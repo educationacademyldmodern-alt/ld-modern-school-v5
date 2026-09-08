@@ -1,0 +1,25 @@
+L D MODERN EDUCATION ACADEMY — FINAL V9 REPAIR
+
+IMPORTANT: Do not mix these files with older V6/V7/V8 files.
+
+1) Supabase > SQL Editor > New query.
+2) Open supabase-schema.sql from this FINAL folder, paste the COMPLETE file and Run once.
+   This now creates/repairs student-media, gallery-media AND the previously missing school-media bucket,
+   adds V8 admission/fee/enquiry columns, and permits public admission/enquiry inserts safely.
+3) GitHub repository root: replace index.html, app.js, style.css, manifest.json, supabase-schema.sql.
+4) Commit changes to main. Vercel redeploys automatically.
+5) Open the live website in Chrome and hard refresh / clear site cache once.
+6) ERP > Cloud Setup: keep the same Supabase Project URL + Publishable Key.
+7) Test in this order: ERP Login > Website Settings logo/background > Admission > student photo > Aadhaar > Submit > Gallery > Fees.
+
+Major fixes in this final package:
+- Modern college/university-style responsive public website.
+- Admission Date and DOB are separately labelled date fields.
+- District, State, Previous Class and other admission fields retained.
+- Student photo: Upload + real live Camera.
+- Aadhaar: image/PDF upload option in admission.
+- Fix for "Bucket not found": school-media bucket is now created by SQL.
+- Public admission insert RLS fixed.
+- Public enquiry insert RLS fixed.
+- Missing V8 database columns repaired.
+- Existing ERP modules and data model retained.

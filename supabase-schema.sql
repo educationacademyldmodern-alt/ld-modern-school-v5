@@ -770,3 +770,70 @@ where not exists (select 1 from public.classes c where lower(c.class_name)=lower
 
 -- ---------- FINAL STATUS ----------
 select 'V5 PLUS MASTER UPGRADE COMPLETE' as status;
+
+-- =====================================================================
+-- FINAL V9 REPAIR — matches the supplied V8 front-end exactly
+-- Safe/idempotent: no business rows are deleted.
+-- =====================================================================
+alter table public.admissions add column if not exists application_no text;
+alter table public.admissions add column if not exists admission_type text;
+alter table public.admissions add column if not exists admission_source text;
+alter table public.admissions add column if not exists student_id text;
+alter table public.admissions add column if not exists father_occupation text;
+alter table public.admissions add column if not exists mother_occupation text;
+alter table public.admissions add column if not exists relation_with_guardian text;
+alter table public.admissions add column if not exists alternate_phone text;
+alter table public.admissions add column if not exists village_city text;
+alter table public.admissions add column if not exists previous_school text;
+alter table public.admissions add column if not exists previous_class text;
+alter table public.admissions add column if not exists transport_required text;
+alter table public.admissions add column if not exists transport_route text;
+alter table public.admissions add column if not exists fee_structure_id uuid;
+
+alter table public.fees add column if not exists base_fee numeric default 0;
+alter table public.fees add column if not exists late_fee numeric default 0;
+alter table public.fees add column if not exists fee_month text;
+alter table public.fees add column if not exists installment_no int;
+alter table public.fees add column if not exists custom_installment_label text;
+alter table public.fees add column if not exists fee_head text;
+alter table public.fees add column if not exists billing_period text;
+alter table public.fees add column if not exists payment_status text;
+alter table public.fees add column if not exists transaction_ref text;
+
+alter table public.enquiries add column if not exists enquiry_date date;
+alter table public.enquiries add column if not exists source text;
+alter table public.enquiries add column if not exists follow_up_date date;
+alter table public.enquiries add column if not exists assigned_to text;
+alter table public.enquiries add column if not exists admin_note text;
+alter table public.enquiries add column if not exists converted_admission_no text;
+
+-- Public website needs to submit admission applications and enquiries.
+alter table public.admissions enable row level security;
+drop policy if exists public_admission_insert on public.admissions;
+create policy public_admission_insert on public.admissions for insert to anon
+with check (coalesce(admission_status,'Applied')='Applied');
+
+drop policy if exists public_enquiry_insert on public.enquiries;
+create policy public_enquiry_insert on public.enquiries for insert to anon
+with check (true);
+
+-- Branding bucket was referenced by app.js but missing from older SQL.
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
+values('school-media','school-media',true,10485760,array['image/jpeg','image/png','image/webp','image/gif'])
+on conflict(id) do update set public=excluded.public,file_size_limit=excluded.file_size_limit,allowed_mime_types=excluded.allowed_mime_types;
+
+drop policy if exists school_media_public_read on storage.objects;
+create policy school_media_public_read on storage.objects for select to anon,authenticated
+using(bucket_id='school-media');
+drop policy if exists school_media_insert on storage.objects;
+create policy school_media_insert on storage.objects for insert to authenticated
+with check(bucket_id='school-media' and public.role_in(array['super_admin','admin','principal']));
+drop policy if exists school_media_update on storage.objects;
+create policy school_media_update on storage.objects for update to authenticated
+using(bucket_id='school-media' and public.role_in(array['super_admin','admin','principal']))
+with check(bucket_id='school-media' and public.role_in(array['super_admin','admin','principal']));
+drop policy if exists school_media_delete on storage.objects;
+create policy school_media_delete on storage.objects for delete to authenticated
+using(bucket_id='school-media' and public.role_in(array['super_admin','admin','principal']));
+
+select 'FINAL V9 REPAIR COMPLETE' as status;
