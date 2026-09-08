@@ -808,3 +808,102 @@ for delete to authenticated
 using (public.role_in(array['super_admin','admin','principal','admission']));
 
 select 'V7 UPGRADE COMPLETE' as status;
+
+-- =========================================================
+-- V8 MODERN ADMISSION + SMART FEE + HOME BRANDING UPGRADE
+-- =========================================================
+
+-- Modern admission details
+alter table public.admissions add column if not exists application_no text;
+alter table public.admissions add column if not exists admission_type text;
+alter table public.admissions add column if not exists admission_source text;
+alter table public.admissions add column if not exists student_id text;
+alter table public.admissions add column if not exists father_occupation text;
+alter table public.admissions add column if not exists mother_occupation text;
+alter table public.admissions add column if not exists relation_with_guardian text;
+alter table public.admissions add column if not exists alternate_phone text;
+alter table public.admissions add column if not exists village_city text;
+alter table public.admissions add column if not exists previous_school text;
+alter table public.admissions add column if not exists previous_class text;
+alter table public.admissions add column if not exists transport_required boolean default false;
+alter table public.admissions add column if not exists transport_route text;
+alter table public.admissions add column if not exists fee_structure_id uuid;
+alter table public.admissions add column if not exists photo_path text;
+alter table public.admissions add column if not exists photo_source text;
+alter table public.admissions add column if not exists photo_taken_at timestamptz;
+alter table public.admissions add column if not exists remarks text;
+
+-- Modern student profile extras
+alter table public.students add column if not exists dob date;
+alter table public.students add column if not exists gender text;
+alter table public.students add column if not exists guardian_name text;
+alter table public.students add column if not exists emergency_phone text;
+alter table public.students add column if not exists photo_path text;
+alter table public.students add column if not exists photo_source text;
+alter table public.students add column if not exists photo_taken_at timestamptz;
+alter table public.students add column if not exists remarks text;
+
+-- Latest smart fee collection columns
+alter table public.fees add column if not exists fee_structure_id uuid;
+alter table public.fees add column if not exists fee_month text;
+alter table public.fees add column if not exists installment_no integer;
+alter table public.fees add column if not exists custom_installment_label text;
+alter table public.fees add column if not exists fee_head text;
+alter table public.fees add column if not exists billing_period text;
+alter table public.fees add column if not exists base_fee numeric default 0;
+alter table public.fees add column if not exists late_fee numeric default 0;
+alter table public.fees add column if not exists payment_status text;
+alter table public.fees add column if not exists transaction_ref text;
+
+-- Fee plan rule upgrades
+alter table public.fee_structures add column if not exists start_month text;
+alter table public.fee_structures add column if not exists billing_cycle text;
+alter table public.fee_structures add column if not exists grace_days integer default 0;
+alter table public.fee_structures add column if not exists late_fee_type text default 'Fixed';
+alter table public.fee_structures add column if not exists late_fee_value numeric default 0;
+alter table public.fee_structures add column if not exists effective_from date;
+alter table public.fee_structures add column if not exists effective_to date;
+
+-- School branding storage bucket for logo/background uploads
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
+values(
+  'school-media','school-media',true,15728640,array['image/jpeg','image/png','image/webp','image/gif']
+)
+on conflict(id) do update set
+  public=excluded.public,
+  file_size_limit=excluded.file_size_limit,
+  allowed_mime_types=excluded.allowed_mime_types;
+
+-- Public can read school logo/background.
+drop policy if exists school_media_public_read on storage.objects;
+create policy school_media_public_read on storage.objects
+for select to anon,authenticated
+using(bucket_id='school-media');
+
+-- Management can upload/edit/delete school branding.
+drop policy if exists school_media_insert on storage.objects;
+create policy school_media_insert on storage.objects
+for insert to authenticated
+with check(bucket_id='school-media' and public.role_in(array['super_admin','admin','principal']));
+
+drop policy if exists school_media_update on storage.objects;
+create policy school_media_update on storage.objects
+for update to authenticated
+using(bucket_id='school-media' and public.role_in(array['super_admin','admin','principal']))
+with check(bucket_id='school-media' and public.role_in(array['super_admin','admin','principal']));
+
+drop policy if exists school_media_delete on storage.objects;
+create policy school_media_delete on storage.objects
+for delete to authenticated
+using(bucket_id='school-media' and public.role_in(array['super_admin','admin','principal']));
+
+-- Helpful indexes for name/admission search
+create index if not exists admissions_student_name_idx on public.admissions(lower(student_name));
+create index if not exists admissions_admission_no_idx on public.admissions(admission_no);
+create index if not exists students_student_name_idx on public.students(lower(student_name));
+create index if not exists students_admission_no_idx on public.students(admission_no);
+create index if not exists fees_student_name_idx on public.fees(lower(student_name));
+create index if not exists exams_student_name_idx on public.exams(lower(student_name));
+create index if not exists enquiries_name_idx on public.enquiries(lower(name));
+
+select 'V8 MODERN ERP UPGRADE COMPLETE' as status;
