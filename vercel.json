@@ -1,10 +1,11 @@
 {
   "cleanUrls": false,
   "trailingSlash": false,
-  "rewrites": [
+  "redirects": [
     {
       "source": "/sitemap.xml",
-      "destination": "/api/sitemap"
+      "destination": "/api/sitemap",
+      "permanent": false
     }
   ]
 }
