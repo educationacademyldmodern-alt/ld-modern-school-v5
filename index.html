@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V52-FINAL-MASTER-SEARCH"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V55-VERIFIED-VISUAL-ONLY"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V38-TEACHING-SYLLABUS-MONITOR"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -195,7 +195,299 @@ button{transition:transform .16s ease,box-shadow .16s ease}button:hover{transfor
 
 /* ===== V41 SMART PAY FEE ===== */
 .smartPayPanel{border-top:4px solid #1768df}.smartPaySearch{align-items:center}.smartPaySearch input{min-width:300px;flex:1}.smartPaySearch select{min-width:150px}.quickPayHint{margin:10px 0 16px;padding:11px 13px;border-radius:10px;background:#eef6ff;border:1px solid #cfe2fb;color:#315273;font-size:12px}.paySearchCount{padding:8px 2px;color:#53667c}.feeStudentHead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;margin:10px 0;border-radius:14px;background:linear-gradient(135deg,#eef6ff,#fff);border:1px solid #d5e5f7}.feeStudentHead h2{margin:0;color:#0b4eb8}.feeStudentHead p{margin:5px 0 0;color:#607188;font-size:12px}@media(max-width:700px){.smartPaySearch{display:grid!important;grid-template-columns:1fr 1fr}.smartPaySearch input{grid-column:1/-1;min-width:0}.smartPaySearch select{min-width:0}.feeStudentHead{align-items:flex-start;flex-direction:column}}
-</style></head>
+</style><style id="v55-verified-visual-patch">
+/* ============================================================
+   V55 VERIFIED VISUAL PATCH
+   IMPORTANT: This patch changes LOOK/spacing only.
+   V53 data/import/fee/dashboard/teacher/parent functions remain untouched.
+   Active public home is the V26 layout (.v26*), so styling targets it directly.
+   ============================================================ */
+
+/* ---------- ACTIVE PUBLIC HOME: compact + modern + clear ---------- */
+.v26Home{
+  background:linear-gradient(180deg,#eef6ff 0%,#f8fbff 48%,#ffffff 100%)!important;
+  color:#102a49!important;
+}
+
+/* Header: less heavy blue, clearer navigation */
+.v26Top{
+  min-height:94px!important;
+  padding:10px clamp(16px,3vw,42px) 8px!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  background:
+    radial-gradient(circle at 78% -30%,rgba(255,255,255,.16),transparent 35%),
+    linear-gradient(112deg,#062e63 0%,#0a4f92 58%,#0b6db6 100%)!important;
+  box-shadow:0 9px 28px rgba(6,42,82,.17)!important;
+}
+.v26Brand{gap:13px!important;min-width:0!important}
+.v26Brand img{
+  width:70px!important;height:70px!important;
+  background:#fff!important;border:2px solid #f5cf53!important;
+  border-radius:15px!important;padding:3px!important;
+  box-shadow:0 7px 18px rgba(1,24,55,.22)!important;
+}
+.v26Brand b{
+  font-size:clamp(18px,2vw,27px)!important;
+  line-height:1.04!important;
+  text-shadow:0 2px 3px rgba(0,0,0,.12)!important;
+}
+.v26Brand span{font-size:10px!important;margin-top:3px!important}
+.v26Motto{font-size:16px!important;opacity:.94!important}
+.v26Top nav{
+  gap:5px!important;margin-top:7px!important;
+}
+.v26Top nav button{
+  min-height:36px!important;
+  padding:7px 10px!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  background:rgba(255,255,255,.07)!important;
+  border-radius:10px!important;
+  color:#f7fbff!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.07)!important;
+  transition:.16s ease!important;
+}
+.v26Top nav button:hover,.v26Top nav button.active{
+  background:#ffffff!important;
+  color:#07386d!important;
+  border-color:#ffffff!important;
+  box-shadow:0 6px 15px rgba(1,26,57,.18)!important;
+  transform:translateY(-1px)!important;
+}
+
+/* Hero: reduce scattered empty space */
+.v26Hero{
+  min-height:285px!important;
+  padding:25px clamp(18px,3.4vw,48px)!important;
+  align-items:center!important;
+  background:
+    radial-gradient(circle at 88% 35%,rgba(25,110,195,.10),transparent 25%),
+    linear-gradient(100deg,#eef8ff 0%,#ffffff 55%,#e9f5ff 100%)!important;
+  border-bottom:1px solid #d8e6f3!important;
+}
+.v26Hero:after{
+  right:10%!important;bottom:-25px!important;
+  font-size:180px!important;opacity:.055!important;
+}
+.v26Welcome{font-size:29px!important;color:#456783!important}
+.v26Hero h1{
+  font-size:clamp(39px,4.3vw,57px)!important;
+  line-height:.96!important;margin:0 0 4px!important;
+  letter-spacing:-.025em!important;color:#083b79!important;
+}
+.v26Hero h3{font-size:19px!important;margin:6px 0 13px!important;color:#264867!important}
+.v26Pills{gap:7px!important}
+.v26Pills span{
+  padding:7px 10px!important;border-radius:10px!important;font-size:11px!important;
+  box-shadow:0 6px 12px rgba(8,50,91,.10)!important;
+}
+.v26Quote{
+  max-width:255px!important;font-size:15px!important;
+  background:rgba(255,255,255,.66)!important;
+  border:1px solid rgba(20,86,147,.10)!important;
+  border-radius:18px!important;padding:15px!important;
+  box-shadow:0 12px 28px rgba(12,58,103,.08)!important;
+}
+
+/* Login + feature area directly below hero */
+.v26MainGrid{
+  grid-template-columns:1.05fr .95fr!important;
+  gap:15px!important;
+  padding:18px clamp(16px,3vw,42px)!important;
+  background:linear-gradient(180deg,#f5faff,#edf6fd)!important;
+}
+.v26LoginCards{gap:12px!important}
+.v26Login{
+  min-height:206px!important;
+  padding:15px 15px 13px!important;
+  border-radius:20px!important;
+  border:1px solid #d8e6f2!important;
+  box-shadow:0 13px 30px rgba(10,54,99,.10),inset 0 1px #fff!important;
+  transition:transform .18s ease,box-shadow .18s ease!important;
+}
+.v26Login:hover{
+  transform:translateY(-4px)!important;
+  box-shadow:0 19px 35px rgba(10,54,99,.15)!important;
+}
+.roundIcon{
+  width:55px!important;height:55px!important;font-size:27px!important;
+  border:1px solid #d7e5f2!important;
+  box-shadow:0 7px 16px rgba(12,66,119,.10)!important;
+}
+.v26Login h3{font-size:19px!important;margin:6px 0 2px!important;color:#123b69!important}
+.v26Login p{font-size:12px!important;margin:0 0 9px!important;color:#6b7f94!important}
+.v26Login button{
+  padding:10px!important;border-radius:10px!important;
+  box-shadow:0 8px 17px rgba(8,74,153,.19)!important;
+}
+.v26Login small{font-size:10px!important;margin-top:7px!important;color:#6a7d90!important}
+
+/* Management icons: bigger symbols, clearer labels */
+.v26FeatureArea{gap:10px!important}
+.v26FeatureTiles{gap:8px!important}
+.v26FeatureTiles button{
+  min-height:104px!important;
+  padding:11px 5px!important;
+  border-radius:16px!important;
+  border:1px solid #d8e6f2!important;
+  background:linear-gradient(180deg,#ffffff,#f6faff)!important;
+  box-shadow:0 9px 20px rgba(9,54,99,.09)!important;
+  transition:.16s ease!important;
+}
+.v26FeatureTiles button:hover,.v26FeatureTiles button.active{
+  transform:translateY(-3px)!important;
+  border-color:#8fbbea!important;
+  background:#ffffff!important;
+  box-shadow:0 14px 25px rgba(9,54,99,.14)!important;
+}
+.v26FeatureTiles button span{
+  font-size:30px!important;margin-bottom:5px!important;
+  filter:drop-shadow(0 3px 4px rgba(13,55,100,.10))!important;
+}
+.v26FeatureTiles b{
+  font-size:10.5px!important;line-height:1.18!important;color:#174877!important;
+}
+.v26Banner{
+  padding:11px 13px!important;
+  border-radius:13px!important;
+  font-size:18px!important;
+  background:linear-gradient(105deg,#0d5da8,#147ac2)!important;
+  box-shadow:0 9px 20px rgba(9,64,118,.16)!important;
+}
+
+/* Benefits and footer pulled together */
+.v26Benefits{
+  background:#ffffff!important;
+  border-top:1px solid #dce7f2!important;border-bottom:1px solid #dce7f2!important;
+}
+.v26Benefits div{padding:12px clamp(13px,2vw,28px)!important;font-size:16px!important}
+.v26Benefits b{font-size:12px!important}.v26Benefits small{font-size:10px!important}
+.v26Footer{
+  padding:10px clamp(16px,3vw,42px)!important;
+  background:linear-gradient(110deg,#062d61,#0b579b)!important;
+}
+.v26Footer img{width:52px!important;height:52px!important}.v26FootMotto{font-size:15px!important}
+
+/* ---------- ADMIN LOGIN: reduce giant blue feeling ---------- */
+#login.auth{
+  background:
+    radial-gradient(circle at 8% 13%,rgba(29,105,192,.13),transparent 30%),
+    radial-gradient(circle at 90% 88%,rgba(34,155,104,.08),transparent 25%),
+    linear-gradient(135deg,#eff6fd 0%,#ffffff 55%,#f3f8fd 100%)!important;
+}
+#login .loginGrid{
+  width:min(920px,94vw)!important;
+  grid-template-columns:.78fr 1.22fr!important;
+  gap:16px!important;
+}
+#login .loginHero{
+  min-height:390px!important;
+  border-radius:24px!important;
+  padding:28px!important;
+  background:linear-gradient(145deg,#ffffff,#edf5ff)!important;
+  color:#123654!important;
+  border:1px solid #d9e6f2!important;
+  box-shadow:0 20px 48px rgba(13,54,94,.12)!important;
+}
+#login .loginHero img{
+  width:88px!important;height:88px!important;
+  background:#fff!important;border-radius:18px!important;padding:5px!important;
+  box-shadow:0 9px 22px rgba(11,56,100,.12)!important;
+}
+#login .loginHero h1{font-size:30px!important;color:#073e7d!important;line-height:1.05!important}
+#login .loginHero p{color:#637a92!important}
+#login .authCard{
+  padding:30px!important;border-radius:24px!important;
+  background:rgba(255,255,255,.98)!important;
+  border:1px solid #d9e6f2!important;
+  box-shadow:0 22px 55px rgba(13,54,94,.15)!important;
+}
+#login .authCard input{
+  min-height:46px!important;border:1px solid #cad9e7!important;border-radius:11px!important;
+}
+#login .authCard>button{
+  min-height:45px!important;border-radius:11px!important;
+  background:linear-gradient(100deg,#0b5fc0,#1687d2)!important;
+  box-shadow:0 9px 19px rgba(8,84,164,.20)!important;
+}
+
+/* ---------- ERP SIDEBAR: clearer icons/tabs, less solid blue ---------- */
+#erp aside{
+  background:
+    radial-gradient(circle at 30% 0,rgba(255,255,255,.08),transparent 22%),
+    linear-gradient(180deg,#062e61 0%,#073f77 56%,#062b59 100%)!important;
+  box-shadow:8px 0 26px rgba(7,38,73,.12)!important;
+}
+#erp aside .sideBrand{
+  background:rgba(255,255,255,.07)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:15px!important;
+  padding:10px!important;
+  margin:3px 2px 8px!important;
+}
+#erp aside nav{gap:5px!important}
+#erp aside nav button{
+  min-height:41px!important;
+  padding:9px 11px!important;
+  color:#edf6ff!important;
+  background:rgba(255,255,255,.052)!important;
+  border:1px solid rgba(255,255,255,.075)!important;
+  border-radius:11px!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.035)!important;
+}
+#erp aside nav button:hover,#erp aside nav button.active{
+  color:#ffffff!important;
+  background:linear-gradient(100deg,rgba(255,255,255,.22),rgba(255,255,255,.11))!important;
+  border-color:rgba(255,255,255,.19)!important;
+  transform:translateX(2px)!important;
+}
+#erpNav .v48GroupHead{
+  background:rgba(1,25,54,.28)!important;
+  border-color:rgba(255,255,255,.11)!important;
+}
+
+/* ---------- Responsive verification ---------- */
+@media(max-width:1100px){
+  .v26Brand b{font-size:20px!important}
+  .v26MainGrid{grid-template-columns:1fr!important}
+  .v26FeatureTiles{grid-template-columns:repeat(6,1fr)!important}
+}
+@media(max-width:760px){
+  .v26Top{min-height:76px!important;padding:8px 12px!important}
+  .v26Brand img{width:53px!important;height:53px!important}
+  .v26Brand b{font-size:13px!important;white-space:normal!important}
+  .v26Brand span{font-size:7px!important}
+  .v26Top nav{top:76px!important;background:#073a71!important;padding:9px!important}
+  .v26Top nav button{font-size:12px!important}
+  .v26Hero{min-height:270px!important;padding:22px 16px!important}
+  .v26Welcome{font-size:25px!important}.v26Hero h1{font-size:36px!important}
+  .v26Hero h3{font-size:16px!important}.v26Quote{display:none!important}
+  .v26MainGrid{padding:12px!important}
+  .v26LoginCards{grid-template-columns:1fr!important}
+  .v26Login{min-height:auto!important}
+  .v26FeatureTiles{grid-template-columns:repeat(2,1fr)!important}
+  .v26Benefits{grid-template-columns:1fr 1fr!important}
+  #login .loginGrid{grid-template-columns:1fr!important;width:min(95vw,520px)!important}
+  #login .loginHero{display:none!important}
+  #login .authCard{padding:22px!important}
+}
+</style>
+<script>
+/* V55 runtime guard: visual only; no database writes. */
+const V55_BUILD='V55-VERIFIED-VISUAL-ONLY';
+function v55VisualGuard(){
+  try{
+    document.querySelectorAll('.v26FeatureTiles button,.v26Top nav button').forEach(b=>{
+      if(!b.title)b.title=(b.innerText||b.textContent||'').trim();
+    });
+    if(typeof v53RestoreAdminQuickLinks==='function' && typeof v14Admin==='function' && v14Admin()){
+      v53RestoreAdminQuickLinks();
+    }
+  }catch(_e){}
+}
+window.addEventListener('load',()=>setTimeout(v55VisualGuard,180));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(v55VisualGuard,80)});
+</script>
+</head>
 <body>
 <div id="publicSite"><div id="runningNotices" class="runningNoticeHost"></div>
 <section id="exactHome" class="v26Home" aria-label="L D Modern Education Academy home page">
@@ -1300,7 +1592,7 @@ async function deleteFeePayment(id,studentId){
 }
 
 function buildFeeSchedule(s){v14Modal(`<h2>Generate Fee Schedule</h2><div class="v14Form"><div><label>Mode</label><select id="fspMode"><option>Monthly</option><option>Installment</option></select></div><div><label>Total Fee</label><input id="fspTotal" type="number"></div><div><label>Start Date</label><input id="fspStart" type="date" value="${today()}"></div><div><label>No. of Months/Installments</label><input id="fspCount" type="number" value="12"></div><div class="full"><button class="v14Action primary" onclick='saveFeeSchedule(${JSON.stringify(s).replace(/'/g,"&#39;")})'>Generate</button></div></div>`)}
-async function saveFeeSchedule(s){let mode=$('fspMode').value,total=Number($('fspTotal').value||0),count=Math.max(1,Number($('fspCount').value||1)),start=new Date($('fspStart').value+'T00:00:00');if(!total||isNaN(start))return toast('Valid fee/date required');let amount=Math.round((total/count)*100)/100,rows=[];for(let i=0;i<count;i++){let d=new Date(start);d.setMonth(d.getMonth()+i);rows.push({admission_no:s.admission_no,academic_session:'2026-27',class_name:s.class_name,plan_mode:mode,schedule_label:mode==='Monthly'?d.toLocaleString('en',{month:'long'}):`Installment ${i+1}`,due_date:d.toISOString().slice(0,10),amount:i===count-1?Math.round((total-amount*(count-1))*100)/100:amount,paid_amount:0,status:'Due',is_free_fee:String(s.fee_category||'').toLowerCase()==='free'||Number(s.fee_waiver_percent||0)>=100});}let del=await sb.from('student_fee_schedules').delete().eq('admission_no',s.admission_no).eq('academic_session','2026-27');if(del.error)return toast(del.error.message);let{error}=await sb.from('student_fee_schedules').insert(rows);toast(error?error.message:'Fee schedule generated');if(!error){$('v14Modal')?.remove();openStudentFeeAccount(s.id)}}
+async function saveFeeSchedule(s){let mode=$('fspMode').value,total=Number($('fspTotal').value||0),count=Math.max(1,Number($('fspCount').value||1)),start=new Date($('fspStart').value+'T00:00:00');if(!total||isNaN(start))return toast('Valid fee/date required');let amount=Math.round((total/count)*100)/100,rows=[];for(let i=0;i<count;i++){let d=new Date(start);d.setMonth(d.getMonth()+i);rows.push({admission_no:s.admission_no,academic_session:'2026-27',class_name:s.class_name,plan_mode:mode,schedule_label:mode==='Monthly'?d.toLocaleString('en',{month:'long'}):`Installment ${i+1}`,due_date:dueDate,amount:i===count-1?Math.round((total-amount*(count-1))*100)/100:amount,paid_amount:0,status:'Due',is_free_fee:String(s.fee_category||'').toLowerCase()==='free'||Number(s.fee_waiver_percent||0)>=100});}let del=await sb.from('student_fee_schedules').delete().eq('admission_no',s.admission_no).eq('academic_session','2026-27');if(del.error)return toast(del.error.message);let{error}=await sb.from('student_fee_schedules').insert(rows);toast(error?error.message:'Fee schedule generated');if(!error){$('v14Modal')?.remove();openStudentFeeAccount(s.id)}}
 function editFeeSchedule(r){v14Modal(`<h2>Edit Fee Schedule</h2><div class="v14Form"><div><label>Label</label><input id="efsLabel" value="${esc(r.schedule_label||'')}"></div><div><label>Due Date</label><input id="efsDate" type="date" value="${esc(r.due_date||'')}"></div><div><label>Amount</label><input id="efsAmount" type="number" value="${Number(r.amount||0)}"></div><div><label>Status</label><select id="efsStatus"><option>Due</option><option>Partial</option><option>Paid</option><option>Waived</option></select></div><div class="full"><button class="v14Action primary" onclick="saveEditedFeeSchedule('${r.id}')">Save</button></div></div>`)}
 async function saveEditedFeeSchedule(id){
  let{data:old,error:oe}=await sb.from('student_fee_schedules').select('admission_no').eq('id',id).single();if(oe)return toast(oe.message);
@@ -3158,4 +3450,317 @@ setTimeout(v52InstallMasterSearch,500);
  document.head.appendChild(st);
 })();
 </script>
+
+<script>
+/* ===== V53 FINAL DATA IMPORT + FEE CONTINUITY + DASHBOARD RESTORE =====
+   Additive patch over V52. Existing public website and prior ERP modules are preserved.
+*/
+const V53_BUILD='V53-FINAL-IMPORT-FEE-RESTORE';
+
+/* ---------- RESTORE OLD ADMIN DASHBOARD SHORTCUTS ---------- */
+function v53RestoreAdminQuickLinks(){
+  if(!v14Admin?.()) return;
+  const grid=document.querySelector('#erpContent .v39QuickGrid');
+  if(!grid) return;
+  const links=[
+    ['v53OrderQuick','📣','Notice / Order',"render('notice_order_center')"],
+    ['v53DataQuick','⇄','Student Data Hub',"render('data_hub')"],
+    ['v53ExcelQuick','📊','Class Data Import',"studentExcelTools()"],
+    ['v53PromotionQuick','⇧','Promotion / Previous',"render('promotion_center')"]
+  ];
+  links.forEach(([id,ic,label,action])=>{
+    if(document.getElementById(id))return;
+    grid.insertAdjacentHTML('beforeend',`<button id="${id}" onclick="${action}"><span>${ic}</span><b>${label}</b></button>`);
+  });
+}
+
+/* ---------- SAFE CLASS-WISE EXCEL TEMPLATE ---------- */
+function v53DownloadStudentImportTemplate(){
+  if(!window.XLSX)return toast('Excel library not loaded');
+  const headers=[
+    'admission_no','student_name','father_name','mother_name','phone','class_name','section','roll_no',
+    'dob','gender','address','status','fee_category','fee_waiver_percent',
+    'due_upto_sep_2026','monthly_fee_from_oct_2026','auto_fee_start_month','remarks'
+  ];
+  const rows=[Object.fromEntries(headers.map(h=>[h,'']))];
+  rows[0].status='Active';
+  rows[0].auto_fee_start_month='2026-10';
+  let wb=XLSX.utils.book_new();
+  let ws=XLSX.utils.json_to_sheet(rows,{header:headers});
+  ws['!cols']=headers.map(h=>({wch:Math.min(Math.max(h.length+2,14),28)}));
+  XLSX.utils.book_append_sheet(wb,ws,'Student Import');
+  let ins=XLSX.utils.aoa_to_sheet([
+    ['L D MODERN EDUCATION ACADEMY - Class-wise Student Import'],
+    ['Rule','Admission No. is the unique key. Same student + no changed data = skipped. Changed fields only = updated. New Admission No. = added.'],
+    ['Fee Rule','due_upto_sep_2026 = total outstanding due up to September 2026. monthly_fee_from_oct_2026 = fixed monthly fee from October onward.'],
+    ['Auto Fee','System generates only the month that has become due; future months are not counted early.'],
+    ['Important','Do not change header names. Import one class at a time for easiest checking.']
+  ]);
+  ins['!cols']=[{wch:18},{wch:110}];
+  XLSX.utils.book_append_sheet(wb,ins,'Instructions');
+  XLSX.writeFile(wb,'LD-Modern-Class-Wise-Student-Import-Template.xlsx');
+}
+
+/* ---------- FEE SETTINGS + MONTH-BY-MONTH AUTO GENERATION ---------- */
+function v53MonthKey(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
+function v53MonthDate(key){
+  const [y,m]=String(key||'').split('-').map(Number);
+  if(!y||!m)return null;
+  return new Date(y,m-1,1);
+}
+function v53NextMonthKey(key){
+  const d=v53MonthDate(key); if(!d)return '';
+  d.setMonth(d.getMonth()+1); return v53MonthKey(d);
+}
+function v53MonthLabel(key){
+  const d=v53MonthDate(key); if(!d)return key;
+  return d.toLocaleString('en-IN',{month:'long',year:'numeric'});
+}
+async function v53UpsertOpeningDue(s,amount){
+  amount=Number(amount||0);
+  if(!s?.admission_no || amount<0)return;
+  const session=school?.academic_session||'2026-27';
+  const label='Opening Due up to September 2026';
+  const {data:old}=await sb.from('student_fee_schedules').select('*')
+    .eq('admission_no',s.admission_no).eq('academic_session',session).eq('schedule_label',label).limit(1);
+  if(old?.length){
+    const r=old[0],paid=Number(r.paid_amount||0),status=amount<=paid?'Paid':paid>0?'Partial':'Due';
+    if(Number(r.amount||0)!==amount || r.status!==status)
+      await sb.from('student_fee_schedules').update({amount, status, updated_at:new Date().toISOString()}).eq('id',r.id);
+  }else if(amount>0){
+    await sb.from('student_fee_schedules').insert({
+      admission_no:s.admission_no,academic_session:session,class_name:s.class_name||'',
+      plan_mode:'Opening Due',schedule_label:label,due_date:'2026-09-30',
+      amount,paid_amount:0,status:'Due',is_free_fee:false
+    });
+  }
+}
+async function v53SaveFeeSetting(s,monthly,startMonth='2026-10',openingDue=null){
+  if(!s?.admission_no)return;
+  const row={
+    admission_no:s.admission_no,student_id:String(s.id||''),student_name:s.student_name||'',
+    class_name:s.class_name||'',academic_session:school?.academic_session||'2026-27',
+    monthly_fee:Number(monthly||0),auto_start_month:startMonth||'2026-10',
+    is_active:true,updated_at:new Date().toISOString()
+  };
+  const {error}=await sb.from('student_fee_settings').upsert(row,{onConflict:'admission_no,academic_session'});
+  if(error)throw error;
+  if(openingDue!==null && openingDue!=='')await v53UpsertOpeningDue(s,Number(openingDue||0));
+  await v53EnsureStudentFeeMonths(s.admission_no);
+}
+async function v53EnsureStudentFeeMonths(admissionNo){
+  const session=school?.academic_session||'2026-27';
+  const {data:cfg,error}=await sb.from('student_fee_settings').select('*')
+    .eq('admission_no',admissionNo).eq('academic_session',session).maybeSingle();
+  if(error||!cfg||!cfg.is_active||Number(cfg.monthly_fee||0)<=0)return;
+  const current=v53MonthKey(new Date()), start=cfg.auto_start_month||'2026-10';
+  if(start>current)return;
+  const {data:old}=await sb.from('student_fee_schedules').select('id,schedule_label,due_date')
+    .eq('admission_no',admissionNo).eq('academic_session',session);
+  const existing=new Set((old||[]).map(x=>String(x.schedule_label||'')));
+  let rows=[], key=start, guard=0;
+  while(key && key<=current && guard++<24){
+    const label='Monthly Fee - '+v53MonthLabel(key);
+    if(!existing.has(label)){
+      const [yy,mm]=key.split('-').map(Number); const dueDate=new Date(Date.UTC(yy,mm,0)).toISOString().slice(0,10);
+      rows.push({
+        admission_no:admissionNo,academic_session:session,class_name:cfg.class_name||'',
+        plan_mode:'Monthly',schedule_label:label,due_date:dueDate,
+        amount:Number(cfg.monthly_fee||0),paid_amount:0,status:'Due',is_free_fee:false
+      });
+    }
+    key=v53NextMonthKey(key);
+  }
+  if(rows.length)await sb.from('student_fee_schedules').insert(rows);
+}
+async function v53AutoGenerateDueMonths(){
+  if(!v14Accounting?.())return;
+  const session=school?.academic_session||'2026-27';
+  const {data}=await sb.from('student_fee_settings').select('admission_no').eq('academic_session',session).eq('is_active',true);
+  for(const r of (data||[]))await v53EnsureStudentFeeMonths(r.admission_no);
+}
+
+/* ---------- DIFFERENTIAL IMPORT: ADD / UPDATE CHANGED / SKIP SAME ---------- */
+function v53CleanImportRow(r){
+  const aliases={
+    'Admission No':'admission_no','Student Name':'student_name','Father Name':'father_name','Mother Name':'mother_name',
+    'Mobile':'phone','Class':'class_name','Section':'section','Roll No':'roll_no','DOB':'dob','Gender':'gender',
+    'Address':'address','Status':'status','Due Till September 2026':'due_upto_sep_2026',
+    'Monthly Fee From October 2026':'monthly_fee_from_oct_2026'
+  };
+  let o={};
+  Object.entries(r||{}).forEach(([k,v])=>{o[aliases[k]||String(k).trim()]=v});
+  ['student_name','father_name','mother_name','class_name','address'].forEach(k=>{if(o[k]!==undefined)o[k]=v53Title(String(o[k]||''))});
+  if(o.phone!==undefined)o.phone=String(o.phone||'').replace(/\.0$/,'').trim();
+  if(o.admission_no!==undefined)o.admission_no=String(o.admission_no||'').replace(/\.0$/,'').trim();
+  if(o.roll_no!==undefined)o.roll_no=String(o.roll_no||'').replace(/\.0$/,'').trim();
+  if(o.status!==undefined && !String(o.status).trim())o.status='Active';
+  return o;
+}
+function v53Title(s){return String(s||'').trim().toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase())}
+async function v53ImportStudentUpdate(e){
+  const f=e.target.files?.[0];if(!f)return;
+  try{
+    let wb=XLSX.read(await f.arrayBuffer(),{cellDates:false});
+    let raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
+    let rows=raw.map(v53CleanImportRow).filter(r=>r.admission_no&&r.student_name);
+    if(!rows.length)return toast('Valid student rows not found');
+    const selectedClass=$('studentExcelClass')?.value||'';
+    if(selectedClass){
+      const wrong=rows.filter(r=>String(r.class_name||'')!==selectedClass);
+      if(wrong.length && !confirm(`${wrong.length} row selected class ${selectedClass} से अलग है. फिर भी import करें?`))return;
+    }
+    if(!confirm(`${rows.length} students check/import करें? Same data skip होगा; केवल changed fields update होंगी.`))return;
+    const admissions=rows.map(r=>r.admission_no);
+    const {data:existing,error:se}=await sb.from('students').select('*').in('admission_no',admissions);
+    if(se)throw se;
+    const map=new Map((existing||[]).map(s=>[String(s.admission_no),s]));
+    let added=0,updated=0,unchanged=0,errors=0,feeUpdated=0;
+    const studentKeys=['student_name','father_name','mother_name','phone','class_name','section','roll_no','dob','gender','address','status','fee_category','fee_waiver_percent','remarks'];
+    for(const row of rows){
+      try{
+        let old=map.get(String(row.admission_no)), student=null;
+        let payload={admission_no:row.admission_no};
+        studentKeys.forEach(k=>{if(row[k]!==undefined && row[k]!=='' )payload[k]=row[k]});
+        normalize('students',payload);
+        if(old){
+          let changed={};
+          Object.entries(payload).forEach(([k,v])=>{
+            if(k==='admission_no')return;
+            const a=(v??'').toString().trim(), b=(old[k]??'').toString().trim();
+            if(a!==b)changed[k]=v;
+          });
+          if(Object.keys(changed).length){
+            const {data:up,error}=await sb.from('students').update(changed).eq('id',old.id).select('*').single();
+            if(error)throw error; student=up;updated++;
+          }else{student=old;unchanged++}
+        }else{
+          const {data:ins,error}=await sb.from('students').insert(payload).select('*').single();
+          if(error)throw error; student=ins;added++;
+        }
+        if(row.monthly_fee_from_oct_2026!=='' || row.due_upto_sep_2026!==''){
+          await v53SaveFeeSetting(
+            student,
+            row.monthly_fee_from_oct_2026!==''?Number(row.monthly_fee_from_oct_2026||0):0,
+            row.auto_fee_start_month||'2026-10',
+            row.due_upto_sep_2026
+          ); feeUpdated++;
+        }
+      }catch(err){console.error('V53 import row error',row.admission_no,err);errors++}
+    }
+    toast(`Import complete • New ${added} • Updated ${updated} • Unchanged ${unchanged} • Fee ${feeUpdated} • Error ${errors}`);
+    $('v53ImportSummary') && ($('v53ImportSummary').innerHTML=`<div class="v53ImportResult"><b>✓ Import Complete</b><span>New: ${added}</span><span>Updated: ${updated}</span><span>Unchanged: ${unchanged}</span><span>Fee Updated: ${feeUpdated}</span><span>Errors: ${errors}</span></div>`);
+    if(typeof v49BroadcastChange==='function')v49BroadcastChange('student-import');
+  }catch(err){toast(err.message||'Excel import failed')}
+  finally{e.target.value=''}
+}
+
+/* Replace only Excel Center UI/function, not other site modules */
+studentExcelTools=async function(){
+  head('Student Excel Center','One class import • changed-only update • fee opening due + auto monthly fee');
+  $('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div><h3>📊 Class-wise Student Data Import</h3><p class="note">पहले template download करें. Admission No. unique key है. Same data दुबारा import करने पर skip होगा; बदली हुई field ही update होगी.</p></div></div>
+  <div class="tools"><select id="studentExcelClass"><option value="">Select / All Classes</option>${cls.map(x=>`<option>${x}</option>`).join('')}</select>
+  <button class="secondary" onclick="v53DownloadStudentImportTemplate()">⬇ Download Blank Excel Format</button>
+  <button class="secondary" onclick="exportStudentFullDetails()">⬇ Existing Full Details</button>
+  <button class="primary" onclick="$('studentExcelImport').click()">⬆ Import / Update Class Data</button></div>
+  <input id="studentExcelImport" class="hidden" type="file" accept=".xlsx,.xls,.csv">
+  <div class="excelHelp"><b>Fee columns:</b> due_upto_sep_2026 = September तक बचा हुआ due • monthly_fee_from_oct_2026 = October से fixed monthly fee • auto_fee_start_month = 2026-10</div>
+  <div id="v53ImportSummary"></div></div>`;
+  $('studentExcelImport').onchange=v53ImportStudentUpdate;
+};
+
+/* ---------- ADMIN EDITABLE PER-STUDENT AUTO FEE ---------- */
+async function v53EditAutoFee(studentId){
+  const {data:s,error}=await sb.from('students').select('*').eq('id',studentId).single();if(error)return toast(error.message);
+  const session=school?.academic_session||'2026-27';
+  const {data:cfg}=await sb.from('student_fee_settings').select('*').eq('admission_no',s.admission_no).eq('academic_session',session).maybeSingle();
+  v14Modal(`<h2>Edit Student Auto Fee • ${esc(s.student_name||'')}</h2><div class="v14Form">
+    <div><label>Opening Due up to Sep 2026</label><input id="v53OpeningDue" type="number" min="0" value=""></div>
+    <div><label>Monthly Fee</label><input id="v53MonthlyFee" type="number" min="0" value="${Number(cfg?.monthly_fee||0)}"></div>
+    <div><label>Auto Start Month</label><input id="v53StartMonth" type="month" value="${esc(cfg?.auto_start_month||'2026-10')}"></div>
+    <div><label>Auto Fee</label><select id="v53FeeActive"><option value="true" ${cfg?.is_active!==false?'selected':''}>Active</option><option value="false" ${cfg?.is_active===false?'selected':''}>Stopped</option></select></div>
+    <div class="full"><p class="note">Opening Due blank छोड़ने पर पुराना opening due नहीं बदलेगा. Monthly fee बदलने पर आने वाले नए महीने उसी fixed amount से बनेंगे.</p></div>
+    <div class="full"><button class="v14Action primary" onclick="v53SaveAutoFee('${s.id}')">Save / Update Fee Setting</button></div></div>`);
+}
+async function v53SaveAutoFee(studentId){
+  const {data:s,error}=await sb.from('students').select('*').eq('id',studentId).single();if(error)return toast(error.message);
+  const session=school?.academic_session||'2026-27';
+  const row={admission_no:s.admission_no,student_id:String(s.id||''),student_name:s.student_name,class_name:s.class_name,
+    academic_session:session,monthly_fee:Number($('v53MonthlyFee').value||0),auto_start_month:$('v53StartMonth').value||'2026-10',
+    is_active:$('v53FeeActive').value==='true',updated_at:new Date().toISOString()};
+  const {error:ue}=await sb.from('student_fee_settings').upsert(row,{onConflict:'admission_no,academic_session'});if(ue)return toast(ue.message);
+  if($('v53OpeningDue').value!=='')await v53UpsertOpeningDue(s,Number($('v53OpeningDue').value||0));
+  await v53EnsureStudentFeeMonths(s.admission_no);
+  $('v14Modal')?.remove();toast('Student fee setting updated');openStudentFeeAccount(studentId);
+}
+
+/* Wrap fee account: generate due months first, then restore an Edit Auto Fee button */
+const v53OpenStudentFeeAccountBase=openStudentFeeAccount;
+openStudentFeeAccount=async function(studentId){
+  try{
+    const {data:s}=await sb.from('students').select('admission_no').eq('id',studentId).maybeSingle();
+    if(s?.admission_no)await v53EnsureStudentFeeMonths(s.admission_no);
+  }catch(_e){}
+  const r=await v53OpenStudentFeeAccountBase(studentId);
+  if(v14Accounting?.()){
+    const tabs=document.querySelector('#erpContent .v14Tabs');
+    if(tabs && !document.getElementById('v53EditAutoFeeBtn'))
+      tabs.insertAdjacentHTML('beforeend',`<button id="v53EditAutoFeeBtn" class="v14Action" onclick="v53EditAutoFee('${studentId}')">⚙️ Edit Auto Fee</button>`);
+  }
+  return r;
+};
+
+/* ---------- SAFE PERMANENT DELETE FOR DEMO / DUPLICATE STUDENT ---------- */
+async function v53PermanentDeleteStudent(id){
+  if(!v14Admin?.())return toast('Admin only');
+  const {data:s,error}=await sb.from('students').select('*').eq('id',id).single();if(error)return toast(error.message);
+  if(!confirm(`Permanent Delete?\n${s.student_name||''} (${s.admission_no||''})\nDemo/duplicate data के लिए ही उपयोग करें.`))return;
+  if(!confirm('इस student का linked attendance/fee/marks/demo data भी permanently delete होगा. Continue?'))return;
+  const adm=s.admission_no;
+  const byAdm=['attendance','fees','fee_payments','student_fee_schedules','student_marks','student_document_receipts','student_session_history','student_fee_settings'];
+  for(const t of byAdm){try{await sb.from(t).delete().eq('admission_no',adm)}catch(_e){}}
+  try{await sb.from('admissions').delete().eq('admission_no',adm)}catch(_e){}
+  try{
+    const paths=[s.photo_path,s.student_photo_path].filter(Boolean);
+    if(paths.length)await sb.storage.from('student-media').remove(paths);
+  }catch(_e){}
+  const {error:de}=await sb.from('students').delete().eq('id',id);if(de)return toast(de.message);
+  toast('Student permanently deleted with linked demo data');
+  render('students');
+}
+
+/* Override only student delete; other table delete stays unchanged */
+const v53DelRowBase=delRow;
+delRow=async function(k,id){
+  if(k==='students' && v14Admin?.())return v53PermanentDeleteStudent(id);
+  return v53DelRowBase(k,id);
+};
+
+/* ---------- RUNTIME HOOKS ---------- */
+const v53DashboardBase=dashboard;
+dashboard=async function(){
+  if(v14Accounting?.()){try{await v53AutoGenerateDueMonths()}catch(_e){}}
+  const r=await v53DashboardBase();
+  setTimeout(v53RestoreAdminQuickLinks,50);
+  return r;
+};
+
+const v53OpenERPBase=openERP;
+openERP=async function(){
+  const r=await v53OpenERPBase();
+  setTimeout(v53RestoreAdminQuickLinks,150);
+  return r;
+};
+
+/* Small isolated styles only */
+(function(){
+  const st=document.createElement('style');
+  st.textContent=`
+    .v53ImportResult{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;padding:13px;border-radius:12px;background:#eef8f1;border:1px solid #cce9d5}
+    .v53ImportResult b{width:100%;color:#17613a}.v53ImportResult span{background:#fff;padding:7px 10px;border-radius:8px;font-weight:800}
+  `;
+  document.head.appendChild(st);
+})();
+</script>
+
 </body></html>
