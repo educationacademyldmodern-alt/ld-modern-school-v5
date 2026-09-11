@@ -2838,7 +2838,7 @@ setTimeout(()=>{v48FixNav();v48EnhanceForms();},500);
    Additive only: restores Forgot Password and strengthens multi-device refresh.
    Existing dashboard/public website/features are not redesigned here.
 */
-const V49_BUILD='V49-FINAL-DB-RECONCILED';
+const V49_BUILD='V49-FINAL-VERIFIED-PLUS';
 
 /* ---------- FORGOT PASSWORD: ADMIN + TEACHER ---------- */
 async function v49ForgotPassword(role){
@@ -3054,5 +3054,635 @@ openERP=async function(){
   return r;
 };
 </script>
+
+
+
+<!-- ===== V49 USER DARK MODE PATCH ===== -->
+<style id="ldDarkModeStyles">
+@media screen {
+  .ldThemeToggle{
+    position:fixed;right:16px;top:88px;z-index:95;
+    border:1px solid #cfd9e6;background:#ffffff;color:#173b68;
+    border-radius:999px;padding:9px 12px;font-weight:900;cursor:pointer;
+    box-shadow:0 8px 24px #071b3830;display:flex;align-items:center;gap:6px
+  }
+  .ldThemeToggle:hover{transform:translateY(-1px)}
+  @media(max-width:650px){
+    .ldThemeToggle{right:10px;top:84px;padding:8px 10px;font-size:12px}
+  }
+
+  html.ld-dark body{background:#0b1220!important;color:#e8eef8!important}
+  html.ld-dark .auth,
+  html.ld-dark .publicPageView,
+  html.ld-dark .publicSection:not(.pubHero),
+  html.ld-dark .soft,
+  html.ld-dark .erp main,
+  html.ld-dark #erpContent{
+    background-color:#0b1220!important;color:#e8eef8!important
+  }
+  html.ld-dark .erp.roleWallpaper main{
+    background-image:linear-gradient(#0b1220e8,#0b1220e8),var(--role-wallpaper)!important
+  }
+
+  html.ld-dark .pubTop,
+  html.ld-dark .erpTop,
+  html.ld-dark .authCard,
+  html.ld-dark .stat,
+  html.ld-dark .panel,
+  html.ld-dark .modalCard,
+  html.ld-dark .v14ModalCard,
+  html.ld-dark .noticeItem,
+  html.ld-dark .resultCard,
+  html.ld-dark .stats div,
+  html.ld-dark .cards3 article,
+  html.ld-dark .quote,
+  html.ld-dark .v39AdminBox,
+  html.ld-dark .futureCard,
+  html.ld-dark .feeSummary button,
+  html.ld-dark .v48ReportGrid button{
+    background:#121c2d!important;color:#edf4ff!important;border-color:#2b3a51!important;
+    box-shadow:none!important
+  }
+
+  html.ld-dark .pubTop nav a,
+  html.ld-dark .loginHero p,
+  html.ld-dark .stats span,
+  html.ld-dark .note,
+  html.ld-dark .stat span,
+  html.ld-dark .erpTop p,
+  html.ld-dark .sideBrand small,
+  html.ld-dark .v14Muted,
+  html.ld-dark .cellSub,
+  html.ld-dark .empty{
+    color:#aebbd0!important
+  }
+
+  html.ld-dark input,
+  html.ld-dark select,
+  html.ld-dark textarea,
+  html.ld-dark .publicForm input,
+  html.ld-dark .publicForm select,
+  html.ld-dark .publicForm textarea,
+  html.ld-dark .searchBox input,
+  html.ld-dark .authCard input,
+  html.ld-dark .tools input,
+  html.ld-dark .tools select,
+  html.ld-dark .panel input,
+  html.ld-dark .panel select,
+  html.ld-dark .panel textarea,
+  html.ld-dark .field input,
+  html.ld-dark .field select,
+  html.ld-dark .field textarea{
+    background:#0f1828!important;color:#f1f6ff!important;border-color:#34445c!important
+  }
+  html.ld-dark input::placeholder,
+  html.ld-dark textarea::placeholder{color:#8392a8!important}
+
+  html.ld-dark .tableWrap{border-color:#2b3a51!important;background:#101827!important}
+  html.ld-dark table{color:#e8eef8!important}
+  html.ld-dark th{background:#172235!important;color:#c7d2e3!important;border-color:#2b3a51!important}
+  html.ld-dark td{background:#101827!important;color:#e8eef8!important;border-color:#253449!important}
+  html.ld-dark tr:hover td{background:#162235!important}
+
+  html.ld-dark .secondary,
+  html.ld-dark .ghost,
+  html.ld-dark .websiteBtn,
+  html.ld-dark .erpHomeBtn,
+  html.ld-dark .modalHead button{
+    background:#172235!important;color:#eaf2ff!important;border-color:#34445c!important
+  }
+
+  html.ld-dark .modalHead{border-color:#2b3a51!important}
+  html.ld-dark .section{color:#8fb9ff!important;border-color:#2b3a51!important}
+  html.ld-dark .empty{border-color:#3a4960!important}
+  html.ld-dark .loginLinks a,
+  html.ld-dark #v49AdminForgot,
+  html.ld-dark .v49ForgotBtn{color:#78aaff!important}
+}
+</style>
+
+<button id="ldThemeToggle" class="ldThemeToggle" type="button" onclick="ldToggleTheme()" aria-label="Toggle dark mode" title="Dark / Light Mode">
+  <span id="ldThemeIcon">🌙</span><span id="ldThemeText">Dark</span>
+</button>
+
+<script>
+(function(){
+  const KEY='ld-modern-theme';
+  function apply(theme){
+    const dark=theme==='dark';
+    document.documentElement.classList.toggle('ld-dark',dark);
+    document.documentElement.style.colorScheme=dark?'dark':'light';
+    const ic=document.getElementById('ldThemeIcon');
+    const tx=document.getElementById('ldThemeText');
+    if(ic)ic.textContent=dark?'☀️':'🌙';
+    if(tx)tx.textContent=dark?'Light':'Dark';
+  }
+  window.ldToggleTheme=function(){
+    const next=document.documentElement.classList.contains('ld-dark')?'light':'dark';
+    try{localStorage.setItem(KEY,next)}catch(_e){}
+    apply(next);
+  };
+  let saved='light';
+  try{saved=localStorage.getItem(KEY)||'light'}catch(_e){}
+  apply(saved);
+})();
+</script>
+<!-- ===== END V49 USER DARK MODE PATCH ===== -->
+
+<!-- ===== V49 PARENT AUTO PASSWORD + ADMIN UPDATE PATCH ===== -->
+<style id="v49ParentPasswordStyles">
+  .v49ParentPassTable input{min-width:150px}
+  .v49ParentPassBadge{display:inline-block;padding:5px 8px;border-radius:999px;background:#eef5ff;color:#174e9a;font-weight:800;font-size:11px}
+  .v49ParentPassNote{padding:12px;border:1px solid #d8e4f2;border-radius:12px;background:#f7fbff;margin:10px 0}
+  html.ld-dark .v49ParentPassNote{background:#101827!important;border-color:#2b3a51!important;color:#e8eef8!important}
+</style>
+<script>
+(function(){
+  function parentAutoPassword(name){
+    let first=String(name||'').trim().split(/\s+/)[0]||'Student';
+    let p=first+'@123';
+    if(p.length<6)p=first+'@1234';
+    return p;
+  }
+  window.v49ParentAutoPassword=parentAutoPassword;
+
+  async function v49ParentApi(payload){
+    let sess=await sb.auth.getSession();
+    let token=sess?.data?.session?.access_token;
+    if(!token)throw new Error('Admin session नहीं मिला. दोबारा Admin login करें.');
+    let r=await fetch('/api/parent-access',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify(payload)
+    });
+    let j={};try{j=await r.json()}catch(_e){}
+    if(!r.ok)throw new Error(j.error||('Server error '+r.status));
+    return j;
+  }
+  window.v49ParentApi=v49ParentApi;
+
+  window.parentAccessCenter=async function(){
+    if(!['super_admin','admin','principal'].includes(profile?.role))return toast('Admin permission required');
+    head('Parent Login Setup','Auto Password • Admin Confirm • Admin Update • Mobile/Email Login');
+    let {data:students,error}=await sb.from('students')
+      .select('id,student_name,admission_no,class_name,father_name,phone,parent_email')
+      .order('class_name').order('student_name');
+    if(error)return toast(error.message);
+    window.__paStudents=students||[];
+
+    let rows=(students||[]).map((s,i)=>{
+      let pass=parentAutoPassword(s.student_name);
+      let realEmail=(s.parent_email||'').includes('@parent.ldmodern.local')?'':(s.parent_email||'');
+      return `<tr>
+        <td><b>${esc(s.student_name||'')}</b><small class="cellSub">${esc(s.class_name||'')} • ${esc(s.admission_no||'')}</small></td>
+        <td><input id="pMob${i}" inputmode="tel" value="${esc(String(s.phone||'').replace(/^\+91/,''))}" placeholder="10 digit mobile"></td>
+        <td><input id="pMail${i}" type="email" value="${esc(realEmail)}" placeholder="Email optional"></td>
+        <td><input id="pPwd${i}" value="${esc(pass)}" autocomplete="new-password"></td>
+        <td>
+          <button class="mini edit" onclick="navigator.clipboard?.writeText($('pPwd${i}').value);toast('Password copied')">Copy</button>
+        </td>
+        <td><button id="pBtn${i}" class="primary" onclick="v49ConfirmParent(${i})">Confirm / Create / Update</button></td>
+      </tr>`;
+    }).join('');
+
+    $('erpContent').innerHTML=`
+      <div class="panel">
+        <div class="panelHead"><div>
+          <h3>🔐 Parent Password Manager</h3>
+          <p class="note">हर Student का default password उसके First Name + @123 से अपने-आप बना है. Admin चाहें तो password बदलकर फिर Confirm कर सकता है.</p>
+        </div></div>
+        <div class="v49ParentPassNote">
+          <b>Example:</b> Rahul Kumar → <b>Rahul@123</b><br>
+          Password database में plain text save नहीं होगा. Parent website पर Mobile या Email + Password से login करेगा.
+        </div>
+        <div class="tableWrap v49ParentPassTable">
+          <table><tr><th>Student</th><th>Parent Mobile</th><th>Parent Email</th><th>Password</th><th>Copy</th><th>Admin Confirm / Update</th></tr>
+          ${rows||'<tr><td colspan="6">No students found</td></tr>'}
+          </table>
+        </div>
+        <div id="v49ParentStatus" class="v32Info" style="margin-top:12px">जिस Student का Parent login बनाना या password update करना हो, उसकी row में Confirm / Create / Update दबाएँ.</div>
+      </div>`;
+  };
+
+  window.v49ConfirmParent=async function(i){
+    let s=(window.__paStudents||[])[i]; if(!s)return toast('Student not found');
+    let mobile=String($('pMob'+i)?.value||'').replace(/\D/g,'').slice(-10);
+    let email=String($('pMail'+i)?.value||'').trim().toLowerCase();
+    let password=$('pPwd'+i)?.value||'';
+    if(mobile.length!==10)return toast('सही 10 digit Parent Mobile डालें');
+    if(password.length<6)return toast('Password कम से कम 6 characters का रखें');
+    if(!confirm(`${s.student_name} का Parent Login Create/Update करना है?`))return;
+
+    let btn=$('pBtn'+i); if(btn){btn.disabled=true;btn.textContent='Saving...'}
+    try{
+      let j=await v49ParentApi({action:'create_or_update',student_id:s.id,mobile,email,password});
+      s.phone=mobile;s.parent_email=j.login_email||email;
+      $('v49ParentStatus').innerHTML=`<b>✓ Parent Login ${j.created?'Created':'Updated'}</b><br>
+        Student: ${esc(s.student_name||'')} • Mobile: <b>${esc(mobile)}</b>
+        ${email?` • Email: <b>${esc(email)}</b>`:''}
+        <br>Parent अब Mobile${email?' या Email':''} + Password से login कर सकता है.`;
+      toast(j.created?'Parent Login created':'Parent Login updated');
+    }catch(e){
+      $('v49ParentStatus').innerHTML='<b>Error:</b> '+esc(e.message||String(e));
+      toast(e.message||String(e));
+    }finally{
+      if(btn){btn.disabled=false;btn.textContent='Confirm / Create / Update'}
+    }
+  };
+
+  // Keep the same render route, but make sure it points to the upgraded center.
+  const oldRenderParentPatch = window.render;
+  window.render=function(p){
+    if(p==='parent_access')return parentAccessCenter();
+    return oldRenderParentPatch(p);
+  };
+})();
+</script>
+<!-- ===== END V49 PARENT AUTO PASSWORD + ADMIN UPDATE PATCH ===== -->
+
+<!-- ===== V49 FINAL GLOBAL LOGO SYNC PATCH ===== -->
+<style id="v49GlobalLogoStyles">
+  .v49DocLogo{display:flex;justify-content:center;align-items:center;margin:0 auto 8px}
+  .v49DocLogo img{width:62px;height:62px;object-fit:contain}
+  .v49IdLogo{width:42px;height:42px;object-fit:contain;vertical-align:middle;margin-right:8px}
+  @media print{
+    .v49DocLogo img{width:58px;height:58px!important}
+    .v49IdLogo{width:38px!important;height:38px!important}
+  }
+</style>
+<script>
+(function(){
+  function v49LogoUrl(){
+    try{
+      return (typeof school!=='undefined' && school && school.logo_url)
+        ? school.logo_url
+        : 'school-logo.png';
+    }catch(_e){
+      return 'school-logo.png';
+    }
+  }
+
+  window.v49ApplyGlobalLogo=function(){
+    const url=v49LogoUrl();
+
+    // Mark only school-brand images. Existing layout/classes are not changed.
+    document.querySelectorAll(
+      'img[src="school-logo.png"],#pubLogo,.v26Brand img,.heroLogoPanel img,.footBrand img,.loginHero img'
+    ).forEach(img=>{
+      if(img && img.tagName==='IMG') img.dataset.schoolLogo='1';
+    });
+
+    document.querySelectorAll('img[data-school-logo="1"]').forEach(img=>{
+      if(img.getAttribute('src')!==url) img.src=url;
+    });
+  };
+
+  // Keep original applySchool exactly; run logo sync only after it.
+  if(typeof window.applySchool==='function' && !window.applySchool.__v49GlobalLogo){
+    const baseApplySchool=window.applySchool;
+    const wrapped=function(){
+      const r=baseApplySchool.apply(this,arguments);
+      try{v49ApplyGlobalLogo()}catch(_e){}
+      return r;
+    };
+    wrapped.__v49GlobalLogo=true;
+    window.applySchool=wrapped;
+  }
+
+  // Keep original Marksheet data/design logic; only prepend current logo in preview/PDF/print HTML.
+  if(typeof window.renderMarksheetHtml==='function' && !window.renderMarksheetHtml.__v49GlobalLogo){
+    const baseMark=window.renderMarksheetHtml;
+    const wrapped=function(){
+      let h=baseMark.apply(this,arguments);
+      const url=v49LogoUrl();
+      if(typeof h==='string' && !h.includes('v49DocLogo')){
+        h=h.replace(
+          '<div class="markHead">',
+          '<div class="markHead"><div class="v49DocLogo"><img data-school-logo="1" src="'+esc(url)+'" alt="School Logo"></div>'
+        );
+      }
+      return h;
+    };
+    wrapped.__v49GlobalLogo=true;
+    window.renderMarksheetHtml=wrapped;
+  }
+
+  // Keep original Fee Card calculation/design logic; only prepend current logo.
+  if(typeof window.renderFeeCard==='function' && !window.renderFeeCard.__v49GlobalLogo){
+    const baseFee=window.renderFeeCard;
+    const wrapped=function(){
+      let h=baseFee.apply(this,arguments);
+      const url=v49LogoUrl();
+      if(typeof h==='string' && !h.includes('v49DocLogo')){
+        h=h.replace(
+          '<div class="markHead">',
+          '<div class="markHead"><div class="v49DocLogo"><img data-school-logo="1" src="'+esc(url)+'" alt="School Logo"></div>'
+        );
+      }
+      return h;
+    };
+    wrapped.__v49GlobalLogo=true;
+    window.renderFeeCard=wrapped;
+  }
+
+  // Keep all 5 original ID Card formats; only add current logo.
+  if(typeof window.renderIdCard==='function' && !window.renderIdCard.__v49GlobalLogo){
+    const baseId=window.renderIdCard;
+    const wrapped=function(){
+      let h=baseId.apply(this,arguments);
+      const url=v49LogoUrl();
+      if(typeof h==='string' && !h.includes('v49IdLogo')){
+        if(h.includes('<div class="v32IdBand">')){
+          h=h.replace(
+            '<div class="v32IdBand">',
+            '<div class="v32IdBand"><img class="v49IdLogo" data-school-logo="1" src="'+esc(url)+'" alt="School Logo">'
+          );
+        }else{
+          h=h.replace(
+            '<div class="idHead">',
+            '<div class="idHead"><img class="v49IdLogo" data-school-logo="1" src="'+esc(url)+'" alt="School Logo">'
+          );
+        }
+      }
+      return h;
+    };
+    wrapped.__v49GlobalLogo=true;
+    window.renderIdCard=wrapped;
+  }
+
+  setTimeout(()=>{try{v49ApplyGlobalLogo()}catch(_e){}},250);
+})();
+</script>
+<!-- ===== END V49 FINAL GLOBAL LOGO SYNC PATCH ===== -->
+
+
+
+<!-- ===== V49 SAFE SCHOOL HIGHLIGHTS / SESSION ICONS PATCH ===== -->
+<style id="v49SchoolHighlightsStyles">
+  .v50HighlightsHost{
+    position:fixed;right:12px;top:132px;width:158px;display:flex;flex-direction:column;
+    gap:10px;z-index:54;pointer-events:none
+  }
+  .v50HighlightCard{
+    pointer-events:auto;background:rgba(255,255,255,.97);border:1px solid #dbe6f4;border-radius:16px;
+    padding:8px;text-align:center;box-shadow:0 10px 28px #001b3d2b;overflow:hidden
+  }
+  .v50HighlightCard img{
+    width:100%;height:112px;object-fit:cover;border-radius:12px;background:#eef3f8
+  }
+  .v50HighlightType{
+    display:inline-block;margin:6px 0 3px;padding:3px 7px;border-radius:999px;
+    font-size:10px;font-weight:900;background:#edf4ff;color:#174f9e
+  }
+  .v50HighlightCard b{display:block;font-size:13px;line-height:1.2;color:#142a44}
+  .v50HighlightCard small{display:block;margin-top:3px;font-size:10px;color:#5b6b7e;line-height:1.25}
+  .v50HighlightCard p{margin:5px 0 0;font-size:10px;line-height:1.25;color:#394d64}
+  .v50HighlightAdminThumb{width:54px;height:54px;border-radius:12px;object-fit:cover;background:#eef3f8}
+  .v50HighlightFormPreview{width:100px;height:100px;border-radius:14px;object-fit:cover;background:#eef3f8}
+  html.ld-dark .v50HighlightCard{background:rgba(15,23,36,.97);border-color:#304157}
+  html.ld-dark .v50HighlightCard b{color:#f1f6ff}
+  html.ld-dark .v50HighlightCard small,html.ld-dark .v50HighlightCard p{color:#b8c6d8}
+  html.ld-dark .v50HighlightType{background:#1c3555;color:#dceaff}
+  @media(max-width:760px){
+    .v50HighlightsHost{
+      position:relative;right:auto;top:auto;width:auto;margin:12px;display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(135px,1fr));z-index:2;pointer-events:auto
+    }
+    .v50HighlightCard img{height:125px}
+  }
+  @media print{.v50HighlightsHost{display:none!important}}
+</style>
+<script>
+(function(){
+  let v50HighlightRows=[];
+
+  function v50IsAdmin(){
+    return ['super_admin','admin','principal'].includes(String(profile?.role||''));
+  }
+
+  function v50EnsureHighlightHost(){
+    let host=document.getElementById('v50HighlightsHost');
+    if(host)return host;
+    host=document.createElement('div');
+    host.id='v50HighlightsHost';
+    host.className='v50HighlightsHost';
+    const exact=document.getElementById('exactHome');
+    const site=document.getElementById('publicSite');
+    if(exact?.parentNode) exact.insertAdjacentElement('afterend',host);
+    else if(site) site.prepend(host);
+    return host;
+  }
+
+  function v50HighlightCardHtml(r){
+    let photo=r.photo_url||'';
+    let line=[r.class_name||'',r.session_label||''].filter(Boolean).join(' • ');
+    return `<article class="v50HighlightCard">
+      ${photo?`<img src="${esc(photo)}" alt="${esc(r.person_name||'School Highlight')}">`:`<div style="height:112px;border-radius:12px;display:grid;place-items:center;background:#eef3f8;font-size:34px">🏆</div>`}
+      <span class="v50HighlightType">${esc(r.highlight_type||'Icon of the Session')}</span>
+      <b>${esc(r.person_name||'')}</b>
+      ${line?`<small>${esc(line)}</small>`:''}
+      ${r.achievement?`<p>${esc(r.achievement)}</p>`:''}
+    </article>`;
+  }
+
+  window.v50LoadPublicHighlights=async function(){
+    let host=v50EnsureHighlightHost();
+    if(!host || !sb){if(host)host.innerHTML='';return}
+    try{
+      let {data,error}=await sb.from('school_highlights').select('*')
+        .eq('is_active',true).order('sort_order',{ascending:true}).order('id',{ascending:true}).limit(3);
+      if(error){host.innerHTML='';host.style.display='none';return}
+      let rows=data||[];
+      host.innerHTML=rows.map(v50HighlightCardHtml).join('');
+      host.style.display=rows.length?'flex':'none';
+    }catch(_e){
+      host.innerHTML='';host.style.display='none';
+    }
+  };
+
+  function v50HighlightTable(rows){
+    if(!rows.length)return '<div class="empty">अभी कोई School Highlight नहीं बनाया गया है.</div>';
+    return `<div class="tableWrap"><table>
+      <tr><th>Photo</th><th>Type / Name</th><th>Class / Session</th><th>Position</th><th>Website</th><th>Action</th></tr>
+      ${rows.map(r=>`<tr>
+        <td>${r.photo_url?`<img class="v50HighlightAdminThumb" src="${esc(r.photo_url)}" alt="">`:'🏆'}</td>
+        <td><b>${esc(r.highlight_type||'')}</b><small class="cellSub">${esc(r.person_name||'')}</small><small class="cellSub">${esc(r.achievement||'')}</small></td>
+        <td>${esc(r.class_name||'—')}<small class="cellSub">${esc(r.session_label||'')}</small></td>
+        <td>${Number(r.sort_order||1)} ${Number(r.sort_order||1)===1?'(Top)':''}</td>
+        <td><span class="v14Badge ${r.is_active?'approved':'pending'}">${r.is_active?'SHOW':'HIDDEN'}</span></td>
+        <td>
+          <button class="mini edit" onclick="v50OpenHighlightForm('${r.id}')">Edit</button>
+          <button class="mini edit" onclick="v50ToggleHighlight('${r.id}',${r.is_active?'false':'true'})">${r.is_active?'Hide':'Show'}</button>
+          <button class="mini del" onclick="v50DeleteHighlight('${r.id}')">Delete</button>
+        </td>
+      </tr>`).join('')}
+    </table></div>`;
+  }
+
+  window.v50SessionIconCenter=async function(){
+    if(!v50IsAdmin())return toast('Admin permission required');
+    head('🏆 School Highlights','School Topper • Important Person • Icon of the Session • Maximum 3');
+    let {data,error}=await sb.from('school_highlights').select('*').order('sort_order',{ascending:true}).order('id',{ascending:true});
+    if(error){
+      $('erpContent').innerHTML=`<div class="panel"><h3>School Highlights setup जरूरी है</h3>
+        <p class="note">यह नया feature पुराने V49 tables को नहीं बदलता. Package में दिया <b>SAFE_ADD_SCHOOL_HIGHLIGHTS.sql</b> Supabase SQL Editor में केवल एक बार run करें.</p>
+        <div class="v32Info">${esc(error.message||'school_highlights table not ready')}</div></div>`;
+      return;
+    }
+    v50HighlightRows=data||[];
+    let active=v50HighlightRows.filter(x=>x.is_active).length;
+    $('erpContent').innerHTML=`<div class="panel">
+      <div class="panelHead"><div><h3>Website Right-Side Highlights</h3>
+        <p class="note">Admin 1, 2 या 3 cards SHOW रख सकता है. Position 1 सबसे ऊपर रहेगा. Mobile पर cards responsive होकर website content को नहीं ढकेंगे.</p>
+      </div><div class="tools">
+        <span class="v14Badge approved">${active} Visible</span>
+        ${v50HighlightRows.length<3?`<button class="primary" onclick="v50OpenHighlightForm()">+ Add Highlight</button>`:`<button class="secondary" disabled>Maximum 3 Added</button>`}
+      </div></div>
+      ${v50HighlightTable(v50HighlightRows)}
+    </div>
+    <div class="panel"><h3>कैसे उपयोग करें</h3>
+      <p class="note">Type चुनें: School Topper / Important Person / Icon of the Session. Photo, Name, Class, Session और Achievement भरें. SHOW/HIDE से तय करें कि website पर 1, 2 या 3 cards दिखें.</p>
+    </div>`;
+  };
+
+  window.v50OpenHighlightForm=function(id=''){
+    if(!v50IsAdmin())return toast('Admin permission required');
+    let r=v50HighlightRows.find(x=>String(x.id)===String(id))||{};
+    if(!id && v50HighlightRows.length>=3)return toast('Maximum 3 Highlights allowed');
+    let selected=(v)=>String(r.highlight_type||'Icon of the Session')===v?'selected':'';
+    v14Modal(`<h2>${id?'Edit':'Add'} School Highlight</h2>
+      <div class="v14Form">
+        <div><label>Type *</label><select id="hiType">
+          <option ${selected('School Topper')}>School Topper</option>
+          <option ${selected('Important Person')}>Important Person</option>
+          <option ${selected('Icon of the Session')}>Icon of the Session</option>
+        </select></div>
+        <div><label>Position</label><select id="hiOrder">
+          ${[1,2,3].map(n=>`<option value="${n}" ${Number(r.sort_order||1)===n?'selected':''}>${n}${n===1?' - Top':''}</option>`).join('')}
+        </select></div>
+        <div class="full"><label>Name *</label><input id="hiName" value="${esc(r.person_name||'')}" placeholder="Student / Person Name"></div>
+        <div><label>Class (optional)</label><input id="hiClass" value="${esc(r.class_name||'')}" placeholder="Class 10"></div>
+        <div><label>Session</label><input id="hiSession" value="${esc(r.session_label||'2026-27')}" placeholder="2026-27"></div>
+        <div class="full"><label>Achievement / Title</label><input id="hiAchievement" value="${esc(r.achievement||'')}" placeholder="School Topper • 95.8%"></div>
+        <div class="full"><label>Photo</label>
+          ${r.photo_url?`<div style="margin:5px 0"><img class="v50HighlightFormPreview" src="${esc(r.photo_url)}" alt=""></div>`:''}
+          <input id="hiPhoto" type="file" accept="image/jpeg,image/png,image/webp">
+          <small class="sizeRule">Photo automatic compress होकर low-storage size में upload होगी.</small>
+        </div>
+        <div class="full"><label><input id="hiActive" type="checkbox" ${r.is_active!==false?'checked':''}> Website पर SHOW करें</label></div>
+        <div class="full"><button class="v14Action primary" onclick="v50SaveHighlight('${id}')">Save Highlight</button></div>
+      </div>`);
+  };
+
+  window.v50SaveHighlight=async function(id=''){
+    if(!v50IsAdmin())return toast('Admin permission required');
+    let old=v50HighlightRows.find(x=>String(x.id)===String(id))||null;
+    let name=String($('hiName')?.value||'').trim();
+    if(!name)return toast('Name जरूरी है');
+    let o={
+      highlight_type:$('hiType').value,
+      person_name:name,
+      class_name:String($('hiClass').value||'').trim()||null,
+      session_label:String($('hiSession').value||'').trim()||'2026-27',
+      achievement:String($('hiAchievement').value||'').trim()||null,
+      sort_order:Number($('hiOrder').value||1),
+      is_active:$('hiActive').checked,
+      updated_at:new Date().toISOString()
+    };
+    let newUpload=null;
+    try{
+      let f=$('hiPhoto')?.files?.[0];
+      if(f){
+        f=await compressImageFile(f,15,50,700,'school-highlight');
+        newUpload=await uploadPublicAsset(f,'session-highlights');
+        o.photo_url=newUpload.url;o.photo_path=newUpload.path;
+      }
+      let q=id?sb.from('school_highlights').update(o).eq('id',id):sb.from('school_highlights').insert(o);
+      let {error}=await q;if(error)throw error;
+      if(newUpload && old?.photo_path && old.photo_path!==newUpload.path){
+        try{await safeStorageRemove('school-media',old.photo_path)}catch(_e){}
+      }
+      $('v14Modal')?.remove();
+      toast('School Highlight saved');
+      await v50SessionIconCenter();
+      await v50LoadPublicHighlights();
+    }catch(e){
+      if(newUpload?.path){try{await safeStorageRemove('school-media',newUpload.path)}catch(_e){}}
+      toast(e.message||String(e));
+    }
+  };
+
+  window.v50ToggleHighlight=async function(id,on){
+    if(!v50IsAdmin())return toast('Admin permission required');
+    let {error}=await sb.from('school_highlights').update({is_active:!!on,updated_at:new Date().toISOString()}).eq('id',id);
+    if(error)return toast(error.message);
+    toast(on?'Highlight SHOW':'Highlight HIDDEN');
+    await v50SessionIconCenter();await v50LoadPublicHighlights();
+  };
+
+  window.v50DeleteHighlight=async function(id){
+    if(!v50IsAdmin())return toast('Admin permission required');
+    let r=v50HighlightRows.find(x=>String(x.id)===String(id));
+    if(!confirm('यह School Highlight delete करना है?'))return;
+    let {error}=await sb.from('school_highlights').delete().eq('id',id);
+    if(error)return toast(error.message);
+    if(r?.photo_path){try{await safeStorageRemove('school-media',r.photo_path)}catch(_e){}}
+    toast('Highlight deleted');
+    await v50SessionIconCenter();await v50LoadPublicHighlights();
+  };
+
+  function v50AddAdminNav(){
+    if(!v50IsAdmin())return;
+    let navHost=$('erpNav');if(!navHost||navHost.querySelector('[data-v50-highlights="1"]'))return;
+    let b=document.createElement('button');
+    b.dataset.v50Highlights='1';
+    b.innerHTML='🏆 School Highlights';
+    b.onclick=()=>render('session_icons');
+    navHost.appendChild(b);
+  }
+
+  // Preserve every existing render route; intercept only the new page name.
+  const v50RenderBase=window.render;
+  window.render=function(p){
+    if(p==='session_icons')return v50SessionIconCenter();
+    return v50RenderBase.apply(this,arguments);
+  };
+
+  // Preserve existing ERP login/open behavior; only append one Admin navigation button.
+  const v50OpenERPBase=window.openERP;
+  window.openERP=async function(){
+    const r=await v50OpenERPBase.apply(this,arguments);
+    setTimeout(v50AddAdminNav,40);
+    return r;
+  };
+
+  // Refresh highlight cards whenever returning to the public website.
+  const v50BackWebsiteBase=window.backWebsite;
+  window.backWebsite=function(){
+    const r=v50BackWebsiteBase.apply(this,arguments);
+    setTimeout(v50LoadPublicHighlights,80);
+    return r;
+  };
+
+  // If Realtime list is available, safely add only the new table.
+  try{
+    if(Array.isArray(v49RealtimeTables) && !v49RealtimeTables.includes('school_highlights')){
+      v49RealtimeTables.push('school_highlights');
+    }
+  }catch(_e){}
+
+  // Initial public page was loaded before this appended patch executes, so retry briefly until Supabase is ready.
+  let tries=0;
+  const timer=setInterval(()=>{
+    tries++;
+    if(typeof sb!=='undefined' && sb){
+      clearInterval(timer);v50LoadPublicHighlights();
+    }else if(tries>=12){
+      clearInterval(timer);
+    }
+  },350);
+})();
+</script>
+<!-- ===== END V49 SAFE SCHOOL HIGHLIGHTS / SESSION ICONS PATCH ===== -->
 
 </body></html>
