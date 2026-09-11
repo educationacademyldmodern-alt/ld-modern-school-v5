@@ -3685,4 +3685,1072 @@ openERP=async function(){
 </script>
 <!-- ===== END V49 SAFE SCHOOL HIGHLIGHTS / SESSION ICONS PATCH ===== -->
 
+
+
+<!-- ===== V49 SAFE SIDEBAR MENU + ONLINE APPLICATIONS PATCH ===== -->
+<style id="v49SafeMenuFixStyles">
+  .v51AppStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+  .v51AppStats>div{padding:13px;border:1px solid #dbe5f0;border-radius:13px;background:#fff}
+  .v51AppStats span{display:block;font-size:11px;color:#6b7b8e}
+  .v51AppStats b{display:block;font-size:20px;margin-top:3px}
+  .v51OnlineTable .mini{white-space:nowrap}
+  @media(max-width:760px){.v51AppStats{grid-template-columns:1fr 1fr}}
+  html.ld-dark .v51AppStats>div{background:#111b2a!important;border-color:#304157!important}
+  html.ld-dark .v51AppStats span{color:#b7c4d5!important}
+</style>
+<script>
+(function(){
+  function v51IsAdmin(){
+    return ['super_admin','admin','principal'].includes(String(profile?.role||''));
+  }
+
+  // Add ONLY two missing menu entries inside the existing Student Management group.
+  try{
+    const g=(typeof v48AdminGroups!=='undefined')
+      ? v48AdminGroups.find(x=>String(x?.[1]||'')==='Student Management')
+      : null;
+    if(g && Array.isArray(g[2])){
+      const items=g[2];
+      const has=k=>items.some(x=>x[0]===k);
+
+      const admissionIndex=Math.max(0,items.findIndex(x=>x[0]==='admissions'));
+
+      if(!has('online_admissions')){
+        items.splice(admissionIndex+1,0,['online_admissions','Online Admission Applications']);
+      }
+
+      if(!has('parent_access')){
+        const hubIndex=items.findIndex(x=>x[0]==='data_hub');
+        items.splice(hubIndex>=0?hubIndex+1:items.length,0,['parent_access','🔐 Parent Login Setup']);
+      }
+    }
+  }catch(e){
+    console.warn('Safe menu add skipped',e);
+  }
+
+  function v51OnlineSource(r){
+    const src=String(r.admission_source||'').toLowerCase();
+    return !!String(r.application_no||'').trim() ||
+      src.includes('online') || src.includes('website') || src.includes('public');
+  }
+
+  function v51StatusClass(s){
+    s=String(s||'Pending').toLowerCase();
+    return s==='approved'?'approved':s==='rejected'?'rejected':'pending';
+  }
+
+  window.v51OnlineAdmissionCenter=async function(){
+    if(!v51IsAdmin())return toast('Admin permission required');
+    head('Online Admission Applications','Pending • Review • Edit • Approve • Reject • Student Sync');
+
+    let {data,error}=await sb.from('admissions').select('*').order('created_at',{ascending:false});
+    if(error)return $('erpContent').innerHTML=`<div class="panel">${esc(error.message)}</div>`;
+
+    let rows=(data||[]).filter(v51OnlineSource);
+    let pending=rows.filter(r=>String(r.admission_status||'Pending').toLowerCase()==='pending').length;
+    let approved=rows.filter(r=>String(r.admission_status||'').toLowerCase()==='approved').length;
+    let rejected=rows.filter(r=>String(r.admission_status||'').toLowerCase()==='rejected').length;
+
+    $('erpContent').innerHTML=`
+      <div class="v51AppStats">
+        <div><span>Total Online Applications</span><b>${rows.length}</b></div>
+        <div><span>Pending</span><b>${pending}</b></div>
+        <div><span>Approved</span><b>${approved}</b></div>
+        <div><span>Rejected</span><b>${rejected}</b></div>
+      </div>
+
+      <div class="panel">
+        <div class="panelHead">
+          <div>
+            <h3>🌐 Online Admission Applications</h3>
+            <p class="note">Website से submit हुए forms यहाँ review होंगे. Approve होने पर existing V49 sync logic Student Register में student जोड़ता/update करता है.</p>
+          </div>
+          <div class="tools">
+            <button class="secondary" onclick="v51OpenPublicAdmissionForm()">Open Public Admission Form</button>
+            <button class="secondary" onclick="render('admissions')">Open Full Admission Register</button>
+          </div>
+        </div>
+
+        <div class="tableWrap v51OnlineTable">
+          <table>
+            <tr>
+              <th>Application</th><th>Student</th><th>Class</th><th>Father</th><th>Mobile</th><th>Session</th><th>Status</th><th>Action</th>
+            </tr>
+            ${rows.map(r=>{
+              const st=String(r.admission_status||'Pending');
+              const isPending=st.toLowerCase()==='pending';
+              return `<tr>
+                <td><b>${esc(r.application_no||'—')}</b><small class="cellSub">${esc(r.admission_no||'')}</small></td>
+                <td><b>${esc(r.student_name||'')}</b></td>
+                <td>${esc(r.class_name||'')}</td>
+                <td>${esc(r.father_name||'')}</td>
+                <td>${esc(r.primary_phone||r.parent_verified_phone||'')}</td>
+                <td>${esc(r.academic_session||'')}</td>
+                <td><span class="v14Badge ${v51StatusClass(st)}">${esc(st)}</span></td>
+                <td>
+                  <button class="mini edit" onclick='openEdit("admissions",${JSON.stringify(r).replace(/'/g,"&#39;")})'>Edit / Review</button>
+                  ${isPending?`<button class="mini edit" onclick="v51ApproveOnlineAdmission('${r.id}')">Approve</button>
+                  <button class="mini del" onclick="v51RejectOnlineAdmission('${r.id}')">Reject</button>`:''}
+                </td>
+              </tr>`;
+            }).join('') || '<tr><td colspan="8">अभी कोई Online Admission Application नहीं है.</td></tr>'}
+          </table>
+        </div>
+      </div>`;
+  };
+
+  window.v51ApproveOnlineAdmission=async function(id){
+    if(!v51IsAdmin())return toast('Admin permission required');
+    await approveAdmission(id);
+    setTimeout(()=>v51OnlineAdmissionCenter(),120);
+  };
+
+  window.v51RejectOnlineAdmission=async function(id){
+    if(!v51IsAdmin())return toast('Admin permission required');
+    let reason=prompt('Reason for rejection (optional)')||'';
+    let {error}=await sb.from('admissions')
+      .update({admission_status:'Rejected',rejected_reason:reason})
+      .eq('id',id);
+    if(error)return toast(error.message);
+    toast('Application rejected');
+    await v51OnlineAdmissionCenter();
+  };
+
+  window.v51OpenPublicAdmissionForm=function(){
+    backWebsite();
+    setTimeout(()=>showPublicPage('admission'),100);
+  };
+
+  // Preserve every existing route. Intercept only the new Online Applications page.
+  const v51RenderBase=window.render;
+  window.render=function(p){
+    if(p==='online_admissions')return v51OnlineAdmissionCenter();
+    return v51RenderBase.apply(this,arguments);
+  };
+})();
+</script>
+<!-- ===== END V49 SAFE SIDEBAR MENU + ONLINE APPLICATIONS PATCH ===== -->
+
+
+
+<!-- ===== V49 SAFE ATTENDANCE REGISTER + DELETED FILES CENTER PATCH ===== -->
+<style id="v52AttendanceDeleteStyles">
+  .v52Toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+  .v52Toolbar input,.v52Toolbar select{padding:9px 10px;border:1px solid #d8e2ee;border-radius:9px;background:#fff}
+  .v52AttendTable th,.v52AttendTable td{vertical-align:middle}
+  .v52AttendChoice{display:flex;gap:5px;flex-wrap:wrap}
+  .v52AttendChoice label{display:inline-flex;align-items:center;gap:3px;border:1px solid #dce5ef;border-radius:999px;padding:5px 8px;cursor:pointer;background:#fff;font-size:11px;font-weight:800}
+  .v52AttendChoice input{margin:0}
+  .v52DeleteTabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  .v52DeleteTabs button{padding:8px 12px;border:1px solid #d8e2ee;border-radius:999px;background:#fff;cursor:pointer;font-weight:800}
+  .v52DeleteTabs button.active{background:#1558b0;color:#fff;border-color:#1558b0}
+  .v52DangerBox{border:1px solid #efc5c1;background:#fff6f5;border-radius:12px;padding:12px;color:#8d221a;margin:10px 0}
+  .v52TrashBadge{display:inline-block;padding:4px 7px;border-radius:999px;background:#fff0ef;color:#9a241c;font-size:10px;font-weight:900}
+  html.ld-dark .v52Toolbar input,html.ld-dark .v52Toolbar select,html.ld-dark .v52AttendChoice label,html.ld-dark .v52DeleteTabs button{background:#111b2a!important;color:#eaf1fb!important;border-color:#304157!important}
+  html.ld-dark .v52DangerBox{background:#2a1717!important;border-color:#704040!important;color:#ffd7d2!important}
+  @media(max-width:760px){
+    .v52Toolbar>*{flex:1 1 140px}
+    .v52AttendChoice{min-width:190px}
+  }
+</style>
+<script>
+(function(){
+  function v52Admin(){return ['super_admin','admin','principal'].includes(String(profile?.role||''))}
+  function v52Norm(s){return String(s||'').trim().toLowerCase()}
+  function v52Digits(s){return String(s||'').replace(/\D/g,'').slice(-10)}
+  function v52EscId(s){return String(s||'').replace(/[^a-zA-Z0-9_-]/g,'_')}
+
+  // ---------------- STUDENT ATTENDANCE REGISTER ----------------
+  let v52StudentRows=[];
+  window.v52StudentAttendanceRegister=async function(){
+    head('✅ Student Attendance Register','Students auto-load • Present / Absent / Leave • Select All • Save');
+    $('erpContent').innerHTML=`
+      <div class="panel">
+        <div class="panelHead"><div>
+          <h3>Student Attendance</h3>
+          <p class="note">Master Student list अपने-आप आएगी. सिर्फ attendance tick करें.</p>
+        </div></div>
+        <div class="v52Toolbar">
+          <input id="v52StuDate" type="date" value="${today()}" onchange="v52LoadStudentAttendance()">
+          <select id="v52StuClass" onchange="v52LoadStudentAttendance()"><option value="">All Classes</option>${cls.map(c=>`<option>${esc(c)}</option>`).join('')}</select>
+          <input id="v52StuSec" placeholder="Section optional" oninput="clearTimeout(window._v52s);window._v52s=setTimeout(v52LoadStudentAttendance,250)">
+          <button class="secondary" onclick="v52SetStudentAll('Present')">All Present</button>
+          <button class="secondary" onclick="v52SetStudentAll('Absent')">All Absent</button>
+          <button class="secondary" onclick="v52SetStudentAll('Leave')">All Leave</button>
+          <button class="primary" onclick="v52SaveStudentAttendance()">Save Attendance</button>
+        </div>
+        <div id="v52StudentAttendanceBox"><div class="empty">Loading students...</div></div>
+      </div>`;
+    await v52LoadStudentAttendance();
+  };
+
+  window.v52LoadStudentAttendance=async function(){
+    let box=$('v52StudentAttendanceBox');if(!box)return;
+    let d=$('v52StuDate')?.value||today(),c=$('v52StuClass')?.value||'',sec=String($('v52StuSec')?.value||'').trim();
+    box.innerHTML='<div class="empty">Loading...</div>';
+    let q=sb.from('students').select('id,student_name,admission_no,student_id,roll_no,class_name,section,father_name,status').order('class_name').order('roll_no').order('student_name');
+    if(c)q=q.eq('class_name',c); if(sec)q=q.ilike('section',sec);
+    let [sr,ar]=await Promise.all([q,sb.from('attendance').select('admission_no,status,remark').eq('date',d)]);
+    if(sr.error)return box.innerHTML=esc(sr.error.message);
+    let amap={};(ar.data||[]).forEach(x=>amap[String(x.admission_no||'')]=x);
+    v52StudentRows=(sr.data||[]).filter(x=>v52Norm(x.status)!=='deleted').map(x=>({...x,_att:(amap[x.admission_no]?.status||'Present')}));
+    box.innerHTML=`<div class="tableWrap"><table class="v52AttendTable">
+      <tr><th>SN</th><th>Student</th><th>Roll</th><th>Adm No.</th><th>Class</th><th>Father</th><th>Attendance</th></tr>
+      ${v52StudentRows.map((r,i)=>`<tr>
+        <td>${i+1}</td><td><b>${esc(r.student_name||'')}</b><small class="cellSub">${esc(r.section||'')}</small></td>
+        <td>${esc(r.roll_no||'')}</td><td>${esc(r.admission_no||'')}</td><td>${esc(r.class_name||'')}</td><td>${esc(r.father_name||'')}</td>
+        <td><div class="v52AttendChoice">
+          ${['Present','Absent','Leave'].map(s=>`<label><input type="radio" name="v52sa_${i}" value="${s}" ${r._att===s?'checked':''}> ${s}</label>`).join('')}
+        </div></td>
+      </tr>`).join('')||'<tr><td colspan="7">No students found.</td></tr>'}
+    </table></div><div class="v32Info"><b>${v52StudentRows.length}</b> students loaded • Date: ${esc(d)}</div>`;
+  };
+
+  window.v52SetStudentAll=function(st){
+    v52StudentRows.forEach((_,i)=>{let x=document.querySelector(`input[name="v52sa_${i}"][value="${st}"]`);if(x)x.checked=true});
+  };
+
+  window.v52SaveStudentAttendance=async function(){
+    let d=$('v52StuDate')?.value||today();if(!v52StudentRows.length)return toast('No students');
+    let rows=v52StudentRows.map((r,i)=>{
+      let st=document.querySelector(`input[name="v52sa_${i}"]:checked`)?.value||'Present';
+      return {date:d,student_name:r.student_name,admission_no:r.admission_no,class_name:r.class_name,section:r.section||'',status:st,remark:'Register'};
+    });
+    let {error}=await sb.from('attendance').upsert(rows,{onConflict:'date,admission_no'});
+    if(error)return toast(error.message);
+    toast(rows.length+' student attendance saved');
+    await v52LoadStudentAttendance();
+  };
+
+  // ---------------- STAFF / TEACHER ATTENDANCE REGISTER ----------------
+  let v52StaffRows=[];
+  window.v52StaffAttendanceRegister=async function(){
+    if(!v52Admin())return toast('Admin permission required');
+    head('🟢 Staff Attendance Register','Approved Teachers + Active Staff auto-load • Tick only');
+    $('erpContent').innerHTML=`
+      <div class="panel">
+        <div class="panelHead"><div><h3>Teacher / Staff Attendance</h3>
+          <p class="note">Approved Teachers और Active Staff अपने-आप list में आएँगे. Duplicate नाम/email/mobile merge होगा.</p>
+        </div></div>
+        <div class="v52Toolbar">
+          <input id="v52StaffDate" type="date" value="${today()}" onchange="v52LoadStaffAttendance()">
+          <button class="secondary" onclick="v52SetStaffAll('Present')">All Present</button>
+          <button class="secondary" onclick="v52SetStaffAll('Absent')">All Absent</button>
+          <button class="secondary" onclick="v52SetStaffAll('Leave')">All Leave</button>
+          <button class="primary" onclick="v52SaveStaffAttendance()">Save Attendance</button>
+        </div>
+        <div id="v52StaffAttendanceBox"><div class="empty">Loading teachers/staff...</div></div>
+      </div>`;
+    await v52LoadStaffAttendance();
+  };
+
+  window.v52LoadStaffAttendance=async function(){
+    let box=$('v52StaffAttendanceBox');if(!box)return;
+    let d=$('v52StaffDate')?.value||today();
+    let [st,tr,ar]=await Promise.all([
+      sb.from('staff').select('id,employee_id,staff_name,staff_type,designation,phone,email,status').order('staff_name'),
+      sb.from('teacher_profiles').select('id,employee_id,teacher_name,full_name,email,mobile,phone,approval_status,status').eq('approval_status','Approved').order('teacher_name'),
+      sb.from('staff_attendance').select('employee_id,staff_name,status,remark').eq('date',d)
+    ]);
+    if(st.error)return box.innerHTML=esc(st.error.message);
+    let map=new Map();
+    function keyOf(x){
+      let e=v52Norm(x.email),p=v52Digits(x.phone||x.mobile),n=v52Norm(x.staff_name||x.teacher_name||x.full_name);
+      return e?('e:'+e):p?('p:'+p):('n:'+n);
+    }
+    (st.data||[]).filter(x=>v52Norm(x.status)!=='deleted' && !/inactive|disabled/i.test(String(x.status||''))).forEach(x=>{
+      map.set(keyOf(x),{source:'staff',id:x.id,employee_id:x.employee_id||('ST-'+String(x.id).slice(0,8)),staff_name:x.staff_name||'',designation:x.designation||x.staff_type||'Staff',email:x.email||'',phone:x.phone||''});
+    });
+    (tr.data||[]).filter(x=>v52Norm(x.status)!=='deleted').forEach(x=>{
+      let k=keyOf(x),old=map.get(k);
+      let row={source:'teacher',id:x.id,employee_id:x.employee_id||('TP-'+String(x.id).slice(0,8)),staff_name:x.teacher_name||x.full_name||x.email||'Teacher',designation:'Teacher',email:x.email||'',phone:x.mobile||x.phone||''};
+      if(old)map.set(k,{...row,...old,employee_id:old.employee_id||row.employee_id,staff_name:old.staff_name||row.staff_name});
+      else map.set(k,row);
+    });
+    let amap={};(ar.data||[]).forEach(x=>{amap[String(x.employee_id||'')]=x; if(x.staff_name)amap['n:'+v52Norm(x.staff_name)]=x});
+    v52StaffRows=[...map.values()].sort((a,b)=>a.staff_name.localeCompare(b.staff_name)).map(x=>({...x,_att:(amap[x.employee_id]?.status||amap['n:'+v52Norm(x.staff_name)]?.status||'Present')}));
+    box.innerHTML=`<div class="tableWrap"><table class="v52AttendTable">
+      <tr><th>SN</th><th>Name</th><th>ID</th><th>Designation</th><th>Contact</th><th>Attendance</th></tr>
+      ${v52StaffRows.map((r,i)=>`<tr>
+        <td>${i+1}</td><td><b>${esc(r.staff_name)}</b><small class="cellSub">${esc(r.email||'')}</small></td>
+        <td>${esc(r.employee_id)}</td><td>${esc(r.designation||'')}</td><td>${esc(r.phone||'')}</td>
+        <td><div class="v52AttendChoice">${['Present','Absent','Leave'].map(s=>`<label><input type="radio" name="v52sta_${i}" value="${s}" ${r._att===s?'checked':''}> ${s}</label>`).join('')}</div></td>
+      </tr>`).join('')||'<tr><td colspan="6">No approved teachers / active staff found.</td></tr>'}
+    </table></div><div class="v32Info"><b>${v52StaffRows.length}</b> teachers/staff loaded • Date: ${esc(d)}</div>`;
+  };
+
+  window.v52SetStaffAll=function(st){
+    v52StaffRows.forEach((_,i)=>{let x=document.querySelector(`input[name="v52sta_${i}"][value="${st}"]`);if(x)x.checked=true});
+  };
+
+  window.v52SaveStaffAttendance=async function(){
+    let d=$('v52StaffDate')?.value||today();if(!v52StaffRows.length)return toast('No teacher/staff');
+    let ids=v52StaffRows.map(x=>x.employee_id).filter(Boolean);
+    if(ids.length){
+      let del=await sb.from('staff_attendance').delete().eq('date',d).in('employee_id',ids);
+      if(del.error)return toast(del.error.message);
+    }
+    let rows=v52StaffRows.map((r,i)=>({
+      date:d,staff_name:r.staff_name,employee_id:r.employee_id,
+      status:document.querySelector(`input[name="v52sta_${i}"]:checked`)?.value||'Present',
+      remark:'Register'
+    }));
+    let {error}=await sb.from('staff_attendance').insert(rows);
+    if(error)return toast(error.message);
+    toast(rows.length+' teacher/staff attendance saved');
+    await v52LoadStaffAttendance();
+  };
+
+  // ---------------- SECURE DELETE API ----------------
+  async function v52DeleteApi(payload){
+    let sess=await sb.auth.getSession(),token=sess?.data?.session?.access_token;
+    if(!token)throw new Error('Admin session missing');
+    let r=await fetch('/api/admin-delete',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify(payload)
+    });
+    let j={};try{j=await r.json()}catch(_e){}
+    if(!r.ok)throw new Error(j.error||('Server error '+r.status));
+    return j;
+  }
+
+  let v52DeleteType='student',v52DeleteRows=[],v52TrashRows=[];
+
+  // Add Deleted Files to existing Settings group only.
+  try{
+    const g=(typeof v48AdminGroups!=='undefined')?v48AdminGroups.find(x=>String(x?.[1]||'')==='Settings'):null;
+    if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='deleted_files'))g[2].push(['deleted_files','🗑️ Deleted Files']);
+  }catch(_e){}
+
+  window.v52DeletedFilesCenter=async function(){
+    if(!v52Admin())return toast('Admin permission required');
+    head('🗑️ Deleted Files','Move to Trash • Select All • Restore • Permanent Delete');
+    $('erpContent').innerHTML=`
+      <div class="panel">
+        <div class="panelHead"><div><h3>Delete Data</h3><p class="note">Normal Delete पहले Deleted Files में जाएगा. Permanent Delete अलग confirmation के बाद ही होगा.</p></div></div>
+        <div class="v52DeleteTabs">
+          ${[['student','Students'],['teacher','Teachers'],['staff','Staff'],['admission','Admission Applications']].map(x=>`<button id="v52tab_${x[0]}" onclick="v52LoadDeleteSource('${x[0]}')">${x[1]}</button>`).join('')}
+        </div>
+        <div class="v52Toolbar">
+          <label><input id="v52SourceAll" type="checkbox" onchange="v52ToggleAll('.v52SourceCheck',this.checked)"> Select All</label>
+          <button class="secondary" onclick="v52RefreshDeleteCenter()">Refresh</button>
+          <button class="primary" onclick="v52MoveSelectedToTrash()">Move Selected to Deleted Files</button>
+        </div>
+        <div id="v52DeleteSourceBox"><div class="empty">Loading...</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panelHead"><div><h3>Deleted Files / Recycle Bin</h3>
+          <p class="note">यहाँ से Restore या Permanent Delete करें. Permanent Delete के बाद data वापस नहीं आएगा.</p>
+        </div></div>
+        <div class="v52DangerBox"><b>Permanent Delete:</b> Student/Teacher के linked attendance, fees, marks, assignments आदि भी key-based cleanup से हटेंगे. इसलिए confirmation जरूरी है.</div>
+        <div class="v52Toolbar">
+          <label><input id="v52TrashAll" type="checkbox" onchange="v52ToggleAll('.v52TrashCheck',this.checked)"> Select All</label>
+          <button class="secondary" onclick="v52RestoreSelected()">Restore Selected</button>
+          <button class="mini del" onclick="v52PermanentDeleteSelected()">Permanent Delete Selected</button>
+        </div>
+        <div id="v52TrashBox"><div class="empty">Loading deleted files...</div></div>
+      </div>`;
+    await v52LoadDeleteSource(v52DeleteType);
+    await v52LoadTrash();
+  };
+
+  window.v52ToggleAll=function(sel,on){document.querySelectorAll(sel).forEach(x=>x.checked=!!on)};
+
+  window.v52LoadDeleteSource=async function(type){
+    v52DeleteType=type;
+    document.querySelectorAll('[id^="v52tab_"]').forEach(b=>b.classList.toggle('active',b.id==='v52tab_'+type));
+    let box=$('v52DeleteSourceBox');if(!box)return;box.innerHTML='<div class="empty">Loading...</div>';
+    let r;
+    if(type==='student')r=await sb.from('students').select('id,student_name,admission_no,class_name,father_name,phone,status').order('student_name');
+    if(type==='teacher')r=await sb.from('teacher_profiles').select('id,teacher_name,full_name,email,mobile,phone,approval_status,status').order('teacher_name');
+    if(type==='staff')r=await sb.from('staff').select('id,employee_id,staff_name,designation,email,phone,status').order('staff_name');
+    if(type==='admission')r=await sb.from('admissions').select('id,application_no,admission_no,student_name,class_name,father_name,primary_phone,admission_status').order('created_at',{ascending:false});
+    if(!r||r.error)return box.innerHTML=esc(r?.error?.message||'Load failed');
+    v52DeleteRows=(r.data||[]).filter(x=>v52Norm(x.status||x.admission_status)!=='deleted');
+    box.innerHTML=`<div class="tableWrap"><table><tr><th>Select</th><th>Name</th><th>ID / Admission</th><th>Details</th></tr>
+      ${v52DeleteRows.map((x,i)=>{
+        let name=x.student_name||x.teacher_name||x.full_name||x.staff_name||'';
+        let key=x.admission_no||x.application_no||x.employee_id||x.email||'';
+        let detail=x.class_name||x.designation||x.approval_status||x.father_name||'';
+        return `<tr><td><input class="v52SourceCheck" type="checkbox" value="${i}"></td><td><b>${esc(name)}</b></td><td>${esc(key)}</td><td>${esc(detail)}</td></tr>`;
+      }).join('')||'<tr><td colspan="4">No data.</td></tr>'}
+    </table></div>`;
+  };
+
+  window.v52MoveSelectedToTrash=async function(){
+    let idx=[...document.querySelectorAll('.v52SourceCheck:checked')].map(x=>Number(x.value)).filter(Number.isFinite);
+    if(!idx.length)return toast('Select data first');
+    if(!confirm(idx.length+' selected record(s) Deleted Files में भेजना है?'))return;
+    try{
+      for(const i of idx){
+        let row=v52DeleteRows[i];if(!row)continue;
+        await v52DeleteApi({action:'archive',entity_type:v52DeleteType,entity_id:row.id});
+      }
+      toast(idx.length+' moved to Deleted Files');
+      await v52LoadDeleteSource(v52DeleteType);await v52LoadTrash();
+    }catch(e){toast(e.message||String(e))}
+  };
+
+  window.v52LoadTrash=async function(){
+    let box=$('v52TrashBox');if(!box)return;
+    let {data,error}=await sb.from('deleted_files').select('id,entity_type,entity_key,display_name,deleted_at,deleted_by').order('deleted_at',{ascending:false});
+    if(error)return box.innerHTML=`<div class="v32Info">${esc(error.message)} • SAFE_ADD_DELETED_FILES.sql run करें.</div>`;
+    v52TrashRows=data||[];
+    box.innerHTML=`<div class="tableWrap"><table><tr><th>Select</th><th>Type</th><th>Name</th><th>Key</th><th>Deleted At</th><th>Action</th></tr>
+      ${v52TrashRows.map((x,i)=>`<tr>
+        <td><input class="v52TrashCheck" type="checkbox" value="${i}"></td>
+        <td><span class="v52TrashBadge">${esc(x.entity_type)}</span></td><td><b>${esc(x.display_name||'')}</b></td>
+        <td>${esc(x.entity_key||'')}</td><td>${esc(String(x.deleted_at||'').replace('T',' ').slice(0,19))}</td>
+        <td><button class="mini edit" onclick="v52RestoreOne('${x.id}')">Restore</button> <button class="mini del" onclick="v52PermanentDeleteOne('${x.id}')">Permanent Delete</button></td>
+      </tr>`).join('')||'<tr><td colspan="6">Deleted Files empty.</td></tr>'}
+    </table></div>`;
+  };
+
+  window.v52RestoreOne=async function(id){
+    if(!confirm('Restore this record?'))return;
+    try{await v52DeleteApi({action:'restore',trash_ids:[id]});toast('Restored');await v52LoadTrash();await v52LoadDeleteSource(v52DeleteType)}catch(e){toast(e.message||String(e))}
+  };
+  window.v52RestoreSelected=async function(){
+    let ids=[...document.querySelectorAll('.v52TrashCheck:checked')].map(x=>v52TrashRows[Number(x.value)]?.id).filter(Boolean);
+    if(!ids.length)return toast('Select deleted files');
+    if(!confirm(ids.length+' record(s) restore करना है?'))return;
+    try{await v52DeleteApi({action:'restore',trash_ids:ids});toast(ids.length+' restored');await v52LoadTrash();await v52LoadDeleteSource(v52DeleteType)}catch(e){toast(e.message||String(e))}
+  };
+  window.v52PermanentDeleteOne=async function(id){await v52PermanentDeleteIds([id])};
+  window.v52PermanentDeleteSelected=async function(){
+    let ids=[...document.querySelectorAll('.v52TrashCheck:checked')].map(x=>v52TrashRows[Number(x.value)]?.id).filter(Boolean);
+    if(!ids.length)return toast('Select deleted files');await v52PermanentDeleteIds(ids);
+  };
+  async function v52PermanentDeleteIds(ids){
+    if(!confirm('PERMANENT DELETE के बाद data वापस नहीं आएगा. Continue?'))return;
+    let word=prompt('Confirm करने के लिए PERMANENT लिखें');
+    if(String(word||'').trim().toUpperCase()!=='PERMANENT')return toast('Permanent delete cancelled');
+    try{await v52DeleteApi({action:'permanent_delete',trash_ids:ids});toast(ids.length+' permanently deleted');await v52LoadTrash()}catch(e){toast(e.message||String(e))}
+  }
+  window.v52RefreshDeleteCenter=async function(){await v52LoadDeleteSource(v52DeleteType);await v52LoadTrash()};
+
+  // Existing delete buttons for Student/Staff/Admission now go safely to Deleted Files.
+  const v52DelRowBase=window.delRow;
+  window.delRow=async function(k,id){
+    if(v52Admin()&&['students','staff','admissions'].includes(k)){
+      let type=k==='students'?'student':k==='staff'?'staff':'admission';
+      if(!confirm('यह record पहले Deleted Files में जाएगा. Continue?'))return;
+      try{await v52DeleteApi({action:'archive',entity_type:type,entity_id:id});toast('Moved to Deleted Files');afterSave(k)}catch(e){toast(e.message||String(e))}
+      return;
+    }
+    return v52DelRowBase.apply(this,arguments);
+  };
+
+  // Preserve every old route; only replace Attendance pages and add Deleted Files.
+  const v52RenderBase=window.render;
+  window.render=function(p){
+    if(p==='attendance')return v52StudentAttendanceRegister();
+    if(p==='staff_attendance')return v52StaffAttendanceRegister();
+    if(p==='deleted_files')return v52DeletedFilesCenter();
+    return v52RenderBase.apply(this,arguments);
+  };
+})();
+</script>
+<!-- ===== END V49 SAFE ATTENDANCE REGISTER + DELETED FILES CENTER PATCH ===== -->
+
+
+
+<!-- ===== V49 SAFE AUTO NUMBER + MASTER SMART IMPORT PATCH ===== -->
+<style id="v53AutoIdImportStyles">
+  .v53RuleBox{margin-top:12px;padding:12px 14px;border:1px solid #cfe0f3;border-radius:12px;background:#f6faff;line-height:1.65;font-size:12px}
+  .v53RuleBox b{color:#0b4eb8}
+  .v53ImportStat{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:12px}
+  .v53ImportStat>div{padding:10px;border:1px solid #dce6f1;border-radius:10px;background:#fff}
+  .v53ImportStat span{display:block;font-size:10px;color:#6c7b8e}.v53ImportStat b{display:block;font-size:18px;margin-top:2px}
+  html.ld-dark .v53RuleBox,html.ld-dark .v53ImportStat>div{background:#111b2a!important;color:#e8eef8!important;border-color:#304157!important}
+  @media(max-width:700px){.v53ImportStat{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  function v53Admin(){return ['super_admin','admin','principal','admission'].includes(String(profile?.role||''))}
+  function v53Text(v){return String(v??'').trim()}
+  function v53Norm(v){return v53Text(v).toLowerCase().replace(/\s+/g,' ')}
+  function v53Digits(v){return String(v??'').replace(/\D/g,'').slice(-10)}
+  function v53YearCode(){
+    let s=String(school?.academic_session||school?.session_label||school?.current_session||'');
+    let m=s.match(/(20\d{2})/),y=m?Number(m[1]):new Date().getFullYear();
+    return String(y).slice(-2);
+  }
+  function v53CanonClass(v){
+    let s=v53Text(v).replace(/^class\s*/i,'');
+    if(/^nur/i.test(s))return 'Nursery';
+    if(/^l\.?k\.?g\.?$/i.test(s))return 'LKG';
+    if(/^u\.?k\.?g\.?$/i.test(s))return 'UKG';
+    if(/^\d{1,2}$/.test(s))return String(Number(s));
+    return s;
+  }
+  function v53KeyName(k){
+    return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  }
+  const v53Aliases={
+    admissionno:'admission_no',admissionnumber:'admission_no',admission:'admission_no',
+    studentid:'student_id',studentcode:'student_id',
+    studentname:'student_name',name:'student_name',
+    rollno:'roll_no',rollnumber:'roll_no',roll:'roll_no',
+    classname:'class_name',class:'class_name',
+    section:'section',fathername:'father_name',father:'father_name',
+    mothername:'mother_name',mother:'mother_name',
+    phone:'phone',mobile:'phone',mobileno:'phone',mobilenumber:'phone',parentmobile:'phone',
+    studentemail:'student_email',email:'student_email',parentemail:'parent_email',
+    address:'address',status:'status',dob:'dob',dateofbirth:'dob',gender:'gender',
+    guardianname:'guardian_name',guardian:'guardian_name',
+    emergencyphone:'emergency_phone',alternatemobile:'emergency_phone',
+    feecategory:'fee_category',feewaiverpercent:'fee_waiver_percent',
+    remarks:'remarks',remark:'remarks'
+  };
+  const v53AllowedFields=new Set([
+    'admission_no','student_id','student_name','roll_no','class_name','section','father_name','mother_name',
+    'phone','student_email','parent_email','address','status','dob','gender','guardian_name','emergency_phone',
+    'fee_category','fee_waiver_percent','remarks'
+  ]);
+  function v53NormalizeExcelRow(raw){
+    let o={};
+    Object.entries(raw||{}).forEach(([k,v])=>{
+      let ck=v53Aliases[v53KeyName(k)]||k;
+      if(!v53AllowedFields.has(ck))return;
+      if(v===null||v===undefined||String(v).trim()==='')return; // Blank cells NEVER erase old data.
+      o[ck]=typeof v==='string'?v.trim():v;
+    });
+    if(o.class_name!==undefined)o.class_name=v53CanonClass(o.class_name);
+    if(o.phone!==undefined)o.phone=v53Text(o.phone);
+    if(o.emergency_phone!==undefined)o.emergency_phone=v53Text(o.emergency_phone);
+    normalize('students',o);
+    return o;
+  }
+  function v53Same(a,b){return v53Text(a)===v53Text(b)}
+  function v53UniqueIndex(rows,keyFn){
+    let first=new Map(),dups=new Set();
+    rows.forEach(r=>{let k=keyFn(r);if(!k)return;if(first.has(k))dups.add(k);else first.set(k,r)});
+    dups.forEach(k=>first.delete(k));return first;
+  }
+
+  async function v53LoadIdPool(){
+    let [sr,ar]=await Promise.all([
+      sb.from('students').select('admission_no,student_id'),
+      sb.from('admissions').select('admission_no,student_id')
+    ]);
+    if(sr.error)throw sr.error;if(ar.error)throw ar.error;
+    let yy=v53YearCode(),admissionUsed=new Set(),studentUsed=new Set(),admMax=0,stuMax=0;
+    [...(sr.data||[]),...(ar.data||[])].forEach(r=>{
+      let a=v53Text(r.admission_no),s=v53Text(r.student_id);
+      if(a)admissionUsed.add(a);if(s)studentUsed.add(s);
+      let ma=a.match(new RegExp('^LD'+yy+'-(\\d+)$','i'));if(ma)admMax=Math.max(admMax,Number(ma[1])||0);
+      let ms=s.match(new RegExp('^STU'+yy+'-(\\d+)$','i'));if(ms)stuMax=Math.max(stuMax,Number(ms[1])||0);
+    });
+    return {yy,admissionUsed,studentUsed,admMax,stuMax};
+  }
+  function v53NextAdmission(pool){
+    let x;do{x='LD'+pool.yy+'-'+String(++pool.admMax).padStart(5,'0')}while(pool.admissionUsed.has(x));
+    pool.admissionUsed.add(x);return x;
+  }
+  function v53NextStudentId(pool){
+    let x;do{x='STU'+pool.yy+'-'+String(++pool.stuMax).padStart(5,'0')}while(pool.studentUsed.has(x));
+    pool.studentUsed.add(x);return x;
+  }
+
+  // Preserve existing students exactly. Existing IDs are NEVER replaced automatically.
+  const v53SyncBase=window.syncOneApprovedAdmission;
+  window.syncOneApprovedAdmission=async function(r){
+    let row={...(r||{})};
+    let existing=null;
+    if(v53Text(row.admission_no)){
+      let q=await sb.from('students').select('id,admission_no,student_id').eq('admission_no',v53Text(row.admission_no)).limit(1);
+      if(q.error)throw q.error;existing=q.data?.[0]||null;
+    }
+    if(existing){
+      row.admission_no=existing.admission_no||row.admission_no;
+      row.student_id=existing.student_id||row.student_id||existing.admission_no;
+    }else if(!v53Text(row.admission_no)||!v53Text(row.student_id)){
+      let pool=await v53LoadIdPool();
+      if(!v53Text(row.admission_no))row.admission_no=v53NextAdmission(pool);
+      else pool.admissionUsed.add(v53Text(row.admission_no));
+      if(!v53Text(row.student_id))row.student_id=v53NextStudentId(pool);
+      else pool.studentUsed.add(v53Text(row.student_id));
+      if(row.id){
+        let u=await sb.from('admissions').update({admission_no:row.admission_no,student_id:row.student_id}).eq('id',row.id);
+        if(u.error)throw u.error;
+      }
+    }
+    return await v53SyncBase(row);
+  };
+
+  // Final approval override: new online admission gets BOTH IDs before Student sync.
+  window.approveAdmission=async function(id){
+    if(!confirm('Approve this admission application?'))return;
+    let {data:r,error}=await sb.from('admissions').select('*').eq('id',id).single();if(error)return toast(error.message);
+
+    let existing=null;
+    if(v53Text(r.admission_no)){
+      let q=await sb.from('students').select('id,admission_no,student_id').eq('admission_no',v53Text(r.admission_no)).limit(1);
+      if(!q.error)existing=q.data?.[0]||null;
+    }
+    let pool=await v53LoadIdPool();
+    let adm=v53Text(r.admission_no)||(existing?.admission_no)||v53NextAdmission(pool);
+    pool.admissionUsed.add(adm);
+    let sid=v53Text(r.student_id)||(existing?.student_id)||v53NextStudentId(pool);
+    pool.studentUsed.add(sid);
+
+    let upd={admission_no:adm,student_id:sid,admission_status:'Approved',approved_at:new Date().toISOString(),approved_by:user?.id};
+    let {error:ue}=await sb.from('admissions').update(upd).eq('id',id);if(ue)return toast(ue.message);
+    Object.assign(r,upd);
+    try{
+      await window.syncOneApprovedAdmission(r);
+      if(typeof v46SyncTransportAdmission==='function')await v46SyncTransportAdmission(r);
+      toast('✓ Approved • Adm No: '+adm+' • Student ID: '+sid);
+      if(typeof page!=='undefined'&&page==='online_admissions'&&typeof v51OnlineAdmissionCenter==='function')await v51OnlineAdmissionCenter();
+      else list('admissions');
+    }catch(e){toast('Approved; auto-sync issue: '+e.message)}
+  };
+
+  async function v53SmartImportFile(file,statusEl){
+    if(!file)throw new Error('Excel file not selected');
+    let wb=XLSX.read(await file.arrayBuffer()),raw=[];
+    wb.SheetNames.forEach(sn=>{
+      let rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:''});
+      raw.push(...rows);
+    });
+    let rows=raw.map(v53NormalizeExcelRow).filter(r=>Object.keys(r).length);
+    if(!rows.length)throw new Error('No valid rows found');
+
+    let {data:existing,error}=await sb.from('students').select('*').order('created_at');
+    if(error)throw error;
+    existing=existing||[];
+
+    let byAdm=new Map(),bySid=new Map();
+    existing.forEach(r=>{if(v53Text(r.admission_no))byAdm.set(v53Norm(r.admission_no),r);if(v53Text(r.student_id))bySid.set(v53Norm(r.student_id),r)});
+    let byPhoneName=v53UniqueIndex(existing,r=>{
+      let p=v53Digits(r.phone),n=v53Norm(r.student_name);return p&&n?p+'|'+n:'';
+    });
+    let byNameFatherDob=v53UniqueIndex(existing,r=>{
+      let n=v53Norm(r.student_name),f=v53Norm(r.father_name),d=v53Text(r.dob);return n&&f&&d?n+'|'+f+'|'+d:'';
+    });
+    let byNameParents=v53UniqueIndex(existing,r=>{
+      let n=v53Norm(r.student_name),f=v53Norm(r.father_name),m=v53Norm(r.mother_name);return n&&f&&m?n+'|'+f+'|'+m:'';
+    });
+
+    let pool=await v53LoadIdPool(),created=0,updated=0,unchanged=0,invalid=0,conflicts=[];
+    let newRows=[],updates=[];
+
+    function findExisting(r){
+      let a=v53Norm(r.admission_no),sid=v53Norm(r.student_id);
+      if(a&&byAdm.has(a))return byAdm.get(a);
+      if(sid&&bySid.has(sid))return bySid.get(sid);
+      let pn=(v53Digits(r.phone)&&v53Norm(r.student_name))?(v53Digits(r.phone)+'|'+v53Norm(r.student_name)):'';
+      if(pn&&byPhoneName.has(pn))return byPhoneName.get(pn);
+      let nfd=(v53Norm(r.student_name)&&v53Norm(r.father_name)&&v53Text(r.dob))?(v53Norm(r.student_name)+'|'+v53Norm(r.father_name)+'|'+v53Text(r.dob)):'';
+      if(nfd&&byNameFatherDob.has(nfd))return byNameFatherDob.get(nfd);
+      let nfm=(v53Norm(r.student_name)&&v53Norm(r.father_name)&&v53Norm(r.mother_name))?(v53Norm(r.student_name)+'|'+v53Norm(r.father_name)+'|'+v53Norm(r.mother_name)):'';
+      if(nfm&&byNameParents.has(nfm))return byNameParents.get(nfm);
+      return null;
+    }
+
+    for(let r of rows){
+      if(!v53Text(r.student_name)){invalid++;continue}
+      if(r.class_name!==undefined && !cls.includes(String(r.class_name))){invalid++;conflicts.push((r.student_name||'Row')+': invalid class '+r.class_name);continue}
+
+      let ex=findExisting(r);
+      if(ex){
+        let patch={};
+        Object.entries(r).forEach(([k,v])=>{
+          if(k==='admission_no'||k==='student_id')return; // identity never overwritten automatically
+          if(v===undefined||v===null||v53Text(v)==='')return;
+          if(!v53Same(ex[k],v))patch[k]=v;
+        });
+        // If an old existing student has a blank ID, fill it; never replace a nonblank old ID.
+        if(!v53Text(ex.admission_no)){
+          let a=v53Text(r.admission_no)||v53NextAdmission(pool);patch.admission_no=a;pool.admissionUsed.add(a);
+        }
+        if(!v53Text(ex.student_id)){
+          let s=v53Text(r.student_id)||v53NextStudentId(pool);patch.student_id=s;pool.studentUsed.add(s);
+        }
+        if(Object.keys(patch).length)updates.push({id:ex.id,patch});else unchanged++;
+      }else{
+        if(!v53Text(r.class_name)){invalid++;conflicts.push((r.student_name||'Row')+': class required for new student');continue}
+        let n={...r};
+        if(!v53Text(n.admission_no))n.admission_no=v53NextAdmission(pool);else{
+          if(pool.admissionUsed.has(v53Text(n.admission_no))){invalid++;conflicts.push(n.student_name+': duplicate Admission No.');continue}
+          pool.admissionUsed.add(v53Text(n.admission_no));
+        }
+        if(!v53Text(n.student_id))n.student_id=v53NextStudentId(pool);else{
+          if(pool.studentUsed.has(v53Text(n.student_id))){invalid++;conflicts.push(n.student_name+': duplicate Student ID');continue}
+          pool.studentUsed.add(v53Text(n.student_id));
+        }
+        if(!v53Text(n.status))n.status='Active';
+        newRows.push(n);
+      }
+    }
+
+    if(!confirm(`Smart Import: ${newRows.length} new • ${updates.length} update • ${unchanged} unchanged • ${invalid} invalid. Continue?`))return {cancelled:true};
+
+    for(let i=0;i<updates.length;i+=15){
+      let batch=updates.slice(i,i+15);
+      let rr=await Promise.all(batch.map(x=>sb.from('students').update(x.patch).eq('id',x.id)));
+      let er=rr.find(x=>x.error);if(er?.error)throw er.error;
+      updated+=batch.length;
+      if(statusEl)statusEl.textContent=`Updating... ${Math.min(i+15,updates.length)}/${updates.length}`;
+    }
+    for(let i=0;i<newRows.length;i+=100){
+      let batch=newRows.slice(i,i+100),ins=await sb.from('students').insert(batch);
+      if(ins.error)throw ins.error;created+=batch.length;
+      if(statusEl)statusEl.textContent=`Adding new students... ${Math.min(i+100,newRows.length)}/${newRows.length}`;
+    }
+    return {created,updated,unchanged,invalid,conflicts};
+  }
+
+  function v53ImportSummary(r){
+    if(r?.cancelled)return '<b>Import cancelled.</b>';
+    return `<b>✓ Master Smart Import Complete</b>
+      <div class="v53ImportStat">
+        <div><span>New Added</span><b>${r.created}</b></div>
+        <div><span>Changed Updated</span><b>${r.updated}</b></div>
+        <div><span>Unchanged</span><b>${r.unchanged}</b></div>
+        <div><span>Invalid / Skipped</span><b>${r.invalid}</b></div>
+      </div>
+      ${r.conflicts?.length?`<small style="display:block;margin-top:8px">${esc(r.conflicts.slice(0,12).join(' | '))}${r.conflicts.length>12?'…':''}</small>`:''}
+      <br><button class="primary" onclick="render('students')">Open Student Register</button>`;
+  }
+
+  // Old class-wise importer now becomes the same safe Master Smart Import.
+  window.importStudentUpdate=async function(e){
+    let f=e.target.files?.[0];if(!f)return;
+    try{
+      let r=await v53SmartImportFile(f,null);
+      toast(r?.cancelled?'Import cancelled':`Smart Import: ${r.created} new • ${r.updated} updated • ${r.unchanged} unchanged`);
+      if(!r?.cancelled)render('students');
+    }catch(err){toast(err.message||'Excel import failed')}finally{e.target.value=''}
+  };
+
+  window.v32ImportStudents=async function(ev){
+    let file=ev.target.files?.[0];if(!file)return;
+    let status=$('hubStatus');if(status)status.textContent='Reading Master Excel...';
+    try{
+      let r=await v53SmartImportFile(file,status);
+      if(status)status.innerHTML=v53ImportSummary(r);
+      if(!r?.cancelled)toast(`Smart Import: ${r.created} new • ${r.updated} updated • ${r.unchanged} unchanged`);
+    }catch(err){
+      if(status)status.innerHTML=`<b>Import failed:</b> ${esc(err.message||err)}`;
+      toast(err.message||'Import failed');
+    }finally{ev.target.value=''}
+  };
+
+  window.v32StudentTemplate=function(){
+    let keys=['admission_no','student_id','student_name','roll_no','class_name','section','father_name','mother_name','phone','student_email','parent_email','address','status','dob','gender','guardian_name','emergency_phone','fee_category','fee_waiver_percent','remarks'];
+    exportRowsXlsx([Object.fromEntries(keys.map(k=>[k,'']))],'Nursery-to-10-Master-Student-Import');
+  };
+  window.exportStudentTemplate=window.v32StudentTemplate;
+
+  window.studentExcelTools=async function(){
+    head('Student Excel Center','Nursery–10 Master Smart Import • Auto Admission No. • Auto Student ID');
+    $('erpContent').innerHTML=`<div class="panel">
+      <h3>Nursery–10 Master Student Import / Update</h3>
+      <p class="note">एक ही Excel में Nursery, LKG, UKG और Class 1–10 रखें. class_name के अनुसार हर student अपने class में जाएगा.</p>
+      <div class="tools">
+        <select id="studentExcelClass"><option value="">All Classes</option>${cls.map(x=>`<option>${x}</option>`).join('')}</select>
+        <button class="secondary" onclick="exportStudentFullDetails()">⬇ Full Details Excel</button>
+        <button class="secondary" onclick="v32StudentTemplate()">⬇ Master Template</button>
+        <button class="primary" onclick="$('studentExcelImport').click()">⬆ Master Smart Import / Update</button>
+      </div>
+      <input id="studentExcelImport" class="hidden" type="file" accept=".xlsx,.xls,.csv">
+      <div class="v53RuleBox"><b>Safe rules:</b><br>
+        ✓ Admission No. blank → auto generated (${v53YearCode()} format: LD${v53YearCode()}-00001)<br>
+        ✓ Student ID blank → auto generated (STU${v53YearCode()}-00001)<br>
+        ✓ Existing student → केवल changed nonblank fields update<br>
+        ✓ Excel blank cell → website का पुराना data नहीं मिटेगा<br>
+        ✓ Website blank + Excel value → value add होगी<br>
+        ✓ Class बदली → student अपने नए class में दिखेगा<br>
+        ✓ New row → new student add होगा; duplicate matching Admission No./Student ID/Name+Phone आदि से रोका जाएगा
+      </div>
+    </div>`;
+    $('studentExcelImport').onchange=window.importStudentUpdate;
+  };
+
+  window.studentDataHub=async function(){
+    if(!v14Admin())return toast('Permission denied');
+    head('Student Data Hub','Nursery–10 • Master Smart Import • Auto IDs • Blank-safe Update');
+    $('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div>
+      <h3>Student Master Import / Export</h3>
+      <p class="note">पूरे Nursery–10 का एक Excel बार-बार import कर सकते हैं. केवल changed data update होगा; blank cells पुराने data को नहीं मिटाएँगे.</p>
+    </div></div>
+    <div class="v32Grid">
+      <div><label>Export Class</label><select id="hubClass"><option value="">All Classes</option>${cls.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div>
+      <div><label>Export</label><button class="primary" onclick="v32ExportStudents()">Export Selected Class / All</button></div>
+      <div><label>Master Import</label><button class="secondary" id="v53ChooseImport">Choose Excel</button><input id="v32ImportFile" class="hiddenFile" type="file" accept=".xlsx,.xls,.csv" onchange="v32ImportStudents(event)"></div>
+      <div><label>Template</label><button class="secondary" onclick="v32StudentTemplate()">Download Nursery–10 Template</button></div>
+    </div>
+    <div id="hubStatus" class="v32Info">Ready for Master Smart Import.</div>
+    <div class="v53RuleBox"><b>Import rules:</b><br>
+      ✓ Nursery/LKG/UKG/1…10 एक ही file में<br>
+      ✓ Admission No. और Student ID blank रख सकते हैं — system auto बनाएगा<br>
+      ✓ पुरानी full file दोबारा import करने पर only changed fields update<br>
+      ✓ blank Excel cells ignored — existing data safe<br>
+      ✓ new rows automatically add होंगी
+    </div></div>`;
+    $('v53ChooseImport').onclick=()=>$('v32ImportFile').click();
+  };
+})();
+</script>
+<!-- ===== END V49 SAFE AUTO NUMBER + MASTER SMART IMPORT PATCH ===== -->
+
+
+
+<!-- ===== V49 SAFE WEBSITE AUTO ADMISSION NUMBER RECEIPT PATCH ===== -->
+<script>
+(function(){
+  // Public website admission submit: show the Admission No generated by the secure RPC at submit time.
+  const form=$('publicAdmission');
+  if(!form)return;
+  form.onsubmit=async e=>{
+    e.preventDefault();if(!cfg)return toast('School cloud not configured');
+    let fd=new FormData(form),o=Object.fromEntries(fd);
+    let required=[['student_name','Student Name'],['class_name','Class'],['father_name','Father Name'],['primary_phone','Parent Mobile Number']];
+    let missing=required.filter(([k])=>!String(o[k]||'').trim()).map(x=>x[1]);
+    let phone=String(o.primary_phone||'').replace(/\D/g,'');
+    if(phone && phone.length<10 && !missing.includes('Parent Mobile Number'))missing.push('Valid 10-digit Parent Mobile Number');
+    if(typeof v32ShowValidation==='function'&&!v32ShowValidation(form,missing))return;
+    if(missing.length)return toast('Required fields भरें');
+
+    o.parent_email=String(o.parent_email||'').trim().toLowerCase()||null;
+    o.primary_phone=normalizePhone(o.primary_phone||'').replace(/^\+91/,'');
+    let file=form._cameraFile||form.querySelector('[name="public_photo_file"]')?.files?.[0];delete o.public_photo_file;
+    let submitBtn=form.querySelector('button[type="submit"],button:not([type])');
+    if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='Submitting...'}
+
+    try{
+      if(file){
+        file=await compressImageFile(file,20,50,760,'student');
+        let path=`public-admission/public/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
+        let{error:upErr}=await sb.storage.from('student-media').upload(path,file,{upsert:false,contentType:'image/jpeg'});
+        if(upErr)throw upErr;
+        o.photo_path=path;o.photo_source=form._cameraFile?'camera':'upload';o.photo_taken_at=new Date().toISOString();
+      }
+      o.academic_session=o.academic_session||'2026-27';
+      let {data,error}=await sb.rpc('submit_admission_application',{p_payload:o});if(error)throw error;
+
+      let app=(data&&data.application_no)||'';
+      let adm=(data&&data.admission_no)||'';
+      let shown=[
+        ['Application No.',app],
+        ['Admission No.',adm],
+        ['Student',o.student_name],
+        ['Class',o.class_name],
+        ['Father',o.father_name],
+        ['Mobile',o.primary_phone],
+        ['Session',o.academic_session],
+        ['Status','Pending Approval']
+      ];
+      $('applicationReceipt').innerHTML=`<div class="v32SuccessCard">
+        <h3>✓ Admission Form Submit हो गया</h3>
+        <p>Admission No. form submit होते ही generate हो गया है। Admin approval के बाद यही Admission No. final Student Register में रहेगा.</p>
+        <div class="v32ReceiptGrid">${shown.map(x=>`<div><span>${esc(x[0])}</span><b>${esc(x[1]||'—')}</b></div>`).join('')}</div>
+        <div class="v32Next"><b>Admission No. सुरक्षित रखें:</b> ${esc(adm||'—')}<br>Application अभी Pending Approval में है.</div>
+      </div>`;
+      toast('✓ Admission No. generated: '+(adm||app));
+      $('applicationReceipt').scrollIntoView({behavior:'smooth',block:'center'});
+      form.reset();form._cameraFile=null;
+    }catch(err){
+      let msg=err?.message||'Admission submit failed';
+      let box=form.querySelector('.v32Validation');
+      if(box){box.classList.remove('ok');box.innerHTML=`<b>Form submit नहीं हुआ:</b><div>${esc(msg)}</div>`}
+      toast(msg);
+    }finally{
+      if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='Submit Admission Application'}
+    }
+  };
+})();
+</script>
+<!-- ===== END V49 SAFE WEBSITE AUTO ADMISSION NUMBER RECEIPT PATCH ===== -->
+
+
+
+<!-- ===== V49 SAFE ANDROID-LIKE FULL DARK MODE ENHANCEMENT ===== -->
+<style id="v54AndroidDarkEnhancement">
+@media screen {
+  html.ld-dark{
+    background:#080b10!important;
+    color-scheme:dark!important;
+  }
+  html.ld-dark body,
+  html.ld-dark #publicSite,
+  html.ld-dark #publicPageView,
+  html.ld-dark #publicPageBody,
+  html.ld-dark .websiteWallpaper,
+  html.ld-dark .premiumLoginSection,
+  html.ld-dark .publicSection,
+  html.ld-dark .publicSection.soft,
+  html.ld-dark .premiumStats,
+  html.ld-dark .erp,
+  html.ld-dark .erp main,
+  html.ld-dark #erpContent{
+    background:#080b10!important;
+    color:#f2f5f9!important;
+  }
+
+  /* Public website hero + mobile cards: full dark instead of light patches */
+  html.ld-dark .premiumHero{
+    background:#080b10!important;
+    color:#f2f5f9!important;
+    border-bottom-color:#263142!important;
+  }
+  html.ld-dark .premiumHero::before{
+    opacity:.12!important;
+    filter:brightness(.42) saturate(.8)!important;
+  }
+  html.ld-dark .premiumHero .heroShade{
+    background:linear-gradient(90deg,rgba(8,11,16,.98) 0%,rgba(8,11,16,.94) 50%,rgba(8,11,16,.72) 100%)!important;
+  }
+  html.ld-dark .premiumHero h1,
+  html.ld-dark .heroSub,
+  html.ld-dark .welcomeScript,
+  html.ld-dark .loginCenterHead h2,
+  html.ld-dark .portalCard h3,
+  html.ld-dark .featureTiles b,
+  html.ld-dark .footMotto{
+    color:#f4f7fb!important;
+    text-shadow:none!important;
+  }
+  html.ld-dark .premiumHero #heroText,
+  html.ld-dark .loginCenterHead p,
+  html.ld-dark .portalCard p,
+  html.ld-dark .portalCard small,
+  html.ld-dark .featureTiles span{
+    color:#aeb9c8!important;
+  }
+
+  html.ld-dark .portalCard,
+  html.ld-dark .featureTiles div,
+  html.ld-dark .heroLogoPanel,
+  html.ld-dark .parentStudentCard,
+  html.ld-dark .otpCard,
+  html.ld-dark .verifiedStrip,
+  html.ld-dark .successCard,
+  html.ld-dark .v32Info,
+  html.ld-dark .v32Checklist,
+  html.ld-dark .v32Next,
+  html.ld-dark .masterItem,
+  html.ld-dark .feeStudentHead,
+  html.ld-dark .smartPayPanel,
+  html.ld-dark .settingsGrid,
+  html.ld-dark .brandPreview,
+  html.ld-dark .storageSafe{
+    background:#11161f!important;
+    color:#eef3f9!important;
+    border-color:#2a3545!important;
+    box-shadow:none!important;
+  }
+
+  /* Native Android-like controls */
+  html.ld-dark input,
+  html.ld-dark select,
+  html.ld-dark textarea,
+  html.ld-dark button{
+    color-scheme:dark!important;
+  }
+  html.ld-dark select option{
+    background:#11161f!important;
+    color:#f2f5f9!important;
+  }
+  html.ld-dark input[type="checkbox"],
+  html.ld-dark input[type="radio"]{
+    accent-color:#4c8dff!important;
+  }
+  html.ld-dark input[type="date"],
+  html.ld-dark input[type="time"],
+  html.ld-dark input[type="month"]{
+    color-scheme:dark!important;
+  }
+  html.ld-dark ::selection{
+    background:#2f6edb!important;
+    color:#fff!important;
+  }
+
+  /* Mobile-friendly dark surfaces */
+  html.ld-dark .premiumTop,
+  html.ld-dark .erpTop{
+    background:#0d121a!important;
+    border-color:#202a38!important;
+  }
+  html.ld-dark .erp aside{
+    background:#0c1119!important;
+    border-right:1px solid #202a38!important;
+  }
+  html.ld-dark .erp aside nav button{
+    color:#dce5f2!important;
+  }
+  html.ld-dark .erp aside nav button:hover,
+  html.ld-dark .erp aside nav button.active{
+    background:#182231!important;
+  }
+
+  html.ld-dark .ldThemeToggle{
+    background:#171c24!important;
+    color:#f4f7fb!important;
+    border-color:#384457!important;
+    box-shadow:0 8px 26px rgba(0,0,0,.48)!important;
+  }
+
+  html.ld-dark .modal,
+  html.ld-dark .v14Modal,
+  html.ld-dark .cameraModal{
+    background:rgba(0,0,0,.78)!important;
+  }
+
+  html.ld-dark .premiumFooter{
+    background:#080b10!important;
+    border-top:1px solid #202a38!important;
+  }
+
+  /* Dark scrollbars where browser supports them */
+  html.ld-dark *{
+    scrollbar-color:#3a4658 #0d1219;
+  }
+  html.ld-dark *::-webkit-scrollbar{width:10px;height:10px}
+  html.ld-dark *::-webkit-scrollbar-track{background:#0d1219}
+  html.ld-dark *::-webkit-scrollbar-thumb{background:#39475a;border-radius:999px;border:2px solid #0d1219}
+
+  /* Keep printable documents light and clean */
+  html.ld-dark .markPreview,
+  html.ld-dark .idCard,
+  html.ld-dark .feePrintCard,
+  html.ld-dark #markPreview,
+  html.ld-dark #feeCardPreview,
+  html.ld-dark #idPreviewBox{
+    color-scheme:light;
+  }
+}
+@media print{
+  html,body{color-scheme:light!important;background:#fff!important}
+}
+</style>
+<script>
+(function(){
+  const metaTheme=document.querySelector('meta[name="theme-color"]')||(()=>{let m=document.createElement('meta');m.name='theme-color';document.head.appendChild(m);return m})();
+  let metaScheme=document.querySelector('meta[name="color-scheme"]');
+  if(!metaScheme){metaScheme=document.createElement('meta');metaScheme.name='color-scheme';document.head.appendChild(metaScheme)}
+  metaScheme.content='light dark';
+
+  function v54SyncAndroidChrome(){
+    const dark=document.documentElement.classList.contains('ld-dark');
+    metaTheme.setAttribute('content',dark?'#080b10':'#0b4eb8');
+    document.documentElement.style.colorScheme=dark?'dark':'light';
+    if(document.body)document.body.style.colorScheme=dark?'dark':'light';
+  }
+
+  v54SyncAndroidChrome();
+
+  const ob=new MutationObserver(v54SyncAndroidChrome);
+  ob.observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+
+  window.addEventListener('pageshow',v54SyncAndroidChrome);
+  window.addEventListener('focus',v54SyncAndroidChrome);
+})();
+</script>
+<!-- ===== END V49 SAFE ANDROID-LIKE FULL DARK MODE ENHANCEMENT ===== -->
+
 </body></html>
