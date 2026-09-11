@@ -749,6 +749,8 @@ render=function(p){
    if(p==='dashboard')return teacherHomeDashboard();
    if(p==='teacher_profile')return teacherMyProfile();
    if(p==='teacher_class')return teacherClassPortal();
+   if(p==='class_teacher_attendance') return classTeacherAttendance();
+   if(p==='teacher_leave') return teacherLeaveApplication();
    if(p==='attendance')return smartAttendance();
    if(p==='fees')return teacherFeeView();
    if(p==='exams')return teacherMarksEntry();
@@ -1450,12 +1452,15 @@ openERP=function(){
     const teacherNav=[
       ['teacher_profile','👤 My Profile'],
       ['teacher_notices','📣 My Notices / Orders'],
+      ['class_teacher_attendance','📋 Class Teacher Attendance'],
       ['teacher_reports','📝 Class Review / Report'],
       ['teacher_class','◉ My Class'],
+      ['teacher_leave','📝 Leave Application'],
       ['attendance','✓ Attendance'],
       ['fees','₹ Fee Status'],
       ['exams','▣ Marks'],
       ['homework','✎ Homework'],
+      
       ['class_opinions','✎ Class Opinion']
     ];
     $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
