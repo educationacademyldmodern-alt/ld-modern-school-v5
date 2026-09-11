@@ -1666,10 +1666,6 @@ async function teacherNoticeCenter(){
   head('My Notices / Orders','Admin से भेजे गए targeted notice/order');let rows=await v32TeacherNotices();
   $('erpContent').innerHTML=`<div class="panel"><h3>Notice / Order Inbox</h3>${rows.length?rows.map(r=>`<article class="v32Notice"><span>${esc(r.date||'')}</span><h4>${esc(r.title||'Notice')}</h4><p>${esc(r.message||'')}</p></article>`).join(''):'<div class="empty">अभी कोई targeted notice/order नहीं है.</div>'}</div>`;
 }
-const v32TeacherProfilePrev=teacherMyProfile;
-teacherMyProfile=async function(){
-  await v32TeacherProfilePrev();let rows=await v32TeacherNotices();if(rows.length&&$('erpContent'))$('erpContent').insertAdjacentHTML('afterbegin',`<div class="panel v32Inbox"><div class="panelHead"><h3>📣 New Notice / Order</h3><button class="secondary" onclick="teacherNoticeCenter()">Open Inbox</button></div>${rows.slice(0,3).map(r=>`<div class="v32Notice"><b>${esc(r.title||'')}</b><span>${esc(r.date||'')}</span><p>${esc(r.message||'')}</p></div>`).join('')}</div>`);
-};
 
 // ---------- Teacher report / Class review ----------
 async function teacherReportCenter(){
