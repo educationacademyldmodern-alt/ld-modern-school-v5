@@ -247,7 +247,7 @@ button{transition:transform .16s ease,box-shadow .16s ease}button:hover{transfor
 <section id="setup" class="auth hidden"><div class="authCard"><h1>Connect School Cloud</h1><p>Supabase Project URL और Publishable Key डालें।</p><input id="cloudUrl" placeholder="https://xxxx.supabase.co"><input id="cloudKey" placeholder="sb_publishable_..."><button onclick="saveCloud()">Connect</button></div></section>
 <section id="login" class="auth hidden"><div class="loginGrid"><div class="loginHero"><img src="school-logo.png" alt="School Logo" style="width:104px;height:104px;object-fit:contain"><h1>L D MODERN EDUCATION ACADEMY</h1><p>Premium Secure School ERP</p><button class="ghost" onclick="backWebsite()">← Public Website</button></div><div class="authCard"><span class="pill">SECURE CLOUD LOGIN</span><h2>Welcome Back</h2><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password"><button onclick="login()">Login</button><div class="loginLinks"><a onclick="signup()">Create Account</a></div><small>Admin • Principal • Admission • Accountant • Teacher • Student • Parent</small></div></div></section>
 
-<div id="erp" class="erp hidden"><aside><div class="sideBrand"><div class="logoText small">LD</div><div><b id="sideName">L D MODERN EDUCATION ACADEMY</b><small id="roleText"></small></div></div><nav id="erpNav"></nav><button class="logout" onclick="logout()">⇥ Logout</button></aside><main><header class="erpTop"><button class="hamb" onclick="document.querySelector('#erp aside').classList.toggle('open')">☰</button><d<h2 id="erpTitle">Dashboard</h2><p id="erpSub"></p></div><button class="websiteBtn" onclick="backWebsite()">View Website</button></header><section id="erpContent"></section></main></div>
+<div id="erp" class="erp hidden"><aside><div class="sideBrand"><div class="logoText small">LD</div><div><b id="sideName">L D MODERN EDUCATION ACADEMY</b><small id="roleText"></small></div></div><nav id="erpNav"></nav><button class="logout" onclick="logout()">⇥ Logout</button></aside><main><header class="erpTop"><button class="hamb" onclick="document.querySelector('#erp aside').classList.toggle('open')">☰</button><button class="erpHomeBtn" onclick="erpGoHome()" title="Home">🏠 Home</button><div><h2 id="erpTitle">Dashboard</h2><p id="erpSub"></p></div><button class="websiteBtn" onclick="backWebsite()">View Website</button></header><section id="erpContent"></section></main></div>
 <div id="modal" class="modal hidden"><div class="modalCard"><div class="modalHead"><h3 id="modalTitle"></h3><button onclick="closeModal()">✕</button></div><form id="dataForm"></form></div></div>
 <input id="excelFile" type="file" accept=".xlsx,.xls,.csv" class="hidden"><div id="cameraModal" class="cameraModal hidden"><div class="cameraCard"><h3>Student Camera</h3><video id="cameraVideo" playsinline autoplay></video><canvas id="cameraCanvas" class="hidden"></canvas><div class="cameraActions"><button type="button" class="primary" onclick="captureCamera()">📸 Capture Photo</button><button type="button" class="secondary" onclick="closeCamera()">Cancel</button></div></div></div><div id="toast" class="toast hidden"></div><script>
 
@@ -1459,7 +1459,7 @@ openERP=function(){
       ['class_opinions','✎ Class Opinion']
     ];
     $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
-  }render('dashboard');
+  }
 };
 
 // ---------- stronger email/mobile password login ----------
