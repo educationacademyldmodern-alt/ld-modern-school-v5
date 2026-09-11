@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V46-SMART-CONSOLIDATED"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V45-V49-MERGED-FINAL"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V38-TEACHING-SYLLABUS-MONITOR"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -251,7 +251,7 @@ button{transition:transform .16s ease,box-shadow .16s ease}button:hover{transfor
 <div id="modal" class="modal hidden"><div class="modalCard"><div class="modalHead"><h3 id="modalTitle"></h3><button onclick="closeModal()">✕</button></div><form id="dataForm"></form></div></div>
 <input id="excelFile" type="file" accept=".xlsx,.xls,.csv" class="hidden"><div id="cameraModal" class="cameraModal hidden"><div class="cameraCard"><h3>Student Camera</h3><video id="cameraVideo" playsinline autoplay></video><canvas id="cameraCanvas" class="hidden"></canvas><div class="cameraActions"><button type="button" class="primary" onclick="captureCamera()">📸 Capture Photo</button><button type="button" class="secondary" onclick="closeCamera()">Cancel</button></div></div></div><div id="toast" class="toast hidden"></div><script>
 
-const K="ld_v5_cloud";const DEFAULT_CFG={url:"https://xleagfmdueyalkdnicyr.supabase.co",key:"sb_publishable_tUcd7gPfNiTzZlZ44VM6UQ_zr045LR5"};let feePlans=[];let cameraOwner=null,cameraStream=null;let savedCfg=JSON.parse(localStorage.getItem(K)||"null"),cfg=((DEFAULT_CFG.url.startsWith("https://")&&!DEFAULT_CFG.url.includes("__")&&DEFAULT_CFG.key.startsWith("sb_publishable_"))?DEFAULT_CFG:savedCfg),sb,user,profile,school={},page="dashboard";const $=x=>document.getElementById(x),cls=["Nursery","LKG","UKG","1","2","3","4","5","6","7","8","9","10"],money=n=>"₹"+Number(n||0).toLocaleString("en-IN"),today=()=>new Date().toISOString().slice(0,10),esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])),F=(n,l,t="text",r=0,c="")=>[n,l,t,r,c];
+const K="ld_v5_cloud";const DEFAULT_CFG={url:"https://xleagfmdueyalkdnicyr.supabase.co",key:"sb_publishable_tUcd7gPfNiTzZlZ44VM6UQ_zr045LR5"};const cfgValid=c=>!!(c&&/^https:\/\/[^/]+\.supabase\.co\/?$/i.test(String(c.url||""))&&String(c.key||"").length>20);let feePlans=[];let cameraOwner=null,cameraStream=null;let savedCfg=JSON.parse(localStorage.getItem(K)||"null"),cfg=(cfgValid(savedCfg)?savedCfg:(cfgValid(DEFAULT_CFG)?DEFAULT_CFG:null)),sb,user,profile,school={},page="dashboard";const $=x=>document.getElementById(x),cls=["Nursery","LKG","UKG","1","2","3","4","5","6","7","8","9","10"],money=n=>"₹"+Number(n||0).toLocaleString("en-IN"),today=()=>new Date().toISOString().slice(0,10),esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])),F=(n,l,t="text",r=0,c="")=>[n,l,t,r,c];
 const roles=["super_admin","admin","principal","admission","accountant","teacher","librarian","transport","student","parent","viewer"];
 const permissions={super_admin:["*"],admin:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","users","excel","settings"],principal:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","excel","settings"],admission:["dashboard","admissions","students","enquiries","excel"],accountant:["dashboard","students","fees","fee_dashboard","fee_structure","payroll","income","expenses","balance","excel"],teacher:["dashboard","students","attendance","exams","timetable","homework","events","notices"],librarian:["dashboard","students","library"],transport:["dashboard","students","transport"],student:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],parent:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],viewer:["dashboard","notices"]};
 const write={admissions:["super_admin","admin","principal","admission"],students:["super_admin","admin","principal","admission"],academics:["super_admin","admin","principal"],attendance:["super_admin","admin","principal","teacher"],staff_attendance:["super_admin","admin","principal"],fees:["super_admin","admin","principal","accountant"],exams:["super_admin","admin","principal","teacher"],staff:["super_admin","admin","principal"],leave:["super_admin","admin","principal"],payroll:["super_admin","admin","principal","accountant"],timetable:["super_admin","admin","principal","teacher"],homework:["super_admin","admin","principal","teacher"],events:["super_admin","admin","principal","teacher"],notices:["super_admin","admin","principal","teacher"],gallery:["super_admin","admin","principal"],enquiries:["super_admin","admin","principal","admission"],transport:["super_admin","admin","principal","transport"],library:["super_admin","admin","principal","librarian"],income:["super_admin","admin","principal","accountant"],expenses:["super_admin","admin","principal","accountant"],fee_structures:["super_admin","admin","principal","accountant"],fee_installments:["super_admin","admin","principal","accountant"],fee_heads:["super_admin","admin","principal","accountant"],classes:["super_admin","admin","principal"],sections:["super_admin","admin","principal"],subjects:["super_admin","admin","principal"]};
@@ -803,7 +803,7 @@ async function teacherPasswordRegister(){
  let email=String($('tRegisterEmail')?.value||'').trim().toLowerCase(),phone=String($('tRegisterPhone')?.value||'').trim(),password=$('tRegisterPassword')?.value||'';
  if(!email||!email.includes('@')||password.length<6)return toast('Valid email और कम से कम 6 character password डालें');
  let {data,error}=await sb.auth.signUp({email,password,options:{data:{phone:phone}}});if(error)return toast(error.message);
- if(!data.user)return toast('Account create नहीं हुआ');user=data.user;await loadProfile();teacherProfileRegistrationForm(email);
+ if(!data.user)return toast('Account create नहीं हुआ');if(!data.session)return toast('Supabase Auth में Confirm email ON है. Password-only registration के लिए Confirm email OFF करें.');user=data.user;await loadProfile();teacherProfileRegistrationForm(email);
 }
 async function resumeTeacherEmailFlow(){
  let{data:{session}}=await sb.auth.getSession();if(!session?.user?.email)return false;user=session.user;await loadProfile();await v14LoadTeacherContext();let mode=new URLSearchParams(location.search).get('mode')||localStorage.getItem('ld_teacher_mode')||'login';
@@ -1018,7 +1018,7 @@ async function websiteSettingsCenter(){
   ${wallInput('Teacher Dashboard','wsTeacherWallpaperFile',school.teacher_wallpaper_url,"removeRoleWallpaper('teacher')")}
   ${wallInput('Parent Dashboard','wsParentWallpaperFile',school.parent_wallpaper_url,"removeRoleWallpaper('parent')")}
  </div></div>
- <div class="panel"><div class="storageSafe">✓ Student photo upload/camera: लगभग 20–50 KB • Gallery: लगभग 15–50 KB • Report Card/ID/Fee PDF और Excel browser में generate होकर सीधे उसी device में download होते हैं; database में generated copy save नहीं होती.</div><div class="tools" style="margin-top:12px"><button class="primary" onclick="saveWebsiteSettings()">Save All Settings</button><button class="secondary" onclick="downloadBackup()">Download Backup</button></div><p class="dangerNote">Database setup पहले से complete है; इस V35 file के लिए SQL दोबारा चलाने की जरूरत नहीं है.</p></div>
+ <div class="panel"><div class="storageSafe">✓ Student photo upload/camera: लगभग 20–50 KB • Gallery: लगभग 15–50 KB • Report Card/ID/Fee PDF और Excel browser में generate होकर सीधे उसी device में download होते हैं; database में generated copy save नहीं होती.</div><div class="tools" style="margin-top:12px"><button class="primary" onclick="saveWebsiteSettings()">Save All Settings</button><button class="secondary" onclick="downloadBackup()">Download Backup</button></div><p class="dangerNote">Database setup पहले से complete है; इस final package का FINAL_SUPABASE_COMPLETE_SAFE_SETUP.sql एक बार सही Supabase project में run होना चाहिए.</p></div>
  <div class="panel"><h3>Password Login System</h3><p class="note">Teacher और Parent केवल Email/Mobile + Password से login करेंगे. Website UI में कोई Magic Link / Secure Link / OTP login option नहीं दिखेगा.</p></div>`;
 }
 function wallInput(label,id,url,removeFn){return `<div><label>${label}</label><input id="${id}" type="file" accept="image/jpeg,image/png,image/webp"><small class="sizeRule">Image upload; browser validation enabled.</small>${url?`<div class="wallPreview" style="background-image:url('${esc(url)}')"></div>`:''}<button class="secondary" style="margin-top:6px" onclick="${removeFn}">Remove</button></div>`}
@@ -1031,12 +1031,12 @@ async function saveWebsiteSettings(){
   let o={id:1,school_name:$('wsName').value.trim(),tagline:$('wsTag').value.trim(),phone:$('wsPhone').value.trim(),address:$('wsAddress').value.trim(),hero_title:$('wsHeroTitle').value.trim(),hero_text:$('wsHeroText').value.trim(),about_text:$('wsAbout').value.trim(),principal_message:$('wsPrincipal').value.trim(),notice1_text:$('rn1').value.trim(),notice1_enabled:$('rn1on').checked,notice2_text:$('rn2').value.trim(),notice2_enabled:$('rn2on').checked,notice3_text:$('rn3').value.trim(),notice3_enabled:$('rn3on').checked};
   if(logo)o.logo_url=logo.url;if(hero)o.hero_image_url=hero.url;if(wall){o.website_wallpaper_url=wall.url;o.website_wallpaper_path=wall.path}if(aw){o.admin_wallpaper_url=aw.url;o.admin_wallpaper_path=aw.path}if(tw){o.teacher_wallpaper_url=tw.url;o.teacher_wallpaper_path=tw.path}if(pw){o.parent_wallpaper_url=pw.url;o.parent_wallpaper_path=pw.path}
   let{error}=await sb.from('school_settings').upsert(o,{onConflict:'id'});if(error)throw error;await loadSchool();toast('All settings saved');websiteSettingsCenter()
- }catch(err){toast((err.message||'Settings save failed')+' • V28 SQL run है या नहीं check करें.')}
+ }catch(err){toast((err.message||'Settings save failed')+' • Final Supabase SQL एक बार run/check करें.')}
 }
 async function removeWebsiteWallpaper(){
  let{error}=await sb.from('school_settings').update({website_wallpaper_url:null,website_wallpaper_path:null}).eq('id',1);if(error)return toast(error.message);await loadSchool();toast('Wallpaper removed');websiteSettingsCenter()
 }
-async function removeRoleWallpaper(kind){let map={admin:['admin_wallpaper_url','admin_wallpaper_path'],teacher:['teacher_wallpaper_url','teacher_wallpaper_path'],parent:['parent_wallpaper_url','parent_wallpaper_path']},x=map[kind];if(!x)return;let o={[x[0]]:null,[x[1]]:null},{error}=await sb.from('school_settings').update(o).eq('id',1);if(error)return toast(error.message+' • V28 SQL run करें.');await loadSchool();toast(kind+' wallpaper removed');websiteSettingsCenter()}
+async function removeRoleWallpaper(kind){let map={admin:['admin_wallpaper_url','admin_wallpaper_path'],teacher:['teacher_wallpaper_url','teacher_wallpaper_path'],parent:['parent_wallpaper_url','parent_wallpaper_path']},x=map[kind];if(!x)return;let o={[x[0]]:null,[x[1]]:null},{error}=await sb.from('school_settings').update(o).eq('id',1);if(error)return toast(error.message+' • Final Supabase SQL एक बार run करें.');await loadSchool();toast(kind+' wallpaper removed');websiteSettingsCenter()}
 async function testWebsiteOtp(){try{await sendSmsOtp($('otpTestPhone').value);toast('Test OTP sent. Mobile check करें.')}catch(err){toast('OTP नहीं भेजा गया: '+(err.message||err))}}
 
 let v17ResultRows=[],v17ResultFeeMap={},v17ResultControlMap={};
@@ -1510,8 +1510,13 @@ async function v32ResolveEmail(identifier,role){
   if(raw.includes('@')) return raw.toLowerCase();
   let digits=raw.replace(/\D/g,'').slice(-10); if(digits.length!==10) return null;
   try{
+    let {data,error}=await sb.rpc('resolve_login_email',{p_identifier:digits,p_role:role});
+    if(!error && data) return String(data).trim().toLowerCase();
+  }catch(_e){}
+  // Legacy fallback for projects where the safe RPC has not yet been installed.
+  try{
     if(role==='teacher'){
-      let {data}=await sb.from('teacher_profiles').select('email').or(`phone.eq.${digits},phone.eq.+91${digits}`).limit(1);
+      let {data}=await sb.from('teacher_profiles').select('email').or(`phone.eq.${digits},mobile.eq.${digits},phone.eq.+91${digits},mobile.eq.+91${digits}`).limit(1);
       if(data?.[0]?.email) return String(data[0].email).toLowerCase();
     }
     if(role==='parent'){
@@ -1801,6 +1806,7 @@ async function createParentAccess(){
    let {data,error}=await temp.auth.signUp({email:loginEmail,password:pw,options:{data:{full_name:`Parent of ${st.student_name||''}`,role:'parent',mobile,linked_admission_no:st.admission_no||''}}});
    if(error){$('paStatus').innerHTML=`<b>Account create नहीं हुआ:</b> ${esc(error.message)}<br><small>अगर यह email पहले से account है तो नया account बनाने के बजाय उसका password reset backend permission मांगता है.</small>`;return toast(error.message)}
    if(!data?.user)return toast('Parent account create नहीं हुआ');
+   if(!data.session){$('paStatus').innerHTML='<b>Supabase setting required:</b> Confirm email OFF करें, फिर Parent account दुबारा बनाएं.';return toast('Supabase Confirm email OFF करना जरूरी है.')}
    let up1=await sb.from('profiles').upsert({id:data.user.id,email:loginEmail,full_name:`Parent of ${st.student_name||''}`,role:'parent',status:'active',linked_admission_no:st.admission_no||''},{onConflict:'id'});
    if(up1.error)return toast('Account बना लेकिन Profile link error: '+up1.error.message);
    let up2=await sb.from('students').update({phone:mobile,parent_email:loginEmail}).eq('id',st.id);
@@ -2277,7 +2283,9 @@ function v46TeacherNav(){
 function v46InstallTeacherNav(){if(!v14Teacher())return;let el=$('erpNav');if(el)el.innerHTML=v46TeacherNav().map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('')}
 
 function v46InstallAdminSearch(){
-  if(!v14Admin()||v46CurrentPage!=='dashboard')return;let c=$('erpContent');if(!c||$('v46MasterSearch'))return;
+  if(!v14Admin()||v46CurrentPage!=='dashboard')return;let c=$('erpContent');
+  // Merge guard: V39/V45 dashboard already contains the Master Search. Never render a second copy.
+  if(!c||$('v46MasterSearch')||c.querySelector('#masterQ')||c.querySelector('#masterResults'))return;
   let d=document.createElement('div');d.id='v46MasterSearch';d.className='panel';d.innerHTML=`<div class="panelHead"><div><h3>🔎 Universal Master Search</h3><p class="note">Student • Teacher • Staff • Admission • Father • Mother • Mobile • Roll • Enquiry</p></div></div><div class="masterBar"><input id="masterQ" placeholder="Name, mobile, roll, admission no. या कुछ भी लिखें..." autocomplete="off"><button class="primary" onclick="adminMasterSearch()">Search</button></div><div id="masterResults" class="masterResults"></div>`;
   let hero=c.querySelector('.dashHero');hero?hero.insertAdjacentElement('afterend',d):c.prepend(d);let q=$('masterQ');if(q)q.addEventListener('input',()=>{clearTimeout(window._masterTimer);window._masterTimer=setTimeout(adminMasterSearch,180)});
 }
@@ -2484,7 +2492,7 @@ function v47StartSalaryRealtime(){
 const v47RenderBase=render;
 render=function(p){v46CurrentPage=p||'dashboard';let out=(v14Admin()&&p==='salary_center')?v47TeacherSalaryCenter():v47RenderBase(p);Promise.resolve(out).finally(()=>setTimeout(()=>{v47DashboardSalarySummary();v47StartSalaryRealtime()},0));return out}
 const v47OpenERPBase=openERP;
-openERP=async function(){let r=await v47OpenERPBase();v47StartSalaryRealtime();setTimeout(v47DashboardSalarySummary,0);return r}
+openERP=async function(){let r=await v47OpenERPBase();v47StartSalaryRealtime();setTimeout(v47DashboardSalarySummary,0);return r};
 
 (function(){let st=document.createElement('style');st.textContent=`
 .v47SalaryHero{display:flex;justify-content:space-between;align-items:center;gap:16px;background:linear-gradient(120deg,#124c8e,#0b6bc9);color:#fff;border-radius:19px;padding:18px 20px;margin-bottom:14px;box-shadow:0 9px 28px #144f8d25}.v47SalaryHero span{font-size:11px;font-weight:900;letter-spacing:.08em;color:#d9ecff}.v47SalaryHero h2{margin:4px 0}.v47SalaryHero p{margin:0;color:#e5f1ff}.v47PayMode{min-width:180px}.v47PayMode label{display:block;font-size:11px;margin-bottom:5px}.v47PayMode select{width:100%;border:0;border-radius:10px;padding:10px;font-weight:800}.v47SalaryStats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}.v47FixedEdit{display:flex;gap:5px;min-width:150px}.v47FixedEdit input{width:95px;padding:7px;border:1px solid #d9e3ef;border-radius:8px}.v47PayBtn{white-space:nowrap}.cellSub{display:block;color:#7c8797;font-size:11px;margin-top:3px}.panelHead{display:flex;justify-content:space-between;align-items:center;gap:10px}.panelHead small{display:block;color:#718096;margin-top:3px}
@@ -2492,4 +2500,559 @@ openERP=async function(){let r=await v47OpenERPBase();v47StartSalaryRealtime();s
 @media(max-width:600px){.v47SalaryStats{grid-template-columns:1fr 1fr}.v47FixedEdit{min-width:130px}.v47FixedEdit input{width:80px}}
 `;document.head.appendChild(st)})();
 
-</script></body></html>
+</script>
+<script>
+/* ===== V48 FINAL CHECKED ADDITIONS =====
+   Important: Admin main V39 dashboard structure is preserved.
+   Only requested Admin sidebar grouping + small header/logo cleanup + requested smart centers.
+*/
+const V48_BUILD='V48-FINAL-CHECKED';
+
+/* ---------- ADMIN SIDEBAR: GROUPS ONLY ---------- */
+const v48AdminGroups = [
+  ['🎓','Student Management',[
+    ['admissions','Admission'],['students','Students List / Edit'],['data_hub','Student Data Hub'],
+    ['attendance','Attendance'],['fee_card_center','Fee Card'],
+    ['idcard_center','ID Card'],['promotion_center','Previous Session / Promotion']
+  ]],
+  ['👨‍🏫','Teacher Management',[
+    ['staff','Teachers / Staff'],['teacher_approval','Teacher Approval'],['staff_attendance','Staff Attendance'],
+    ['leave','Leave'],['salary_center','Teacher Salary Center'],['payroll','Payroll']
+  ]],
+  ['💳','Fees & Accounts',[
+    ['smart_fee_center','Pay Fee'],['fee_dashboard','Fee Dashboard'],['fee_structure','Fee Structure'],
+    ['due_reminders','Due Fee Reminder'],['income','Income'],['expenses','Expenses'],['balance','Balance Sheet']
+  ]],
+  ['📝','Exams & Results',[
+    ['exams','Marks Entry'],['marksheet_center','Smart Marksheet'],['result_control','Publish Result'],
+    ['result_receipt_center','Marksheet / TC Received']
+  ]],
+  ['📚','Academic Management',[
+    ['academics','Academics'],['timetable','Timetable'],['homework','Homework'],
+    ['teaching_monitor','Teaching & Syllabus Monitor'],['class_review_center','Class Review / Reports']
+  ]],
+  ['🚐','Van / Transport',[
+    ['van_center','Van Details'],['transport','Transport Register']
+  ]],
+  ['📢','Notice & Orders',[
+    ['notice_order_center','Smart Notice / Order'],['notices','Notices'],['events','Events / PTM / Holidays']
+  ]],
+  ['📊','Reports & Data',[
+    ['reports','Reports'],['excel','Excel / Export'],['activity_log','Activity Log'],['library','Library']
+  ]],
+  ['⚙️','Settings',[
+    ['users','Users & Roles'],['settings','Website & Settings'],['gallery','Gallery'],['enquiries','Enquiries']
+  ]]
+];
+
+function v48AdminSidebar(){
+  if(!v14Admin?.()) return;
+  const nav=$('erpNav'); if(!nav) return;
+  const seen=new Set(['dashboard']);
+  const groupHtml=v48AdminGroups.map((g,i)=>{
+    const unique=(g[2]||[]).filter(x=>{const k=String(x[0]||'');if(!k||seen.has(k))return false;seen.add(k);return true});
+    if(!unique.length)return '';
+    const child=unique.map(x=>"<button type=\"button\" data-route=\""+x[0]+"\" onclick=\"render('"+x[0]+"')\">"+x[1]+"</button>").join('');
+    return '<div class="v48Group"><button type="button" class="v48GroupHead" onclick="v48ToggleGroup('+i+',this)"><b>'+g[0]+'</b><span>'+g[1]+'</span><em>›</em></button><div class="v48Sub" id="v48g'+i+'">'+child+'</div></div>';
+  }).join('');
+  nav.innerHTML='<button type="button" class="v48DashBtn" data-route="dashboard" onclick="render(\'dashboard\')">🏠 <span>Dashboard</span></button>'+groupHtml;
+}
+function v48ToggleGroup(i,btn){
+  const x=$('v48g'+i); if(!x)return;
+  const open=x.classList.toggle('open');
+  btn.classList.toggle('open',open);
+}
+
+/* ---------- ROUTE WRAPPER: KEEP OLD FUNCTIONS ---------- */
+const v48RenderBase=render;
+render=function(p){
+  if(p==='van_center') return vanCenter();
+  if(p==='result_receipt_center') return resultReceiptCenter();
+  if(p==='reports') return v48ReportsCenter();
+  const r=v48RenderBase(p);
+  Promise.resolve(r).finally(()=>setTimeout(()=>{
+    if(v14Admin?.()) v48AdminSidebar();
+    v48FixNav();
+    v48PolishAdminHero();
+    v48EnhanceForms();
+  },0));
+  return r;
+};
+
+const v48OpenERPBase=openERP;
+openERP=async function(){
+  const r=await v48OpenERPBase();
+  setTimeout(()=>{
+    if(v14Admin?.())v48AdminSidebar();
+    v48FixNav();
+    v48EnhanceForms();
+  },0);
+  return r;
+};
+
+/* ---------- ONE HOME + BACK ---------- */
+function v48FixNav(){
+  const c=document.querySelector('.v45NavControls');
+  if(c){
+    const b=c.querySelector('#v45BackBtn'); if(b)b.textContent='← Back';
+    const h=c.querySelector('#v45HomeBtn'); if(h)h.textContent='🏠 Home';
+  }
+  // Sidebar Home is replaced by single Dashboard button for Admin.
+}
+
+/* ---------- ADMIN HERO: SAME V39 DASHBOARD, REQUESTED TEXT/LOGO ONLY ---------- */
+async function v48PolishAdminHero(){
+  if(!v14Admin?.()) return;
+  const hero=document.querySelector('.v39Hero'); if(!hero)return;
+  const hello=hero.querySelector('.v39Hello'); if(hello)hello.textContent='Welcome to';
+  const h2=hero.querySelector('.v39HeroCopy h2'); if(h2)h2.textContent='L D Modern Education Academy';
+  const repeated=hero.querySelector('.v39HeroSchool'); if(repeated)repeated.style.display='none';
+
+  const adminBox=hero.querySelector('.v39AdminBox');
+  if(adminBox && !adminBox.dataset.v48logo){
+    adminBox.dataset.v48logo='1';
+    let url=school?.logo_url||'';
+    adminBox.classList.add('v48LogoOnly');
+    adminBox.innerHTML='<div class="v48LogoWrap">'+
+      (url?'<img src="'+esc(url)+'" alt="School Logo">':'<div class="v48LogoFallback">LD</div>')+
+      '<label title="Update school logo">✎<input id="v48LogoFile" type="file" accept="image/*" hidden onchange="v48UpdateLogo()"></label></div>';
+  }
+}
+async function v48UpdateLogo(){
+  const input=$('v48LogoFile'), f=input?.files?.[0]; if(!f)return;
+  try{
+    const compressed=await compressImageFile(f,15,80,700,'logo');
+    const up=await uploadPublicAsset(compressed,'branding/logo');
+    let {error}=await sb.from('school_settings').upsert({id:1,logo_url:up.url},{onConflict:'id'});
+    if(error)throw error;
+    await loadSchool();applySchool();toast('School logo updated • all devices');
+    dashboard();
+  }catch(e){toast(e.message||String(e))}
+}
+
+/* ---------- AUTO TITLE CASE WHILE TYPING ---------- */
+const v48TitleFields=/student_name|father_name|mother_name|guardian_name|address|village_city|previous_school|father_occupation|mother_occupation|driver_name|pickup_point|route_name|teacher_name|full_name|title|subject|remark/i;
+function v48TitleCase(s){
+  return String(s||'').toLowerCase().replace(/(^|[\s,./()'-])([a-z])/g,(m,a,b)=>a+b.toUpperCase());
+}
+function v48AttachTitleCase(el){
+  if(!el || el.dataset.v48title==='1')return;
+  const n=el.name||el.id||'';
+  if(!v48TitleFields.test(n))return;
+  if(['email','number','date','tel'].includes((el.type||'').toLowerCase()))return;
+  el.dataset.v48title='1';
+  el.addEventListener('input',()=>{
+    const a=el.selectionStart,b=el.selectionEnd,old=el.value,neu=v48TitleCase(old);
+    if(neu!==old){el.value=neu;try{el.setSelectionRange(a,b)}catch(_e){}}
+  });
+}
+
+/* ---------- STATE -> DISTRICT SELECT ---------- */
+const v48States=['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Delhi','Jammu and Kashmir','Ladakh','Chandigarh','Puducherry','Andaman and Nicobar Islands','Dadra and Nagar Haveli and Daman and Diu','Lakshadweep'];
+const v48UPDistricts=['Agra','Aligarh','Ambedkar Nagar','Amethi','Amroha','Auraiya','Ayodhya','Azamgarh','Baghpat','Bahraich','Ballia','Balrampur','Banda','Barabanki','Bareilly','Basti','Bhadohi','Bijnor','Budaun','Bulandshahr','Chandauli','Chitrakoot','Deoria','Etah','Etawah','Farrukhabad','Fatehpur','Firozabad','Gautam Buddha Nagar','Ghaziabad','Ghazipur','Gonda','Gorakhpur','Hamirpur','Hapur','Hardoi','Hathras','Jalaun','Jaunpur','Jhansi','Kannauj','Kanpur Dehat','Kanpur Nagar','Kasganj','Kaushambi','Kheri','Kushinagar','Lalitpur','Lucknow','Maharajganj','Mahoba','Mainpuri','Mathura','Mau','Meerut','Mirzapur','Moradabad','Muzaffarnagar','Pilibhit','Pratapgarh','Prayagraj','Rae Bareli','Rampur','Saharanpur','Sambhal','Sant Kabir Nagar','Shahjahanpur','Shamli','Shravasti','Siddharthnagar','Sitapur','Sonbhadra','Sultanpur','Unnao','Varanasi'];
+
+function v48ReplaceStateDistrict(root=document){
+  root.querySelectorAll('input[name="state"]').forEach(inp=>{
+    if(inp.dataset.v48done)return;
+    const sel=document.createElement('select');sel.name='state';sel.required=inp.required;sel.dataset.v48done='1';
+    sel.innerHTML='<option value="">Select State</option>'+v48States.map(x=>'<option'+(x===inp.value?' selected':'')+'>'+x+'</option>').join('');
+    sel.addEventListener('change',()=>v48RefreshDistrict(sel));
+    inp.replaceWith(sel);
+  });
+  root.querySelectorAll('input[name="district"]').forEach(inp=>{
+    if(inp.dataset.v48done)return;
+    const sel=document.createElement('select');sel.name='district';sel.required=inp.required;sel.dataset.v48done='1';
+    const state=(root.querySelector('select[name="state"]')?.value)||'Uttar Pradesh';
+    const arr=state==='Uttar Pradesh'?v48UPDistricts:[];
+    sel.innerHTML='<option value="">Select District</option>'+arr.map(x=>'<option'+(x===inp.value?' selected':'')+'>'+x+'</option>').join('');
+    if(!arr.length && inp.value)sel.innerHTML+='<option selected>'+esc(inp.value)+'</option>';
+    inp.replaceWith(sel);
+  });
+}
+function v48RefreshDistrict(stateSel){
+  const form=stateSel.closest('form')||document;
+  const d=form.querySelector('select[name="district"]');if(!d)return;
+  const arr=stateSel.value==='Uttar Pradesh'?v48UPDistricts:[];
+  d.innerHTML='<option value="">Select District</option>'+arr.map(x=>'<option>'+x+'</option>').join('');
+  if(!arr.length)d.innerHTML+='<option value="Other">Other</option>';
+}
+function v48EnhanceForms(){
+  document.querySelectorAll('input,textarea').forEach(v48AttachTitleCase);
+  v48ReplaceStateDistrict(document);
+}
+document.addEventListener('focusin',()=>setTimeout(v48EnhanceForms,0));
+
+/* ---------- VAN CENTER ---------- */
+async function vanCenter(){
+  if(!v14Admin?.())return toast('Permission denied');
+  head('Van Details','Vehicle • Student • Attendance • Due Fee');
+  $('erpContent').innerHTML='<div class="panel"><div class="tools">'+
+    '<input id="v48VanQ" placeholder="Student / Father / Admission / Vehicle / Route">'+
+    '<select id="v48VanClass"><option value="">All Classes</option>'+cls.map(c=>'<option>'+esc(c)+'</option>').join('')+'</select>'+
+    '<input id="v48VanDate" type="date" value="'+today()+'">'+
+    '<button class="primary" onclick="v48LoadVan()">Search</button></div><div id="v48VanBody"><div class="empty">Loading...</div></div></div>';
+  await v48LoadVan();
+}
+async function v48LoadVan(){
+  const q=($('v48VanQ')?.value||'').toLowerCase(), c=$('v48VanClass')?.value||'', date=$('v48VanDate')?.value||today();
+  const [tr,st,at,fe]=await Promise.all([
+    sb.from('transport').select('*'),
+    sb.from('students').select('*'),
+    sb.from('attendance').select('*').eq('date',date),
+    sb.from('fees').select('*')
+  ]);
+  if(tr.error||st.error){$('v48VanBody').innerHTML='<div class="empty">'+esc((tr.error||st.error).message)+'</div>';return}
+  const students=st.data||[],att=at.data||[],fees=fe.data||[];
+  const byName={};students.forEach(s=>byName[String(s.student_name||'').toLowerCase()]=s);
+  const am={};att.forEach(a=>{if(a.admission_no)am[a.admission_no]=a.status});
+  const dm={};fees.forEach(f=>{if(f.admission_no)dm[f.admission_no]=(dm[f.admission_no]||0)+Number(f.due_amount||0)});
+  let rows=(tr.data||[]).map(t=>{const s=byName[String(t.student_name||'').toLowerCase()]||{};return {t,s,att:am[s.admission_no]||'Not Marked',due:dm[s.admission_no]||0}});
+  if(c)rows=rows.filter(r=>r.s.class_name===c);
+  if(q)rows=rows.filter(r=>[r.t.student_name,r.s.father_name,r.s.admission_no,r.t.vehicle_no,r.t.route_name].some(v=>String(v||'').toLowerCase().includes(q)));
+  $('v48VanBody').innerHTML='<div class="tableWrap"><table><tr><th>Student</th><th>Class</th><th>Father</th><th>Vehicle</th><th>Route/Pickup</th><th>Attendance</th><th>Due Fee</th><th>Action</th></tr>'+
+  (rows.map(r=>'<tr><td><b>'+esc(r.t.student_name||'')+'</b><small class="cellSub">'+esc(r.s.admission_no||'')+'</small></td><td>'+esc(r.s.class_name||'')+'</td><td>'+esc(r.s.father_name||'')+'</td><td>'+esc(r.t.vehicle_no||'')+'</td><td>'+esc(r.t.route_name||'')+' • '+esc(r.t.pickup_point||'')+'</td><td>'+esc(r.att)+'</td><td>'+money(r.due)+'</td><td><button class="mini edit" onclick="render(\'transport\')">Edit Van</button></td></tr>').join('')||'<tr><td colspan="8">No van students found.</td></tr>')+
+  '</table></div>';
+}
+
+/* ---------- EXAM RESULT / MARKSHEET / TC RECEIVED ---------- */
+async function resultReceiptCenter(){
+  if(!v14Admin?.())return toast('Permission denied');
+  head('Examination Result & Document Received','Present / Previous Session • Marksheet • TC');
+  $('erpContent').innerHTML='<div class="panel"><div class="tools">'+
+    '<input id="v48RRSession" value="'+esc(school.academic_session||'2026-27')+'" placeholder="Session">'+
+    '<select id="v48RRClass"><option value="">All Classes</option>'+cls.map(c=>'<option>'+esc(c)+'</option>').join('')+'</select>'+
+    '<input id="v48RRQ" placeholder="Student / Father / Admission">'+
+    '<button class="primary" onclick="v48LoadReceipt()">Show</button></div><div id="v48RRBody"><div class="empty">Loading...</div></div></div>';
+  await v48LoadReceipt();
+}
+async function v48LoadReceipt(){
+  const c=$('v48RRClass')?.value||'',q=($('v48RRQ')?.value||'').toLowerCase(),session=$('v48RRSession')?.value||'2026-27';
+  let sq=sb.from('students').select('*').order('student_name');if(c)sq=sq.eq('class_name',c);
+  const [sres,rres]=await Promise.all([sq,sb.from('student_document_receipts').select('*').eq('academic_session',session)]);
+  if(sres.error){$('v48RRBody').innerHTML='<div class="empty">'+esc(sres.error.message)+'</div>';return}
+  if(rres.error){$('v48RRBody').innerHTML='<div class="empty"><b>One-time database setup required.</b><br>Run FINAL_SUPABASE_ONE_TIME_SETUP.sql once in Supabase SQL Editor.<br>'+esc(rres.error.message)+'</div>';return}
+  const rm={};(rres.data||[]).forEach(r=>rm[r.admission_no]=r);
+  let rows=sres.data||[];if(q)rows=rows.filter(s=>[s.student_name,s.father_name,s.admission_no].some(v=>String(v||'').toLowerCase().includes(q)));
+  $('v48RRBody').innerHTML='<div class="tableWrap"><table><tr><th>Student</th><th>Class</th><th>Marksheet</th><th>TC</th><th>Received By</th><th>Save</th></tr>'+
+    (rows.map(s=>{const r=rm[s.admission_no]||{};const a=String(s.admission_no||'').replace(/[^a-zA-Z0-9_-]/g,'_');return '<tr><td><b>'+esc(s.student_name||'')+'</b><small class="cellSub">'+esc(s.admission_no||'')+' • '+esc(s.father_name||'')+'</small></td><td>'+esc(s.class_name||'')+'</td><td><input id="mr_'+a+'" type="checkbox" '+(r.marksheet_received?'checked':'')+'></td><td><input id="tc_'+a+'" type="checkbox" '+(r.tc_received?'checked':'')+'></td><td><select id="rb_'+a+'"><option value="">Select</option><option '+(r.received_by==='Student'?'selected':'')+'>Student</option><option '+(r.received_by==='Parent'?'selected':'')+'>Parent</option></select></td><td><button class="mini edit" onclick="v48SaveReceipt(\''+esc(s.admission_no||'')+'\',\''+esc(session)+'\',\''+a+'\')">Save</button></td></tr>'}).join('')||'<tr><td colspan="6">No students.</td></tr>')+
+    '</table></div>';
+}
+async function v48SaveReceipt(adm,session,key){
+  const o={admission_no:adm,academic_session:session,marksheet_received:!!$('mr_'+key)?.checked,tc_received:!!$('tc_'+key)?.checked,received_by:$('rb_'+key)?.value||null,received_at:new Date().toISOString(),updated_by:user?.id||null,updated_at:new Date().toISOString()};
+  const {error}=await sb.from('student_document_receipts').upsert(o,{onConflict:'admission_no,academic_session'});
+  toast(error?error.message:'Updated • shared database');
+}
+
+/* ---------- REPORTS LANDING ---------- */
+async function v48ReportsCenter(){
+  if(!v14Admin?.())return toast('Permission denied');
+  head('Reports','Student • Fee • Attendance • Exam • Session');
+  $('erpContent').innerHTML='<div class="panel"><div class="v48ReportGrid">'+
+    '<button onclick="render(\'students\')">🎓<b>Student Report</b></button>'+
+    '<button onclick="render(\'fee_dashboard\')">💳<b>Fee Report</b></button>'+
+    '<button onclick="render(\'attendance\')">✅<b>Attendance Report</b></button>'+
+    '<button onclick="render(\'exams\')">📝<b>Exam Report</b></button>'+
+    '<button onclick="render(\'result_receipt_center\')">☑<b>Marksheet / TC</b></button>'+
+    '<button onclick="render(\'excel\')">📊<b>Export / Excel</b></button>'+
+    '</div></div>';
+}
+
+/* ---------- STUDENT SEARCH: PHOTO ON RIGHT ---------- */
+const v48StudentFullBase=dashboardStudentFull;
+dashboardStudentFull=async function(id){
+  await v48StudentFullBase(id);
+  try{
+    const {data:s}=await sb.from('students').select('*').eq('id',id).single();
+    if(!s)return;
+    let url=s.photo_url||s.student_photo_url||'';
+    if(!url&&s.photo_path){
+      const r=await sb.storage.from('student-media').createSignedUrl(s.photo_path,3600);
+      url=r.data?.signedUrl||'';
+    }
+    const box=$('globalStudentResults');
+    if(box&&url&&!box.querySelector('.v48SearchPhoto')){
+      const img=document.createElement('img');img.className='v48SearchPhoto';img.src=url;img.alt='Student Photo';box.prepend(img);
+    }
+  }catch(_e){}
+};
+
+/* ---------- TEACHER NOTICE REPLY + ADMIN REPLY VIEW ---------- */
+const v48TeacherNoticeBase=teacherNoticeCenter;
+teacherNoticeCenter=async function(){
+  await v48TeacherNoticeBase();
+  try{
+    const rows=await v32TeacherNotices(),host=$('erpContent');if(!host||!rows.length)return;
+    const panel=document.createElement('div');panel.className='panel';panel.innerHTML='<h3>Reply to Admin</h3>'+
+      rows.map(r=>'<div class="v48ReplyRow"><b>'+esc(r.title||'Notice')+'</b><textarea id="v48rep_'+r.id+'" placeholder="Type reply"></textarea><button class="secondary" onclick="v48ReplyNotice(\''+r.id+'\')">Send Reply</button></div>').join('');
+    host.appendChild(panel);
+  }catch(_e){}
+};
+async function v48ReplyNotice(id){
+  const txt=$('v48rep_'+id)?.value.trim();if(!txt)return toast('Reply लिखें');
+  const o={notice_id:String(id),teacher_profile_id:String(v14TeacherProfile?.id||''),teacher_name:v14TeacherProfile?.teacher_name||profile?.full_name||'',reply_text:txt,replied_at:new Date().toISOString()};
+  const {error}=await sb.from('notice_replies').insert(o);toast(error?error.message:'Reply sent to Admin');
+}
+
+const v48NoticeOrderBase=noticeOrderCenter;
+noticeOrderCenter=async function(){
+  await v48NoticeOrderBase();
+  try{
+    const host=$('erpContent');if(!host)return;
+    const panel=document.createElement('div');panel.className='panel';panel.innerHTML='<div class="panelHead"><h3>Teacher Replies</h3><button class="secondary" onclick="v48LoadReplies()">Refresh</button></div><div id="v48Replies">Loading...</div>';
+    host.appendChild(panel);await v48LoadReplies();
+  }catch(_e){}
+};
+async function v48LoadReplies(){
+  const box=$('v48Replies');if(!box)return;
+  const {data,error}=await sb.from('notice_replies').select('*').order('replied_at',{ascending:false}).limit(100);
+  if(error){box.innerHTML='<div class="empty">Run FINAL_SUPABASE_ONE_TIME_SETUP.sql once.<br>'+esc(error.message)+'</div>';return}
+  box.innerHTML=(data||[]).length?'<div class="tableWrap"><table><tr><th>Date</th><th>Teacher</th><th>Reply</th></tr>'+
+    data.map(r=>'<tr><td>'+esc(String(r.replied_at||'').replace('T',' ').slice(0,16))+'</td><td>'+esc(r.teacher_name||'')+'</td><td>'+esc(r.reply_text||'')+'</td></tr>').join('')+'</table></div>':'<div class="empty">No teacher replies yet.</div>';
+}
+
+/* ---------- CSS: SIDEBAR ONLY + SMALL REQUESTED FIXES ---------- */
+(function(){
+  const st=document.createElement('style');
+  st.textContent=`
+  #erpNav .v48DashBtn,#erpNav .v48GroupHead{width:100%;display:flex!important;align-items:center;gap:9px;text-align:left}
+  .v48Group{margin:3px 0}.v48GroupHead b{font-size:18px;width:24px;text-align:center}.v48GroupHead span{flex:1}.v48GroupHead em{font-style:normal;font-size:20px;transition:.2s}.v48GroupHead.open em{transform:rotate(90deg)}
+  .v48Sub{display:none;padding:3px 0 5px 32px}.v48Sub.open{display:grid}.v48Sub button{font-size:12px!important;padding:8px 9px!important;text-align:left!important}
+  .v39HeroSchool{display:none!important}.v39Hero{grid-template-columns:1fr auto!important}
+  .v39AdminBox.v48LogoOnly{background:transparent!important;border:0!important;padding:0!important;max-width:none!important}
+  .v48LogoWrap{position:relative;width:92px;height:92px;border-radius:16px;background:#fff;display:grid;place-items:center;overflow:hidden}
+  .v48LogoWrap img{width:86px;height:86px;object-fit:contain}.v48LogoFallback{font-size:26px;font-weight:900;color:#174674}
+  .v48LogoWrap label{position:absolute;right:3px;bottom:3px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#173d6b;color:#fff;cursor:pointer}
+  .v48SearchPhoto{float:right;width:110px;height:130px;object-fit:cover;border-radius:14px;border:2px solid #dce8f5;margin:8px 8px 12px 16px}
+  .v48ReportGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.v48ReportGrid button{min-height:95px;border:1px solid #e2e9f1;background:#fff;border-radius:14px;font-size:27px;cursor:pointer}.v48ReportGrid b{display:block;font-size:12px;margin-top:7px}
+  .v48ReplyRow{display:grid;gap:7px;padding:12px 0;border-bottom:1px solid #edf1f5}.v48ReplyRow textarea{min-height:70px}
+  @media(max-width:760px){.v48Sub{padding-left:24px}.v39Hero{grid-template-columns:1fr!important}.v48LogoWrap{width:76px;height:76px}.v48LogoWrap img{width:70px;height:70px}.v48ReportGrid{grid-template-columns:repeat(2,1fr)}}
+  `;
+  document.head.appendChild(st);
+})();
+
+setTimeout(()=>{v48FixNav();v48EnhanceForms();},500);
+</script>
+
+<script>
+/* ===== V49 FINAL STABILITY PATCH =====
+   Additive only: restores Forgot Password and strengthens multi-device refresh.
+   Existing dashboard/public website/features are not redesigned here.
+*/
+const V49_BUILD='V49-FINAL-DB-RECONCILED';
+
+/* ---------- FORGOT PASSWORD: ADMIN + TEACHER ---------- */
+async function v49ForgotPassword(role){
+  try{
+    let identifier='';
+    if(role==='teacher') identifier=String($('tLoginId')?.value||'').trim();
+    else identifier=String($('email')?.value||'').trim();
+
+    if(!identifier){
+      identifier=String(prompt('Email या registered Mobile number डालें')||'').trim();
+      if(!identifier)return;
+    }
+
+    let email=identifier.includes('@') ? identifier.toLowerCase() : await v32ResolveEmail(identifier,role);
+    if(!email || !email.includes('@')){
+      return toast('इस Mobile से registered Email नहीं मिला. Email डालकर फिर कोशिश करें.');
+    }
+
+    const redirectTo=location.origin+location.pathname;
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
+    if(error)return toast('Password reset failed: '+error.message);
+    toast('Password reset link registered Email पर भेज दिया गया है.');
+  }catch(e){toast(e.message||String(e))}
+}
+
+function v49RestoreForgotPassword(){
+  /* Admin login */
+  const adminCard=document.querySelector('#login .authCard');
+  if(adminCard && !adminCard.querySelector('#v49AdminForgot')){
+    const links=adminCard.querySelector('.loginLinks');
+    if(links){
+      const a=document.createElement('a');
+      a.id='v49AdminForgot';
+      a.textContent='Forgot Password?';
+      a.style.cursor='pointer';
+      a.onclick=()=>v49ForgotPassword('admin');
+      links.appendChild(document.createTextNode('  •  '));
+      links.appendChild(a);
+    }
+    const em=$('email');
+    if(em){em.type='text';em.placeholder='Email / Mobile';em.setAttribute('inputmode','email')}
+  }
+
+  /* Teacher login */
+  const box=$('teacherAuthBox');
+  if(box && $('tLoginPassword') && !box.querySelector('#v49TeacherForgot')){
+    const full=document.createElement('div');
+    full.className='full';
+    full.id='v49TeacherForgot';
+    full.style.textAlign='right';
+    full.innerHTML='<button type="button" class="v49ForgotBtn" onclick="v49ForgotPassword(\'teacher\')">Forgot Password?</button>';
+    const form=box.querySelector('.v14Form');
+    if(form)form.appendChild(full);
+  }
+}
+
+/* Wrap teacher form only to add the old forgot-password option back */
+const v49TeacherExistingBase=teacherExistingLoginForm;
+teacherExistingLoginForm=function(){
+  const r=v49TeacherExistingBase();
+  setTimeout(v49RestoreForgotPassword,0);
+  return r;
+};
+
+/* ---------- PASSWORD RECOVERY LINK HANDLER ---------- */
+function v49ShowNewPassword(){
+  if(document.getElementById('v49RecoveryModal'))return;
+  const wrap=document.createElement('div');
+  wrap.id='v49RecoveryModal';
+  wrap.className='v14Modal';
+  wrap.innerHTML=`<div class="v14ModalCard">
+    <button class="v14Close" onclick="document.getElementById('v49RecoveryModal')?.remove()">×</button>
+    <h2>Set New Password</h2>
+    <p class="v14Muted">नया password कम से कम 6 characters का रखें.</p>
+    <div class="v14Form">
+      <div class="full"><label>New Password</label><input id="v49NewPass" type="password" placeholder="New Password"></div>
+      <div class="full"><label>Confirm Password</label><input id="v49NewPass2" type="password" placeholder="Confirm Password"></div>
+      <div class="full"><button class="v14Action primary" onclick="v49SaveNewPassword()">Update Password</button></div>
+    </div>
+  </div>`;
+  document.body.appendChild(wrap);
+}
+async function v49SaveNewPassword(){
+  const a=$('v49NewPass')?.value||'', b=$('v49NewPass2')?.value||'';
+  if(a.length<6)return toast('Password कम से कम 6 characters का रखें.');
+  if(a!==b)return toast('दोनों Password समान नहीं हैं.');
+  const {error}=await sb.auth.updateUser({password:a});
+  if(error)return toast(error.message);
+  document.getElementById('v49RecoveryModal')?.remove();
+  toast('Password successfully updated. अब नए password से login करें.');
+  await sb.auth.signOut();
+  setTimeout(()=>location.href=location.origin+location.pathname,800);
+}
+if(sb?.auth?.onAuthStateChange){
+  sb.auth.onAuthStateChange((event)=>{
+    if(event==='PASSWORD_RECOVERY')setTimeout(v49ShowNewPassword,100);
+  });
+}
+
+/* ---------- MULTI-DEVICE / CROSS-TAB AUTO REFRESH ---------- */
+let v49RealtimeChannel=null, v49RefreshTimer=null, v49LastRefresh=0;
+const v49RealtimeTables=[
+  'students','admissions','attendance','fees','fee_payments','student_fee_schedules',
+  'staff','staff_attendance','teacher_profiles','teacher_class_assignments','teacher_subject_assignments',
+  'exams','student_marks','timetable','homework','events','notices','school_settings',
+  'teaching_diary','syllabus_master','student_document_receipts','notice_replies','transport',
+  'transport_attendance','leave','class_opinions','payroll','expenses'
+];
+
+function v49SafeRefresh(reason){
+  if(!user || $('erp')?.classList.contains('hidden'))return;
+  clearTimeout(v49RefreshTimer);
+  v49RefreshTimer=setTimeout(async()=>{
+    if(Date.now()-v49LastRefresh<1200)return;
+    v49LastRefresh=Date.now();
+    try{
+      await loadSchool(); applySchool();
+      /* Re-render current ERP page so shared Supabase changes appear on any device */
+      const current=page||'dashboard';
+      if(typeof render==='function') await render(current);
+    }catch(_e){}
+  },450);
+}
+
+function v49StartRealtime(){
+  if(!sb || !user || v49RealtimeChannel)return;
+  try{
+    let ch=sb.channel('ld-modern-live-v49');
+    v49RealtimeTables.forEach(t=>{
+      ch=ch.on('postgres_changes',{event:'*',schema:'public',table:t},()=>v49SafeRefresh(t));
+    });
+    v49RealtimeChannel=ch.subscribe();
+  }catch(_e){}
+}
+
+const v49OpenERPBase=openERP;
+openERP=async function(){
+  const r=await v49OpenERPBase();
+  setTimeout(()=>{
+    v49RestoreForgotPassword();
+    v49StartRealtime();
+  },100);
+  return r;
+};
+
+const v49LogoutBase=logout;
+logout=async function(){
+  try{
+    if(v49RealtimeChannel){await sb.removeChannel(v49RealtimeChannel);v49RealtimeChannel=null}
+  }catch(_e){}
+  return await v49LogoutBase();
+};
+
+/* Browser/tab/device freshness fallback even if Realtime publication is unavailable */
+window.addEventListener('focus',()=>v49SafeRefresh('focus'));
+window.addEventListener('online',()=>v49SafeRefresh('online'));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)v49SafeRefresh('visible')});
+
+/* Cross-tab refresh on same device */
+try{
+  const v49BC=new BroadcastChannel('ld-modern-v49');
+  window.v49BroadcastChange=(type='data')=>v49BC.postMessage({type,at:Date.now()});
+  v49BC.onmessage=()=>v49SafeRefresh('broadcast');
+}catch(_e){window.v49BroadcastChange=()=>{}}
+
+/* ---------- KEEP FORGOT BUTTON PRESENT AFTER DYNAMIC UI CHANGES ---------- */
+const v49Observer=new MutationObserver(()=>v49RestoreForgotPassword());
+v49Observer.observe(document.body,{childList:true,subtree:true});
+setTimeout(v49RestoreForgotPassword,200);
+
+/* ---------- SMALL CSS ONLY FOR FORGOT LINK ---------- */
+(function(){
+  const st=document.createElement('style');
+  st.textContent=`
+    .v49ForgotBtn{border:0;background:transparent;color:#1769aa;font-weight:800;cursor:pointer;padding:4px 0}
+    .v49ForgotBtn:hover{text-decoration:underline}
+    #v49AdminForgot{font-weight:800}
+  `;
+  document.head.appendChild(st);
+})();
+</script>
+
+
+<script>
+/* ===== V45–V49 MERGE GUARD =====
+   Keeps one visible sidebar route per page and preserves the newest implementation.
+*/
+const V45_V49_MERGED_BUILD='V45-V49-MERGED-FINAL';
+function vMergeDedupeSidebar(){
+  const nav=document.getElementById('erpNav'); if(!nav)return;
+  const seen=new Set();
+  [...nav.querySelectorAll('button')].forEach(btn=>{
+    let route=btn.dataset.route||'';
+    if(!route){
+      const oc=btn.getAttribute('onclick')||'';
+      const m=oc.match(/render\(['"]([^'"]+)['"]\)/);
+      route=m?m[1]:'';
+    }
+    if(!route)return; // group headers / non-route controls
+    if(seen.has(route))btn.remove(); else seen.add(route);
+  });
+}
+const vMergeRenderBase=render;
+render=function(p){
+  const r=vMergeRenderBase(p);
+  Promise.resolve(r).finally(()=>setTimeout(vMergeDedupeSidebar,0));
+  return r;
+};
+const vMergeOpenERPBase=openERP;
+openERP=async function(){
+  const r=await vMergeOpenERPBase();
+  setTimeout(vMergeDedupeSidebar,50);
+  return r;
+};
+</script>
+
+</body></html>

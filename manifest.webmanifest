@@ -1,14 +1,19 @@
 {
-  "name": "L D Modern Education Academy Kushinagar",
-  "short_name": "LD Modern Academy",
-  "start_url": "./",
+  "name": "L D Modern Education Academy",
+  "short_name": "LD Modern",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#eef6fd",
-  "theme_color": "#032451",
+  "background_color": "#ffffff",
+  "theme_color": "#123f72",
   "icons": [
     {
-      "src": "icon-192.png",
-      "sizes": "192x192",
+      "src": "favicon-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
       "type": "image/png"
     },
     {
