@@ -610,6 +610,40 @@ async function smartAttendance(){
  $("erpContent").innerHTML=`<div class="panel"><div class="panelHead"><div><h3>✓ Fast Attendance Register</h3><p class="note">Class चुनते ही सभी Active students दिखेंगे. All Present / All Absent / All Leave या individual tick से status बदलें.</p></div></div><div class="tools attendanceTools"><select id="attClass"><option value="">Select Class</option>${cls.map(x=>`<option>${x}</option>`).join("")}</select><input id="attDate" type="date" value="${today()}"><input id="attSection" placeholder="Section optional"><button class="secondary" onclick="loadAttendanceClass()">Load Students</button></div><div id="attendanceSheet"><div class="empty">पहले Class select करें.</div></div></div>`;
  $("attClass").onchange=loadAttendanceClass;$("attDate").onchange=loadAttendanceClass;
 }
+ async function classTeacherAttendance(){
+  head('Class Teacher Attendance','Only your assigned class');
+
+  let tp=v14TeacherProfile||{};
+  let {data,error}=await sb
+    .from('teacher_class_assignments')
+    .select('class_name,is_class_teacher,is_active')
+    .eq('teacher_profile_id',tp.id)
+    .eq('is_class_teacher',true)
+    .eq('is_active',true);
+
+  if(error) return toast(error.message);
+
+  let row=(data||[])[0];
+
+  if(!row){
+    $('erpContent').innerHTML=
+      '<div class="panel"><h3>Class Teacher Attendance</h3><p>You are not assigned as Class Teacher of any class.</p></div>';
+    return;
+  }
+
+  await smartAttendance();
+
+  let cls=$('attClass');
+  if(cls){
+    cls.value=row.class_name;
+    cls.disabled=true;
+  }
+
+  let dt=$('attDate');
+  if(dt && !dt.value) dt.value=today();
+
+  await loadAttendanceClass();
+} 
 async function loadAttendanceClass(){
  let c=$("attClass")?.value,d=$("attDate")?.value||today(),sec=$("attSection")?.value.trim()||"";if(!c){attendanceRows=[];return $("attendanceSheet").innerHTML='<div class="empty">Select Class</div>'}
  let q=sb.from("students").select("id,student_name,father_name,admission_no,class_name,section,status").eq("class_name",c).eq("status","Active").order("student_name");if(sec)q=q.eq("section",sec);let{data:students,error}=await q;if(error)return toast(error.message);
@@ -858,7 +892,7 @@ async function approveTeacherV14(id,authId){
  await saveTeacherReviewV14(id);
  let d1=await sb.from('teacher_class_assignments').delete().eq('teacher_profile_id',id);if(d1.error)return toast(d1.error.message);
  let d2=await sb.from('teacher_subject_assignments').delete().eq('teacher_profile_id',id);if(d2.error)return toast(d2.error.message);
- let ca=classes.map(c=>({teacher_profile_id:id,academic_session:'2026-27',class_name:c,is_class_teacher:true,is_active:true,approved_by:user.id,approved_at:new Date().toISOString()}));
+ let ca=classes.map(c=>({teacher_profile_id:id,academic_session:'2026-27',class_name:c,is_class_teacher:c===classTeache,is_active:true,approved_by:user.id,approved_at:new Date().toISOString()}));
  let sa=subjects.map(s=>({teacher_profile_id:id,academic_session:'2026-27',subject_name:s,is_special_subject:true,is_active:true}));
  let r1=await sb.from('teacher_class_assignments').insert(ca);if(r1.error)return toast(r1.error.message);
  if(sa.length){let r2=await sb.from('teacher_subject_assignments').insert(sa);if(r2.error)return toast(r2.error.message)}
@@ -1937,7 +1971,7 @@ openERP=function(){
   if(!v14Teacher())return v38OpenERPPrev();
   $('login').classList.add('hidden');$('publicSite').classList.add('hidden');$('erp').classList.remove('hidden');
   $('roleText').textContent='teacher';
-  let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile'],['teacher_class','👨‍🎓 My Students'],['attendance','✅ Attendance'],['teacher_schedule','🕐 Teaching Schedule'],['teaching_diary','📖 Daily Teaching / Syllabus'],['fees','₹ Fee Status'],['exams','📝 Exams & Marks'],['homework','✏️ Homework'],['class_opinions','💬 Class Opinion']];
+let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile'],['teacher_notices','📢 My Notices / Orders'],['class_teacher_attendance','📋 Class Teacher Attendance'],['teacher_reports','📄 Class Review / Report'],['teacher_class','◉ My Class'],['teacher_leave','📝 Leave Application'],['attendance','✓ Attendance'],['teacher_schedule','📅 Teaching Schedule'],['teaching_diary','📘 Daily Teaching / Syllabus'],['fees','₹ Fee Status'],['exams','▣ Exams & Marks'],['homework','✏️ Homework'],['class_opinions','💬 Class Opinion']];
   $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
   applyPortalWallpapers();render('dashboard');
 };
