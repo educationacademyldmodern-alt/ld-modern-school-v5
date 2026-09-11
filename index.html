@@ -708,7 +708,7 @@ openERP=function(){
  $('login').classList.add('hidden');$('publicSite').classList.add('hidden');$('erp').classList.remove('hidden');
  $('roleText').textContent=(profile.role||'viewer').replaceAll('_',' ');
  if(v14Teacher()){
-   let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile'],['teacher_class','◉ My Class'],['attendance','✓ Attendance'],['fees','₹ Fee Status'],['exams','▣ Marks'],['homework','✎ Homework'],['class_opinions','✎ Class Opinion']];
+   let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile'],['teacher_class','◉ My Class'],['teacher_notices','📢 Orders / Notices'],['teacher_leave','📝 Leave Application'],['class_teacher_attendance','📋 Class Teacher Attendance'],['attendance','✓ Attendance'],['fees','₹ Fee Status'],['exams','▣ Marks'],['homework','✎ Homework'],['class_opinions','✎ Class Opinion']];
    $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
    return render('dashboard');
  }
