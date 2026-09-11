@@ -1459,7 +1459,7 @@ openERP=function(){
       ['class_opinions','✎ Class Opinion']
     ];
     $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
-  }
+  }render('dashboard');
 };
 
 // ---------- stronger email/mobile password login ----------
