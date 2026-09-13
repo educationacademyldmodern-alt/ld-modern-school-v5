@@ -6954,4 +6954,84 @@ if(typeof window.studentExcelCenter!=='function'&&typeof studentExcelTools==='fu
 </script>
 <!-- ===== END V82 FINAL COMPATIBILITY ALIASES ===== -->
 
+
+<!-- ===== V82.1 NO-JUMP / LOGIN-TOP FINAL FIX ===== -->
+<style id="v82-1-nojump-css">
+/* Admin login must open as a viewport layer, never lower in the document. */
+#login:not(.hidden){position:fixed!important;inset:0!important;z-index:30000!important;overflow:auto!important;overscroll-behavior:contain!important}
+#login:not(.hidden)>.auth,#login.auth:not(.hidden){min-height:100dvh!important;display:grid!important;place-items:center!important}
+/* Role login modal always stays inside the visible viewport. */
+#v14Modal.v14Modal,.v64Modal{position:fixed!important;inset:0!important;z-index:30010!important}
+html,body{scroll-behavior:auto!important}
+</style>
+<script id="v82-1-nojump-runtime">
+(()=>{
+ 'use strict';
+ window.V821_BUILD='V82.1-NO-JUMP-LOGIN-TOP-2026-09-13';
+ const q=id=>document.getElementById(id);
+ function topNow(){
+   try{document.documentElement.scrollTop=0;document.body.scrollTop=0;window.scrollTo(0,0)}catch(_e){}
+   try{let m=document.querySelector('#erp .v79Main');if(m)m.scrollTop=0}catch(_e){}
+   try{let l=q('login');if(l)l.scrollTop=0}catch(_e){}
+   try{let p=q('publicSite');if(p)p.scrollTop=0}catch(_e){}
+ }
+ function topBurst(){topNow();requestAnimationFrame(topNow);setTimeout(topNow,0);setTimeout(topNow,80)}
+
+ /* Admin Login: original openPortal had no explicit top reset. Harden it here. */
+ if(typeof window.openPortal==='function'){
+   const oldOpenPortal=window.openPortal;
+   window.openPortal=function(){
+     topNow();
+     const r=oldOpenPortal.apply(this,arguments);
+     topBurst();
+     setTimeout(()=>{try{q('email')?.focus({preventScroll:true})}catch(_e){}},90);
+     return r;
+   };
+ }
+
+ /* Teacher modal is fixed; also reset document scroll so closing it returns cleanly. */
+ if(typeof window.teacherLoginDialog==='function'){
+   const oldTeacher=window.teacherLoginDialog;
+   window.teacherLoginDialog=function(){topNow();const r=oldTeacher.apply(this,arguments);topBurst();return r};
+ }
+
+ /* Student modal: same no-jump behavior. */
+ const studentFn=window.v79StudentLoginDialog||window.v80StudentLoginDialog;
+ if(typeof studentFn==='function'){
+   const safeStudent=function(){topNow();const r=studentFn.apply(this,arguments);topBurst();return r};
+   window.v79StudentLoginDialog=safeStudent;
+   window.v80StudentLoginDialog=safeStudent;
+ }
+
+ /* Parent portal: prevent input focus from moving the page downward. */
+ if(typeof window.parentPasswordLoginDialog==='function'){
+   const oldParent=window.parentPasswordLoginDialog;
+   window.parentPasswordLoginDialog=function(){
+     topNow();
+     const r=oldParent.apply(this,arguments);
+     topBurst();
+     setTimeout(()=>{topNow();try{q('parentIdentifier')?.focus({preventScroll:true})}catch(_e){}},90);
+     return r;
+   };
+ }
+
+ /* Public menu views should swap at the top, not jump to old DOM positions. */
+ if(typeof window.showPublicPage==='function'){
+   const oldShow=window.showPublicPage;
+   window.showPublicPage=function(){const r=oldShow.apply(this,arguments);topBurst();return r};
+ }
+
+ /* Login / Access button must not scroll to the cards. */
+ window.v80ScrollLogin=window.v79ScrollLogin=function(){
+   try{document.querySelector('#v79LoginCards button')?.focus({preventScroll:true})}catch(_e){}
+ };
+
+ /* Successful login already has top guards; this makes it final after all wrappers. */
+ if(typeof window.openERP==='function'){
+   const oldERP=window.openERP;
+   window.openERP=function(){topNow();const r=oldERP.apply(this,arguments);topBurst();return r};
+ }
+})();
+</script>
+<!-- ===== END V82.1 NO-JUMP / LOGIN-TOP FINAL FIX ===== -->
 </body></html>
