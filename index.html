@@ -3566,9 +3566,7 @@ try{
 }catch(_e){window.v49BroadcastChange=()=>{}}
 
 /* ---------- KEEP FORGOT BUTTON PRESENT AFTER DYNAMIC UI CHANGES ---------- */
-const v49Observer=new MutationObserver(()=>v49RestoreForgotPassword());
-v49Observer.observe(document.body,{childList:true,subtree:true});
-setTimeout(v49RestoreForgotPassword,200);
+/* V77.1 performance: legacy V49 whole-body observer removed. */
 
 /* ---------- SMALL CSS ONLY FOR FORGOT LINK ---------- */
 (function(){
@@ -3763,11 +3761,7 @@ approveTeacherV14=async function(id,authId){
 /* Existing v32 password sign-in is retained. This patch never calls OTP/Magic Link on normal login. */
 
 /* ---------- CONSISTENCY OBSERVER ---------- */
-const v50Observer=new MutationObserver(()=>{
-  v50DedupeTopNav();
-  setTimeout(v50DedupeTeacherProfile,0);
-});
-v50Observer.observe(document.body,{childList:true,subtree:true});
+/* V77.1 performance: no whole-body consistency observer; one-time cleanup only. */
 setTimeout(()=>{v50DedupeTopNav();v50DedupeTeacherProfile();},300);
 
 /* ---------- CSS ---------- */
@@ -3921,129 +3915,6 @@ function v51RuntimeGuard(){
 window.addEventListener('focus',v51RuntimeGuard);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)v51RuntimeGuard()});
 setTimeout(v51RuntimeGuard,500);
-</script>
-
-<script>
-/* ===== V52 FINAL MASTER SEARCH PATCH =====
-   Restores Admin top Master Search and adds the same safe search to Teacher.
-   No public-site redesign; existing V39 dashboard/features preserved.
-*/
-const V52_BUILD='V52-FINAL-MASTER-SEARCH';
-
-function v52SearchAllowedStudent(s){
-  if(v14Admin?.())return true;
-  if(v14Teacher?.()){
-    const allowed=v14AllowedClassNames?.()||[];
-    return allowed.includes(String(s.class_name||''));
-  }
-  return false;
-}
-
-async function v52MasterSearch(){
-  const input=$('v52MasterQ'), box=$('v52MasterResults');
-  const q=String(input?.value||'').trim().toLowerCase();
-  if(!box)return;
-  if(q.length<2){box.classList.remove('show');box.innerHTML='';return}
-
-  box.innerHTML='<div class="v52Searching">Searching...</div>';box.classList.add('show');
-  try{
-    const {data,error}=await sb.from('students').select('*').limit(500);
-    if(error)throw error;
-    let rows=(data||[]).filter(v52SearchAllowedStudent).filter(s=>
-      [s.student_name,s.admission_no,s.father_name,s.mother_name,s.mobile,s.phone,s.class_name,s.roll_no]
-      .some(v=>String(v||'').toLowerCase().includes(q))
-    ).slice(0,12);
-
-    if(!rows.length){box.innerHTML='<div class="v52Empty">No student found</div>';return}
-
-    box.innerHTML=rows.map(s=>`
-      <button type="button" class="v52Result" onclick="v52OpenStudent('${esc(String(s.id))}')">
-        <span class="v52ResultAvatar">${esc(String(s.student_name||'S').trim().charAt(0).toUpperCase())}</span>
-        <span><b>${esc(s.student_name||'')}</b><small>${esc(s.admission_no||'')} • ${esc(s.class_name||'')} • ${esc(s.father_name||'')}</small></span>
-      </button>`).join('');
-  }catch(e){box.innerHTML='<div class="v52Empty">'+esc(e.message||String(e))+'</div>'}
-}
-
-async function v52OpenStudent(id){
-  const box=$('v52MasterResults');if(box)box.classList.remove('show');
-  if(v14Admin?.()){
-    try{await dashboardStudentFull(id);return}catch(_e){}
-    render('students');return;
-  }
-  if(v14Teacher?.()){
-    render('teacher_students');
-    setTimeout(async()=>{
-      try{
-        if(typeof dashboardStudentFull==='function')await dashboardStudentFull(id);
-      }catch(_e){}
-    },250);
-  }
-}
-
-function v52InstallMasterSearch(){
-  if(!user || $('erp')?.classList.contains('hidden'))return;
-  if(!(v14Admin?.()||v14Teacher?.()))return;
-
-  let host=document.querySelector('#erp .erpTopbar') || document.querySelector('#erp header') || document.querySelector('#erp .erpHeader');
-  if(!host)return;
-  if(host.querySelector('#v52MasterSearch'))return;
-
-  const wrap=document.createElement('div');
-  wrap.id='v52MasterSearch';
-  wrap.className='v52MasterSearch';
-  wrap.innerHTML=`
-    <div class="v52SearchBox">
-      <span>🔎</span>
-      <input id="v52MasterQ" type="search" autocomplete="off"
-        placeholder="${v14Admin?.()?'Master Search — Student / Admission / Father / Mobile / Class':'Search My Students — Name / Admission / Father / Class'}"
-        oninput="v52MasterSearch()">
-      <button type="button" onclick="document.getElementById('v52MasterQ').value='';document.getElementById('v52MasterResults').classList.remove('show')">×</button>
-    </div>
-    <div id="v52MasterResults" class="v52MasterResults"></div>`;
-  host.appendChild(wrap);
-}
-
-document.addEventListener('click',e=>{
-  const root=$('v52MasterSearch');
-  if(root && !root.contains(e.target))$('v52MasterResults')?.classList.remove('show');
-});
-
-const v52OpenERPBase=openERP;
-openERP=async function(){
-  const r=await v52OpenERPBase();
-  setTimeout(()=>{v52InstallMasterSearch();v51RuntimeGuard?.()},120);
-  return r;
-};
-
-const v52RenderBase=render;
-render=function(p){
-  const r=v52RenderBase(p);
-  Promise.resolve(r).finally(()=>setTimeout(v52InstallMasterSearch,80));
-  return r;
-};
-
-const v52Observer=new MutationObserver(()=>setTimeout(v52InstallMasterSearch,0));
-v52Observer.observe(document.body,{childList:true,subtree:true});
-setTimeout(v52InstallMasterSearch,500);
-
-(function(){
- const st=document.createElement('style');
- st.textContent=`
- #erp .erpTopbar,#erp header.erpHeader,#erp .erpHeader{position:relative}
- .v52MasterSearch{position:relative;flex:1;max-width:640px;min-width:240px;margin-left:auto;margin-right:10px;z-index:80}
- .v52SearchBox{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid #d9e4ef;border-radius:13px;padding:7px 10px;box-shadow:0 3px 12px rgba(23,61,107,.08)}
- .v52SearchBox input{flex:1;min-width:0;border:0!important;outline:0!important;background:transparent!important;padding:4px!important;font-size:13px}
- .v52SearchBox button{border:0;background:transparent;font-size:20px;cursor:pointer;color:#60758a}
- .v52MasterResults{display:none;position:absolute;left:0;right:0;top:calc(100% + 5px);background:#fff;border:1px solid #dce6f0;border-radius:13px;box-shadow:0 12px 32px rgba(0,0,0,.16);overflow:hidden;max-height:390px;overflow-y:auto}
- .v52MasterResults.show{display:block}
- .v52Result{width:100%;display:flex!important;align-items:center;gap:10px;text-align:left!important;padding:10px 12px!important;border:0!important;border-bottom:1px solid #eef3f7!important;background:#fff!important;color:#173b68!important;cursor:pointer}
- .v52Result:hover{background:#f5f9fd!important}.v52ResultAvatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e8f1fa;font-weight:900;flex:0 0 auto}
- .v52Result span:nth-child(2){min-width:0;flex:1}.v52Result b,.v52Result small{display:block}.v52Result small{margin-top:3px;color:#6b7e90;font-size:11px}
- .v52Searching,.v52Empty{padding:14px;text-align:center;color:#6b7e90}
- @media(max-width:760px){.v52MasterSearch{order:20;width:100%;max-width:none;margin:8px 0 0}.v52SearchBox{padding:6px 9px}.v52SearchBox input{font-size:12px}}
- `;
- document.head.appendChild(st);
-})();
 </script>
 
 <script>
@@ -6754,7 +6625,7 @@ function v75GoWebsite(){try{backWebsite();}catch(_e){$('erp')?.classList.add('hi
 function v75ToggleGroup(i){let all=[...document.querySelectorAll('#erpNav .v75Group')],g=all[i];if(!g)return;let was=g.classList.contains('open');all.forEach(x=>x.classList.remove('open'));if(!was)g.classList.add('open')}
 function v75BuildAdminSidebar(route=v75CurrentRoute){if(!v75IsAdmin())return;v75CurrentRoute=route||v75CurrentRoute;let host=$('erpNav');if(!host)return;host.className='v75Nav';let quick=`<div class="v75QuickNav">${v75Quick.map(x=>`<button type="button" class="v75Quick ${x[0]===v75CurrentRoute?'active':''}" ${x[0]==='__website'?`onclick="v75GoWebsite()"`:`data-route="${x[0]}" onclick="render('${x[0]}')"`}>${x[1]}</button>`).join('')}</div>`;let groups=v75Groups.map((g,i)=>{let open=g.items.some(x=>x[0]===v75CurrentRoute);return `<div class="v75Group ${open?'open':''}"><button type="button" class="v75GroupHead" onclick="v75ToggleGroup(${i})"><span>${g.icon} ${g.name}</span><em>›</em></button><div class="v75Sub">${g.items.filter((x,j,a)=>a.findIndex(y=>y[0]===x[0])===j).map(x=>`<button type="button" data-route="${x[0]}" class="${x[0]===v75CurrentRoute?'active':''}" onclick="render('${x[0]}')">${x[1]}</button>`).join('')}</div></div>`}).join('');host.innerHTML=quick+groups}
 try{v48AdminSidebar=v75BuildAdminSidebar}catch(_e){}try{v58AdminSidebar=v75BuildAdminSidebar}catch(_e){}try{v59AdminSidebar=v75BuildAdminSidebar}catch(_e){}
-function v75EnsureSearch(){if(!v75IsAdmin())return;let top=document.querySelector('#erp .erpTop');if(!top)return;let existing=$('v75GlobalSearch');if(existing){if(existing.parentElement!==top)top.appendChild(existing);return}let box=document.createElement('div');box.id='v75GlobalSearch';box.className='v75GlobalSearch';box.innerHTML=`<div class="v75GlobalSearchBox"><span>🔎</span><input id="v75GlobalQ" autocomplete="off" placeholder="Master Search — Student / Fee / Teacher / Function..."></div><div id="v75GlobalResults" class="v75SearchDrop hidden"></div>`;let web=top.querySelector('.websiteBtn');top.insertBefore(box,web||null);let q=$('v75GlobalQ');q.addEventListener('input',()=>{clearTimeout(v75SearchTimer);v75SearchTimer=setTimeout(v75RunSearch,220)});q.addEventListener('focus',()=>{if(q.value.trim())v75RunSearch()});q.addEventListener('keydown',e=>{if(e.key==='Escape')$('v75GlobalResults')?.classList.add('hidden')})}
+function v75EnsureSearch(){/* V77.1: legacy duplicate search UI disabled */}
 function v75SafeQ(q){return String(q||'').replace(/[%_,()]/g,' ').replace(/\s+/g,' ').trim()}
 function v75SearchItem(type,index,title,sub,tag){return `<button type="button" class="v75SearchItem" onclick="v75OpenSearchResult('${type}',${index})"><span>🔎</span><span><b>${esc(title||'')}</b><small>${esc(sub||'')}</small></span><span class="v75SearchTag">${esc(tag||type)}</span></button>`}
 async function v75RunSearch(){let q=String($('v75GlobalQ')?.value||'').trim(),drop=$('v75GlobalResults');if(!drop)return;if(!q){drop.classList.add('hidden');drop.innerHTML='';return}drop.classList.remove('hidden');let l=q.toLowerCase();let routeRows=v75AllRoutes().filter(x=>((x[1]+' '+(v75RouteAliases[x[0]]||'')).toLowerCase().includes(l))).slice(0,10);window.__v75SearchRows.route=routeRows;let html=routeRows.length?`<div class="v75SearchSection">Website Functions</div>${routeRows.map((x,i)=>v75SearchItem('route',i,x[1],v75RouteAliases[x[0]]||'Open function','FUNCTION')).join('')}`:'';if(q.length<2){drop.innerHTML=html||'<div class="v75SearchEmpty">कम से कम 2 अक्षर लिखें</div>';return}let z=v75SafeQ(q);if(!z){drop.innerHTML=html;return}let ors=(fields)=>fields.map(f=>`${f}.ilike.%${z}%`).join(',');let jobs=[
@@ -6769,7 +6640,7 @@ async function v75RunSearch(){let q=String($('v75GlobalQ')?.value||'').trim(),dr
  ];let settled=await Promise.all(jobs.map(async ([k,p])=>{try{let r=await p;return[k,r.error?[]:(r.data||[])]}catch(_e){return[k,[]]}}));for(let [k,rows] of settled)window.__v75SearchRows[k]=rows;let labels={student:'Students',admission:'Admissions',teacher:'Teachers',staff:'Staff',fee:'Fee / Receipts',notice:'Notices',exam:'Exams',enquiry:'Enquiries'};let rendered=0;for(let [k,rows] of settled){if(!rows.length)continue;rendered+=rows.length;html+=`<div class="v75SearchSection">${labels[k]}</div>`+rows.map((r,i)=>{let t='',sub='';if(k==='student'){t=r.student_name;sub=`${r.admission_no||''} • Class ${r.class_name||''} • ${r.father_name||''}`}else if(k==='admission'){t=r.student_name;sub=`${r.application_no||r.admission_no||''} • ${r.admission_status||''}`}else if(k==='teacher'){t=r.teacher_name||r.email;sub=`${r.employee_id||''} • ${r.phone||r.mobile||''} • ${r.approval_status||''}`}else if(k==='staff'){t=r.staff_name;sub=`${r.employee_id||''} • ${r.designation||''}`}else if(k==='fee'){t=r.student_name||r.admission_no;sub=`${r.receipt_no||''} • Due ${money(r.due_amount||0)} • Paid ${money(r.paid_amount||0)}`}else if(k==='notice'){t=r.title;sub=`${r.date||''} • ${r.audience||''}`}else if(k==='exam'){t=r.exam_name;sub=`${r.academic_session||''} • ${r.status||''}`}else{t=r.name;sub=`${r.phone||''} • ${r.status||''}`}return v75SearchItem(k,i,t,sub,labels[k])}).join('')}
 drop.innerHTML=html||'<div class="v75SearchEmpty">कोई matching function/data नहीं मिला</div>'}
 async function v75OpenSearchResult(type,index){let r=(window.__v75SearchRows[type]||[])[index];$('v75GlobalResults')?.classList.add('hidden');if(!r)return;if(type==='route')return render(r[0]);if(type==='student'){let x=await sb.from('students').select('*').eq('id',r.id).maybeSingle();if(x.data&&typeof openEdit==='function')return openEdit('students',x.data);return render('students')}if(type==='admission'){let x=await sb.from('admissions').select('*').eq('id',r.id).maybeSingle();if(x.data&&typeof openEdit==='function')return openEdit('admissions',x.data);return render('admissions')}if(type==='staff'){let x=await sb.from('staff').select('*').eq('id',r.id).maybeSingle();if(x.data&&typeof openEdit==='function')return openEdit('staff',x.data);return render('staff')}if(type==='teacher')return render('teacher_approval');if(type==='fee')return render('smart_fee_center');if(type==='notice')return render('notices');if(type==='exam')return render('exam_admit_center');if(type==='enquiry')return render('enquiries')}
-document.addEventListener('pointerdown',e=>{if(!e.target.closest('#v75GlobalSearch'))$('v75GlobalResults')?.classList.add('hidden')},{capture:true});document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&String(e.key).toLowerCase()==='k'&&v75IsAdmin()){e.preventDefault();v75EnsureSearch();$('v75GlobalQ')?.focus()}});
+/* V77.1: old V75 search document listeners removed. */
 const v75RenderBase=render;render=async function(p){v75CurrentRoute=p||v75CurrentRoute;let r=await v75RenderBase.apply(this,arguments);setTimeout(()=>{if(v75IsAdmin()){v75BuildAdminSidebar(v75CurrentRoute);v75EnsureSearch()}},90);return r};
 const v75OpenERPBase=openERP;openERP=async function(){let r=await v75OpenERPBase.apply(this,arguments);setTimeout(()=>{if(v75IsAdmin()){v75BuildAdminSidebar('dashboard');v75EnsureSearch()}},180);return r};
 window.addEventListener('load',()=>setTimeout(()=>{if(v75IsAdmin()){v75BuildAdminSidebar(v75CurrentRoute);v75EnsureSearch()}},1100));
@@ -6860,5 +6731,161 @@ try{window.v76ApplySchoolBase=applySchool;applySchool=function(){let z=window.v7
 window.addEventListener('load',()=>setTimeout(()=>{v76SyncBranding();v76ApplyRoleClass();if(!document.getElementById('erp')?.classList.contains('hidden'))v76InstallRoleNav();v76EnhanceParentPortal()},500));
 </script>
 <!-- ===== END V76 PREMIUM UNIFIED RESPONSIVE UI ===== -->
+
+<!-- ===== V77 FINAL APPROVED PREMIUM HARD-RESET UI ===== -->
+<style id="v77-final-approved-premium-style">
+:root{--v77nav:118px;--v77blue:#0756aa;--v77deep:#042b61;--v77cyan:#10a7ef;--v77bg:#eef7ff;--v77line:#d6e7f7;--v77shadow:0 12px 32px rgba(4,54,111,.13)}
+/* PUBLIC: hard reset legacy sidebars/offsets and keep the approved one-page experience */
+#exactHome.v76PublicHome{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;left:auto!important;right:auto!important;background:linear-gradient(180deg,#edf8ff,#fbfdff)!important}
+#exactHome.v76PublicHome .v76SiteHeader{max-width:none!important;margin:0!important;border-radius:0!important}
+#exactHome.v76PublicHome .v76SiteNav{width:100%!important;max-width:none!important;margin:0!important;position:relative!important;left:auto!important;right:auto!important}
+#exactHome.v76PublicHome .v76PublicHero{width:100%!important;margin:0!important;border-radius:0!important}
+#exactHome.v76PublicHome .v76LoginGrid,#exactHome.v76PublicHome .v76ServiceGrid,#exactHome.v76PublicHome .v76ValueBar{width:min(1450px,96%)!important;margin-left:auto!important;margin-right:auto!important}
+#exactHome.v76PublicHome .v76LoginGrid{margin-top:-42px!important}
+#exactHome.v76PublicHome .v76ServiceGrid{padding-top:8px!important}
+#exactHome.v76PublicHome .v76SiteFooter{margin-top:10px!important}
+/* ERP SHELL: remove old clutter and enforce the approved premium frame */
+#erp.v77Premium{min-height:100vh!important;background:linear-gradient(180deg,#e8f5ff,#f8fbff)!important;color:#0a2d56!important}
+#erp.v77Premium>aside{position:fixed!important;inset:0 auto 0 0!important;width:var(--v77nav)!important;background:linear-gradient(180deg,#073a7a 0%,#052a5b 48%,#031f47 100%)!important;padding:8px 7px 10px!important;border-right:1px solid rgba(255,255,255,.14)!important;box-shadow:8px 0 30px rgba(0,42,91,.16)!important;z-index:4100!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
+#erp.v77Premium>aside .sideBrand{min-height:83px!important;padding:7px 2px 10px!important;display:grid!important;place-items:center!important;text-align:center!important;gap:4px!important;border-bottom:1px solid rgba(255,255,255,.14)!important}
+#erp.v77Premium>aside .sideBrand .logoText,#erp.v77Premium>aside .sideBrand img{width:42px!important;height:42px!important;border-radius:50%!important;object-fit:contain!important}
+#erp.v77Premium>aside .sideBrand b{font-size:8px!important;line-height:1.15!important;color:#fff!important;max-width:95px!important}
+#erp.v77Premium>aside .sideBrand small{font-size:7px!important;color:#bfe6ff!important}
+#erp.v77Premium>aside nav{display:flex!important;flex-direction:column!important;gap:3px!important;overflow:auto!important;padding:8px 0 4px!important;scrollbar-width:none!important}
+#erp.v77Premium>aside nav::-webkit-scrollbar{display:none!important}
+#erp.v77Premium>aside nav button,#erp.v77Premium>aside .logout{min-height:49px!important;border:0!important;border-radius:12px!important;background:transparent!important;color:#e9f7ff!important;padding:6px 4px!important;text-align:center!important;font-size:9px!important;font-weight:800!important;line-height:1.12!important;display:grid!important;place-items:center!important;gap:2px!important;white-space:normal!important;cursor:pointer!important}
+#erp.v77Premium>aside nav button:hover,#erp.v77Premium>aside nav button.active{background:linear-gradient(135deg,rgba(19,173,255,.34),rgba(55,111,255,.22))!important;box-shadow:inset 3px 0 #31d7ff,0 6px 15px rgba(0,28,71,.18)!important;color:#fff!important}
+#erp.v77Premium>main{margin-left:var(--v77nav)!important;min-height:100vh!important;background:transparent!important;width:calc(100% - var(--v77nav))!important}
+#erp.v77Premium .erpTop{display:none!important}
+#v77Header{height:82px;position:sticky;top:0;z-index:3900;display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,520px) auto;align-items:center;gap:14px;padding:8px 18px;background:linear-gradient(100deg,rgba(2,61,126,.98),rgba(8,111,190,.96));color:#fff;border-bottom:1px solid rgba(255,255,255,.25);box-shadow:0 9px 24px rgba(5,59,112,.15);backdrop-filter:blur(16px)}
+.v77HeaderBrand{display:flex;align-items:center;gap:11px;min-width:0}.v77HeaderBrand img{width:58px;height:58px;object-fit:contain;border-radius:50%;background:#fff;padding:3px;box-shadow:0 5px 15px rgba(0,24,57,.2)}.v77HeaderBrand b{display:block;font-size:clamp(17px,1.8vw,28px);line-height:1.02;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v77HeaderBrand small{display:block;color:#d5efff;font-size:9px;margin-top:4px;font-weight:700}
+.v77HeaderSearch{display:flex;align-items:center;background:#fff;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.5);box-shadow:0 8px 22px rgba(0,26,68,.16)}.v77HeaderSearch input{width:100%;border:0!important;outline:0!important;padding:12px 14px;background:transparent!important;color:#173d67!important;min-width:0}.v77HeaderSearch button{width:48px;align-self:stretch;border:0;background:linear-gradient(135deg,#1478de,#0d55b6);color:#fff;font-size:18px;cursor:pointer}
+.v77HeaderActions{display:flex;align-items:center;justify-content:flex-end;gap:8px}.v77HdrBtn{width:42px;height:42px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;display:grid;place-items:center;cursor:pointer}.v77ProfileChip{display:flex;align-items:center;gap:9px;border-radius:16px;padding:7px 10px;background:rgba(3,37,86,.42);border:1px solid rgba(255,255,255,.18);min-width:150px}.v77ProfileChip .avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#0b4b91;font-weight:1000}.v77ProfileChip b,.v77ProfileChip small{display:block}.v77ProfileChip b{font-size:11px}.v77ProfileChip small{font-size:8px;color:#cdeaff}.v77Online{padding:5px 8px;border-radius:999px;background:#00a65a;color:#fff;font-size:8px;font-weight:900}.v77MenuBtn{display:none}
+#erp.v77Premium #erpContent{padding:12px 14px 18px!important;max-width:1700px!important;margin:0 auto!important;min-width:0!important}
+/* Shared approved dashboards */
+.v77Dash{display:grid;gap:12px}.v77HeroGrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px}.v77Hero{min-height:292px;border-radius:22px;overflow:hidden;position:relative;padding:28px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;background-image:linear-gradient(100deg,rgba(0,32,75,.86),rgba(5,74,139,.34),rgba(0,27,61,.50)),url('exact-home.webp');background-size:cover;background-position:center;box-shadow:var(--v77shadow);border:1px solid rgba(255,255,255,.35)}.v77Hero:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,25,57,.04),rgba(2,25,57,.25));pointer-events:none}.v77HeroCopy,.v77MetricRow{position:relative;z-index:1}.v77HeroCopy span{font-size:15px}.v77HeroCopy h1{font-size:clamp(29px,3vw,44px);line-height:1;margin:5px 0 10px}.v77HeroCopy p{font-size:16px;margin:0;color:#edf8ff}.v77HeroSlogan{font-family:Georgia,serif;font-style:italic;font-size:22px;margin-top:17px;max-width:280px;line-height:1.08}.v77MetricRow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:stretch}.v77Metric{border:1px solid rgba(255,255,255,.46);border-radius:17px;padding:13px 14px;color:#fff;text-align:left;box-shadow:0 10px 24px rgba(0,31,75,.18);backdrop-filter:blur(8px);background:linear-gradient(135deg,rgba(45,99,255,.92),rgba(24,64,206,.83));cursor:pointer}.v77Metric:nth-child(2){background:linear-gradient(135deg,rgba(0,194,124,.94),rgba(0,137,92,.86))}.v77Metric:nth-child(3){background:linear-gradient(135deg,rgba(255,79,150,.94),rgba(214,40,115,.86))}.v77Metric:nth-child(4){background:linear-gradient(135deg,rgba(255,161,43,.96),rgba(238,113,19,.90))}.v77Metric:nth-child(5){background:linear-gradient(135deg,#8d5af3,#6538c7)}.v77Metric span,.v77Metric small,.v77Metric b{display:block}.v77Metric span{font-size:10px}.v77Metric b{font-size:27px;line-height:1.1;margin:3px 0}.v77Metric small{font-size:8px;opacity:.9}.v77HeroPoster{min-height:292px;border-radius:22px;overflow:hidden;position:relative;padding:17px;color:#fff;background-image:linear-gradient(180deg,rgba(1,38,80,.22),rgba(1,28,62,.90)),url('exact-home.webp');background-size:cover;background-position:70% center;box-shadow:var(--v77shadow);border:1px solid rgba(255,255,255,.35);display:flex;flex-direction:column;justify-content:space-between}.v77HeroPoster .posterLogo{width:76px;height:76px;border-radius:50%;object-fit:contain;background:#fff;padding:5px}.v77HeroPoster blockquote{font-family:Georgia,serif;font-size:24px;font-style:italic;line-height:1.05;margin:0 0 auto;text-align:right;text-shadow:0 3px 10px #001f48}.v77HeroPoster strong{font-size:16px}.v77HeroPoster small{color:#d8efff}.v77PosterBtn{border:0;border-radius:10px;background:#fff;color:#0b4b91;padding:8px;font-weight:900;margin-top:9px;cursor:pointer}
+.v77Quick{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.v77Quick button{min-height:92px;border:1px solid #dfeaf5;background:linear-gradient(180deg,#fff,#f6fbff);border-radius:16px;box-shadow:0 7px 20px rgba(5,49,100,.08);color:#0b315f;display:grid;place-items:center;gap:5px;padding:10px 6px;font-weight:900;cursor:pointer}.v77Quick button:hover{transform:translateY(-2px);border-color:#80baff}.v77Quick span{font-size:27px}.v77Quick small{font-size:8px;color:#6d8299}
+.v77Grid3{display:grid;grid-template-columns:1.16fr .95fr .95fr;gap:12px}.v77Grid2{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.v77Panel{background:rgba(255,255,255,.96);border:1px solid #dceaf7;border-radius:18px;padding:14px;box-shadow:0 8px 24px rgba(5,49,98,.09);min-width:0}.v77Panel h3{margin:0 0 10px;font-size:15px;color:#0b3566}.v77PanelHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.v77PanelHead h3{margin:0}.v77PanelHead button,.v77MiniBtn{border:1px solid #d5e4f2;background:#fff;border-radius:9px;padding:6px 9px;color:#124a85;font-size:9px;font-weight:800;cursor:pointer}.v77List{display:grid;gap:0}.v77List>div,.v77List>button{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border:0;border-bottom:1px solid #edf3f8;background:transparent;text-align:left;color:#12365f;min-width:0}.v77List small{display:block;color:#76899e;font-size:9px;margin-top:2px}.v77List b{font-size:11px}.v77DonutWrap{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center}.v77Donut{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(#08b67f var(--pct,0%),#e7eff7 0)}.v77Donut:after{content:'';position:absolute;width:92px;height:92px;border-radius:50%;background:#fff}.v77Donut strong{position:relative;z-index:2;font-size:24px;color:#0a3568}.v77Donut small{position:absolute;z-index:2;margin-top:38px;font-size:8px;color:#6f8298}.v77Schedule{width:100%!important;min-width:620px!important;border-collapse:collapse}.v77Schedule th,.v77Schedule td{padding:9px 8px!important;font-size:10px!important;border-bottom:1px solid #eaf1f8!important}.v77Schedule th{background:#eaf4ff!important;color:#0a3d75!important}.v77Schedule button{border:0;border-radius:8px;background:#0d74db;color:#fff;padding:6px 9px;font-size:9px;cursor:pointer}.v77Footer{display:grid;grid-template-columns:repeat(4,1fr);background:linear-gradient(100deg,#073b82,#075da9);color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 8px 20px rgba(0,49,102,.13)}.v77Footer>div{padding:11px 15px;border-right:1px solid rgba(255,255,255,.13);display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center}.v77Footer span{font-size:24px;grid-row:1/3}.v77Footer b{font-size:11px}.v77Footer small{font-size:8px;color:#d9efff}.v77Empty{text-align:center;color:#76899e;padding:25px}
+/* Parent standalone portal */
+#parentPortal.v77ParentPremium{padding:0!important;max-width:none!important;margin:0!important;background:#edf7ff!important;min-height:100vh!important}.v77ParentApp{display:grid;grid-template-columns:118px minmax(0,1fr);min-height:100vh}.v77ParentSide{background:linear-gradient(180deg,#073a7a,#032657);padding:9px 7px;color:#fff;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:5px;z-index:20}.v77ParentSide .brand{text-align:center;padding:7px 2px 12px;border-bottom:1px solid rgba(255,255,255,.16)}.v77ParentSide .brand img{width:52px;height:52px;border-radius:50%;background:#fff;object-fit:contain;padding:3px}.v77ParentSide .brand b{display:block;font-size:8px;margin-top:4px}.v77ParentSide button{border:0;border-radius:11px;background:transparent;color:#e9f7ff;padding:9px 4px;font-size:9px;font-weight:900;cursor:pointer}.v77ParentSide button:hover{background:rgba(255,255,255,.12)}.v77ParentSide .logoutP{margin-top:auto;background:rgba(229,55,68,.16)}.v77ParentMain{min-width:0}.v77ParentHead{height:78px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 18px;background:linear-gradient(100deg,#063b7f,#0872c2);color:#fff;position:sticky;top:0;z-index:19}.v77ParentHead .school{display:flex;align-items:center;gap:9px}.v77ParentHead img{width:54px;height:54px;border-radius:50%;background:#fff;object-fit:contain;padding:3px}.v77ParentHead b{font-size:20px}.v77ParentHead small{display:block;font-size:8px;color:#d6efff}.v77ParentContent{padding:12px;max-width:1500px;margin:auto}.v77ParentMenu{display:none}
+@media(max-width:1200px){.v77HeroGrid{grid-template-columns:1fr}.v77HeroPoster{min-height:170px;background-position:center}.v77HeroPoster blockquote{font-size:19px;max-width:360px;margin-left:auto}.v77Quick{grid-template-columns:repeat(4,1fr)}.v77Grid3{grid-template-columns:1fr 1fr}.v77Grid3>.v77Panel:first-child{grid-column:1/-1}.v77MetricRow{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){:root{--v77nav:0px}#erp.v77Premium>aside{width:min(300px,86vw)!important;transform:translateX(-105%)!important;transition:transform .2s ease!important}#erp.v77Premium>aside.open{transform:translateX(0)!important}#erp.v77Premium>main{margin-left:0!important;width:100%!important}#v77Header{height:70px;grid-template-columns:auto minmax(0,1fr) auto;padding:7px 9px;gap:7px}.v77MenuBtn{display:grid}.v77HeaderBrand img{width:44px;height:44px}.v77HeaderBrand b{font-size:13px;white-space:normal}.v77HeaderBrand small{display:none}.v77HeaderSearch{grid-column:1/-1;grid-row:2;height:40px;display:none}.v77HeaderSearch.open{display:flex;position:absolute;left:8px;right:8px;top:65px;z-index:25}.v77ProfileChip{min-width:0;padding:5px;background:transparent;border:0}.v77ProfileChip>div:last-child{display:none}.v77Online{display:none}.v77Hero{min-height:255px;padding:18px}.v77HeroPoster{display:none}.v77MetricRow{grid-template-columns:repeat(2,1fr)}.v77Quick{grid-template-columns:repeat(3,1fr)}.v77Grid2,.v77Grid3{grid-template-columns:1fr}.v77Grid3>.v77Panel:first-child{grid-column:auto}.v77Footer{grid-template-columns:repeat(2,1fr)}.v77ParentApp{grid-template-columns:1fr}.v77ParentSide{position:fixed;left:0;top:0;width:min(290px,84vw);transform:translateX(-105%);transition:.2s;z-index:5000}.v77ParentSide.open{transform:translateX(0)}.v77ParentMenu{display:inline-grid}.v77ParentHead b{font-size:14px}}
+@media(max-width:600px){#erp.v77Premium #erpContent{padding:8px!important}.v77Hero{min-height:245px;padding:14px}.v77HeroCopy h1{font-size:27px}.v77HeroCopy p{font-size:12px}.v77HeroSlogan{font-size:17px}.v77MetricRow{gap:7px}.v77Metric{padding:10px}.v77Metric b{font-size:20px}.v77Metric span{font-size:8px}.v77Quick{grid-template-columns:repeat(2,1fr);gap:7px}.v77Quick button{min-height:78px}.v77Quick span{font-size:23px}.v77DonutWrap{grid-template-columns:1fr;place-items:center}.v77Schedule{min-width:520px!important}.v77Footer{grid-template-columns:1fr 1fr}.v77HeaderActions .v77HdrBtn:nth-child(2){display:none}.v77ParentContent{padding:8px}.v77ParentHead{padding:7px 9px}.v77ParentHead img{width:42px;height:42px}}
+</style>
+<script id="v77-final-approved-premium-script">
+window.V77_BUILD='V77-FINAL-APPROVED-PREMIUM-2026-09-13';
+function v77Role(){return String(window.profile?.role||'').toLowerCase()}
+function v77Admin(){return ['super_admin','admin','principal','admission','accountant','librarian','transport'].includes(v77Role())}
+function v77Esc(v){return typeof esc==='function'?esc(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function v77SchoolName(){return window.school?.school_name||'L D MODERN EDUCATION ACADEMY'}
+function v77Address(){return window.school?.address||window.school?.school_address||'Gambhiriya Bujurg, Singhapatti, Kushinagar'}
+function v77Logo(){return window.school?.logo_url||'school-logo.png'}
+function v77Footer(){return `<section class="v77Footer"><div><span>🎯</span><b>Our Vision</b><small>Quality Education for Brighter Learners</small></div><div><span>👥</span><b>Our Mission</b><small>Nurturing Young Minds with Values</small></div><div><span>⭐</span><b>Our Motto</b><small>Discipline • Knowledge • Success</small></div><div><span>💡</span><b>Smart Learning</b><small>Together for a Brighter Tomorrow</small></div></section>`}
+function v77ToggleNav(){document.querySelector('#erp>aside')?.classList.toggle('open')}
+function v77CloseNav(){document.querySelector('#erp>aside')?.classList.remove('open')}
+function v77ToggleSearch(){document.querySelector('#v77Header .v77HeaderSearch')?.classList.toggle('open')}
+function v77HeaderSearch(){let q=String(document.getElementById('v77Q')?.value||'').trim();if(!q)return;let l=q.toLowerCase();if(v77Admin()&&typeof v75RunSearch==='function'){try{v75EnsureSearch?.();let x=document.getElementById('v75GlobalQ');if(x){x.value=q;v75RunSearch();x.focus();return}}catch(_e){}}let map=[[/attendance/,'attendance'],[/fee|payment/,'fees'],[/exam|result|marks/,'exams'],[/homework/,'homework'],[/time|bell|schedule/,'timetable'],[/notice/,'notices'],[/gallery/,'gallery'],[/student|class/,'students'],[/profile/,'teacher_profile']];for(let [r,p] of map)if(r.test(l)){render(p);return}toast?.('Use menu for this item')}
+function v77EnsureHeader(){let erp=document.getElementById('erp');if(!erp||erp.classList.contains('hidden'))return;erp.classList.add('v77Premium');let main=erp.querySelector('main');if(!main)return;let h=document.getElementById('v77Header');if(!h){h=document.createElement('header');h.id='v77Header';main.prepend(h)}let name=profile?.full_name||user?.email||'User',role=v77Role()||'user';h.innerHTML=`<button class="v77HdrBtn v77MenuBtn" onclick="v77ToggleNav()">☰</button><div class="v77HeaderBrand"><img src="${v77Esc(v77Logo())}" onerror="this.src='school-logo.png'"><div><b>${v77Esc(v77SchoolName())}</b><small>${v77Esc(v77Address())}</small></div></div><div class="v77HeaderSearch"><input id="v77Q" placeholder="Search Student / Teacher / Fee / Notice / Function..." onkeydown="if(event.key==='Enter')v77HeaderSearch()"><button onclick="v77HeaderSearch()">⌕</button></div><div class="v77HeaderActions"><button class="v77HdrBtn" onclick="v77ToggleSearch()">🔎</button><button class="v77HdrBtn" onclick="render('notices')">🔔</button><span class="v77Online">● Online</span><div class="v77ProfileChip"><div class="avatar">${v77Esc((name||'U').charAt(0).toUpperCase())}</div><div><b>${v77Esc(name)}</b><small>${v77Esc(role.replaceAll('_',' '))}</small></div></div></div>`;document.getElementById('v77Q')?.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelector('#v77Header .v77HeaderSearch')?.classList.remove('open')})}
+function v77Metric(label,value,small,onclick){return `<button class="v77Metric" onclick="${onclick}"><span>${v77Esc(label)}</span><b>${v77Esc(value)}</b><small>${v77Esc(small)}</small></button>`}
+function v77Quick(icon,label,route,small=''){return `<button onclick="render('${route}')"><span>${icon}</span>${v77Esc(label)}${small?`<small>${v77Esc(small)}</small>`:''}</button>`}
+function v77Poster(role){let quote=role==='teacher'?'A Teacher Changes the World One Child at a Time':role==='student'?'Dream • Learn • Improve • Achieve':role==='parent'?'Support • Guide • Encourage • They Excel':'Discipline • Knowledge • Character • Success';return `<aside class="v77HeroPoster"><img class="posterLogo" src="${v77Esc(v77Logo())}" onerror="this.src='school-logo.png'"><blockquote>“${v77Esc(quote)}”</blockquote><div><strong>${v77Esc(v77SchoolName())}</strong><small>ज्ञान की नींव, सफलता की उड़ान!</small>${v77Admin()?`<button class="v77PosterBtn" onclick="render('settings')">⚙ Change Banner / Wallpaper</button>`:''}</div></aside>`}
+async function v77AdminDashboard(){head?.('Dashboard','School Management Command Center');let [sCount,stCount,feeCollected,inc,exp,parentRows,attRows,dueRows]=await Promise.all([cnt('students'),cnt('staff'),sum('fees','paid_amount'),sum('income','amount'),sum('expenses','amount'),v39SafeRows('profiles','role',null,0),v39SafeRows('attendance','status,date',null,0),v39SafeRows('fees','due_amount',null,0)]);let parents=(parentRows||[]).filter(x=>x.role==='parent').length,todayAtt=(attRows||[]).filter(x=>x.date===today()),present=todayAtt.filter(x=>/present|^p$/i.test(String(x.status||''))).length,absent=todayAtt.filter(x=>/absent|^a$/i.test(String(x.status||''))).length,due=(dueRows||[]).reduce((a,r)=>a+Number(r.due_amount||0),0),pct=todayAtt.length?Math.round(present*100/todayAtt.length):0,name=profile?.full_name||'Admin';let el=document.getElementById('erpContent');el.innerHTML=`<div class="v77Dash"><section class="v77HeroGrid"><div class="v77Hero"><div class="v77HeroCopy"><span>Welcome Back,</span><h1>${v77Esc(name)}! 👋</h1><p>Manage today, build a brighter tomorrow.</p><div class="v77HeroSlogan">“Education Today, A Better Tomorrow”</div></div><div class="v77MetricRow">${v77Metric('Total Students',sCount,'Live Database',"render('students')")}${v77Metric('Total Teachers',stCount,'Staff Database',"render('staff')")}${v77Metric('Total Parents',parents,'Registered Logins',"render('users')")}${v77Metric('Classes','11','Nursery - 10',"render('academics')")}</div></div>${v77Poster('admin')}</section><section class="v77Quick">${v77Quick('➕','Add Student','admissions')}${v77Quick('👨‍🎓','Students','students')}${v77Quick('👩‍🏫','Teachers','staff')}${v77Quick('✅','Attendance','attendance')}${v77Quick('💰','Pay Fee','smart_fee_center')}${v77Quick('🅰️','Exams & Marks','exams')}${v77Quick('🕐','Timetable','timetable')}${v77Quick('📚','Syllabus','teaching_monitor')}${v77Quick('📊','Reports','reports')}${v77Quick('📣','Notices','notices')}${v77Quick('🖼️','Gallery','gallery')}${v77Quick('⚙️','Settings','settings')}</section><section class="v77Grid3"><div class="v77Panel"><div class="v77PanelHead"><h3>🕘 Recent Activities</h3><button onclick="dashboard()">↻</button></div><div id="v39Activities" class="v77List"><div>Loading…</div></div></div><div class="v77Panel"><div class="v77PanelHead"><h3>📊 Today Attendance Summary</h3><button onclick="render('attendance')">View Details</button></div><div class="v77DonutWrap"><div class="v77Donut" style="--pct:${pct}%"><strong>${pct}%</strong><small>Present</small></div><div class="v77List"><div><span>Present</span><b>${present}</b></div><div><span>Absent</span><b>${absent}</b></div><div><span>Marked</span><b>${todayAtt.length}</b></div><div><span>Pending Fee</span><b>${money(due)}</b></div></div></div></div><div style="display:grid;gap:12px"><div class="v77Panel"><div class="v77PanelHead"><h3>📢 Important Notices</h3><button onclick="render('notices')">View All</button></div><div id="v39Notices" class="v77List"><div>Loading…</div></div></div><div class="v77Panel"><div class="v77PanelHead"><h3>🗓 Calendar & Events</h3><button onclick="render('events')">View All</button></div><div id="v39Events" class="v77List"><div>Loading…</div></div></div></div></section>${v77Footer()}</div>`;try{v39LoadAdminPanels?.()}catch(_e){}v77EnsureHeader()}
+async function v77TeacherDashboard(){await v14LoadTeacherContext?.();head?.('Teacher Dashboard',`${v76TeacherName()} • My Teaching Command Center`);let allowed=typeof v14AllowedClassNames==='function'?v14AllowedClassNames():[],name=v76TeacherName(),day=v76Day(),d=today();let [students,tt,att,logs,notices]=await Promise.all([allowed.length?v76SafeRows('students','admission_no,student_name,class_name,roll_no',q=>q.in('class_name',allowed)):Promise.resolve([]),v76SafeRows('timetable','*',q=>q.eq('teacher_name',name).eq('day_name',day).order('period_no')),allowed.length?v76SafeRows('attendance','admission_no,status,class_name,date',q=>q.eq('date',d).in('class_name',allowed)):Promise.resolve([]),v76SafeRows('teaching_diary','period_no,teaching_date',q=>q.eq('teacher_user_id',user.id).eq('teaching_date',d)),v76SafeRows('notices','*',q=>q.order('date',{ascending:false}).limit(5))]);let present=att.filter(x=>/^(present|p)$/i.test(String(x.status||''))).length,total=students.length,pct=total?Math.round(present*100/total):0,pending=Math.max(tt.length-logs.length,0),classes=[...new Set(allowed)],sched=tt.length?tt.map(r=>`<tr><td>${v77Esc(r.period_no||'')}</td><td>${v77Esc(r.start_time||'')}${r.end_time?' - '+v77Esc(r.end_time):''}</td><td>${v77Esc(r.class_name||'')}</td><td>${v77Esc(r.subject||'')}</td><td>${v77Esc(r.topic||'—')}</td><td><button onclick='teacherDailyTeachingForm(${JSON.stringify(r).replace(/'/g,"&#39;")})'>Mark / Update</button></td></tr>`).join(''):'<tr><td colspan="6">No teaching bell assigned for today.</td></tr>';document.getElementById('erpContent').innerHTML=`<div class="v77Dash"><section class="v77HeroGrid"><div class="v77Hero"><div class="v77HeroCopy"><span>Good Morning</span><h1>${v77Esc(name)} 👋</h1><p>A great teacher shapes a better tomorrow.</p><div class="v77HeroSlogan">Teach • Inspire • Empower</div></div><div class="v77MetricRow">${v77Metric('My Classes',classes.length,'Class Teacher',"render('teacher_class')")}${v77Metric('Total Students',total,'In My Classes',"render('teacher_class')")}${v77Metric("Today's Periods",tt.length,'Scheduled',"render('teacher_schedule')")}${v77Metric('Attendance',pct+'%',present+'/'+total+' present',"render('attendance')")}</div></div>${v77Poster('teacher')}</section><section class="v77Grid2"><div class="v77Panel"><div class="v77PanelHead"><h3>🗓 Today's Teaching Schedule</h3><button onclick="render('teacher_schedule')">View Full</button></div><div class="tableWrap"><table class="v77Schedule"><tr><th>Period</th><th>Time</th><th>Class</th><th>Subject</th><th>Topic</th><th>Action</th></tr>${sched}</table></div></div><div class="v77Panel"><div class="v77PanelHead"><h3>👥 My Classes</h3><button onclick="render('teacher_class')">View All</button></div><div class="v77List">${classes.length?classes.map(c=>`<button onclick="render('teacher_class')"><span><b>Class ${v77Esc(c)}</b><small>${students.filter(x=>String(x.class_name)===String(c)).length} Students</small></span><b>›</b></button>`).join(''):'<div>No class assigned</div>'}</div></div></section><section class="v77Grid3"><div class="v77Panel"><h3>📊 My Attendance</h3><div class="v77DonutWrap"><div class="v77Donut" style="--pct:${pct}%"><strong>${pct}%</strong><small>Present</small></div><div class="v77List"><div><span>Present</span><b>${present}</b></div><div><span>Total Students</span><b>${total}</b></div></div></div></div><div class="v77Panel"><h3>✅ My Tasks</h3><div class="v77List"><div><span>Teaching Diary Pending</span><b>${pending}</b></div><div><span>Today's Bells</span><b>${tt.length}</b></div><div><span>Assigned Classes</span><b>${classes.length}</b></div></div></div><div class="v77Panel"><h3>⚡ Quick Access</h3><div class="v77Quick" style="grid-template-columns:repeat(2,1fr)">${v77Quick('✅','Take Attendance','attendance')}${v77Quick('📘','Homework','homework')}${v77Quick('🅰️','Enter Marks','exams')}${v77Quick('👤','My Profile','teacher_profile')}</div></div></section><section class="v77Grid2"><div class="v77Panel"><h3>📢 Today's Notices</h3><div class="v77List">${notices.length?notices.slice(0,5).map(n=>`<div><span><b>${v77Esc(n.title||'Notice')}</b><small>${v77Esc(n.date||'')}</small></span></div>`).join(''):'<div>No new notice</div>'}</div></div><div class="v77Panel" style="background:linear-gradient(135deg,#fff8d9,#fff);display:grid;place-items:center;text-align:center"><div><div style="font-size:38px">💡</div><h3>“The best teachers teach from the heart, not from the book.”</h3></div></div></section>${v77Footer()}</div>`;v77EnsureHeader()}
+async function v77StudentDashboard(){head?.('Student Dashboard',`${profile?.full_name||user?.email||'Student'} • Learn Today, Lead Tomorrow`);let st=await v76FindStudent();if(!st){document.getElementById('erpContent').innerHTML=`<div class="v77Panel v77Empty">Student record is not linked to this login yet. Admin में Student Login Email check करें.</div>`;return}let adm=st.admission_no||'',cl=st.class_name||'';let [att,fees,marks,tt,hw]=await Promise.all([v76SafeRows('attendance','*',q=>q.eq('admission_no',adm).order('date',{ascending:false}).limit(200)),v76SafeRows('fees','*',q=>q.eq('admission_no',adm)),v76SafeRows('student_marks','*',q=>q.eq('admission_no',adm)),v76SafeRows('timetable','*',q=>q.eq('class_name',cl).eq('day_name',v76Day()).order('period_no')),v76SafeRows('homework','*',q=>q.eq('class_name',cl).order('date',{ascending:false}).limit(6))]);let p=att.filter(x=>/^(present|p)$/i.test(String(x.status||''))).length,a=att.filter(x=>/^(absent|a)$/i.test(String(x.status||''))).length,pct=att.length?Math.round(p*100/att.length):0,due=fees.reduce((x,r)=>x+Number(r.due_amount||0),0),res=v76CalcResult(marks),schedule=tt.length?tt.map(r=>`<tr><td>${v77Esc(r.period_no||'')}</td><td>${v77Esc(r.subject||'')}</td><td>${v77Esc(r.start_time||'')}</td><td>${v77Esc(r.teacher_name||'')}</td></tr>`).join(''):'<tr><td colspan="4">No timetable available.</td></tr>';document.getElementById('erpContent').innerHTML=`<div class="v77Dash"><section class="v77HeroGrid"><div class="v77Hero"><div class="v77HeroCopy"><span>Hello</span><h1>${v77Esc(st.student_name||profile?.full_name||'Student')}! 👋</h1><p>Learn Today • Lead Tomorrow</p><div class="v77HeroSlogan">Dream • Learn • Improve • Achieve</div></div><div class="v77MetricRow">${v77Metric('My Class',cl||'—','Roll '+(st.roll_no||'—'),"render('students')")}${v77Metric('Attendance',pct+'%',p+' present',"render('attendance')")}${v77Metric('My Result',res.grade,res.pct+'% latest',"render('exams')")}${v77Metric('My Tasks',hw.length,'Pending',"render('homework')")}</div></div>${v77Poster('student')}</section><section class="v77Quick">${v77Quick('👤','My Profile','students')}${v77Quick('✅','Attendance','attendance')}${v77Quick('📘','Homework','homework')}${v77Quick('📚','Study Material','homework')}${v77Quick('🅰️','Exam Results','exams')}${v77Quick('🕐','Time Table','timetable')}${v77Quick('👩‍🏫','Class Teachers','students')}${v77Quick('📣','Notices','notices')}${v77Quick('🖼️','Gallery','gallery')}${v77Quick('💬','Questions / Help','notices')}${v77Quick('₹','Fee Due','fees',money(due))}${v77Quick('🏠','Home','dashboard')}</section><section class="v77Grid2"><div class="v77Panel"><h3>👤 My Profile</h3><div class="v77List"><div><span>Name</span><b>${v77Esc(st.student_name||'')}</b></div><div><span>Class / Roll</span><b>${v77Esc(cl)} / ${v77Esc(st.roll_no||'—')}</b></div><div><span>Admission No.</span><b>${v77Esc(adm||'—')}</b></div></div></div><div class="v77Panel"><div class="v77PanelHead"><h3>🕐 Today's Time Table</h3><button onclick="render('timetable')">View Full</button></div><div class="tableWrap"><table class="v77Schedule"><tr><th>Period</th><th>Subject</th><th>Time</th><th>Teacher</th></tr>${schedule}</table></div></div></section><section class="v77Grid2"><div class="v77Panel"><h3>📝 My Homework</h3><div class="v77List">${hw.length?hw.map(x=>`<div><span><b>${v77Esc(x.subject||'Homework')}</b><small>${v77Esc(x.title||x.description||'')}</small></span><b>${v77Esc(x.due_date||'')}</b></div>`).join(''):'<div>No homework available.</div>'}</div></div><div class="v77Panel"><h3>📊 Latest Result</h3><div class="v77List">${marks.length?marks.slice(-6).reverse().map(x=>`<div><span>${v77Esc(x.subject||x.exam_name||'Subject')}</span><b>${v77Esc(x.obtained_marks??x.total_marks??'—')}/${v77Esc(x.max_marks??'—')} ${v77Esc(x.grade||'')}</b></div>`).join(''):'<div>No published result yet.</div>'}</div></div></section>${v77Footer()}</div>`;v77EnsureHeader()}
+async function v77ParentDashboard(){head?.('Parent Dashboard','My Child • Attendance • Fee • Result');let data=null;try{let r=await sb.rpc('parent_portal_summary');if(!r.error)data=r.data}catch(_e){}let kids=data?.students||[];if(!kids.length){document.getElementById('erpContent').innerHTML=`<div class="v77Panel v77Empty">No linked student found. Admin में Parent Access linking check कराएँ.</div>`;v77EnsureHeader();return}let x=kids[0],att=x.attendance||{},fee=x.fee||{},results=x.results||[],res=results[0]||{},pct=att.total?Math.round(Number(att.present||0)*100/Number(att.total||1)):0;document.getElementById('erpContent').innerHTML=`<div class="v77Dash"><section class="v77HeroGrid"><div class="v77Hero"><div class="v77HeroCopy"><span>Welcome</span><h1>Dear Parent! 💗</h1><p>Your child's progress is our priority.</p><div class="v77HeroSlogan">Together for a Brighter Tomorrow</div></div><div class="v77MetricRow">${v77Metric('My Child',kids.length,x.student_name||'Student',"render('students')")}${v77Metric('Attendance',pct+'%','This Session',"render('attendance')")}${v77Metric('Fee Status',Number(fee.due||0)>0?'Due':'Paid',money(fee.due||0)+' due',"render('fees')")}${v77Metric('Latest Result',res.grade||'—',res.exam_name||'Published',"render('exams')")}</div></div>${v77Poster('parent')}</section><section class="v77Quick">${v77Quick('👦','Child Profile','students')}${v77Quick('✅','Attendance','attendance')}${v77Quick('₹','Fee Details','fees')}${v77Quick('📊','Exam Results','exams')}${v77Quick('📘','Homework','homework')}${v77Quick('📣','Notices','notices')}${v77Quick('🖼️','Gallery','gallery')}${v77Quick('🪪','Download ID','students')}${v77Quick('🕐','Time Table','timetable')}${v77Quick('☎️','Contact School','notices')}${v77Quick('📅','Events','events')}${v77Quick('🏠','Home','dashboard')}</section><section class="v77Grid2"><div class="v77Panel"><h3>👦 My Child Information</h3><div class="v77List">${kids.map(k=>`<div><span><b>${v77Esc(k.student_name||'Student')}</b><small>Class ${v77Esc(k.class_name||'')} • Roll ${v77Esc(k.roll_no||'—')}</small></span><b>${v77Esc(k.admission_no||'')}</b></div>`).join('')}</div></div><div class="v77Panel"><h3>₹ Fee Summary</h3><div class="v77List"><div><span>Total Paid</span><b>${money(fee.paid||0)}</b></div><div><span>Total Due</span><b>${money(fee.due||0)}</b></div><div><span>Attendance</span><b>${pct}%</b></div></div></div></section><section class="v77Grid2"><div class="v77Panel"><h3>📅 Recent Attendance</h3><div class="v77List">${(x.recent_attendance||[]).length?(x.recent_attendance||[]).slice(0,8).map(a=>`<div><span>${v77Esc(a.date||'')}</span><b>${v77Esc(a.status||'')}</b></div>`).join(''):'<div>No attendance yet</div>'}</div></div><div class="v77Panel"><h3>📊 Latest Results</h3><div class="v77List">${results.length?results.slice(0,8).map(r=>`<div><span>${v77Esc(r.exam_name||'')} • ${v77Esc(r.subject||'')}</span><b>${v77Esc(r.total_marks??'—')}/${v77Esc(r.max_marks??'—')} ${v77Esc(r.grade||'')}</b></div>`).join(''):'<div>No published result yet</div>'}</div></div></section>${v77Footer()}</div>`;v77EnsureHeader()}
+async function v77LoadParentPortal(){let ok=await restoreParentSession();if(!ok)return;let dash=document.getElementById('parentDashboard'),gate=document.getElementById('parentGate');gate?.classList.add('hidden');dash?.classList.remove('hidden');let {data,error}=await sb.rpc('parent_portal_summary');if(error){document.getElementById('parentDashboardBody').innerHTML=`<div class="resultCard">${v77Esc(error.message)}</div>`;return}let kids=data?.students||[];if(!kids.length){document.getElementById('parentDashboardBody').innerHTML='<div class="resultCard"><h3>No student linked</h3></div>';return}let x=kids[0],att=x.attendance||{},fee=x.fee||{},res=(x.results||[])[0]||{},pct=att.total?Math.round(Number(att.present||0)*100/Number(att.total||1)):0;let p=document.getElementById('parentPortal');p.classList.add('v77ParentPremium');dash.className='';dash.innerHTML=`<div class="v77ParentApp"><aside class="v77ParentSide" id="v77ParentSide"><div class="brand"><img src="${v77Esc(v77Logo())}" onerror="this.src='school-logo.png'"><b>${v77Esc(v77SchoolName())}</b></div><button>🏠 Home</button><button>👦 My Child</button><button>✅ Attendance</button><button>₹ Fee Details</button><button>📊 Exam Results</button><button>📘 Homework</button><button onclick="showPublicPage('notices')">📣 Notices</button><button onclick="showPublicPage('gallery')">🖼 Gallery</button><button>💬 Messages</button><button>❓ Help</button><button class="logoutP" onclick="parentSignOut()">⏻ Logout</button></aside><main class="v77ParentMain"><header class="v77ParentHead"><button class="v77HdrBtn v77ParentMenu" onclick="v77ToggleParentNav()">☰</button><div class="school"><img src="${v77Esc(v77Logo())}" onerror="this.src='school-logo.png'"><div><b>${v77Esc(v77SchoolName())}</b><small>${v77Esc(v77Address())}</small></div></div><div><b>Welcome ${v77Esc(profile?.full_name||'Parent')}</b><small>Parent</small></div></header><div class="v77ParentContent"><div class="v77Dash"><section class="v77HeroGrid"><div class="v77Hero"><div class="v77HeroCopy"><span>Welcome</span><h1>Dear Parent! 💗</h1><p>Your child's progress is our priority.</p><div class="v77HeroSlogan">Together for a Brighter Tomorrow</div></div><div class="v77MetricRow">${v77Metric('My Child',kids.length,x.student_name||'Student',"void(0)")}${v77Metric('Attendance',pct+'%','This Month',"void(0)")}${v77Metric('Fee Status',Number(fee.due||0)>0?'Due':'Paid',money(fee.due||0)+' due',"void(0)")}${v77Metric('Latest Result',res.grade||'—',res.exam_name||'Published',"void(0)")}</div></div>${v77Poster('parent')}</section><section class="v77Quick">${v77Quick('👦','Child Profile','students')}${v77Quick('✅','Attendance','attendance')}${v77Quick('₹','Fee Details','fees')}${v77Quick('📊','Exam Results','exams')}${v77Quick('📘','Homework','homework')}${v77Quick('📣','Notices','notices')}${v77Quick('🖼️','Gallery','gallery')}${v77Quick('🪪','Download ID','students')}${v77Quick('🕐','Time Table','timetable')}${v77Quick('☎️','Contact School','notices')}</section><section class="v77Grid2"><div class="v77Panel"><h3>👦 My Child Information</h3><div class="v77List">${kids.map(k=>`<div><span><b>${v77Esc(k.student_name||'Student')}</b><small>Class ${v77Esc(k.class_name||'')} • Roll ${v77Esc(k.roll_no||'—')}</small></span><b>${v77Esc(k.admission_no||'')}</b></div>`).join('')}</div></div><div class="v77Panel"><h3>₹ Fee Summary</h3><div class="v77List"><div><span>Total Paid</span><b>${money(fee.paid||0)}</b></div><div><span>Total Due</span><b>${money(fee.due||0)}</b></div><div><span>Attendance</span><b>${pct}%</b></div></div></div></section>${v77Footer()}</div></div></main></div>`}
+function v77ToggleParentNav(){document.getElementById('v77ParentSide')?.classList.toggle('open')}
+async function v77ParentPasswordLogin(){let id=document.getElementById('parentIdentifier')?.value||'',password=document.getElementById('parentPassword')?.value||'';if(!id||!password)return toast('Email/Mobile और Password डालें');let {data,error}=await sb.auth.signInWithPassword(authPayload(id,password));if(error)return toast(error.message);user=data.user;await loadProfile();if(!['parent'].includes(profile?.role)){await sb.auth.signOut();return toast('यह Parent account नहीं है')}parentVerifiedEmail=String(user.email||'').toLowerCase();await openERP();await render('dashboard')}
+try{parentPasswordLogin=v77ParentPasswordLogin}catch(_e){}
+/* Final wrappers deliberately replace only the visual dashboards, not the underlying modules/data functions. */
+try{dashboard=async function(){let r=v77Role();if(r==='teacher')return v77TeacherDashboard();if(r==='student')return v77StudentDashboard();if(r==='parent')return v77ParentDashboard();return v77AdminDashboard()}}catch(_e){}
+try{teacherHomeDashboard=v77TeacherDashboard}catch(_e){}
+try{loadParentPortal=v77LoadParentPortal}catch(_e){}
+try{let _v77OpenERP=openERP;openERP=async function(){let z=await _v77OpenERP.apply(this,arguments);setTimeout(()=>{v77EnsureHeader();v77CloseNav()},80);return z}}catch(_e){}
+try{let _v77Render=render;render=async function(p){v77CloseNav();let z=await _v77Render.apply(this,arguments);setTimeout(v77EnsureHeader,30);return z}}catch(_e){}
+window.addEventListener('resize',()=>{if(innerWidth>900)v77CloseNav()});
+window.addEventListener('load',()=>setTimeout(()=>{let erp=document.getElementById('erp');if(erp&&!erp.classList.contains('hidden'))v77EnsureHeader()},700));
+</script>
+<!-- ===== END V77 FINAL APPROVED PREMIUM HARD-RESET UI ===== -->
+
+
+<!-- ===== V77.1 SINGLE SEARCH + PERFORMANCE GUARD ===== -->
+<style id="v771-single-search-style">
+#v52MasterSearch,#v75GlobalSearch{display:none!important}
+#v77Header .v77HeaderSearch{position:relative;overflow:visible!important}
+.v771SearchResults{display:none;position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:9999;background:#fff;color:#173d67;border:1px solid #d5e5f4;border-radius:16px;box-shadow:0 18px 44px rgba(0,30,72,.24);max-height:420px;overflow:auto;text-align:left}
+.v771SearchResults.show{display:block}
+.v771SearchHead{padding:8px 11px;background:#f1f7fd;color:#5b7693;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0;z-index:1}
+.v771SearchItem{width:100%;border:0;border-bottom:1px solid #edf3f8;background:#fff;color:#173d67;display:flex;align-items:center;gap:10px;padding:10px 12px;text-align:left;cursor:pointer}
+.v771SearchItem:hover{background:#f4f9ff}.v771SearchIcon{width:34px;height:34px;border-radius:10px;background:#eaf4ff;display:grid;place-items:center;flex:0 0 auto}.v771SearchItem span:nth-child(2){min-width:0;flex:1}.v771SearchItem b,.v771SearchItem small{display:block}.v771SearchItem small{font-size:9px;color:#6f8398;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v771SearchTag{font-size:8px;font-weight:900;padding:4px 6px;border-radius:999px;background:#e9f5ff;color:#0d63b8}.v771SearchEmpty{padding:16px;text-align:center;color:#718398;font-size:11px}
+@media(max-width:900px){.v771SearchResults{left:0;right:0;max-height:55vh}.v771SearchItem{padding:9px}.v771SearchTag{display:none}}
+</style>
+<script id="v771-single-search-script">
+window.V771_BUILD='V77.1-SINGLE-SEARCH-PERFORMANCE-2026-09-13';
+window.__v771Rows={route:[],student:[],teacher:[],fee:[],notice:[],admission:[]};
+window.__v771SearchToken=0;
+function v771CleanLegacySearch(){
+  try{document.getElementById('v52MasterSearch')?.remove()}catch(_e){}
+  try{document.getElementById('v75GlobalSearch')?.remove()}catch(_e){}
+  try{if(typeof v52Observer!=='undefined')v52Observer.disconnect()}catch(_e){}
+  try{if(typeof v49Observer!=='undefined')v49Observer.disconnect()}catch(_e){}
+  try{if(typeof v50Observer!=='undefined')v50Observer.disconnect()}catch(_e){}
+  try{if(typeof v52InstallMasterSearch==='function')v52InstallMasterSearch=function(){}}catch(_e){}
+  try{if(typeof v75EnsureSearch==='function')v75EnsureSearch=function(){}}catch(_e){}
+}
+function v771ResultBox(){
+  let host=document.querySelector('#v77Header .v77HeaderSearch'); if(!host)return null;
+  let box=document.getElementById('v771SearchResults');
+  if(!box){box=document.createElement('div');box.id='v771SearchResults';box.className='v771SearchResults';host.appendChild(box)}
+  return box;
+}
+function v771SafeQ(q){return String(q||'').replace(/[%_,()]/g,' ').replace(/\s+/g,' ').trim()}
+function v771Item(type,index,icon,title,sub,tag){return `<button type="button" class="v771SearchItem" onclick="v771Open('${type}',${index})"><span class="v771SearchIcon">${icon}</span><span><b>${v77Esc(title||'')}</b><small>${v77Esc(sub||'')}</small></span><span class="v771SearchTag">${v77Esc(tag||type)}</span></button>`}
+function v771RouteList(q){
+  let l=String(q||'').toLowerCase(); let rows=[];
+  try{if(v77Admin()&&typeof v75AllRoutes==='function')rows=v75AllRoutes().filter(x=>((x[1]+' '+((window.v75RouteAliases||{})[x[0]]||'')).toLowerCase().includes(l))).slice(0,8)}catch(_e){}
+  if(!rows.length){let base=[['dashboard','Dashboard'],['students','Students'],['attendance','Attendance'],['fees','Fee / Payment'],['exams','Exam / Result / Marks'],['homework','Homework'],['timetable','Timetable / Bell'],['notices','Notices'],['gallery','Gallery'],['settings','Settings'],['teacher_profile','My Profile']];rows=base.filter(x=>(x[0]+' '+x[1]).toLowerCase().includes(l)).slice(0,8)}
+  return rows;
+}
+async function v771Query(label,promise){try{let r=await promise;return [label,r?.error?[]:(r?.data||[])]}catch(_e){return [label,[]]}}
+async function v77HeaderSearch(){
+  let q=String(document.getElementById('v77Q')?.value||'').trim(),box=v771ResultBox(); if(!box||!q)return;
+  let token=++window.__v771SearchToken, l=q.toLowerCase(), html='';
+  let routes=v771RouteList(q); window.__v771Rows.route=routes;
+  if(routes.length){html+='<div class="v771SearchHead">Functions</div>'+routes.map((r,i)=>v771Item('route',i,'⚡',r[1],r[0],'FUNCTION')).join('')}
+  if(q.length<2){box.innerHTML=html||'<div class="v771SearchEmpty">कम से कम 2 अक्षर लिखें</div>';box.classList.add('show');return}
+  let z=v771SafeQ(q); if(!z){box.innerHTML=html;box.classList.add('show');return}
+  box.innerHTML=(html||'')+'<div class="v771SearchEmpty">Searching…</div>';box.classList.add('show');
+  let jobs=[];
+  if(v77Admin()){
+    let ors=(fields)=>fields.map(f=>`${f}.ilike.%${z}%`).join(',');
+    jobs=[
+      v771Query('student',sb.from('students').select('id,student_name,admission_no,roll_no,class_name,father_name,phone').or(ors(['student_name','admission_no','roll_no','father_name','phone'])).limit(6)),
+      v771Query('teacher',sb.from('teacher_profiles').select('id,teacher_name,email,phone,mobile,employee_id,approval_status').or(ors(['teacher_name','email','phone','mobile','employee_id'])).limit(5)),
+      v771Query('fee',sb.from('fees').select('id,student_name,admission_no,receipt_no,due_amount,paid_amount').or(ors(['student_name','admission_no','receipt_no'])).limit(5)),
+      v771Query('notice',sb.from('notices').select('id,title,date,audience').or(ors(['title','message'])).limit(4))
+    ];
+  }else if(v77Role()==='teacher'){
+    let qq=sb.from('students').select('id,student_name,admission_no,roll_no,class_name,father_name,phone').or(`student_name.ilike.%${z}%,admission_no.ilike.%${z}%,roll_no.ilike.%${z}%,father_name.ilike.%${z}%`).limit(10);
+    try{let allowed=v14AllowedClassNames?.()||[];if(allowed.length)qq=qq.in('class_name',allowed)}catch(_e){}
+    jobs=[v771Query('student',qq)];
+  }
+  let settled=jobs.length?await Promise.all(jobs):[]; if(token!==window.__v771SearchToken)return;
+  let labels={student:'Students',teacher:'Teachers',fee:'Fee / Receipts',notice:'Notices'};
+  for(let [k,rows] of settled){window.__v771Rows[k]=rows;if(!rows.length)continue;html+=`<div class="v771SearchHead">${labels[k]}</div>`+rows.map((r,i)=>{let t='',sub='',icon='🔎';if(k==='student'){icon='🎓';t=r.student_name;sub=`${r.admission_no||''} • Class ${r.class_name||''} • ${r.father_name||''}`}else if(k==='teacher'){icon='👩‍🏫';t=r.teacher_name||r.email;sub=`${r.employee_id||''} • ${r.phone||r.mobile||''}`}else if(k==='fee'){icon='₹';t=r.student_name||r.admission_no;sub=`${r.receipt_no||''} • Due ${typeof money==='function'?money(r.due_amount||0):r.due_amount||0}`}else{icon='📣';t=r.title;sub=`${r.date||''} • ${r.audience||''}`}return v771Item(k,i,icon,t,sub,labels[k])}).join('')}
+  box.innerHTML=html||'<div class="v771SearchEmpty">कोई matching function/data नहीं मिला</div>';box.classList.add('show');
+}
+async function v771Open(type,index){
+  let r=(window.__v771Rows[type]||[])[index];document.getElementById('v771SearchResults')?.classList.remove('show');if(!r)return;
+  if(type==='route')return render(r[0]);
+  if(type==='student'){try{let x=await sb.from('students').select('*').eq('id',r.id).maybeSingle();if(x.data&&typeof openEdit==='function'&&v77Admin())return openEdit('students',x.data)}catch(_e){}return render('students')}
+  if(type==='teacher')return render('teacher_approval');if(type==='fee')return render('smart_fee_center');if(type==='notice')return render('notices');
+}
+if(!window.__v771OutsideSearch){window.__v771OutsideSearch=true;document.addEventListener('pointerdown',e=>{let h=document.querySelector('#v77Header .v77HeaderSearch');if(h&&!h.contains(e.target))document.getElementById('v771SearchResults')?.classList.remove('show')},{capture:true})}
+try{let _v771Ensure=v77EnsureHeader;v77EnsureHeader=function(){let r=_v771Ensure.apply(this,arguments);v771CleanLegacySearch();let q=document.getElementById('v77Q');if(q){q.setAttribute('autocomplete','off');q.setAttribute('spellcheck','false')}v771ResultBox();return r}}catch(_e){}
+window.addEventListener('load',()=>setTimeout(v771CleanLegacySearch,250));
+setTimeout(v771CleanLegacySearch,50);
+</script>
+<!-- ===== END V77.1 SINGLE SEARCH + PERFORMANCE GUARD ===== -->
 </body></html>
 
