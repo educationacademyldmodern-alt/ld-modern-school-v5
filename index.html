@@ -6449,4 +6449,81 @@ install();document.addEventListener('DOMContentLoaded',install);setTimeout(insta
 </script>
 <!-- ===== END V80.4 ===== -->
 
+<!-- ===== V81 FINAL CONSOLIDATED PREMIUM ===== -->
+<style id="v81-final-css">
+html,body{scroll-behavior:auto!important}body.v80-erp-open{overflow:hidden!important}
+/* PUBLIC: one viewport, no long duplicate home */
+#publicSite:not(.hidden){height:100dvh!important;min-height:100dvh!important;overflow:hidden!important;background:linear-gradient(145deg,#eef9ff,#fff 45%,#e8f4ff)!important}
+#publicSite #exactHome{height:100%!important;min-height:0!important;overflow:hidden!important;display:grid!important;grid-template-rows:auto minmax(0,1fr)!important}
+#publicSite .v79PublicHead{position:relative!important;top:auto!important;z-index:30!important}
+#publicSite .v79PublicBody,#publicSite .v79HomeMain{min-height:0!important;height:100%!important;overflow:hidden!important}
+#publicSite .v79Services,#publicSite .v79Values,#publicSite .v79HomeHighlights,#publicSite footer,#publicSite .v79Footer{display:none!important}
+#publicSite .v79Hero{height:100%!important;min-height:0!important;margin:0!important;border-radius:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:18px clamp(14px,4vw,52px)!important}
+#publicSite .v79Hero h1{font-size:clamp(30px,5vw,64px)!important;line-height:1.02!important;max-width:820px!important}
+#publicSite .v79Hero .v79Hindi,#publicSite .v79Hero [data-hindi]{font-family:"Noto Sans Devanagari","Nirmala UI",sans-serif!important}
+#v79LoginCards{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important;margin:14px 0 0!important;max-width:980px!important}
+#v79LoginCards>*{min-height:86px!important;padding:12px!important}
+/* public subpages are modal overlays, never below home */
+#publicPageView:not(.hidden){position:fixed!important;inset:0!important;z-index:9990!important;background:rgba(4,25,58,.66)!important;backdrop-filter:blur(8px)!important;overflow:auto!important;padding:clamp(10px,3vw,34px)!important}
+#publicPageView .publicPageShell,#publicPageView>div{max-width:1100px!important;margin:0 auto!important;background:#fff!important;border-radius:24px!important;box-shadow:0 28px 80px rgba(0,26,67,.28)!important}
+/* ERP: premium full canvas */
+#erp:not(.hidden){position:fixed!important;inset:0!important;height:100dvh!important;overflow:hidden!important;background:linear-gradient(135deg,#dff2ff,#f8fbff 48%,#e8f5ff)!important}
+#erp .v79Side{background:linear-gradient(180deg,#062b73 0%,#074ca0 52%,#063574 100%)!important;box-shadow:12px 0 34px rgba(5,47,105,.16)!important;border-right:1px solid rgba(255,255,255,.18)!important}
+#erp .v79Side .sideBrand,#erp .v79Side .v79SideBrand,#erp .v79Side .brand{display:none!important}
+#erp .v79Side nav button{background:transparent!important;color:#fff!important;border:1px solid transparent!important}
+#erp .v79Side nav button:hover,#erp .v79Side nav button.active{background:rgba(255,255,255,.16)!important;border-color:rgba(255,255,255,.22)!important;transform:translateX(2px)!important}
+#erp .v79Side nav button .ico{font-size:34px!important}
+#erp .v79Main{height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important;background:transparent!important;scroll-behavior:auto!important}
+#erp .v79Top{position:sticky!important;top:0!important;z-index:60!important;background:rgba(255,255,255,.92)!important;backdrop-filter:blur(14px)!important;border-bottom:1px solid #dbeaf7!important;box-shadow:0 5px 18px rgba(12,61,110,.06)!important}
+#erpContent{min-height:calc(100dvh - 112px)!important;padding:10px 14px 20px!important;background:transparent!important}
+#erpContent>*{max-width:none!important;width:100%!important}
+.v80HeroWrap{grid-template-columns:minmax(0,1fr) 270px!important;min-height:255px!important}.v80HeroScene{min-height:255px!important}.v80HeroPoster{min-height:255px!important}
+.v80Summary{grid-template-columns:repeat(4,minmax(0,1fr))!important}.v80QuickGrid{grid-template-columns:repeat(6,minmax(0,1fr))!important}.v80DashGrid{grid-template-columns:2fr 1fr 1fr!important}
+.v80Summary .card,.v80QuickGrid button,.v80Panel,.v80HubGrid button{box-shadow:0 8px 24px rgba(16,71,128,.08)!important;border:1px solid rgba(103,164,214,.18)!important}
+/* universal back button */
+#v81Back{display:inline-flex!important;align-items:center!important;gap:6px!important;border:0!important;border-radius:12px!important;padding:9px 13px!important;background:#e8f2ff!important;color:#0b4a91!important;font-weight:800!important;cursor:pointer!important}
+.v81InlineErr{display:none;margin:9px 0 0;padding:9px 11px;border-radius:10px;background:#fff0f0;color:#b42318;border:1px solid #ffc8c8;font-weight:700;font-size:13px}.v81InlineErr.show{display:block}
+@media(max-width:900px){
+ #publicSite #exactHome{display:block!important;overflow:auto!important}#publicSite .v79Hero{min-height:calc(100dvh - 118px)!important;height:auto!important;padding:14px 12px!important}
+ #v79LoginCards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:10px!important}#v79LoginCards>*{min-height:72px!important;padding:9px!important}
+ #erp .v79Side{width:282px!important;transform:translateX(-105%)!important;z-index:100!important}#erp .v79Side.open{transform:translateX(0)!important}
+ #erp .v79Main{left:0!important;width:100%!important}.v80HeroWrap{grid-template-columns:1fr!important}.v80HeroPoster{display:none!important}.v80Summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v80QuickGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v80DashGrid{grid-template-columns:1fr!important}.v80Panel{grid-column:auto!important}
+}
+@media(min-width:901px){#erp .v79Side{width:132px!important}#erp .v79Main{left:132px!important}.v80HubGrid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+</style>
+<script id="v81-final-runtime">
+(()=>{
+'use strict';
+window.V81_BUILD='V81-FINAL-CONSOLIDATED-PREMIUM-2026-09-13';
+const $=id=>document.getElementById(id), rr=()=>String(window.profile?.role||'viewer').toLowerCase();
+function hardTop(){try{const m=document.querySelector('#erp .v79Main');if(m)m.scrollTop=0;document.documentElement.scrollTop=0;document.body.scrollTop=0;window.scrollTo(0,0)}catch(_e){}}
+function inline(hostId,msg){let host=$(hostId);if(!host)return;let e=host.querySelector('.v81InlineErr');if(!e){e=document.createElement('div');e.className='v81InlineErr';host.appendChild(e)}e.textContent=msg||'';e.classList.toggle('show',!!msg)}
+function authMsg(err){let m=String(err?.message||err||'').toLowerCase();if(m.includes('invalid login')||m.includes('invalid credentials'))return 'ID / Mobile / Email या Password गलत है।';if(m.includes('email not confirmed'))return 'यह account अभी verify/active नहीं है।';if(m.includes('rate limit'))return 'अभी बहुत अधिक login प्रयास हुए हैं। थोड़ी देर बाद फिर प्रयास करें।';return 'Login नहीं हुआ। ID और Password जाँचें।'}
+function ensureBack(){let top=document.querySelector('#erp .v79Top');if(!top||$('v81Back'))return;let b=document.createElement('button');b.id='v81Back';b.type='button';b.innerHTML='← Back';b.onclick=()=>{if(typeof window.v81Back==='function')window.v81Back()};top.prepend(b)}
+let hist=['dashboard'];
+function remember(k){k=String(k||'dashboard');if(hist[hist.length-1]!==k)hist.push(k);if(hist.length>20)hist.shift()}
+window.v81Back=function(){if(hist.length>1)hist.pop();let k=hist.pop()||'dashboard';hardTop();if(k==='dashboard')return window.v80Dashboard?.();return window.v804Nav?.(k)||window.v80Nav?.(k)||window.render?.(k)};
+const nav0=window.v804Nav||window.v80Nav;if(typeof nav0==='function'){window.v804Nav=window.v80Nav=function(k){remember(k);hardTop();let r=nav0.apply(this,arguments);Promise.resolve(r).finally(hardTop);return r}}
+const hub0=window.v80Hub;if(typeof hub0==='function')window.v80Hub=function(k){remember(k);hardTop();let r=hub0.apply(this,arguments);Promise.resolve(r).finally(hardTop);return r};
+const route0=window.v80HubOpen;if(typeof route0==='function')window.v80HubOpen=function(k){remember(k);hardTop();let r=route0.apply(this,arguments);Promise.resolve(r).finally(hardTop);return r};
+/* Public navigation stays on the single landing screen; details open as overlay. */
+const pub0=window.showPublicPage;window.showPublicPage=function(id){if(id==='home'){document.querySelector('#publicPageView')?.classList.add('hidden');document.querySelector('#exactHome')?.classList.remove('hidden');hardTop();return}let r=pub0?.(id);document.querySelector('#exactHome')?.classList.remove('hidden');hardTop();return r};
+window.backWebsite=function(){document.body.classList.remove('v80-erp-open');$('erp')?.classList.add('hidden');$('login')?.classList.add('hidden');$('setup')?.classList.add('hidden');$('publicSite')?.classList.remove('hidden');$('publicPageView')?.classList.add('hidden');$('exactHome')?.classList.remove('hidden');hardTop()};
+/* Admin login: error beside the form, never toast-only. */
+window.login=async function(){let card=$('login'),email=String($('email')?.value||'').trim(),password=$('password')?.value||'';inline('login','');if(!email||!password){inline('login','कृपया ID / Email और Password भरें।');return}let {data,error}=await sb.auth.signInWithPassword({email,password});if(error){inline('login',authMsg(error));return}window.user=data.user;await loadProfile();inline('login','');hardTop();openERP()};
+/* Teacher login local error */
+window.teacherPasswordLogin=async function(){let id=String($('tLoginId')?.value||'').trim(),password=$('tLoginPassword')?.value||'',host=$('teacherAuthBox');if(host)inline('teacherAuthBox','');if(!id||!password){inline('teacherAuthBox','कृपया Email/Mobile और Password भरें।');return}let {data,error}=await sb.auth.signInWithPassword(authPayload(id,password));if(error){inline('teacherAuthBox',authMsg(error));return}window.user=data.user;await loadProfile();try{await v14LoadTeacherContext()}catch(_e){}if(rr()!=='teacher'){await sb.auth.signOut();inline('teacherAuthBox','यह Teacher account नहीं है।');return}if(window.v14TeacherProfile&&v14TeacherProfile.approval_status!=='Approved'){await sb.auth.signOut();inline('teacherAuthBox','Teacher account अभी Admin approval में है।');return}$('v14Modal')?.remove();hardTop();openERP()};
+/* Parent + Student use one common portal shell, permissions decide cards. */
+window.parentPasswordLogin=async function(){let id=String($('parentIdentifier')?.value||'').trim(),password=$('parentPassword')?.value||'';inline('parentPortal','');if(!id||!password){inline('parentPortal','कृपया Email/Mobile और Password भरें।');return}let {data,error}=await sb.auth.signInWithPassword(authPayload(id,password));if(error){inline('parentPortal',authMsg(error));return}window.user=data.user;await loadProfile();if(!['parent','student'].includes(rr())){await sb.auth.signOut();inline('parentPortal','यह Parent/Student account नहीं है।');return}window.parentVerifiedEmail=String(user.email||'').toLowerCase();hardTop();openERP()};
+window.v80StudentPasswordLogin=async function(){let id=String($('v80StudentId')?.value||'').trim(),password=$('v80StudentPassword')?.value||'',modal=$('v14Modal');if(modal)inline('v14Modal','');if(!id||!password){inline('v14Modal','कृपया Email/Mobile और Password भरें।');return}let payload=typeof authPayload==='function'?authPayload(id,password):{email:id,password};let {data,error}=await sb.auth.signInWithPassword(payload);if(error){inline('v14Modal',authMsg(error));return}window.user=data.user;await loadProfile();if(rr()!=='student'){await sb.auth.signOut();inline('v14Modal','यह Student account नहीं है।');return}$('v14Modal')?.remove();hardTop();openERP()};
+/* Open ERP instantly at top, with one shell only. */
+const open0=window.openERP;if(typeof open0==='function')window.openERP=function(){document.querySelectorAll('#publicPageView,.v14Modal').forEach(x=>x.classList?.add('hidden'));hardTop();let r=open0.apply(this,arguments);ensureBack();requestAnimationFrame(hardTop);setTimeout(hardTop,40);return r};
+/* Remove legacy jump sources at runtime. */
+document.addEventListener('click',e=>{let a=e.target.closest('a[href^="#"]');if(a){e.preventDefault();let id=(a.getAttribute('href')||'').slice(1);if(id&&$(id))window.showPublicPage?.(id)}},true);
+function install(){ensureBack();document.querySelectorAll('[onclick*="scrollIntoView"],[onclick*="scrollTo("]').forEach(el=>{if(el.closest('#erp'))el.style.scrollBehavior='auto'});if($('pubTag'))$('pubTag').textContent='Gambhiriya Bujurg, Singhapatti, Padrauna-Kushinagar, 274304';let h=document.querySelector('#publicSite .v79Hero .v79Hindi');if(h)h.textContent='ज्ञान की नींव, सफलता की उड़ान!'}
+install();document.addEventListener('DOMContentLoaded',install);setTimeout(install,100);setTimeout(install,700);
+})();
+</script>
+<!-- ===== END V81 ===== -->
+
 </body></html>
