@@ -762,6 +762,14 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 }
 </style>
 
+
+<style id="v71NavTopFix">
+/* Public menu pages open as a full-screen page at the top, never lower in document flow. */
+#publicPageView.publicPageView{position:fixed!important;inset:0!important;z-index:5000!important;overflow-y:auto!important;overscroll-behavior:contain!important;background:#f4f8fc!important;}
+#publicPageView.hidden{display:none!important;}
+#publicPageView .publicPageBar{position:sticky!important;top:0!important;z-index:5001!important;}
+#publicPageBody{min-height:calc(100vh - 66px);}
+</style>
 </head>
 <body>
 <div id="publicSite"><div id="runningNotices" class="runningNoticeHost"></div>
@@ -820,7 +828,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 
 const K="ld_v5_cloud";const DEFAULT_CFG={url:"https://xleagfmdueyalkdnicyr.supabase.co",key:"sb_publishable_tUcd7gPfNiTzZlZ44VM6UQ_zr045LR5"};let feePlans=[];let cameraOwner=null,cameraStream=null;let savedCfg=JSON.parse(localStorage.getItem(K)||"null"),cfg=((DEFAULT_CFG.url.startsWith("https://")&&!DEFAULT_CFG.url.includes("__")&&DEFAULT_CFG.key.startsWith("sb_publishable_"))?DEFAULT_CFG:savedCfg),sb,user,profile,school={},page="dashboard";const $=x=>document.getElementById(x),cls=["Nursery","LKG","UKG","1","2","3","4","5","6","7","8","9","10"],money=n=>"₹"+Number(n||0).toLocaleString("en-IN"),today=()=>new Date().toISOString().slice(0,10),esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])),F=(n,l,t="text",r=0,c="")=>[n,l,t,r,c];
 const roles=["super_admin","admin","principal","admission","accountant","teacher","librarian","transport","student","parent","viewer"];
-const permissions={super_admin:["*"],admin:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","users","excel","settings"],principal:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","excel","settings"],admission:["dashboard","admissions","students","enquiries","excel"],accountant:["dashboard","students","fees","fee_dashboard","fee_structure","payroll","income","expenses","balance","excel"],teacher:["dashboard","students","attendance","exams","timetable","homework","events","notices"],librarian:["dashboard","students","library"],transport:["dashboard","students","transport"],student:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],parent:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],viewer:["dashboard","notices"]};
+const permissions={super_admin:["*"],admin:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","exam_admit_center","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","users","excel","settings"],principal:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","exam_admit_center","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","excel","settings"],admission:["dashboard","admissions","students","enquiries","excel"],accountant:["dashboard","students","fees","fee_dashboard","fee_structure","payroll","income","expenses","balance","excel"],teacher:["dashboard","students","attendance","exams","timetable","homework","events","notices"],librarian:["dashboard","students","library"],transport:["dashboard","students","transport"],student:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],parent:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],viewer:["dashboard","notices"]};
 const write={admissions:["super_admin","admin","principal","admission"],students:["super_admin","admin","principal","admission"],academics:["super_admin","admin","principal"],attendance:["super_admin","admin","principal","teacher"],staff_attendance:["super_admin","admin","principal"],fees:["super_admin","admin","principal","accountant"],exams:["super_admin","admin","principal","teacher"],staff:["super_admin","admin","principal"],leave:["super_admin","admin","principal"],payroll:["super_admin","admin","principal","accountant"],timetable:["super_admin","admin","principal","teacher"],homework:["super_admin","admin","principal","teacher"],events:["super_admin","admin","principal","teacher"],notices:["super_admin","admin","principal","teacher"],gallery:["super_admin","admin","principal"],enquiries:["super_admin","admin","principal","admission"],transport:["super_admin","admin","principal","transport"],library:["super_admin","admin","principal","librarian"],income:["super_admin","admin","principal","accountant"],expenses:["super_admin","admin","principal","accountant"],fee_structures:["super_admin","admin","principal","accountant"],fee_installments:["super_admin","admin","principal","accountant"],fee_heads:["super_admin","admin","principal","accountant"],classes:["super_admin","admin","principal"],sections:["super_admin","admin","principal"],subjects:["super_admin","admin","principal"]};
 const can=k=>profile&&(profile.role==="super_admin"||permissions[profile.role]?.includes("*")||permissions[profile.role]?.includes(k)),canEdit=k=>write[k]?.includes(profile?.role);
 const M={
@@ -852,17 +860,31 @@ const nav=[["dashboard","🏠 Dashboard"],["admissions","📝 Admissions"],["stu
 function toast(m){$("toast").textContent=m;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),5000)}function scrollToId(x){$(x).scrollIntoView({behavior:"smooth"})}
 let publicMoved=null;
 function restorePublicMoved(){if(publicMoved&&publicMoved.isConnected){let footer=document.querySelector('#publicSite>footer');if(footer)footer.before(publicMoved);else $('publicSite').appendChild(publicMoved);publicMoved.style.display='none';publicMoved=null}}
+function v71ResetPublicScroll(view){
+  try{view.scrollTop=0}catch(_e){}
+  try{document.documentElement.scrollTop=0}catch(_e){}
+  try{document.body.scrollTop=0}catch(_e){}
+  try{window.scrollTo(0,0)}catch(_e){}
+  requestAnimationFrame(()=>{try{view.scrollTop=0;window.scrollTo(0,0)}catch(_e){}});
+}
 function showPublicPage(id){
   const home=$("exactHome"),view=$("publicPageView"),body=$("publicPageBody"),title=$("publicPageTitle");
   if(!home||!view||!body)return;
   const navEl=document.getElementById('v26Nav');navEl?.classList.remove('show');
   navEl?.querySelectorAll('button').forEach(b=>{b.classList.toggle('active',(b.getAttribute('onclick')||'').includes(`'${id}'`))});
   restorePublicMoved();
-  if(id==='home'){home.classList.remove('hidden');view.classList.add('hidden');window.scrollTo({top:0,behavior:'auto'});return;}
+  if(id==='home'){
+    view.classList.add('hidden');
+    home.classList.remove('hidden');
+    v71ResetPublicScroll(view);
+    return;
+  }
   const src=$(id);if(!src)return toast('Page not available');
-  home.classList.add('hidden');view.classList.remove('hidden');title.textContent=({about:'About School',facilities:'Academics',admission:'Admission',gallery:'Gallery',notices:'Notices',contact:'Contact',parentPortal:'Parent Portal'}[id]||'School');
+  home.classList.add('hidden');
+  title.textContent=({about:'About School',facilities:'Academics',admission:'Admission',gallery:'Gallery',notices:'Notices',contact:'Contact',parentPortal:'Parent Portal'}[id]||'School');
   body.innerHTML='';src.style.display='block';body.appendChild(src);publicMoved=src;
-  window.scrollTo({top:0,behavior:'auto'});
+  view.classList.remove('hidden');
+  v71ResetPublicScroll(view);
 }
 function publicModule(k){
   document.querySelectorAll('.v26FeatureTiles button').forEach(b=>b.classList.toggle('active',(b.getAttribute('onclick')||'').includes(`'${k}'`)));
@@ -1439,7 +1461,144 @@ button{transition:transform .16s ease,box-shadow .16s ease}button:hover{transfor
  #erpNav button{min-height:46px!important;font-size:12px!important}
 }
 </style>
-</head><body>${el.innerHTML}</body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
+</head><body>${el.innerHTML}
+
+<!-- ===== V73 ONE-PLACE SMART PARENT ACCESS ===== -->
+<style id="v73-smart-parent-style">
+#erp .v73ParentSearch{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 14px}
+#erp .v73ParentSearch input{flex:1;min-width:240px}
+#erp .v73ParentResults{display:grid;gap:8px;margin-top:10px}
+#erp .v73ParentRow{display:grid;grid-template-columns:minmax(170px,1.3fr) minmax(120px,.9fr) minmax(100px,.7fr) auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid #dbe8f5;border-radius:14px;background:rgba(255,255,255,.88)}
+#erp .v73ParentRow small{display:block;color:#65758a;margin-top:3px}
+#erp .v73Selected{border:1px solid #bdd9f2;background:rgba(255,255,255,.9);border-radius:16px;padding:14px;margin-top:12px}
+#erp .v73PwRow{display:flex;gap:8px;align-items:center}
+#erp .v73PwRow input{flex:1;font-weight:800;letter-spacing:.3px}
+#erp .v73ParentActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+#erp .v73QuickParentBtn{background:#6d28d9!important;color:#fff!important;border-color:#6d28d9!important}
+#erp .v73StudentSmartActions{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+@media(max-width:760px){#erp .v73ParentRow{grid-template-columns:1fr}.v73PwRow{align-items:stretch;flex-wrap:wrap}.v73PwRow input{min-width:100%}}
+</style>
+<script id="v73-smart-parent-access">
+window.V73_BUILD='V73-ONE-PLACE-SMART-PARENT-ACCESS-2026-09-13';
+window.__v73ParentStudents=[];
+window.__v73SelectedParentStudent=null;
+window.__v73ParentSearchTimer=null;
+
+function v73IsAdmin(){return ['super_admin','admin','principal'].includes(String(profile?.role||''))}
+function v73NormPhone(v){return String(v||'').replace(/\D/g,'').slice(-10)}
+function v73SuggestedPassword(name){
+  let first=String(name||'Student').trim().split(/\s+/)[0].replace(/[^A-Za-z0-9]/g,'')||'Student';
+  first=first.charAt(0).toUpperCase()+first.slice(1).toLowerCase();
+  let pw=first+'@123';
+  if(pw.length<6)pw=first+'1@123';
+  return pw;
+}
+function v73EscapeAttr(v){return esc(String(v??'')).replace(/`/g,'&#96;')}
+function v73CopyText(v){
+  v=String(v||'');if(!v)return toast('Password नहीं है');
+  if(navigator.clipboard?.writeText){navigator.clipboard.writeText(v).then(()=>toast('Password copied')).catch(()=>prompt('Copy password',v));}
+  else prompt('Copy password',v);
+}
+function v73GenerateParentPassword(){
+  let st=window.__v73SelectedParentStudent;if(!st)return toast('पहले Student चुनें');
+  let pw=v73SuggestedPassword(st.student_name);let a=$('paPassword'),b=$('paPassword2');if(a)a.value=pw;if(b)b.value=pw;
+  let out=$('v73PwPreview');if(out)out.textContent=pw;return pw;
+}
+function v73ParentMatches(q,s){
+  q=String(q||'').toLowerCase().trim();if(!q)return true;
+  return [s.student_name,s.admission_no,s.roll_no,s.class_name,s.father_name,s.phone,s.parent_email].some(v=>String(v||'').toLowerCase().includes(q));
+}
+function v73RenderParentSearch(q=''){
+  let box=$('v73ParentSearchResults');if(!box)return;
+  let rows=(window.__v73ParentStudents||[]).filter(s=>v73ParentMatches(q,s)).slice(0,30);
+  box.innerHTML=rows.length?rows.map(s=>`<div class="v73ParentRow"><div><b>${esc(s.student_name||'')}</b><small>${esc(s.admission_no||'')} • Roll ${esc(s.roll_no||'—')}</small></div><div>${esc(s.father_name||'')}<small>${esc(s.phone||'')}</small></div><div>${esc(s.class_name||'')}</div><button class="primary" onclick="v73SelectParentStudent('${s.id}')">Select</button></div>`).join(''):'<div class="empty">कोई Student नहीं मिला.</div>';
+}
+function v73ParentSearchInput(){clearTimeout(window.__v73ParentSearchTimer);window.__v73ParentSearchTimer=setTimeout(()=>v73RenderParentSearch($('v73ParentQ')?.value||''),120)}
+function v73SelectParentStudent(id){
+  let st=(window.__v73ParentStudents||[]).find(x=>String(x.id)===String(id));if(!st)return toast('Student नहीं मिला');
+  window.__v73SelectedParentStudent=st;window.__paStudents=window.__v73ParentStudents;
+  let sel=$('paStudent');if(sel)sel.value=st.id;
+  let mobile=v73NormPhone(st.phone);if($('paMobile'))$('paMobile').value=mobile;if($('paEmail'))$('paEmail').value=st.parent_email||'';
+  let pw=v73GenerateParentPassword();let box=$('v73SelectedStudent');if(box){box.classList.remove('hidden');let nm=$('v73SelectedName');if(nm)nm.textContent=`${st.student_name||''} • ${st.class_name||''} • ${st.admission_no||''}`}
+  let stat=$('paStatus');if(stat)stat.innerHTML=`Selected: <b>${esc(st.student_name||'')}</b> • Father: <b>${esc(st.father_name||'')}</b> • Mobile: <b>${esc(st.phone||'—')}</b><br>Suggested Password: <b id="v73PwPreview">${esc(pw)}</b>`;
+  setTimeout(()=>document.getElementById('v73SelectedStudent')?.scrollIntoView({behavior:'smooth',block:'start'}),30);
+}
+async function v73FindCanonicalParentEmail(st,mobile,email){
+  if(email)return email;
+  let siblings=(window.__v73ParentStudents||[]).filter(x=>v73NormPhone(x.phone)===mobile && x.parent_email);
+  if(siblings.length)return String(siblings[0].parent_email||'').trim().toLowerCase();
+  return `p${mobile}@parent.ldmodern.local`;
+}
+async function v73CreateParentAccess(){
+  if(!v73IsAdmin())return toast('Admin permission required');
+  let st=window.__v73SelectedParentStudent;if(!st)return toast('पहले Student चुनें');
+  let mobile=v73NormPhone($('paMobile')?.value),email=String($('paEmail')?.value||'').trim().toLowerCase(),pw=String($('paPassword')?.value||''),pw2=String($('paPassword2')?.value||'');
+  if(mobile.length!==10)return toast('सही 10 digit Parent Mobile डालें');if(pw.length<6)return toast('Password कम से कम 6 characters का रखें');if(pw!==pw2)return toast('दोनों Password समान नहीं हैं');
+  let loginEmail=await v73FindCanonicalParentEmail(st,mobile,email),status=$('paStatus');if(status)status.innerHTML='Parent access check किया जा रहा है...';
+  try{
+    let existingProfile=null;
+    try{let r=await sb.from('profiles').select('id,email,role,status,linked_admission_no').eq('email',loginEmail).maybeSingle();existingProfile=r.data||null}catch(_e){}
+    if(existingProfile?.id){
+      let link=await sb.from('students').update({phone:mobile,parent_email:loginEmail}).eq('id',st.id);if(link.error)throw link.error;
+      // Same mobile siblings use one parent account automatically.
+      try{await sb.from('students').update({parent_email:loginEmail}).eq('phone',st.phone)}catch(_e){}
+      st.phone=mobile;st.parent_email=loginEmail;
+      if(status)status.innerHTML=`<b>✓ Existing Parent account से Student link हो गया</b><br>Login Mobile: <b>${esc(mobile)}</b><br>Login Email: <b>${esc(loginEmail)}</b><br><small>यह account पहले से बना है, इसलिए नया generated password उस पुराने account पर लागू नहीं किया गया। Existing password ही रहेगा.</small>`;
+      return toast('Student linked to existing Parent account');
+    }
+    const temp=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+    let {data,error}=await temp.auth.signUp({email:loginEmail,password:pw,options:{data:{full_name:`Parent of ${st.student_name||''}`,role:'parent',mobile,linked_admission_no:st.admission_no||''}}});
+    if(error)throw error;if(!data?.user)throw new Error('Parent account create नहीं हुआ');
+    let up1=await sb.from('profiles').upsert({id:data.user.id,email:loginEmail,full_name:`Parent of ${st.student_name||''}`,role:'parent',status:'active',linked_admission_no:st.admission_no||''},{onConflict:'id'});if(up1.error)throw up1.error;
+    let up2=await sb.from('students').update({phone:mobile,parent_email:loginEmail}).eq('id',st.id);if(up2.error)throw up2.error;
+    // Link siblings sharing this mobile to same Parent identity without creating duplicates.
+    try{await sb.from('students').update({parent_email:loginEmail}).eq('phone',st.phone)}catch(_e){}
+    st.phone=mobile;st.parent_email=loginEmail;
+    if(status)status.innerHTML=`<b>✓ Parent Login तैयार है</b><br>Student: ${esc(st.student_name||'')}<br>Login Mobile: <b>${esc(mobile)}</b>${email?`<br>Login Email: <b>${esc(email)}</b>`:''}<br>Password: <b>${esc(pw)}</b> <button class="mini" onclick="v73CopyText('${v73EscapeAttr(pw)}')">Copy</button><br><small>Same mobile वाले sibling students इसी Parent account से link किए जा सकते हैं.</small>`;
+    toast('Parent Login created & linked');
+  }catch(e){if(status)status.innerHTML=`<b>Account create/link नहीं हुआ:</b> ${esc(e.message||String(e))}`;toast(e.message||String(e))}
+}
+async function parentAccessCenter(preselectId){
+  if(!v73IsAdmin())return toast('Admin / Principal only');
+  head('🔐 Smart Parent Access','Search Student → Generate Password → Create / Link • एक ही जगह');
+  let {data:students,error}=await sb.from('students').select('id,student_name,admission_no,roll_no,class_name,father_name,phone,parent_email,status').order('student_name');
+  if(error)return toast(error.message);window.__v73ParentStudents=students||[];window.__paStudents=students||[];
+  $('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div><h3>🔎 Student Search</h3><p class="note">Name • Admission No. • Roll No. • Father • Mobile</p></div></div><div class="v73ParentSearch"><input id="v73ParentQ" autocomplete="off" placeholder="Student खोजें..." oninput="v73ParentSearchInput()"><button class="primary" onclick="v73RenderParentSearch($('v73ParentQ').value)">Search</button></div><div id="v73ParentSearchResults" class="v73ParentResults"></div></div>
+  <div id="v73SelectedStudent" class="panel v73Selected hidden"><div class="panelHead"><div><h3>🔐 Parent Login / Password Generator</h3><p id="v73SelectedName" class="note"></p></div></div><input id="paStudent" type="hidden"><div class="v32Grid"><div><label>Parent Mobile *</label><input id="paMobile" inputmode="tel" placeholder="10 digit mobile"></div><div><label>Parent Email (optional)</label><input id="paEmail" type="email" placeholder="parent@example.com"></div><div><label>Password *</label><div class="v73PwRow"><input id="paPassword" type="text" minlength="6"><button type="button" class="secondary" onclick="v73GenerateParentPassword()">⚡ Generate</button><button type="button" onclick="v73CopyText($('paPassword').value)">Copy</button></div></div><div><label>Confirm Password *</label><input id="paPassword2" type="text" minlength="6"></div></div><div class="v73ParentActions"><button class="primary" onclick="v73CreateParentAccess()">✓ Create / Link Parent Login</button><button class="secondary" onclick="render('dashboard')">Back to Dashboard</button></div><div id="paStatus" class="v32Info">Student चुनें.</div></div>
+  <div class="panel"><h3>Smart Rule</h3><div class="v32Checklist">✓ Student search एक ही जगह<br>✓ Student select करते ही Mobile/Email auto fill<br>✓ Password auto suggestion: Raj Kumar → Raj@123<br>✓ Same mobile वाले siblings को एक Parent identity से link करने की कोशिश<br>✓ Parent side पर OTP/Magic Link की जरूरत नहीं<br>✓ Student data delete नहीं होगा</div></div>`;
+  v73RenderParentSearch('');
+  let wanted=preselectId||window.__v73ParentPreselect;window.__v73ParentPreselect=null;if(wanted)setTimeout(()=>v73SelectParentStudent(wanted),30);
+}
+function v73OpenParentForStudent(id){window.__v73ParentPreselect=id;render('parent_access')}
+function v73InstallParentAccessNav(){
+  if(!v73IsAdmin())return;let host=$('erpNav');if(!host)return;
+  let all=[...host.querySelectorAll('button')],matches=all.filter(b=>(b.getAttribute('onclick')||'').includes("'parent_access'")||(b.textContent||'').includes('Parent Access')||(b.textContent||'').includes('Parent Login Setup'));
+  matches.slice(1).forEach(x=>x.remove());if(matches.length){matches[0].innerHTML='🔐 <span>Parent Access</span>';matches[0].onclick=()=>render('parent_access');return}
+  let b=document.createElement('button');b.className='v73QuickParentBtn';b.innerHTML='🔐 <span>Parent Access</span>';b.onclick=()=>render('parent_access');
+  let anchor=[...host.querySelectorAll('button')].find(x=>(x.textContent||'').includes('Students')||(x.getAttribute('onclick')||'').includes("'students'"));
+  anchor?.after(b)||host.prepend(b);
+}
+function v73PolishDashboardParentShortcut(){
+  if(!v73IsAdmin())return;let quick=document.querySelector('#erpContent .dashHero .quick');if(quick&&!$('v73ParentQuick'))quick.insertAdjacentHTML('beforeend','<button id="v73ParentQuick" class="v73QuickParentBtn" onclick="render(\'parent_access\')">🔐 Parent Password</button>');
+  let command=document.querySelector('#erpContent .futureGrid');if(command&&!$('v73ParentCommand'))command.insertAdjacentHTML('afterbegin','<div id="v73ParentCommand" class="futureCard" onclick="render(\'parent_access\')"><b>🔐 Parent Access</b><span>Search • Password • Link</span></div>');
+}
+const v73DashboardFullBase=dashboardStudentFull;
+dashboardStudentFull=async function(id){await v73DashboardFullBase(id);if(!v73IsAdmin())return;let card=document.querySelector('#globalStudentResults .studentFullCard');if(card&&!card.querySelector('.v73StudentSmartActions'))card.insertAdjacentHTML('afterbegin',`<div class="v73StudentSmartActions"><button class="primary" onclick="v73OpenParentForStudent('${id}')">🔐 Parent Login / Password</button></div>`)};
+const v73DashboardSearchBase=dashboardStudentSearch;
+dashboardStudentSearch=async function(){await v73DashboardSearchBase();if(!v73IsAdmin())return;document.querySelectorAll('#globalStudentResults table tr').forEach(tr=>{let b=tr.querySelector('button[onclick^="dashboardStudentFull"]');if(!b||tr.querySelector('.v73RowParentBtn'))return;let m=(b.getAttribute('onclick')||'').match(/'([^']+)'/);if(!m)return;b.insertAdjacentHTML('afterend',` <button class="mini v73RowParentBtn" onclick="v73OpenParentForStudent('${m[1]}')">🔐 Parent</button>`)});};
+const v73DashboardBase=dashboard;
+dashboard=async function(){let r=await v73DashboardBase.apply(this,arguments);v73PolishDashboardParentShortcut();v73InstallParentAccessNav();return r};
+const v73AdminCommandBase=adminCommandCenter;
+adminCommandCenter=async function(){let r=await v73AdminCommandBase.apply(this,arguments);v73PolishDashboardParentShortcut();v73InstallParentAccessNav();return r};
+const v73RenderBase=render;
+render=function(p){let r=v73RenderBase.apply(this,arguments);Promise.resolve(r).finally(()=>setTimeout(()=>{v73InstallParentAccessNav();v73PolishDashboardParentShortcut()},60));return r};
+const v73OpenERPBase=openERP;
+openERP=function(){let r=v73OpenERPBase.apply(this,arguments);Promise.resolve(r).finally(()=>setTimeout(()=>{v73InstallParentAccessNav();v73PolishDashboardParentShortcut()},140));return r};
+setTimeout(()=>{try{v73InstallParentAccessNav();v73PolishDashboardParentShortcut()}catch(_e){}},500);
+</script>
+<!-- ===== END V73 ONE-PLACE SMART PARENT ACCESS ===== -->
+
+</body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 
 function v14AddNav(){
  const additions=[
@@ -4588,7 +4747,7 @@ const v59AdminNav=[
  ['marksheet_center','📄 Marksheet'],['promotion_center','⬆ Previous Session / Promotion'],['staff','👨‍🏫 Teachers / Staff'],
  ['teacher_approval','✅ Teacher Approval'],['staff_attendance','🕘 Staff Attendance'],['leave','🗓 Leave'],['payroll','💰 Payroll'],
  ['fee_dashboard','📊 Fee Dashboard'],['fee_structure','⚙ Fee Structure'],['due_reminders','📲 Due Fee Reminder'],
- ['income','📥 Income'],['expenses','📤 Expenses'],['balance','📚 Balance Sheet'],['exams','📝 Marks Entry'],
+ ['income','📥 Income'],['expenses','📤 Expenses'],['balance','📚 Balance Sheet'],['exams','📝 Marks Entry'],['exam_admit_center','🎫 Exam & Admit Card'],
  ['result_control','📢 Publish Result'],['result_receipt_center','📥 Marksheet / TC Received'],['academics','📘 Academics'],
  ['timetable','🕐 Timetable'],['homework','✏ Homework'],['teaching_monitor','📖 Teaching / Syllabus'],
  ['class_review_center','💬 Class Review / Reports'],['van_center','🚐 Van Details'],['transport','🚌 Transport Register'],
@@ -6295,5 +6454,170 @@ async function v71LoadPublicHighlights(){
 window.addEventListener('load',()=>setTimeout(v71LoadPublicHighlights,850));
 </script>
 <!-- ===== END V71 SMART HOMEPAGE TOP-3 HIGHLIGHTS ===== -->
+
+
+<script id="v71FallbackNavFix">
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('#pubNav a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+    const id=(a.getAttribute('href')||'').slice(1);if(!id)return;e.preventDefault();showPublicPage(id);
+  }));
+});
+</script>
+
+<!-- ===== V72 STABLE ERP / NO-JUMP / CLEAN ADMIN PATCH ===== -->
+<style id="v72-stable-ui-style">
+#erp .erpTop{position:relative!important;top:auto!important;z-index:20!important}
+#erp .erpTop .websiteBtn{display:inline-flex!important;align-items:center!important;justify-content:center!important;visibility:visible!important;white-space:nowrap!important}
+@media(max-width:700px){#erp .erpTop .websiteBtn{display:inline-flex!important;font-size:11px!important;padding:7px 8px!important}}
+</style>
+<script id="v72-stable-no-jump">
+window.V72_BUILD='V72-STABLE-NO-JUMP-2026-09-13';
+window.__v72BackgroundRefresh=false;
+window.__v72NavIntentUntil=0;
+let v72LastUserActivity=Date.now(),v72StableTimer=null,v72QueuedReason='';
+function v72MarkActivity(){if(!window.__v72BackgroundRefresh)v72LastUserActivity=Date.now()}
+function v72MarkNavIntent(){window.__v72NavIntentUntil=Date.now()+1800;v72LastUserActivity=Date.now()}
+document.addEventListener('scroll',v72MarkActivity,true);
+document.addEventListener('touchmove',v72MarkActivity,{passive:true,capture:true});
+document.addEventListener('pointerdown',e=>{v72MarkActivity();if(e.target?.closest?.('#erpNav button,.erpHomeBtn,[onclick*="render("]'))v72MarkNavIntent()},{capture:true,passive:true});
+document.addEventListener('keydown',e=>{v72MarkActivity();if((e.key==='Enter'||e.key===' ')&&e.target?.closest?.('#erpNav button,.erpHomeBtn,[onclick*="render("]'))v72MarkNavIntent()},true);
+try{
+  const v72LegacyViewportReset=v671ResetERPViewport;
+  v671ResetERPViewport=function(){
+    if(window.__v72BackgroundRefresh)return;
+    if(Date.now()>Number(window.__v72NavIntentUntil||0))return;
+    return v72LegacyViewportReset();
+  };
+}catch(_e){}
+function v72ScrollSnapshot(){
+  const main=document.querySelector('#erp main'),content=document.getElementById('erpContent'),doc=document.scrollingElement||document.documentElement;
+  return {winY:window.scrollY||doc?.scrollTop||0,docTop:doc?.scrollTop||0,mainTop:main?.scrollTop||0,contentTop:content?.scrollTop||0};
+}
+function v72RestoreScroll(s){
+  const run=()=>{
+    try{const main=document.querySelector('#erp main');if(main)main.scrollTop=s.mainTop||0}catch(_e){}
+    try{const content=document.getElementById('erpContent');if(content)content.scrollTop=s.contentTop||0}catch(_e){}
+    try{const doc=document.scrollingElement||document.documentElement;if(doc)doc.scrollTop=s.docTop||s.winY||0}catch(_e){}
+    try{window.scrollTo(0,s.winY||s.docTop||0)}catch(_e){}
+  };
+  requestAnimationFrame(()=>{run();setTimeout(run,40);setTimeout(run,140)});
+}
+async function v72RunStableRefresh(){
+  if(!user||$('erp')?.classList.contains('hidden'))return;
+  const quietFor=Date.now()-v72LastUserActivity;
+  if(quietFor<2200){clearTimeout(v72StableTimer);v72StableTimer=setTimeout(v72RunStableRefresh,2300-quietFor);return}
+  if(window.__v72BackgroundRefresh)return;
+  const snap=v72ScrollSnapshot(),current=page||'dashboard';
+  window.__v72BackgroundRefresh=true;
+  try{await loadSchool();applySchool();if(typeof render==='function')await render(current)}catch(_e){}
+  finally{v72RestoreScroll(snap);setTimeout(()=>{window.__v72BackgroundRefresh=false},180);try{setTimeout(v62RefreshNotifications,220)}catch(_e){}}
+}
+v58InstantRefresh=function(reason){
+  if(!user||$('erp')?.classList.contains('hidden'))return;
+  v72QueuedReason=reason||v72QueuedReason;
+  clearTimeout(v72StableTimer);
+  v72StableTimer=setTimeout(v72RunStableRefresh,1100);
+};
+try{v49SafeRefresh=v58InstantRefresh}catch(_e){}
+v71InstallAdminNav=function(){
+  if(!v71Admin())return;const host=$('erpNav');if(!host)return;
+  let buttons=[...host.querySelectorAll('button')];
+  let matches=buttons.filter(b=>b.dataset.v71HomeHighlights==='1'||(b.textContent||'').trim().includes('Home Highlights')||(b.getAttribute('onclick')||'').includes('home_highlights'));
+  matches.slice(1).forEach(b=>b.remove());
+  if(matches.length){matches[0].dataset.v71HomeHighlights='1';matches[0].onclick=()=>render('home_highlights');return}
+  const b=document.createElement('button');b.dataset.v71HomeHighlights='1';b.innerHTML='🌟 Home Highlights';b.onclick=()=>render('home_highlights');
+  const g=[...host.querySelectorAll('button')].find(x=>(x.getAttribute('onclick')||'').includes("'gallery'")||(x.textContent||'').includes('Gallery'));
+  host.insertBefore(b,g||null);
+};
+function v72PolishTopBar(){
+  const web=document.querySelector('#erp .erpTop .websiteBtn');if(web){web.textContent='🌐 Website';web.title='Public Website'}
+  try{v71InstallAdminNav()}catch(_e){}
+}
+const v72OpenERPBase=openERP;
+openERP=function(){const r=v72OpenERPBase.apply(this,arguments);Promise.resolve(r).finally(()=>setTimeout(v72PolishTopBar,120));return r};
+const v72RenderBase=render;
+render=function(p){const r=v72RenderBase.apply(this,arguments);Promise.resolve(r).finally(()=>setTimeout(v72PolishTopBar,40));return r};
+setTimeout(v72PolishTopBar,400);
+</script>
+<!-- ===== END V72 STABLE ERP / NO-JUMP / CLEAN ADMIN PATCH ===== -->
+
+<!-- ===== V74 SMART ONE-PLACE TEACHING BELL ===== -->
+<style id="v74-teaching-bell-style">
+.v74Hero{padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,#eef7ff,#fff);border:1px solid #cfe2f5;margin-bottom:14px}.v74Hero h2{margin:0 0 4px;color:#0b4f91}.v74Hero p{margin:0;color:#557086;font-size:12px}.v74Tools{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.v74Tools label{display:grid;gap:4px;font-size:11px;color:#566b7d}.v74Tools select,.v74Tools input{min-width:150px}.v74BellGrid{display:grid;gap:10px}.v74BellRow{display:grid;grid-template-columns:64px 115px 115px 125px 90px minmax(150px,1fr) 150px;gap:8px;align-items:center;padding:10px;border:1px solid #dbe8f4;border-radius:13px;background:#fff}.v74BellNo{font-weight:900;color:#0b5fab;text-align:center}.v74BellRow input,.v74BellRow select{width:100%;min-width:0}.v74BellActions{display:flex;gap:5px;flex-wrap:wrap}.v74BellActions button{padding:6px 8px;font-size:10px}.v74Report{margin-top:14px}.v74StatusOk{color:#14783d;font-weight:800}.v74StatusWait{color:#a76700;font-weight:800}.v74TeacherBell{display:grid;grid-template-columns:80px 95px 120px minmax(110px,.8fr) minmax(150px,1fr) minmax(180px,1.2fr) minmax(180px,1.2fr);gap:8px;align-items:start;padding:11px;border:1px solid #d7e6f4;border-radius:14px;background:#ffffffeb;margin-bottom:9px}.v74TeacherBell>div>small{display:block;color:#718394;font-size:10px;margin-bottom:3px}.v74TeacherBell input,.v74TeacherBell textarea{width:100%}.v74TeacherBell textarea{min-height:58px;resize:vertical}.v74Done{border-color:#9ed7af;background:#f5fff7}.v74DailyTitle{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.v74DailyTitle b{color:#0b4f91}.v74ReportTable td small{display:block;color:#66798a;margin-top:3px}.v74ParentLesson{padding:10px 12px;border:1px solid #dce8f3;border-radius:12px;background:#fff;margin:8px 0}.v74ParentLesson b{display:block;color:#0c4d88}.v74ParentLesson span,.v74ParentLesson small{display:block;margin-top:3px}.v74ParentLesson .ws{margin-top:6px;padding:6px 8px;border-radius:8px;background:#fff6df;color:#725000}
+@media(max-width:1100px){.v74BellRow{grid-template-columns:60px repeat(2,minmax(120px,1fr));}.v74BellRow>*:nth-child(n+4){grid-column:auto}.v74TeacherBell{grid-template-columns:75px 90px repeat(2,minmax(130px,1fr))}.v74TeacherBell>div:nth-child(n+5){grid-column:span 2}}
+@media(max-width:720px){.v74BellRow{grid-template-columns:1fr 1fr}.v74BellNo{grid-column:1/-1;text-align:left}.v74BellActions{grid-column:1/-1}.v74TeacherBell{grid-template-columns:1fr 1fr}.v74TeacherBell>div:nth-child(n+3){grid-column:1/-1}}
+</style>
+<script id="v74-smart-teaching-bell">
+window.V74_BUILD='V74-SMART-TEACHING-BELL-2026-09-13';
+let v74Teachers=[],v74CurrentTeacher=null,v74ScheduleRows=[],v74Subjects=[];
+let v74SelectedTeacherId='',v74SelectedDay='',v74SelectedReportDate=today(),v74ParentLearningChannel=null,v74ParentLearningTimer=null;
+const v74Admin=()=>['super_admin','admin','principal'].includes(profile?.role);
+const v74Teacher=()=>profile?.role==='teacher';
+function v74DayName(d=new Date()){return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()]}
+function v74DayFromDate(ds){try{return v74DayName(new Date(String(ds||today())+'T12:00:00'))}catch(_e){return v74DayName()}}
+function v74ClassOptions(val=''){return `<option value="">Class</option>${cls.map(c=>`<option ${String(c)===String(val)?'selected':''}>${esc(c)}</option>`).join('')}`}
+function v74DayOptions(val='Monday'){return ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(d=>`<option ${d===val?'selected':''}>${d}</option>`).join('')}
+function v74SubjectList(){return [...new Set(v74Subjects.filter(Boolean).map(x=>String(x).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b)).map(s=>`<option value="${esc(s)}"></option>`).join('')}
+async function v74LoadReferenceData(){
+  let [tr,ac]=await Promise.all([sb.from('teacher_profiles').select('id,auth_user_id,teacher_name,approval_status').eq('approval_status','Approved').order('teacher_name'),sb.from('academics').select('subject').limit(1000)]);
+  if(tr.error)throw tr.error;v74Teachers=tr.data||[];v74Subjects=(ac.data||[]).map(x=>x.subject).filter(Boolean);
+}
+async function v74BellCenter(){
+  if(!v74Admin())return toast('Admin / Principal only');page='v74_bell_center';head('🔔 Teacher Bell Timetable','एक जगह Teacher चुनें → Bell 1,2,3… में Class + Subject + Time Add / Update / Delete करें');
+  $('erpContent').innerHTML='<div class="panel"><div class="empty">Loading teachers...</div></div>';
+  try{await v74LoadReferenceData()}catch(e){return $('erpContent').innerHTML=`<div class="panel v64Danger">${esc(e.message||e)}</div>`}
+  let nowDay=v74SelectedDay||v74DayName();if(nowDay==='Sunday')nowDay='Monday';
+  $('erpContent').innerHTML=`<div class="v74Hero"><h2>🔔 Smart Teaching Bell Control</h2><p>Teacher-wise weekly timetable और daily teaching report एक ही जगह। Student/Teacher master data नहीं बदलेगा.</p></div>
+  <div class="panel"><div class="v74Tools"><label>Teacher<select id="v74TeacherSel" onchange="v74LoadBellEditor()"><option value="">Select Teacher</option>${v74Teachers.map(t=>`<option value="${esc(t.id)}">${esc(t.teacher_name||'')}</option>`).join('')}</select></label><label>Weekly Day<select id="v74DaySel" onchange="v74LoadBellEditor()">${v74DayOptions(nowDay)}</select></label><label>Daily Report Date<input id="v74ReportDate" type="date" value="${esc(v74SelectedReportDate||today())}" onchange="v74LoadDailyReport()"></label><button class="primary" onclick="v74LoadBellEditor()">Open Teacher Bells</button></div></div>
+  <datalist id="v74SubjectList">${v74SubjectList()}</datalist><div id="v74BellBody" class="panel"><div class="empty">Teacher select करें.</div></div><div id="v74DailyReport" class="panel v74Report"><div class="empty">Daily report teacher select करने पर दिखेगी.</div></div>`;
+  if(v74SelectedTeacherId&&v74Teachers.some(t=>String(t.id)===String(v74SelectedTeacherId))){$('v74TeacherSel').value=v74SelectedTeacherId;$('v74DaySel').value=nowDay;$('v74ReportDate').value=v74SelectedReportDate||today();await v74LoadBellEditor()}
+}
+async function v74LoadBellEditor(){
+  let id=$('v74TeacherSel')?.value,day=$('v74DaySel')?.value||'Monday',box=$('v74BellBody');v74SelectedTeacherId=id||'';v74SelectedDay=day;if(!id)return box.innerHTML='<div class="empty">Teacher select करें.</div>';
+  v74CurrentTeacher=v74Teachers.find(t=>String(t.id)===String(id));if(!v74CurrentTeacher)return;
+  let {data,error}=await sb.from('timetable').select('*').eq('teacher_name',v74CurrentTeacher.teacher_name).eq('day_name',day).order('period_no');if(error)return box.innerHTML=`<div class="empty">${esc(error.message)}</div>`;
+  v74ScheduleRows=data||[];let map={};v74ScheduleRows.forEach(r=>map[Number(r.period_no)]=r);
+  let max=Math.max(8,...v74ScheduleRows.map(r=>Number(r.period_no)||0));max=Math.min(Math.max(max,8),12);
+  box.innerHTML=`<div class="panelHead"><div><h3>${esc(v74CurrentTeacher.teacher_name)} • ${esc(day)}</h3><p class="note">हर Bell में Time, Class और Subject set करें। नीचे Save All से एक साथ update होगा.</p></div><div class="tools"><button class="secondary" onclick="v74AddBellRow()">+ Add Bell</button><button class="primary" onclick="v74SaveAllBells()">✓ Save All Bells</button></div></div><div id="v74BellRows" class="v74BellGrid">${Array.from({length:max},(_,i)=>v74BellRowHtml(i+1,map[i+1])).join('')}</div>`;
+  await v74LoadDailyReport();
+}
+function v74BellRowHtml(n,r={}){return `<div class="v74BellRow" data-period="${n}" data-id="${esc(r.id||'')}"><div class="v74BellNo">Bell ${n}</div><input class="v74Start" type="time" value="${esc(r.start_time||'')}"><input class="v74End" type="time" value="${esc(r.end_time||'')}"><select class="v74Class">${v74ClassOptions(r.class_name||'')}</select><input class="v74Section" placeholder="Section" value="${esc(r.section||'')}"><input class="v74Subject" list="v74SubjectList" placeholder="Subject" value="${esc(r.subject||'')}"><div class="v74BellActions"><button class="primary" onclick="v74SaveBellRow(${n})">Save</button>${r.id?`<button class="del" onclick="v74DeleteBellRow(${n})">Delete</button>`:''}</div></div>`}
+function v74AddBellRow(){let host=$('v74BellRows');if(!host)return;let n=host.querySelectorAll('.v74BellRow').length+1;if(n>12)return toast('Maximum 12 bells');host.insertAdjacentHTML('beforeend',v74BellRowHtml(n,{}))}
+function v74BellPayload(n){let row=document.querySelector(`#v74BellRows .v74BellRow[data-period="${n}"]`);if(!row)return null;return {row,id:row.dataset.id||'',teacher_name:v74CurrentTeacher?.teacher_name||'',day_name:$('v74DaySel')?.value||'Monday',period_no:Number(n),start_time:row.querySelector('.v74Start')?.value||null,end_time:row.querySelector('.v74End')?.value||null,class_name:row.querySelector('.v74Class')?.value||'',section:row.querySelector('.v74Section')?.value.trim()||'',subject:row.querySelector('.v74Subject')?.value.trim()||''}}
+async function v74SaveBellRow(n,silent=false){let p=v74BellPayload(n);if(!p||!p.teacher_name)return;if(!p.class_name&&!p.subject&&!p.start_time&&!p.end_time){if(!silent)toast('Bell details भरें');return false}if(!p.class_name||!p.subject){if(!silent)toast(`Bell ${n}: Class और Subject जरूरी है`);return false}let o={teacher_name:p.teacher_name,day_name:p.day_name,period_no:p.period_no,start_time:p.start_time,end_time:p.end_time,class_name:p.class_name,section:p.section,subject:p.subject};let res=p.id?await sb.from('timetable').update(o).eq('id',p.id):await sb.from('timetable').insert(o).select('id').single();if(res.error){if(!silent)toast(res.error.message);throw res.error}if(!p.id&&res.data?.id)p.row.dataset.id=res.data.id;if(!silent){toast(`Bell ${n} saved`);await v74LoadBellEditor()}return true}
+async function v74SaveAllBells(){if(!v74CurrentTeacher)return toast('Teacher select करें');let rows=[...document.querySelectorAll('#v74BellRows .v74BellRow')],saved=0;for(let row of rows){let n=Number(row.dataset.period),p=v74BellPayload(n);if(!p)continue;if(!p.class_name&&!p.subject&&!p.start_time&&!p.end_time)continue;if(!p.class_name||!p.subject)return toast(`Bell ${n}: Class और Subject दोनों भरें`);try{await v74SaveBellRow(n,true);saved++}catch(_e){return}}toast(`${saved} Bell(s) saved • Teacher timetable updated`);await v74LoadBellEditor();v74BroadcastOnly('timetable')}
+async function v74DeleteBellRow(n){let p=v74BellPayload(n);if(!p?.id){p?.row?.remove();return}if(!confirm(`Bell ${n} delete करें?`))return;let{error}=await sb.from('timetable').delete().eq('id',p.id);if(error)return toast(error.message);toast(`Bell ${n} deleted`);await v74LoadBellEditor();v74BroadcastOnly('timetable')}
+async function v74LoadDailyReport(){let box=$('v74DailyReport');if(!box||!v74CurrentTeacher)return;let ds=$('v74ReportDate')?.value||today();v74SelectedReportDate=ds;let day=v74DayFromDate(ds),tp=v74CurrentTeacher;box.innerHTML='<div class="empty">Loading daily teaching...</div>';let [tt,di]=await Promise.all([sb.from('timetable').select('*').eq('teacher_name',tp.teacher_name).eq('day_name',day).order('period_no'),tp.auth_user_id?sb.from('teaching_diary').select('*').eq('teacher_user_id',tp.auth_user_id).eq('teaching_date',ds).order('period_no'):Promise.resolve({data:[]})]);if(tt.error||di.error)return box.innerHTML=`<div class="empty">${esc((tt.error||di.error).message)}</div>`;let dm={};(di.data||[]).forEach(x=>dm[Number(x.period_no)]=x);let rows=tt.data||[];box.innerHTML=`<div class="v74DailyTitle"><div><h3>📖 Daily Teaching Report</h3><b>${esc(tp.teacher_name)} • ${esc(ds)} • ${esc(day)}</b></div><span>${(di.data||[]).length}/${rows.length} Bells Updated</span></div><div class="tableWrap"><table class="v74ReportTable"><tr><th>Bell</th><th>Time</th><th>Class</th><th>Subject</th><th>Lesson / Topic</th><th>What Done</th><th>Worksheet</th><th>Status</th></tr>${rows.map(r=>{let d=dm[Number(r.period_no)]||{};return `<tr><td><b>${esc(r.period_no)}</b></td><td>${esc(r.start_time||'')}–${esc(r.end_time||'')}</td><td>${esc(r.class_name||'')} ${esc(r.section||'')}</td><td>${esc(r.subject||'')}</td><td>${d.topic?`<b>${esc(d.topic)}</b><small>Lesson ${esc(d.lesson_no||'—')}</small>`:'—'}</td><td>${esc(d.details||'—')}</td><td>${esc(d.homework_remark||'—')}</td><td class="${d.id?'v74StatusOk':'v74StatusWait'}">${d.id?'✓ Updated':'Pending'}</td></tr>`}).join('')||'<tr><td colspan="8">No bells assigned for this day.</td></tr>'}</table></div>`}
+async function v74MyTeachingBells(){
+  if(!v74Teacher())return toast('Teacher login only');page='teacher_bells';await v14LoadTeacherContext();let name=v38TeacherName(),ds=today(),day=v74DayFromDate(ds);head('🔔 My Teaching Bell','आज के Bell automatic • Teacher केवल Lesson / Topic / Work Done / Worksheet भरे');$('erpContent').innerHTML='<div class="panel"><div class="empty">Loading today bells...</div></div>';
+  let [tt,di]=await Promise.all([sb.from('timetable').select('*').eq('teacher_name',name).eq('day_name',day).order('period_no'),sb.from('teaching_diary').select('*').eq('teacher_user_id',user.id).eq('teaching_date',ds).order('period_no')]);if(tt.error||di.error)return $('erpContent').innerHTML=`<div class="panel v64Danger">${esc((tt.error||di.error).message)}</div>`;let dm={};(di.data||[]).forEach(x=>dm[Number(x.period_no)]=x);window.v74TeacherBellRows=tt.data||[];
+  $('erpContent').innerHTML=`<div class="v74Hero"><h2>🔔 ${esc(name)} • My Teaching Bell</h2><p>${esc(ds)} • ${esc(day)} • Admin के timetable से आज के bell automatic आए हैं.</p></div><div class="panel"><div class="panelHead"><div><h3>Today's Teaching</h3><p class="note">Time / Class / Subject fixed हैं। हर Bell में Lesson Topic, क्या कराया और Worksheet भरें.</p></div></div><div id="v74TeacherBellList">${(tt.data||[]).map(r=>v74TeacherBellHtml(r,dm[Number(r.period_no)]||{})).join('')||'<div class="empty">आज कोई Bell assign नहीं है.</div>'}</div>${(tt.data||[]).length?'<div class="tools" style="justify-content:flex-end;margin-top:12px"><button class="primary" onclick="v74SaveTodayTeaching()">✓ Save Today All Bells</button></div>':''}</div>`;
+}
+function v74TeacherBellHtml(r,d){return `<div class="v74TeacherBell ${d.id?'v74Done':''}" data-period="${Number(r.period_no)}" data-class="${esc(r.class_name||'')}" data-subject="${esc(r.subject||'')}"><div><small>Bell</small><b>${esc(r.period_no)}</b></div><div><small>Time</small><b>${esc(r.start_time||'')}<br>${r.end_time?'– '+esc(r.end_time):''}</b></div><div><small>Class / Subject</small><b>${esc(r.class_name||'')} ${esc(r.section||'')}</b><br>${esc(r.subject||'')}</div><div><small>Lesson No.</small><input class="v74Lesson" type="number" min="1" value="${esc(d.lesson_no||'')}"></div><div><small>Lesson / Topic</small><input class="v74Topic" placeholder="आज का topic" value="${esc(d.topic||'')}"></div><div><small>आज क्या कराया</small><textarea class="v74Details" placeholder="Classwork / teaching details">${esc(d.details||'')}</textarea></div><div><small>Worksheet / Practice</small><textarea class="v74Worksheet" placeholder="Worksheet / questions / practice">${esc(d.homework_remark||'')}</textarea></div></div>`}
+async function v74SaveTodayTeaching(){let rows=[...document.querySelectorAll('#v74TeacherBellList .v74TeacherBell')];if(!rows.length)return;let saved=0;for(let row of rows){let topic=row.querySelector('.v74Topic').value.trim(),details=row.querySelector('.v74Details').value.trim(),worksheet=row.querySelector('.v74Worksheet').value.trim(),lesson=Number(row.querySelector('.v74Lesson').value||0);if(!topic&&!details&&!worksheet&&!lesson)continue;if(!lesson||!topic)return toast(`Bell ${row.dataset.period}: Lesson No. और Topic जरूरी है`);let o={teacher_user_id:user.id,teacher_name:v38TeacherName(),teaching_date:today(),period_no:Number(row.dataset.period),class_name:row.dataset.class,subject:row.dataset.subject,lesson_no:lesson,topic,details,homework_remark:worksheet,updated_at:new Date().toISOString()};let{error}=await sb.from('teaching_diary').upsert(o,{onConflict:'teacher_user_id,teaching_date,period_no'});if(error)return toast(error.message);saved++}if(!saved)return toast('कम से कम एक Bell का update भरें');toast(`${saved} Bell update saved • Admin और Parent view synced`);v74BroadcastOnly('teaching-diary');await v74MyTeachingBells()}
+
+function v74BroadcastOnly(reason){try{v58BC?.postMessage({reason,at:Date.now()})}catch(_e){}try{localStorage.setItem('ld_v58_update',String(Date.now()))}catch(_e){}}
+try{if(Array.isArray(v58LiveTables)&&!v58LiveTables.includes('teaching_diary'))v58LiveTables.push('teaching_diary')}catch(_e){}
+function v74StartParentLearningRealtime(){
+  if(!sb||!user||!['parent','student'].includes(profile?.role))return;
+  try{if(v74ParentLearningChannel){sb.removeChannel(v74ParentLearningChannel);v74ParentLearningChannel=null}let ch=sb.channel('v74-parent-learning-'+String(user.id).slice(0,8));['teaching_diary','homework'].forEach(t=>{ch=ch.on('postgres_changes',{event:'*',schema:'public',table:t},()=>{clearTimeout(v74ParentLearningTimer);v74ParentLearningTimer=setTimeout(()=>{if(!$('parentDashboard')?.classList.contains('hidden'))loadParentPortal().catch(()=>{})},500)})});v74ParentLearningChannel=ch.subscribe()}catch(_e){}
+}
+try{const v74ParentLoadBase=loadParentPortal;loadParentPortal=async function(){let r=await v74ParentLoadBase.apply(this,arguments);v74StartParentLearningRealtime();return r}}catch(_e){}
+
+// Parent view: show teacher daily work + worksheet clearly from the same teaching_diary feed.
+v64OpenLearning=async function(adm){let{data,error}=await sb.rpc('parent_class_learning',{p_admission_no:adm});if(error)return toast(error.message);let d=data?.daily_teaching||[],h=data?.homework||[];v64Modal(`<h2>📚 Daily Class / Worksheet</h2><div class="v64Learning"><h3>Teacher Daily Bell Update</h3>${d.length?d.map(x=>`<div class="v74ParentLesson"><b>${esc(x.subject||'')} • Bell ${esc(x.period_no||'')} • ${v64FmtDate(x.teaching_date)}</b><span><strong>Lesson/Topic:</strong> ${esc(x.topic||'—')}</span><span><strong>क्या कराया:</strong> ${esc(x.details||'—')}</span><span class="ws"><strong>Worksheet:</strong> ${esc(x.homework_remark||'—')}</span></div>`).join(''):'<p>No daily teaching update yet.</p>'}<h3>Homework / Assignment</h3>${h.length?h.map(x=>`<div><b>${esc(x.subject||'')} • ${esc(x.title||'')}</b><span>${esc(x.description||'')}</span><small>${v64FmtDate(x.date)} ${x.due_date?'• Due '+v64FmtDate(x.due_date):''}</small></div>`).join(''):'<p>No homework update yet.</p>'}</div>`)};
+function v74InstallNav(){let host=$('erpNav');if(!host)return;if(v74Admin()){
+  [...host.querySelectorAll('button')].forEach(b=>{let oc=b.getAttribute('onclick')||'',tx=b.textContent||'';if((oc.includes("render('timetable')")||oc.includes("render('v65_teaching')"))&&!oc.includes('v74_bell_center'))b.remove()});
+  let old=[...host.querySelectorAll('button')].filter(b=>(b.getAttribute('onclick')||'').includes("'v74_bell_center'"));old.slice(1).forEach(x=>x.remove());if(!old.length){let b=document.createElement('button');b.dataset.v74Bell='1';b.innerHTML='🔔 <span>Teacher Bell Timetable</span>';b.onclick=()=>render('v74_bell_center');let ref=[...host.querySelectorAll('button')].find(x=>(x.textContent||'').includes('Teacher')||(x.textContent||'').includes('Staff'));host.insertBefore(b,ref?.nextSibling||host.firstChild)}}else if(v74Teacher()){
+  [...host.querySelectorAll('button')].forEach(b=>{let oc=b.getAttribute('onclick')||'';if(oc.includes("'teacher_schedule'")||oc.includes("'teaching_diary'"))b.remove()});
+  let old=[...host.querySelectorAll('button')].filter(b=>(b.getAttribute('onclick')||'').includes("'teacher_bells'"));old.slice(1).forEach(x=>x.remove());if(!old.length){let b=document.createElement('button');b.dataset.v74MyBell='1';b.innerHTML='🔔 <span>My Teaching Bell</span>';b.onclick=()=>render('teacher_bells');let att=[...host.querySelectorAll('button')].find(x=>(x.getAttribute('onclick')||'').includes("'attendance'"));host.insertBefore(b,att?.nextSibling||host.firstChild)}}}
+function v74DashboardQuick(){if(!v74Admin())return;let root=$('erpContent');if(!root||$('v74DashBell'))return;let q=root.querySelector('.quick,.v65Quick,.v39QuickGrid,.v14Tabs');if(q){let b=document.createElement('button');b.id='v74DashBell';b.className='v14Action';b.innerHTML='🔔 Teacher Bell Timetable';b.onclick=()=>render('v74_bell_center');q.appendChild(b)}}
+const v74RenderBase=render;
+render=async function(p){if(p==='v74_bell_center')return v74BellCenter();if(p==='teacher_bells')return v74MyTeachingBells();let r=await v74RenderBase.apply(this,arguments);setTimeout(()=>{v74InstallNav();v74DashboardQuick()},60);return r};
+const v74OpenERPBase=openERP;
+openERP=async function(){let r=await v74OpenERPBase.apply(this,arguments);setTimeout(()=>{v74InstallNav();v74DashboardQuick()},140);return r};
+window.addEventListener('load',()=>setTimeout(()=>{v74InstallNav();v74DashboardQuick()},900));
+</script>
+<!-- ===== END V74 SMART ONE-PLACE TEACHING BELL ===== -->
 
 </body></html>
