@@ -785,7 +785,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
       <button class="v76MenuBtn" onclick="v76TogglePublicNav()">☰</button>
     </div>
   </header>
-  <nav id="v26Nav" class="v76SiteNav">
+  <nav id="v76Nav" class="v76SiteNav">
     <button onclick="showPublicPage('home')">🏠 Home</button>
     <button onclick="showPublicPage('about')">ℹ About</button>
     <button onclick="showPublicPage('facilities')">🎓 Academics</button>
@@ -897,7 +897,7 @@ function v71ResetPublicScroll(view){
 function showPublicPage(id){
   const home=$("exactHome"),view=$("publicPageView"),body=$("publicPageBody"),title=$("publicPageTitle");
   if(!home||!view||!body)return;
-  const navEl=document.getElementById('v26Nav');navEl?.classList.remove('show');
+  const navEl=document.getElementById('v76Nav')||document.getElementById('v26Nav');navEl?.classList.remove('show');
   navEl?.querySelectorAll('button').forEach(b=>{b.classList.toggle('active',(b.getAttribute('onclick')||'').includes(`'${id}'`))});
   restorePublicMoved();
   if(id==='home'){
@@ -1488,7 +1488,22 @@ button{transition:transform .16s ease,box-shadow .16s ease}button:hover{transfor
  #erpNav button{min-height:46px!important;font-size:12px!important}
 }
 </style>
-</head><body>${el.innerHTML}</body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
+</head><body>${el.innerHTML}
+<!-- ===== V76.1 PUBLIC APPROVED LOOK COLLISION FIX ===== -->
+<style id="v76-1-public-collision-fix">
+/* Legacy V26 used a fixed #v26Nav sidebar and 230px left padding with !important.
+   V76.1 isolates the approved V76 navigation and removes that inherited offset. */
+#exactHome.v26Home.v76PublicHome{padding-left:0!important;margin-left:0!important;width:100%!important;max-width:none!important;}
+#v76Nav.v76SiteNav{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:100%!important;transform:none!important;}
+#v76Nav.v76SiteNav:before{content:none!important;display:none!important;}
+@media(max-width:900px){
+  #v76Nav.v76SiteNav{display:none!important;position:absolute!important;left:10px!important;right:10px!important;top:78px!important;width:auto!important;transform:none!important;}
+  #v76Nav.v76SiteNav.show{display:grid!important;}
+}
+@media(max-width:620px){#v76Nav.v76SiteNav{top:68px!important;}}
+</style>
+<!-- ===== END V76.1 PUBLIC APPROVED LOOK COLLISION FIX ===== -->
+</body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 
 function v14AddNav(){
  const additions=[
@@ -6752,7 +6767,7 @@ html,body{max-width:100%;overflow-x:hidden}.v76PublicHome{position:relative;min-
 </style>
 
 <script id="v76-premium-unified-script">
-window.V76_BUILD='V76-PREMIUM-UNIFIED-APPROVED-UI-2026-09-13';
+window.V76_BUILD='V76.1-PREMIUM-UNIFIED-PUBLIC-FIX-2026-09-13';
 function v76Role(){return String(window.profile?.role||'').toLowerCase()}
 function v76AdminRole(){return ['super_admin','admin','principal'].includes(v76Role())}
 function v76PublicHeroUrl(){return window.school?.hero_image_url||window.school?.website_wallpaper_url||''}
@@ -6763,7 +6778,7 @@ function v76SyncBranding(){
   document.querySelectorAll('.v76SchoolName').forEach(x=>x.textContent=n);document.querySelectorAll('.v76SchoolAddress').forEach(x=>x.textContent=a);document.querySelectorAll('.v76BrandLogo,.v76HeroLogo,.v76AdminPromo img').forEach(x=>x.src=logo);
   v76SetBg(document.querySelector('.v76PublicHero'),'--v76-public-hero',v76PublicHeroUrl());
 }
-function v76TogglePublicNav(){document.getElementById('v26Nav')?.classList.toggle('show')}
+function v76TogglePublicNav(){document.getElementById('v76Nav')?.classList.toggle('show')}
 function v76ScrollLogin(){document.getElementById('v76LoginSection')?.scrollIntoView({behavior:'smooth',block:'center'})}
 function v76PublicSearch(){let q=String(document.getElementById('v76PublicQ')?.value||'').trim().toLowerCase();if(!q)return;let map=[[/admission|admit|प्रवेश/,'admission'],[/gallery|photo|video/,'gallery'],[/notice|सूचना/,'notices'],[/event|holiday|ptm/,'events'],[/contact|phone|address/,'contact'],[/about|school/,'about'],[/academic|class|syllabus/,'facilities']];for(let [r,p] of map)if(r.test(q))return showPublicPage(p);if(/teacher/.test(q))return teacherLoginDialog();if(/student/.test(q))return v76StudentLoginDialog();if(/parent|fee|attendance|result/.test(q))return parentPasswordLoginDialog();toast('Use menu or Login / Access for this item')}
 async function v76StudentPasswordLogin(){let id=String(document.getElementById('v76StudentId')?.value||'').trim(),password=document.getElementById('v76StudentPassword')?.value||'';if(!id||!password)return toast('Email/Mobile और Password डालें');let payload=(typeof authPayload==='function')?authPayload(id,password):{email:id,password};let {data,error}=await sb.auth.signInWithPassword(payload);if(error)return toast(error.message);user=data.user;await loadProfile();if(v76Role()!=='student'){await sb.auth.signOut();return toast('यह Student account नहीं है')}document.getElementById('v14Modal')?.remove();openERP()}
