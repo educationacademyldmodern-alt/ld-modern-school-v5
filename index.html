@@ -5990,4 +5990,124 @@ function install80(){if($('v79MasterQ')){$('v79MasterQ').onkeydown=e=>{if(e.key=
 document.addEventListener('click',e=>{if(!e.target.closest('.v79TopSearch'))$('v79SearchDrop')?.classList.add('hidden');if(innerWidth<=900&&!e.target.closest('#v79Side')&&!e.target.closest('.v79Hamb'))$('v79Side')?.classList.remove('open')});
 install80();document.addEventListener('DOMContentLoaded',install80);setTimeout(install80,80);setTimeout(install80,500);
 })();
-</script></body></html>
+</script>
+<!-- ===== V80.1 TOP-OPEN + SAFE ROUTE + FORGOT PASSWORD FIX ===== -->
+<style id="v801-top-open-css">
+html{scroll-behavior:auto!important;overscroll-behavior:none!important}
+body{scroll-behavior:auto!important}
+body.v80-erp-open{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;overflow:hidden!important}
+#erp{position:fixed!important;inset:0!important;overflow:hidden!important}
+#erp .v79Main{overscroll-behavior:contain!important;scroll-behavior:auto!important}
+#erpContent{scroll-margin-top:0!important}
+.v801RouteLoading,.v801RouteError{margin:14px 0;background:#fff;border:1px solid #dce9f5;border-radius:16px;padding:22px;box-shadow:0 7px 20px #0a559510;color:#0b3e77}
+.v801RouteLoading b,.v801RouteError b{display:block;font-size:18px;margin-bottom:5px}
+.v801RouteLoading small,.v801RouteError small{color:#71869b}
+.v801Forgot{width:100%!important;margin-top:8px!important;border:0!important;background:transparent!important;color:#0b63c5!important;font-weight:800!important;cursor:pointer!important;padding:7px!important}
+.v801Forgot:hover{text-decoration:underline!important}
+</style>
+<script id="v801-top-open-runtime">
+(()=>{
+'use strict';
+window.V801_BUILD='V80.1-TOP-OPEN-FORGOT-FIX-2026-09-13';
+const byId=id=>document.getElementById(id);
+const oldShowPublic=window.showPublicPage;
+const oldBackWebsite=window.backWebsite;
+
+function hardTop(){
+  try{const m=document.querySelector('#erp .v79Main');if(m){m.scrollTop=0;m.scrollLeft=0}}catch(_e){}
+  try{const sc=document.scrollingElement||document.documentElement;if(sc){sc.scrollTop=0;sc.scrollLeft=0}}catch(_e){}
+  try{document.documentElement.scrollTop=0;document.body.scrollTop=0}catch(_e){}
+  try{window.scrollTo({top:0,left:0,behavior:'auto'})}catch(_e){try{window.scrollTo(0,0)}catch(__){}}
+}
+function hardTopBurst(){hardTop();requestAnimationFrame(hardTop);setTimeout(hardTop,0);setTimeout(hardTop,60);setTimeout(hardTop,180)}
+function publicTop(){
+  try{const p=byId('publicSite');if(p){p.scrollTop=0;p.scrollLeft=0}}catch(_e){}
+  try{const v=byId('publicPageView');if(v){v.scrollTop=0;v.scrollLeft=0}}catch(_e){}
+  hardTopBurst();
+}
+window.v801HardTop=hardTopBurst;
+
+// Every public option opens from the top; no old anchor/scroll position is reused.
+if(typeof oldShowPublic==='function'){
+  window.showPublicPage=function(id){const r=oldShowPublic.apply(this,arguments);publicTop();return r};
+}
+window.backWebsite=function(){
+  try{document.body.classList.remove('v80-erp-open')}catch(_e){}
+  try{byId('erp')?.classList.add('hidden');byId('login')?.classList.add('hidden');byId('setup')?.classList.add('hidden');byId('publicSite')?.classList.remove('hidden')}catch(_e){}
+  try{window.showPublicPage('home')}catch(_e){try{oldBackWebsite&&oldBackWebsite()}catch(__){}}
+  publicTop();
+};
+
+function routeLoading(label='Opening…'){
+  hardTop();
+  const c=byId('erpContent');
+  if(c)c.innerHTML=`<section class="v801RouteLoading"><b>${label}</b><small>Page is opening at the top…</small></section>`;
+  hardTopBurst();
+}
+function routeError(err){
+  const c=byId('erpContent');
+  const msg=String(err?.message||err||'Unable to open this page');
+  if(c)c.innerHTML=`<section class="v801RouteError"><b>Page could not open</b><small>${msg.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}</small></section>`;
+  hardTopBurst();
+}
+async function runSafe(fn,label,args=[]){
+  routeLoading(label);
+  try{const r=fn(...args);await Promise.resolve(r);hardTopBurst();return r}catch(e){console.error(e);routeError(e);if(window.toast)try{toast(e.message||String(e))}catch(_e){};return null}
+}
+
+// Wrap the old functional renderer so stale dashboard content never remains under a page.
+const baseOpenRoute=window.v80OpenRoute;
+if(typeof baseOpenRoute==='function'){
+  window.v80OpenRoute=async function(p){
+    routeLoading('Opening '+String(p||'page').replaceAll('_',' ')+'…');
+    try{const r=baseOpenRoute.apply(this,arguments);await Promise.resolve(r);hardTopBurst();return r}catch(e){routeError(e);return null}
+  };
+}
+
+// Teacher functions used directly by quick buttons: clear old dashboard first and catch rejected loads.
+const directNames={
+  teacherTeachingSchedule:'My Teaching Bell',teacherMyProfile:'My Profile',teacherClassPortal:'My Classes',teacherReportCenter:'Teaching Report',
+  smartAttendance:'Attendance',teacherHomework:'Homework',teacherMarksEntry:'Exams & Marks',teacherNoticeCenter:'Notices'
+};
+Object.entries(directNames).forEach(([name,label])=>{
+  const base=window[name];
+  if(typeof base!=='function'||base.__v801Wrapped)return;
+  const wrapped=function(...args){return runSafe(base,label,args)};
+  wrapped.__v801Wrapped=true;
+  window[name]=wrapped;
+});
+
+// Explicit Admin forgot-password link. Parent/Student self-reset is intentionally not added.
+window.v801AdminForgot=async function(){
+  if(typeof window.v49ForgotPassword==='function')return window.v49ForgotPassword('admin');
+  const email=String(byId('email')?.value||'').trim();
+  if(!email)return window.toast?toast('पहले Admin Email डालें'):alert('पहले Admin Email डालें');
+  if(!window.sb?.auth?.resetPasswordForEmail)return window.toast?toast('Password reset service available नहीं है'):null;
+  try{const {error}=await sb.auth.resetPasswordForEmail(email);if(error)throw error;window.toast?toast('Password reset link email पर भेज दिया गया'):alert('Reset link sent')}catch(e){window.toast?toast(e.message||String(e)):alert(e.message||String(e))}
+};
+function ensureForgot(){
+  const card=document.querySelector('#login .v79AuthCard');
+  if(card&&!byId('v801AdminForgot')){
+    const loginBtn=[...card.querySelectorAll('button')].find(b=>(b.getAttribute('onclick')||'').trim()==='login()');
+    if(loginBtn){const b=document.createElement('button');b.id='v801AdminForgot';b.type='button';b.className='v801Forgot';b.textContent='Forgot Password?';b.onclick=window.v801AdminForgot;loginBtn.insertAdjacentElement('afterend',b)}
+  }
+  try{if(typeof window.v49RestoreForgotPassword==='function')window.v49RestoreForgotPassword()}catch(_e){}
+}
+
+// Prevent hash anchors inside app from moving the whole page before JS renders the selected view.
+document.addEventListener('click',e=>{
+  const a=e.target.closest?.('a[href^="#"]');
+  if(a&&(a.closest('#erp')||a.closest('#publicSite'))){e.preventDefault()}
+},true);
+
+document.addEventListener('click',e=>{
+  if(e.target.closest?.('#erpNav button,.v80HubGrid button,.v80QuickGrid button,.v79ModuleBar button'))hardTopBurst();
+},true);
+
+ensureForgot();
+document.addEventListener('DOMContentLoaded',()=>{ensureForgot();hardTop()});
+setTimeout(ensureForgot,120);setTimeout(ensureForgot,700);
+})();
+</script>
+<!-- ===== END V80.1 ===== -->
+</body></html>
