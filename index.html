@@ -7605,7 +7605,45 @@ function v90RenderPwRows(){let rows=v90PwFiltered(),host=v90Q('v90PwBody');v90Q(
 function v90PwToggle(id,v){let x=(window.__v90MonitorCache.pwStudents||[]).find(z=>String(z.id)===String(id));if(x)x._selected=v;v90Q('v90PwStatus').textContent=`${v90PwFiltered().length} students visible • ${(window.__v90MonitorCache.pwStudents||[]).filter(x=>x._selected).length} selected`}
 function v90PwSelectAll(v){v90PwFiltered().forEach(x=>x._selected=v);v90RenderPwRows()}
 function v90GenerateSelectedPasswords(){(window.__v90MonitorCache.pwStudents||[]).filter(x=>x._selected).forEach(x=>{x._pw=v90SuggestedPassword(x.student_name);let i=v90Q('v90Pw_'+x.id);if(i)i.value=x._pw});v90Toast('Selected passwords generated')}
-async function v90CreateOneParent(st){let mob=String(v90Q('v90Mob_'+st.id)?.value||st.phone||'').replace(/\D/g,'').slice(-10),mail=String(v90Q('v90Mail_'+st.id)?.value||'').trim().toLowerCase(),pw=String(v90Q('v90Pw_'+st.id)?.value||st._pw||'');if(mob.length!==10)throw new Error(`${st.student_name}: valid 10 digit mobile required`);if(pw.length<6)throw new Error(`${st.student_name}: password too short`);let sibling=(window.__v90MonitorCache.pwStudents||[]).find(x=>String(x.id)!==String(st.id)&&String(x.phone||'').replace(/\D/g,'').slice(-10)===mob&&x.parent_email);let loginEmail=mail||String(sibling?.parent_email||'').trim().toLowerCase()||`p${mob}@parent.ldmodern.local`;let existing=null;try{let x=await sb.from('profiles').select('id,email,role').eq('email',loginEmail).maybeSingle();existing=x.data||null}catch(_e){};if(existing?.id){let up=await sb.from('students').update({phone:mob,parent_email:loginEmail}).eq('id',st.id);if(up.error)throw up.error;st.phone=mob;st.parent_email=loginEmail;return 'Linked existing'}const temp=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});let a=await temp.auth.signUp({email:loginEmail,password:pw,options:{data:{full_name:`Parent of ${st.student_name||''}`,role:'parent',mobile:mob,linked_admission_no:st.admission_no||''}}});if(a.error)throw a.error;if(!a.data?.user)throw new Error('Account create failed');let p=await sb.from('profiles').upsert({id:a.data.user.id,email:loginEmail,full_name:`Parent of ${st.student_name||''}`,role:'parent',status:'active',linked_admission_no:st.admission_no||''},{onConflict:'id'});if(p.error)throw p.error;let u=await sb.from('students').update({phone:mob,parent_email:loginEmail}).eq('id',st.id);if(u.error)throw u.error;st.phone=mob;st.parent_email=loginEmail;return 'Created'}
+async function v90CreateOneParent(st){
+  let mob=String(v90Q('v90Mob_'+st.id)?.value||st.phone||'').replace(/\D/g,'').slice(-10);
+  let mail=String(v90Q('v90Mail_'+st.id)?.value||'').trim().toLowerCase();
+  let pw=String(v90Q('v90Pw_'+st.id)?.value||st._pw||'');
+
+  if(mob.length!==10)throw new Error(st.student_name+': valid 10 digit mobile required');
+  if(pw.length<6)throw new Error(st.student_name+': password too short');
+
+  const ses=await sb.auth.getSession();
+  const token=ses?.data?.session?.access_token;
+  if(!token)throw new Error('Admin login required');
+
+  const r=await fetch('/api/parent-access',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer '+token
+    },
+    body:JSON.stringify({
+      action:'create_or_update',
+      student_id:st.id,
+      mobile:mob,
+      email:mail,
+      password:pw
+    })
+  });
+
+  const raw=await r.text();
+  let j={};
+  try{j=raw?JSON.parse(raw):{}}
+  catch(_e){throw new Error(raw||'Parent Access server error')}
+
+  if(!r.ok)throw new Error(j?.error||'Parent account create/link failed');
+
+  st.phone=mob;
+  st.parent_email=j.login_email||mail;
+  return j.created?'Created + Active':'Linked + Active';
+}
+
 async function v90CreateSelectedParents(){let rows=(window.__v90MonitorCache.pwStudents||[]).filter(x=>x._selected);if(!rows.length)return v90Toast('Select students first');if(!confirm(`${rows.length} selected Parent login create/link करने हैं?`))return;let ok=0,fail=0;v90Q('v90PwStatus').textContent='Processing selected accounts...';for(let i=0;i<rows.length;i++){let st=rows[i];try{st._state=await v90CreateOneParent(st);ok++}catch(e){st._state='Error: '+(e.message||e);fail++}v90Q('v90PwStatus').textContent=`Processing ${i+1}/${rows.length} • Success ${ok} • Failed ${fail}`;await new Promise(r=>setTimeout(r,120))}v90RenderPwRows();v90Toast(`Completed • ${ok} success • ${fail} failed`)}
 
 /* Parent portal visual family — preserve existing functionality/data. */
