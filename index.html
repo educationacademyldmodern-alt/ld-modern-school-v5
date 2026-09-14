@@ -770,7 +770,200 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 #publicPageView .publicPageBar{position:sticky!important;top:0!important;z-index:5001!important;}
 #publicPageBody{min-height:calc(100vh - 66px);}
 </style>
-<style id="v92-admin-topbar-fix">#erp.v90Shell .v45NavControls,#erp.v90Shell .erpHomeBtn,#erp.v90Shell #v52MasterSearch{display:none!important}#erp.v90Shell .erpTop{display:flex!important;align-items:center!important;flex-wrap:wrap!important;height:auto!important;min-height:72px!important;padding:8px 12px!important;gap:8px!important}#erp.v90Shell .v764MasterSearch{order:20!important;flex:1 1 100%!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important}#erp.v90Shell .v764MasterSearch input{width:100%!important;min-width:0!important}</style><style id="v92-admin-readability-fix">#erp.v90Shell .v90Dash>.v90Welcome:not(.teacher) h1{display:none!important}#erp.v90Shell .v90Dash>.v90Welcome:not(.teacher)>div:first-child>span{font-size:0!important}#erp.v90Shell .v90Dash>.v90Welcome:not(.teacher)>div:first-child>span:after{content:"ADMIN DASHBOARD";font-size:13px!important;letter-spacing:.08em;font-weight:900}#erpNav.v90Nav .v90Home{font-size:13.5px!important}.v90NavGroup summary{font-size:11.5px!important}.v90NavGroup>div button{font-size:12px!important}#erp.v90Shell .v90Dash>.v90Welcome:not(.teacher).v90MonitorGrid .v90Monitor b{font-size:13.5px!important}#erp.v90Shell .v90Dash>.v90Welcome:not(.teacher).v90MonitorGrid .v90Monitor small{font-size:10px!important}#erp.v90Shell .v90Dash>.v90Welcome:not(.teacher) .v90WelcomeActions button{font-size:11.5px!important}#erp.v90Shell .v90Dash>.v90Welcome:not(.teacher)~.v90Bottom .v90Quick button span{font-size:11px!important}</style><style id="v92-compact-admin">#erp.v90Shell .v90Dash>.v90Welcome;display:none!important}#erp.v90Shell .erpTop{min-height:52px!important;height:auto!important;padding:6px 10px!important;gap:6px!important;background:#fff!important;background-image:none!important}#erp.v90Shell .v764MasterSearch{margin-left:auto!important;width:380px!important;max-width:380px!important;min-width:220px!important;flex:0 1 380px!important}#erp.v90Shell .v764MasterSearch input{height:36px!important;font-size:12px!important;padding:6px 10px!important}#erp.v90Shell #erpContent{padding:8px 12px 20px!important}@media(max-width:900px){#erp.v90Shell .v764MasterSearch{width:100%!important;max-width:none!important;flex:1 1 100%!important}}</style></head>
+
+<style id="v93-approved-admin-ui">
+/* V93 approved Admin UI skin — visual only, functions/routes untouched */
+#erp.v90Shell{background:#f4f8fd!important}
+#erp.v90Shell aside{
+  width:220px!important;
+  background:linear-gradient(180deg,#062e68 0%,#064f9c 56%,#053872 100%)!important;
+  border-right:0!important;
+  box-shadow:10px 0 28px rgba(5,45,92,.12)!important
+}
+#erp.v90Shell main{
+  margin-left:220px!important;
+  min-height:100vh!important;
+  background:#f4f8fd!important;
+  background-image:none!important
+}
+#erp.v90Shell #erpContent{
+  max-width:none!important;width:100%!important;
+  padding:12px 16px 22px!important;
+  background:#f4f8fd!important;
+  background-image:none!important
+}
+#erp.v90Shell #erpContent::before,
+#erp.v90Shell main::before{display:none!important;content:none!important;background:none!important}
+
+#erp.v90Shell .sideBrand{min-height:92px!important;padding:15px 12px!important;background:transparent!important;border-bottom:1px solid #ffffff24!important}
+#erp.v90Shell .sideBrand .logoText{width:52px!important;height:52px!important;border-radius:50%!important;background:#fff!important;color:#0c62b8!important;font-size:15px!important}
+#erp.v90Shell .sideBrand b{font-size:13px!important;line-height:1.25!important;color:#fff!important}
+#erp.v90Shell .sideBrand small{font-size:9px!important;color:#d9ebff!important}
+#erpNav.v90Nav{padding:10px 8px 18px!important}
+#erpNav.v90Nav .v90Home,#erpNav.v90Nav button{
+  min-height:44px!important;font-size:12px!important;border-radius:10px!important;
+  padding:9px 11px!important;color:#eef7ff!important
+}
+.v90NavGroup summary{font-size:10.5px!important;color:#bcd9f7!important;padding:10px 8px!important}
+.v90NavGroup>div button{font-size:11.5px!important;min-height:40px!important}
+#erp.v90Shell aside .logout{font-size:12px!important;font-weight:800!important;color:#fff!important;padding:11px 12px!important}
+
+/* compact premium top header */
+#erp.v90Shell .erpTop{
+  min-height:94px!important;height:auto!important;
+  display:grid!important;
+  grid-template-columns:minmax(340px,1.4fr) minmax(180px,.75fr) minmax(330px,1fr) auto!important;
+  grid-auto-rows:auto!important;
+  align-items:center!important;
+  gap:8px 12px!important;
+  padding:10px 16px!important;
+  background:linear-gradient(90deg,#ffffff 0%,#f5faff 100%)!important;
+  background-image:none!important;
+  border-bottom:1px solid #dbe8f5!important;
+  box-shadow:0 6px 18px rgba(21,70,120,.08)!important
+}
+#erp.v90Shell .v63SchoolHead{
+  display:block!important;min-width:0!important;text-align:left!important;order:1!important
+}
+#erp.v90Shell .v63SchoolHead b{
+  font-size:24px!important;line-height:1!important;color:#173d73!important;white-space:nowrap!important
+}
+#erp.v90Shell .v63SchoolHead span{
+  font-size:10px!important;color:#4f6d8d!important;margin-top:5px!important;letter-spacing:.02em!important
+}
+#erp.v90Shell .erpTop>div:has(#erpTitle){
+  display:block!important;order:2!important;text-align:left!important;min-width:160px!important
+}
+#erp.v90Shell #erpTitle{font-size:18px!important;color:#173d73!important;margin:0!important}
+#erp.v90Shell #erpSub{font-size:9px!important;color:#74859a!important;margin-top:3px!important}
+#erp.v90Shell .v764MasterSearch{
+  order:3!important;margin:0!important;min-width:0!important;width:100%!important;max-width:none!important;
+  display:flex!important;gap:6px!important
+}
+#erp.v90Shell .v764MasterSearch input{
+  width:100%!important;min-width:0!important;height:38px!important;padding:8px 12px!important;
+  font-size:11px!important;border-radius:12px!important;border:1px solid #c9ddef!important;background:#fff!important
+}
+#erp.v90Shell .v764MasterSearch button{
+  width:42px!important;height:38px!important;padding:0!important;border-radius:12px!important;
+  background:#0b69dc!important;color:#fff!important;border:0!important;font-size:0!important
+}
+#erp.v90Shell .v764MasterSearch button::after{content:"🔎";font-size:16px!important}
+#erp.v90Shell #v63AdminBox{
+  display:flex!important;order:4!important;min-width:170px!important;justify-self:end!important;
+  border:1px solid #d3e3f1!important;box-shadow:none!important;border-radius:14px!important;padding:6px 9px!important
+}
+#erp.v90Shell .v63Avatar{width:38px!important;height:38px!important;font-size:21px!important}
+#erp.v90Shell #v63AdminBox b{font-size:11px!important}
+#erp.v90Shell #v63AdminBox small{font-size:8.5px!important}
+
+/* second compact action row */
+#erp.v90Shell #v75DarkBtn,
+#erp.v90Shell [data-v58-order],
+#erp.v90Shell [data-v58-settings],
+#erp.v90Shell #v764LiveBadge,
+#erp.v90Shell .v63Msg,
+#erp.v90Shell .websiteBtn{
+  order:10!important;grid-row:2!important;
+  height:32px!important;min-height:32px!important;padding:6px 10px!important;
+  border:1px solid #d5e4f2!important;background:#fff!important;color:#174f88!important;
+  border-radius:9px!important;font-size:10px!important;font-weight:800!important;box-shadow:none!important
+}
+#erp.v90Shell #v75DarkBtn{grid-column:2!important;justify-self:start!important}
+#erp.v90Shell [data-v58-order]{grid-column:2!important;margin-left:68px!important}
+#erp.v90Shell [data-v58-settings]{grid-column:2!important;margin-left:138px!important}
+#erp.v90Shell #v764LiveBadge{grid-column:3!important;justify-self:start!important;color:#087c5b!important;background:#ecfbf2!important}
+#erp.v90Shell .v63Msg{grid-column:4!important;justify-self:start!important;width:34px!important;border-radius:10px!important}
+#erp.v90Shell .websiteBtn{grid-column:4!important;justify-self:end!important}
+#erp.v90Shell #v58LiveDot{display:none!important}
+#erp.v90Shell .v63TopLogout{display:none!important}
+#erp.v90Shell #v90HomeBtn,#erp.v90Shell #v90BackBtn,#erp.v90Shell .erpHomeBtn{display:none!important}
+#erp.v90Shell .erpTop .hamb{display:none!important}
+
+/* admin first screen: remove old giant hero */
+#erp.v90Shell .v90Dash>.v90Welcome:not(.teacher){display:none!important}
+
+/* KPI cards like approved mockup */
+#erp.v90Shell .v90Stats{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:10px!important;margin:4px 0 12px!important
+}
+#erp.v90Shell .v90Stat{
+  min-height:92px!important;border:0!important;border-radius:16px!important;padding:14px!important;
+  box-shadow:0 9px 22px rgba(31,84,137,.14)!important;color:#fff!important
+}
+#erp.v90Shell .v90Stat:nth-child(1){background:linear-gradient(135deg,#1687ff,#1260dc)!important}
+#erp.v90Shell .v90Stat:nth-child(2){background:linear-gradient(135deg,#27d77d,#09a95a)!important}
+#erp.v90Shell .v90Stat:nth-child(3){background:linear-gradient(135deg,#ffb43d,#ef8711)!important}
+#erp.v90Shell .v90Stat:nth-child(4){background:linear-gradient(135deg,#ff6175,#e63255)!important}
+#erp.v90Shell .v90Stat:nth-child(5){background:linear-gradient(135deg,#8b5cf6,#6434d9)!important}
+#erp.v90Shell .v90Stat:nth-child(6){background:linear-gradient(135deg,#1fc9e8,#129fc7)!important}
+#erp.v90Shell .v90Stat>span{
+  width:46px!important;height:46px!important;border-radius:13px!important;
+  background:#ffffff22!important;color:#fff!important;font-size:23px!important
+}
+#erp.v90Shell .v90Stat small{font-size:10px!important;color:#eef8ff!important}
+#erp.v90Shell .v90Stat b{font-size:24px!important;color:#fff!important;margin-top:4px!important}
+
+/* monitoring area becomes large white admin panel */
+#erp.v90Shell .v90SectionTitle{
+  margin:0!important;padding:14px 16px 8px!important;
+  background:#fff!important;border:1px solid #dce8f4!important;border-bottom:0!important;
+  border-radius:16px 16px 0 0!important;align-items:center!important
+}
+#erp.v90Shell .v90SectionTitle h2{font-size:17px!important;color:#143f76!important}
+#erp.v90Shell .v90SectionTitle p{font-size:10px!important}
+#erp.v90Shell .v90MonitorGrid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:9px!important;background:#fff!important;border:1px solid #dce8f4!important;border-top:0!important;
+  border-radius:0 0 16px 16px!important;padding:8px 12px 14px!important
+}
+#erp.v90Shell .v90Monitor{
+  min-height:80px!important;border-radius:13px!important;background:#fbfdff!important;
+  border:1px solid #dce8f4!important;box-shadow:none!important;padding:10px!important
+}
+#erp.v90Shell .v90MonitorIcon{
+  width:42px!important;height:42px!important;border-radius:12px!important;background:#eaf4ff!important;font-size:21px!important
+}
+#erp.v90Shell .v90Monitor b{font-size:11.5px!important;color:#153d70!important}
+#erp.v90Shell .v90Monitor small{font-size:9px!important;color:#71859a!important}
+
+/* quick access / system rules */
+#erp.v90Shell .v90Bottom{grid-template-columns:1.5fr 1fr!important;gap:10px!important;margin-top:10px!important}
+#erp.v90Shell .v90Panel{border-radius:16px!important;border:1px solid #dce8f4!important;box-shadow:0 6px 18px rgba(24,69,112,.06)!important}
+#erp.v90Shell .v90Panel h3{font-size:14px!important}
+#erp.v90Shell .v90Quick{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+#erp.v90Shell .v90Quick button{min-height:72px!important;background:#f8fbff!important}
+#erp.v90Shell .v90Quick button span{font-size:10.5px!important}
+
+/* force old wallpaper/legacy dashboard graphics away */
+#erp.roleWallpaper main,#erp.v90Shell main{background-image:none!important}
+#erp.v90Shell .dashHero,#erp.v90Shell .v39Hero,#erp.v90Shell .v65Hero{background-image:none!important}
+
+/* responsive */
+@media(max-width:1280px){
+  #erp.v90Shell .erpTop{grid-template-columns:minmax(280px,1.2fr) minmax(150px,.6fr) minmax(280px,1fr) auto!important}
+  #erp.v90Shell .v63SchoolHead b{font-size:20px!important}
+  #erp.v90Shell .v90Stats{grid-template-columns:repeat(3,1fr)!important}
+  #erp.v90Shell .v90MonitorGrid{grid-template-columns:repeat(3,1fr)!important}
+}
+@media(max-width:900px){
+  #erp.v90Shell aside{width:278px!important}
+  #erp.v90Shell main{margin-left:0!important}
+  #erp.v90Shell .erpTop{display:flex!important;flex-wrap:wrap!important;min-height:70px!important;padding:8px 10px!important}
+  #erp.v90Shell .erpTop .hamb{display:inline-flex!important;order:1!important}
+  #erp.v90Shell .v63SchoolHead{display:none!important}
+  #erp.v90Shell .erpTop>div:has(#erpTitle){display:block!important;order:2!important;flex:1!important}
+  #erp.v90Shell .v764MasterSearch{order:20!important;flex:1 1 100%!important}
+  #erp.v90Shell #v63AdminBox{order:3!important;margin-left:auto!important}
+  #erp.v90Shell #v75DarkBtn,#erp.v90Shell [data-v58-order],#erp.v90Shell [data-v58-settings],
+  #erp.v90Shell #v764LiveBadge,#erp.v90Shell .v63Msg,#erp.v90Shell .websiteBtn{display:none!important}
+  #erp.v90Shell .v90Stats{grid-template-columns:repeat(2,1fr)!important}
+  #erp.v90Shell .v90MonitorGrid{grid-template-columns:repeat(2,1fr)!important}
+  #erp.v90Shell .v90Bottom{grid-template-columns:1fr!important}
+}
+</style>
+</head>
 <body>
 <div id="publicSite"><div id="runningNotices" class="runningNoticeHost"></div>
 <section id="exactHome" class="v26Home" aria-label="L D Modern Education Academy home page">
