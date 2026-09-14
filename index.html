@@ -2706,6 +2706,15 @@ async function v32PasswordSignIn(identifier,password,role){
   let email=await v32ResolveEmail(raw,role);
   if(email) return await sb.auth.signInWithPassword({email,password});
   if(raw.includes('@')) return await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
+  if(role==='parent'){
+    let digits=raw.replace(/\D/g,'').slice(-10);
+    if(digits.length===10){
+      return await sb.auth.signInWithPassword({
+        email:p${digits}@parent.ldmodern.local,
+        password
+      });
+    }
+  }
   let phone=normalizePhone(raw);
   return await sb.auth.signInWithPassword({phone,password});
 }
