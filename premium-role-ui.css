@@ -202,16 +202,3 @@ UI only: no database, routing, auth, fee, attendance, result or permission logic
   #erp.v90Shell .v90Stats,#erp.v90Shell .v90MonitorGrid{grid-template-columns:1fr!important}
   #parentDashboard .portalStats{grid-template-columns:repeat(2,1fr)!important}
 }
-
-/* V92 LAPTOP DESKTOP FIX */
-@media(min-width:769px){
-#erp.v90Shell aside{transform:none!important;left:0!important;display:flex!important;width:205px!important}
-#erp.v90Shell main{margin-left:205px!important}
-#erp.v90Shell .erpTop .hamb{display:none!important}
-}
-@media(min-width:769px) and (max-width:1150px){
-#erp.v90Shell .erpTop{grid-template-columns:minmax(250px,1fr) minmax(240px,.9fr) auto!important;padding:8px 12px!important}
-#erp.v90Shell .v63SchoolHead b{font-size:18px!important}
-#erp.v90Shell .v63SchoolHead span{font-size:8px!important}
-#erp.v90Shell .v764MasterSearch{max-width:360px!important}
-}
