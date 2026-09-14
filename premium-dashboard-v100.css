@@ -1,0 +1,138 @@
+
+:root{
+  --v100-blue:#0759c9;--v100-blue2:#0b78e7;--v100-navy:#063d88;
+  --v100-bg:#f3f7fd;--v100-text:#0d2f66;--v100-muted:#6f84a0;--v100-border:#dbe6f3;
+}
+*{box-sizing:border-box}
+html,body{max-width:100%!important;overflow-x:hidden!important}
+
+/* Kill legacy role wallpapers / old dashboard visual residue */
+#erp.roleWallpaper,#erp.roleWallpaper > main,#erp.v100Shell,#erp.v100Shell > main{
+  background-image:none!important;background:var(--v100-bg)!important;background-attachment:initial!important
+}
+#erp #erpContent:before{display:none!important;content:none!important}
+#erp.v100Shell #erpContent .dashHero{margin-top:0!important;background:none!important}
+#parentPortal.parentWallpaper,#parentDashboard.v100Parent{background-image:none!important}
+
+/* One clean premium shell */
+#erp.v100Shell{background:var(--v100-bg)!important;color:var(--v100-text)!important}
+#erp.v100Shell aside{
+  position:fixed!important;inset:0 auto 0 0!important;width:205px!important;
+  background:linear-gradient(180deg,#075fcf 0%,#0750ae 55%,#04397f 100%)!important;
+  padding:0 10px 13px!important;box-shadow:8px 0 28px rgba(5,69,139,.15)!important;z-index:60!important
+}
+#erp.v100Shell > main{margin-left:205px!important;min-width:0!important;max-width:calc(100% - 205px)!important;min-height:100vh!important}
+#erp.v100Shell .sideBrand{min-height:92px!important;padding:13px 7px!important;border-bottom:1px solid rgba(255,255,255,.16)!important}
+.v100SideBrand,.v100Brand,.v100ParentBrand{display:flex!important;align-items:center!important;gap:10px!important}
+.v100Mark{width:46px;height:46px;flex:0 0 46px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#0b63d1;font-weight:1000;font-size:15px;box-shadow:0 5px 16px rgba(0,0,0,.12)}
+.v100BrandText{min-width:0}.v100BrandText b{display:block!important;color:inherit;font-size:12px!important;line-height:1.12!important;white-space:nowrap}.v100BrandText span{display:block!important;font-size:8px!important;margin-top:4px!important;white-space:nowrap}
+#erp.v100Shell .sideBrand .v100BrandText b{color:#fff!important;white-space:normal!important}
+#erp.v100Shell .sideBrand .v100BrandText span{color:#d8eaff!important;white-space:normal!important}
+
+/* Clean single sidebar nav */
+.v100Nav{display:grid!important;gap:3px!important;padding-top:9px!important;overflow:auto!important;scrollbar-width:none!important}.v100Nav::-webkit-scrollbar{display:none!important}
+.v100Nav button{
+  border:0!important;background:transparent!important;color:#eaf4ff!important;display:grid!important;
+  grid-template-columns:28px 1fr!important;align-items:center!important;text-align:left!important;min-height:42px!important;
+  padding:8px 9px!important;border-radius:10px!important;cursor:pointer!important
+}
+.v100Nav button span{font-size:17px!important;text-align:center!important}
+.v100Nav button b{font-size:10.5px!important;font-weight:850!important}
+.v100Nav button:hover,.v100Nav button.active{background:linear-gradient(90deg,#10a0ff,#1474e8)!important;color:#fff!important;box-shadow:0 8px 18px rgba(0,76,180,.2)!important}
+#erp.v100Shell .logout{margin-top:auto!important;color:#fff!important;font-weight:900!important;padding:10px!important}
+
+/* Only one top header */
+#erp.v100Shell .v100Top{
+  height:78px!important;min-height:78px!important;padding:8px 15px!important;border:0!important;
+  background:linear-gradient(90deg,#0754c0,#0b78e7)!important;color:#fff!important;
+  display:grid!important;grid-template-columns:minmax(330px,1.18fr) minmax(300px,.9fr) auto!important;
+  gap:13px!important;align-items:center!important;position:sticky!important;top:0!important;z-index:55!important;
+  box-shadow:0 5px 18px rgba(7,72,145,.18)!important
+}
+.v100Menu{display:none!important;border:0!important;background:#fff!important;color:#0b5fc9!important;border-radius:10px!important;padding:9px 11px!important;font-weight:900!important}
+.v100Brand{min-width:0!important;color:#fff!important}.v100Brand .v100Mark{width:50px;height:50px;flex-basis:50px}.v100Brand .v100BrandText b{font-size:19px!important;color:#fff!important}.v100Brand .v100BrandText span{font-size:9px!important;color:#dcecff!important}
+.v100Search{display:flex!important;align-items:center!important;justify-self:center!important;width:100%!important;max-width:470px!important;height:42px!important}
+.v100Search input{flex:1!important;min-width:0!important;height:42px!important;border:0!important;background:#fff!important;padding:9px 13px!important;color:#173c72!important;font-size:10.5px!important;outline:0!important;border-radius:13px 0 0 13px!important}
+.v100Search>button:last-child{width:48px!important;height:42px!important;border:2px solid #fff!important;border-left:0!important;background:#095fd2!important;color:#fff!important;border-radius:0 13px 13px 0!important;font-size:18px!important}
+.v100Back{width:42px!important;height:42px!important;border:0!important;background:#fff!important;color:#0c60ce!important;border-radius:13px 0 0 13px!important;margin-right:2px!important;font-weight:1000!important}
+.v100Back+input{border-radius:0!important}
+.v100TopActions{display:flex!important;align-items:center!important;gap:7px!important;justify-self:end!important}
+.v100Icon{position:relative!important;width:41px!important;height:41px!important;border:1px solid rgba(255,255,255,.18)!important;border-radius:13px!important;background:rgba(3,54,126,.34)!important;color:#fff!important;font-size:18px!important}
+.v100Icon .v62Badge{position:absolute!important;right:4px!important;top:2px!important}
+.v100Profile{display:flex!important;align-items:center!important;gap:7px!important;min-width:168px!important;height:47px!important;padding:6px 9px!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:15px!important;background:rgba(3,54,126,.34)!important;color:#fff!important;text-align:left!important}
+.v100Avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#0a62d3;font-weight:1000}.v100Profile>span:nth-child(2){display:grid;min-width:0}.v100Profile b{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v100Profile small{font-size:8px;color:#dcecff}.v100Profile em{margin-left:auto;font-style:normal}
+.v100CompatTitle{display:none!important}
+
+/* Hide all known legacy top duplicates */
+#erp.v100Shell #v64HealthBadge,#erp.v100Shell #v764LiveBadge,#erp.v100Shell .v63Msg,#erp.v100Shell #v63AdminBox,
+#erp.v100Shell .v63TopLogout,#erp.v100Shell .websiteBtn,#erp.v100Shell #v75DarkBtn,#erp.v100Shell [data-v58-order],
+#erp.v100Shell [data-v58-settings],#erp.v100Shell #v90HomeBtn,#erp.v100Shell #v90BackBtn,#erp.v100Shell .erpHomeBtn,
+#erp.v100Shell .v63SchoolHead,#erp.v100Shell .v45NavControls,#erp.v100Shell .v75BackBtn,
+#erp.v100Shell .hamb:not(.v100Menu){display:none!important}
+
+/* Main approved dashboard */
+#erp.v100Shell #erpContent{padding:13px 15px 22px!important;max-width:none!important;min-width:0!important;background:var(--v100-bg)!important}
+#erp.v100Shell #erpContent>*{min-width:0!important;max-width:100%!important}
+.v100Dash{max-width:1500px!important;margin:0 auto!important;color:var(--v100-text)!important}
+.v100Greeting{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 17px;margin-bottom:10px;background:#fff;border:1px solid var(--v100-border);border-radius:16px;box-shadow:0 6px 18px rgba(17,74,131,.04)}
+.v100Greeting>div:first-child>small{font-size:9px;font-weight:900;color:#526e96;letter-spacing:.05em}.v100Greeting h1{margin:3px 0 4px!important;font-size:27px!important;line-height:1.05!important;color:#0b2d6c!important}.v100Greeting p{margin:0!important;color:#607a9b!important;font-size:10.5px!important}
+.v100GreetingRight{display:flex;gap:13px;align-items:center}.v100Date{font-size:9.5px;font-weight:800;color:#315787;white-space:nowrap}.v100Online{display:flex;align-items:center;gap:8px;background:#eefaf5;border:1px solid #d3efe2;border-radius:13px;padding:8px 10px}.v100Online>i{width:9px;height:9px;border-radius:50%;background:#11b77e}.v100Online span{display:grid}.v100Online b{font-size:9.5px;color:#138456}.v100Online small{font-size:7.5px;color:#65a68a}
+.v100Stats{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:9px!important;margin:0 0 10px!important;min-width:0!important}
+.v100Stat{min-width:0;min-height:108px;border:1px solid var(--v100-border);border-radius:15px;padding:13px;display:grid;grid-template-columns:44px 1fr 10px;gap:9px;align-items:center;box-shadow:0 6px 16px rgba(17,74,131,.045)}
+.v100StatIcon{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;color:#fff;font-size:20px}.v100Stat div{display:grid;gap:3px;min-width:0}.v100Stat small{font-size:8.5px;color:#647b9b}.v100Stat b{font-size:21px;line-height:1;color:#0e2f64}.v100Stat em{font-style:normal;font-size:7.5px;color:#6e83a0}.v100Stat>i{font-style:normal;color:#3e6ba3}
+.v100Stat.blue{background:#eef6ff}.v100Stat.blue .v100StatIcon{background:#1473ec}.v100Stat.green{background:#effbf6}.v100Stat.green .v100StatIcon{background:#17aa73}.v100Stat.yellow{background:#fff8e9}.v100Stat.yellow .v100StatIcon{background:#f5aa20}.v100Stat.pink{background:#fff0f4}.v100Stat.pink .v100StatIcon{background:#f13c70}.v100Stat.purple{background:#f4efff}.v100Stat.purple .v100StatIcon{background:#7a4ce4}.v100Stat.cyan{background:#edf9ff}.v100Stat.cyan .v100StatIcon{background:#20a8e7}
+.v100MainGrid{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(285px,.9fr);gap:10px;margin-bottom:10px;min-width:0}.v100MainGrid.teacher{grid-template-columns:minmax(0,2.2fr) minmax(270px,.8fr)}
+.v100BottomGrid{display:grid;grid-template-columns:1.05fr .85fr 1.1fr;gap:10px;min-width:0}
+.v100Panel{min-width:0;background:#fff;border:1px solid var(--v100-border);border-radius:16px;padding:12px;box-shadow:0 6px 18px rgba(17,74,131,.045);overflow:hidden}.v100Panel>header{display:flex;justify-content:space-between;align-items:center;gap:9px;margin-bottom:9px}.v100Panel h2{margin:0!important;font-size:14px!important;color:#123f78!important}.v100Panel header p{margin:2px 0 0!important;font-size:8px!important;color:#7488a2!important}.v100Panel header>button{border:1px solid #d6e2f0;background:#fff;color:#234f83;border-radius:9px;padding:6px 9px;font-size:8.5px;font-weight:800}
+.v100ActionGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;min-width:0}.v100Action{min-width:0;min-height:76px;border:1px solid #dce7f3;background:#fbfdff;border-radius:12px;padding:9px;display:grid;grid-template-columns:40px 1fr 9px;align-items:center;gap:8px;text-align:left;cursor:pointer}.v100Action>span{width:40px;height:40px;border-radius:10px;background:#eef6ff;display:grid;place-items:center;font-size:18px}.v100Action div{display:grid;gap:3px;min-width:0}.v100Action b{font-size:9.5px;color:#174579}.v100Action small{font-size:7.5px;color:#778ba4}.v100Action em{font-style:normal;color:#4b75a9}.v100Action:hover{border-color:#aad0f0;background:#f7fbff}
+.v100Activity,.v100Notifications{display:grid;gap:6px}.v100Activity .v100Action,.v100Notifications .v100Action{min-height:55px}.v100Activity .v100Action>span,.v100Notifications .v100Action>span{width:34px;height:34px;font-size:16px}
+.v100Attendance{display:flex;align-items:center;justify-content:center;gap:20px;min-height:158px}.v100Donut{--pct:0;position:relative;width:132px;height:132px;border-radius:50%;background:conic-gradient(#13b178 calc(var(--pct)*1%),#e8eff7 0);display:grid;place-items:center}.v100Donut:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;background:#fff}.v100Donut b,.v100Donut span{position:relative;z-index:1}.v100Donut b{font-size:22px;color:#0e326a}.v100Donut span{font-size:8px;color:#71849c;margin-top:-32px}.v100Legend{display:grid;gap:9px;min-width:140px}.v100Legend span{display:grid;grid-template-columns:9px 1fr auto;gap:6px;align-items:center;font-size:8.5px;color:#36577e}.v100Legend i{width:8px;height:8px;border-radius:50%}.v100Legend .g{background:#13b178}.v100Legend .r{background:#ff4560}.v100Legend .b{background:#1d8de5}.v100Legend .k{background:#9cb3cb}
+.v100Quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.v100Quick button{min-height:72px;border:1px solid #dce7f3;border-radius:12px;background:#f9fbfe;display:grid;place-items:center;gap:4px}.v100Quick button b{font-size:19px}.v100Quick button span{font-size:8.5px;font-weight:800;color:#174579}
+.v100Footer{margin-top:10px;min-height:44px;border-radius:12px;background:linear-gradient(90deg,#0754c0,#0b77e5);color:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-size:8.5px}.v100Footer b{font-style:italic;font-size:11px}
+.v100Schedule{border:1px solid #dce7f3;border-radius:12px;overflow:hidden}.v100Schedule button{width:100%;border:0;border-top:1px solid #edf2f7;background:#fff;display:grid;grid-template-columns:55px 105px 1fr 1fr 62px;gap:7px;align-items:center;padding:9px 10px;text-align:left;color:#2f537e;font-size:8.5px}.v100Schedule button:first-child{border-top:0}.v100Schedule button:hover{background:#f8fbff}.v100Schedule button em{justify-self:end;font-style:normal;background:#0d67dd;color:#fff;border-radius:7px;padding:5px 7px}
+
+/* Child module normalization */
+#erp.v100Shell #erpContent .panel,#erp.v100Shell #erpContent .v64ServicePanel,#erp.v100Shell #erpContent .v90Panel,#erp.v100Shell #erpContent .v75Card,#erp.v100Shell #erpContent .v14Card{
+  max-width:100%!important;min-width:0!important;border-radius:15px!important;border-color:var(--v100-border)!important;box-shadow:0 6px 18px rgba(17,74,131,.045)!important
+}
+#erp.v100Shell .tableWrap{max-width:100%!important;overflow:auto!important}
+#erp.v100Shell #erpContent{overflow-x:hidden!important}
+#erp.v100Shell #erpContent table{max-width:none}
+.v100LoadingPage{background:#fff;border:1px solid var(--v100-border);border-radius:16px;padding:14px;min-height:260px}.v100LoadingPage header{display:flex;align-items:center;gap:10px}.v100LoadingPage header>span{width:36px;height:36px;border-radius:10px;background:#e7f1ff}.v100LoadingPage header div{display:grid}.v100LoadingPage header b{font-size:14px;color:#123f78}.v100LoadingPage header small{font-size:8px;color:#7b8fa7}.v100Shimmer{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}.v100Shimmer i{height:80px;border-radius:12px;background:linear-gradient(90deg,#eef3f8,#f9fbfd,#eef3f8);background-size:200% 100%;animation:v100Sh 1.1s linear infinite}@keyframes v100Sh{to{background-position:-200% 0}}
+.v100MiniLoad{display:block;width:100%;height:60px;border-radius:10px;background:linear-gradient(90deg,#eef3f8,#fafcff,#eef3f8);background-size:200% 100%;animation:v100Sh 1.1s linear infinite}
+
+/* Parent/Student same visual family */
+#parentDashboard.v100Parent:not(.hidden){position:fixed!important;inset:0!important;z-index:22000!important;background:#f3f7fd!important;overflow:auto!important;overflow-x:hidden!important;padding:12px!important}
+#parentDashboard.v100Parent .v100ParentHead{position:sticky!important;top:0!important;z-index:30!important;min-height:72px!important;background:linear-gradient(90deg,#0754c0,#0b77e5)!important;border:0!important;border-radius:15px!important;color:#fff!important;padding:9px 13px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;box-shadow:0 5px 18px rgba(7,72,145,.18)!important}
+.v100ParentBrand{color:#fff}.v100ParentBrand .v100BrandText b{font-size:17px!important;color:#fff!important}.v100ParentBrand .v100BrandText span{font-size:8.5px!important;color:#dcecff!important}.v100ParentActions{display:flex;gap:7px}.v100ParentActions button{border:1px solid rgba(255,255,255,.22);background:rgba(3,54,126,.32);color:#fff;border-radius:9px;padding:7px 10px;font-size:8.5px;font-weight:800}
+#parentDashboard.v100Parent #parentDashboardBody{max-width:1450px;margin:10px auto!important}
+#parentDashboard.v100Parent .parentStudentCard,#parentDashboard.v100Parent .portalStats>div,#parentDashboard.v100Parent .v32ParentNotices,#parentDashboard.v100Parent .panel{border-radius:15px!important;border:1px solid var(--v100-border)!important;box-shadow:0 6px 18px rgba(17,74,131,.045)!important;background:#fff!important}
+
+/* Laptop fit */
+@media(max-height:800px) and (min-width:901px){
+  #erp.v100Shell .v100Top{height:70px!important;min-height:70px!important}
+  .v100Greeting{padding:10px 14px}.v100Greeting h1{font-size:23px!important}
+  .v100Stat{min-height:94px;padding:10px}.v100Stat b{font-size:18px}.v100StatIcon{width:38px;height:38px}
+  .v100Action{min-height:67px}.v100Quick button{min-height:63px}.v100Attendance{min-height:142px}
+  #erp.v100Shell #erpContent{padding-top:10px!important}
+}
+
+@media(max-width:1280px){
+  .v100Stats{grid-template-columns:repeat(3,1fr)!important}
+  .v100Brand .v100BrandText b{font-size:16px!important}
+  .v100BottomGrid{grid-template-columns:1fr 1fr}.v100BottomGrid .v100Panel:last-child{grid-column:1/-1}
+}
+@media(max-width:900px){
+  #erp.v100Shell aside{width:278px!important;transform:translateX(-105%)!important;transition:.2s!important}
+  #erp.v100Shell aside.open{transform:translateX(0)!important}
+  #erp.v100Shell > main{margin-left:0!important;max-width:100%!important;width:100%!important}
+  #erp.v100Shell .v100Top{display:flex!important;flex-wrap:wrap!important;height:auto!important;min-height:64px!important;padding:8px 9px!important}
+  .v100Menu{display:inline-flex!important}.v100Brand{display:none!important}.v100TopActions{margin-left:auto!important}.v100Search{order:20!important;flex:1 1 100%!important;max-width:none!important}.v100Profile{min-width:0!important}.v100Profile>span:nth-child(2){display:none!important}
+  .v100MainGrid,.v100MainGrid.teacher{grid-template-columns:1fr!important}.v100BottomGrid{grid-template-columns:1fr!important}.v100BottomGrid .v100Panel:last-child{grid-column:auto}
+}
+@media(max-width:600px){
+  .v100Stats{grid-template-columns:repeat(2,1fr)!important}.v100ActionGrid{grid-template-columns:1fr 1fr!important}
+  .v100Greeting{align-items:flex-start;flex-direction:column}.v100GreetingRight{width:100%;justify-content:space-between}
+  .v100Attendance{flex-direction:column}.v100Schedule button{grid-template-columns:45px 1fr 1fr}.v100Schedule button b:nth-of-type(2){display:none}.v100Schedule button em{grid-column:3}
+  .v100ParentBrand .v100BrandText b{font-size:14px!important}.v100ParentActions button:nth-child(2){display:none}
+}
