@@ -1,0 +1,89 @@
+
+/* V93 Premium Role Dashboard — final visual layer */
+:root{--v93-blue:#075bc9;--v93-blue2:#0a7bea;--v93-navy:#073c83;--v93-bg:#f4f8ff;--v93-border:#dbe7f4;--v93-text:#0c2f67;--v93-muted:#6b82a0}
+#erp.v90Shell{background:var(--v93-bg)!important}
+#erp.v90Shell aside{width:205px!important;background:linear-gradient(180deg,#075ecf 0%,#064ca8 55%,#043b83 100%)!important;padding:0 10px 14px!important;box-shadow:8px 0 28px rgba(5,69,139,.15)!important}
+#erp.v90Shell main{margin-left:205px!important;background:var(--v93-bg)!important}
+#erp.v90Shell .sideBrand{min-height:92px!important;padding:14px 8px!important;border-bottom:1px solid rgba(255,255,255,.17)!important}
+#erp.v90Shell .sideBrand b{font-size:13px!important;color:#fff!important}
+#erp.v90Shell .sideBrand small{font-size:9px!important;color:#dbeaff!important}
+#erp.v90Shell .v90Nav{padding-top:10px!important}
+#erp.v90Shell .v90Nav button,#erp.v90Shell .v90Nav summary{border-radius:10px!important;color:#eaf4ff!important;font-size:11.5px!important;font-weight:800!important}
+#erp.v90Shell .v90Nav button.active,#erp.v90Shell .v90Nav button:hover,#erp.v90Shell .v90Nav summary:hover{background:linear-gradient(90deg,#16a2ff,#1875e8)!important;color:#fff!important}
+
+/* premium blue header */
+#erp.v90Shell .erpTop{height:82px!important;min-height:82px!important;padding:10px 18px!important;background:linear-gradient(90deg,#0754c0,#0b78e8)!important;border:0!important;box-shadow:0 5px 20px rgba(5,72,146,.18)!important;display:grid!important;grid-template-columns:minmax(330px,1.2fr) minmax(300px,.9fr) auto!important;gap:12px!important;align-items:center!important}
+#erp.v90Shell .v63SchoolHead{display:block!important;order:1!important;text-align:left!important}
+#erp.v90Shell .v63SchoolHead b{font-size:22px!important;color:#fff!important;line-height:1.05!important;white-space:nowrap!important}
+#erp.v90Shell .v63SchoolHead span{display:block!important;font-size:10px!important;color:#dcecff!important;margin-top:5px!important}
+#erp.v90Shell .erpTop>div:has(#erpTitle),#erp.v90Shell #v90HomeBtn,#erp.v90Shell #v90BackBtn,#erp.v90Shell .v45NavControls,#erp.v90Shell #v52MasterSearch,#erp.v90Shell #v75DarkBtn,#erp.v90Shell [data-v58-order],#erp.v90Shell [data-v58-settings],#erp.v90Shell #v764LiveBadge,#erp.v90Shell #v58LiveDot,#erp.v90Shell .websiteBtn,#erp.v90Shell .v63TopLogout,#erp.v90Shell .v63Msg{display:none!important}
+#erp.v90Shell .v764MasterSearch{display:flex!important;order:2!important;width:100%!important;max-width:460px!important;min-width:0!important;margin:0!important;justify-self:center!important;gap:0!important}
+#erp.v90Shell .v764MasterSearch input{width:100%!important;height:42px!important;border:0!important;border-radius:14px 0 0 14px!important;padding:9px 14px!important;font-size:12px!important;background:#fff!important;color:#143c73!important}
+#erp.v90Shell .v764MasterSearch button{width:48px!important;height:42px!important;border-radius:0 14px 14px 0!important;background:#0a5ed4!important;color:#fff!important;border:2px solid #fff!important;border-left:0!important}
+#erp.v90Shell #v63AdminBox{display:flex!important;order:3!important;justify-self:end!important;background:rgba(3,54,126,.4)!important;color:#fff!important;border:1px solid rgba(255,255,255,.22)!important;border-radius:16px!important;padding:7px 11px!important;box-shadow:none!important}
+#erp.v90Shell #v63AdminBox b,#erp.v90Shell #v63AdminBox small{color:#fff!important}
+#erp.v90Shell .v63Avatar{background:#fff!important;color:#0a63d4!important}
+
+/* dashboard */
+#erp.v90Shell #erpContent{padding:16px 18px 28px!important;max-width:none!important}
+.v93Dash{max-width:1500px;margin:0 auto}
+.v93Greeting{display:flex;justify-content:space-between;align-items:center;gap:18px;background:#fff;border:1px solid var(--v93-border);border-radius:18px;padding:18px 20px;margin-bottom:12px;box-shadow:0 7px 22px rgba(20,73,128,.06)}
+.v93Greeting h1{margin:4px 0 5px!important;font-size:28px!important;line-height:1.05;color:#103475!important}
+.v93Greeting p{margin:0;color:#5e789a;font-size:12px}
+.v93Eyebrow{font-size:10px;font-weight:900;letter-spacing:.05em;color:#3c5e8d}
+.v93GreetingMeta{display:flex;align-items:center;gap:16px}
+.v93Date{font-size:11px;font-weight:800;color:#2c5590;white-space:nowrap}
+.v93Online{display:flex;align-items:center;gap:8px;background:#effaf5;border:1px solid #d3efe2;border-radius:13px;padding:9px 12px;color:#168452}
+.v93Online i{width:9px;height:9px;background:#10b981;border-radius:50%}
+.v93Online span{display:grid}.v93Online b{font-size:11px}.v93Online small{font-size:8px;color:#55a17d}
+.v93Stats{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:10px!important;margin:0 0 12px!important}
+.v93Stats .v90Stat{min-height:105px!important;border-radius:16px!important;border:1px solid var(--v93-border)!important;padding:14px!important;box-shadow:0 7px 18px rgba(16,76,135,.06)!important}
+.v93Stats .v90Stat:nth-child(1){background:linear-gradient(135deg,#edf5ff,#dcecff)!important}.v93Stats .v90Stat:nth-child(2){background:linear-gradient(135deg,#edfdf6,#dcf7ea)!important}.v93Stats .v90Stat:nth-child(3){background:linear-gradient(135deg,#fff8e9,#fff0cf)!important}.v93Stats .v90Stat:nth-child(4){background:linear-gradient(135deg,#fff0f3,#ffe1e7)!important}.v93Stats .v90Stat:nth-child(5){background:linear-gradient(135deg,#f3efff,#e8defd)!important}.v93Stats .v90Stat:nth-child(6){background:linear-gradient(135deg,#edf8ff,#dff2ff)!important}
+.v93Stats .v90Stat>span{background:#fff!important;box-shadow:0 5px 14px rgba(13,83,155,.08)!important}
+.v93Stats .v90Stat b{font-size:23px!important;color:#0e2f63!important}.v93Stats .v90Stat small{font-size:10px!important;color:#637b99!important}
+.v93DashboardGrid{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,.8fr);gap:12px;margin-bottom:12px}
+.v93Panel{background:#fff;border:1px solid var(--v93-border);border-radius:17px;padding:14px;box-shadow:0 7px 22px rgba(20,73,128,.06)}
+.v93PanelHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.v93PanelHead h2{margin:0;font-size:16px;color:#133f78}.v93PanelHead p{margin:3px 0 0;font-size:9.5px;color:#7588a0}
+.v93PrimaryGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important;padding:0!important;background:transparent!important;box-shadow:none!important;border:0!important}
+.v93MoreGrid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;padding:0!important;background:transparent!important;box-shadow:none!important}
+.v93ActionCard,.v93MoreGrid .v90Monitor{min-height:86px!important;background:#fbfdff!important;border:1px solid #dbe7f4!important;border-radius:13px!important;padding:10px!important}
+.v93ActionCard b,.v93MoreGrid .v90Monitor b{font-size:11px!important;color:#174579!important}.v93ActionCard small,.v93MoreGrid .v90Monitor small{font-size:8.5px!important;color:#768ba4!important}
+.v93Quick{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+.v93Quick button{min-height:78px!important;border-radius:13px!important;background:#f8fbff!important;border:1px solid #dce8f5!important;box-shadow:none!important}
+.v93Quick button b{font-size:21px!important}.v93Quick button span{font-size:10px!important;font-weight:800!important;color:#163f74!important}
+.v93Live{font-size:9px;color:#168552;font-weight:900}
+.v93ScheduleTable{border:1px solid #dce7f4;border-radius:13px;overflow:hidden}
+.v93ScheduleHead,.v93ScheduleRow{display:grid;grid-template-columns:70px 130px 1fr 1.2fr 80px;gap:8px;align-items:center}
+.v93ScheduleHead{background:#eef6ff;padding:9px 12px;color:#174579;font-size:9px;font-weight:900}
+.v93ScheduleRow{width:100%;border:0;border-top:1px solid #edf2f7;background:#fff;padding:10px 12px;text-align:left;color:#254c7c;font-size:10px;cursor:pointer}
+.v93ScheduleRow:hover{background:#f7fbff}.v93ScheduleRow strong{justify-self:end;background:#0d67dc;color:#fff;padding:6px 12px;border-radius:8px;font-size:9px}
+.v93TeacherGrid{grid-template-columns:minmax(0,2.2fr) minmax(260px,.75fr)}
+
+/* Parent / Student portal */
+#parentDashboard.v93ParentDashboard:not(.hidden){position:fixed!important;inset:0!important;z-index:22000!important;background:var(--v93-bg)!important;overflow:auto!important;padding:14px!important}
+.v93ParentBrand{max-width:1450px;margin:0 auto 12px;min-height:76px;padding:12px 18px;border-radius:18px;background:linear-gradient(90deg,#0754c0,#0b78e8);color:#fff;display:flex;align-items:center;justify-content:space-between;box-shadow:0 5px 20px rgba(5,72,146,.18)}
+.v93ParentBrand>div:first-child{display:grid}.v93ParentBrand b{font-size:22px}.v93ParentBrand span{font-size:10px;color:#dcecff;margin-top:4px}.v93ParentRole{display:grid;text-align:right;background:rgba(3,54,126,.35);padding:8px 12px;border-radius:13px}.v93ParentRole strong{font-size:12px}.v93ParentRole small{font-size:9px;color:#dcecff}
+#parentDashboard.v93ParentDashboard .portalHead,#parentDashboard.v93ParentDashboard .parentStudentCard,#parentDashboard.v93ParentDashboard .v32ParentNotices,#parentDashboard.v93ParentDashboard .panel{border-radius:16px!important;border:1px solid var(--v93-border)!important;box-shadow:0 7px 22px rgba(20,73,128,.06)!important}
+#parentDashboard.v93ParentDashboard .portalStats>div{border-radius:14px!important;border:1px solid var(--v93-border)!important;background:linear-gradient(135deg,#f8fbff,#eef6ff)!important}
+
+@media(max-width:1280px){.v93Stats{grid-template-columns:repeat(3,1fr)!important}.v93MoreGrid{grid-template-columns:repeat(3,1fr)!important}}
+@media(max-width:900px){
+  #erp.v90Shell aside{width:278px!important}
+  #erp.v90Shell main{margin-left:0!important}
+  #erp.v90Shell .erpTop{display:flex!important;flex-wrap:wrap!important;height:auto!important;min-height:66px!important;padding:8px 10px!important}
+  #erp.v90Shell .erpTop .hamb{display:inline-flex!important;order:1!important;background:#fff!important;color:#0b5fbf!important}
+  #erp.v90Shell .v63SchoolHead{display:none!important}
+  #erp.v90Shell .v764MasterSearch{order:20!important;flex:1 1 100%!important;max-width:none!important}
+  #erp.v90Shell #v63AdminBox{order:3!important;margin-left:auto!important}
+  #erp.v90Shell #erpContent{padding:10px!important}
+  .v93DashboardGrid,.v93TeacherGrid{grid-template-columns:1fr}
+  .v93MoreGrid{grid-template-columns:repeat(2,1fr)!important}
+  .v93Greeting{align-items:flex-start;flex-direction:column}.v93GreetingMeta{width:100%;justify-content:space-between}
+}
+@media(max-width:600px){
+  .v93Stats{grid-template-columns:repeat(2,1fr)!important}.v93PrimaryGrid,.v93MoreGrid{grid-template-columns:1fr 1fr!important}
+  .v93ScheduleHead{display:none}.v93ScheduleRow{grid-template-columns:55px 1fr 1fr}.v93ScheduleRow span:nth-child(4){display:none}
+  .v93ScheduleRow strong{grid-column:3;grid-row:1/3}
+  .v93ParentBrand b{font-size:16px}.v93ParentBrand span{font-size:8px}
+}
