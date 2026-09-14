@@ -7857,7 +7857,7 @@ const v92PrevRender=window.render;
 window.render=async function(route='dashboard'){if(route==='v92_admit_publish'){if(typeof v90Push==='function')v90Push(route);return v92AdmitPublishCenter()}let r=await v92PrevRender.apply(this,arguments);setTimeout(v92AdminQuick,15);return r};
 const v92BackPrev=window.v91Back||window.v90Back;
 window.v92Back=function(){let h=window.__v90History||['dashboard'];if(h.length>1)h.pop();let r=h[h.length-1]||'dashboard';window.__v90History=h;if(r==='v92_admit_publish')return v92AdmitPublishCenter();if(typeof v91Special==='function'&&(r==='v91_student_photos'||r==='v91_parent_updates'))return v91Special(r,true);return typeof v90Dispatch==='function'?v90Dispatch(r,true):(v92BackPrev?v92BackPrev():window.render(r))};
-try{const sh92=v90InstallShell;v90InstallShell=function(active){let r=sh92.apply(this,arguments);let b=q92('v90BackBtn');if(b)b.onclick=window.v92Back;return r}}catch(_e){}
+try{const sh92=v90InstallShell;v90InstallShell=function(active){let r=sh92.apply(this,arguments);let b=q92('v90BackBtn');if(b){b.onclick=window.v92Back;b.style.display='inline-flex'}return r}}catch(_e){}
 
 function v92Init(){try{v92AdminQuick();if(user&&!q92('erp')?.classList.contains('hidden'))v90InstallShell(window.__v90Route||'dashboard')}catch(_e){}}
 document.addEventListener('DOMContentLoaded',()=>setTimeout(v92Init,330));window.addEventListener('load',()=>setTimeout(v92Init,520));
