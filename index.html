@@ -3362,7 +3362,7 @@ let v45History=[], v45NavigatingBack=false;
 const v45RenderBase=render;
 render=function(p){
   try{
-    if(!v45NavigatingBack){let cur=v45History[v45History.length-1];if(cur!==p)v45History.push(p);if(v45History.length>40)v45History.shift()}
+    if(window.__v90Route===undefined && !v45NavigatingBack){let cur=v45History[v45History.length-1];if(cur!==p)v45History.push(p);if(v45History.length>40)v45History.shift()}
     v45NavigatingBack=false;
   }catch(_e){}
   let out=v45RenderBase(p);
