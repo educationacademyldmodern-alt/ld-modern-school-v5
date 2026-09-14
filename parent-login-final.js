@@ -17,10 +17,23 @@ parentPasswordLogin = async function () {
       body: JSON.stringify({ identifier: id, password })
     });
 
-    const j = await r.json();
+    const raw = await r.text();
+    let j = {};
+
+    try {
+      j = raw ? JSON.parse(raw) : {};
+    } catch (_) {
+      j = { error: raw || 'Server returned an invalid response' };
+    }
 
     if (!r.ok) {
-      throw new Error(j?.error || 'Parent login failed');
+      throw new Error(j?.error || ('Server error ' + r.status));
+    }
+
+    if (!j?.access_token || !j?.refresh_token) {
+      throw new Error(
+        j?.error || 'Parent account अभी Admin द्वारा activate नहीं किया गया है'
+      );
     }
 
     const { data, error } = await sb.auth.setSession({
