@@ -8,8 +8,12 @@
     try{return typeof v90Safe==='function'?v90Safe(v):String(v??'')}
     catch(_e){return String(v??'')}
   };
-  const role100=()=>String(window.profile?.role||'viewer').toLowerCase();
-  const isAdmin100=()=>['super_admin','admin','principal'].includes(role100());
+  const role100=()=>{
+    let raw='';
+    try{raw=window.profile?.role||((typeof profile!=='undefined'&&profile?.role)||'')}catch(_e){}
+    return String(raw||'').trim().toLowerCase().replace(/[\s-]+/g,'_');
+  };
+  const isAdmin100=()=>['super_admin','superadmin','admin','principal'].includes(role100());
   const isTeacher100=()=>role100()==='teacher';
   const money100=v=>{try{return typeof v90Money==='function'?v90Money(v):'₹'+Number(v||0).toLocaleString('en-IN')}catch(_e){return '₹0'}};
   const today100=()=>{try{return typeof v90Today==='function'?v90Today():new Date().toISOString().slice(0,10)}catch(_e){return new Date().toISOString().slice(0,10)}};
@@ -122,7 +126,8 @@
   function buildNav100(active=activeRoute100){
     const host=document.getElementById('erpNav');
     if(!host)return;
-    const nav=isAdmin100()?ADMIN_NAV100:TEACHER_NAV100;
+    const nav=isAdmin100()?ADMIN_NAV100:(isTeacher100()?TEACHER_NAV100:null);
+    if(!nav)return;
     const expected=nav.map(x=>x[0]);
     const signature=expected.join('|')+'@'+active;
     const buttons=[...host.children].filter(x=>x.tagName==='BUTTON');
@@ -143,6 +148,7 @@
     const needBack=active!=='dashboard';
     top.className='erpTop v100Top';
     top.dataset.v100='1';
+    top.dataset.v100Role=role100();
     top.innerHTML=`
       <button class="v100Menu" type="button" onclick="document.querySelector('#erp aside')?.classList.toggle('open')" aria-label="Menu">☰</button>
       <div class="v100Brand">${brand100()}</div>
@@ -446,10 +452,12 @@
         const top=q('.erpTop',erp);
         const bad=top&&!top.classList.contains('v100Top');
         const legacy=top&&q(LEGACY_TOP100,top);
-        if(bad||legacy)header100(activeRoute100);
+        const knownRole=isAdmin100()||isTeacher100();
+        const wrongRole=knownRole&&top&&top.dataset.v100Role!==role100();
+        if(bad||legacy||wrongRole)header100(activeRoute100);
         removeLegacyTop100();
         const nav=document.getElementById('erpNav');
-        if(nav)buildNav100(activeRoute100);
+        if(nav&&knownRole)buildNav100(activeRoute100);
       }
       polishParent100();
     }catch(_e){}

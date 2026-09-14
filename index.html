@@ -772,7 +772,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 </style>
 
 
-</head>
+<link rel="stylesheet" href="premium-dashboard-v100.css?v=100.2"></head>
 <body>
 <div id="publicSite"><div id="runningNotices" class="runningNoticeHost"></div>
 <section id="exactHome" class="v26Home" aria-label="L D Modern Education Academy home page">
@@ -7572,7 +7572,7 @@ let v92Exams=[],v92Candidates=[],v92PubMap={};
 
 function v92PrintCss(){return `@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Arial,sans-serif;color:#111;background:#fff}.v92A4Page{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v92A4Page:last-child{page-break-after:auto}.v92BlankSlot{height:89mm}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;background:#fff;color:#111;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91;overflow:hidden}.v69AdmitHead .seal img{width:14mm!important;height:14mm!important;object-fit:cover!important;border-radius:2mm!important}.v69School{text-align:center}.v69School b{display:block;font-size:12px;line-height:1.05;color:#0b376c}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse!important;min-width:0!important;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a!important;padding:.8mm 1mm!important;text-align:center!important;font-size:6.5px!important;line-height:1.05}.v69TT th{background:#edf3f9!important}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm;color:#333}`}
 
-window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');w.document.write(`<html><head><title>Admit Card A4</title><style>${v92PrintCss()}</style><link rel="stylesheet" href="premium-dashboard-v100.css?v=100.1"></head><body>${el.innerHTML}</body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
+window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');w.document.write(`<html><head><title>Admit Card A4</title><style>${v92PrintCss()}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
 window.v92PdfArea=function(id,name){let el=q92(id);if(!el)return toast('Preview first');if(!window.html2pdf)return v92PrintArea(id);let opt={margin:[10,10,10,10],filename:name||'admit-cards.pdf',image:{type:'jpeg',quality:.94},html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};html2pdf().set(opt).from(el).save();};
 
 function v92BuildPages(cards){let pages=[];for(let i=0;i<cards.length;i+=3){let chunk=cards.slice(i,i+3),html=chunk.map(x=>v75ParentAdmitHtml(x)).join('');for(let j=chunk.length;j<3;j++)html+='<div class="v92BlankSlot"></div>';pages.push(`<section class="v92A4Page">${html}</section>`)}return pages.join('')}
@@ -7621,4 +7621,4 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(v92Init,330));window
 </script>
 <!-- ===== END V92 ===== -->
 
-<script src="premium-dashboard-v100.js?v=100.1"></script></body></html>
+<script src="premium-dashboard-v100.js?v=100.2"></script></body></html>

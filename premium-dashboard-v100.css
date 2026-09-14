@@ -136,3 +136,14 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
   .v100Attendance{flex-direction:column}.v100Schedule button{grid-template-columns:45px 1fr 1fr}.v100Schedule button b:nth-of-type(2){display:none}.v100Schedule button em{grid-column:3}
   .v100ParentBrand .v100BrandText b{font-size:14px!important}.v100ParentActions button:nth-child(2){display:none}
 }
+
+
+/* V100.2 FINAL ADMIN NAV + CSS CASCADE FIX */
+#erp.v100Shell .v100SideBrand:before{display:none!important;content:none!important}
+#erp.v100Shell #erpNav.v100Nav{display:grid!important;gap:3px!important;padding-top:9px!important}
+#erp.v100Shell #erpNav.v100Nav button{width:100%!important;margin:0!important;min-height:42px!important;border:0!important;background:transparent!important;color:#eaf4ff!important;display:grid!important;grid-template-columns:28px 1fr!important;align-items:center!important;text-align:left!important;padding:8px 9px!important;border-radius:10px!important;transform:none!important;box-shadow:none!important}
+#erp.v100Shell #erpNav.v100Nav button:hover,#erp.v100Shell #erpNav.v100Nav button.active{background:linear-gradient(90deg,#10a0ff,#1474e8)!important;color:#fff!important;transform:none!important;box-shadow:0 8px 18px rgba(0,76,180,.20)!important}
+#erp.v100Shell #erpContent:before{display:none!important;content:none!important;background:none!important}
+#erp.v100Shell .dashHero{background:none!important;margin-top:0!important}
+#erp.v100Shell .erpTop.v100Top{background:linear-gradient(90deg,#0754c0,#0b78e7)!important}
+
