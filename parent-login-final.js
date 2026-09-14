@@ -4,11 +4,11 @@ parentPasswordLogin = async function () {
   const host = $('parentGate');
 
   if (!id || !password) {
-    v75AuthStatus(host, 'Mobile/Email और Password डालें');
+    v75AuthStatus(host, 'v75ParentLoginStatus', 'Mobile/Email और Password डालें', false);
     return;
   }
 
-  v75AuthStatus(host, 'Login check किया जा रहा है...', true);
+  v75AuthStatus(host, 'v75ParentLoginStatus', 'Login check किया जा रहा है...', true);
 
   try {
     const r = await fetch('/api/parent-login', {
@@ -48,7 +48,9 @@ parentPasswordLogin = async function () {
   } catch (e) {
     v75AuthStatus(
       host,
-      'Parent login failed: ' + (e?.message || 'Login failed')
+      'v75ParentLoginStatus',
+      'Parent login failed: ' + (e?.message || 'Login failed'),
+      false
     );
   }
 };
