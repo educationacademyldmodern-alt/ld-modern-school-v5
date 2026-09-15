@@ -716,3 +716,101 @@ UI only: no database, routing, auth, fee, attendance, result or permission logic
 #erp.v90Shell .v97DashTool small{
   color:#5b7390!important;
 }
+
+
+/* ============================================================
+   V113 ONE-PAGE FINAL NAV COLLISION FIX
+   Neutralizes old V63 fixed/vertical #v26Nav rules.
+   ============================================================ */
+#publicSite #exactHome.v26Home #v26Nav{
+  position:static!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:wrap!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:4px!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:visible!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  z-index:auto!important;
+}
+#publicSite #exactHome.v26Home #v26Nav::before{
+  content:none!important;
+  display:none!important;
+}
+#publicSite #exactHome.v26Home #v26Nav button{
+  width:auto!important;
+  min-width:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:5px 10px!important;
+  margin:0!important;
+  font-size:10px!important;
+  line-height:1.1!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  border-radius:8px!important;
+  background:rgba(255,255,255,.08)!important;
+  color:#fff!important;
+  box-shadow:none!important;
+}
+
+/* Old V63 left offset must never return on the public home. */
+#publicSite #exactHome.v26Home{
+  padding-left:0!important;
+  margin-left:0!important;
+}
+
+/* Mobile: compact dropdown, not permanent sidebar. */
+@media(max-width:900px){
+  #publicSite #exactHome.v26Home #v26Nav{
+    display:none!important;
+    position:absolute!important;
+    left:8px!important;
+    right:8px!important;
+    top:66px!important;
+    bottom:auto!important;
+    width:auto!important;
+    max-height:min(70dvh,430px)!important;
+    overflow:auto!important;
+    padding:8px!important;
+    margin:0!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:5px!important;
+    border:1px solid #2f7fc8!important;
+    border-radius:12px!important;
+    background:#063b78!important;
+    box-shadow:0 14px 30px rgba(0,30,70,.28)!important;
+    z-index:500!important;
+  }
+  #publicSite #exactHome.v26Home #v26Nav.show{
+    display:grid!important;
+  }
+  #publicSite #exactHome.v26Home #v26Nav button{
+    width:100%!important;
+    display:flex!important;
+    justify-content:flex-start!important;
+    text-align:left!important;
+    min-height:35px!important;
+    padding:7px 9px!important;
+    font-size:10px!important;
+  }
+}
+@media(max-width:480px){
+  #publicSite #exactHome.v26Home #v26Nav{
+    left:6px!important;
+    right:6px!important;
+    top:60px!important;
+  }
+}
