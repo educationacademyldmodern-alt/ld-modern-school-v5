@@ -61,3 +61,75 @@
 @media(max-width:900px){.v26Home.v114ReferenceHome{padding-left:0!important}.v26Top{min-height:92px!important;padding:8px 12px 8px 54px!important;grid-template-columns:1fr!important;grid-template-areas:'brand'!important}.v26Brand{grid-template-columns:64px 1fr!important;gap:9px!important}.v26Brand img{width:60px!important;height:60px!important}.v26Brand b{font-size:18px!important}.v26Brand span{font-size:9px!important}.v26Brand small{font-size:7px!important;padding:4px 7px!important}.v26Motto{display:none!important}.v26Menu{display:grid!important;place-items:center!important;position:absolute!important;left:10px!important;top:18px!important;z-index:9999!important;width:36px!important;height:36px!important;padding:0!important;border:1px solid #d3e3f0!important;border-radius:9px!important;background:#fff!important;color:#0a60bd!important}.v26Top #v26Nav{top:0!important;transform:translateX(-105%)!important;transition:transform .2s ease!important;padding-top:70px!important}.v26Top #v26Nav.show{transform:translateX(0)!important}.v26Hero{min-height:300px!important;padding:18px!important;align-items:flex-end!important}.v26HeroCopy{padding:16px!important}.v26Welcome{font-size:18px!important}.v26Hero h1{font-size:34px!important}.v26Hero h3{font-size:17px!important}.v26Quote{display:none!important}.v26MainGrid{padding:10px!important}.v26LoginCards{grid-template-columns:1fr!important}.v114HomeStats{grid-template-columns:repeat(2,1fr)!important;padding:0 10px 10px!important}.v26Footer{padding:10px 12px!important;flex-direction:column!important;gap:8px!important}.v26FootMotto{text-align:center!important}
 #erp.v90Shell aside{width:278px!important;transform:translateX(-105%)!important;transition:transform .2s ease!important;z-index:200!important}#erp.v90Shell aside.open{transform:translateX(0)!important;box-shadow:18px 0 45px rgba(2,35,75,.35)!important}#erp.v90Shell main{margin-left:0!important}.erpTop .hamb{display:inline-grid!important;place-items:center!important;width:38px!important;height:38px!important;padding:0!important;border:1px solid rgba(255,255,255,.5)!important;border-radius:9px!important;background:#fff!important;color:#0a5fbd!important}.erpTop{grid-template-columns:auto auto 1fr auto!important;min-height:70px!important;padding:7px 9px!important}.v63SchoolHead{display:none!important}.v764MasterSearch{grid-column:1/-1!important;grid-row:2!important;max-width:none!important}.v63AdminBox{grid-column:auto!important}.v63AdminBox small{display:none!important}#erp.v90Shell #erpContent{padding:10px!important}.v90Welcome.v114ReferenceHero{min-height:185px!important;border-radius:0 0 18px 18px!important;padding:18px!important}.v90Welcome.v114ReferenceHero h1{font-size:25px!important}.v114HeroMotto{display:none!important}.v90Stats,.v114TeacherStats{grid-template-columns:repeat(2,1fr)!important}.v114AdminMainGrid,.v114AdminFeedGrid,.v114TeacherWorkspace{grid-template-columns:1fr!important}.v114QuickPanel,.v114AdminFeedGrid>article:first-child,.v114TeacherSide{grid-column:auto!important}.v114TeacherSide{grid-template-columns:1fr!important}.v90MonitorGrid{grid-template-columns:repeat(2,1fr)!important}.v90Quick{grid-template-columns:repeat(3,1fr)!important}.v114AttendanceVisual{grid-template-columns:130px 1fr!important}.v114Donut{width:125px!important}.v114Donut:after{width:86px!important}.v114PortalBrand b{font-size:14px!important}.v114PortalBrand small{display:none!important}.v114PortalBrand img{width:45px!important;height:45px!important}.v114PortalAccount span{display:none!important}.parentDashboardBody,#parentDashboardBody{padding:9px!important}.v114PortalHero{min-height:155px!important;padding:16px!important}.v114PortalHeroStudent{display:none!important}.v114PortalStats{grid-template-columns:repeat(2,1fr)!important}.v114PortalQuick{grid-template-columns:repeat(5,1fr)!important}.v114PortalGrid{grid-template-columns:1fr!important}}
 @media(max-width:560px){.v26Hero{min-height:250px!important}.v26Hero h1{font-size:27px!important}.v26Hero h3{font-size:15px!important}.v26Pills span:nth-child(n+3){display:none!important}.v114HeroAdmission b{font-size:14px!important}.v114HomeStats{grid-template-columns:1fr 1fr!important}.v90Stats,.v114TeacherStats{grid-template-columns:1fr 1fr!important}.v90Stat{min-height:88px!important;padding:10px!important}.v90Stat>span{width:40px!important;height:40px!important;flex-basis:40px!important;font-size:20px!important}.v90Stat b{font-size:18px!important}.v114AdminMainGrid,.v114AdminFeedGrid{gap:9px!important}.v114AttendanceVisual{grid-template-columns:1fr!important;justify-items:center!important}.v114Legend{width:100%!important}.v114QuickGrid{grid-template-columns:repeat(2,1fr)!important}.v90MonitorGrid{grid-template-columns:1fr!important}.v105PaySearch{grid-template-columns:1fr!important}.v90Quick{grid-template-columns:repeat(2,1fr)!important}.v114PortalHeroText h2{font-size:24px!important}.v114PortalStats{grid-template-columns:1fr 1fr!important}.v114PortalQuick{grid-template-columns:repeat(2,1fr)!important}.otpCard .searchBox{grid-template-columns:1fr!important}.otpCard button{height:45px!important}.portalHead{padding:7px 9px!important}.v114PortalBrand b{font-size:11px!important}.v114PortalAccount button{font-size:9px!important}.v114ChildRow{grid-template-columns:64px 1fr!important}.v114ChildAvatar{width:64px!important;height:72px!important;font-size:28px!important}}
+
+/* ===== V114.1 PUBLIC INTERNAL PAGE ALIGNMENT FIX =====
+   Keep the reference left navigation + single notice bar visible on desktop,
+   but open Admission/About/Gallery/Notice/Contact cleanly in the remaining canvas. */
+@media (min-width:901px){
+  #publicPageView.publicPageView{
+    position:fixed!important;
+    top:38px!important;
+    left:250px!important;
+    right:0!important;
+    bottom:0!important;
+    width:auto!important;
+    height:auto!important;
+    z-index:9970!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    background:#f4f8fc!important;
+  }
+  #publicPageView .publicPageBar{
+    position:sticky!important;
+    top:0!important;
+    z-index:9972!important;
+    height:64px!important;
+    padding:0 22px!important;
+    background:linear-gradient(90deg,#0757c9,#0c76e6)!important;
+    box-shadow:0 4px 14px rgba(5,72,146,.18)!important;
+  }
+  #publicPageBody{
+    width:100%!important;
+    min-width:0!important;
+    min-height:calc(100vh - 102px)!important;
+    overflow-x:hidden!important;
+  }
+  #publicPageBody>.publicSection,
+  #publicPageBody .publicSection{
+    width:min(1180px,calc(100% - 28px))!important;
+    max-width:1180px!important;
+    margin:14px auto!important;
+    padding:28px 30px!important;
+    border-radius:16px!important;
+    box-shadow:0 7px 22px rgba(17,69,126,.08)!important;
+  }
+  #publicPageBody .publicForm{width:100%!important;max-width:none!important}
+}
+
+/* A single 38px ticker row; JS combines all enabled notices into this row. */
+#publicSite .runningNoticeHost{height:38px!important;overflow:hidden!important}
+#publicSite .runStrip{height:38px!important;min-height:38px!important}
+#publicSite .runStrip:before{content:'LATEST'!important}
+
+@media (max-width:900px){
+  #publicPageView.publicPageView{
+    position:fixed!important;
+    top:38px!important;
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+    width:auto!important;
+    height:auto!important;
+    z-index:10020!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+  }
+  #publicPageView .publicPageBar{height:58px!important;padding:0 10px!important}
+  #publicPageBody{min-width:0!important;width:100%!important}
+  #publicPageBody>.publicSection,#publicPageBody .publicSection{
+    width:100%!important;max-width:none!important;margin:0!important;
+    padding:18px 12px!important;border-radius:0!important;box-shadow:none!important
+  }
+  #publicPageBody .publicForm{grid-template-columns:1fr!important;width:100%!important}
+  #publicPageBody input,#publicPageBody select,#publicPageBody textarea,#publicPageBody button{max-width:100%!important}
+}
