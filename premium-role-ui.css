@@ -1,12 +1,12 @@
-/* PREMIUM ROLE UI — V92 SAFE VISUAL LAYER
-UI only: no database, routing, auth, fee, attendance, result or permission logic changed. */
+/* PREMIUM ROLE UI — V109 FINAL DIRECT UPGRADE
+Directly styles the existing role dashboards; no duplicate dashboard or parallel feature layer. */
 :root{
   --role-blue:#0758c7;--role-blue2:#0a77e8;--role-navy:#043b83;--role-bg:#f4f8ff;
   --role-border:#dce8f5;--role-text:#0e2f63;--role-muted:#6d83a3;--role-card:#fff;
 }
 
 /* ADMIN + TEACHER COMMON SHELL */
-#erp.v90Shell{background:var(--role-bg)!important}
+#erp.v90Shell{background:var(--role-bg)!important;font-family:Cambria,Georgia,"Times New Roman",serif!important;font-size:14px!important}
 #erp.v90Shell aside{
   width:205px!important;
   background:linear-gradient(180deg,#075ecf 0%,#064aa3 52%,#05377f 100%)!important;
@@ -22,12 +22,12 @@ UI only: no database, routing, auth, fee, attendance, result or permission logic
   width:48px!important;height:48px!important;border-radius:50%!important;
   background:#fff!important;color:#0b61c9!important
 }
-#erp.v90Shell .sideBrand b{font-size:13px!important;line-height:1.18!important;color:#fff!important}
-#erp.v90Shell .sideBrand small{font-size:9px!important;color:#dcecff!important}
+#erp.v90Shell .sideBrand b{font-size:14px!important;line-height:1.18!important;color:#fff!important}
+#erp.v90Shell .sideBrand small{font-size:12px!important;color:#dcecff!important}
 #erp.v90Shell .v90Nav,#erp.v90Shell #erpNav{padding-top:10px!important;gap:4px!important}
 #erp.v90Shell .v90Nav button,#erp.v90Shell #erpNav button{
   min-height:42px!important;border-radius:10px!important;padding:10px 12px!important;
-  color:#eaf4ff!important;font-size:12px!important;font-weight:700!important
+  color:#eaf4ff!important;font-size:14px!important;font-weight:700!important
 }
 #erp.v90Shell .v90Nav button.active,#erp.v90Shell #erpNav button.active,
 #erp.v90Shell .v90Nav button:hover,#erp.v90Shell #erpNav button:hover{
@@ -60,7 +60,7 @@ UI only: no database, routing, auth, fee, attendance, result or permission logic
 }
 #erp.v90Shell .v764MasterSearch input{
   height:42px!important;border-radius:13px 0 0 13px!important;border:0!important;
-  padding:9px 14px!important;font-size:12px!important;background:#fff!important;color:#173d73!important
+  padding:9px 14px!important;font-size:14px!important;background:#fff!important;color:#173d73!important
 }
 #erp.v90Shell .v764MasterSearch button{
   width:48px!important;height:42px!important;border-radius:0 13px 13px 0!important;
@@ -79,8 +79,7 @@ UI only: no database, routing, auth, fee, attendance, result or permission logic
 #erp.v90Shell #v75DarkBtn,#erp.v90Shell [data-v58-order],#erp.v90Shell [data-v58-settings],
 #erp.v90Shell #v764LiveBadge,#erp.v90Shell #v58LiveDot,#erp.v90Shell .websiteBtn,
 #erp.v90Shell .v63Msg,#erp.v90Shell .v63TopLogout,#erp.v90Shell .v45NavControls,
-#erp.v90Shell .erpHomeBtn,#erp.v90Shell #v90HomeBtn,#erp.v90Shell #v90BackBtn,
-#erp.v90Shell #v52MasterSearch{display:none!important}
+#erp.v90Shell .erpHomeBtn,#erp.v90Shell #v52MasterSearch{display:none!important}
 #erp.v90Shell .erpTop .hamb{display:none!important}
 
 /* DASHBOARD BODY — SAME PREMIUM FAMILY FOR ADMIN + TEACHER */
@@ -112,7 +111,7 @@ UI only: no database, routing, auth, fee, attendance, result or permission logic
 #erp.v90Shell .v90Stat:nth-child(5){background:linear-gradient(135deg,#f4efff,#e8defe)!important}
 #erp.v90Shell .v90Stat:nth-child(6){background:linear-gradient(135deg,#edf8ff,#dff2ff)!important}
 #erp.v90Shell .v90Stat b{color:#0e2f63!important;font-size:25px!important}
-#erp.v90Shell .v90Stat small{color:#6b80a0!important;font-size:10px!important}
+#erp.v90Shell .v90Stat small{color:#6b80a0!important;font-size:14px!important}
 #erp.v90Shell .v90Stat>span{
   background:#fff!important;color:#0a64d4!important;
   box-shadow:0 5px 14px rgba(13,83,155,.08)!important
@@ -140,11 +139,14 @@ UI only: no database, routing, auth, fee, attendance, result or permission logic
   border:1px solid var(--role-border)!important;box-shadow:none!important;border-radius:18px!important
 }
 #erp.v90Shell .teacherTop p{color:#58799d!important}
-#erp.roleWallpaper main,#erp.v90Shell main{background-image:none!important}
+#erp.v90Shell main{background-image:none!important}
+#erp.v90Shell.roleWallpaper main{background-image:linear-gradient(#f6f8fce8,#f6f8fce8),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-attachment:fixed!important}
+#parentPortal.parentWallpaper{background-image:linear-gradient(#fffffff0,#fffffff0),var(--parent-wallpaper)!important;background-size:cover!important;background-position:center!important}
 
 /* PARENT + STUDENT COMBINED PORTAL — SAME COLORS/CARDS, NO FAKE BUTTONS */
 #parentPortal{
-  max-width:none!important;padding:22px!important;background:var(--role-bg)!important;min-height:100vh!important
+  max-width:none!important;padding:22px!important;background:var(--role-bg)!important;min-height:100vh!important;
+  font-family:Cambria,Georgia,"Times New Roman",serif!important;font-size:14px!important
 }
 #parentPortal>span.eyebrow,#parentPortal>h2,#parentPortal>.sectionLead{display:none!important}
 #parentDashboard{
@@ -204,20 +206,28 @@ UI only: no database, routing, auth, fee, attendance, result or permission logic
 }
 
 
-/* V92 FINAL SAFE NAV DOCK — keeps Back/Home visible without changing route logic */
+/* V109 BACK / HOME — always visible in the existing app header; no floating overlap */
 #erp.v90Shell #v90BackBtn,#erp.v90Shell #v90HomeBtn{
-  display:inline-flex!important;position:fixed!important;bottom:16px!important;z-index:120!important;
+  display:inline-flex!important;position:static!important;left:auto!important;right:auto!important;bottom:auto!important;top:auto!important;z-index:auto!important;
   min-height:40px!important;padding:9px 13px!important;border-radius:12px!important;
-  border:1px solid #cfe0f3!important;background:#fff!important;color:#0b57a3!important;
-  box-shadow:0 8px 24px rgba(5,63,125,.18)!important;font-weight:900!important;font-size:11px!important
+  border:1px solid rgba(255,255,255,.45)!important;background:#fff!important;color:#0b57a3!important;
+  box-shadow:none!important;font-family:Cambria,Georgia,"Times New Roman",serif!important;font-weight:900!important;font-size:14px!important;align-items:center!important;justify-content:center!important
 }
-#erp.v90Shell #v90BackBtn{left:218px!important}
-#erp.v90Shell #v90HomeBtn{left:302px!important}
 @media(max-width:900px){
- #erp.v90Shell #v90BackBtn{left:10px!important;bottom:10px!important}
- #erp.v90Shell #v90HomeBtn{left:94px!important;bottom:10px!important}
+ #erp.v90Shell #v90BackBtn,#erp.v90Shell #v90HomeBtn{min-width:40px!important;padding:8px 10px!important}
  #erp.v90Shell aside.open{box-shadow:18px 0 45px rgba(2,35,75,.28)!important}
- #erp.v90Shell #erpContent{padding-bottom:68px!important}
+ #erp.v90Shell #erpContent{padding-bottom:24px!important}
+}
+
+/* V109 CAMBRIA 14 — dashboard controls/data only. Official ID/Admit/Result print formats keep their own fitted print sizes. */
+#erp.v90Shell .erpTop button,#erp.v90Shell .erpTop input,#erp.v90Shell .erpTop select,
+#erp.v90Shell aside button,#erp.v90Shell aside label,
+#erp.v90Shell #erpContent .v90Panel button,#erp.v90Shell #erpContent .v90Panel input,#erp.v90Shell #erpContent .v90Panel select,#erp.v90Shell #erpContent .v90Panel textarea,#erp.v90Shell #erpContent .v90Panel label,
+#erp.v90Shell #erpContent .panel button,#erp.v90Shell #erpContent .panel input,#erp.v90Shell #erpContent .panel select,#erp.v90Shell #erpContent .panel textarea,#erp.v90Shell #erpContent .panel label,
+#erp.v90Shell #erpContent .tableWrap th,#erp.v90Shell #erpContent .tableWrap td,#erp.v90Shell #erpContent .note,#erp.v90Shell #erpContent .cellSub,
+#erp.v90Shell #erpContent .v90Monitor b,#erp.v90Shell #erpContent .v90Monitor small,#erp.v90Shell #erpContent .v90Toolbar button,#erp.v90Shell #erpContent .v90Toolbar input,#erp.v90Shell #erpContent .v90Toolbar select,
+#parentPortal button,#parentPortal input,#parentPortal select,#parentPortal textarea,#parentPortal label,#parentPortal .portalHead,#parentPortal .parentStudentCard,#parentPortal .miniTable,#parentPortal .note,#parentPortal .cellSub,#parentPortal table th,#parentPortal table td{
+  font-family:Cambria,Georgia,"Times New Roman",serif!important;font-size:14px!important
 }
 /* V93 ADMIN-CREATED TEACHER ACCESS — visual only */
 .v93LoginRule,.v93Rule,.v93AdminOnly{margin-top:12px;padding:11px 13px;border:1px solid #cfe0f5;border-radius:12px;background:#eef7ff;color:#154d82;font-size:12px;line-height:1.55}
