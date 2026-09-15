@@ -62,190 +62,468 @@
 #erp.v90Shell aside{width:278px!important;transform:translateX(-105%)!important;transition:transform .2s ease!important;z-index:200!important}#erp.v90Shell aside.open{transform:translateX(0)!important;box-shadow:18px 0 45px rgba(2,35,75,.35)!important}#erp.v90Shell main{margin-left:0!important}.erpTop .hamb{display:inline-grid!important;place-items:center!important;width:38px!important;height:38px!important;padding:0!important;border:1px solid rgba(255,255,255,.5)!important;border-radius:9px!important;background:#fff!important;color:#0a5fbd!important}.erpTop{grid-template-columns:auto auto 1fr auto!important;min-height:70px!important;padding:7px 9px!important}.v63SchoolHead{display:none!important}.v764MasterSearch{grid-column:1/-1!important;grid-row:2!important;max-width:none!important}.v63AdminBox{grid-column:auto!important}.v63AdminBox small{display:none!important}#erp.v90Shell #erpContent{padding:10px!important}.v90Welcome.v114ReferenceHero{min-height:185px!important;border-radius:0 0 18px 18px!important;padding:18px!important}.v90Welcome.v114ReferenceHero h1{font-size:25px!important}.v114HeroMotto{display:none!important}.v90Stats,.v114TeacherStats{grid-template-columns:repeat(2,1fr)!important}.v114AdminMainGrid,.v114AdminFeedGrid,.v114TeacherWorkspace{grid-template-columns:1fr!important}.v114QuickPanel,.v114AdminFeedGrid>article:first-child,.v114TeacherSide{grid-column:auto!important}.v114TeacherSide{grid-template-columns:1fr!important}.v90MonitorGrid{grid-template-columns:repeat(2,1fr)!important}.v90Quick{grid-template-columns:repeat(3,1fr)!important}.v114AttendanceVisual{grid-template-columns:130px 1fr!important}.v114Donut{width:125px!important}.v114Donut:after{width:86px!important}.v114PortalBrand b{font-size:14px!important}.v114PortalBrand small{display:none!important}.v114PortalBrand img{width:45px!important;height:45px!important}.v114PortalAccount span{display:none!important}.parentDashboardBody,#parentDashboardBody{padding:9px!important}.v114PortalHero{min-height:155px!important;padding:16px!important}.v114PortalHeroStudent{display:none!important}.v114PortalStats{grid-template-columns:repeat(2,1fr)!important}.v114PortalQuick{grid-template-columns:repeat(5,1fr)!important}.v114PortalGrid{grid-template-columns:1fr!important}}
 @media(max-width:560px){.v26Hero{min-height:250px!important}.v26Hero h1{font-size:27px!important}.v26Hero h3{font-size:15px!important}.v26Pills span:nth-child(n+3){display:none!important}.v114HeroAdmission b{font-size:14px!important}.v114HomeStats{grid-template-columns:1fr 1fr!important}.v90Stats,.v114TeacherStats{grid-template-columns:1fr 1fr!important}.v90Stat{min-height:88px!important;padding:10px!important}.v90Stat>span{width:40px!important;height:40px!important;flex-basis:40px!important;font-size:20px!important}.v90Stat b{font-size:18px!important}.v114AdminMainGrid,.v114AdminFeedGrid{gap:9px!important}.v114AttendanceVisual{grid-template-columns:1fr!important;justify-items:center!important}.v114Legend{width:100%!important}.v114QuickGrid{grid-template-columns:repeat(2,1fr)!important}.v90MonitorGrid{grid-template-columns:1fr!important}.v105PaySearch{grid-template-columns:1fr!important}.v90Quick{grid-template-columns:repeat(2,1fr)!important}.v114PortalHeroText h2{font-size:24px!important}.v114PortalStats{grid-template-columns:1fr 1fr!important}.v114PortalQuick{grid-template-columns:repeat(2,1fr)!important}.otpCard .searchBox{grid-template-columns:1fr!important}.otpCard button{height:45px!important}.portalHead{padding:7px 9px!important}.v114PortalBrand b{font-size:11px!important}.v114PortalAccount button{font-size:9px!important}.v114ChildRow{grid-template-columns:64px 1fr!important}.v114ChildAvatar{width:64px!important;height:72px!important;font-size:28px!important}}
 
-/* ===== V114.1 PUBLIC INTERNAL PAGE ALIGNMENT FIX =====
-   Keep the reference left navigation + single notice bar visible on desktop,
-   but open Admission/About/Gallery/Notice/Contact cleanly in the remaining canvas. */
-@media (min-width:901px){
-  #publicPageView.publicPageView{
-    position:fixed!important;
-    top:38px!important;
-    left:250px!important;
-    right:0!important;
-    bottom:0!important;
-    width:auto!important;
-    height:auto!important;
-    z-index:9970!important;
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
-    background:#f4f8fc!important;
-  }
-  #publicPageView .publicPageBar{
-    position:sticky!important;
-    top:0!important;
-    z-index:9972!important;
-    height:64px!important;
-    padding:0 22px!important;
-    background:linear-gradient(90deg,#0757c9,#0c76e6)!important;
-    box-shadow:0 4px 14px rgba(5,72,146,.18)!important;
-  }
-  #publicPageBody{
-    width:100%!important;
-    min-width:0!important;
-    min-height:calc(100vh - 102px)!important;
-    overflow-x:hidden!important;
-  }
-  #publicPageBody>.publicSection,
-  #publicPageBody .publicSection{
-    width:min(1180px,calc(100% - 28px))!important;
-    max-width:1180px!important;
-    margin:14px auto!important;
-    padding:28px 30px!important;
-    border-radius:16px!important;
-    box-shadow:0 7px 22px rgba(17,69,126,.08)!important;
-  }
-  #publicPageBody .publicForm{width:100%!important;max-width:none!important}
+
+/* ===== V115 EXACT-REFERENCE + ONE-SCREEN FINAL PASS ===== */
+/* Old stored wallpapers no longer control the main reference heroes. */
+.v26Hero{background-image:url('v1144-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v114AdminHero{background-image:linear-gradient(90deg,rgba(1,36,80,.82),rgba(4,80,146,.20) 48%,rgba(255,255,255,.02)),url('v1144-school-wallpaper.jpg')!important;background-position:center!important}
+.v114TeacherHero{background-image:linear-gradient(90deg,rgba(1,36,80,.84),rgba(4,80,146,.18) 48%,rgba(255,255,255,.02)),url('v1144-school-wallpaper.jpg')!important;background-position:center!important}
+.v114PortalDash.parentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v1144-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v114PortalDash.studentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v1144-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v114PortalHero:before{display:none!important}
+
+/* Public desktop uses the reference hero artwork itself, avoiding duplicate overlay text. */
+@media(min-width:901px){
+  .v26Hero{min-height:472px!important;padding:0!important}
+  .v26HeroCopy,.v26Quote{display:none!important}
 }
 
-/* A single 38px ticker row; JS combines all enabled notices into this row. */
-#publicSite .runningNoticeHost{height:38px!important;overflow:hidden!important}
-#publicSite .runStrip{height:38px!important;min-height:38px!important}
-#publicSite .runStrip:before{content:'LATEST'!important}
+/* Dashboard reference first-view: extra tools stay fully available from sidebar/quick links, but do not push the reference dashboard below the fold. */
+.v114AdminDash>#v114AdminClassSlot,.v114AdminDash>.v114PayPanel,.v114AdminDash>.v114ManagementPanel{display:none!important}
+.v115DashFooter{min-height:42px;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;padding:8px 18px!important;border-radius:12px!important;background:linear-gradient(90deg,#0756a7,#0a79d3)!important;color:#fff!important;font-style:normal!important;box-shadow:0 7px 18px rgba(0,48,100,.12)!important}.v115DashFooter b{font-size:11px!important}.v115DashFooter span{font-size:10px!important;letter-spacing:.08em!important}.v115DashFooter em{font-size:10px!important;font-style:normal!important;color:#e6f4ff!important}
 
-@media (max-width:900px){
-  #publicPageView.publicPageView{
-    position:fixed!important;
-    top:38px!important;
-    left:0!important;
-    right:0!important;
-    bottom:0!important;
-    width:auto!important;
-    height:auto!important;
-    z-index:10020!important;
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
-  }
-  #publicPageView .publicPageBar{height:58px!important;padding:0 10px!important}
-  #publicPageBody{min-width:0!important;width:100%!important}
-  #publicPageBody>.publicSection,#publicPageBody .publicSection{
-    width:100%!important;max-width:none!important;margin:0!important;
-    padding:18px 12px!important;border-radius:0!important;box-shadow:none!important
-  }
-  #publicPageBody .publicForm{grid-template-columns:1fr!important;width:100%!important}
-  #publicPageBody input,#publicPageBody select,#publicPageBody textarea,#publicPageBody button{max-width:100%!important}
+/* Parent / Student left rail matching the approved reference. */
+#parentDashboard{position:relative!important;padding-left:104px!important;max-width:none!important}
+.v115ParentSide{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:104px!important;z-index:250!important;display:flex!important;flex-direction:column!important;gap:6px!important;padding:88px 8px 12px!important;background:linear-gradient(180deg,#073f83,#062b61 62%,#051f49)!important;box-shadow:6px 0 20px rgba(0,38,80,.22)!important}.v115ParentSide button{min-height:62px!important;display:grid!important;place-items:center!important;gap:3px!important;padding:7px 4px!important;border:0!important;border-radius:10px!important;background:transparent!important;color:#dcf3ff!important;font-size:20px!important;font-weight:900!important}.v115ParentSide button span{font-size:9px!important}.v115ParentSide button:hover,.v115ParentSide button:first-child{background:linear-gradient(90deg,#0a9cf0,#0871d8)!important;color:#fff!important}.v115ParentSide button:last-child{margin-top:auto!important;color:#ffdbdf!important}
+#parentDashboard>.portalHead{margin-left:0!important;border-radius:0!important}
+#parentDashboardBody{max-width:none!important}
+
+/* Teacher class summary: same visual role as the reference “My Classes” card, full details stay in My Class route. */
+.v115TeacherClasses{min-height:0!important}.v115ClassList{display:grid!important;gap:7px!important}.v115ClassList button{min-height:52px!important;display:grid!important;grid-template-columns:48px 1fr auto!important;align-items:center!important;gap:9px!important;padding:8px 10px!important;border:0!important;border-bottom:1px solid #e8eef5!important;background:#fff!important;color:#143b6e!important;text-align:left!important}.v115ClassList button b{width:42px!important;height:38px!important;display:grid!important;place-items:center!important;border-radius:9px!important;background:linear-gradient(135deg,#20c979,#10a75e)!important;color:#fff!important;font-size:13px!important}.v115ClassList button:nth-child(2) b{background:linear-gradient(135deg,#ffc94d,#f2a51f)!important}.v115ClassList button:nth-child(3) b{background:linear-gradient(135deg,#9b5af7,#7540df)!important}.v115ClassList button span{font-size:10px!important;font-weight:800!important}.v115ClassList button em{font-style:normal!important;color:#0a6ac8!important;font-size:20px!important}
+
+/* Desktop/laptop one-screen behavior. Internal module pages keep normal scrolling. */
+@media(min-width:901px){
+  #erp.v90Shell:not(.v105InternalFocus) main{height:100vh!important;overflow:hidden!important}
+  #erp.v90Shell:not(.v105InternalFocus) #erpContent{height:calc(100vh - 78px)!important;overflow:hidden!important;padding:10px 16px 8px!important}
+  #erp.v90Shell:not(.v105InternalFocus) .v90Dash{height:100%!important;grid-template-rows:minmax(160px,220px) 106px minmax(210px,1.15fr) minmax(165px,1fr) 42px!important;gap:9px!important}
+  .v114AdminMainGrid,.v114AdminFeedGrid{min-height:0!important;overflow:hidden!important}
+  .v114AdminMainGrid>.v90Panel,.v114AdminFeedGrid>.v90Panel{height:100%!important;min-height:0!important;overflow:hidden!important;padding:12px!important}
+  .v114AdminMainGrid{grid-template-columns:1.08fr 1.08fr .95fr!important}
+  .v114AdminFeedGrid{grid-template-columns:1.15fr 1fr 1fr!important}
+  .v114AttendanceVisual{height:calc(100% - 34px)!important}
+  .v114Bars{height:calc(100% - 34px)!important;min-height:115px!important}
+  .v114QuickGrid{height:calc(100% - 32px)!important;grid-template-rows:repeat(2,1fr)!important}
+  .v114QuickGrid button{min-height:0!important}
+  .v39Feed:nth-child(n+5),.v39Notice:nth-child(n+5),.v39Event:nth-child(n+5){display:none!important}
+
+  .v114TeacherDash{height:100%!important;grid-template-rows:minmax(150px,205px) 94px minmax(300px,1fr) 118px 42px!important;gap:9px!important}
+  .v114TeacherWorkspace{min-height:0!important;grid-template-columns:1.45fr .86fr .72fr!important;gap:9px!important}
+  .v114TeacherWorkspace>.v90Panel,.v114TeacherWorkspace>#v114TeacherClassSlot,.v114TeacherWorkspace>.v114TeacherSide{min-height:0!important;height:100%!important;overflow:hidden!important}
+  .v114TeacherSide{grid-template-columns:1fr!important;grid-template-rows:auto 1fr!important;gap:9px!important}
+  .v114TeacherQuick{min-height:0!important;overflow:hidden!important;padding:10px!important}
+  .v114TeacherQuick .v90Quick{grid-template-columns:repeat(9,1fr)!important;height:78px!important}
+  .v114TeacherQuick .v90Quick button{min-height:0!important;height:78px!important;padding:6px!important}
+  .v114TeacherQuick .v90Quick b{font-size:20px!important}.v114TeacherQuick .v90Quick span{font-size:8px!important}
+  .v90Schedule{max-height:calc(100% - 42px)!important;overflow:auto!important}
+}
+
+/* Short laptop screens (e.g. 1366×768): compact without shrinking readability into unusable sizes. */
+@media(min-width:901px) and (max-height:850px){
+  #erp.v90Shell .erpTop{min-height:64px!important;height:64px!important;padding:6px 12px!important}
+  #erp.v90Shell:not(.v105InternalFocus) #erpContent{height:calc(100vh - 64px)!important;padding:7px 12px!important}
+  #erp.v90Shell .sideBrand{min-height:84px!important;padding:9px 7px!important}.sideBrand .logoText.small{width:44px!important;height:44px!important;flex-basis:44px!important}.sideBrand b{font-size:11px!important}.sideBrand small{font-size:8px!important}
+  .v90NavGroup summary,.v90Nav>button{min-height:36px!important;padding:7px 9px!important;font-size:11px!important}.v90NavGroup>div button{min-height:31px!important;padding:5px 8px!important;font-size:10px!important}
+  #erp.v90Shell:not(.v105InternalFocus) .v90Dash{grid-template-rows:138px 72px minmax(158px,1.2fr) minmax(132px,1fr) 30px!important;gap:6px!important}
+  .v90Welcome.v114ReferenceHero{min-height:0!important;height:100%!important;padding:14px 20px!important;border-radius:0 0 18px 18px!important}.v90Welcome.v114ReferenceHero h1{font-size:27px!important}.v90Welcome.v114ReferenceHero p{font-size:13px!important}.v114HeroMini{margin-top:8px!important}.v114HeroMini button{padding:5px 8px!important;font-size:9px!important}.v114HeroMotto{padding:9px 12px!important}.v114HeroMotto b{font-size:22px!important}
+  .v90Stat{min-height:0!important;height:72px!important;padding:8px 10px!important;gap:8px!important}.v90Stat>span{width:42px!important;height:42px!important;flex-basis:42px!important;font-size:21px!important}.v90Stat small{font-size:9px!important}.v90Stat b{font-size:18px!important}
+  .v114PanelHead{min-height:26px!important;margin-bottom:4px!important}.v114PanelHead h3,.v90PanelHead h3{font-size:11px!important}.v114PanelHead button,.v90PanelHead button{padding:4px 6px!important;font-size:8px!important}
+  .v114Donut{width:105px!important}.v114Donut:after{width:72px!important}.v114Donut b{font-size:22px!important}.v114Legend span{padding:5px 0!important;font-size:9px!important}
+  .v114Bars{min-height:92px!important;padding-top:5px!important}.v114Bars small,.v114Bars b{font-size:8px!important}
+  .v114QuickGrid{gap:5px!important}.v114QuickGrid button{border-radius:8px!important;padding:4px!important}.v114QuickGrid b{font-size:18px!important}.v114QuickGrid span{font-size:7px!important}
+  .v39Feed,.v39Notice,.v39Event{padding:5px 0!important}.v39Feed>span,.v39Notice>span{width:24px!important;height:24px!important}.v39Feed b,.v39Notice b,.v39Event b{font-size:9px!important}.v39Feed small,.v39Feed time,.v39Notice small,.v39Notice em,.v39Event small{font-size:7px!important}
+  .v115DashFooter{min-height:30px!important;height:30px!important;padding:4px 12px!important;border-radius:8px!important}.v115DashFooter b,.v115DashFooter span,.v115DashFooter em{font-size:8px!important}
+  .v114TeacherDash{grid-template-rows:125px 68px minmax(250px,1fr) 92px 30px!important}.v114TeacherQuick{padding:6px!important}.v114TeacherQuick h3{font-size:10px!important;margin:0 0 4px!important}.v114TeacherQuick .v90Quick{height:58px!important}.v114TeacherQuick .v90Quick button{height:58px!important}.v114TeacherQuick .v90Quick b{font-size:16px!important}.v115ClassList button{min-height:42px!important;padding:5px 7px!important}.v115ClassList button b{width:35px!important;height:31px!important;font-size:10px!important}.v115ClassList button span{font-size:8px!important}
+}
+
+/* Mobile/tablet: app-like full-width panels, sidebar closes after route selection via existing v90InstallShell. */
+@media(max-width:900px){
+  #parentDashboard{padding-left:0!important}
+  .v115ParentSide{position:sticky!important;top:0!important;left:auto!important;bottom:auto!important;width:100%!important;height:58px!important;z-index:260!important;display:flex!important;flex-direction:row!important;gap:4px!important;padding:5px 6px!important;overflow-x:auto!important;background:linear-gradient(90deg,#073f83,#075fb8)!important}
+  .v115ParentSide button{flex:0 0 70px!important;min-height:48px!important;height:48px!important;padding:4px!important;font-size:16px!important}.v115ParentSide button span{font-size:7px!important}.v115ParentSide button:last-child{margin-top:0!important;margin-left:auto!important}
+  .v26Hero{background-position:center!important}
+  .v114AdminHero,.v114TeacherHero{background-position:center!important}
+  .v114AdminDash>.v114PayPanel,.v114AdminDash>.v114ManagementPanel{display:block!important}
+  .v114AdminDash>#v114AdminClassSlot{display:none!important}
+  .v115DashFooter{flex-direction:column!important;align-items:flex-start!important;gap:2px!important;padding:8px 10px!important}
+}
+
+@media(max-width:560px){
+  .v115ParentSide{height:54px!important}.v115ParentSide button{flex-basis:62px!important;height:44px!important;min-height:44px!important}
+  .v114PortalDash.parentRole .v114PortalHero,.v114PortalDash.studentRole .v114PortalHero{background-position:center!important}
 }
 
 
 /* ======================================================================
-   V114.2 CLEAN LAYOUT + 3D FUNCTION CARD FIX
-   Visual-only. Removes public left rail, prevents overlay/covering, and
-   consolidates Admin dashboard appearance without changing any route/action.
+   V114.3 FINAL REFERENCE REBUILD — LAST-WINS OVERRIDES
+   Loaded again at end of index.html, after all legacy inline styles.
+   Visual/layout only: no DB/RPC/security/business logic changes.
    ====================================================================== */
 
-/* PUBLIC WEBSITE — no permanent left rail. Desktop navigation becomes a clean top ribbon. */
-.v26Home.v114ReferenceHome{padding-left:0!important;width:100%!important;max-width:none!important;overflow-x:hidden!important}
-.v26Top{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:'brand motto' 'nav nav'!important;padding:10px 24px 0!important}
-.v26Brand{grid-area:brand!important}.v26Motto{grid-area:motto!important}
-#v26Nav{grid-area:nav!important;position:static!important;inset:auto!important;width:100%!important;min-height:52px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;flex-wrap:wrap!important;gap:4px!important;overflow:visible!important;padding:6px 8px!important;margin:10px -8px 0!important;background:linear-gradient(90deg,#073b76,#075ca8,#073b76)!important;border-radius:12px 12px 0 0!important;box-shadow:0 6px 18px rgba(0,43,91,.14)!important;transform:none!important}
-#v26Nav:before{display:none!important;content:none!important}
-#v26Nav button{width:auto!important;min-height:38px!important;padding:8px 10px!important;border-radius:9px!important;display:inline-flex!important;flex:0 0 auto!important;font-size:11px!important;box-shadow:none!important}
-#v26Nav button span{flex:0 0 auto!important}
-#v26Nav button:hover,#v26Nav button.active{background:linear-gradient(180deg,#25a8ff,#0877dd)!important;box-shadow:0 7px 14px rgba(0,62,137,.22),inset 0 1px rgba(255,255,255,.45)!important;transform:translateY(-1px)!important}
-.v26Hero,.v26MainGrid,.v114HomeStats,.v26Footer{width:100%!important;margin-left:0!important}
+/* PUBLIC: no permanent left rail; clean school header + one-row public nav. */
+.v26Home.v114ReferenceHome{padding-left:0!important;width:100%!important;max-width:none!important;min-height:calc(100vh - 38px)!important;overflow-x:hidden!important}
+.v26Top{min-height:145px!important;height:auto!important;padding:10px 24px 0!important;display:grid!important;grid-template-columns:minmax(0,1fr) 190px!important;grid-template-areas:'brand motto' 'nav nav'!important;align-items:center!important;background:linear-gradient(180deg,#fbfdff,#eaf5ff)!important;color:#0a3166!important;border-bottom:0!important;box-shadow:0 4px 14px rgba(4,54,105,.12)!important}
+.v26Brand{grid-area:brand!important;grid-template-columns:90px minmax(0,1fr)!important;gap:12px!important;text-align:center!important}.v26Brand img{width:84px!important;height:84px!important}.v26Brand b{font-size:clamp(26px,3vw,43px)!important;line-height:1!important}.v26Brand span{font-size:12px!important;margin-top:5px!important}.v26Brand small{font-size:9px!important;margin-top:6px!important;padding:5px 12px!important}
+.v26Motto{grid-area:motto!important;position:static!important;display:block!important;margin:0!important;transform:rotate(-3deg)!important;font-size:20px!important;color:#123f76!important}
+#v26Nav{grid-area:nav!important;position:static!important;inset:auto!important;width:100%!important;height:50px!important;min-height:50px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;flex-wrap:nowrap!important;gap:4px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:5px 8px!important;margin:8px 0 0!important;background:linear-gradient(90deg,#073b76,#0876d2,#073b76)!important;border-radius:12px 12px 0 0!important;box-shadow:0 6px 16px rgba(0,45,95,.14)!important;transform:none!important}
+#v26Nav:before{display:none!important;content:none!important}#v26Nav button{flex:0 0 auto!important;width:auto!important;min-height:38px!important;padding:8px 15px!important;border:0!important;border-radius:9px!important;background:transparent!important;color:#fff!important;text-align:center!important;font-size:12px!important;font-weight:900!important;white-space:nowrap!important}#v26Nav button:hover,#v26Nav button.active{background:linear-gradient(180deg,#27a7ff,#0874d8)!important;box-shadow:0 6px 12px rgba(0,54,120,.24),inset 0 1px rgba(255,255,255,.35)!important;transform:none!important}
+.v26Menu{display:none!important}
+.v26Hero{width:100%!important;margin:0!important;min-height:410px!important;padding:0!important;background-image:url('v1144-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important;border:0!important}.v26HeroCopy,.v26Quote{display:none!important}
+.v26MainGrid{width:100%!important;margin:0!important;padding:12px 24px!important;grid-template-columns:minmax(0,1fr) 300px!important}.v114HomeStats{width:100%!important;margin:0!important;padding:0 24px 12px!important}.v26Footer{width:100%!important;margin:0!important}
 
-/* Public Admission/About/Gallery/Notices: full canvas, never under a left rail. */
+/* Public sub-pages / Admission: full canvas; no side offset or hidden-under-header effect. */
+#publicPageView.publicPageView{position:fixed!important;top:38px!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;z-index:12000!important;overflow-y:auto!important;overflow-x:hidden!important;background:#f4f8fc!important}
+#publicPageView>.publicPageBar{position:sticky!important;top:0!important;z-index:12002!important;height:62px!important;display:flex!important;align-items:center!important;padding:0 18px!important;background:linear-gradient(90deg,#0757c9,#0c76e6)!important;color:#fff!important}
+#publicPageBody{width:100%!important;min-width:0!important;min-height:calc(100vh - 62px)!important;padding:0!important;margin:0!important;overflow-x:hidden!important}
+#publicPageBody>.publicSection,#publicPageBody .publicSection{width:min(1240px,calc(100% - 28px))!important;max-width:1240px!important;margin:14px auto!important;padding:24px 28px!important;border-radius:16px!important;background:#fff!important;box-shadow:0 8px 24px rgba(17,69,126,.08)!important}
+#publicSite .runningNoticeHost{height:38px!important;min-height:38px!important;overflow:hidden!important}.runStrip.r2,.runStrip.r3{display:none!important}
+
+/* ADMIN / TEACHER shell: narrow fixed rail, content starts after it, no cover/overlap. */
+#erp.v90Shell{overflow-x:hidden!important}#erp.v90Shell aside{width:205px!important;padding:0 8px 10px!important;background:linear-gradient(180deg,#083d79,#052c5d 62%,#041f44)!important;box-shadow:6px 0 18px rgba(0,35,75,.16)!important}#erp.v90Shell main{margin-left:205px!important;width:calc(100% - 205px)!important;min-width:0!important;background:#eef5fc!important;overflow-x:hidden!important}
+#erp.v90Shell .sideBrand{min-height:88px!important;padding:10px 7px!important}.sideBrand .logoText.small{width:48px!important;height:48px!important;flex-basis:48px!important}.sideBrand b{font-size:11px!important}.sideBrand small{font-size:8px!important}
+#erp.v90Shell #erpNav{padding-top:7px!important;gap:3px!important}.v90NavGroup summary,.v90Nav>button{min-height:38px!important;padding:8px 9px!important;font-size:11px!important}.v90NavGroup>div{padding:3px 0 6px 7px!important}.v90NavGroup>div button{min-height:30px!important;padding:5px 7px!important;font-size:9px!important}
+
+/* One uncluttered top bar: brand, search, clock, bell, profile. Back/Home only on internal pages. */
+#erp.v90Shell .erpTop{min-height:72px!important;height:72px!important;padding:7px 12px!important;display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:9px!important;position:sticky!important;top:0!important;z-index:500!important;background:linear-gradient(90deg,#0758c7,#087fe6)!important;border:0!important;box-shadow:0 4px 14px rgba(2,64,132,.18)!important;overflow:visible!important}
+#erp.v90Shell:not(.v105InternalFocus) #v90BackBtn,#erp.v90Shell:not(.v105InternalFocus) #v90HomeBtn{display:none!important}
+#erp.v90Shell.v105InternalFocus #v90BackBtn,#erp.v90Shell.v105InternalFocus #v90HomeBtn{display:inline-flex!important;flex:0 0 auto!important}
+#erp.v90Shell .v63SchoolHead{display:block!important;flex:0 1 315px!important;min-width:210px!important;max-width:315px!important;text-align:left!important;color:#fff!important}#erp.v90Shell .v63SchoolHead b{color:#fff!important;font-size:18px!important;line-height:1!important;white-space:normal!important}#erp.v90Shell .v63SchoolHead span{color:#dceeff!important;font-size:8px!important;margin-top:4px!important}
+#erp.v90Shell .v764MasterSearch{display:flex!important;flex:1 1 430px!important;width:auto!important;max-width:520px!important;min-width:230px!important;margin-left:auto!important;margin-right:auto!important;gap:0!important}.v764MasterSearch input{height:40px!important;border-radius:20px 0 0 20px!important}.v764MasterSearch button{height:40px!important;border-radius:0 20px 20px 0!important}
+#erp.v90Shell #v63AdminBox{display:none!important}#erp.v90Shell #v97TopIdentity{display:flex!important;flex:0 0 auto!important;max-width:185px!important;min-width:120px!important;min-height:42px!important;padding:4px 9px 4px 4px!important;border:1px solid rgba(255,255,255,.28)!important;background:rgba(3,49,105,.24)!important;color:#fff!important;box-shadow:none!important}#erp.v90Shell #v97TopIdentity b,#erp.v90Shell #v97TopIdentity small{color:#fff!important}
+#erp.v90Shell #v62Bell{flex:0 0 40px!important;width:40px!important;height:40px!important;background:#fff!important;border:1px solid rgba(255,255,255,.55)!important}
+#erp.v90Shell .websiteBtn,#erp.v90Shell #v75DarkBtn,#erp.v90Shell #v764LiveBadge,#erp.v90Shell #v58LiveDot,#erp.v90Shell .v45NavControls,#erp.v90Shell #v52MasterSearch{display:none!important}
+.v1143Clock{flex:0 0 auto!important;min-width:120px!important;display:grid!important;gap:2px!important;padding:4px 10px!important;border-left:1px solid rgba(255,255,255,.28)!important;border-right:1px solid rgba(255,255,255,.28)!important;color:#fff!important;text-align:center!important;line-height:1.05!important}.v1143Clock b{font-size:9px!important}.v1143Clock small{font-size:11px!important;color:#e5f3ff!important}
+#erp.v90Shell #erpContent{position:relative!important;width:100%!important;max-width:none!important;margin:0!important;padding:10px 14px 22px!important;overflow-x:hidden!important;background:#eef5fc!important}#erpContent:before{display:none!important}
+
+/* Reference Admin first view: no scattered duplicate strips. */
+#v97DashTools{display:none!important}.v114AdminDash>#v114AdminClassSlot,.v114AdminDash>.v114PayPanel,.v114AdminDash>.v114ManagementPanel{display:none!important}
+.v90Welcome.v114ReferenceHero{border-radius:0 0 18px 18px!important}.v114AdminHero{background-image:linear-gradient(90deg,rgba(1,36,80,.82),rgba(4,80,146,.18) 50%,rgba(255,255,255,.02)),url('v1144-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v114TeacherHero{background-image:linear-gradient(90deg,rgba(1,36,80,.84),rgba(4,80,146,.18) 50%,rgba(255,255,255,.02)),url('v1144-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+
+/* 3D function cards: actions/onclick remain the existing ones. */
+.v114QuickGrid button,.v90Quick button,.v90Monitor{position:relative!important;overflow:hidden!important;border:1px solid rgba(116,160,204,.28)!important;border-bottom-color:rgba(69,116,168,.42)!important;box-shadow:0 7px 0 rgba(7,65,126,.09),0 12px 22px rgba(8,61,119,.12),inset 0 1px rgba(255,255,255,.65)!important;transition:transform .14s ease,box-shadow .14s ease!important}.v114QuickGrid button:before,.v90Quick button:before,.v90Monitor:before{content:''!important;position:absolute!important;left:0!important;top:0!important;right:0!important;height:38%!important;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0))!important;pointer-events:none!important}.v114QuickGrid button:hover,.v90Quick button:hover,.v90Monitor:hover{transform:translateY(-2px)!important;box-shadow:0 9px 0 rgba(7,65,126,.075),0 16px 27px rgba(8,61,119,.16),inset 0 1px rgba(255,255,255,.7)!important}.v114QuickGrid button:active,.v90Quick button:active,.v90Monitor:active{transform:translateY(2px)!important;box-shadow:0 3px 0 rgba(7,65,126,.09),0 6px 10px rgba(8,61,119,.11)!important}
+
+/* Parent/Student owns its canvas. The slim rail is part of the approved portal, never over content. */
+body.v1143-parent-active #publicPageView>.publicPageBar{display:none!important}body.v1143-parent-active #publicPageView{top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;z-index:21000!important}body.v1143-parent-active #publicPageBody{min-height:100vh!important;width:100%!important;padding:0!important;margin:0!important}body.v1143-parent-active #parentPortal{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+#parentDashboard{position:relative!important;padding-left:92px!important;width:100%!important;max-width:none!important;min-width:0!important}.v115ParentSide{width:92px!important;padding:80px 7px 10px!important}.v115ParentSide button{min-height:56px!important;font-size:18px!important}.v115ParentSide button span{font-size:8px!important}.v114PortalDash.parentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v1144-school-wallpaper.jpg')!important}.v114PortalDash.studentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v1144-school-wallpaper.jpg')!important}
+
+/* Desktop/laptop reference first screen. Internal modules keep normal vertical scroll. */
 @media(min-width:901px){
- #publicPageView.publicPageView{position:fixed!important;top:38px!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;z-index:12000!important;overflow-y:auto!important;overflow-x:hidden!important;background:#f4f8fc!important}
- #publicPageView .publicPageBar{position:sticky!important;top:0!important;height:64px!important;z-index:12002!important;padding:0 22px!important;background:linear-gradient(90deg,#0757c9,#0c76e6)!important}
- #publicPageBody{width:100%!important;min-width:0!important;min-height:calc(100vh - 102px)!important;overflow-x:hidden!important}
- #publicPageBody>.publicSection,#publicPageBody .publicSection{width:min(1220px,calc(100% - 32px))!important;max-width:1220px!important;margin:16px auto!important;padding:28px 30px!important;border-radius:16px!important;box-shadow:0 8px 24px rgba(17,69,126,.08)!important}
-}
-#publicSite .runningNoticeHost{height:38px!important;min-height:38px!important;overflow:hidden!important}
-#publicSite .runStrip{height:38px!important;min-height:38px!important}.runStrip.r2,.runStrip.r3{display:none!important}
-
-/* ADMIN/TEACHER SHELL — one clean header, no duplicate scattered badges/profile boxes. */
-#erp.v90Shell{overflow-x:hidden!important}
-#erp.v90Shell main{position:relative!important;min-width:0!important;overflow-x:hidden!important}
-#erp.v90Shell .erpTop{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:8px!important;min-height:76px!important;height:auto!important;padding:9px 14px!important;position:sticky!important;top:0!important;z-index:500!important;background:linear-gradient(90deg,#0755bc,#087ee2)!important}
-#erp.v90Shell .v63SchoolHead{display:block!important;flex:1 1 270px!important;min-width:180px!important;max-width:390px!important}
-#erp.v90Shell .v764MasterSearch{display:flex!important;flex:0 1 460px!important;width:auto!important;max-width:460px!important;min-width:230px!important;margin-left:auto!important}
-#erp.v90Shell #v90BackBtn,#erp.v90Shell #v90HomeBtn{flex:0 0 auto!important}
-#erp.v90Shell #v63AdminBox{display:none!important}
-#erp.v90Shell #v64HealthBadge,#erp.v90Shell #v113EcoBadge,#erp.v90Shell #v764LiveBadge,#erp.v90Shell #v58LiveDot,#erp.v90Shell #v75DarkBtn{display:none!important}
-#erp.v90Shell #v62Bell{flex:0 0 42px!important;width:42px!important;height:42px!important;border:1px solid rgba(255,255,255,.52)!important;background:#fff!important;box-shadow:0 5px 13px rgba(0,52,112,.15)!important}
-#erp.v90Shell #v97TopIdentity{display:flex!important;flex:0 0 auto!important;max-width:205px!important;min-height:43px!important;padding:5px 10px 5px 5px!important;border-color:rgba(255,255,255,.34)!important;background:rgba(3,49,105,.24)!important;color:#fff!important;box-shadow:none!important}
-#erp.v90Shell #v97TopIdentity b,#erp.v90Shell #v97TopIdentity small{color:#fff!important}
-#erp.v90Shell #erpContent{position:relative!important;z-index:1!important;width:100%!important;max-width:none!important;margin:0!important;padding:12px 16px 26px!important;overflow-x:hidden!important}
-#erp.v90Shell .v90Page,#erp.v90Shell .v90Dash{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important}
-
-/* Legacy utility strip duplicated dashboard functions. Hide it; all its routes remain in existing sidebar/cards. */
-#v97DashTools{display:none!important}
-
-/* Sidebar is stable on desktop and never covers main content. */
-@media(min-width:901px){
- #erp.v90Shell aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:225px!important;transform:none!important;overflow:hidden!important;z-index:600!important}
- #erp.v90Shell aside #erpNav{overflow-y:auto!important;overflow-x:hidden!important;padding-bottom:14px!important}
- #erp.v90Shell main{margin-left:225px!important;width:calc(100% - 225px)!important}
- .v90NavGroup summary{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;box-shadow:inset 0 1px rgba(255,255,255,.08)!important}
- .v90NavGroup[open]>summary,.v90NavGroup summary:hover{background:linear-gradient(180deg,#159bed,#0874d9)!important;box-shadow:0 8px 16px rgba(0,53,122,.25),inset 0 1px rgba(255,255,255,.35)!important}
+  #erp.v90Shell:not(.v105InternalFocus) main{height:100vh!important;overflow:hidden!important}#erp.v90Shell:not(.v105InternalFocus) #erpContent{height:calc(100vh - 72px)!important;overflow:hidden!important;padding:7px 12px!important}#erp.v90Shell:not(.v105InternalFocus) .v90Dash{height:100%!important;grid-template-rows:minmax(125px,185px) 76px minmax(170px,1.15fr) minmax(130px,1fr) 30px!important;gap:6px!important}
+  .v114AdminMainGrid,.v114AdminFeedGrid{min-height:0!important;overflow:hidden!important}.v114AdminMainGrid>.v90Panel,.v114AdminFeedGrid>.v90Panel{height:100%!important;min-height:0!important;overflow:hidden!important;padding:9px!important}.v114AdminMainGrid{grid-template-columns:1.08fr 1.08fr .95fr!important}.v114AdminFeedGrid{grid-template-columns:1.15fr 1fr 1fr!important}.v90Stat{height:76px!important;min-height:76px!important;padding:8px 9px!important}.v90Stat>span{width:42px!important;height:42px!important;flex-basis:42px!important;font-size:21px!important}.v90Stat small{font-size:9px!important}.v90Stat b{font-size:18px!important}.v114QuickGrid{height:calc(100% - 25px)!important;gap:5px!important}.v114QuickGrid button{min-height:0!important;padding:4px!important}.v114QuickGrid b{font-size:18px!important}.v114QuickGrid span{font-size:7px!important}.v114PanelHead{min-height:23px!important;margin-bottom:3px!important}.v114PanelHead h3{font-size:10px!important}.v114PanelHead button{font-size:8px!important;padding:3px 5px!important}.v39Feed:nth-child(n+5),.v39Notice:nth-child(n+5),.v39Event:nth-child(n+5){display:none!important}.v115DashFooter{height:30px!important;min-height:30px!important;padding:4px 10px!important}
 }
 
-/* ADMIN cards — stronger premium 3D depth while preserving every onclick/action. */
-.v114AdminDash .v90Stat,.v114QuickGrid button,.v90Monitor,.v114PortalQuick button,.v90Quick button{position:relative!important;overflow:hidden!important;transition:transform .15s ease,box-shadow .15s ease!important;box-shadow:0 10px 0 rgba(4,58,119,.08),0 15px 28px rgba(6,59,116,.13),inset 0 1px rgba(255,255,255,.48)!important}
-.v114AdminDash .v90Stat:before,.v114QuickGrid button:before,.v90Monitor:before,.v114PortalQuick button:before,.v90Quick button:before{content:''!important;position:absolute!important;left:0!important;top:0!important;right:0!important;height:38%!important;background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(255,255,255,0))!important;pointer-events:none!important}
-.v114QuickGrid button:hover,.v90Monitor:hover,.v114PortalQuick button:hover,.v90Quick button:hover{transform:translateY(-3px)!important;box-shadow:0 12px 0 rgba(4,58,119,.07),0 20px 34px rgba(6,59,116,.18),inset 0 1px rgba(255,255,255,.55)!important}
-.v114QuickGrid button:active,.v90Monitor:active,.v114PortalQuick button:active,.v90Quick button:active{transform:translateY(1px)!important;box-shadow:0 5px 0 rgba(4,58,119,.08),0 8px 14px rgba(6,59,116,.12)!important}
-.v114QuickGrid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:11px!important}
-.v114QuickGrid button{min-height:92px!important;border:1px solid rgba(123,166,207,.32)!important;border-bottom-color:rgba(73,121,171,.42)!important;border-radius:15px!important}
-.v114QuickGrid b{font-size:28px!important;filter:drop-shadow(0 2px 2px rgba(0,43,91,.12))!important}.v114QuickGrid span{font-size:10px!important}
-.v114ManagementPanel{padding:2px 0 0!important}.v114ManagementPanel .v90SectionTitle{margin:0 0 9px!important;padding:12px 14px!important;border-radius:14px!important;background:linear-gradient(180deg,#fff,#f5faff)!important;border:1px solid #d7e5f2!important}
-.v90MonitorGrid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:11px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
-.v90Monitor{min-height:96px!important;display:grid!important;grid-template-columns:48px minmax(0,1fr) 16px!important;align-items:center!important;gap:9px!important;padding:12px!important;border:1px solid #d5e4f2!important;border-radius:16px!important;background:linear-gradient(145deg,#ffffff,#edf6ff)!important;color:#123b70!important;text-align:left!important}
-.v90Monitor:nth-child(4n+2){background:linear-gradient(145deg,#ffffff,#edfbf4)!important}.v90Monitor:nth-child(4n+3){background:linear-gradient(145deg,#ffffff,#fff7e9)!important}.v90Monitor:nth-child(4n+4){background:linear-gradient(145deg,#ffffff,#f5efff)!important}
-.v90MonitorIcon{width:46px!important;height:46px!important;border-radius:14px!important;display:grid!important;place-items:center!important;background:linear-gradient(145deg,#1188ef,#075fc7)!important;color:#fff!important;font-size:23px!important;box-shadow:0 7px 14px rgba(3,81,164,.24),inset 0 1px rgba(255,255,255,.35)!important}.v90Monitor:nth-child(4n+2) .v90MonitorIcon{background:linear-gradient(145deg,#25c97a,#0a9a54)!important}.v90Monitor:nth-child(4n+3) .v90MonitorIcon{background:linear-gradient(145deg,#ffba31,#ee8610)!important}.v90Monitor:nth-child(4n+4) .v90MonitorIcon{background:linear-gradient(145deg,#9a5cf4,#6f37ce)!important}
-.v90Monitor b{display:block!important;color:#0d3971!important;font-size:11px!important}.v90Monitor small{display:block!important;margin-top:4px!important;color:#6a8097!important;font-size:9px!important}.v90Monitor em{font-style:normal!important;color:#0a69cd!important;font-size:20px!important}
+/* Laptop short-height: preserve readable fit instead of horizontal squeezing. */
+@media(min-width:901px) and (max-height:800px){
+  .v26Top{min-height:125px!important}.v26Brand img{width:70px!important;height:70px!important}.v26Brand b{font-size:32px!important}.v26Hero{min-height:320px!important}.v26MainGrid{padding-top:9px!important;padding-bottom:9px!important}.v26Login{min-height:145px!important;padding:10px!important}.roundIcon{width:46px!important;height:46px!important;font-size:23px!important}.v26Login h3{font-size:16px!important}.v26Login p{font-size:10px!important}.v26Login button{padding:7px 14px!important;font-size:10px!important}.v114HomeStats button{min-height:62px!important}.v26Footer{min-height:54px!important;padding:6px 24px!important}
+  #erp.v90Shell .erpTop{height:62px!important;min-height:62px!important}.v1143Clock{display:none!important}#erp.v90Shell:not(.v105InternalFocus) #erpContent{height:calc(100vh - 62px)!important}#erp.v90Shell:not(.v105InternalFocus) .v90Dash{grid-template-rows:118px 66px minmax(145px,1.2fr) minmax(112px,1fr) 26px!important}.v90Welcome.v114ReferenceHero h1{font-size:25px!important}.v114HeroMotto b{font-size:19px!important}.v114AttendanceVisual{grid-template-columns:98px 1fr!important}.v114Donut{width:94px!important}.v114Donut:after{width:64px!important}.v114Donut b{font-size:18px!important}.v114Bars{min-height:78px!important}.v39Feed,.v39Notice,.v39Event{padding:4px 0!important}.v115DashFooter{height:26px!important;min-height:26px!important}
+}
 
-/* Class snapshot / pay fee are clean blocks, not floating layers. */
-#v114AdminClassSlot,.v103ClassPanel,.v114PayPanel{position:relative!important;inset:auto!important;width:100%!important;max-width:100%!important;z-index:auto!important;clear:both!important}
-.v103ClassPanel,.v114PayPanel{border-radius:16px!important;box-shadow:0 9px 24px rgba(4,57,111,.08)!important}
-
-/* PARENT / STUDENT — own full-screen portal; no public left rail or generic bar covering it. */
-body.v1142-parent-active #publicPageView{inset:0!important;top:0!important;left:0!important;width:100%!important;z-index:21000!important}
-body.v1142-parent-active #publicPageView>.publicPageBar{display:none!important}
-body.v1142-parent-active #publicPageBody{min-height:100vh!important;width:100%!important;padding:0!important;margin:0!important}
-body.v1142-parent-active #parentPortal{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
-#parentDashboard:not(.hidden){left:0!important;right:0!important;top:0!important;bottom:0!important;width:100%!important;max-width:none!important}
-.v114PortalQuick button{border-radius:14px!important;background:linear-gradient(145deg,#fff,#edf6ff)!important}
-.v114PortalQuick button:nth-child(3n+2){background:linear-gradient(145deg,#fff,#eefaf4)!important}.v114PortalQuick button:nth-child(3n){background:linear-gradient(145deg,#fff,#fff5e8)!important}
-
-/* MOBILE/TABLET — no permanent side rail, full-width content, menu closes after route. */
+/* Mobile: no fixed left problem anywhere; app menu/top rail, full-width content. */
 @media(max-width:900px){
- .v26Top{grid-template-columns:1fr!important;grid-template-areas:'brand'!important;padding:8px 10px 8px 52px!important}
- .v26Menu{display:grid!important;position:absolute!important;left:10px!important;top:18px!important}
- .v26Top #v26Nav{position:fixed!important;left:10px!important;right:10px!important;top:62px!important;bottom:auto!important;width:auto!important;max-height:calc(100vh - 74px)!important;overflow:auto!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;padding:10px!important;margin:0!important;border-radius:15px!important;background:linear-gradient(180deg,#073d7a,#052a58)!important;transform:translateY(-125%)!important;transition:transform .2s ease!important;z-index:20050!important;box-shadow:0 20px 45px rgba(0,31,68,.35)!important}
- .v26Top #v26Nav.show{transform:translateY(0)!important}
- #v26Nav button{width:100%!important;justify-content:flex-start!important;min-height:43px!important;font-size:11px!important}
- #publicPageView.publicPageView{position:fixed!important;top:38px!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;z-index:12000!important;overflow-y:auto!important;overflow-x:hidden!important}
- #publicPageBody>.publicSection,#publicPageBody .publicSection{width:100%!important;max-width:none!important;margin:0!important;padding:16px 11px!important;border-radius:0!important;box-shadow:none!important}
- #erp.v90Shell aside{width:min(82vw,292px)!important;transform:translateX(-105%)!important;z-index:20000!important}
- #erp.v90Shell aside.open{transform:translateX(0)!important}
- #erp.v90Shell main{margin-left:0!important;width:100%!important}
- #erp.v90Shell .erpTop{display:flex!important;flex-wrap:wrap!important;gap:6px!important;min-height:66px!important;padding:7px 8px!important}
- #erp.v90Shell .erpTop .hamb{display:grid!important;order:0!important}
- #erp.v90Shell #v90BackBtn{order:1!important}#erp.v90Shell #v90HomeBtn{order:2!important}
- #erp.v90Shell .v63SchoolHead{display:none!important}
- #erp.v90Shell #v62Bell{order:3!important;margin-left:auto!important}
- #erp.v90Shell #v97TopIdentity{order:4!important;max-width:48px!important;padding:4px!important}
- #erp.v90Shell #v97TopIdentity>span:last-child{display:none!important}
- #erp.v90Shell .v764MasterSearch{order:10!important;flex:1 0 100%!important;width:100%!important;max-width:none!important;min-width:0!important}
- #erp.v90Shell #erpContent{padding:9px!important}
- .v90MonitorGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v90Monitor{min-height:88px!important;grid-template-columns:42px 1fr 12px!important;padding:10px!important}.v90MonitorIcon{width:40px!important;height:40px!important;font-size:20px!important}
- .v114QuickGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v114QuickGrid button{min-height:86px!important}
- .v114PortalQuick{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #publicSite .runningNoticeHost{position:relative!important}.v26Home.v114ReferenceHome{padding-left:0!important}.v26Top{min-height:88px!important;padding:8px 9px 8px 52px!important;grid-template-columns:1fr!important;grid-template-areas:'brand'!important}.v26Brand{grid-template-columns:58px 1fr!important;gap:8px!important;text-align:left!important}.v26Brand img{width:54px!important;height:54px!important}.v26Brand b{font-size:17px!important}.v26Brand span{font-size:8px!important}.v26Brand small{font-size:7px!important;padding:3px 6px!important}.v26Motto{display:none!important}.v26Menu{display:grid!important;place-items:center!important;position:absolute!important;left:10px!important;top:20px!important;width:34px!important;height:34px!important;padding:0!important;border:1px solid #cfe0ef!important;border-radius:9px!important;background:#fff!important;color:#0a60bd!important;z-index:20050!important}
+  .v26Top #v26Nav{position:fixed!important;left:9px!important;right:9px!important;top:58px!important;bottom:auto!important;width:auto!important;height:auto!important;max-height:calc(100vh - 70px)!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important;padding:9px!important;margin:0!important;overflow:auto!important;background:linear-gradient(180deg,#073d78,#052a58)!important;border-radius:14px!important;transform:translateY(-130%)!important;transition:transform .2s ease!important;z-index:20040!important}.v26Top #v26Nav.show{transform:translateY(0)!important}#v26Nav button{width:100%!important;justify-content:flex-start!important;font-size:10px!important}
+  .v26Hero{min-height:230px!important;background-position:center!important}.v26MainGrid{grid-template-columns:1fr!important;padding:9px!important}.v26LoginCards{grid-template-columns:1fr!important}.v114HomeStats{grid-template-columns:repeat(2,1fr)!important;padding:0 9px 9px!important}.v114HomeNotice{display:none!important}
+  #publicPageView.publicPageView{top:0!important}#publicPageBody>.publicSection,#publicPageBody .publicSection{width:100%!important;max-width:none!important;margin:0!important;padding:14px 10px!important;border-radius:0!important;box-shadow:none!important}
+  #erp.v90Shell aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(82vw,285px)!important;transform:translateX(-105%)!important;z-index:20000!important}#erp.v90Shell aside.open{transform:translateX(0)!important}#erp.v90Shell main{margin-left:0!important;width:100%!important}#erp.v90Shell .erpTop{height:auto!important;min-height:64px!important;display:flex!important;flex-wrap:wrap!important;padding:7px!important;gap:5px!important}.erpTop .hamb{display:grid!important;order:0!important}#erp.v90Shell .v63SchoolHead{display:none!important}#erp.v90Shell #v90BackBtn{order:1!important}#erp.v90Shell #v90HomeBtn{order:2!important}#erp.v90Shell .v1143Clock{display:none!important}#erp.v90Shell #v62Bell{order:3!important;margin-left:auto!important}#erp.v90Shell #v97TopIdentity{order:4!important;min-width:42px!important;max-width:46px!important;padding:4px!important}#erp.v90Shell #v97TopIdentity>span:last-child{display:none!important}#erp.v90Shell .v764MasterSearch{order:10!important;flex:1 0 100%!important;width:100%!important;max-width:none!important;min-width:0!important}#erp.v90Shell #erpContent{padding:8px!important}.v90Stats,.v114TeacherStats{grid-template-columns:repeat(2,1fr)!important}.v114AdminMainGrid,.v114AdminFeedGrid,.v114TeacherWorkspace{grid-template-columns:1fr!important}.v114QuickGrid{grid-template-columns:repeat(2,1fr)!important}.v90MonitorGrid{grid-template-columns:repeat(2,1fr)!important}
+  #parentDashboard{padding-left:0!important}.v115ParentSide{position:sticky!important;top:0!important;left:auto!important;bottom:auto!important;width:100%!important;height:56px!important;display:flex!important;flex-direction:row!important;gap:4px!important;padding:4px 5px!important;overflow-x:auto!important;background:linear-gradient(90deg,#073f83,#075fb8)!important}.v115ParentSide button{flex:0 0 68px!important;height:48px!important;min-height:48px!important;padding:3px!important;font-size:15px!important}.v115ParentSide button span{font-size:7px!important}.v115ParentSide button:last-child{margin-top:0!important;margin-left:auto!important}
 }
-@media(max-width:560px){
- .v26Top #v26Nav{grid-template-columns:1fr!important}
- .v90MonitorGrid{grid-template-columns:1fr!important}
- .v114PortalQuick{grid-template-columns:repeat(2,minmax(0,1fr))!important}
- .v114PortalHero{border-radius:0 0 16px 16px!important}
- .portalHead{min-height:66px!important;padding:7px 8px!important}
+@media(max-width:560px){.v26Top #v26Nav{grid-template-columns:1fr!important}.v90MonitorGrid{grid-template-columns:1fr!important}.v114PortalQuick{grid-template-columns:repeat(2,1fr)!important}}
+
+
+/* =====================================================================
+   V114.4 CLEAN SCHOOL WALLPAPER + REAL FUNCTIONAL UI
+   Wallpaper contains only the school/campus. All text, tabs, icons,
+   cards and actions are live HTML controls above the wallpaper.
+   ===================================================================== */
+.v26Hero{
+  background-image:
+    linear-gradient(90deg,rgba(1,34,72,.78) 0%,rgba(3,65,125,.45) 44%,rgba(3,47,94,.14) 72%,rgba(255,255,255,.03) 100%),
+    url('v1144-school-wallpaper.jpg')!important;
+  background-size:cover!important;
+  background-position:center!important;
+  padding:28px 34px!important;
+  align-items:center!important;
+}
+.v26HeroCopy{
+  display:block!important;
+  position:relative!important;
+  z-index:2!important;
+  width:min(720px,68%)!important;
+  max-width:720px!important;
+  padding:20px 22px!important;
+  border-radius:18px!important;
+  background:linear-gradient(90deg,rgba(3,42,88,.82),rgba(3,76,139,.52),rgba(3,76,139,.18))!important;
+  box-shadow:0 16px 38px rgba(0,28,63,.22)!important;
+  backdrop-filter:blur(1px)!important;
+}
+.v26HeroCopy .v26Welcome{color:#ffe04a!important;font-size:25px!important}
+.v26HeroCopy h1{color:#fff!important;font-size:clamp(35px,4vw,58px)!important;text-shadow:0 3px 10px rgba(0,0,0,.32)!important}
+.v26HeroCopy h3{color:#fff!important;font-size:22px!important}
+.v26HeroCopy .v26Pills span{
+  background:rgba(6,62,119,.72)!important;
+  border:1px solid rgba(255,255,255,.24)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.16)!important;
+}
+.v26Quote{
+  display:block!important;
+  position:relative!important;
+  z-index:2!important;
+  min-width:250px!important;
+  max-width:300px!important;
+  padding:20px!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.88)!important;
+  color:#0c3973!important;
+  border:1px solid rgba(255,255,255,.9)!important;
+  box-shadow:0 14px 30px rgba(0,37,79,.16)!important;
+  backdrop-filter:blur(3px)!important;
+}
+.v26Quote span{color:#0a68c7!important}
+.v114HeroAdmission{
+  appearance:none!important;
+  border:0!important;
+  cursor:pointer!important;
+  font-family:inherit!important;
+}
+.v114HeroAdmission:hover{transform:translateY(-2px)!important;filter:brightness(1.04)!important}
+.v114HeroAdmission:active{transform:translateY(1px)!important}
+
+/* Real functional icon/card treatment: icons are UI elements, never wallpaper art. */
+.v26Login,.v114HomeStats button,.v114QuickGrid button,.v90Quick button,.v90Monitor{
+  position:relative!important;
+  overflow:hidden!important;
+}
+.roundIcon,.v114HomeStats button>span,.v90Quick button>b,.v114QuickGrid button>b,.v90MonitorIcon{
+  filter:drop-shadow(0 4px 5px rgba(0,48,105,.18))!important;
+}
+.roundIcon{
+  background:linear-gradient(145deg,#ffffff,#dceeff)!important;
+  border:1px solid #c8dff3!important;
+  box-shadow:0 7px 0 rgba(6,73,139,.08),0 12px 20px rgba(9,64,119,.14),inset 0 1px #fff!important;
+}
+#v26Nav button{
+  box-shadow:inset 0 1px rgba(255,255,255,.08)!important;
+}
+#v26Nav button:hover,#v26Nav button.active{
+  box-shadow:0 5px 0 rgba(2,52,113,.22),0 10px 18px rgba(0,43,96,.18),inset 0 1px rgba(255,255,255,.30)!important;
+}
+
+/* All role hero imagery uses the clean campus file; live text stays selectable/clickable. */
+.v114AdminHero{
+  background-image:linear-gradient(90deg,rgba(1,36,80,.86),rgba(4,80,146,.42) 48%,rgba(255,255,255,.04)),
+  url('v1144-school-wallpaper.jpg')!important;
+  background-size:cover!important;background-position:center!important;
+}
+.v114TeacherHero{
+  background-image:linear-gradient(90deg,rgba(1,36,80,.86),rgba(4,80,146,.42) 48%,rgba(255,255,255,.04)),
+  url('v1144-school-wallpaper.jpg')!important;
+  background-size:cover!important;background-position:center!important;
+}
+.v114PortalDash.parentRole .v114PortalHero,
+.v114PortalDash.studentRole .v114PortalHero{
+  background-image:linear-gradient(90deg,rgba(2,38,79,.86),rgba(4,83,147,.34) 52%,rgba(255,255,255,.04)),
+  url('v1144-school-wallpaper.jpg')!important;
+  background-size:cover!important;background-position:center!important;
+}
+
+@media(max-width:900px){
+  .v26Hero{min-height:280px!important;padding:14px!important;background-position:center!important}
+  .v26HeroCopy{width:100%!important;max-width:none!important;padding:14px!important}
+  .v26HeroCopy .v26Welcome{font-size:18px!important}
+  .v26HeroCopy h1{font-size:29px!important}
+  .v26HeroCopy h3{font-size:15px!important}
+  .v26Quote{display:none!important}
+  .v26Pills{gap:5px!important}
+  .v26Pills span{font-size:8px!important;padding:6px 7px!important}
+  .v114HeroAdmission{padding:7px 14px!important}
+  .v114HeroAdmission b{font-size:13px!important}
+}
+
+/* =====================================================================
+   V114.5 FINAL GLOBAL 3D ICON SYSTEM
+   Visual-only last-wins layer. It does not replace onclick/routes/data.
+   Icons/tabs remain live HTML controls; the wallpaper remains school-only.
+   ===================================================================== */
+:root{
+  --v1145-3d-edge:rgba(4,58,119,.18);
+  --v1145-3d-shadow:rgba(2,45,96,.22);
+  --v1145-3d-hi:rgba(255,255,255,.88);
+}
+
+/* Common icon surface: raised, glossy and readable without heavy animation. */
+.roundIcon,
+.v114HomeStats button>span,
+.v90Stat>span,
+.v114QuickGrid button>b,
+.v90Quick button>b,
+.v90MonitorIcon,
+.v114PortalStats button>span,
+.v114PortalQuick button,
+.v115ParentSide button,
+.v114HeroMini button,
+#erp.v90Shell #v62Bell,
+#erp.v90Shell .v63Avatar,
+#erp.v90Shell #v97TopIdentity>span:first-child,
+.v114PanelHead button,
+.v26Pills span{
+  -webkit-font-smoothing:antialiased!important;
+  text-shadow:0 2px 2px rgba(0,27,64,.16),0 5px 9px rgba(0,38,84,.12)!important;
+  filter:drop-shadow(0 3px 3px rgba(0,40,88,.16))!important;
+}
+
+/* Public website — every main tab/action reads as a real 3D control. */
+#v26Nav button,
+.v26Login button,
+.v114HomeStats button,
+.v114NoticeHead button,
+.v114HeroAdmission,
+.publicPageBar button,
+.v26Menu{
+  position:relative!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  box-shadow:0 5px 0 rgba(2,48,105,.18),0 9px 18px rgba(0,39,88,.18),inset 0 1px 0 rgba(255,255,255,.45)!important;
+  transform:translateZ(0)!important;
+  transition:transform .12s ease,box-shadow .12s ease,filter .12s ease!important;
+}
+#v26Nav button:before,
+.v26Login button:before,
+.v114HomeStats button:before,
+.v114HeroAdmission:before,
+.publicPageBar button:before{
+  content:""!important;
+  position:absolute!important;
+  left:4px!important;right:4px!important;top:2px!important;height:42%!important;
+  border-radius:inherit!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0))!important;
+  pointer-events:none!important;
+}
+#v26Nav button:hover,
+.v26Login button:hover,
+.v114HomeStats button:hover,
+.v114NoticeHead button:hover,
+.v114HeroAdmission:hover,
+.publicPageBar button:hover{
+  transform:translateY(-2px)!important;
+  filter:brightness(1.04)!important;
+  box-shadow:0 7px 0 rgba(2,48,105,.15),0 13px 22px rgba(0,39,88,.22),inset 0 1px 0 rgba(255,255,255,.52)!important;
+}
+#v26Nav button:active,
+.v26Login button:active,
+.v114HomeStats button:active,
+.v114NoticeHead button:active,
+.v114HeroAdmission:active,
+.publicPageBar button:active{
+  transform:translateY(2px)!important;
+  box-shadow:0 2px 0 rgba(2,48,105,.18),0 5px 9px rgba(0,39,88,.16),inset 0 1px 0 rgba(255,255,255,.32)!important;
+}
+.roundIcon{
+  color:#0b5eb8!important;
+  background:radial-gradient(circle at 32% 24%,#fff 0 20%,#e8f5ff 38%,#c9e5fb 68%,#a9d2f0 100%)!important;
+  border:1px solid #b8d8ef!important;
+  box-shadow:inset 0 2px 3px #fff, inset 0 -5px 9px rgba(3,80,151,.12),0 6px 0 rgba(5,71,135,.10),0 12px 22px rgba(5,59,113,.16)!important;
+}
+.v114HomeStats button>span{
+  display:grid!important;place-items:center!important;
+  width:44px!important;height:44px!important;border-radius:14px!important;
+  background:linear-gradient(145deg,#ffffff,#d7ecff)!important;
+  border:1px solid #c4ddf2!important;
+  box-shadow:inset 0 1px #fff,0 5px 0 rgba(5,75,144,.08),0 9px 16px rgba(6,63,120,.14)!important;
+}
+.v26Pills span{
+  box-shadow:inset 0 1px rgba(255,255,255,.34),inset 0 -3px rgba(0,22,56,.13),0 4px 0 rgba(0,31,74,.14),0 8px 14px rgba(0,31,74,.15)!important;
+}
+
+/* Admin + Teacher navigation/tab icons: raised app controls, no scattered flat tabs. */
+#erp.v90Shell #erpNav>button,
+#erp.v90Shell .v90Nav>button,
+#erp.v90Shell .v90NavGroup summary,
+#erp.v90Shell .v90NavGroup>div button,
+#erp.v90Shell #v90BackBtn,
+#erp.v90Shell #v90HomeBtn,
+#erp.v90Shell .hamb{
+  border:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.10),0 3px 0 rgba(0,25,63,.11),0 6px 12px rgba(0,22,55,.10)!important;
+  text-shadow:0 2px 3px rgba(0,23,58,.24)!important;
+}
+#erp.v90Shell #erpNav>button:hover,
+#erp.v90Shell .v90Nav>button:hover,
+#erp.v90Shell .v90NavGroup summary:hover,
+#erp.v90Shell .v90NavGroup>div button:hover,
+#erp.v90Shell #erpNav button.active,
+#erp.v90Shell .v90Nav button.active{
+  transform:translateY(-1px)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.32),0 5px 0 rgba(0,37,89,.16),0 9px 16px rgba(0,31,75,.18)!important;
+}
+
+/* Dashboard 3D icon medallions. Existing values/actions stay unchanged. */
+.v90Stat>span,
+.v114QuickGrid button>b,
+.v90Quick button>b,
+.v90MonitorIcon,
+.v114PortalStats button>span{
+  display:grid!important;place-items:center!important;
+  border:1px solid rgba(122,164,208,.30)!important;
+  background:linear-gradient(145deg,#ffffff 0%,#edf7ff 46%,#d3eaff 100%)!important;
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.95),inset 0 -5px 9px rgba(6,85,160,.10),0 5px 0 rgba(4,74,145,.08),0 10px 17px rgba(6,61,119,.14)!important;
+}
+.v114QuickGrid button>b,.v90Quick button>b{
+  width:42px!important;height:42px!important;border-radius:14px!important;margin-inline:auto!important;
+}
+.v90MonitorIcon{
+  width:46px!important;height:46px!important;border-radius:15px!important;flex:0 0 46px!important;
+}
+
+/* Parent/Student: side rail + portal cards use the same real 3D language. */
+.v115ParentSide button,
+.v114PortalQuick button,
+.v114PortalStats button{
+  position:relative!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.18),0 4px 0 rgba(0,38,90,.12),0 8px 15px rgba(0,35,80,.13)!important;
+  transition:transform .12s ease,box-shadow .12s ease!important;
+}
+.v114PortalQuick button{
+  background:linear-gradient(145deg,#ffffff,#edf6ff)!important;
+  border-color:#d7e6f3!important;
+  color:#0b376f!important;
+}
+.v114PortalQuick button:hover,.v114PortalStats button:hover,.v115ParentSide button:hover{
+  transform:translateY(-2px)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.34),0 6px 0 rgba(0,38,90,.10),0 12px 20px rgba(0,35,80,.16)!important;
+}
+.v114PortalQuick button:active,.v114PortalStats button:active,.v115ParentSide button:active{
+  transform:translateY(1px)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.20),0 2px 0 rgba(0,38,90,.12),0 5px 9px rgba(0,35,80,.12)!important;
+}
+.v114PortalStats button>span{
+  width:46px!important;height:46px!important;border-radius:15px!important;
+}
+
+/* Compact mobile depth: keep 3D but avoid oversized shadows/overflow. */
+@media(max-width:900px){
+  #v26Nav button,.v26Login button,.v114HomeStats button,.v114HeroAdmission,.publicPageBar button,
+  #erp.v90Shell #erpNav>button,#erp.v90Shell .v90Nav>button,#erp.v90Shell .v90NavGroup summary,
+  .v115ParentSide button,.v114PortalQuick button,.v114PortalStats button{
+    box-shadow:inset 0 1px rgba(255,255,255,.18),0 3px 0 rgba(0,38,90,.10),0 6px 10px rgba(0,35,80,.11)!important;
+  }
+  .v114QuickGrid button>b,.v90Quick button>b{width:38px!important;height:38px!important;border-radius:12px!important}
+  .v90MonitorIcon{width:40px!important;height:40px!important;flex-basis:40px!important;border-radius:12px!important}
+  .v114PortalStats button>span{width:40px!important;height:40px!important;border-radius:12px!important}
+}
+
+/* Accessibility: users preferring reduced motion still get depth without movement. */
+@media(prefers-reduced-motion:reduce){
+  #v26Nav button,.v26Login button,.v114HomeStats button,.v114HeroAdmission,.publicPageBar button,
+  .v114QuickGrid button,.v90Quick button,.v90Monitor,.v115ParentSide button,.v114PortalQuick button,.v114PortalStats button{transition:none!important}
+}
+
+/* Catch remaining legacy icon/avatar/badge glyphs without changing their size/flow. */
+#publicSite [class*="Icon"],#publicSite [class*="icon"],
+#erp [class*="Icon"],#erp [class*="icon"],#erp [class*="Avatar"],#erp [class*="avatar"],
+#parentPortal [class*="Icon"],#parentPortal [class*="icon"],#parentPortal [class*="Avatar"],#parentPortal [class*="avatar"]{
+  filter:drop-shadow(0 3px 4px rgba(0,42,92,.20))!important;
+  text-shadow:0 1px 1px rgba(255,255,255,.30),0 3px 5px rgba(0,37,82,.17)!important;
+}
+.v39StatIcon,.v50TeacherAvatar,.v52ResultAvatar,.v63Avatar,.v114ChildAvatar,.v97AvatarBox,.v97AvatarLargeFallback{
+  box-shadow:inset 0 2px 3px rgba(255,255,255,.72),inset 0 -4px 8px rgba(4,68,135,.09),0 5px 0 rgba(4,64,127,.08),0 10px 18px rgba(2,48,99,.14)!important;
 }

@@ -1,5 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.4-CLEAN-SCHOOL-REAL-UI-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.4-CLEAN-SCHOOL-REAL-UI-2026-09-15"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
 <link rel="canonical" href="/">
@@ -806,19 +806,12 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
     <div class="v26Motto">Education Today<br><b>A Better Tomorrow</b></div>
     <nav id="v26Nav">
       <button onclick="showPublicPage('home')">⌂ <span>Home</span></button>
-      <button onclick="openPortal()">▣ <span>Dashboard</span></button>
+      <button onclick="showPublicPage('about')">👤 <span>About</span></button>
+      <button onclick="showPublicPage('facilities')">🎓 <span>Academic</span></button>
       <button onclick="showPublicPage('admission')">✎ <span>Admission</span></button>
-      <button onclick="publicModule('students')">👥 <span>Students</span></button>
-      <button onclick="publicModule('attendance')">✓ <span>Attendance</span></button>
-      <button onclick="publicModule('fees')">₹ <span>Fees</span></button>
-      <button onclick="publicModule('teacher')">♟ <span>Teachers / Staff</span></button>
-      <button onclick="publicModule('exams')">▤ <span>Exams / Marks</span></button>
-      <button onclick="showPublicPage('notices')">🔔 <span>Notices & Orders</span></button>
       <button onclick="showPublicPage('gallery')">▧ <span>Gallery</span></button>
-      <button onclick="publicModule('reports')">▥ <span>Reports</span></button>
-      <button onclick="showPublicPage('contact')">☎ <span>Contact / Enquiry</span></button>
-      <button onclick="teacherLoginDialog()">👩‍🏫 <span>Teacher Portal</span></button>
-      <button onclick="parentPasswordLoginDialog()">👨‍👩‍👧 <span>Parent / Student</span></button>
+      <button onclick="showPublicPage('notices')">🔔 <span>Notice</span></button>
+      <button onclick="showPublicPage('contact')">☎ <span>Contact</span></button>
     </nav>
   </header>
   <section class="v26Hero">
@@ -827,7 +820,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
       <h1>L D MODERN<br>EDUCATION ACADEMY</h1>
       <h3>A Brighter Tomorrow Begins Here...</h3>
       <div class="v26Pills"><span>🎓 Quality Education</span><span>👩‍🏫 Experienced Teachers</span><span>📚 Safe & Supportive Environment</span><span>🏆 Holistic Development</span></div>
-      <div class="v114HeroAdmission"><b>ADMISSION OPEN 2026-27</b><small>NURSERY TO CLASS 10</small></div>
+      <button type="button" class="v114HeroAdmission" onclick="showPublicPage('admission')"><b>ADMISSION OPEN 2026-27</b><small>NURSERY TO CLASS 10</small></button>
     </div>
     <div class="v26Quote"><b>“Small Steps<br>Big Futures”</b><span>Discipline • Knowledge • Character • Success</span></div>
   </section>
@@ -851,7 +844,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 <section id="events" class="publicSection soft"><span class="eyebrow">CALENDAR</span><h2>Events & Occasions</h2><div id="eventCards" class="cards3"><div class="empty">Upcoming events will appear here.</div></div></section>
 <section id="notices" class="publicSection"><span class="eyebrow">UPDATES</span><h2>News, Notices & Downloads</h2><div id="noticeCards" class="noticeList"><div class="empty">Notices will appear here.</div></div></section>
 <section id="admission" class="publicSection soft"><span class="eyebrow">DIRECT ONLINE ADMISSION</span><h2>Online Admission Application</h2><p class="sectionLead">Parent सीधे form भरें। कोई Email Link/OTP नहीं। Application पहले <b>Pending</b> में जाएगी; Admin Approve/Reject/Edit करेगा और approval के बाद ही Student Register में final admission बनेगा.</p><div id="secureAdmission"><form id="publicAdmission" class="publicForm"><input name="student_name" placeholder="Student Name" required><select name="class_name" required><option value="">Select Class</option></select><input name="academic_session" value="2026-27" placeholder="Session"><input name="dob" type="date" title="Date of Birth"><select name="gender"><option value="">Gender</option><option>Male</option><option>Female</option><option>Other</option></select><input name="father_name" placeholder="Father Name" required><input name="mother_name" placeholder="Mother Name"><input name="guardian_name" placeholder="Guardian Name"><input name="primary_phone" inputmode="tel" placeholder="Parent Mobile Number" required><input name="alternate_phone" placeholder="Alternate Mobile"><input name="parent_email" id="admissionParentEmail" type="email" placeholder="Parent Email"><input name="previous_school" placeholder="Previous School"><input name="previous_class" placeholder="Previous Class"><input name="district" placeholder="District"><input name="state" placeholder="State"><textarea name="address" placeholder="Full Address"></textarea><div class="publicPhoto"><label>Student Photo</label><div class="uploadRow"><label class="uploadBtn">📁 Upload Photo<input class="hiddenFile" type="file" name="public_photo_file" accept="image/jpeg,image/png,image/webp"></label><button class="uploadBtn cameraBtn" type="button" onclick="openLiveCamera(this)">📷 Take Photo from Camera</button></div><div class="cameraPreview"></div><small class="sizeRule">Photo automatic compress होकर लगभग 10–25 KB में save होगा.</small></div><button>Submit Pending Application</button></form><div id="applicationReceipt"></div></div></section>
-<section id="parentPortal" class="publicSection"><span class="eyebrow">PARENT + STUDENT SECURE DASHBOARD</span><h2>Attendance • Fee • Published Result</h2><p class="sectionLead">Parent Registered Mobile से और Student Admission No. / Login ID से School Admin द्वारा दिए Password के साथ login करें. कोई Forgot/Reset/Register/OTP option नहीं.</p><div id="parentGate" class="otpCard"><h3>Parent / Student Login</h3><div class="searchBox" style="grid-template-columns:1fr 1fr auto"><input id="parentIdentifier" placeholder="Parent Mobile / Student Admission No. / Email"><input id="parentPassword" type="password" placeholder="Admin Password"><button type="button" onclick="parentPasswordLogin()">Login</button></div><small class="otpHelp">School द्वारा दिया गया Email/Mobile और Password इस्तेमाल करें.</small></div><div id="parentDashboard" class="hidden"><div class="portalHead"><div class="v114PortalBrand"><img src="school-logo.png" alt="School Logo"><div><b>L D MODERN EDUCATION ACADEMY</b><small>Gambhiriya Bujurg, Singhapatti, Kushinagar</small></div></div><div class="v114PortalAccount"><span>Parent + Student Portal</span><button class="secondary" onclick="parentSignOut()">⏻ Logout</button></div></div><div id="parentDashboardBody"></div></div></section>
+<section id="parentPortal" class="publicSection"><span class="eyebrow">PARENT + STUDENT SECURE DASHBOARD</span><h2>Attendance • Fee • Published Result</h2><p class="sectionLead">Parent Registered Mobile से और Student Admission No. / Login ID से School Admin द्वारा दिए Password के साथ login करें. कोई Forgot/Reset/Register/OTP option नहीं.</p><div id="parentGate" class="otpCard"><h3>Parent / Student Login</h3><div class="searchBox" style="grid-template-columns:1fr 1fr auto"><input id="parentIdentifier" placeholder="Parent Mobile / Student Admission No. / Email"><input id="parentPassword" type="password" placeholder="Admin Password"><button type="button" onclick="parentPasswordLogin()">Login</button></div><small class="otpHelp">School द्वारा दिया गया Email/Mobile और Password इस्तेमाल करें.</small></div><div id="parentDashboard" class="hidden"><aside class="v115ParentSide"><button onclick="document.getElementById('parentDashboard')?.scrollIntoView({behavior:'smooth'})">🏠<span>Home</span></button><button onclick="document.querySelector('#parentDashboardBody .v114ChildInfo')?.scrollIntoView({behavior:'smooth'})">👤<span>My Child</span></button><button onclick="document.querySelector('#parentDashboardBody .v114AttendanceBlock')?.scrollIntoView({behavior:'smooth'})">✅<span>Attendance</span></button><button onclick="document.querySelector('#parentDashboardBody .v114FeeBlock')?.scrollIntoView({behavior:'smooth'})">₹<span>Fee Details</span></button><button onclick="document.querySelector('#parentDashboardBody .resultMini')?.scrollIntoView({behavior:'smooth'})">A+<span>Results</span></button><button onclick="document.querySelector('#parentDashboardBody .v32ParentNotices')?.scrollIntoView({behavior:'smooth'})">📣<span>Notices</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Gallery],#parentDashboardBody .gallery')?.scrollIntoView({behavior:'smooth'})">🖼<span>Gallery</span></button><button onclick="parentSignOut()">⏻<span>Logout</span></button></aside><div class="portalHead"><div class="v114PortalBrand"><img src="school-logo.png" alt="School Logo"><div><b>L D MODERN EDUCATION ACADEMY</b><small>Gambhiriya Bujurg, Singhapatti, Kushinagar</small></div></div><div class="v114PortalAccount"><span>Parent + Student Portal</span><button class="secondary" onclick="parentSignOut()">⏻ Logout</button></div></div><div id="parentDashboardBody"></div></div></section>
 <section id="contact" class="publicSection soft two"><div><span class="eyebrow">CONTACT</span><h2>Contact Us</h2><p id="publicAddress">Gambhiriya Bujurg, Singhapatti, Kushinagar, Uttar Pradesh</p><p id="publicPhone"></p></div><form id="enquiryForm" class="publicForm"><input name="name" placeholder="Your Name" required><input name="phone" placeholder="Mobile" required><input name="email" type="email" placeholder="Email"><textarea name="message" placeholder="Message" required></textarea><button id="enquirySubmitBtn">Send Enquiry</button><div id="enquiryStatus"></div></form></section>
 <footer class="premiumFooter"><div class="footBrand"><img src="school-logo.png" alt="School Logo"><div><b id="footSchool">L D MODERN EDUCATION ACADEMY</b><span>Knowledge • Discipline • Character</span></div></div><div class="footMotto">A Better Education • A Brighter Tomorrow</div><span>Public Website + Smart Cloud ERP<br><small>© 2026 L D MODERN EDUCATION ACADEMY. All Rights Reserved.</small></span></footer>
 </div>
@@ -1220,7 +1213,7 @@ async function loadParentPortal(){
  let st=data?.students||[];if(!st.length){box.innerHTML='<div class="resultCard"><h3>No student linked</h3><p>इस login से कोई approved student record नहीं मिला। Admin में Student → Parent/Student Login check करें.</p></div>';return}
  const role=String(profile?.role||'parent').toLowerCase();
  const roleName=role==='student'?'Student':'Parent';
- box.innerHTML=st.map((x,idx)=>{let att=x.attendance||{},fee=x.fee||{},recent=x.recent_attendance||[],results=x.results||[];let latest=results[0]||{},attPct=Number(att.total||0)?Math.round(Number(att.present||0)*100/Number(att.total||1)):0;let feeClear=Number(fee.due||0)<=0;return `<article class="parentStudentCard v114PortalDash">
+ box.innerHTML=st.map((x,idx)=>{let att=x.attendance||{},fee=x.fee||{},recent=x.recent_attendance||[],results=x.results||[];let latest=results[0]||{},attPct=Number(att.total||0)?Math.round(Number(att.present||0)*100/Number(att.total||1)):0;let feeClear=Number(fee.due||0)<=0;return `<article class="parentStudentCard v114PortalDash ${role==='student'?'studentRole':'parentRole'}">
    <section class="v114PortalHero"><div class="v114PortalHeroText"><small>${role==='student'?'HELLO':'WELCOME'}</small><h2>${role==='student'?esc(x.student_name||'Student'):'Dear Parent!'}</h2><p>${role==='student'?'Learn Today • Lead Tomorrow':'Your child’s progress is our priority.'}</p><em>${role==='student'?'Dream • Learn • Improve • Achieve':'Support • Guide • Encourage • Excel'}</em></div><div class="v114PortalHeroStudent"><div class="v114StudentBadge">${role==='student'?'🎓':'👨‍👩‍👧'}</div><div><b>${esc(x.student_name||'Student')}</b><span>Class ${esc(x.class_name||'—')} • Admission ${esc(x.admission_no||'—')}</span></div><button onclick="v97ShowParentProfile?.()">Profile</button></div></section>
    <section class="v114PortalStats"><button onclick="this.closest('.v114PortalDash').querySelector('.v114ChildInfo')?.scrollIntoView({behavior:'smooth'})"><span>👤</span><small>${role==='student'?'My Class':'My Child'}</small><b>${role==='student'?esc(x.class_name||'—'):'1'}</b><em>${esc(x.student_name||'Student')}</em></button><button onclick="this.closest('.v114PortalDash').querySelector('.v114AttendanceBlock')?.scrollIntoView({behavior:'smooth'})"><span>✅</span><small>Attendance</small><b>${attPct?attPct+'%':'—'}</b><em>This Session</em></button><button onclick="this.closest('.v114PortalDash').querySelector('.v114FeeBlock')?.scrollIntoView({behavior:'smooth'})"><span>₹</span><small>Fee Status</small><b>${feeClear?'Paid':'Due'}</b><em>${feeClear?'Clear':money(fee.due||0)}</em></button><button onclick="this.closest('.v114PortalDash').querySelector('.resultMini')?.scrollIntoView({behavior:'smooth'})"><span>🏆</span><small>Latest Result</small><b>${esc(latest.grade||'—')}</b><em>${results.length?'Published':'No result'}</em></button></section>
    <section class="v114PortalQuick"><button onclick="v97ShowParentProfile?.()">👤<span>My Profile</span></button><button onclick="this.closest('.v114PortalDash').querySelector('.v114AttendanceBlock')?.scrollIntoView({behavior:'smooth'})">✅<span>Attendance</span></button><button onclick="this.closest('.v114PortalDash').querySelector('.v114FeeBlock')?.scrollIntoView({behavior:'smooth'})">₹<span>Fee Details</span></button><button onclick="this.closest('.v114PortalDash').querySelector('.resultMini')?.scrollIntoView({behavior:'smooth'})">A+<span>Exam Results</span></button><button onclick="document.getElementById('v75ParentAdmit')?.scrollIntoView({behavior:'smooth'})">🎫<span>Admit Card</span></button><button onclick="document.querySelector('#parentDashboardBody .v32ParentNotices')?.scrollIntoView({behavior:'smooth'})">📢<span>Notices</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Homework],#parentDashboardBody .v64Homework')?.scrollIntoView({behavior:'smooth'})">📚<span>Homework</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Gallery],#parentDashboardBody .gallery')?.scrollIntoView({behavior:'smooth'})">🖼<span>Gallery</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Timetable],#parentDashboardBody .v64Timetable')?.scrollIntoView({behavior:'smooth'})">🕐<span>Time Table</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Help],#parentDashboardBody [id*=Message]')?.scrollIntoView({behavior:'smooth'})">💬<span>Help</span></button></section>
@@ -7477,7 +7470,7 @@ window.erpGoHome=v90GoHome;
 function v90Card(icon,title,sub,route,cls='') {return `<button class="v90Monitor ${cls}" onclick="render('${route}')"><span class="v90MonitorIcon">${icon}</span><span><b>${v90Safe(title)}</b><small>${v90Safe(sub)}</small></span><em>›</em></button>`}
 async function v90AdminDashboard(){
  window.__v90Route='dashboard';v90Head('Admin Dashboard','Full School Control • Live Monitoring');v90InstallShell('dashboard');
- const adminName=v90Safe(profile?.full_name||'Admin');
+ const adminName=v90Safe(String(profile?.role||'').toLowerCase()==='principal'?'Principal':'Admin');
  v90Set(`<div class="v90Dash v114AdminDash"><section class="v90Welcome v114ReferenceHero v114AdminHero"><div><span>WELCOME BACK</span><h1>Welcome Back, <b>${adminName}!</b></h1><p>Manage today, build a brighter tomorrow.</p><div class="v114HeroMini"><button onclick="openAdd('admissions')">➕ Admission</button><button onclick="render('smart_fee_center')">₹ Pay Fee</button><button onclick="render('attendance')">✓ Attendance</button></div></div><div class="v114HeroMotto"><b>“Better Education<br>Brighter Future”</b><small>DISCIPLINE • KNOWLEDGE • CHARACTER • SUCCESS</small></div></section>
  <section id="v90Stats" class="v90Stats v114AdminStats">${Array.from({length:6},()=>'<div class="v90Stat skeleton"></div>').join('')}</section>
  <div id="v114AdminClassSlot"></div>
@@ -7488,7 +7481,7 @@ async function v90AdminDashboard(){
  </section>
  <section class="v114AdminFeedGrid"><article class="v90Panel"><div class="v114PanelHead"><h3>Recent Activities</h3><button onclick="v39LoadAdminPanels()">View All →</button></div><div id="v39Activities"><div class="v39Empty">Loading…</div></div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Important Notices</h3><button onclick="render('notices')">View All →</button></div><div id="v39Notices"><div class="v39Empty">Loading…</div></div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Calendar & Events</h3><button onclick="render('events')">View Calendar →</button></div><div id="v39Events"><div class="v39Empty">Loading…</div></div></article></section>
  <section id="v105DashPay" class="v90Panel v105DashPay v114PayPanel"><div class="v105PayHead"><div><h3>💳 Pay Fee • Front Quick Entry</h3><p>Student name का letter लिखें → fee details auto खुलेगा → amount भरें → Paid करें.</p></div><button class="secondary" onclick="render('master_fee')">Master Fee Management</button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" oninput="v105DashboardFeeInput()"><select id="v105FeeClass" onchange="v105DashboardFeeSearch()"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">नाम का पहला letter लिखें या Class चुनें.</div></div><div id="v105FeeAccount"></div></section>
- <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">● LIVE</span></div><div class="v90MonitorGrid">${v90Card('📅','Attendance Status','Class-wise done / not marked','v90_attendance_monitor')}${v90Card('💰','Due Fee Status','Old due + current month due','v90_due_fee_monitor')}${v90Card('📝','Exam Participation','Selected • Admit • Appeared','v90_exam_monitor')}${v90Card('📊','Marks Entry Progress','Teacher • Subject • Pending','v90_marks_monitor')}${v90Card('🚌','Transport Trip','Pickup / Drop attendance','v90_transport_monitor')}${v90Card('👥','Presence & Leave','Students + Teachers today','v90_presence_monitor')}${v90Card('🎓','Student Requests','Leave • Correction • Add/Remove','v90_student_requests')}${v90Card('👨‍🏫','Teacher Requests','Personal + class related','v90_teacher_requests')}${v90Card('🗓','Timetable Master','Fast bell + whole week','timetable_master','strong')}${v90Card('📚','Daily Teaching','Timetable → lesson update','v90_teaching_monitor')}${v90Card('🔐','Student / Parent Login','One Password • Live Status','parent_access','strong')}${v90Card('🔎','Full Master Search','Student / Teacher / Fee / Exam','dashboard_search')}</div></section></div>`);
+ <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">● LIVE</span></div><div class="v90MonitorGrid">${v90Card('📅','Attendance Status','Class-wise done / not marked','v90_attendance_monitor')}${v90Card('💰','Due Fee Status','Old due + current month due','v90_due_fee_monitor')}${v90Card('📝','Exam Participation','Selected • Admit • Appeared','v90_exam_monitor')}${v90Card('📊','Marks Entry Progress','Teacher • Subject • Pending','v90_marks_monitor')}${v90Card('🚌','Transport Trip','Pickup / Drop attendance','v90_transport_monitor')}${v90Card('👥','Presence & Leave','Students + Teachers today','v90_presence_monitor')}${v90Card('🎓','Student Requests','Leave • Correction • Add/Remove','v90_student_requests')}${v90Card('👨‍🏫','Teacher Requests','Personal + class related','v90_teacher_requests')}${v90Card('🗓','Timetable Master','Fast bell + whole week','timetable_master','strong')}${v90Card('📚','Daily Teaching','Timetable → lesson update','v90_teaching_monitor')}${v90Card('🔐','Student / Parent Login','One Password • Live Status','parent_access','strong')}${v90Card('🔎','Full Master Search','Student / Teacher / Fee / Exam','dashboard_search')}</div></section><footer class="v115DashFooter"><b>L D MODERN EDUCATION ACADEMY</b><span>Learn &nbsp; | &nbsp; Grow &nbsp; | &nbsp; Succeed</span><em>Education for a Better Tomorrow</em></footer></div>`);
  await v90LoadDashboardStats();
  try{v39LoadAdminPanels()}catch(_e){}
 }
@@ -7525,7 +7518,7 @@ async function v90TeacherDashboard(){
  v90Set(`<div class="v90Dash v114TeacherDash"><section class="v90Welcome teacher v114ReferenceHero v114TeacherHero"><div><span>GOOD MORNING</span><h1>${v90Safe(name)} 👋</h1><p>A great teacher shapes a better tomorrow.</p></div><div class="v114HeroMotto teacher"><b>Teach<br>Inspire<br>Empower</b><small>A Teacher Changes the World One Child at a Time</small></div></section>
  <section class="v90Stats v114TeacherStats">${[['👥','My Classes',classes.length],['👨‍🎓','Class Data','Live'],['📖',"Today's Periods",sched.length],['✅','Attendance','Today'],['☑','Pending Tasks','Open']].map(x=>`<div class="v90Stat"><span>${x[0]}</span><div><small>${x[1]}</small><b>${x[2]}</b></div></div>`).join('')}</section>
  <section class="v114TeacherWorkspace"><article class="v90Panel v114TeacherSchedule"><div class="v90PanelHead"><div><h3>📅 Today's Teaching Schedule</h3><p>Admin timetable से automatic generated</p></div><button class="primary" onclick="render('v90_teacher_daily')">View Full</button></div><div class="v90Schedule">${sched.length?sched.map(x=>`<button onclick="v90OpenTeacherDailyBell(${Number(x.period_no)||0})"><b>${v90Safe(x.period_no||'')}</b><span>${v90FmtTime(x.start_time)}–${v90FmtTime(x.end_time)}</span><strong>Class ${v90Safe(x.class_name||'')} • ${v90Safe(x.subject||'')}</strong><em>Mark ›</em></button>`).join(''):'<div class="empty">आज का timetable नहीं मिला। Admin Timetable Master में set करें.</div>'}</div></article><div id="v114TeacherClassSlot"></div><aside class="v114TeacherSide"><article class="v90Panel v114QuoteCard"><b>💡 “The best teachers teach from the heart, not from the book.”</b></article><article class="v90Panel"><h3>Today's Quick Work</h3><div class="v114TeacherTasks"><button onclick="render('attendance')">✅ Update Attendance</button><button onclick="render('homework')">📚 Homework</button><button onclick="render('v90_teacher_marks')">📝 Enter Marks</button><button onclick="render('teacher_notices')">📣 Notices</button></div></article></aside></section>
- <section class="v90Panel v114TeacherQuick"><h3>Quick Access</h3><div class="v90Quick">${[['👥','My Class','teacher_class'],['✅','Take Attendance','attendance'],['📖','Daily Teaching','v90_teacher_daily'],['✏','Homework','homework'],['A+','Enter Marks','v90_teacher_marks'],['📬','My Requests','v90_my_requests'],['📣','Orders','teacher_notices'],['🖼','Class Gallery','gallery'],['👤','Profile','teacher_profile']].map(x=>`<button onclick="render('${x[2]}')"><b>${x[0]}</b><span>${x[1]}</span></button>`).join('')}</div></section></div>`);
+ <section class="v90Panel v114TeacherQuick"><h3>Quick Access</h3><div class="v90Quick">${[['👥','My Class','teacher_class'],['✅','Take Attendance','attendance'],['📖','Daily Teaching','v90_teacher_daily'],['✏','Homework','homework'],['A+','Enter Marks','v90_teacher_marks'],['📬','My Requests','v90_my_requests'],['📣','Orders','teacher_notices'],['🖼','Class Gallery','gallery'],['👤','Profile','teacher_profile']].map(x=>`<button onclick="render('${x[2]}')"><b>${x[0]}</b><span>${x[1]}</span></button>`).join('')}</div></section><footer class="v115DashFooter teacher"><b>Our Vision</b><span>Our Mission &nbsp; • &nbsp; Our Motto</span><em>Together for a Brighter Tomorrow</em></footer></div>`);
 }
 
 /* ---------- Attendance monitor ---------- */
@@ -8807,8 +8800,8 @@ v90AttendanceClassDetail=function(cl){let s=v103SortStudents((window.__v90Monito
 async function v103LoadClassFront(role){let obj=role==='teacher'?window.__v103TeacherFront:window.__v103AdminFront,sel=$(role==='teacher'?'v103TeacherFrontClass':'v103AdminFrontClass'),c=sel?.value||'';if(!c){obj.rows=[];obj.att={};obj.className='';return v103RenderClassFront(role)}if(role==='teacher'&&!v103ClassTeacherClasses().includes(String(c)))return;let [sr,ar]=await Promise.all([sb.from('students').select('id,student_name,father_name,admission_no,roll_no,class_name,section,phone,status').eq('class_name',c).eq('status','Active'),sb.from('attendance').select('admission_no,status').eq('class_name',c).eq('date',today())]);if(sr.error||ar.error){let b=$(role==='teacher'?'v103TeacherFrontBody':'v103AdminFrontBody');if(b)b.innerHTML=`<div class="empty">${esc((sr.error||ar.error).message)}</div>`;return}obj.rows=v103SortStudents(sr.data||[]);obj.att={};(ar.data||[]).forEach(x=>obj.att[x.admission_no]=x.status);obj.className=c;v103RenderClassFront(role)}
 function v103RenderClassFront(role){let obj=role==='teacher'?window.__v103TeacherFront:window.__v103AdminFront,q=$(role==='teacher'?'v103TeacherFrontQ':'v103AdminFrontQ')?.value||'',body=$(role==='teacher'?'v103TeacherFrontBody':'v103AdminFrontBody');if(!body)return;if(!obj.className)return body.innerHTML='<div class="empty">Class select करें.</div>';let rows=obj.rows.filter(x=>v103MatchStudent(x,q)),cnt=v103Counts(obj.rows,obj.att);body.innerHTML=`${v103StatsHtml(cnt)}<div class="tableWrap"><table class="v103ClassTable"><tr><th>S.No.</th><th>Roll No.</th><th>Student</th><th>Father</th><th>Admission</th><th>Status</th></tr>${rows.slice(0,80).map((s,i)=>`<tr><td>${i+1}</td><td><b>${esc(s.roll_no||'—')}</b></td><td><b>${esc(s.student_name||'')}</b></td><td>${esc(s.father_name||'')}</td><td>${esc(s.admission_no||'')}</td><td>${esc(obj.att[s.admission_no]||'Not Marked')}</td></tr>`).join('')||'<tr><td colspan="6">No matching students.</td></tr>'}</table></div>`}
 function v103DashboardClassPanel(role,classes){let id=role==='teacher'?'Teacher':'Admin',first=role==='teacher'?(classes[0]||''):'';return `<section id="v103${id}ClassPanel" class="v103ClassPanel"><div class="v103ClassHead"><div><h3>${role==='teacher'?'👥 My Class • Today Attendance':'🏫 Smart Class Snapshot'}</h3><p>${role==='teacher'?'Only Class Teacher assigned class':'Class select → automatic data • live search'}</p></div></div><div class="v103ClassTools"><select id="v103${id}FrontClass" onchange="v103LoadClassFront('${role}')">${role==='admin'?'<option value="">Select Class</option>':''}${classes.map(c=>`<option ${c===first?'selected':''}>${esc(c)}</option>`).join('')}</select><input id="v103${id}FrontQ" autocomplete="off" placeholder="Type letter: name / father / roll / admission" oninput="v103RenderClassFront('${role}')"></div><div id="v103${id}FrontBody"><div class="empty">${role==='teacher'&&first?'Loading...':'Class select करें.'}</div></div></section>`}
-async function v103DecorateTeacherDashboard(){try{await v103RefreshTeacherContext();let classes=v103ClassTeacherClasses(),dash=document.querySelector('#erpContent .v90Dash');if(!dash)return;document.getElementById('v103TeacherClassPanel')?.remove();let welcome=dash.querySelector('.v90Welcome'),tmp=document.createElement('div');tmp.innerHTML=v103DashboardClassPanel('teacher',classes);let panel=tmp.firstElementChild,slot=document.getElementById('v114TeacherClassSlot');if(slot)slot.replaceChildren(panel);else (welcome||dash.firstElementChild)?.insertAdjacentElement('afterend',panel);let stats=[...dash.querySelectorAll('.v90Stat')].find(x=>v103Norm(x.querySelector('small')?.textContent)==='my classes');if(stats){let b=stats.querySelector('b');if(b)b.textContent=String(classes.length)}if(classes.length)await v103LoadClassFront('teacher');else panel.querySelector('#v103TeacherFrontBody').innerHTML='<div class="empty">Admin ने Class Teacher class assign नहीं की है. Teaching Bell नीचे केवल assigned timetable periods दिखाता रहेगा.</div>';v103HideControl()}catch(e){console.warn('V103 teacher dashboard',e)}}
-async function v103DecorateAdminDashboard(){try{let dash=document.querySelector('#erpContent .v90Dash');if(!dash)return;document.getElementById('v103AdminClassPanel')?.remove();let stats=dash.querySelector('#v90Stats')||dash.querySelector('.v90Stats'),tmp=document.createElement('div');tmp.innerHTML=v103DashboardClassPanel('admin',cls);let panel=tmp.firstElementChild,slot=document.getElementById('v114AdminClassSlot');if(slot)slot.replaceChildren(panel);else (stats||dash.querySelector('.v90Welcome'))?.insertAdjacentElement('afterend',panel);let q=$('v97DashQ');if(q){q.setAttribute('autocomplete','off');q.oninput=()=>{clearTimeout(window.__v103LiveTimers.adminSearch);window.__v103LiveTimers.adminSearch=setTimeout(()=>v103AdminDashboardLiveSearch(q.value),170)}}v103HideControl()}catch(e){console.warn('V103 admin dashboard',e)}}
+async function v103DecorateTeacherDashboard(){try{await v103RefreshTeacherContext();let classes=v103ClassTeacherClasses(),dash=document.querySelector('#erpContent .v90Dash');if(!dash)return;document.getElementById('v103TeacherClassPanel')?.remove();let slot=document.getElementById('v114TeacherClassSlot');if(slot){slot.innerHTML=`<article id="v103TeacherClassPanel" class="v90Panel v115TeacherClasses"><div class="v114PanelHead"><h3>👥 My Classes</h3><button onclick="render('teacher_class')">View All →</button></div><div class="v115ClassList">${classes.length?classes.map((c,i)=>`<button onclick="render('teacher_class')"><b>${v90Safe(c)}</b><span>${i===0?'Class Teacher':'Assigned Class'}</span><em>›</em></button>`).join(''):'<div class="empty">Admin ने Class Teacher class assign नहीं की है.</div>'}</div></article>`}let stats=[...dash.querySelectorAll('.v90Stat')].find(x=>v103Norm(x.querySelector('small')?.textContent)==='my classes');if(stats){let b=stats.querySelector('b');if(b)b.textContent=String(classes.length)}v103HideControl()}catch(e){console.warn('V103 teacher dashboard',e)}}
+async function v103DecorateAdminDashboard(){try{document.getElementById('v103AdminClassPanel')?.remove();let slot=document.getElementById('v114AdminClassSlot');if(slot)slot.innerHTML='';let q=$('v97DashQ');if(q){q.setAttribute('autocomplete','off');q.oninput=()=>{clearTimeout(window.__v103LiveTimers.adminSearch);window.__v103LiveTimers.adminSearch=setTimeout(()=>v103AdminDashboardLiveSearch(q.value),170)}}v103HideControl()}catch(e){console.warn('V103 admin dashboard',e)}}
 async function v103AdminDashboardLiveSearch(q){
  q=String(q||'').trim();let host=$('v103AdminLiveSearch');if(!host){let bar=$('v97DashTools');if(!bar)return;host=document.createElement('div');host.id='v103AdminLiveSearch';host.style.gridColumn='1/-1';host.className='v103InlineStatus';bar.appendChild(host)}
  if(!q){host.innerHTML='<div class="v105SearchEmpty">Search में एक letter लिखते ही Student और Teacher matching data नीचे आएगा.</div>';return}
@@ -8860,7 +8853,7 @@ setTimeout(v103HideControl,800);
 }
 </style>
 <script id="v109-final-runtime-guard">
-window.V109_BUILD='V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15';
+window.V109_BUILD='V114.4-CLEAN-SCHOOL-REAL-UI-2026-09-15';
 function v109NormalizeSidebar(){
  try{
   const erp=document.getElementById('erp'),aside=document.querySelector('#erp aside');if(!erp||!aside)return;
@@ -9112,114 +9105,30 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 </script>
 <!-- ===== END V113 LONG-TERM FREE-TIER SMART SYNC + APPROVAL HARDENING ===== -->
 
-<link rel="stylesheet" href="premium-role-ui.css?v=1142fix1">
-<script>window.V114_BUILD='V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15';</script>
-
-
-<script id="v1142-clean-layout-fix">
-/* V114.2 — visual shell/state repair only. Existing routes, DB/RPC, permissions and CRUD remain authoritative. */
+<script id="v1143-final-ui-runtime">
 (function(){
-  const q=id=>document.getElementById(id);
-  function closePublicOverlay(){
-    try{q('publicPageView')?.classList.add('hidden')}catch(_e){}
-    try{document.body.classList.remove('v1142-public-page','v1142-parent-active')}catch(_e){}
-  }
-  function cleanAdminChrome(){
+  window.V1143_BUILD='V114.4-CLEAN-SCHOOL-REAL-UI-2026-09-15';
+  function tick(){
     try{
-      const erp=q('erp');
-      if(!erp||erp.classList.contains('hidden'))return;
-      document.body.classList.add('v1142-erp-active');
-      closePublicOverlay();
-      // Old dashboard utility strip duplicated the same functions in scattered places.
-      q('v97DashTools')?.remove();
-      // Keep notification + one profile identity. Other legacy badges remain functional through their pages/cards/nav.
-      ['v64HealthBadge','v113EcoBadge','v764LiveBadge','v58LiveDot','v75DarkBtn'].forEach(id=>{let e=q(id);if(e)e.style.display='none'});
-      document.querySelector('#erp aside')?.classList.remove('open');
-      document.querySelector('#erp main')?.scrollTo({top:0,left:0});
-      window.scrollTo?.(0,0);
-    }catch(_e){}
-  }
-  function cleanParentChrome(){
-    try{
-      const pd=q('parentDashboard');
-      if(pd&&!pd.classList.contains('hidden')){
-        document.body.classList.add('v1142-parent-active');
-        document.body.classList.remove('v1142-erp-active','v1142-public-page');
+      const top=document.querySelector('#erp .erpTop');
+      if(top && !document.getElementById('v1143Clock')){
+        const x=document.createElement('div');x.id='v1143Clock';x.className='v1143Clock';
+        const bell=document.getElementById('v62Bell');
+        top.insertBefore(x,bell||document.getElementById('v97TopIdentity')||null);
       }
+      const x=document.getElementById('v1143Clock');
+      if(x){const n=new Date();x.innerHTML='<b>'+n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})+'</b><small>'+n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+'</small>'}
+      document.body.classList.toggle('v1143-parent-active',!!document.querySelector('#parentDashboard:not(.hidden)'));
     }catch(_e){}
   }
-
-  // One ticker row only.
-  const oldNotice=window.renderRunningNotices;
-  window.renderRunningNotices=function(){
-    const host=q('runningNotices');if(!host)return;
-    try{
-      const defaults=['L D MODERN EDUCATION ACADEMY','Admission & Academic Updates','Important School Notice'];
-      const rows=[
-        [school?.notice1_text||defaults[0],school?.notice1_enabled!==false],
-        [school?.notice2_text||defaults[1],school?.notice2_enabled!==false],
-        [school?.notice3_text||defaults[2],school?.notice3_enabled!==false]
-      ].filter(x=>x[1]).map(x=>String(x[0]||'').trim()).filter(Boolean);
-      const sec=Math.max(8,Math.min(90,Number(school?.notice_speed_seconds||localStorage.getItem('ld_notice_speed_seconds')||35)));
-      if(!rows.length){host.innerHTML='';host.style.display='none';return}
-      const safe=(typeof esc==='function'?esc:(v=>String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))));
-      host.innerHTML='<div class="runStrip r1"><span style="animation-duration:'+sec+'s">'+safe(rows.join('   ★   '))+'</span></div>';
-      host.style.display='block';
-    }catch(e){if(typeof oldNotice==='function')return oldNotice.apply(this,arguments)}
-  };
-
-  // Public pages always own a clean full-width canvas; no ERP/sidebar underneath.
-  try{
-    const baseShow=window.showPublicPage;
-    window.showPublicPage=function(id){
-      document.body.classList.remove('v1142-erp-active','v1142-parent-active');
-      document.body.classList.toggle('v1142-public-page',id!=='home');
-      const r=baseShow.apply(this,arguments);
-      setTimeout(()=>{try{q('v26Nav')?.classList.remove('show');q('publicPageView')?.scrollTo({top:0,left:0});window.scrollTo(0,0)}catch(_e){}},0);
-      return r;
-    };
-  }catch(_e){}
-
-  // ERP must never retain a fixed public Admission/About page over it.
-  try{
-    const baseOpen=window.openERP;
-    window.openERP=async function(){
-      closePublicOverlay();
-      document.body.classList.add('v1142-erp-active');
-      const r=await baseOpen.apply(this,arguments);
-      [20,120,360].forEach(ms=>setTimeout(cleanAdminChrome,ms));
-      return r;
-    };
-  }catch(_e){}
-
-  try{
-    const baseRender=window.render;
-    window.render=async function(){
-      if(q('erp')&&!q('erp').classList.contains('hidden'))closePublicOverlay();
-      const r=await baseRender.apply(this,arguments);
-      [20,100,260].forEach(ms=>setTimeout(cleanAdminChrome,ms));
-      return r;
-    };
-  }catch(_e){}
-
-  try{
-    const baseBack=window.backWebsite;
-    window.backWebsite=function(){document.body.classList.remove('v1142-erp-active','v1142-parent-active');const r=baseBack.apply(this,arguments);setTimeout(()=>window.scrollTo(0,0),0);return r};
-  }catch(_e){}
-
-  try{
-    const baseParentLoad=window.loadParentPortal;
-    window.loadParentPortal=async function(){const r=await baseParentLoad.apply(this,arguments);setTimeout(cleanParentChrome,30);return r};
-  }catch(_e){}
-  try{
-    const baseParentOut=window.parentSignOut;
-    window.parentSignOut=async function(){document.body.classList.remove('v1142-parent-active');return await baseParentOut.apply(this,arguments)};
-  }catch(_e){}
-
-  function refresh(){try{window.renderRunningNotices?.();cleanAdminChrome();cleanParentChrome()}catch(_e){}}
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(refresh,180));
-  window.addEventListener('load',()=>setTimeout(refresh,320));
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(tick,250));
+  window.addEventListener('load',()=>setTimeout(tick,450));
+  setInterval(tick,30000);
+  const obs=new MutationObserver(()=>tick());
+  try{obs.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']})}catch(_e){}
 })();
 </script>
 
+<link rel="stylesheet" href="premium-role-ui.css?v=1145final3d1">
+<script>window.V114_BUILD='V114.4-CLEAN-SCHOOL-REAL-UI-2026-09-15';</script>
 </body></html>
