@@ -1,5 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114-REFERENCE-SAME-DESIGN-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114-REFERENCE-SAME-DESIGN-2026-09-15"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
 <link rel="canonical" href="/">
@@ -8860,7 +8860,7 @@ setTimeout(v103HideControl,800);
 }
 </style>
 <script id="v109-final-runtime-guard">
-window.V109_BUILD='V114-REFERENCE-SAME-DESIGN-2026-09-15';
+window.V109_BUILD='V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15';
 function v109NormalizeSidebar(){
  try{
   const erp=document.getElementById('erp'),aside=document.querySelector('#erp aside');if(!erp||!aside)return;
@@ -9112,6 +9112,114 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 </script>
 <!-- ===== END V113 LONG-TERM FREE-TIER SMART SYNC + APPROVAL HARDENING ===== -->
 
-<link rel="stylesheet" href="premium-role-ui.css?v=114ref2">
-<script>window.V114_BUILD='V114-REFERENCE-SAME-DESIGN-2026-09-15';</script>
-\n<script id="v1141-public-page-fix">\n/* V114.1 visual-only public shell fix: one ticker row + clean internal-page canvas. */\n(function(){\n  const oldRender=window.renderRunningNotices;\n  window.renderRunningNotices=function(){\n    const host=document.getElementById('runningNotices');\n    if(!host)return;\n    try{\n      const defaults=['L D MODERN EDUCATION ACADEMY','Admission & Academic Updates','Important School Notice'];\n      const rows=[\n        [school?.notice1_text||defaults[0],school?.notice1_enabled!==false],\n        [school?.notice2_text||defaults[1],school?.notice2_enabled!==false],\n        [school?.notice3_text||defaults[2],school?.notice3_enabled!==false]\n      ].filter(x=>x[1]).map(x=>String(x[0]||'').trim()).filter(Boolean);\n      const sec=Math.max(8,Math.min(90,Number(school?.notice_speed_seconds||localStorage.getItem('ld_notice_speed_seconds')||35)));\n      if(!rows.length){host.innerHTML='';host.style.display='none';return}\n      const safe=(typeof esc==='function'?esc:(v=>String(v).replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[m]))));\n      host.innerHTML='<div class="runStrip r1"><span style="animation-duration:'+sec+'s">'+safe(rows.join('   ★   '))+'</span></div>';\n      host.style.display='block';\n    }catch(e){ if(typeof oldRender==='function') return oldRender.apply(this,arguments); }\n  };\n  function refresh(){try{window.renderRunningNotices?.()}catch(_e){}}\n  document.addEventListener('DOMContentLoaded',()=>setTimeout(refresh,180));\n  window.addEventListener('load',()=>setTimeout(refresh,260));\n})();\n</script>\n</body></html>
+<link rel="stylesheet" href="premium-role-ui.css?v=1142fix1">
+<script>window.V114_BUILD='V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15';</script>
+
+
+<script id="v1142-clean-layout-fix">
+/* V114.2 — visual shell/state repair only. Existing routes, DB/RPC, permissions and CRUD remain authoritative. */
+(function(){
+  const q=id=>document.getElementById(id);
+  function closePublicOverlay(){
+    try{q('publicPageView')?.classList.add('hidden')}catch(_e){}
+    try{document.body.classList.remove('v1142-public-page','v1142-parent-active')}catch(_e){}
+  }
+  function cleanAdminChrome(){
+    try{
+      const erp=q('erp');
+      if(!erp||erp.classList.contains('hidden'))return;
+      document.body.classList.add('v1142-erp-active');
+      closePublicOverlay();
+      // Old dashboard utility strip duplicated the same functions in scattered places.
+      q('v97DashTools')?.remove();
+      // Keep notification + one profile identity. Other legacy badges remain functional through their pages/cards/nav.
+      ['v64HealthBadge','v113EcoBadge','v764LiveBadge','v58LiveDot','v75DarkBtn'].forEach(id=>{let e=q(id);if(e)e.style.display='none'});
+      document.querySelector('#erp aside')?.classList.remove('open');
+      document.querySelector('#erp main')?.scrollTo({top:0,left:0});
+      window.scrollTo?.(0,0);
+    }catch(_e){}
+  }
+  function cleanParentChrome(){
+    try{
+      const pd=q('parentDashboard');
+      if(pd&&!pd.classList.contains('hidden')){
+        document.body.classList.add('v1142-parent-active');
+        document.body.classList.remove('v1142-erp-active','v1142-public-page');
+      }
+    }catch(_e){}
+  }
+
+  // One ticker row only.
+  const oldNotice=window.renderRunningNotices;
+  window.renderRunningNotices=function(){
+    const host=q('runningNotices');if(!host)return;
+    try{
+      const defaults=['L D MODERN EDUCATION ACADEMY','Admission & Academic Updates','Important School Notice'];
+      const rows=[
+        [school?.notice1_text||defaults[0],school?.notice1_enabled!==false],
+        [school?.notice2_text||defaults[1],school?.notice2_enabled!==false],
+        [school?.notice3_text||defaults[2],school?.notice3_enabled!==false]
+      ].filter(x=>x[1]).map(x=>String(x[0]||'').trim()).filter(Boolean);
+      const sec=Math.max(8,Math.min(90,Number(school?.notice_speed_seconds||localStorage.getItem('ld_notice_speed_seconds')||35)));
+      if(!rows.length){host.innerHTML='';host.style.display='none';return}
+      const safe=(typeof esc==='function'?esc:(v=>String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))));
+      host.innerHTML='<div class="runStrip r1"><span style="animation-duration:'+sec+'s">'+safe(rows.join('   ★   '))+'</span></div>';
+      host.style.display='block';
+    }catch(e){if(typeof oldNotice==='function')return oldNotice.apply(this,arguments)}
+  };
+
+  // Public pages always own a clean full-width canvas; no ERP/sidebar underneath.
+  try{
+    const baseShow=window.showPublicPage;
+    window.showPublicPage=function(id){
+      document.body.classList.remove('v1142-erp-active','v1142-parent-active');
+      document.body.classList.toggle('v1142-public-page',id!=='home');
+      const r=baseShow.apply(this,arguments);
+      setTimeout(()=>{try{q('v26Nav')?.classList.remove('show');q('publicPageView')?.scrollTo({top:0,left:0});window.scrollTo(0,0)}catch(_e){}},0);
+      return r;
+    };
+  }catch(_e){}
+
+  // ERP must never retain a fixed public Admission/About page over it.
+  try{
+    const baseOpen=window.openERP;
+    window.openERP=async function(){
+      closePublicOverlay();
+      document.body.classList.add('v1142-erp-active');
+      const r=await baseOpen.apply(this,arguments);
+      [20,120,360].forEach(ms=>setTimeout(cleanAdminChrome,ms));
+      return r;
+    };
+  }catch(_e){}
+
+  try{
+    const baseRender=window.render;
+    window.render=async function(){
+      if(q('erp')&&!q('erp').classList.contains('hidden'))closePublicOverlay();
+      const r=await baseRender.apply(this,arguments);
+      [20,100,260].forEach(ms=>setTimeout(cleanAdminChrome,ms));
+      return r;
+    };
+  }catch(_e){}
+
+  try{
+    const baseBack=window.backWebsite;
+    window.backWebsite=function(){document.body.classList.remove('v1142-erp-active','v1142-parent-active');const r=baseBack.apply(this,arguments);setTimeout(()=>window.scrollTo(0,0),0);return r};
+  }catch(_e){}
+
+  try{
+    const baseParentLoad=window.loadParentPortal;
+    window.loadParentPortal=async function(){const r=await baseParentLoad.apply(this,arguments);setTimeout(cleanParentChrome,30);return r};
+  }catch(_e){}
+  try{
+    const baseParentOut=window.parentSignOut;
+    window.parentSignOut=async function(){document.body.classList.remove('v1142-parent-active');return await baseParentOut.apply(this,arguments)};
+  }catch(_e){}
+
+  function refresh(){try{window.renderRunningNotices?.();cleanAdminChrome();cleanParentChrome()}catch(_e){}}
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(refresh,180));
+  window.addEventListener('load',()=>setTimeout(refresh,320));
+})();
+</script>
+
+</body></html>

@@ -133,3 +133,119 @@
   #publicPageBody .publicForm{grid-template-columns:1fr!important;width:100%!important}
   #publicPageBody input,#publicPageBody select,#publicPageBody textarea,#publicPageBody button{max-width:100%!important}
 }
+
+
+/* ======================================================================
+   V114.2 CLEAN LAYOUT + 3D FUNCTION CARD FIX
+   Visual-only. Removes public left rail, prevents overlay/covering, and
+   consolidates Admin dashboard appearance without changing any route/action.
+   ====================================================================== */
+
+/* PUBLIC WEBSITE — no permanent left rail. Desktop navigation becomes a clean top ribbon. */
+.v26Home.v114ReferenceHome{padding-left:0!important;width:100%!important;max-width:none!important;overflow-x:hidden!important}
+.v26Top{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:'brand motto' 'nav nav'!important;padding:10px 24px 0!important}
+.v26Brand{grid-area:brand!important}.v26Motto{grid-area:motto!important}
+#v26Nav{grid-area:nav!important;position:static!important;inset:auto!important;width:100%!important;min-height:52px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;flex-wrap:wrap!important;gap:4px!important;overflow:visible!important;padding:6px 8px!important;margin:10px -8px 0!important;background:linear-gradient(90deg,#073b76,#075ca8,#073b76)!important;border-radius:12px 12px 0 0!important;box-shadow:0 6px 18px rgba(0,43,91,.14)!important;transform:none!important}
+#v26Nav:before{display:none!important;content:none!important}
+#v26Nav button{width:auto!important;min-height:38px!important;padding:8px 10px!important;border-radius:9px!important;display:inline-flex!important;flex:0 0 auto!important;font-size:11px!important;box-shadow:none!important}
+#v26Nav button span{flex:0 0 auto!important}
+#v26Nav button:hover,#v26Nav button.active{background:linear-gradient(180deg,#25a8ff,#0877dd)!important;box-shadow:0 7px 14px rgba(0,62,137,.22),inset 0 1px rgba(255,255,255,.45)!important;transform:translateY(-1px)!important}
+.v26Hero,.v26MainGrid,.v114HomeStats,.v26Footer{width:100%!important;margin-left:0!important}
+
+/* Public Admission/About/Gallery/Notices: full canvas, never under a left rail. */
+@media(min-width:901px){
+ #publicPageView.publicPageView{position:fixed!important;top:38px!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;z-index:12000!important;overflow-y:auto!important;overflow-x:hidden!important;background:#f4f8fc!important}
+ #publicPageView .publicPageBar{position:sticky!important;top:0!important;height:64px!important;z-index:12002!important;padding:0 22px!important;background:linear-gradient(90deg,#0757c9,#0c76e6)!important}
+ #publicPageBody{width:100%!important;min-width:0!important;min-height:calc(100vh - 102px)!important;overflow-x:hidden!important}
+ #publicPageBody>.publicSection,#publicPageBody .publicSection{width:min(1220px,calc(100% - 32px))!important;max-width:1220px!important;margin:16px auto!important;padding:28px 30px!important;border-radius:16px!important;box-shadow:0 8px 24px rgba(17,69,126,.08)!important}
+}
+#publicSite .runningNoticeHost{height:38px!important;min-height:38px!important;overflow:hidden!important}
+#publicSite .runStrip{height:38px!important;min-height:38px!important}.runStrip.r2,.runStrip.r3{display:none!important}
+
+/* ADMIN/TEACHER SHELL — one clean header, no duplicate scattered badges/profile boxes. */
+#erp.v90Shell{overflow-x:hidden!important}
+#erp.v90Shell main{position:relative!important;min-width:0!important;overflow-x:hidden!important}
+#erp.v90Shell .erpTop{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:8px!important;min-height:76px!important;height:auto!important;padding:9px 14px!important;position:sticky!important;top:0!important;z-index:500!important;background:linear-gradient(90deg,#0755bc,#087ee2)!important}
+#erp.v90Shell .v63SchoolHead{display:block!important;flex:1 1 270px!important;min-width:180px!important;max-width:390px!important}
+#erp.v90Shell .v764MasterSearch{display:flex!important;flex:0 1 460px!important;width:auto!important;max-width:460px!important;min-width:230px!important;margin-left:auto!important}
+#erp.v90Shell #v90BackBtn,#erp.v90Shell #v90HomeBtn{flex:0 0 auto!important}
+#erp.v90Shell #v63AdminBox{display:none!important}
+#erp.v90Shell #v64HealthBadge,#erp.v90Shell #v113EcoBadge,#erp.v90Shell #v764LiveBadge,#erp.v90Shell #v58LiveDot,#erp.v90Shell #v75DarkBtn{display:none!important}
+#erp.v90Shell #v62Bell{flex:0 0 42px!important;width:42px!important;height:42px!important;border:1px solid rgba(255,255,255,.52)!important;background:#fff!important;box-shadow:0 5px 13px rgba(0,52,112,.15)!important}
+#erp.v90Shell #v97TopIdentity{display:flex!important;flex:0 0 auto!important;max-width:205px!important;min-height:43px!important;padding:5px 10px 5px 5px!important;border-color:rgba(255,255,255,.34)!important;background:rgba(3,49,105,.24)!important;color:#fff!important;box-shadow:none!important}
+#erp.v90Shell #v97TopIdentity b,#erp.v90Shell #v97TopIdentity small{color:#fff!important}
+#erp.v90Shell #erpContent{position:relative!important;z-index:1!important;width:100%!important;max-width:none!important;margin:0!important;padding:12px 16px 26px!important;overflow-x:hidden!important}
+#erp.v90Shell .v90Page,#erp.v90Shell .v90Dash{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important}
+
+/* Legacy utility strip duplicated dashboard functions. Hide it; all its routes remain in existing sidebar/cards. */
+#v97DashTools{display:none!important}
+
+/* Sidebar is stable on desktop and never covers main content. */
+@media(min-width:901px){
+ #erp.v90Shell aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:225px!important;transform:none!important;overflow:hidden!important;z-index:600!important}
+ #erp.v90Shell aside #erpNav{overflow-y:auto!important;overflow-x:hidden!important;padding-bottom:14px!important}
+ #erp.v90Shell main{margin-left:225px!important;width:calc(100% - 225px)!important}
+ .v90NavGroup summary{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;box-shadow:inset 0 1px rgba(255,255,255,.08)!important}
+ .v90NavGroup[open]>summary,.v90NavGroup summary:hover{background:linear-gradient(180deg,#159bed,#0874d9)!important;box-shadow:0 8px 16px rgba(0,53,122,.25),inset 0 1px rgba(255,255,255,.35)!important}
+}
+
+/* ADMIN cards — stronger premium 3D depth while preserving every onclick/action. */
+.v114AdminDash .v90Stat,.v114QuickGrid button,.v90Monitor,.v114PortalQuick button,.v90Quick button{position:relative!important;overflow:hidden!important;transition:transform .15s ease,box-shadow .15s ease!important;box-shadow:0 10px 0 rgba(4,58,119,.08),0 15px 28px rgba(6,59,116,.13),inset 0 1px rgba(255,255,255,.48)!important}
+.v114AdminDash .v90Stat:before,.v114QuickGrid button:before,.v90Monitor:before,.v114PortalQuick button:before,.v90Quick button:before{content:''!important;position:absolute!important;left:0!important;top:0!important;right:0!important;height:38%!important;background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(255,255,255,0))!important;pointer-events:none!important}
+.v114QuickGrid button:hover,.v90Monitor:hover,.v114PortalQuick button:hover,.v90Quick button:hover{transform:translateY(-3px)!important;box-shadow:0 12px 0 rgba(4,58,119,.07),0 20px 34px rgba(6,59,116,.18),inset 0 1px rgba(255,255,255,.55)!important}
+.v114QuickGrid button:active,.v90Monitor:active,.v114PortalQuick button:active,.v90Quick button:active{transform:translateY(1px)!important;box-shadow:0 5px 0 rgba(4,58,119,.08),0 8px 14px rgba(6,59,116,.12)!important}
+.v114QuickGrid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:11px!important}
+.v114QuickGrid button{min-height:92px!important;border:1px solid rgba(123,166,207,.32)!important;border-bottom-color:rgba(73,121,171,.42)!important;border-radius:15px!important}
+.v114QuickGrid b{font-size:28px!important;filter:drop-shadow(0 2px 2px rgba(0,43,91,.12))!important}.v114QuickGrid span{font-size:10px!important}
+.v114ManagementPanel{padding:2px 0 0!important}.v114ManagementPanel .v90SectionTitle{margin:0 0 9px!important;padding:12px 14px!important;border-radius:14px!important;background:linear-gradient(180deg,#fff,#f5faff)!important;border:1px solid #d7e5f2!important}
+.v90MonitorGrid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:11px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.v90Monitor{min-height:96px!important;display:grid!important;grid-template-columns:48px minmax(0,1fr) 16px!important;align-items:center!important;gap:9px!important;padding:12px!important;border:1px solid #d5e4f2!important;border-radius:16px!important;background:linear-gradient(145deg,#ffffff,#edf6ff)!important;color:#123b70!important;text-align:left!important}
+.v90Monitor:nth-child(4n+2){background:linear-gradient(145deg,#ffffff,#edfbf4)!important}.v90Monitor:nth-child(4n+3){background:linear-gradient(145deg,#ffffff,#fff7e9)!important}.v90Monitor:nth-child(4n+4){background:linear-gradient(145deg,#ffffff,#f5efff)!important}
+.v90MonitorIcon{width:46px!important;height:46px!important;border-radius:14px!important;display:grid!important;place-items:center!important;background:linear-gradient(145deg,#1188ef,#075fc7)!important;color:#fff!important;font-size:23px!important;box-shadow:0 7px 14px rgba(3,81,164,.24),inset 0 1px rgba(255,255,255,.35)!important}.v90Monitor:nth-child(4n+2) .v90MonitorIcon{background:linear-gradient(145deg,#25c97a,#0a9a54)!important}.v90Monitor:nth-child(4n+3) .v90MonitorIcon{background:linear-gradient(145deg,#ffba31,#ee8610)!important}.v90Monitor:nth-child(4n+4) .v90MonitorIcon{background:linear-gradient(145deg,#9a5cf4,#6f37ce)!important}
+.v90Monitor b{display:block!important;color:#0d3971!important;font-size:11px!important}.v90Monitor small{display:block!important;margin-top:4px!important;color:#6a8097!important;font-size:9px!important}.v90Monitor em{font-style:normal!important;color:#0a69cd!important;font-size:20px!important}
+
+/* Class snapshot / pay fee are clean blocks, not floating layers. */
+#v114AdminClassSlot,.v103ClassPanel,.v114PayPanel{position:relative!important;inset:auto!important;width:100%!important;max-width:100%!important;z-index:auto!important;clear:both!important}
+.v103ClassPanel,.v114PayPanel{border-radius:16px!important;box-shadow:0 9px 24px rgba(4,57,111,.08)!important}
+
+/* PARENT / STUDENT — own full-screen portal; no public left rail or generic bar covering it. */
+body.v1142-parent-active #publicPageView{inset:0!important;top:0!important;left:0!important;width:100%!important;z-index:21000!important}
+body.v1142-parent-active #publicPageView>.publicPageBar{display:none!important}
+body.v1142-parent-active #publicPageBody{min-height:100vh!important;width:100%!important;padding:0!important;margin:0!important}
+body.v1142-parent-active #parentPortal{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+#parentDashboard:not(.hidden){left:0!important;right:0!important;top:0!important;bottom:0!important;width:100%!important;max-width:none!important}
+.v114PortalQuick button{border-radius:14px!important;background:linear-gradient(145deg,#fff,#edf6ff)!important}
+.v114PortalQuick button:nth-child(3n+2){background:linear-gradient(145deg,#fff,#eefaf4)!important}.v114PortalQuick button:nth-child(3n){background:linear-gradient(145deg,#fff,#fff5e8)!important}
+
+/* MOBILE/TABLET — no permanent side rail, full-width content, menu closes after route. */
+@media(max-width:900px){
+ .v26Top{grid-template-columns:1fr!important;grid-template-areas:'brand'!important;padding:8px 10px 8px 52px!important}
+ .v26Menu{display:grid!important;position:absolute!important;left:10px!important;top:18px!important}
+ .v26Top #v26Nav{position:fixed!important;left:10px!important;right:10px!important;top:62px!important;bottom:auto!important;width:auto!important;max-height:calc(100vh - 74px)!important;overflow:auto!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;padding:10px!important;margin:0!important;border-radius:15px!important;background:linear-gradient(180deg,#073d7a,#052a58)!important;transform:translateY(-125%)!important;transition:transform .2s ease!important;z-index:20050!important;box-shadow:0 20px 45px rgba(0,31,68,.35)!important}
+ .v26Top #v26Nav.show{transform:translateY(0)!important}
+ #v26Nav button{width:100%!important;justify-content:flex-start!important;min-height:43px!important;font-size:11px!important}
+ #publicPageView.publicPageView{position:fixed!important;top:38px!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;z-index:12000!important;overflow-y:auto!important;overflow-x:hidden!important}
+ #publicPageBody>.publicSection,#publicPageBody .publicSection{width:100%!important;max-width:none!important;margin:0!important;padding:16px 11px!important;border-radius:0!important;box-shadow:none!important}
+ #erp.v90Shell aside{width:min(82vw,292px)!important;transform:translateX(-105%)!important;z-index:20000!important}
+ #erp.v90Shell aside.open{transform:translateX(0)!important}
+ #erp.v90Shell main{margin-left:0!important;width:100%!important}
+ #erp.v90Shell .erpTop{display:flex!important;flex-wrap:wrap!important;gap:6px!important;min-height:66px!important;padding:7px 8px!important}
+ #erp.v90Shell .erpTop .hamb{display:grid!important;order:0!important}
+ #erp.v90Shell #v90BackBtn{order:1!important}#erp.v90Shell #v90HomeBtn{order:2!important}
+ #erp.v90Shell .v63SchoolHead{display:none!important}
+ #erp.v90Shell #v62Bell{order:3!important;margin-left:auto!important}
+ #erp.v90Shell #v97TopIdentity{order:4!important;max-width:48px!important;padding:4px!important}
+ #erp.v90Shell #v97TopIdentity>span:last-child{display:none!important}
+ #erp.v90Shell .v764MasterSearch{order:10!important;flex:1 0 100%!important;width:100%!important;max-width:none!important;min-width:0!important}
+ #erp.v90Shell #erpContent{padding:9px!important}
+ .v90MonitorGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v90Monitor{min-height:88px!important;grid-template-columns:42px 1fr 12px!important;padding:10px!important}.v90MonitorIcon{width:40px!important;height:40px!important;font-size:20px!important}
+ .v114QuickGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v114QuickGrid button{min-height:86px!important}
+ .v114PortalQuick{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:560px){
+ .v26Top #v26Nav{grid-template-columns:1fr!important}
+ .v90MonitorGrid{grid-template-columns:1fr!important}
+ .v114PortalQuick{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .v114PortalHero{border-radius:0 0 16px 16px!important}
+ .portalHead{min-height:66px!important;padding:7px 8px!important}
+}
