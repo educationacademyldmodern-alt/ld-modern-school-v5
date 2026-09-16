@@ -1,5 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.11-PREMIUM-CLEAN-DASHBOARDS-2026-09-16"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.11-PREMIUM-CLEAN-DASHBOARDS-2026-09-16"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
 <link rel="canonical" href="/">
@@ -1299,9 +1299,20 @@ function v14Pct(a,b){return b?Math.round((Number(a||0)/Number(b))*10000)/100:0}
 function v14Grade(p){p=Number(p||0);return p>=90?'A+':p>=80?'A':p>=70?'B+':p>=60?'B':p>=50?'C':p>=40?'D':'F'}
 function v14Modal(html){let old=$('v14Modal');if(old)old.remove();document.body.insertAdjacentHTML('beforeend',`<div id="v14Modal" class="v14Modal"><div class="v14ModalCard"><button class="v14Close" onclick="$('v14Modal').remove()">✕</button>${html}</div></div>`)}
 function v14Pdf(elId,name){let el=$(elId);if(!el)return toast('Preview first');if(window.html2pdf){let isMark=/mark|report|result/i.test(String(name||''))||el.classList.contains('markPreview')||!!el.querySelector('.markPreview');let opt=isMark?{margin:5,filename:name||'report-card.pdf',image:{type:'jpeg',quality:.98},html2canvas:{scale:2.8,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true}}:{margin:8,filename:name||'document.pdf',image:{type:'jpeg',quality:.86},html2canvas:{scale:1.8,useCORS:true,letterRendering:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true}};html2pdf().set(opt).from(el).save()}else{v14Print(elId)}}
-function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Allow popup');let base='body{font-family:Cambria,Georgia,serif;padding:18px;color:#14233b}table{width:100%;border-collapse:collapse}th,td{border:1px solid #6f7f91;padding:7px}.idPreviewWrap{display:flex;gap:12px;flex-wrap:wrap}.markInfo{display:grid;grid-template-columns:1fr 1fr;gap:7px}.v107DocHead{display:grid;grid-template-columns:74px 1fr 74px;gap:12px;align-items:center;border-bottom:3px double #173e72;padding:8px 6px 12px;margin-bottom:14px}.v107DocLogoWrap img{width:64px;height:64px;object-fit:contain}.v107DocSchool{text-align:center}.v107DocSchool h2{margin:0;color:#0a376d;font-size:25px;letter-spacing:.3px}.v107DocSchool p{margin:3px 0;font-size:11px}.v107DocSchool b{display:block;font-size:15px;margin-top:5px}.v107DocSchool span,.v107DocSchool small{display:block;font-size:10px;margin-top:2px}.v107DocSeal{width:60px;height:60px;border:2px solid #173e72;border-radius:50%;display:grid;place-items:center;text-align:center;color:#173e72;font-weight:900;font-size:16px}.v107DocSeal small{font-size:7px}.v32SignRow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px;padding-top:16px}.v32SignRow span{text-align:center;border-top:1px solid #8d99a8;padding-top:5px;font-size:10px}@page{size:A4;margin:10mm}',extra='';if((el.matches?.('.idCard')||el.querySelector?.('.idCard'))&&typeof idStudioPrintCss==='function')extra=idStudioPrintCss().replace(/@page\{[^}]*\}/,'');w.document.write(`<html><head><title>Print</title><style>${base}${extra}</style></head><body>${el.innerHTML}
+function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Allow popup');let base='body{font-family:Cambria,Georgia,serif;padding:18px;color:#14233b}table{width:100%;border-collapse:collapse}th,td{border:1px solid #6f7f91;padding:7px}.idPreviewWrap{display:flex;gap:12px;flex-wrap:wrap}.markInfo{display:grid;grid-template-columns:1fr 1fr;gap:7px}.v107DocHead{display:grid;grid-template-columns:74px 1fr 74px;gap:12px;align-items:center;border-bottom:3px double #173e72;padding:8px 6px 12px;margin-bottom:14px}.v107DocLogoWrap img{width:64px;height:64px;object-fit:contain}.v107DocSchool{text-align:center}.v107DocSchool h2{margin:0;color:#0a376d;font-size:25px;letter-spacing:.3px}.v107DocSchool p{margin:3px 0;font-size:11px}.v107DocSchool b{display:block;font-size:15px;margin-top:5px}.v107DocSchool span,.v107DocSchool small{display:block;font-size:10px;margin-top:2px}.v107DocSeal{width:60px;height:60px;border:2px solid #173e72;border-radius:50%;display:grid;place-items:center;text-align:center;color:#173e72;font-weight:900;font-size:16px}.v107DocSeal small{font-size:7px}.v32SignRow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px;padding-top:16px}.v32SignRow span{text-align:center;border-top:1px solid #8d99a8;padding-top:5px;font-size:10px}.v11412A4Doc{width:190mm;max-width:190mm;box-sizing:border-box;margin:0 auto 8mm;padding:10mm;background:#fff;page-break-inside:avoid}.v11412A4Doc table{font-size:10px}.v11412A4Doc th,.v11412A4Doc td{padding:5px}.v11412NoticeMeta{display:grid;grid-template-columns:1fr 2fr 1.4fr;gap:8px;margin:12px 0}.v11412NoticeMeta span{padding:8px;border:1px solid #d5e0eb;background:#f7fbff;font-size:10px}.v11412NoticeMeta b{display:block;color:#5b728d;font-size:8px;text-transform:uppercase}.v11412NoticeTitle{text-align:center;font-size:21px;font-weight:900;color:#123f72;margin:18px 0 12px}.v11412NoticeBody{min-height:120mm;border:1px solid #d9e4ef;padding:14px;line-height:1.75;font-size:13px;white-space:normal}.v11412ResultNote{text-align:center;margin-top:10px;font-size:9px;color:#66778a}.v11412DocSection h4{margin:12px 0 6px;color:#153f70}@page{size:A4;margin:10mm}',extra='';if((el.matches?.('.idCard')||el.querySelector?.('.idCard'))&&typeof idStudioPrintCss==='function')extra=idStudioPrintCss().replace(/@page\{[^}]*\}/,'');w.document.write(`<html><head><title>Print</title><style>${base}${extra}</style></head><body>${el.innerHTML}
 <!-- V107-CLEAN-PREMIUM-DOCS-2026-09-15 -->
 
+
+<style id="v11412-centered-document-style">
+/* V114.12 centered official document studio */
+.v11412PreviewStage{padding:16px;background:#eef4fa;border-radius:16px;overflow:auto}
+.markPreview.v11412A4Doc,.feePrintCard.v11412A4Doc,.v11412NoticeDoc{width:min(190mm,100%);max-width:190mm!important;margin:14px auto!important;box-sizing:border-box!important;padding:10mm!important;background:#fff!important;page-break-inside:avoid!important;box-shadow:0 14px 34px rgba(4,49,94,.12)!important;border-radius:10px!important}
+.v11412A4Doc .v107DocHead{margin-bottom:14px!important}.v11412A4Doc .markInfo{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;margin:12px 0!important}.v11412A4Doc table{width:100%!important;min-width:0!important;border-collapse:collapse!important}.v11412A4Doc th,.v11412A4Doc td{padding:7px!important;border:1px solid #b8c8d8!important;font-size:11px!important}.v11412A4Doc th{background:#edf5fc!important;color:#173f6d!important}.v11412TotalRow th{background:#dcecff!important}.v11412A4Doc .v32ResultRow{margin:14px 0!important}.v11412A4Doc .v32SignRow{margin-top:30px!important}.v11412ResultNote{text-align:center;margin:10px 0 0;color:#66778a;font-size:10px}.v11412DocSection{margin-top:12px}.v11412DocSection h4{margin:0 0 7px;color:#153f70}.v11412Due{background:#fff2ef!important;border-color:#ffd0c8!important}.v11412Due strong{color:#b42318!important}.v11412Paid{background:#effbf4!important;border-color:#bce7cd!important}.v11412Paid strong{color:#087c5b!important}
+.v11412NoticeMeta{display:grid;grid-template-columns:1fr 2fr 1.4fr;gap:8px;margin:14px 0}.v11412NoticeMeta span{padding:9px;border:1px solid #d5e0eb;border-radius:8px;background:#f7fbff;font-size:11px}.v11412NoticeMeta b{display:block;margin-bottom:3px;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:#627991}.v11412NoticeTitle{text-align:center;margin:18px auto 12px;font-size:24px;font-weight:950;color:#123f72;text-transform:uppercase}.v11412NoticeBody{min-height:115mm;padding:16px;border:1px solid #d9e4ef;border-radius:10px;background:#fff;line-height:1.8;font-size:14px;color:#253b54}.v11412NoticeClosing p{text-align:center;font-size:10px;color:#66778a;margin:16px 0}
+#markPreviewBox,#feeCardPreview,#rcMarkPreview,#teacherMarksheetPreview{display:block!important;width:100%!important}.idPreviewWrap{justify-content:center!important}
+@media(max-width:760px){.markPreview.v11412A4Doc,.feePrintCard.v11412A4Doc,.v11412NoticeDoc{width:100%!important;padding:16px!important;margin:10px auto!important;border-radius:12px!important}.v11412NoticeMeta{grid-template-columns:1fr!important}.v11412NoticeBody{min-height:300px!important}.v11412A4Doc .markInfo{grid-template-columns:1fr!important}.v11412A4Doc th,.v11412A4Doc td{font-size:9px!important;padding:5px!important}}
+@media print{.v11412PreviewStage{padding:0!important;background:#fff!important}.markPreview.v11412A4Doc,.feePrintCard.v11412A4Doc,.v11412NoticeDoc{width:190mm!important;max-width:190mm!important;margin:0 auto!important;box-shadow:none!important;border-radius:0!important}.v11412A4Doc{break-inside:avoid;page-break-inside:avoid}}
+</style>
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
 <!-- ===== V92.1 LOGIN RAW-CODE PARSE FIX: restored V14 print boundary ===== -->
@@ -2789,7 +2800,7 @@ let v32TargetRows=[];
 async function noticeOrderCenter(){
   if(!v14Admin())return toast('Permission denied');
   head('Notice / Order Center','Teacher • Student • Class • All • Targeted login visibility');
-  $('erpContent').innerHTML=`<div class="panel"><h3>Create Targeted Notice / Order</h3><div class="v32Grid"><div><label>Type</label><select id="noKind"><option>Notice</option><option>Order</option><option>Warning</option><option>Academic Instruction</option><option>Fee Notice</option><option>Exam Notice</option></select></div><div><label>Send To</label><select id="noTarget" onchange="v32LoadNoticeTargets()"><option value="teacher">Selected Teacher(s)</option><option value="student">Selected Student(s)</option><option value="class">Selected Class(es)</option><option value="all_teachers">All Teachers</option><option value="all_students">All Students / Parents</option></select></div><div><label>Date</label><input id="noDate" type="date" value="${today()}"></div><div><label>Title</label><input id="noTitle" placeholder="Notice / Order title"></div><div class="full"><label>Message / Order</label><textarea id="noMessage" rows="5" placeholder="पूरा notice/order लिखें"></textarea></div></div><div id="noTargets" class="v32TargetBox"></div><div class="tools"><button class="secondary" onclick="v32TargetSelect(true)">All Select</button><button class="secondary" onclick="v32TargetSelect(false)">Unselect</button><button class="primary" onclick="v32SendTargetNotice()">Send Notice / Order</button></div><div id="noStatus"></div></div><div class="panel"><div class="panelHead"><h3>Recent Targeted Notices</h3><button class="secondary" onclick="v32LoadRecentNotices()">Refresh</button></div><div id="noRecent"></div></div>`;
+  $('erpContent').innerHTML=`<div class="panel"><h3>Create Targeted Notice / Order</h3><div class="v32Grid"><div><label>Type</label><select id="noKind"><option>Notice</option><option>Order</option><option>Warning</option><option>Academic Instruction</option><option>Fee Notice</option><option>Exam Notice</option></select></div><div><label>Send To</label><select id="noTarget" onchange="v32LoadNoticeTargets()"><option value="teacher">Selected Teacher(s)</option><option value="student">Selected Student(s)</option><option value="class">Selected Class(es)</option><option value="all_teachers">All Teachers</option><option value="all_students">All Students / Parents</option></select></div><div><label>Date</label><input id="noDate" type="date" value="${today()}"></div><div><label>Title</label><input id="noTitle" placeholder="Notice / Order title"></div><div class="full"><label>Message / Order</label><textarea id="noMessage" rows="5" placeholder="पूरा notice/order लिखें"></textarea></div></div><div id="noTargets" class="v32TargetBox"></div><div class="tools"><button class="secondary" onclick="v32TargetSelect(true)">All Select</button><button class="secondary" onclick="v32TargetSelect(false)">Unselect</button><button class="secondary" onclick="v11412PreviewCurrentNotice()">👁 Print Preview</button><button class="primary" onclick="v32SendTargetNotice()">Send Notice / Order</button></div><div id="noStatus"></div></div><div class="panel"><div class="panelHead"><h3>Recent Targeted Notices</h3><button class="secondary" onclick="v32LoadRecentNotices()">Refresh</button></div><div id="noRecent"></div></div>`;
   await v32LoadNoticeTargets();await v32LoadRecentNotices();
 }
 async function v32LoadNoticeTargets(){
@@ -2810,9 +2821,33 @@ async function v32SendTargetNotice(){
 }
 async function v32LoadRecentNotices(){
   let{data,error}=await sb.from('notices').select('*').order('date',{ascending:false}).limit(100);if(error)return $('noRecent').innerHTML=esc(error.message);let rows=(data||[]).filter(x=>/^(teacher|student|class):/.test(String(x.audience||'')));
-  $('noRecent').innerHTML=`<div class="tableWrap"><table><tr><th>Date</th><th>Target</th><th>Title</th><th>Message</th><th>Action</th></tr>${rows.map(r=>`<tr><td>${esc(r.date||'')}</td><td>${esc(r.audience||'')}</td><td>${esc(r.title||'')}</td><td>${esc(r.message||'')}</td><td><button class="mini del" onclick="v32DeleteNotice('${r.id}')">Delete</button></td></tr>`).join('')}</table></div>`;
+  $('noRecent').innerHTML=`<div class="tableWrap"><table><tr><th>Date</th><th>Target</th><th>Title</th><th>Message</th><th>Action</th></tr>${rows.map(r=>`<tr><td>${esc(r.date||'')}</td><td>${esc(r.audience||'')}</td><td>${esc(r.title||'')}</td><td>${esc(r.message||'')}</td><td><button class="mini" onclick="v11412PreviewSavedNotice('${r.id}')">Preview</button> <button class="mini del" onclick="v32DeleteNotice('${r.id}')">Delete</button></td></tr>`).join('')}</table></div>`;
 }
 async function v32DeleteNotice(id){if(!confirm('Delete this notice/order?'))return;let{error}=await sb.from('notices').delete().eq('id',id);toast(error?error.message:'Deleted');if(!error)v32LoadRecentNotices()}
+
+function v11412NoticeTargetLabel(){
+  let type=$('noTarget')?.value||'';
+  if(type==='all_teachers')return 'All Teachers';if(type==='all_students')return 'All Students / Parents';
+  let labels=[...document.querySelectorAll('.noCheck:checked')].map(x=>x.closest('label')?.querySelector('b')?.textContent||x.value).filter(Boolean);
+  return labels.length?labels.slice(0,6).join(', ')+(labels.length>6?` +${labels.length-6} more`:''):'Selected Recipient(s)';
+}
+function v11412NoticeDocHtml(o={}){
+  let rawTitle=String(o.title||'NOTICE / ORDER'),kind=String(o.kind||'NOTICE').toUpperCase(),title=rawTitle.replace(/^(Notice|Order|Warning|Academic Instruction|Fee Notice|Exam Notice):\s*/i,'')||rawTitle;
+  return `<article class="v11412A4Doc v11412NoticeDoc v107OfficialDoc">${v107DocHeader(kind,title,'2026-27')}<div class="v11412NoticeMeta"><span><b>Date</b>${esc(o.date||today())}</span><span><b>To</b>${esc(o.audience||'School Community')}</span><span><b>Reference</b>${esc(o.ref||'Official School Communication')}</span></div><div class="v11412NoticeTitle">${esc(title)}</div><div class="v11412NoticeBody">${esc(o.message||'').replace(/\n/g,'<br>')}</div><div class="v11412NoticeClosing"><p>Issued by order of the school administration.</p><div class="v32SignRow"><span>Prepared By</span><span>Office</span><span>Principal / Director</span></div></div></article>`
+}
+function v11412OpenNoticePreview(doc,file='school-notice.pdf'){
+  let id='v11412NoticePreview';v14Modal(`<h2>Official Notice / Order Preview</h2><div id="${id}" class="v11412PreviewStage">${doc}</div><div class="v14Tabs"><button class="v14Action primary" onclick="v14Pdf('${id}','${esc(file)}')">PDF</button><button class="v14Action" onclick="v14Print('${id}')">Print</button></div>`)
+}
+function v11412PreviewCurrentNotice(){
+  let kind=$('noKind')?.value||'Notice',title=$('noTitle')?.value.trim()||'Notice / Order',message=$('noMessage')?.value.trim();if(!message)return toast('Preview के लिए Message / Order लिखें');
+  v11412OpenNoticePreview(v11412NoticeDocHtml({kind,title,message,date:$('noDate')?.value||today(),audience:v11412NoticeTargetLabel()}),`${String(title).replace(/[^a-z0-9]+/gi,'_')||'notice'}.pdf`)
+}
+async function v11412PreviewSavedNotice(id){
+  let{data,error}=await sb.from('notices').select('*').eq('id',id).single();if(error)return toast(error.message);if(!data)return toast('Notice not found');
+  let m=String(data.title||'').match(/^(Notice|Order|Warning|Academic Instruction|Fee Notice|Exam Notice):\s*(.*)$/i),kind=m?.[1]||'Notice',title=m?.[2]||data.title||'Notice';
+  v11412OpenNoticePreview(v11412NoticeDocHtml({kind,title,message:data.message||'',date:data.date||today(),audience:data.audience||'School Community',ref:'Saved Notice / Order'}),`${String(title).replace(/[^a-z0-9]+/gi,'_')||'notice'}.pdf`)
+}
+
 
 // ---------- Teacher notices ----------
 async function v32TeacherNotices(){
@@ -2865,7 +2900,7 @@ function v107DocHeader(title,subTitle,session){
 // ---------- 15 actual prepared document designs ----------
 renderMarksheetHtml=function(s,marks,exam,t){
   t=Number(t||1);let max=marks.reduce((a,x)=>a+Number(x.max_marks||0),0),got=marks.reduce((a,x)=>a+Number(x.obtained_marks||0),0),pct=v14Pct(got,max),res=pct>=40?'PASS':'FAIL',grade=v14Grade(pct);
-  return `<div class="markPreview t${t} v32Mark v107OfficialDoc">${v107DocHeader(`${exam||'EXAM'} • REPORT CARD`,'RESULT / MARKSHEET','2026-27')}<div class="markInfo"><div><b>Student:</b> ${esc(s.student_name)}</div><div><b>Admission:</b> ${esc(s.admission_no||'')}</div><div><b>Roll No:</b> ${esc(s.roll_no||'')}</div><div><b>Class:</b> ${esc(s.class_name||'')}</div><div><b>Father:</b> ${esc(s.father_name||'')}</div><div><b>Mother:</b> ${esc(s.mother_name||'')}</div><div><b>DOB:</b> ${esc(v14FmtDate(s.dob))}</div><div><b>Result:</b> ${res}</div></div><table><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>%</th><th>Grade</th></tr>${marks.map(m=>`<tr><td>${esc(m.subject_name)}</td><td>${Number(m.max_marks||0)}</td><td>${Number(m.obtained_marks||0)}</td><td>${v14Pct(m.obtained_marks,m.max_marks)}%</td><td>${esc(m.grade||v14Grade(v14Pct(m.obtained_marks,m.max_marks)))}</td></tr>`).join('')}<tr><th>Total</th><th>${max}</th><th>${got}</th><th>${pct}%</th><th>${grade}</th></tr></table><div class="v32ResultRow"><span><b>Percentage</b><strong>${pct}%</strong></span><span><b>Overall Grade</b><strong>${grade}</strong></span><span><b>Result</b><strong>${res}</strong></span></div><div class="v32SignRow"><span>Class Teacher</span><span>Parent Signature</span><span>Principal / Director</span></div></div>`;
+  return `<article class="markPreview t${t} v32Mark v107OfficialDoc v11412A4Doc v11412Marksheet">${v107DocHeader(`${exam||'EXAM'} • REPORT CARD`,'RESULT / MARKSHEET','2026-27')}<div class="markInfo"><div><b>Student:</b> ${esc(s.student_name)}</div><div><b>Admission:</b> ${esc(s.admission_no||'')}</div><div><b>Roll No:</b> ${esc(s.roll_no||'')}</div><div><b>Class:</b> ${esc(s.class_name||'')}</div><div><b>Father:</b> ${esc(s.father_name||'')}</div><div><b>Mother:</b> ${esc(s.mother_name||'')}</div><div><b>DOB:</b> ${esc(v14FmtDate(s.dob))}</div><div><b>Result:</b> ${res}</div></div><table><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>%</th><th>Grade</th></tr>${marks.map(m=>`<tr><td>${esc(m.subject_name)}</td><td>${Number(m.max_marks||0)}</td><td>${Number(m.obtained_marks||0)}</td><td>${v14Pct(m.obtained_marks,m.max_marks)}%</td><td>${esc(m.grade||v14Grade(v14Pct(m.obtained_marks,m.max_marks)))}</td></tr>`).join('')}<tr class="v11412TotalRow"><th>Total</th><th>${max}</th><th>${got}</th><th>${pct}%</th><th>${grade}</th></tr></table><div class="v32ResultRow"><span><b>Percentage</b><strong>${pct}%</strong></span><span><b>Overall Grade</b><strong>${grade}</strong></span><span><b>Result</b><strong>${res}</strong></span></div><div class="v11412ResultNote">This report card is generated from the approved school result records.</div><div class="v32SignRow"><span>Class Teacher</span><span>Parent Signature</span><span>Principal / Director</span></div></article>`;
 };
 renderIdCard=function(s,t){
   t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));let set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=v107DocLogo(),radius=set.photoShape==='circle'?'50%':set.photoShape==='square'?'0':'12%',addr=school?.address||'';
@@ -2874,7 +2909,7 @@ renderIdCard=function(s,t){
 };
 renderFeeCard=function(d,t){
   t=Number(t||1);let s=d.s,names=['Classic Ledger','Blue Smart Fee','Green Payment','Purple Premium','Compact Statement'];let schedule=(d.sch||[]).slice(0,12),payments=(d.pay||[]).slice(-8).reverse();
-  return `<div class="feePrintCard t${t} v32Fee"><div class="v32DocRibbon">FORMAT ${t} • ${names[t-1]}</div><div class="markHead"><h2>${esc(school.school_name||'L D MODERN EDUCATION ACADEMY')}</h2><b>STUDENT FEE CARD</b><small>Session 2026-27</small></div><div class="markInfo"><div><b>Student:</b> ${esc(s.student_name||'')}</div><div><b>Admission:</b> ${esc(s.admission_no||'')}</div><div><b>Class:</b> ${esc(s.class_name||'')}</div><div><b>Roll:</b> ${esc(s.roll_no||'')}</div><div><b>Father:</b> ${esc(s.father_name||'')}</div><div><b>Mobile:</b> ${esc(s.phone||'')}</div></div><div class="v32ResultRow"><span><b>Total Fee</b><strong>${money(d.total)}</strong></span><span><b>Paid</b><strong>${money(d.paid)}</strong></span><span><b>Due</b><strong>${money(d.due)}</strong></span></div>${schedule.length?`<h4>Fee Schedule</h4><table><tr><th>Fee / Installment</th><th>Due Date</th><th>Amount</th><th>Paid</th><th>Status</th></tr>${schedule.map(x=>`<tr><td>${esc(x.schedule_label||x.plan_mode||'Fee')}</td><td>${esc(x.due_date||'')}</td><td>${money(x.amount)}</td><td>${money(x.paid_amount)}</td><td>${esc(x.status||'Due')}</td></tr>`).join('')}</table>`:''}${payments.length?`<h4>Recent Payments</h4><table><tr><th>Date</th><th>Receipt</th><th>Amount</th><th>Mode</th></tr>${payments.map(x=>`<tr><td>${esc(x.payment_date||'')}</td><td>${esc(x.receipt_no||'')}</td><td>${money(x.amount)}</td><td>${esc(x.payment_mode||'')}</td></tr>`).join('')}</table>`:''}<div class="v32SignRow"><span>Accounts</span><span>Parent</span><span>Principal / Director</span></div></div>`;
+  return `<article class="feePrintCard t${t} v32Fee v107OfficialDoc v11412A4Doc v11412FeeCard"><div class="v32DocRibbon">FORMAT ${t} • ${names[t-1]}</div>${v107DocHeader('STUDENT FEE CARD',`FORMAT ${t} • ${names[t-1]}`,'2026-27')}<div class="markInfo"><div><b>Student:</b> ${esc(s.student_name||'')}</div><div><b>Admission:</b> ${esc(s.admission_no||'')}</div><div><b>Class:</b> ${esc(s.class_name||'')}</div><div><b>Roll:</b> ${esc(s.roll_no||'')}</div><div><b>Father:</b> ${esc(s.father_name||'')}</div><div><b>Mobile:</b> ${esc(s.phone||'')}</div></div><div class="v32ResultRow"><span><b>Total Fee</b><strong>${money(d.total)}</strong></span><span><b>Paid</b><strong>${money(d.paid)}</strong></span><span class="${Number(d.due||0)>0?'v11412Due':'v11412Paid'}"><b>Due</b><strong>${money(d.due)}</strong></span></div>${schedule.length?`<section class="v11412DocSection"><h4>Fee Schedule</h4><table><tr><th>Fee / Installment</th><th>Due Date</th><th>Amount</th><th>Paid</th><th>Status</th></tr>${schedule.map(x=>`<tr><td>${esc(x.schedule_label||x.plan_mode||'Fee')}</td><td>${esc(x.due_date||'')}</td><td>${money(x.amount)}</td><td>${money(x.paid_amount)}</td><td>${esc(x.status||'Due')}</td></tr>`).join('')}</table></section>`:''}${payments.length?`<section class="v11412DocSection"><h4>Recent Payments</h4><table><tr><th>Date</th><th>Receipt</th><th>Amount</th><th>Mode</th></tr>${payments.map(x=>`<tr><td>${esc(x.payment_date||'')}</td><td>${esc(x.receipt_no||'')}</td><td>${money(x.amount)}</td><td>${esc(x.payment_mode||'')}</td></tr>`).join('')}</table></section>`:''}<div class="v11412ResultNote">Fee status reflects the latest saved school fee records.</div><div class="v32SignRow"><span>Accounts</span><span>Parent</span><span>Principal / Director</span></div></article>`;
 };
 
 // ---------- remove accidental link/OTP wording from visible UI ----------
@@ -9129,231 +9164,103 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 })();
 </script>
 
-<link rel="stylesheet" href="premium-role-ui.css?v=11410norail1">
-<script>window.V114_BUILD='V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16';</script>
-
-<script id="v1147-master-dashboard-runtime">
+<link rel="stylesheet" href="premium-role-ui.css?v=11411clean1">
+<script id="v11411-premium-clean-runtime">
 (function(){
-  window.V1147_BUILD='V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16';
-  const e7=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const icon7=s=>{const m=String(s||'').match(/^([^A-Za-z0-9₹]+|₹)/);return m?m[0].trim()||'◆':'◆'};
-  const label7=s=>String(s||'').replace(/^([^A-Za-z0-9₹]+|₹)\s*/,'').trim();
+  window.V11411_BUILD='V114.11-PREMIUM-CLEAN-DASHBOARDS-2026-09-16';
 
-  const teacherMasters=[
-    {key:'class',icon:'👥',title:'My Class',sub:'Profile • Students • Photos',routes:['teacher_profile','v97_profile','teacher_class','v91_student_photos']},
-    {key:'attendance',icon:'✅',title:'Attendance',sub:'Class • Master • Gate Pass',routes:['attendance','master_attendance','master_gate_pass']},
-    {key:'teaching',icon:'📚',title:'Teaching',sub:'Bell • Daily Update • Homework',routes:['teacher_bells','teacher_schedule','v90_teacher_daily','teaching_diary','homework']},
-    {key:'exam',icon:'📝',title:'Exam & Marks',sub:'Copy Check • Marks Entry',routes:['v90_teacher_marks','exams']},
-    {key:'communication',icon:'📣',title:'Requests & Notices',sub:'Requests • Orders • Class Review',routes:['v90_my_requests','teacher_notices','class_opinions']},
-    {key:'personal',icon:'🗒',title:'My Workspace',sub:'Notes • Password • Profile',routes:['my_notes','v93_teacher_password','v97_profile','teacher_profile']}
-  ];
-
-  function activeAdminGroup(active){
-    try{return V90_ADMIN_GROUPS.findIndex(g=>Array.isArray(g[2])&&g[2].some(x=>x[0]===active))}catch(_e){return -1}
+  const esc11=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  function cleanRoleChrome(){
+    const erp=document.getElementById('erp'); if(!erp) return;
+    erp.querySelectorAll(':scope>aside,#erpNav,.v11410TopNav,.v1149RoleRail,.v115RoleRail').forEach(x=>x.remove());
+    erp.style.removeProperty('grid-template-columns');
+    const main=erp.querySelector(':scope>main');
+    if(main){main.style.removeProperty('margin-left');main.style.removeProperty('left');main.style.removeProperty('width')}
   }
-  function activeTeacherMaster(active){
-    return teacherMasters.findIndex(g=>g.routes.includes(active));
-  }
-  function goDashboardThen(fn){
-    if(String(window.__v90Route||'dashboard')==='dashboard'){setTimeout(fn,30);return}
-    render('dashboard');setTimeout(fn,260);
-  }
-
-  window.v1147OpenAdminMaster=function(i,scroll=true){
-    try{
-      const g=V90_ADMIN_GROUPS[Number(i)];if(!g)return;
-      const panel=document.getElementById('v1147AdminMasterPanel');if(!panel)return;
-      document.querySelectorAll('#v1147AdminMasters .v1147MasterCard').forEach((b,n)=>b.classList.toggle('active',n===Number(i)));
-      panel.innerHTML='<h3>'+e7(g[0]+' '+g[1])+'</h3><div class="v1147OptionGrid">'+g[2].map(x=>'<button class="v1147Option" onclick="render(\''+e7(x[0])+'\')"><span class="v1147OptionIcon">'+e7(icon7(x[1]))+'</span><span>'+e7(label7(x[1]))+'</span></button>').join('')+'</div>';
-      if(scroll)panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-    }catch(e){console.warn('V114.7 admin master',e)}
-  };
-  window.v1147GoAdminMaster=function(i){goDashboardThen(()=>window.v1147OpenAdminMaster(i,true))};
-
-  function teacherItems(master){
-    let all=[];try{all=Array.from(V90_TEACHER_NAV||[])}catch(_e){}
-    const used=new Set();const out=[];
-    master.routes.forEach(r=>{const x=all.find(v=>v[0]===r);if(x&&!used.has(r)){used.add(r);out.push(x)}});
-    return out;
-  }
-  window.v1147OpenTeacherMaster=function(key,scroll=true){
-    const g=teacherMasters.find(x=>x.key===key);if(!g)return;
-    const panel=document.getElementById('v1147TeacherMasterPanel');if(!panel)return;
-    document.querySelectorAll('#v1147TeacherMasters .v1147MasterCard').forEach(b=>b.classList.toggle('active',b.dataset.key===key));
-    const items=teacherItems(g);
-    panel.innerHTML='<h3>'+e7(g.icon+' '+g.title)+'</h3><div class="v1147OptionGrid">'+items.map(x=>'<button class="v1147Option" onclick="render(\''+e7(x[0])+'\')"><span class="v1147OptionIcon">'+e7(icon7(x[1]))+'</span><span>'+e7(label7(x[1]))+'</span></button>').join('')+'</div>';
-    if(scroll)panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-  };
-  window.v1147GoTeacherMaster=function(key){goDashboardThen(()=>window.v1147OpenTeacherMaster(key,true))};
-
-  const buildNavBase=v90BuildNav;
-  v90BuildNav=function(active=window.__v90Route||'dashboard'){
-    const host=document.getElementById('erpNav');if(!host||!profile)return buildNavBase.apply(this,arguments);
-    if(v90Admin()){
-      const ai=activeAdminGroup(active);host.className='v90Nav v1147SlimNav';
-      host.innerHTML='<button class="v1147RailBtn '+(active==='dashboard'?'active':'')+'" onclick="render(\'dashboard\')"><span class="v1147RailIcon">🏠</span><span class="v1147RailLabel">Dashboard</span></button>'+V90_ADMIN_GROUPS.map((g,i)=>'<button class="v1147RailBtn '+(ai===i?'active':'')+'" onclick="v1147GoAdminMaster('+i+')" title="'+e7(g[1])+'"><span class="v1147RailIcon">'+e7(g[0])+'</span><span class="v1147RailLabel">'+e7(g[1])+'</span></button>').join('');
-      return;
-    }
-    if(v90Teacher()){
-      const ti=activeTeacherMaster(active);host.className='v90Nav v1147SlimNav';
-      host.innerHTML='<button class="v1147RailBtn '+(active==='dashboard'?'active':'')+'" onclick="render(\'dashboard\')"><span class="v1147RailIcon">🏠</span><span class="v1147RailLabel">Home</span></button>'+teacherMasters.map((g,i)=>'<button class="v1147RailBtn '+(ti===i?'active':'')+'" onclick="v1147GoTeacherMaster(\''+g.key+'\')" title="'+e7(g.title)+'"><span class="v1147RailIcon">'+g.icon+'</span><span class="v1147RailLabel">'+e7(g.title)+'</span></button>').join('');
-      return;
-    }
-    return buildNavBase.apply(this,arguments);
-  };
-
-  function adminMasterMarkup(){
-    return '<section id="v1147AdminMasters" class="v1147MasterSection"><div class="v1147MasterHead"><div><h2>Master Management</h2><p>Category चुनें → उसी category के सभी working options यहीं मिलेंगे.</p></div></div><div class="v1147MasterGrid">'+V90_ADMIN_GROUPS.map((g,i)=>'<button class="v1147MasterCard" onclick="v1147OpenAdminMaster('+i+')"><span class="v1147MasterIcon">'+e7(g[0])+'</span><span class="v1147MasterText"><b>'+e7(g[1])+'</b><small>'+e7(g[2].slice(0,3).map(x=>label7(x[1])).join(' • '))+'</small></span><span class="v1147MasterArrow">›</span></button>').join('')+'</div><div id="v1147AdminMasterPanel" class="v1147MasterPanel"></div></section>';
-  }
-  function decorateAdmin(){
-    try{
-      const dash=document.querySelector('#erpContent .v90Dash');if(!dash||!v90Admin())return;
-      document.getElementById('v1147AdminMasters')?.remove();
-      const holder=document.createElement('div');holder.innerHTML=adminMasterMarkup();const sec=holder.firstElementChild;
-      const stats=dash.querySelector('#v90Stats,.v90Stats');if(stats)stats.insertAdjacentElement('afterend',sec);else dash.prepend(sec);
-    }catch(e){console.warn('V114.7 decorate admin',e)}
-  }
-  function teacherMasterMarkup(){
-    return '<section id="v1147TeacherMasters" class="v1147MasterSection"><div class="v1147MasterHead"><div><h2>My Work Masters</h2><p>Class, attendance, teaching, exam और communication एक जगह.</p></div></div><div class="v1147MasterGrid">'+teacherMasters.map(g=>'<button class="v1147MasterCard" data-key="'+g.key+'" onclick="v1147OpenTeacherMaster(\''+g.key+'\')"><span class="v1147MasterIcon">'+g.icon+'</span><span class="v1147MasterText"><b>'+e7(g.title)+'</b><small>'+e7(g.sub)+'</small></span><span class="v1147MasterArrow">›</span></button>').join('')+'</div><div id="v1147TeacherMasterPanel" class="v1147MasterPanel"></div></section>';
-  }
-  function decorateTeacher(){
-    try{
-      const dash=document.querySelector('#erpContent .v90Dash');if(!dash||!v90Teacher())return;
-      document.getElementById('v1147TeacherMasters')?.remove();
-      const holder=document.createElement('div');holder.innerHTML=teacherMasterMarkup();const sec=holder.firstElementChild;
-      const stats=dash.querySelector('.v90Stats');if(stats)stats.insertAdjacentElement('afterend',sec);else dash.prepend(sec);
-    }catch(e){console.warn('V114.7 decorate teacher',e)}
-  }
-
-  const adminDashBase=v90AdminDashboard;
-  v90AdminDashboard=async function(){const r=await adminDashBase.apply(this,arguments);setTimeout(decorateAdmin,160);setTimeout(decorateAdmin,420);return r};
-  const teacherDashBase=v90TeacherDashboard;
-  v90TeacherDashboard=async function(){const r=await teacherDashBase.apply(this,arguments);setTimeout(decorateTeacher,160);setTimeout(decorateTeacher,420);return r};
-
-  function pFind(dash,selector){return dash.querySelector(selector)||document.querySelector(selector)}
-  function pScroll(dash,selector){const n=pFind(dash,selector);if(n)n.scrollIntoView({behavior:'smooth',block:'start'})}
-  function parentGroups(role){
-    const student=role==='student';
-    return [
-      {icon:'👤',title:student?'My Profile':'My Child',sub:'Profile • Student details',items:[['👤','Profile',d=>{if(typeof v97ShowParentProfile==='function')v97ShowParentProfile();else pScroll(d,'.v114ChildInfo')}],['🎓','Student Details',d=>pScroll(d,'.v114ChildInfo')]]},
-      {icon:'✅',title:'Attendance',sub:'Attendance • Gate Pass',items:[['✅','Attendance',d=>pScroll(d,'.v114AttendanceBlock')],['🚪','Gate Pass / Leave',d=>pScroll(d,'#v102ParentGatePass')]]},
-      {icon:'₹',title:'Fees',sub:'Paid • Due • Fee status',items:[['₹','Fee Details',d=>pScroll(d,'.v114FeeBlock')]]},
-      {icon:'📚',title:'Learning',sub:'Homework • Time Table',items:[['📚','Homework',d=>pScroll(d,'[id*=Homework],.v64Homework')],['🕐','Time Table',d=>pScroll(d,'[id*=Timetable],.v64Timetable')]]},
-      {icon:'🏆',title:'Exam & Result',sub:'Result • Admit Card',items:[['A+','Exam Results',d=>pScroll(d,'.resultMini')],['🎫','Admit Card',d=>pScroll(d,'#v75ParentAdmit')]]},
-      {icon:'📣',title:'Communication',sub:'Notices • Gallery • Help',items:[['📣','Notices',d=>pScroll(d,'.v32ParentNotices')],['🖼','Gallery',d=>pScroll(d,'[id*=Gallery],.gallery')],['💬','Messages / Help',d=>pScroll(d,'[id*=Help],[id*=Message]')]]}
-    ];
-  }
-  function installParentMasters(){
-    try{
-      const role=String(profile?.role||'parent').toLowerCase();
-      document.querySelectorAll('#parentDashboardBody .v114PortalDash').forEach((dash,idx)=>{
-        dash.querySelector('.v1147ParentMasters')?.remove();
-        const groups=parentGroups(role);const sec=document.createElement('section');sec.className='v1147MasterSection v1147ParentMasters';
-        sec.innerHTML='<div class="v1147MasterHead"><div><h3>'+(role==='student'?'Student Masters':'Parent Masters')+'</h3><p>Related options category-wise एक जगह.</p></div></div><div class="v1147MasterGrid"></div><div class="v1147MasterPanel"></div>';
-        const grid=sec.querySelector('.v1147MasterGrid'),panel=sec.querySelector('.v1147MasterPanel');
-        groups.forEach((g,gi)=>{const b=document.createElement('button');b.className='v1147MasterCard';b.innerHTML='<span class="v1147MasterIcon">'+g.icon+'</span><span class="v1147MasterText"><b>'+e7(g.title)+'</b><small>'+e7(g.sub)+'</small></span><span class="v1147MasterArrow">›</span>';b.onclick=()=>{grid.querySelectorAll('.v1147MasterCard').forEach((x,n)=>x.classList.toggle('active',n===gi));panel.innerHTML='<h3>'+g.icon+' '+e7(g.title)+'</h3><div class="v1147OptionGrid"></div>';const og=panel.querySelector('.v1147OptionGrid');g.items.forEach(it=>{const o=document.createElement('button');o.className='v1147Option';o.innerHTML='<span class="v1147OptionIcon">'+it[0]+'</span><span>'+e7(it[1])+'</span>';o.onclick=()=>it[2](dash);og.appendChild(o)});panel.scrollIntoView({behavior:'smooth',block:'nearest'})};grid.appendChild(b)});
-        const stats=dash.querySelector('.v114PortalStats');if(stats)stats.insertAdjacentElement('afterend',sec);else dash.prepend(sec);
-      });
-    }catch(e){console.warn('V114.7 parent masters',e)}
-  }
-  const parentLoadBase=loadParentPortal;
-  loadParentPortal=async function(){const r=await parentLoadBase.apply(this,arguments);setTimeout(installParentMasters,260);setTimeout(installParentMasters,620);return r};
-
-  /* Make dashboard start at top and keep the wallpaper visible after each role login/restore. */
-  try{
-    const openBase=openERP;
-    openERP=async function(){const r=await openBase.apply(this,arguments);setTimeout(()=>window.scrollTo(0,0),100);return r};
-  }catch(_e){}
-})();
-</script>
-
-
-<script id="v11410-no-left-rail-runtime">
-(function(){
-  window.V11410_BUILD='V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16';
-
-  /* V114.10: no fixed left role rail anywhere inside Admin/Teacher ERP.
-     Internal modules use an in-flow top master navigation, so content can never
-     sit underneath or behind a blue sidebar. */
-  function v11410RemoveLegacyRail(){
-    const erp=document.getElementById('erp');if(!erp)return;
-    erp.querySelectorAll(':scope>aside').forEach(x=>x.remove());
-    erp.classList.remove('v58SideHidden');
-    erp.querySelectorAll(':scope>main>.v11410TopNav').forEach((x,i)=>{if(i)x.remove()});
-    erp.querySelectorAll('.erpTop .hamb,.erpTop .v1149Hamb').forEach(x=>x.remove());
-  }
-  function v11410WireAccordion(nav){
-    nav.querySelectorAll(':scope>details').forEach(d=>{
-      if(d.dataset.v11410Accordion==='1')return;
-      d.dataset.v11410Accordion='1';
-      d.addEventListener('toggle',()=>{
-        if(!d.open)return;
-        nav.querySelectorAll(':scope>details').forEach(o=>{if(o!==d)o.open=false});
-      });
-    });
-  }
-  function v11410TopNavigation(active){
-    const erp=document.getElementById('erp'),main=erp?.querySelector(':scope>main'),top=main?.querySelector(':scope>.erpTop');
-    if(!erp||!main||!top)return;
-    v11410RemoveLegacyRail();
-    let nav=main.querySelector(':scope>#erpNav.v11410TopNav');
-    if(String(active||'dashboard')==='dashboard'){
-      nav?.remove();
-      return;
-    }
-    if(!nav){
-      const old=document.getElementById('erpNav');if(old&&old!==nav)old.remove();
-      nav=document.createElement('nav');nav.id='erpNav';nav.className='v90Nav v11410TopNav';
-      top.insertAdjacentElement('afterend',nav);
-    }
-    try{v90BuildNav(active)}catch(_e){}
-    nav.classList.add('v11410TopNav');
-    v11410WireAccordion(nav);
-    nav.querySelectorAll('.v90NavGroup').forEach(g=>{if(g.querySelector('button.active'))g.open=true});
-  }
+  window.v11411CleanRoleChrome=cleanRoleChrome;
 
   try{
     const shellBase=v90InstallShell;
     v90InstallShell=function(active=window.__v90Route||'dashboard'){
-      v11410RemoveLegacyRail();
+      cleanRoleChrome();
       const r=shellBase.apply(this,arguments);
-      v11410RemoveLegacyRail();
-      v11410TopNavigation(String(active||'dashboard'));
-      setTimeout(()=>v1149UpgradeIcons(document),0);
+      cleanRoleChrome();
+      const erp=document.getElementById('erp');
+      erp?.classList.toggle('v11411Internal',String(active||'dashboard')!=='dashboard');
+      setTimeout(cleanRoleChrome,0);
       return r;
     };
-  }catch(e){console.warn('V114.10 shell wrapper',e)}
+  }catch(e){console.warn('V114.11 shell',e)}
 
-  function grapheme(s){
-    s=String(s||'').trimStart();if(!s)return null;
-    try{const seg=new Intl.Segmenter(undefined,{granularity:'grapheme'});return [...seg.segment(s)][0]?.segment||null}catch(_e){return Array.from(s)[0]||null}
+  function adminMasterMarkup(){
+    if(!Array.isArray(window.V90_ADMIN_GROUPS)) return '';
+    return `<section id="v11411AdminMasters" class="v11411Masters"><div class="v11411SectionHead"><div><span>SMART CONTROL</span><h2>Master Management</h2><p>एक category चुनें — उससे जुड़े सभी working options नीचे खुलेंगे।</p></div></div><div class="v11411MasterGrid">${V90_ADMIN_GROUPS.map((g,i)=>`<button class="v11411MasterCard" data-i="${i}" onclick="v11411OpenAdminMaster(${i})"><span class="v11411MasterIcon">${esc11(g[0])}</span><span class="v11411MasterText"><b>${esc11(g[1])}</b><small>${esc11((g[2]||[]).slice(0,3).map(x=>String(x[1]||'').replace(/^\S+\s*/,'')).join(' • '))}</small></span><em>›</em></button>`).join('')}</div><div id="v11411AdminPanel" class="v11411MasterPanel"></div></section>`;
   }
-  function isIconish(g){return !!g && (/[^A-Za-z0-9\s]/u.test(g)||['A+','LD'].includes(g))}
-  function wrapLeading(el){
-    if(!el||el.dataset.v1149IconDone==='1')return;
-    const known=el.querySelector(':scope > .v1147MasterIcon,:scope > .v1147OptionIcon,:scope > .v90MonitorIcon,:scope > .roundIcon,:scope > .v114StudentBadge,:scope > .v114ChildAvatar');
-    if(known){known.classList.add('v1149Icon3D');el.dataset.v1149IconDone='1';return}
-    const fs=el.querySelector(':scope > span:first-child');
-    if(fs && fs.textContent.trim().length<=4 && !fs.querySelector('*')){fs.classList.add('v1149Icon3D');el.dataset.v1149IconDone='1';return}
-    const n=[...el.childNodes].find(x=>x.nodeType===3 && String(x.nodeValue||'').trim());if(!n)return;
-    const raw=n.nodeValue,trim=raw.trimStart(),g=grapheme(trim);if(!isIconish(g))return;
-    const start=raw.indexOf(trim),after=trim.slice(g.length).replace(/^\s+/,'');
-    const sp=document.createElement('span');sp.className='v1149Icon3D';sp.textContent=g;
-    n.nodeValue=raw.slice(0,start)+(after?' '+after:'');el.insertBefore(sp,n);el.dataset.v1149IconDone='1';
-  }
-  window.v1149UpgradeIcons=function(root=document){
-    try{
-      root.querySelectorAll?.('#publicSite button,#publicSite a,#publicPageView button,#erp button,#erp .v11410TopNav summary>span,#parentPortal button').forEach(wrapLeading);
-      root.querySelectorAll?.('.roundIcon,.v1147MasterIcon,.v1147OptionIcon,.v90Stat>span,.v90MonitorIcon,.v39StatIcon,.v114StudentBadge,.v114ChildAvatar,.v114PortalStats button>span:first-child,.v114HomeStats button>span:first-child').forEach(x=>x.classList.add('v1149Icon3D'));
-    }catch(_e){}
+  window.v11411OpenAdminMaster=function(i){
+    const g=window.V90_ADMIN_GROUPS?.[i], panel=document.getElementById('v11411AdminPanel'); if(!g||!panel)return;
+    document.querySelectorAll('#v11411AdminMasters .v11411MasterCard').forEach((b,n)=>b.classList.toggle('active',n===i));
+    panel.innerHTML=`<div class="v11411PanelHead"><div><span>${esc11(g[0])}</span><h3>${esc11(g[1])}</h3></div><button onclick="this.closest('.v11411MasterPanel').innerHTML=''">×</button></div><div class="v11411OptionGrid">${(g[2]||[]).map(x=>`<button onclick="render('${esc11(x[0])}')"><span>${esc11(String(x[1]||'').split(/\s+/)[0]||'•')}</span><b>${esc11(String(x[1]||'').replace(/^\S+\s*/,''))}</b></button>`).join('')}</div>`;
+    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
   };
-  const mo=new MutationObserver(m=>{for(const x of m){for(const n of x.addedNodes){if(n.nodeType===1)v1149UpgradeIcons(n)}}});
-  document.addEventListener('DOMContentLoaded',()=>{
-    v11410RemoveLegacyRail();v11410TopNavigation(window.__v90Route||'dashboard');v1149UpgradeIcons();
-    mo.observe(document.body,{childList:true,subtree:true});
-  });
-  window.addEventListener('load',()=>setTimeout(()=>{v11410RemoveLegacyRail();v11410TopNavigation(window.__v90Route||'dashboard');v1149UpgradeIcons()},250));
+  function decorateAdmin(){
+    const dash=document.querySelector('#erpContent .v114AdminDash'); if(!dash||!v90Admin?.())return;
+    document.getElementById('v11411AdminMasters')?.remove();
+    const stats=dash.querySelector('#v90Stats,.v90Stats');
+    const wrap=document.createElement('div'); wrap.innerHTML=adminMasterMarkup(); const sec=wrap.firstElementChild;
+    if(sec) (stats||dash.querySelector('.v114AdminHero'))?.insertAdjacentElement('afterend',sec);
+  }
+
+  const teacherGroups=[
+    ['👥','My Class','Students • Profile • Class work',[['teacher_class','👥 My Class'],['teacher_profile','👤 My Profile']]],
+    ['✅','Attendance','Today • Master Attendance',[['attendance','✅ Attendance'],['master_attendance','📋 Master Attendance']]],
+    ['📚','Teaching','Bell • Daily Teaching • Homework',[['teacher_bells','🔔 My Teaching Bell'],['v90_teacher_daily','📖 Daily Teaching'],['homework','✏ Homework']]],
+    ['📝','Exam & Marks','Marks • Copy Check • Exam',[['v90_teacher_marks','📝 Copy Check / Marks'],['exams','📊 Marks Entry']]],
+    ['📣','Communication','Requests • Notices • Opinion',[['v90_my_requests','📬 My Requests'],['teacher_notices','📣 Orders / Notices'],['class_opinions','💬 Class Opinion']]],
+    ['🗒','Workspace','My Notes',[['my_notes','🗒 My Notes']]]
+  ];
+  window.v11411OpenTeacherMaster=function(i){
+    const g=teacherGroups[i],panel=document.getElementById('v11411TeacherPanel'); if(!g||!panel)return;
+    document.querySelectorAll('#v11411TeacherMasters .v11411MasterCard').forEach((b,n)=>b.classList.toggle('active',n===i));
+    panel.innerHTML=`<div class="v11411PanelHead"><div><span>${g[0]}</span><h3>${esc11(g[1])}</h3></div><button onclick="this.closest('.v11411MasterPanel').innerHTML=''">×</button></div><div class="v11411OptionGrid">${g[3].map(x=>`<button onclick="render('${x[0]}')"><span>${esc11(x[1].split(/\s+/)[0])}</span><b>${esc11(x[1].replace(/^\S+\s*/,''))}</b></button>`).join('')}</div>`;
+    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  function decorateTeacher(){
+    const dash=document.querySelector('#erpContent .v114TeacherDash'); if(!dash||!v90Teacher?.())return;
+    document.getElementById('v11411TeacherMasters')?.remove();
+    const sec=document.createElement('section'); sec.id='v11411TeacherMasters';sec.className='v11411Masters';
+    sec.innerHTML=`<div class="v11411SectionHead"><div><span>MY WORK HUB</span><h2>Teacher Masters</h2><p>Class, attendance, teaching और exam के options category-wise.</p></div></div><div class="v11411MasterGrid">${teacherGroups.map((g,i)=>`<button class="v11411MasterCard" onclick="v11411OpenTeacherMaster(${i})"><span class="v11411MasterIcon">${g[0]}</span><span class="v11411MasterText"><b>${esc11(g[1])}</b><small>${esc11(g[2])}</small></span><em>›</em></button>`).join('')}</div><div id="v11411TeacherPanel" class="v11411MasterPanel"></div>`;
+    const stats=dash.querySelector('.v90Stats,.v114TeacherStats'); (stats||dash.querySelector('.v114TeacherHero'))?.insertAdjacentElement('afterend',sec);
+  }
+
+  function findParentTarget(dash,key){
+    const map={profile:'.v114ChildInfo,.parentStudentCard',attendance:'.v114AttendanceBlock,[class*=Attendance]',fee:'.v114FeeBlock,[class*=Fee]',learning:'[id*=Homework],[class*=Homework],[id*=Timetable],[class*=Timetable]',result:'.resultMini,[class*=Result]',communication:'.v32ParentNotices,[id*=Notice],[id*=Gallery],[id*=Help],[id*=Message]'};
+    return dash.querySelector(map[key]||'')||document.querySelector(map[key]||'');
+  }
+  function parentGroups(role){return [
+    ['👤',role==='student'?'My Profile':'My Child','Student details','profile'],['✅','Attendance','Today • Monthly','attendance'],['₹','Fees','Paid • Due','fee'],['📚','Learning','Homework • Timetable','learning'],['🏆','Exam & Result','Result • Admit','result'],['📣','Communication','Notices • Gallery • Help','communication']
+  ]}
+  window.v11411ParentJump=function(idx,uid){
+    const dash=document.querySelector(`[data-v11411-parent="${uid}"]`)?.closest('.v114PortalDash')||document.querySelector('#parentDashboardBody .v114PortalDash');
+    const role=String(profile?.role||'parent').toLowerCase(),g=parentGroups(role)[idx],t=findParentTarget(dash,g?.[3]);
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'}); else if(g?.[3]==='profile'&&typeof v97ShowParentProfile==='function')v97ShowParentProfile();
+  };
+  function decorateParent(){
+    const role=String(profile?.role||'parent').toLowerCase();
+    document.querySelectorAll('#parentDashboardBody .v114PortalDash').forEach((dash,idx)=>{
+      dash.querySelector('.v11411ParentMasters')?.remove(); const uid='p'+idx;
+      const g=parentGroups(role),sec=document.createElement('section');sec.className='v11411Masters v11411ParentMasters';sec.dataset.v11411Parent=uid;
+      sec.innerHTML=`<div class="v11411SectionHead"><div><span>${role==='student'?'STUDENT HUB':'PARENT HUB'}</span><h2>${role==='student'?'Student Masters':'Parent Masters'}</h2><p>जरूरी options category-wise, बिना side bar.</p></div></div><div class="v11411MasterGrid">${g.map((x,i)=>`<button class="v11411MasterCard" onclick="v11411ParentJump(${i},'${uid}')"><span class="v11411MasterIcon">${x[0]}</span><span class="v11411MasterText"><b>${esc11(x[1])}</b><small>${esc11(x[2])}</small></span><em>›</em></button>`).join('')}</div>`;
+      const stats=dash.querySelector('.v114PortalStats'); (stats||dash.querySelector('.v114PortalHero'))?.insertAdjacentElement('afterend',sec);
+    });
+  }
+
+  try{const a=v90AdminDashboard;v90AdminDashboard=async function(){const r=await a.apply(this,arguments);cleanRoleChrome();setTimeout(decorateAdmin,30);return r}}catch(_e){}
+  try{const t=v90TeacherDashboard;v90TeacherDashboard=async function(){const r=await t.apply(this,arguments);cleanRoleChrome();setTimeout(decorateTeacher,30);return r}}catch(_e){}
+  try{const p=loadParentPortal;loadParentPortal=async function(){const r=await p.apply(this,arguments);setTimeout(decorateParent,60);return r}}catch(_e){}
+
+  const obs=new MutationObserver(()=>{const erp=document.getElementById('erp');if(erp&&!erp.classList.contains('hidden'))cleanRoleChrome()});
+  document.addEventListener('DOMContentLoaded',()=>{cleanRoleChrome();obs.observe(document.body,{childList:true,subtree:true})});
+  window.addEventListener('load',()=>setTimeout(cleanRoleChrome,150));
 })();
 </script>
-
 </body></html>
