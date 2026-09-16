@@ -6887,6 +6887,14 @@ function v75InstallGlobalSearch(){let top=document.querySelector('#erp .erpTop')
 async function v75TopSearchRun(){if(!v75Admin())return;let q=String($('v75TopQ')?.value||'').trim();if(q.length<2)return toast('कम से कम 2 अक्षर लिखें');let z=q.replace(/[%_,()]/g,'').trim(),pat='%'+z+'%';v64Modal('<h2>🔎 Master Search</h2><div id="v75TopResults" class="empty">Searching...</div>');let [sr,tr,er]=await Promise.all([sb.from('students').select('id,student_name,admission_no,student_id,roll_no,class_name,father_name,phone').or(`student_name.ilike.${pat},admission_no.ilike.${pat},student_id.ilike.${pat},roll_no.ilike.${pat},father_name.ilike.${pat},phone.ilike.${pat}`).limit(15),sb.from('staff').select('id,staff_name,employee_id,designation,phone,email').or(`staff_name.ilike.${pat},employee_id.ilike.${pat},phone.ilike.${pat},email.ilike.${pat}`).limit(8),sb.from('enquiries').select('id,name,phone,email,status').or(`name.ilike.${pat},phone.ilike.${pat},email.ilike.${pat}`).limit(8)]);let box=$('v75TopResults');if(!box)return;let html=[];(sr.data||[]).forEach(x=>html.push(`<div class="v75StudentRow"><div><b>🎓 ${v75Esc(x.student_name||'')}</b><small>${v75Esc(x.admission_no||'')} • ID ${v75Esc(x.student_id||'—')} • Roll ${v75Esc(x.roll_no||'—')}</small></div><div>${v75Esc(x.father_name||'')}<small>${v75Esc(x.phone||'')}</small></div><div>Class ${v75Esc(x.class_name||'')}</div><button class="primary" onclick="$('v14Modal')?.remove();dashboardStudentFull('${x.id}')">Open</button></div>`));(tr.data||[]).forEach(x=>html.push(`<div class="v75StudentRow"><div><b>👨‍🏫 ${v75Esc(x.staff_name||'')}</b><small>${v75Esc(x.employee_id||'')}</small></div><div>${v75Esc(x.designation||'')}</div><div>${v75Esc(x.phone||x.email||'')}</div><button onclick="$('v14Modal')?.remove();render('staff')">Staff</button></div>`));(er.data||[]).forEach(x=>html.push(`<div class="v75StudentRow"><div><b>☎ ${v75Esc(x.name||'')}</b><small>Enquiry</small></div><div>${v75Esc(x.status||'')}</div><div>${v75Esc(x.phone||x.email||'')}</div><button onclick="$('v14Modal')?.remove();render('enquiries')">Open</button></div>`));let err=sr.error||tr.error||er.error;box.className='';box.innerHTML=html.join('')||(err?`<div class="dangerNote">${v75Esc(err.message)}</div>`:'<div class="empty">No matching record.</div>')}
 
 /* ---------- INLINE LOGIN ERRORS (same auth, clearer placement) ---------- */
+function v1142LoginMsg(err,who='Login'){
+ let m=String(err?.message||err||'').trim();
+ if(/invalid login credentials|invalid credentials/i.test(m))return 'ID/Mobile/Email या Password गलत है.';
+ if(/email not confirmed|not confirmed/i.test(m))return 'Account अभी active/verified नहीं है. Admin से संपर्क करें.';
+ if(/failed to fetch|network|connection|fetch failed/i.test(m))return 'Server/Internet connection problem. कृपया फिर कोशिश करें.';
+ if(/rate limit|too many requests/i.test(m))return 'बहुत बार login प्रयास हुआ. थोड़ी देर बाद फिर कोशिश करें.';
+ return who+' failed. '+(m||'कृपया फिर कोशिश करें.');
+}
 function v75AuthStatus(host,id,msg,ok=false){let root=typeof host==='string'?document.querySelector(host):host;if(!root)return toast(msg);let b=document.getElementById(id);if(!b){b=document.createElement('div');b.id=id;b.className='v75AuthStatus';root.appendChild(b)}b.className='v75AuthStatus'+(ok?' ok':'');b.textContent=msg||'';return b}
 login=async function(){let id=$('email')?.value.trim()||'',password=$('password')?.value||'',host=document.querySelector('#login .authCard');if(!id||!password){v75AuthStatus(host,'v75AdminLoginStatus','Email/Mobile और Password डालें');return}v75AuthStatus(host,'v75AdminLoginStatus','Login check किया जा रहा है...',true);let{data,error}=await v32PasswordSignIn(id,password,'admin');if(error){v75AuthStatus(host,'v75AdminLoginStatus','Login failed: '+error.message);return}user=data.user;await loadProfile();await v14LoadTeacherContext();if(!profile){await sb.auth.signOut();v75AuthStatus(host,'v75AdminLoginStatus','Profile नहीं मिला. Users & Roles check करें.');return}openERP()}
 teacherPasswordLogin=async function(){let id=$('tLoginId')?.value||'',password=$('tLoginPassword')?.value||'',host=$('teacherAuthBox');if(!id||!password){v75AuthStatus(host,'v75TeacherLoginStatus','Email/Mobile और Password डालें');return}v75AuthStatus(host,'v75TeacherLoginStatus','Login check किया जा रहा है...',true);let{data,error}=await v32PasswordSignIn(id,password,'teacher');if(error){v75AuthStatus(host,'v75TeacherLoginStatus','Teacher login failed: '+error.message);return}user=data.user;await loadProfile();await v14LoadTeacherContext();if(profile?.role!=='teacher'){await sb.auth.signOut();v75AuthStatus(host,'v75TeacherLoginStatus','यह Teacher account नहीं है');return}if(v14TeacherProfile&&v14TeacherProfile.approval_status!=='Approved'){await sb.auth.signOut();v75AuthStatus(host,'v75TeacherLoginStatus','Teacher account अभी Admin approval में है');return}$('v14Modal')?.remove();openERP()}
@@ -8073,7 +8081,7 @@ login=async function(){
   try{
     v75AuthStatus?.(host,'v75AdminLoginStatus','Admin login check किया जा रहा है...',true);
     let {data,error}=await v32PasswordSignIn(id,password,'admin');
-    if(error){v75AuthStatus?.(host,'v75AdminLoginStatus','Admin login failed: '+error.message);return}
+    if(error){v75AuthStatus?.(host,'v75AdminLoginStatus',v1142LoginMsg(error,'Admin login'));return}
     user=data.user;await loadProfile();
     let rr=String(profile?.role||'').toLowerCase(),st=String(profile?.status||'active').toLowerCase();
     if(!['admin','super_admin'].includes(rr)||['disabled','inactive','pending','suspended','rejected'].includes(st)){
@@ -8513,7 +8521,7 @@ parentPasswordLogin=async function(){
     }
     if(!auth||auth.error){
       let msg=lastErr?.message||'Invalid login';
-      if(/invalid login credentials/i.test(msg))msg='Mobile / Admission No. / Login ID या Admin द्वारा दिया Password सही नहीं है.';
+      if(/invalid login credentials/i.test(msg))msg='Mobile / Admission No. / Login ID या Admin द्वारा दिया Password सही नहीं है.';if(/failed to fetch|network|connection|fetch failed/i.test(msg))msg='Server/Internet connection problem. कृपया फिर कोशिश करें.';
       return v99ParentNote(msg,'bad');
     }
     user=auth.data.user;
@@ -8527,7 +8535,7 @@ parentPasswordLogin=async function(){
     document.getElementById('parentDashboard')?.classList.remove('hidden');
     await loadParentPortal();
     setTimeout(()=>{try{v75InstallTopControls?.();v97PolishParentPortal?.();window.scrollTo(0,0)}catch(_e){}},20);
-  }catch(e){v99ParentNote(e?.message||String(e),'bad')}
+  }catch(e){v99ParentNote(v1142LoginMsg(e,'Parent/Student login'),'bad')}
   finally{window.__v99ParentBusy=false;if(btn){btn.disabled=false;btn.textContent='Login'}}
 };window.parentPasswordLogin=parentPasswordLogin;
 
@@ -8548,7 +8556,7 @@ teacherPasswordLogin=async function(){
       auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
       if(auth.error)auth=await v32PasswordSignIn(raw,password,'teacher');
     }
-    if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login failed: '+(auth?.error?.message||'Invalid login'));return}
+    if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',v1142LoginMsg(auth?.error,'Teacher login'));return}
     user=auth.data.user;await loadProfile();await v14LoadTeacherContext();
     if(String(profile?.role||'').toLowerCase()!=='teacher'){await sb.auth.signOut();user=null;profile=null;v75AuthStatus?.(host,'v75TeacherLoginStatus','यह Teacher account नहीं है');return}
     if(v14TeacherProfile&&String(v14TeacherProfile.approval_status||'').toLowerCase()!=='approved'){await sb.auth.signOut();user=null;profile=null;v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher access अभी Admin Approved नहीं है');return}
