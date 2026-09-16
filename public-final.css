@@ -1,909 +1,319 @@
-*{box-sizing:border-box}
+/* V114.2 FINAL SMART PUBLIC UI
+   Visual-only shell. Existing login functions/routes remain authoritative. */
 
-#exactHome{
-  width:100%!important;
-  max-width:100%!important;
-  margin:0!important;
-  padding:0!important;
-  overflow-x:hidden!important;
-  background:#f6fbff!important;
-}
+html,body{max-width:100%;overflow-x:hidden}
+#runningNotices{display:none!important}
+#exactHome.v1142FinalBuilt{padding:0!important;margin:0!important;width:100%!important;max-width:none!important;overflow:visible!important;background:#edf7ff!important}
+#exactHome.v1142FinalBuilt>*:not(#v1142RefPage){display:none!important}
 
 #v1142RefPage{
   width:100%;
-  max-width:100%;
-  overflow:hidden;
-  background:#fff;
-  font-family:Arial,sans-serif;
+  min-height:100dvh;
+  background:#eef8ff;
+  color:#092e62;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  overflow-x:hidden;
 }
+#v1142RefPage *{box-sizing:border-box}
 
-/* LATEST */
+/* ONE continuous latest line */
 .v1142Latest{
-  height:38px;
-  display:flex;
-  align-items:center;
-  background:#10151d;
-  color:#fff;
-  overflow:hidden;
-  font-size:13px;
-  font-weight:700;
+  width:100%;height:30px;min-height:30px;
+  display:flex;align-items:center;flex-wrap:nowrap;
+  overflow:hidden;background:#101820;color:#fff;
+  position:relative;z-index:20;
 }
-.v1142Latest b{
-  height:38px;
-  display:flex;
-  align-items:center;
-  padding:0 18px;
-  background:#ef2828;
-  flex:0 0 auto;
+.v1142LatestLabel{
+  height:30px;min-width:94px;flex:0 0 94px;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 14px;background:#ef2525;color:#fff;
+  font-weight:950;font-size:12px;letter-spacing:.04em;
+  box-shadow:5px 0 12px rgba(0,0,0,.18);
+  position:relative;z-index:2;
+}
+.v1142LatestViewport{
+  width:0;flex:1 1 auto;height:30px;overflow:hidden;
+  display:flex;align-items:center;white-space:nowrap;
 }
 .v1142LatestTrack{
-  white-space:nowrap;
-  padding-left:22px;
-  animation:v1142Ticker 28s linear infinite;
+  display:flex;align-items:center;flex-wrap:nowrap;
+  width:max-content;white-space:nowrap;
+  animation:v1142Ticker 30s linear infinite;
+  will-change:transform;
+}
+.v1142LatestTrack span{
+  flex:0 0 auto;white-space:nowrap;
+  padding-right:90px;line-height:30px;
+  font-size:12px;font-weight:800;
 }
 @keyframes v1142Ticker{
-  from{transform:translateX(10%)}
-  to{transform:translateX(-65%)}
-}
-
-/* BRAND */
-.v1142Brand{
-  min-height:220px;
-  display:grid;
-  grid-template-columns:210px minmax(0,1fr) 220px;
-  align-items:center;
-  gap:12px;
-  padding:14px 34px 9px;
-  background:
-    radial-gradient(circle at 50% 0,#fff 0,#eef8ff 58%,#fff 100%);
-}
-
-.v1142LogoWrap{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.v1142Logo{
-  width:155px;
-  height:155px;
-  object-fit:contain;
-  filter:
-    drop-shadow(0 10px 8px rgba(0,42,95,.25))
-    drop-shadow(0 2px 0 #fff);
-}
-
-.v1142BrandCenter{text-align:center}
-
-.v1142SchoolName{
-  margin:0;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:clamp(42px,5.3vw,76px);
-  line-height:.80;
-  font-weight:950;
-  letter-spacing:.01em;
-  background:linear-gradient(
-    180deg,
-    #e7f7ff 0%,
-    #1674cd 17%,
-    #073e8b 47%,
-    #021f55 69%,
-    #126ec6 100%
-  );
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  -webkit-text-stroke:1px #052c68;
-  text-shadow:
-    0 1px 0 #fff,
-    0 3px 0 #c5dced,
-    0 5px 0 #7097ba,
-    0 9px 12px rgba(0,37,87,.33);
-}
-
-.v1142SchoolName span{display:block}
-
-.v1142Address{
-  margin:12px 0 0;
-  color:#14294b;
-  font-size:15px;
-  font-weight:900;
-  letter-spacing:.02em;
-}
-
-.v1142Quality{
-  margin-top:12px;
-  color:#254e7e;
-  font-family:Georgia,serif;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.30em;
-}
-
-.v1142Quote{
-  text-align:center;
-  font:italic 22px/1.32 Georgia,serif;
-  color:#17254a;
-}
-
-/* NAV */
-.v1142RefNav{
-  margin:0 18px;
-  min-height:68px;
-  display:flex;
-  align-items:center;
-  justify-content:space-around;
-  gap:5px;
-  padding:6px 12px;
-  border-radius:22px 22px 0 0;
-  background:linear-gradient(90deg,#062f70,#0867c4,#062f70);
-  box-shadow:0 9px 21px rgba(0,49,112,.24);
-}
-.v1142RefNav button{
-  min-height:52px;
-  padding:9px 18px;
-  border:0;
-  border-radius:13px;
-  background:transparent;
-  color:#fff;
-  font-size:15px;
-  font-weight:850;
-  cursor:pointer;
-  white-space:nowrap;
-}
-.v1142RefNav button:hover,
-.v1142RefNav button:first-child{
-  background:linear-gradient(135deg,#10a9f3,#0871da);
-  box-shadow:0 8px 17px rgba(0,42,102,.27);
-}
-
-/* HERO - image tag, इसलिए blank नहीं होगा */
-.v1142Hero{
-  width:100%;
-  overflow:hidden;
-  background:#eaf6ff;
-}
-.v1142Hero img{
-  display:block;
-  width:100%;
-  height:auto;
-  max-height:315px;
-  object-fit:cover;
-  object-position:center;
-}
-
-/* LOGIN CARDS - existing cards */
-.v1142LoginArea{
-  padding:14px 36px 16px;
-  background:linear-gradient(180deg,#fff,#f3faff);
-}
-
-#v1142RefPage .v26LoginCards{
-  width:100%!important;
-  max-width:none!important;
-  margin:0!important;
-  padding:0!important;
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:22px!important;
-}
-
-#v1142RefPage .v26Login{
-  min-width:0!important;
-  min-height:132px!important;
-  padding:16px 18px!important;
-  border-radius:20px!important;
-  border:1px solid #cfe4f7!important;
-  background:linear-gradient(145deg,#fff,#edf7ff)!important;
-  box-shadow:
-    0 14px 27px rgba(4,66,134,.14),
-    inset 0 1px #fff!important;
-}
-
-#v1142RefPage .v26Login:nth-child(2){
-  background:linear-gradient(145deg,#fff,#fff5dc)!important;
-}
-#v1142RefPage .v26Login:nth-child(3){
-  background:linear-gradient(145deg,#fff,#e9faf4)!important;
-}
-
-#v1142RefPage .v26Login button{
-  min-height:38px!important;
-  padding:8px 25px!important;
-  border-radius:999px!important;
-  font-weight:900!important;
-  box-shadow:0 8px 15px rgba(0,68,150,.20)!important;
-}
-
-/* FOOTER */
-.v1142RefFooter{
-  min-height:62px;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto;
-  align-items:center;
-  gap:20px;
-  padding:10px 42px;
-  background:linear-gradient(90deg,#052a61,#0758a9);
-  color:#fff;
-  font-size:12px;
-}
-.v1142RefFootLeft{
-  display:flex;
-  gap:24px;
-  flex-wrap:wrap;
-  font-weight:750;
-}
-.v1142RefFootRight{
-  text-align:right;
-  line-height:1.6;
-}
-.v1142Founder{font-weight:900}
-
-/* MOBILE */
-@media(max-width:700px){
-  .v1142Latest{font-size:11px;height:34px}
-  .v1142Latest b{height:34px;padding:0 10px}
-
-  .v1142Brand{
-    min-height:auto;
-    grid-template-columns:70px minmax(0,1fr);
-    padding:10px;
-  }
-  .v1142Logo{width:65px;height:65px}
-  .v1142Quote{display:none}
-
-  .v1142SchoolName{
-    font-size:25px;
-    line-height:.92;
-  }
-  .v1142Address{
-    font-size:9px;
-    margin-top:7px;
-  }
-  .v1142Quality{
-    font-size:8px;
-    letter-spacing:.12em;
-    margin-top:7px;
-  }
-
-  .v1142RefNav{
-    margin:0;
-    border-radius:0;
-    justify-content:flex-start;
-    overflow-x:auto;
-  }
-  .v1142RefNav button{
-    flex:0 0 auto;
-    min-height:42px;
-    font-size:12px;
-    padding:7px 13px;
-  }
-
-  .v1142Hero img{
-    min-height:185px;
-    object-fit:cover;
-  }
-
-  .v1142LoginArea{padding:10px}
-
-  #v1142RefPage .v26LoginCards{
-    grid-template-columns:1fr!important;
-    gap:10px!important;
-  }
-
-  .v1142RefFooter{
-    grid-template-columns:1fr;
-    gap:6px;
-    padding:10px 14px;
-  }
-  .v1142RefFootRight{text-align:left}
-}
-
-/* ===== ONE SCREEN FINAL FIT ===== */
-
-html,body{
-  margin:0!important;
-  padding:0!important;
-  width:100%!important;
-  min-height:100%!important;
-}
-
-@media (min-width:701px){
-
-  #v1142RefPage{
-    height:100vh!important;
-    min-height:100vh!important;
-    max-height:100vh!important;
-    display:grid!important;
-    grid-template-rows:
-      32px
-      170px
-      58px
-      minmax(210px,1fr)
-      138px
-      54px!important;
-    overflow:hidden!important;
-  }
-
-  .v1142Latest{
-    height:32px!important;
-  }
-
-  .v1142Latest b{
-    height:32px!important;
-  }
-
-  .v1142Brand{
-    min-height:0!important;
-    height:170px!important;
-    padding:7px 28px!important;
-  }
-
-  .v1142Logo{
-    width:118px!important;
-    height:118px!important;
-  }
-
-  .v1142SchoolName{
-    font-size:clamp(38px,4.4vw,64px)!important;
-    line-height:.80!important;
-  }
-
-  .v1142Address{
-    margin-top:7px!important;
-    font-size:13px!important;
-  }
-
-  .v1142Quality{
-    margin-top:7px!important;
-    font-size:10px!important;
-  }
-
-  .v1142Quote{
-    font-size:18px!important;
-  }
-
-  .v1142RefNav{
-    min-height:58px!important;
-    height:58px!important;
-    margin:0 18px!important;
-    padding:4px 10px!important;
-  }
-
-  .v1142RefNav button{
-    min-height:44px!important;
-    padding:6px 15px!important;
-    font-size:13px!important;
-  }
-
-  .v1142Hero{
-    min-height:0!important;
-    height:100%!important;
-  }
-
-  .v1142Hero img{
-    width:100%!important;
-    height:100%!important;
-    max-height:none!important;
-    object-fit:cover!important;
-    object-position:center!important;
-  }
-
-  .v1142LoginArea{
-    height:138px!important;
-    padding:8px 34px!important;
-    overflow:hidden!important;
-  }
-
-  #v1142RefPage .v26LoginCards{
-    height:100%!important;
-    gap:18px!important;
-  }
-
-  #v1142RefPage .v26Login{
-    min-height:0!important;
-    height:120px!important;
-    padding:10px 16px!important;
-  }
-
-  #v1142RefPage .v26Login button{
-    min-height:34px!important;
-    padding:6px 22px!important;
-  }
-
-  .v1142RefFooter{
-    min-height:54px!important;
-    height:54px!important;
-    padding:7px 35px!important;
-  }
-}
-
-/* laptop की कम height पर और compact */
-@media (min-width:701px) and (max-height:760px){
-
-  #v1142RefPage{
-    grid-template-rows:
-      30px
-      145px
-      52px
-      minmax(185px,1fr)
-      118px
-      48px!important;
-  }
-
-  .v1142Brand{
-    height:145px!important;
-  }
-
-  .v1142Logo{
-    width:98px!important;
-    height:98px!important;
-  }
-
-  .v1142SchoolName{
-    font-size:clamp(32px,3.8vw,52px)!important;
-  }
-
-  .v1142RefNav{
-    height:52px!important;
-    min-height:52px!important;
-  }
-
-  .v1142RefNav button{
-    min-height:39px!important;
-  }
-
-  .v1142LoginArea{
-    height:118px!important;
-    padding:6px 30px!important;
-  }
-
-  #v1142RefPage .v26Login{
-    height:106px!important;
-    padding:8px 14px!important;
-  }
-
-  .v1142RefFooter{
-    height:48px!important;
-    min-height:48px!important;
-  }
-}
-
-/* mobile में scroll allowed, लेकिन width fit */
-@media(max-width:700px){
-
-  #v1142RefPage{
-    width:100%!important;
-    max-width:100%!important;
-    min-height:100dvh!important;
-    overflow-x:hidden!important;
-  }
-
-  .v1142Hero img{
-    width:100%!important;
-  }
-}
-
-/* ===== FINAL FIT + CONTINUOUS TICKER ===== */
-
-/* ticker */
-.v1142Latest{
-  padding:0!important;
-  overflow:hidden!important;
-}
-
-.v1142Latest > b{
-  position:relative!important;
-  z-index:5!important;
-  flex:0 0 auto!important;
-  background:#ef2727!important;
-}
-
-.v1142LatestViewport{
-  flex:1 1 auto!important;
-  min-width:0!important;
-  height:100%!important;
-  overflow:hidden!important;
-  display:flex!important;
-  align-items:center!important;
-}
-
-.v1142LatestTrack{
-  display:flex!important;
-  align-items:center!important;
-  width:max-content!important;
-  white-space:nowrap!important;
-  padding:0!important;
-  animation:v1142TickerContinuous 30s linear infinite!important;
-  will-change:transform!important;
-}
-
-.v1142LatestTrack span{
-  display:block!important;
-  flex:0 0 auto!important;
-  padding-right:80px!important;
-}
-
-@keyframes v1142TickerContinuous{
   from{transform:translateX(0)}
   to{transform:translateX(-50%)}
 }
 
-/* Public CONTROL कभी नहीं दिखे */
-#publicSite .v1142PublicControlHide,
-#exactHome .v1142PublicControlHide,
-#v1142RefPage .v1142PublicControlHide{
-  display:none!important;
-}
-
-/* LAPTOP + DESKTOP = exact one-screen */
-@media(min-width:701px){
-
-  body.v1142-public-home-active{
-    overflow:hidden!important;
-  }
-
-  #v1142RefPage{
-    height:100dvh!important;
-    min-height:100dvh!important;
-    max-height:100dvh!important;
-    display:grid!important;
-
-    grid-template-rows:
-      30px
-      138px
-      50px
-      minmax(0,1fr)
-      122px
-      46px!important;
-
-    overflow:hidden!important;
-  }
-
-  #v1142RefPage > *{
-    min-height:0!important;
-  }
-
-  .v1142Latest{
-    height:30px!important;
-  }
-
-  .v1142Latest > b{
-    height:30px!important;
-  }
-
-  .v1142Brand{
-    min-height:0!important;
-    height:138px!important;
-    padding:5px 25px!important;
-  }
-
-  .v1142Logo{
-    width:98px!important;
-    height:98px!important;
-  }
-
-  .v1142SchoolName{
-    font-size:clamp(33px,4vw,55px)!important;
-    line-height:.82!important;
-  }
-
-  .v1142Address{
-    margin-top:5px!important;
-    font-size:12px!important;
-  }
-
-  .v1142Quality{
-    margin-top:5px!important;
-    font-size:9px!important;
-  }
-
-  .v1142Quote{
-    font-size:17px!important;
-  }
-
-  .v1142RefNav{
-    height:50px!important;
-    min-height:50px!important;
-    padding:3px 9px!important;
-  }
-
-  .v1142RefNav button{
-    min-height:39px!important;
-    padding:5px 14px!important;
-    font-size:12px!important;
-  }
-
-  .v1142Hero{
-    height:100%!important;
-    min-height:0!important;
-    overflow:hidden!important;
-  }
-
-  .v1142Hero img{
-    display:block!important;
-    width:100%!important;
-    height:100%!important;
-    max-height:none!important;
-    object-fit:cover!important;
-    object-position:center!important;
-  }
-
-  /* login cards अब पूरे दिखेंगे */
-  .v1142LoginArea{
-    height:122px!important;
-    min-height:0!important;
-    padding:6px 30px!important;
-    overflow:hidden!important;
-  }
-
-  #v1142RefPage .v26LoginCards{
-    height:110px!important;
-    min-height:0!important;
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    align-items:stretch!important;
-    gap:18px!important;
-  }
-
-  #v1142RefPage .v26Login{
-    height:110px!important;
-    min-height:0!important;
-    padding:7px 14px!important;
-    overflow:hidden!important;
-  }
-
-  #v1142RefPage .v26Login h2,
-  #v1142RefPage .v26Login h3{
-    margin:2px 0!important;
-    font-size:17px!important;
-  }
-
-  #v1142RefPage .v26Login p{
-    margin:2px 0 5px!important;
-    font-size:10px!important;
-  }
-
-  #v1142RefPage .v26Login button{
-    min-height:31px!important;
-    padding:5px 22px!important;
-    font-size:11px!important;
-  }
-
-  .v1142RefFooter{
-    height:46px!important;
-    min-height:46px!important;
-    padding:5px 34px!important;
-  }
-}
-
-/* छोटे laptop */
-@media(min-width:701px) and (max-height:690px){
-
-  #v1142RefPage{
-    grid-template-rows:
-      28px
-      118px
-      46px
-      minmax(0,1fr)
-      106px
-      42px!important;
-  }
-
-  .v1142Brand{
-    height:118px!important;
-  }
-
-  .v1142Logo{
-    width:82px!important;
-    height:82px!important;
-  }
-
-  .v1142SchoolName{
-    font-size:clamp(29px,3.6vw,47px)!important;
-  }
-
-  .v1142LoginArea{
-    height:106px!important;
-    padding:4px 28px!important;
-  }
-
-  #v1142RefPage .v26LoginCards,
-  #v1142RefPage .v26Login{
-    height:98px!important;
-  }
-}
-
-/* MOBILE = width perfect, कोई horizontal overflow नहीं */
-@media(max-width:700px){
-
-  html,body,
-  #publicSite,
-  #exactHome,
-  #v1142RefPage{
-    width:100%!important;
-    max-width:100%!important;
-    overflow-x:hidden!important;
-  }
-
-  .v1142LatestTrack{
-    animation-duration:25s!important;
-  }
-}
-
-
-/* ===== V1142 COLOR 3D FINAL ===== */
-
-/* Header को premium colourful depth */
-#v1142RefPage .v1142Brand{
+/* premium school header */
+.v1142Brand{
+  min-width:0;
+  display:grid;
+  grid-template-columns:150px minmax(0,1fr) 185px;
+  align-items:center;
+  gap:16px;
+  padding:14px 28px 10px;
   background:
-    radial-gradient(circle at 50% -20%,#ffffff 0%,#eef8ff 48%,#d8edff 100%)!important;
-  box-shadow:
-    inset 0 -1px 0 rgba(0,80,170,.15),
-    0 5px 14px rgba(0,58,125,.10)!important;
+    radial-gradient(circle at 16% 20%,rgba(68,184,255,.18),transparent 28%),
+    linear-gradient(180deg,#fbfeff 0%,#e9f6ff 100%);
+  border-bottom:1px solid #bedcf3;
+  box-shadow:0 7px 20px rgba(0,55,110,.11);
 }
-
-/* Logo को vivid 3D */
-#v1142RefPage .v1142Logo{
-  filter:
-    saturate(1.25)
-    contrast(1.08)
-    drop-shadow(0 3px 0 #ffffff)
-    drop-shadow(0 8px 8px rgba(0,49,105,.32))!important;
+.v1142LogoWrap{display:flex;align-items:center;justify-content:center;min-width:0}
+.v1142Logo{
+  width:104px;height:104px;object-fit:contain;
+  filter:saturate(1.18) contrast(1.05) drop-shadow(0 7px 7px rgba(0,48,95,.24));
 }
-
-/* SCHOOL NAME - असली visible 3D */
-#v1142RefPage .v1142SchoolName{
-  background:none!important;
-  -webkit-background-clip:initial!important;
-  background-clip:initial!important;
-  -webkit-text-fill-color:initial!important;
-  color:#075fc1!important;
-  -webkit-text-stroke:1px #06316e!important;
-  font-weight:950!important;
-  letter-spacing:.01em!important;
-  text-shadow:
-    0 1px 0 #ffffff,
-    0 2px 0 #cbe6ff,
-    0 3px 0 #8ab9e9,
-    0 4px 0 #4e83bd,
-    0 5px 0 #245a97,
-    0 6px 0 #123f79,
-    0 10px 13px rgba(0,35,80,.34)!important;
-  filter:drop-shadow(0 3px 3px rgba(0,55,130,.20))!important;
-}
-
-#v1142RefPage .v1142SchoolName span:first-child{
-  color:#0876df!important;
-}
-
-#v1142RefPage .v1142SchoolName span:last-child{
-  color:#06458f!important;
-}
-
-/* Address और quality line */
-#v1142RefPage .v1142Address{
-  color:#102f59!important;
-  text-shadow:0 1px 0 #fff!important;
-}
-
-#v1142RefPage .v1142Quality{
-  color:#0757a7!important;
-  font-weight:900!important;
-}
-
-/* Menu glossy 3D */
-#v1142RefPage .v1142RefNav{
-  background:
-    linear-gradient(180deg,#087de1 0%,#0757b4 42%,#053679 100%)!important;
-  border:1px solid #56baff!important;
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.32),
-    inset 0 -3px 0 rgba(0,29,80,.30),
-    0 7px 14px rgba(0,49,110,.25)!important;
-}
-
-#v1142RefPage .v1142RefNav button{
-  text-shadow:0 2px 2px rgba(0,25,70,.38)!important;
-}
-
-#v1142RefPage .v1142RefNav button:first-child,
-#v1142RefPage .v1142RefNav button:hover{
-  background:linear-gradient(180deg,#18b7ff,#0780e4 55%,#0562bc)!important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.45),
-    0 4px 0 #034f9a,
-    0 7px 11px rgba(0,45,100,.28)!important;
-}
-
-/* Hero image को colourful रखें */
-#v1142RefPage .v1142Hero img{
-  filter:saturate(1.16) contrast(1.05) brightness(1.03)!important;
-}
-
-/* तीनों LOGIN CARDS - colourful 3D */
-#v1142RefPage .v26Login{
-  position:relative!important;
-  border-width:1px!important;
-  border-style:solid!important;
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.95),
-    0 5px 0 rgba(33,87,145,.17),
-    0 10px 18px rgba(0,55,120,.16)!important;
-}
-
-#v1142RefPage .v26Login:nth-child(1){
-  background:
-    linear-gradient(145deg,#ffffff 0%,#e9f7ff 50%,#cdeaff 100%)!important;
-  border-color:#9ed4ff!important;
-}
-
-#v1142RefPage .v26Login:nth-child(2){
-  background:
-    linear-gradient(145deg,#ffffff 0%,#fff7df 50%,#ffe6a9 100%)!important;
-  border-color:#f2cb67!important;
-}
-
-#v1142RefPage .v26Login:nth-child(3){
-  background:
-    linear-gradient(145deg,#ffffff 0%,#e9fff7 50%,#c6f4e1 100%)!important;
-  border-color:#8edfc2!important;
-}
-
-#v1142RefPage .v26Login h2,
-#v1142RefPage .v26Login h3{
-  color:#073b7d!important;
-  font-weight:950!important;
+.v1142BrandCenter{min-width:0;text-align:center;padding:3px 0}
+.v1142SchoolName{
+  margin:0;padding:3px 0 7px;
+  color:#0863c3;
+  font-size:clamp(34px,4.1vw,58px);
+  line-height:1.02;
+  font-weight:950;
+  letter-spacing:-.025em;
+  -webkit-text-stroke:.8px #073c82;
   text-shadow:
     0 1px 0 #fff,
-    0 2px 2px rgba(0,61,130,.14)!important;
+    0 2px 0 #d8ecff,
+    0 3px 0 #a7d1f7,
+    0 4px 0 #6da4db,
+    0 5px 0 #3d77b4,
+    0 8px 14px rgba(0,51,107,.27);
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.v1142Address{
+  margin-top:3px;color:#173b64;font-size:12px;
+  font-weight:900;letter-spacing:.02em;
+}
+.v1142Quality{
+  display:inline-block;margin-top:7px;
+  padding:5px 13px;border-radius:999px;
+  background:linear-gradient(180deg,#0e85ef,#075bbb);
+  color:#fff;font-size:9px;font-weight:900;
+  box-shadow:0 4px 0 #064584,0 7px 12px rgba(0,55,120,.16);
+}
+.v1142Quote{
+  justify-self:end;text-align:center;
+  color:#0755a7;font-family:Georgia,serif;
+  font-style:italic;font-size:17px;line-height:1.25;
+}
+.v1142Quote b{display:block;color:#063b79;font-size:20px}
+
+/* only seven public menu options */
+.v1142RefNav{
+  min-width:0;
+  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:6px;align-items:center;
+  padding:5px 12px;
+  background:linear-gradient(180deg,#073f83,#052e63);
+  box-shadow:0 5px 14px rgba(0,41,90,.22);
+}
+.v1142RefNav button{
+  min-width:0;min-height:39px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:10px;padding:6px 8px;
+  background:linear-gradient(180deg,#167ad9,#0a55a7);
+  color:#fff;font-weight:900;font-size:11px;
+  box-shadow:inset 0 1px rgba(255,255,255,.34),0 3px 0 #043d7a;
+  cursor:pointer;white-space:normal;line-height:1.05;
+}
+.v1142RefNav button:hover,.v1142RefNav button:focus-visible{
+  transform:translateY(-1px);
+  background:linear-gradient(180deg,#25a7ff,#0871d4);
 }
 
-/* Admin button */
-#v1142RefPage .v26Login:nth-child(1) button{
-  color:#fff!important;
-  background:linear-gradient(180deg,#149ef1,#0864c3 58%,#03488f)!important;
-  border:1px solid #87d1ff!important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.45),
-    0 4px 0 #033b78,
-    0 7px 10px rgba(0,48,110,.25)!important;
+/* hero */
+.v1142Hero{
+  min-width:0;position:relative;overflow:hidden;
+  background:#dceeff;
+}
+.v1142Hero img{
+  display:block;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  filter:saturate(1.08) contrast(1.02);
 }
 
-/* Teacher button */
-#v1142RefPage .v26Login:nth-child(2) button{
-  color:#fff!important;
-  background:linear-gradient(180deg,#25c985,#0aa963 58%,#067947)!important;
-  border:1px solid #7ce9bb!important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.45),
-    0 4px 0 #05613b,
-    0 7px 10px rgba(0,90,53,.22)!important;
+/* Premium 3D login cards */
+.v1142LoginArea{
+  min-width:0;background:linear-gradient(180deg,#f6fbff,#eaf5ff);
+  display:flex;align-items:center;justify-content:center;
+  padding:8px 26px;
+}
+#v1142RefPage .v26LoginCards{
+  width:min(1120px,100%)!important;
+  max-width:1120px!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:18px!important;
+}
+#v1142RefPage .v26Login{
+  min-width:0!important;
+  min-height:116px!important;
+  height:116px!important;
+  padding:9px 14px 10px!important;
+  border-radius:18px!important;
+  border:1px solid rgba(7,63,128,.15)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  overflow:visible!important;
+  transform:translateZ(0);
+}
+#v1142RefPage .v26Login.admin{
+  background:linear-gradient(145deg,#ffffff,#e8f3ff)!important;
+  box-shadow:0 7px 0 #0d5aa9,0 13px 23px rgba(0,63,135,.20),inset 0 1px #fff!important;
+}
+#v1142RefPage .v26Login.teacher{
+  background:linear-gradient(145deg,#ffffff,#e9fff3)!important;
+  box-shadow:0 7px 0 #16864f,0 13px 23px rgba(0,105,58,.17),inset 0 1px #fff!important;
+}
+#v1142RefPage .v26Login.parent{
+  background:linear-gradient(145deg,#fffdf8,#fff0d8)!important;
+  box-shadow:0 7px 0 #c66b09,0 13px 23px rgba(171,91,0,.18),inset 0 1px #fff!important;
+}
+#v1142RefPage .roundIcon{
+  width:38px!important;height:38px!important;min-height:38px!important;
+  margin:0 auto 3px!important;font-size:19px!important;
+  border-radius:50%!important;
+  box-shadow:0 4px 9px rgba(0,45,100,.14)!important;
+}
+#v1142RefPage .v26Login h3{
+  margin:1px 0!important;font-size:16px!important;line-height:1.05!important;color:#0b356d!important
+}
+#v1142RefPage .v26Login p{
+  margin:1px 0 5px!important;font-size:9px!important;line-height:1.1!important;color:#536b86!important
+}
+#v1142RefPage .v26Login button{
+  width:min(210px,94%)!important;
+  min-height:30px!important;padding:5px 10px!important;
+  border-radius:9px!important;font-size:10px!important;
+  box-shadow:0 3px 0 rgba(0,0,0,.22)!important;
+}
+#v1142RefPage .v26Login.admin button{background:linear-gradient(180deg,#1687ef,#0757b2)!important}
+#v1142RefPage .v26Login.teacher button{background:linear-gradient(180deg,#18ad6a,#087d48)!important}
+#v1142RefPage .v26Login.parent button{background:linear-gradient(180deg,#ff9d2d,#e4740b)!important}
+
+/* footer */
+.v1142RefFooter{
+  min-width:0;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;gap:14px;
+  padding:7px 26px;
+  background:linear-gradient(100deg,#041f49,#075ca8);
+  color:#fff;font-size:10px;
+  border-top:1px solid #2b7dc5;
+}
+.v1142RefFootLeft{
+  min-width:0;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  font-weight:800;
+}
+.v1142RefFootRight{text-align:right;white-space:nowrap}
+.v1142RefFootRight b{display:block;color:#ffd548}
+
+/* Never expose a public website-control/edit floating control */
+body:not(.v1142-erp-active) .v1142PublicControlHide{display:none!important}
+
+/* Desktop/laptop = exact fitted home */
+@media(min-width:701px){
+  body.v1142-public-home-active{overflow:hidden!important}
+  #v1142RefPage{
+    height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;
+    display:grid!important;
+    grid-template-rows:30px 144px 50px minmax(0,1fr) 138px 48px!important;
+    overflow:hidden!important;
+  }
+  .v1142Brand{height:144px!important;min-height:144px!important}
+  .v1142RefNav{height:50px!important;min-height:50px!important}
+  .v1142Hero{height:100%!important;min-height:0!important}
+  .v1142LoginArea{height:138px!important;min-height:138px!important}
+  .v1142RefFooter{height:48px!important;min-height:48px!important}
 }
 
-/* Parent button */
-#v1142RefPage .v26Login:nth-child(3) button{
-  color:#fff!important;
-  background:linear-gradient(180deg,#ffae54,#f47b28 58%,#d85814)!important;
-  border:1px solid #ffd09d!important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.45),
-    0 4px 0 #b8440d,
-    0 7px 10px rgba(157,63,8,.22)!important;
+/* shorter laptop displays */
+@media(min-width:701px) and (max-height:700px){
+  #v1142RefPage{
+    grid-template-rows:28px 116px 44px minmax(0,1fr) 124px 42px!important;
+  }
+  .v1142Latest,.v1142LatestLabel,.v1142LatestViewport{height:28px!important;min-height:28px!important}
+  .v1142Brand{height:116px!important;min-height:116px!important;padding-top:8px!important;padding-bottom:6px!important}
+  .v1142Logo{width:82px!important;height:82px!important}
+  .v1142SchoolName{font-size:clamp(29px,3.5vw,46px)!important;padding-bottom:4px!important}
+  .v1142Address{font-size:10px!important}
+  .v1142Quality{margin-top:4px!important;padding:4px 10px!important;font-size:8px!important}
+  .v1142Quote{font-size:14px!important}.v1142Quote b{font-size:17px!important}
+  .v1142RefNav{height:44px!important;min-height:44px!important;padding:3px 10px!important}
+  .v1142RefNav button{min-height:34px!important;font-size:10px!important;padding:4px 7px!important}
+  .v1142LoginArea{height:124px!important;min-height:124px!important;padding:6px 26px!important}
+  #v1142RefPage .v26Login{height:106px!important;min-height:106px!important;padding:6px 12px!important}
+  #v1142RefPage .roundIcon{width:31px!important;height:31px!important;min-height:31px!important;font-size:16px!important}
+  #v1142RefPage .v26Login h3{font-size:14px!important}
+  #v1142RefPage .v26Login p{font-size:8px!important}
+  #v1142RefPage .v26Login button{min-height:27px!important;font-size:9px!important}
+  .v1142RefFooter{height:42px!important;min-height:42px!important;padding-top:4px!important;padding-bottom:4px!important}
 }
 
-#v1142RefPage .v26Login button:active{
-  transform:translateY(3px)!important;
-  box-shadow:0 1px 0 rgba(0,35,80,.35)!important;
+/* Tablet/mobile: no horizontal overflow; vertical scroll is intentional */
+@media(max-width:700px){
+  body.v1142-public-home-active{overflow-y:auto!important;overflow-x:hidden!important}
+  #v1142RefPage{min-height:100dvh!important;height:auto!important;display:block!important;overflow:visible!important}
+  .v1142Latest{height:29px!important;min-height:29px!important}
+  .v1142LatestLabel{height:29px!important;min-width:78px!important;flex-basis:78px!important;padding:0 8px!important;font-size:10px!important}
+  .v1142LatestViewport{height:29px!important}
+  .v1142LatestTrack span{font-size:10px!important;padding-right:55px!important}
+  .v1142Brand{
+    grid-template-columns:58px minmax(0,1fr)!important;
+    gap:8px!important;padding:12px 10px 10px!important;
+  }
+  .v1142Logo{width:52px!important;height:52px!important}
+  .v1142SchoolName{
+    font-size:clamp(21px,7vw,31px)!important;
+    line-height:1.04!important;
+    padding:3px 0 5px!important;
+    -webkit-text-stroke:.45px #073c82!important;
+    text-shadow:0 1px #fff,0 2px #a7d1f7,0 3px #568ac2,0 6px 10px rgba(0,51,107,.20)!important;
+  }
+  .v1142Address{font-size:9px!important;line-height:1.25!important}
+  .v1142Quality{font-size:7px!important;margin-top:5px!important;padding:4px 8px!important}
+  .v1142Quote{display:none!important}
+  .v1142RefNav{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:4px!important;padding:5px!important;
+  }
+  .v1142RefNav button{min-height:36px!important;font-size:9px!important;padding:4px!important}
+  .v1142Hero{height:clamp(180px,48vw,260px)!important;min-height:180px!important}
+  .v1142LoginArea{height:auto!important;min-height:0!important;padding:12px 11px 17px!important}
+  #v1142RefPage .v26LoginCards{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    width:100%!important;
+  }
+  #v1142RefPage .v26Login{
+    height:auto!important;min-height:122px!important;
+    padding:12px 14px!important;
+  }
+  #v1142RefPage .roundIcon{width:42px!important;height:42px!important;min-height:42px!important;font-size:21px!important}
+  #v1142RefPage .v26Login h3{font-size:17px!important}
+  #v1142RefPage .v26Login p{font-size:10px!important;margin:3px 0 8px!important}
+  #v1142RefPage .v26Login button{min-height:34px!important;font-size:11px!important}
+  .v1142RefFooter{
+    grid-template-columns:1fr!important;
+    gap:5px!important;padding:10px 12px!important;
+    text-align:center!important;font-size:9px!important;
+  }
+  .v1142RefFootLeft{justify-content:center!important;gap:8px 14px!important}
+  .v1142RefFootRight{text-align:center!important;white-space:normal!important}
 }
-
-/* Footer richer blue */
-#v1142RefPage .v1142RefFooter{
-  background:
-    linear-gradient(90deg,#032d69,#0766bf 50%,#032d69)!important;
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.15),
-    0 -5px 14px rgba(0,42,95,.12)!important;
+@media(max-width:430px){
+  .v1142RefNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
-
-/* ===== END V1142 COLOR 3D FINAL ===== */
-

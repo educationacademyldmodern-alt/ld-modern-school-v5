@@ -1,0 +1,80 @@
+/* V114.2 FINAL ROLE RESPONSIVE GUARD
+   Does not remove/replace ERP modules or data flow. */
+html,body{max-width:100%;overflow-x:hidden}
+#erp,#erp main,#erpContent,#parentPortal,#parentDashboard,#parentDashboardBody{min-width:0;max-width:100%}
+#erp .tableWrap,#parentPortal .tableWrap,#parentDashboard .tableWrap{
+  max-width:100%!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch
+}
+#erp img,#parentPortal img,#parentDashboard img{max-width:100%}
+#erpContent input,#erpContent select,#erpContent textarea,
+#parentPortal input,#parentPortal select,#parentPortal textarea{
+  max-width:100%
+}
+
+/* Desktop sidebar never overlaps content */
+@media(min-width:901px){
+  #erp:not(.hidden) aside{
+    position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+    width:292px!important;min-width:292px!important;
+    transform:none!important;visibility:visible!important;opacity:1!important;
+    z-index:100!important;overflow-y:auto!important;overflow-x:hidden!important;
+  }
+  #erp:not(.hidden) main{
+    margin-left:292px!important;
+    width:calc(100% - 292px)!important;
+    min-width:0!important;
+    max-width:calc(100% - 292px)!important;
+  }
+  #erp .erpTop .hamb{display:none!important}
+  #erpContent{width:100%!important;min-width:0!important}
+}
+
+/* Mobile drawer: hidden until existing .open class */
+@media(max-width:900px){
+  #erp:not(.hidden) aside{
+    position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+    width:min(84vw,300px)!important;max-width:300px!important;height:100dvh!important;
+    z-index:9000!important;
+    transform:translateX(-104%)!important;
+    transition:transform .18s ease!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    box-shadow:12px 0 32px rgba(0,25,60,.26)!important;
+  }
+  #erp:not(.hidden) aside.open{transform:translateX(0)!important}
+  #erp:not(.hidden) main{
+    margin-left:0!important;width:100%!important;max-width:100%!important;min-width:0!important
+  }
+  #erp .erpTop{
+    width:100%!important;min-width:0!important;
+    padding-left:9px!important;padding-right:9px!important;
+    gap:7px!important;
+  }
+  #erp .erpTop .hamb{display:inline-flex!important;align-items:center!important;justify-content:center!important}
+  #erpContent{width:100%!important;min-width:0!important;padding:10px!important;overflow-x:hidden!important}
+  #erp .erpCards,#erp .v90Stats,#erp .v114AdminStats,#erp .v114TeacherStats{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important
+  }
+  #erp .smartDashGrid,#erp .v114AdminMainGrid,#erp .v114AdminFeedGrid{
+    grid-template-columns:1fr!important
+  }
+  #erp .tools,#erp .quick,#erp .v14Tabs{max-width:100%!important;flex-wrap:wrap!important}
+  #erp button,#parentPortal button,#parentDashboard button{touch-action:manipulation}
+  #parentPortal,#parentDashboard{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+  #parentDashboardBody{padding:10px!important;overflow-x:hidden!important}
+  #parentDashboard .v114PortalStats,#parentDashboard .v114PortalQuick,#parentDashboard .v114PortalGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important
+  }
+}
+@media(max-width:520px){
+  #erp .erpCards,#erp .v90Stats,#erp .v114AdminStats,#erp .v114TeacherStats,
+  #parentDashboard .v114PortalStats,#parentDashboard .v114PortalQuick,#parentDashboard .v114PortalGrid{
+    grid-template-columns:1fr!important
+  }
+  #erp .erpTop .websiteBtn{display:none!important}
+  #erpContent{padding:8px!important}
+}
+
+/* navigation controls remain in normal header flow */
+#erp .v45NavControls,#erp .v90BackHome,#erp .v90NavControls{
+  position:static!important;max-width:100%!important;flex-wrap:wrap!important
+}

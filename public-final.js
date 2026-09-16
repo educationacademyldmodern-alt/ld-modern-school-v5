@@ -1,282 +1,188 @@
 (function(){
+'use strict';
 
-function getSchool(){
-  try{
-    if(typeof school!=='undefined' && school)return school;
-  }catch(e){}
+const DEFAULT_NOTICE='Admissions Open for Session 2026-27 (Nursery to Class 10) | Quality Education for a Better Tomorrow | Building Character, Creating Brighter Futures | Welcome to L D Modern Education Academy';
+const DEFAULT_EMAIL='educationacademyldmodern@gmail.com';
+const DEFAULT_PHONE='9625688873';
+const DEFAULT_ADDRESS='Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar, 274304';
+
+function sc(){
+  try{ if(typeof school!=='undefined' && school) return school; }catch(_e){}
   return {};
 }
+function safeText(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function noticeText(){
+  const s=sc();
+  return String(
+    s.latest_information ||
+    [s.notice1_enabled!==false?s.notice1_text:'',s.notice2_enabled!==false?s.notice2_text:'',s.notice3_enabled!==false?s.notice3_text:''].filter(Boolean).join('  •  ') ||
+    DEFAULT_NOTICE
+  ).trim();
+}
+function publicGo(id){
+  try{
+    if(id==='home'){
+      if(typeof showPublicPage==='function') showPublicPage('home');
+      window.scrollTo(0,0);
+      return;
+    }
+    const route=id==='academics'?'facilities':id;
+    if(typeof showPublicPage==='function') return showPublicPage(route);
+  }catch(e){console.warn('Public nav',e)}
+}
+window.v1142PublicGo=publicGo;
 
-function buildReferenceHome(){
-
-  const home=document.getElementById('exactHome');
-  if(!home)return;
-
-  const sc=getSchool();
-
-  /* पहले से बना हो तो सिर्फ logo/phone update */
-  const ready=document.getElementById('v1142RefPage');
-  if(ready){
-    const logo=ready.querySelector('.v1142Logo');
-    if(logo && sc.logo_url)logo.src=sc.logo_url;
-    return;
-  }
-
-  /* मौजूदा functional login cards सुरक्षित रखें */
-  const loginCards=home.querySelector('.v26LoginCards');
-  if(!loginCards)return;
-
-  /* पुराना logo source */
-  const oldLogo=home.querySelector('.v26Brand img');
-  const logoSrc=
-    sc.logo_url ||
-    (oldLogo ? oldLogo.getAttribute('src') : '') ||
-    'school-logo.png';
-
-  /* पुराना exactHome hide, delete नहीं */
-  [...home.children].forEach(function(el){
-    el.style.setProperty('display','none','important');
+function hidePublicControls(){
+  if(document.body.classList.contains('v1142-erp-active'))return;
+  document.querySelectorAll('button,a,[role="button"]').forEach(el=>{
+    if(el.closest('#v1142RefPage'))return;
+    const t=((el.textContent||'')+' '+(el.title||'')+' '+(el.getAttribute('aria-label')||'')).replace(/\s+/g,' ').trim();
+    if(/\bwebsite\s*control\b/i.test(t)||/^control$/i.test(t)){
+      el.classList.add('v1142PublicControlHide');
+    }
   });
+}
+
+function build(){
+  const home=document.getElementById('exactHome');
+  if(!home || document.getElementById('v1142RefPage')) return;
+
+  const logins=home.querySelector('.v26LoginCards');
+  if(!logins) return;
+
+  const s=sc();
+  const oldLogo=home.querySelector('.v26Brand img');
+  const logo=s.logo_url || oldLogo?.getAttribute('src') || 'school-logo.png';
+  const hero='public-hero-reference.webp';
+  const name=s.school_name || 'L D MODERN EDUCATION ACADEMY';
+  const address=s.address || DEFAULT_ADDRESS;
+  const email=s.email || DEFAULT_EMAIL;
+  const phone=s.phone || DEFAULT_PHONE;
+  const n=noticeText();
 
   const page=document.createElement('div');
   page.id='v1142RefPage';
-
   page.innerHTML=`
-    <div class="v1142Latest">
-      <b>LATEST</b>
-      <div class="v1142LatestTrack">
-        📢 Admissions Open for Session 2026-27 (Nursery to Class 10)
-        &nbsp;&nbsp; | &nbsp;&nbsp;
-        Quality Education for a Better Tomorrow
-        &nbsp;&nbsp; | &nbsp;&nbsp;
-        Building Character, Creating Brighter Futures
-        &nbsp;&nbsp; | &nbsp;&nbsp;
-        Welcome to L D Modern Education Academy
+    <div class="v1142Latest" aria-label="Latest school information">
+      <div class="v1142LatestLabel">LATEST</div>
+      <div class="v1142LatestViewport">
+        <div class="v1142LatestTrack">
+          <span>${safeText(n)} &nbsp; • &nbsp;</span>
+          <span>${safeText(n)} &nbsp; • &nbsp;</span>
+        </div>
       </div>
     </div>
 
     <header class="v1142Brand">
       <div class="v1142LogoWrap">
-        <img class="v1142Logo" alt="School Logo">
+        <img class="v1142Logo" src="${safeText(logo)}" alt="School Logo">
       </div>
-
       <div class="v1142BrandCenter">
-        <h1 class="v1142SchoolName">
-          <span>L D MODERN</span>
-          <span>EDUCATION ACADEMY</span>
-        </h1>
-
-        <div class="v1142Address"></div>
-
-        <div class="v1142Quality">
-          QUALITY EDUCATION FOR A BETTER TOMORROW
-        </div>
+        <h1 class="v1142SchoolName">${safeText(name)}</h1>
+        <div class="v1142Address">${safeText(address)}</div>
+        <div class="v1142Quality">NURSERY TO CLASS 10 &nbsp; • &nbsp; QUALITY EDUCATION FOR A BETTER TOMORROW</div>
       </div>
-
-      <div class="v1142Quote">
-        Education<br>
-        Today<br>
-        A Better<br>
-        Tomorrow
-      </div>
+      <div class="v1142Quote">Education Today<b>A Better Tomorrow</b></div>
     </header>
 
-    <nav class="v1142RefNav">
-      <button type="button" data-page="home">🏠 Home</button>
-      <button type="button" data-page="about">👥 About</button>
-      <button type="button" data-page="facilities">🎓 Academics</button>
-      <button type="button" data-page="admission">📝 Admission / Enquiry</button>
-      <button type="button" data-page="notices">🔔 Notices</button>
-      <button type="button" data-page="gallery">🖼 Gallery</button>
-      <button type="button" data-page="contact">☎ Contact</button>
+    <nav class="v1142RefNav" aria-label="Public website navigation">
+      <button type="button" data-page="home">Home</button>
+      <button type="button" data-page="about">About</button>
+      <button type="button" data-page="academics">Academics</button>
+      <button type="button" data-page="admission">Admission / Enquiry</button>
+      <button type="button" data-page="notices">Notices</button>
+      <button type="button" data-page="gallery">Gallery</button>
+      <button type="button" data-page="contact">Contact</button>
     </nav>
 
     <section class="v1142Hero">
-      <img src="public-hero-reference.webp"
-           alt="L D Modern Education Academy">
+      <img src="${hero}" alt="L D Modern Education Academy">
     </section>
 
     <section class="v1142LoginArea"></section>
 
     <footer class="v1142RefFooter">
       <div class="v1142RefFootLeft">
-        <span>✉ educationacademyldmodern@gmail.com</span>
-        <span class="v1142Phone"></span>
+        <span>✉ ${safeText(email)}</span>
+        <span>☎ ${safeText(phone)}</span>
       </div>
-
       <div class="v1142RefFootRight">
-        <div>© 2026 L D MODERN EDUCATION ACADEMY • All Rights Reserved</div>
-        <div class="v1142Founder">Founder - Adv Shiv Balak Yadav</div>
+        <span>© 2026 L D MODERN EDUCATION ACADEMY. All Rights Reserved.</span>
+        <b>Founder - Adv Shiv Balak Yadav</b>
       </div>
-    </footer>
-  `;
+    </footer>`;
 
+  home.classList.add('v1142FinalBuilt');
   home.appendChild(page);
+  page.querySelector('.v1142LoginArea').appendChild(logins);
 
-  const logo=page.querySelector('.v1142Logo');
-  logo.src=logoSrc;
-  logo.onerror=function(){
-    this.onerror=null;
-    this.src='school-logo.png';
-  };
-
-  page.querySelector('.v1142Address').textContent=
-    sc.address ||
-    'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar, 274304';
-
-  page.querySelector('.v1142Phone').textContent=
-    '☎ '+(sc.phone || '9625688873');
-
-  /* functional cards उसी के उसी */
-  page.querySelector('.v1142LoginArea').appendChild(loginCards);
-  loginCards.style.removeProperty('display');
-
-  /* Public menu existing showPublicPage function को ही call करे */
-  page.querySelectorAll('.v1142RefNav button').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      const pg=this.dataset.page;
-
-      if(pg==='home'){
-        window.scrollTo({top:0,behavior:'smooth'});
-        return;
-      }
-
-      if(typeof window.showPublicPage==='function'){
-        window.showPublicPage(pg);
-      }
-    });
+  page.querySelectorAll('.v1142RefNav button').forEach(b=>{
+    b.addEventListener('click',()=>publicGo(b.dataset.page));
   });
+
+  document.body.classList.add('v1142-public-home-active');
+  hidePublicControls();
+  sync();
 }
 
-document.addEventListener('DOMContentLoaded',buildReferenceHome,{once:true});
-
-window.addEventListener('load',function(){
-  buildReferenceHome();
-  setTimeout(buildReferenceHome,350);
-  setTimeout(buildReferenceHome,1000);
-},{once:true});
-
-})();
-
-/* stray \n / n/n text cleanup */
-(function cleanStrayPublicText(){
-  function run(){
-    const roots=[
-      document.body,
-      document.getElementById('exactHome'),
-      document.getElementById('v1142RefPage')
-    ].filter(Boolean);
-
-    roots.forEach(root=>{
-      [...root.childNodes].forEach(node=>{
-        if(node.nodeType!==3) return;
-
-        const t=(node.textContent||'').trim();
-
-        if(
-          t==='\\n' ||
-          t==='\\n\\n' ||
-          t==='n/n' ||
-          t==='/n' ||
-          t==='/n/n'
-        ){
-          node.remove();
-        }
-      });
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded',run);
-  window.addEventListener('load',()=>{
-    run();
-    setTimeout(run,500);
-  });
-})();
-
-/* ===== FINAL PUBLIC CORRECTIONS ===== */
-(function(){
-
-function publicSchool(){
-  try{
-    if(typeof school!=='undefined' && school)return school;
-  }catch(e){}
-  return {};
-}
-
-function setupTicker(){
-
-  const latest=document.querySelector('#v1142RefPage .v1142Latest');
-  if(!latest)return;
-
-  const sc=publicSchool();
-
-  /* बाद में Admin Website Control इसी field को update करेगा */
-  const text=
-    sc.latest_information ||
-    sc.latest_notice ||
-    sc.running_notice ||
-    sc.public_notice ||
-    'Admissions Open for Session 2026-27 (Nursery to Class 10)  |  Quality Education for a Better Tomorrow  |  Building Character, Creating Brighter Futures  |  Welcome to L D Modern Education Academy';
-
-  latest.innerHTML='';
-
-  const label=document.createElement('b');
-  label.textContent='LATEST';
-
-  const viewport=document.createElement('div');
-  viewport.className='v1142LatestViewport';
-
-  const track=document.createElement('div');
-  track.className='v1142LatestTrack';
-
-  /* दो copies = पहली खत्म होते ही दूसरी शुरू */
-  for(let i=0;i<2;i++){
-    const span=document.createElement('span');
-    span.textContent='📢  '+text+'   •   ';
-    track.appendChild(span);
-  }
-
-  viewport.appendChild(track);
-  latest.appendChild(label);
-  latest.appendChild(viewport);
-}
-
-function hidePublicControl(){
-
-  document.querySelectorAll(
-    '#publicSite button,#publicSite a,#exactHome button,#exactHome a,#v1142RefPage button,#v1142RefPage a'
-  ).forEach(el=>{
-
-    const text=(
-      (el.textContent||'')+' '+
-      (el.getAttribute('title')||'')+' '+
-      (el.getAttribute('aria-label')||'')
-    ).replace(/\s+/g,' ').trim();
-
-    if(/^control$/i.test(text) || /^website control$/i.test(text)){
-      el.classList.add('v1142PublicControlHide');
-    }
-  });
-}
-
-function fitPublicHome(){
-
+function sync(){
   const page=document.getElementById('v1142RefPage');
-
-  if(page){
-    document.body.classList.add('v1142-public-home-active');
-  }
-
-  setupTicker();
-  hidePublicControl();
+  if(!page)return;
+  const s=sc();
+  const n=noticeText();
+  const spans=page.querySelectorAll('.v1142LatestTrack span');
+  spans.forEach(x=>x.textContent=n+'   •   ');
+  const logo=page.querySelector('.v1142Logo');
+  if(logo && s.logo_url)logo.src=s.logo_url;
+  const name=page.querySelector('.v1142SchoolName');
+  if(name)name.textContent=s.school_name||'L D MODERN EDUCATION ACADEMY';
+  const address=page.querySelector('.v1142Address');
+  if(address)address.textContent=s.address||DEFAULT_ADDRESS;
+  const foot=page.querySelectorAll('.v1142RefFootLeft span');
+  if(foot[0])foot[0].textContent='✉ '+(s.email||DEFAULT_EMAIL);
+  if(foot[1])foot[1].textContent='☎ '+(s.phone||DEFAULT_PHONE);
+  hidePublicControls();
 }
 
-document.addEventListener('DOMContentLoaded',fitPublicHome);
+function state(){
+  const home=document.getElementById('exactHome');
+  const pub=document.getElementById('publicSite');
+  const on=!!home && !home.classList.contains('hidden') && !!pub && !pub.classList.contains('hidden');
+  document.body.classList.toggle('v1142-public-home-active',on);
+  if(on){build();sync()}
+}
 
-window.addEventListener('load',()=>{
-  fitPublicHome();
-  setTimeout(fitPublicHome,350);
-  setTimeout(fitPublicHome,1000);
-});
+function hookSchoolRefresh(){
+  try{
+    if(typeof applySchool==='function' && !applySchool.__v1142Final){
+      const base=applySchool;
+      const wrapped=function(){
+        const r=base.apply(this,arguments);
+        setTimeout(sync,0);
+        return r;
+      };
+      wrapped.__v1142Final=true;
+      applySchool=wrapped;
+    }
+  }catch(_e){}
+}
 
+function start(){
+  build();
+  hookSchoolRefresh();
+  state();
+  [300,900,1800].forEach(ms=>setTimeout(()=>{build();sync();state()},ms));
+
+  document.addEventListener('click',()=>setTimeout(state,0),true);
+  window.addEventListener('resize',state,{passive:true});
+
+  const ob=new MutationObserver(()=>state());
+  const pub=document.getElementById('publicSite');
+  if(pub)ob.observe(pub,{attributes:true,subtree:false,attributeFilter:['class']});
+  const home=document.getElementById('exactHome');
+  if(home)ob.observe(home,{attributes:true,subtree:false,attributeFilter:['class']});
+}
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});
+else start();
 })();
