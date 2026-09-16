@@ -3852,7 +3852,7 @@ try{
 
 /* ---------- KEEP FORGOT BUTTON PRESENT AFTER DYNAMIC UI CHANGES ---------- */
 const v49Observer=new MutationObserver(()=>v49RestoreForgotPassword());
-v49Observer.observe(document.body,{childList:true,subtree:true});
+v49Observer.disconnect(); /* V114.2 performance: global DOM watch disabled */
 setTimeout(v49RestoreForgotPassword,200);
 
 /* ---------- SMALL CSS ONLY FOR FORGOT LINK ---------- */
@@ -4051,7 +4051,7 @@ const v50Observer=new MutationObserver(()=>{
   v50DedupeTopNav();
   setTimeout(v50DedupeTeacherProfile,0);
 });
-v50Observer.observe(document.body,{childList:true,subtree:true});
+v50Observer.disconnect(); /* V114.2 performance: global DOM watch disabled */
 setTimeout(()=>{v50DedupeTopNav();v50DedupeTeacherProfile();},300);
 
 /* ---------- CSS ---------- */
@@ -4307,7 +4307,7 @@ render=function(p){
 };
 
 const v52Observer=new MutationObserver(()=>setTimeout(v52InstallMasterSearch,0));
-v52Observer.observe(document.body,{childList:true,subtree:true});
+v52Observer.disconnect(); /* V114.2 performance: global DOM watch disabled */
 setTimeout(v52InstallMasterSearch,500);
 
 (function(){
