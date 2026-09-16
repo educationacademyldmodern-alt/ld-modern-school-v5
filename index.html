@@ -795,6 +795,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 .v107LogoAdmin{display:flex;gap:10px;align-items:center;border:1px solid #dbe5ef;background:#f8fbff;border-radius:12px;padding:10px;margin:5px 0 8px}.v107LogoAdmin img{width:62px;height:62px;object-fit:contain;background:#fff;border:1px solid #dce5ef;border-radius:10px;padding:3px}.v107LogoAdmin span{font-size:12px;line-height:1.45;color:#52647a}
 @media(max-width:700px){#erp,#parentPortal{font-size:14px}#erpContent{padding:10px!important;overflow-x:hidden}.tableWrap{max-width:100%;overflow-x:auto}.v107DocHead{grid-template-columns:50px minmax(0,1fr) 50px;gap:7px;padding:7px}.v107DocLogoWrap img{width:45px;height:45px}.v107DocSchool h2{font-size:18px}.v107DocSchool b{font-size:12px}.v107DocSchool p,.v107DocSchool span,.v107DocSchool small{font-size:8px}.v107DocSeal{width:44px;height:44px;font-size:12px}.v107LogoAdmin{align-items:flex-start}.v107LogoAdmin img{width:48px;height:48px}}
 </style>
+
+<link rel="stylesheet" href="public-final.css?v=FINAL2">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -1308,6 +1310,7 @@ function v14Modal(html){let old=$('v14Modal');if(old)old.remove();document.body.
 function v14Pdf(elId,name){let el=$(elId);if(!el)return toast('Preview first');if(window.html2pdf){let isMark=/mark|report|result/i.test(String(name||''))||el.classList.contains('markPreview')||!!el.querySelector('.markPreview');let opt=isMark?{margin:5,filename:name||'report-card.pdf',image:{type:'jpeg',quality:.98},html2canvas:{scale:2.8,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true}}:{margin:8,filename:name||'document.pdf',image:{type:'jpeg',quality:.86},html2canvas:{scale:1.8,useCORS:true,letterRendering:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true}};html2pdf().set(opt).from(el).save()}else{v14Print(elId)}}
 function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Allow popup');let base='body{font-family:Cambria,Georgia,serif;padding:18px;color:#14233b}table{width:100%;border-collapse:collapse}th,td{border:1px solid #6f7f91;padding:7px}.idPreviewWrap{display:flex;gap:12px;flex-wrap:wrap}.markInfo{display:grid;grid-template-columns:1fr 1fr;gap:7px}.v107DocHead{display:grid;grid-template-columns:74px 1fr 74px;gap:12px;align-items:center;border-bottom:3px double #173e72;padding:8px 6px 12px;margin-bottom:14px}.v107DocLogoWrap img{width:64px;height:64px;object-fit:contain}.v107DocSchool{text-align:center}.v107DocSchool h2{margin:0;color:#0a376d;font-size:25px;letter-spacing:.3px}.v107DocSchool p{margin:3px 0;font-size:11px}.v107DocSchool b{display:block;font-size:15px;margin-top:5px}.v107DocSchool span,.v107DocSchool small{display:block;font-size:10px;margin-top:2px}.v107DocSeal{width:60px;height:60px;border:2px solid #173e72;border-radius:50%;display:grid;place-items:center;text-align:center;color:#173e72;font-weight:900;font-size:16px}.v107DocSeal small{font-size:7px}.v32SignRow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px;padding-top:16px}.v32SignRow span{text-align:center;border-top:1px solid #8d99a8;padding-top:5px;font-size:10px}@page{size:A4;margin:10mm}',extra='';if((el.matches?.('.idCard')||el.querySelector?.('.idCard'))&&typeof idStudioPrintCss==='function')extra=idStudioPrintCss().replace(/@page\{[^}]*\}/,'');w.document.write(`<html><head><title>Print</title><style>${base}${extra}</style></head><body>${el.innerHTML}
 <!-- V107-CLEAN-PREMIUM-DOCS-2026-09-15 -->
+
 
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
@@ -9367,4 +9370,6 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 })();
 </script>
 
+
+<script src="public-final.js?v=FINAL3"></script>
 </body></html>
