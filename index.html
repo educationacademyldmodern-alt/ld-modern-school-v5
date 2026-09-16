@@ -8960,6 +8960,101 @@ document.addEventListener('click',function(e){
 </script>
 <!-- ===== END V114.2 MOBILE SIDEBAR FIT PATCH ===== -->
 
+
+<style id="v1142-admin-desktop-layout">
+@media(min-width:901px){
+  #erp.v90Shell{
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:hidden!important;
+  }
+
+  #erp.v90Shell aside{
+    position:fixed!important;
+    left:0!important;
+    top:0!important;
+    bottom:0!important;
+    width:300px!important;
+    height:100vh!important;
+    transform:none!important;
+    z-index:100!important;
+    overflow-y:auto!important;
+  }
+
+  #erp.v90Shell main{
+    margin-left:300px!important;
+    width:calc(100% - 300px)!important;
+    max-width:calc(100% - 300px)!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+  }
+
+  #erp.v90Shell .erpTop,
+  #erp.v90Shell #erpContent{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  #erp.v90Shell #erpContent{
+    padding:18px!important;
+  }
+}
+</style>
+
+
+<!-- ===== V114.2 CLEAN SAFE PUBLIC WEBSITE ===== -->
+<style id="v1142-public-clean-safe">
+#publicSite{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
+
+/* Public search is unnecessary on the clean home */
+#publicSite #v79PubSearch,
+#publicSite [onclick*="v80PublicSearch"],
+#publicSite [onclick*="v79PublicSearch"]{
+  display:none!important;
+}
+
+/* Public page stays informational; ERP actions remain behind login */
+#publicSite .v1142-public-hidden-action{
+  display:none!important;
+}
+</style>
+
+<script id="v1142-public-clean-safe-runtime">
+(function(){
+  const blocked=/^(apply|apply now|admission form|new admission|pay fee|attendance|result|results|student info|student information|student list|register|registration)$/i;
+
+  function cleanPublic(){
+    const root=document.getElementById('publicSite');
+    if(!root)return;
+
+    root.querySelectorAll('a,button,[role="button"]').forEach(function(el){
+      const text=(el.textContent||'').replace(/\s+/g,' ').trim();
+      if(blocked.test(text)){
+        el.classList.add('v1142-public-hidden-action');
+        el.setAttribute('aria-hidden','true');
+      }
+    });
+
+    const search=document.getElementById('v79PubSearch');
+    if(search){
+      const box=search.closest('form,.v79Search,.v79SearchBox,.publicSearch,[class*="Search"]');
+      if(box)box.style.display='none';
+      else search.style.display='none';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded',cleanPublic,{once:true});
+  window.addEventListener('load',cleanPublic,{once:true});
+})();
+</script>
+<!-- ===== END V114.2 CLEAN SAFE PUBLIC WEBSITE ===== -->
+
 <!-- ===== V111 MASTER FEE + PREMIUM FEE NOTICE DIRECT UPGRADE ===== -->
 <style id="v111-master-fee-style">
 .v111FeePage{display:grid;gap:14px}.v111Hero{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;padding:18px;border:1px solid #cfe0f4;border-radius:18px;background:linear-gradient(135deg,#f8fbff,#eef6ff)}.v111Hero h2{margin:3px 0 5px}.v111Hero p{margin:0;color:#60748b}.v111Toolbar,.v111BulkActions,.v111NoticeTools{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.v111Toolbar label,.v111BulkGrid label,.v111NoticeTools label,.v111PlannerTools label{display:grid;gap:5px;font-weight:800;font-size:12px}.v111Toolbar input,.v111Toolbar select,.v111BulkGrid input,.v111BulkGrid select,.v111BulkGrid textarea,.v111NoticeTools input,.v111NoticeTools select,.v111NoticeTools textarea,.v111PlannerTools input,.v111PlannerTools select{min-height:40px;border:1px solid #cfdbea;border-radius:10px;padding:9px 10px;background:#fff}.v111BulkGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.v111BulkGrid .wide{grid-column:span 2}.v111BulkCard{padding:15px;border:1px solid #d9e5f1;border-radius:16px;background:#fff;box-shadow:0 8px 22px #102a4308}.v111BulkCard h3{margin:0 0 6px}.v111StudentHead,.v111StudentRow{display:grid;grid-template-columns:42px minmax(180px,1.3fr) minmax(150px,1fr) 90px 115px 115px 115px 130px auto;gap:8px;align-items:center}.v111StudentHead{padding:8px 10px;font-size:11px;font-weight:900;color:#5e7189;text-transform:uppercase}.v111StudentRow{padding:10px;border:1px solid #e2eaf3;border-radius:12px;background:#fff;margin:7px 0}.v111StudentRow input[type=checkbox]{width:18px;height:18px}.v111StudentRow small{display:block;color:#718096;margin-top:3px}.v111Money{font-weight:900}.v111Due{color:#b42318}.v111Good{color:#067647}.v111SelectedCount{font-weight:900;color:#0c4f9e}.v111Planner{margin-top:12px;padding:14px;border:1px solid #cfe0f4;border-radius:14px;background:#f8fbff}.v111PlannerTools{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.v111QuoteCards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:10px 0}.v111QuoteCards>div{padding:12px;border-radius:12px;background:#fff;border:1px solid #dce7f1}.v111QuoteCards b{display:block;font-size:18px}.v111NoticeGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.v111NoticeRow{display:grid;grid-template-columns:42px minmax(180px,1.3fr) minmax(150px,1fr) 90px 120px 110px;gap:8px;align-items:center;padding:10px;border:1px solid #e2eaf3;border-radius:12px;background:#fff;margin:7px 0}.v111NoticeRow small{display:block;color:#718096}.v111NoticePages{background:#dfe5ec;padding:12px}.v111NoticePage{width:210mm;min-height:297mm;margin:0 auto 12px;background:#fff;padding:12mm 10mm;box-sizing:border-box;display:grid;grid-template-rows:repeat(3,1fr);gap:6mm;page-break-after:always}.v111NoticePage:last-child{page-break-after:auto}.v111FeeNotice{border:2px solid #123f70;border-radius:12px;padding:10px 12px;display:grid;grid-template-rows:auto auto 1fr auto;gap:7px;overflow:hidden}.v111FeeNotice .head{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;border-bottom:1px solid #cfdbea;padding-bottom:7px}.v111FeeNotice .head img{width:48px;height:48px;object-fit:contain}.v111FeeNotice .school{text-align:center}.v111FeeNotice .school b{display:block;font-size:18px;color:#0b3765;letter-spacing:.3px}.v111FeeNotice .school span{font-size:10px}.v111FeeNotice .tag{font-weight:900;border:1px solid #9fb9d4;border-radius:999px;padding:4px 8px;font-size:10px}.v111FeeNotice .info{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.v111FeeNotice .info div{padding:6px;border-radius:8px;background:#f5f8fc;font-size:10px}.v111FeeNotice .info b{display:block;color:#51657b;font-size:9px}.v111FeeNotice .duebox{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:#fff4f2;border:1px solid #fac5bd}.v111FeeNotice .duebox strong{font-size:22px;color:#b42318}.v111FeeNotice .foot{display:flex;justify-content:space-between;gap:10px;font-size:10px}.v111FeeNotice.fmt2{border-color:#8a5d00}.v111FeeNotice.fmt2 .head{background:#fff9e9;padding:7px}.v111FeeNotice.fmt2 .school b{color:#7a4b00}.v111FeeNotice.fmt3{border:0;border-left:8px solid #0f766e;box-shadow:inset 0 0 0 1px #9fd8d2}.v111FeeNotice.fmt3 .school b{color:#0f766e}.v111FeeNotice.fmt4{border-color:#6d28d9;background:linear-gradient(145deg,#fff,#faf7ff)}.v111FeeNotice.fmt4 .school b{color:#5b21b6}.v111FeeNotice.fmt5{border:2px double #1f2937}.v111FeeNotice.fmt5 .head{border-bottom:2px solid #1f2937}.v111FeeNotice.fmt5 .school b{color:#111827}.v111ParentFeeBox{margin-top:10px;padding:12px;border:1px solid #d8e5f1;border-radius:14px;background:#f8fbff}.v111ParentFeeBox button{margin-top:6px}
