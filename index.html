@@ -1,5 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.11-PREMIUM-CLEAN-DASHBOARDS-2026-09-16"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.11-PREMIUM-CLEAN-DASHBOARDS-2026-09-16"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.14-FINAL-BACKEND-REPAIR-2026-09-16"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.14-FINAL-BACKEND-REPAIR-2026-09-16"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
 <link rel="canonical" href="/">
@@ -811,7 +811,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
       <button onclick="showPublicPage('admission')">✎ <span>Admission</span></button>
       <button onclick="showPublicPage('gallery')">▧ <span>Gallery</span></button>
       <button onclick="showPublicPage('notices')">🔔 <span>Notice</span></button>
-      <button onclick="showPublicPage('contact')">☎ <span>Contact</span></button>
+      <button onclick="showPublicPage('contact')">☎ <span>Contact School</span></button>
     </nav>
   </header>
   <section class="v26Hero">
@@ -845,7 +845,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 <section id="notices" class="publicSection"><span class="eyebrow">UPDATES</span><h2>News, Notices & Downloads</h2><div id="noticeCards" class="noticeList"><div class="empty">Notices will appear here.</div></div></section>
 <section id="admission" class="publicSection soft"><span class="eyebrow">DIRECT ONLINE ADMISSION</span><h2>Online Admission Application</h2><p class="sectionLead">Parent सीधे form भरें। कोई Email Link/OTP नहीं। Application पहले <b>Pending</b> में जाएगी; Admin Approve/Reject/Edit करेगा और approval के बाद ही Student Register में final admission बनेगा.</p><div id="secureAdmission"><form id="publicAdmission" class="publicForm"><input name="student_name" placeholder="Student Name" required><select name="class_name" required><option value="">Select Class</option></select><input name="academic_session" value="2026-27" placeholder="Session"><input name="dob" type="date" title="Date of Birth"><select name="gender"><option value="">Gender</option><option>Male</option><option>Female</option><option>Other</option></select><input name="father_name" placeholder="Father Name" required><input name="mother_name" placeholder="Mother Name"><input name="guardian_name" placeholder="Guardian Name"><input name="primary_phone" inputmode="tel" placeholder="Parent Mobile Number" required><input name="alternate_phone" placeholder="Alternate Mobile"><input name="parent_email" id="admissionParentEmail" type="email" placeholder="Parent Email"><input name="previous_school" placeholder="Previous School"><input name="previous_class" placeholder="Previous Class"><input name="district" placeholder="District"><input name="state" placeholder="State"><textarea name="address" placeholder="Full Address"></textarea><div class="publicPhoto"><label>Student Photo</label><div class="uploadRow"><label class="uploadBtn">📁 Upload Photo<input class="hiddenFile" type="file" name="public_photo_file" accept="image/jpeg,image/png,image/webp"></label><button class="uploadBtn cameraBtn" type="button" onclick="openLiveCamera(this)">📷 Take Photo from Camera</button></div><div class="cameraPreview"></div><small class="sizeRule">Photo automatic compress होकर लगभग 10–25 KB में save होगा.</small></div><button>Submit Pending Application</button></form><div id="applicationReceipt"></div></div></section>
 <section id="parentPortal" class="publicSection"><span class="eyebrow">PARENT + STUDENT SECURE DASHBOARD</span><h2>Attendance • Fee • Published Result</h2><p class="sectionLead">Parent Registered Mobile से और Student Admission No. / Login ID से School Admin द्वारा दिए Password के साथ login करें. कोई Forgot/Reset/Register/OTP option नहीं.</p><div id="parentGate" class="otpCard"><h3>Parent / Student Login</h3><div class="searchBox" style="grid-template-columns:1fr 1fr auto"><input id="parentIdentifier" placeholder="Parent Mobile / Student Admission No. / Email"><input id="parentPassword" type="password" placeholder="Admin Password"><button type="button" onclick="parentPasswordLogin()">Login</button></div><small class="otpHelp">School द्वारा दिया गया Email/Mobile और Password इस्तेमाल करें.</small></div><div id="parentDashboard" class="hidden"><div class="portalHead"><div class="v114PortalBrand"><img src="school-logo.png" alt="School Logo"><div><b>L D MODERN EDUCATION ACADEMY</b><small>Gambhiriya Bujurg, Singhapatti, Kushinagar</small></div></div><div class="v114PortalAccount"><span>Parent + Student Portal</span><button class="secondary" onclick="parentSignOut()">⏻ Logout</button></div></div><div id="parentDashboardBody"></div></div></section>
-<section id="contact" class="publicSection soft two"><div><span class="eyebrow">CONTACT</span><h2>Contact Us</h2><p id="publicAddress">Gambhiriya Bujurg, Singhapatti, Kushinagar, Uttar Pradesh</p><p id="publicPhone"></p></div><form id="enquiryForm" class="publicForm"><input name="name" placeholder="Your Name" required><input name="phone" placeholder="Mobile" required><input name="email" type="email" placeholder="Email"><textarea name="message" placeholder="Message" required></textarea><button id="enquirySubmitBtn">Send Enquiry</button><div id="enquiryStatus"></div></form></section>
+<section id="contact" class="publicSection soft two"><div><span class="eyebrow">CONTACT</span><h2>Contact School</h2><p id="publicAddress">Gambhiriya Bujurg, Singhapatti, Kushinagar, Uttar Pradesh</p><p id="publicPhone"></p></div><form id="enquiryForm" class="publicForm"><input name="name" placeholder="Your Name" required><input name="phone" placeholder="Mobile" required><input name="email" type="email" placeholder="Email"><textarea name="message" placeholder="Message" required></textarea><button id="enquirySubmitBtn">Send Enquiry</button><div id="enquiryStatus"></div></form></section>
 <footer class="premiumFooter"><div class="footBrand"><img src="school-logo.png" alt="School Logo"><div><b id="footSchool">L D MODERN EDUCATION ACADEMY</b><span>Knowledge • Discipline • Character</span></div></div><div class="footMotto">A Better Education • A Brighter Tomorrow</div><span>Public Website + Smart Cloud ERP<br><small>© 2026 L D MODERN EDUCATION ACADEMY. All Rights Reserved.</small></span></footer>
 </div>
 
@@ -911,7 +911,7 @@ function showPublicPage(id){
   }
   const src=$(id);if(!src)return toast('Page not available');
   home.classList.add('hidden');
-  title.textContent=({about:'About School',facilities:'Academics',admission:'Admission',gallery:'Gallery',notices:'Notices',contact:'Contact',parentPortal:'Parent Portal'}[id]||'School');
+  title.textContent=({about:'About School',facilities:'Academics',admission:'Admission',gallery:'Gallery',notices:'Notices',contact:'Contact School',parentPortal:'Parent Portal'}[id]||'School');
   body.innerHTML='';src.style.display='block';body.appendChild(src);publicMoved=src;
   view.classList.remove('hidden');
   v71ResetPublicScroll(view);
@@ -1118,24 +1118,28 @@ async function captureCamera(){
 }
 
 $("publicAdmission").onsubmit=async e=>{
- e.preventDefault();if(!cfg)return toast("School cloud not configured");
- let fd=new FormData(e.target),o=Object.fromEntries(fd);o.parent_email=String(o.parent_email||'').trim().toLowerCase()||null;o.primary_phone=normalizePhone(o.primary_phone||'').replace(/^\+91/,'');if(!o.primary_phone)return toast("Parent mobile जरूरी है");
- let file=e.target._cameraFile||e.target.querySelector('[name="public_photo_file"]')?.files?.[0];delete o.public_photo_file;
+ e.preventDefault();if(!cfg)return toast("School cloud not configured");if(e.target.dataset.busy==='1')return;
+ const btn=e.target.querySelector('button[type="submit"],button:not([type])');e.target.dataset.busy='1';if(btn){btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent='Submitting...'}
+ let uploadedPath='';
  try{
-  if(file){file=await compressImageFile(file,10,25,640,'student');let uid='public',path=`public-admission/${uid}/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;let{error:upErr}=await sb.storage.from('student-media').upload(path,file,{upsert:false,contentType:'image/jpeg'});if(upErr)throw upErr;o.photo_path=path;o.photo_source=e.target._cameraFile?'camera':'upload';o.photo_taken_at=new Date().toISOString()}
+  let fd=new FormData(e.target),o=Object.fromEntries(fd);o.parent_email=String(o.parent_email||'').trim().toLowerCase()||null;o.primary_phone=normalizePhone(o.primary_phone||'').replace(/^\+91/,'');if(!o.primary_phone)throw new Error("Parent mobile जरूरी है");
+  let file=e.target._cameraFile||e.target.querySelector('[name="public_photo_file"]')?.files?.[0];delete o.public_photo_file;
+  if(file){file=await compressImageFile(file,10,25,640,'student');let uid='public',path=`public-admission/${uid}/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;let{error:upErr}=await sb.storage.from('student-media').upload(path,file,{upsert:false,contentType:'image/jpeg'});if(upErr)throw upErr;uploadedPath=path;o.photo_path=path;o.photo_source=e.target._cameraFile?'camera':'upload';o.photo_taken_at=new Date().toISOString()}
   o.academic_session=o.academic_session||"2026-27";let{data,error}=await sb.rpc('submit_admission_application',{p_payload:o});if(error)throw error;
-  let a=(data&&data.application_no)||'';$('applicationReceipt').innerHTML=`<div class="successCard"><b>✓ Application Submitted</b><p>Application No: <strong>${esc(a)}</strong></p><p>Status: <span class="badge pending">Pending Verification</span></p><small>School approval के बाद admission final होगा.</small></div>`;toast("Application submitted successfully");e.target.reset();e.target._cameraFile=null
- }catch(err){toast(err.message||'Admission submit failed')}
+  let a=(data&&data.application_no)||'',dup=!!data?.duplicate;if(dup&&uploadedPath){try{await sb.storage.from('student-media').remove([uploadedPath])}catch(_e){}uploadedPath=''}$('applicationReceipt').innerHTML=`<div class="successCard"><b>✓ ${dup?'Application Already Pending':'Application Submitted'}</b><p>Application No: <strong>${esc(a)}</strong></p><p>Status: <span class="badge pending">Pending Verification</span></p><small>${dup?'Same student की pending application पहले से मौजूद है; duplicate नहीं बनाया गया.':'School approval के बाद admission final होगा.'}</small></div>`;toast(dup?"Pending application already exists":"Application submitted successfully");e.target.reset();e.target._cameraFile=null
+ }catch(err){if(uploadedPath){try{await sb.storage.from('student-media').remove([uploadedPath])}catch(_e){}}toast(err.message||'Admission submit failed')}
+ finally{e.target.dataset.busy='0';if(btn){btn.disabled=false;btn.textContent=btn.dataset.oldText||'Submit Pending Application'}}
 };
 
 $("enquiryForm").onsubmit=async e=>{
- e.preventDefault();if(!cfg)return openPortal();let status=$("enquiryStatus"),btn=$("enquirySubmitBtn");if(status){status.className="";status.textContent=""}
- let o=Object.fromEntries(new FormData(e.target));o.name=String(o.name||"").trim();o.phone=String(o.phone||"").replace(/\D/g,"").trim();o.email=String(o.email||"").trim()||null;o.message=String(o.message||"").trim();
- if(!o.name||o.phone.length<10||!o.message){if(status){status.className="enquiryStatus err";status.textContent="Name, valid mobile और message भरें."}return}
- o.status="New";o.enquiry_date=today();o.source="Website";if(btn){btn.disabled=true;btn.textContent="Sending..."}
- let{error}=await sb.from("enquiries").insert(o);if(btn){btn.disabled=false;btn.textContent="Send Enquiry"}
- if(error){if(status){status.className="enquiryStatus err";status.textContent="Enquiry नहीं भेजी गई: "+error.message}return toast(error.message)}
- if(status){status.className="enquiryStatus ok";status.textContent="✓ Enquiry successfully sent to school."}toast("Enquiry sent successfully");e.target.reset()
+ e.preventDefault();if(!cfg)return openPortal();if(e.target.dataset.busy==='1')return;let status=$("enquiryStatus"),btn=$("enquirySubmitBtn");if(status){status.className="";status.textContent=""}
+ let o=Object.fromEntries(new FormData(e.target));o.name=String(o.name||"").trim();o.phone=String(o.phone||"").replace(/\D/g,"").slice(-10);o.email=String(o.email||"").trim().toLowerCase()||null;o.message=String(o.message||"").trim();
+ if(!o.name||o.phone.length!==10||o.message.length<3){if(status){status.className="enquiryStatus err";status.textContent="Name, valid 10-digit mobile और message भरें."}return}
+ const last=Number(localStorage.getItem('ld_public_enquiry_last')||0);if(last&&Date.now()-last<60000){if(status){status.className="enquiryStatus err";status.textContent="एक मिनट बाद दोबारा कोशिश करें."}return}
+ e.target.dataset.busy='1';if(btn){btn.disabled=true;btn.textContent="Sending..."}
+ try{let{data,error}=await sb.rpc('v11415_submit_enquiry',{p_payload:o});if(error)throw error;localStorage.setItem('ld_public_enquiry_last',String(Date.now()));if(status){status.className="enquiryStatus ok";status.textContent=data?.duplicate?"✓ यही enquiry पहले से school को मिल चुकी है.":"✓ Enquiry successfully sent to school."}toast(data?.duplicate?"Duplicate enquiry नहीं बनाई गई":"Enquiry sent successfully");e.target.reset()}
+ catch(err){if(status){status.className="enquiryStatus err";status.textContent="Enquiry नहीं भेजी गई: "+(err.message||err)}toast(err.message||String(err))}
+ finally{e.target.dataset.busy='0';if(btn){btn.disabled=false;btn.textContent="Send Enquiry"}}
 };
 
 
@@ -7451,7 +7455,7 @@ const V90_ADMIN_GROUPS=[
   ['admissions','📝 Admission'],['students','👥 Students'],['parent_access','🔐 Student / Parent Login'],['data_hub','⇄ Student Data Hub'],['attendance','✅ Attendance'],['master_attendance','📋 Master Attendance'],['idcard_center','🪪 ID Card'],['promotion_center','⬆ Previous Session / Promotion'],['v90_student_requests','🎓 Student Requests']
  ]],
  ['👩‍🏫','Teachers',[
-  ['staff','👩‍🏫 Teachers / Staff'],['teacher_approval','✅ Teacher Approval'],['staff_attendance','🟢 Staff Attendance'],['leave','🗓 Staff Leave'],['payroll','💰 Payroll'],['v90_teacher_requests','👨‍🏫 Teacher Requests'],['v74_bell_center','🔔 Teacher Bell'],['v90_teaching_monitor','📚 Daily Teaching Monitor']
+  ['staff','👩‍🏫 Teachers / Staff'],['teacher_approval','✅ Teacher Approval'],['staff_attendance','🟢 Staff Attendance'],['leave','🗓 Staff Leave'],['payroll','💰 Payroll'],['v90_teacher_requests','👨‍🏫 Teacher Requests']
  ]],
  ['₹','Fee & Accounts',[
   ['smart_fee_center','₹ Pay Fee'],['master_fee','💼 Master Fee Management'],['fee_card_center','💳 Fee Card'],['v65_fee','🧠 Future Fee Control'],['fee_dashboard','📊 Fee Dashboard'],['fee_structure','⚙ Fee Structure'],['due_reminders','📲 Due Fee Reminder'],['income','📥 Income'],['expenses','📤 Expenses'],['balance','📚 Balance Sheet']
@@ -7490,8 +7494,9 @@ function v90InstallShell(active=window.__v90Route||'dashboard'){
  erp.classList.toggle('v105InternalFocus',String(active||'dashboard')!=='dashboard');
  if(window.innerWidth>900)erp.classList.remove('v58SideHidden');
  const top=erp.querySelector('.erpTop');if(top){
-   let hb=top.querySelector('#v90HomeBtn');if(!hb){hb=document.createElement('button');hb.id='v90HomeBtn';hb.className='v90TopBtn';hb.textContent='🏠 Home';hb.onclick=v90GoHome;const title=top.querySelector('div');top.insertBefore(hb,title||top.firstChild?.nextSibling||null)}
-   let bb=top.querySelector('#v90BackBtn');if(!bb){bb=document.createElement('button');bb.id='v90BackBtn';bb.className='v90TopBtn';bb.textContent='← Back';bb.onclick=v90Back;top.insertBefore(bb,hb)}
+   /* V114.15: one Home/Dashboard navigation only. Role rail owns Home; top bar keeps Back. */
+   top.querySelector('#v90HomeBtn')?.remove();
+   let bb=top.querySelector('#v90BackBtn');if(!bb){bb=document.createElement('button');bb.id='v90BackBtn';bb.className='v90TopBtn';bb.textContent='← Back';bb.onclick=v90Back;const title=top.querySelector('div');top.insertBefore(bb,title||top.firstChild?.nextSibling||null)}
    let web=top.querySelector('.websiteBtn');if(web){web.style.display='inline-flex';web.textContent='🌐 View Website';web.onclick=()=>backWebsite()}
  }
  v90BuildNav(active);
@@ -8444,12 +8449,30 @@ v64SaveTeacherStudent=async function(id){return v98TeacherBasicSave(id,'attendan
 
 function v98FileBase64(f){return new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>resolve(String(r.result||'').split(',')[1]||'');r.onerror=()=>reject(new Error('Photo read failed'));r.readAsDataURL(f)})}
 window.v91TeacherUploadPhoto=async function(id,input){
-  let f=input?.files?.[0];if(!f)return;let srow=(typeof v91TeacherPhotoRows!=='undefined'?v91TeacherPhotoRows:[]).find(x=>String(x.id)===String(id));if(!srow)return toast('Student not found');let card=document.getElementById('v91PhotoCard_'+id);card?.classList.add('uploading');try{
-    f=await compressImageFile(f,10,25,640,'student');if(f.size>45*1024)throw new Error('Photo 45KB से बड़ी रह गई. दूसरा photo चुनें.');let token=await v98AuthToken();if(!token)throw new Error('Teacher session expired. फिर login करें.');let b64=await v98FileBase64(f);
-    let r=await fetch('/api/student-media',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({student_id:id,file_base64:b64,mime:'image/jpeg'})}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Student photo update failed');
-    srow.photo_path=j.path;srow.photo_url='';srow.student_photo_url='';if(j.signed_url){srow._signed_photo=j.signed_url;try{photoCache91?.set(j.path,{url:j.signed_url,exp:Date.now()+3300000})}catch(_e){}}else{try{await v91AttachStudentPhoto(srow)}catch(_e){}}
-    try{v91RenderTeacherPhotos()}catch(_e){};toast(`Photo updated • ${Math.round(f.size/1024)} KB • synced`);try{v58BroadcastUpdate?.('students')}catch(_e){}
-  }catch(e){let m=e?.message||String(e);if(/bucket not found|storage/i.test(m))m='Student Storage setup check करें: Primary Admin login • Vercel SUPABASE_URL/SERVICE_ROLE env • V109 Storage Repair SQL.';toast(m)}finally{card?.classList.remove('uploading');if(input)input.value=''}
+  let f=input?.files?.[0];if(!f)return;
+  let srow=(typeof v91TeacherPhotoRows!=='undefined'?v91TeacherPhotoRows:[]).find(x=>String(x.id)===String(id));
+  if(!srow)return toast('Student not found');
+  let card=document.getElementById('v91PhotoCard_'+id);card?.classList.add('uploading');
+  try{
+    f=await compressImageFile(f,10,25,640,'student');
+    if(f.size>45*1024)throw new Error('Photo 45KB से बड़ी रह गई. दूसरा photo चुनें.');
+    if(!user?.id)throw new Error('Teacher session expired. फिर login करें.');
+    const path=`teacher-student-photo/${user.id}/${srow.id}.jpg`;
+    let up=await sb.storage.from('student-media').upload(path,f,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'});
+    if(up.error)throw up.error;
+    let rr=await sb.rpc('v91_teacher_set_student_photo',{p_student_id:srow.id,p_photo_path:path});
+    if(rr.error)throw rr.error;
+    srow.photo_path=path;srow.photo_url='';srow.student_photo_url='';
+    try{photoCache91?.delete(path)}catch(_e){}
+    try{await v91AttachStudentPhoto(srow)}catch(_e){}
+    try{v91RenderTeacherPhotos()}catch(_e){}
+    toast(`Photo updated • ${Math.round(f.size/1024)} KB • synced`);
+    try{v58BroadcastUpdate?.('students')}catch(_e){}
+  }catch(e){
+    let m=e?.message||String(e);
+    if(/bucket not found|row-level security|storage|policy/i.test(m))m='Student photo permission/storage setup ठीक नहीं है. V114.14-FINAL-BACKEND-REPAIR.sql safe re-run करें. • '+m;
+    toast(m)
+  }finally{card?.classList.remove('uploading');if(input)input.value=''}
 };
 </script>
 
@@ -9140,127 +9163,83 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 </script>
 <!-- ===== END V113 LONG-TERM FREE-TIER SMART SYNC + APPROVAL HARDENING ===== -->
 
-<script id="v1143-final-ui-runtime">
+<script id="v11415-final-utility-runtime">
 (function(){
-  window.V1143_BUILD='V114.4-CLEAN-SCHOOL-REAL-UI-2026-09-15';
-  function tick(){
-    try{
-      const top=document.querySelector('#erp .erpTop');
-      if(top && !document.getElementById('v1143Clock')){
-        const x=document.createElement('div');x.id='v1143Clock';x.className='v1143Clock';
-        const bell=document.getElementById('v62Bell');
-        top.insertBefore(x,bell||document.getElementById('v97TopIdentity')||null);
-      }
-      const x=document.getElementById('v1143Clock');
-      if(x){const n=new Date();x.innerHTML='<b>'+n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})+'</b><small>'+n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+'</small>'}
-      document.body.classList.toggle('v1143-parent-active',!!document.querySelector('#parentDashboard:not(.hidden)'));
-    }catch(_e){}
-  }
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(tick,250));
-  window.addEventListener('load',()=>setTimeout(tick,450));
-  setInterval(tick,30000);
-  const obs=new MutationObserver(()=>tick());
-  try{obs.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']})}catch(_e){}
+ window.V11415_BUILD='V114.15-FINAL-TRIPLE-RECHECKED-2026-09-16';
+ function tick(){try{const top=document.querySelector('#erp .erpTop');if(top&&!document.getElementById('v11415Clock')){const x=document.createElement('div');x.id='v11415Clock';x.className='v1143Clock';const bell=document.getElementById('v62Bell');top.insertBefore(x,bell||document.getElementById('v97TopIdentity')||null)}const x=document.getElementById('v11415Clock');if(x){const n=new Date();x.innerHTML='<b>'+n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})+'</b><small>'+n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+'</small>'}document.body.classList.toggle('v11415-parent-active',!!document.querySelector('#parentDashboard:not(.hidden)'))}catch(_e){}}
+ document.addEventListener('DOMContentLoaded',()=>setTimeout(tick,250));window.addEventListener('load',()=>setTimeout(tick,450));setInterval(tick,30000);const obs=new MutationObserver(()=>tick());try{obs.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']})}catch(_e){}
 })();
 </script>
 
-<link rel="stylesheet" href="premium-role-ui.css?v=11411clean1">
-<script id="v11411-premium-clean-runtime">
+<link rel="stylesheet" href="premium-role-ui.css?v=11415final3x">
+
+<script id="v11415-final-master-rail-runtime">
 (function(){
-  window.V11411_BUILD='V114.11-PREMIUM-CLEAN-DASHBOARDS-2026-09-16';
-
-  const esc11=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  function cleanRoleChrome(){
-    const erp=document.getElementById('erp'); if(!erp) return;
-    erp.querySelectorAll(':scope>aside,#erpNav,.v11410TopNav,.v1149RoleRail,.v115RoleRail').forEach(x=>x.remove());
-    erp.style.removeProperty('grid-template-columns');
-    const main=erp.querySelector(':scope>main');
-    if(main){main.style.removeProperty('margin-left');main.style.removeProperty('left');main.style.removeProperty('width')}
+  window.V11415_BUILD='V114.15-FINAL-TRIPLE-RECHECKED-2026-09-16';
+  const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const role=()=>String(profile?.role||'').toLowerCase();
+  const isAdmin=()=>['admin','super_admin','principal'].includes(role());
+  const isTeacher=()=>role()==='teacher';
+  const iconLabel=(s='')=>{const a=String(s).trim().split(/\s+/);return [a.shift()||'•',a.join(' ')||String(s)]};
+  const closeRail=()=>{document.getElementById('erp')?.classList.remove('v11415RailOpen');document.getElementById('parentDashboard')?.classList.remove('v11415ParentOpen')};
+  window.v11415ToggleRail=()=>document.getElementById('erp')?.classList.toggle('v11415RailOpen');
+  window.v11415ToggleParentRail=()=>document.getElementById('parentDashboard')?.classList.toggle('v11415ParentOpen');
+  function schoolBrand(label){return `<div class="v11415RoleBrand"><img src="school-logo.png" alt="School Logo"><div><b>L D MODERN<br>EDUCATION ACADEMY</b><small>${esc(label)}</small></div></div>`}
+  function routeButton(route,label,active){const [ic,tx]=iconLabel(label);return `<button class="v11415RailLink ${active===route?'active':''}" onclick="closeV11415AndRender('${esc(route)}')"><span>${esc(ic)}</span><span>${esc(tx)}</span></button>`}
+  window.closeV11415AndRender=function(route){closeRail();return render(route)};
+  function buildAdminRail(active){
+    const groups=Array.isArray(window.V90_ADMIN_GROUPS)?window.V90_ADMIN_GROUPS:[];
+    return `${schoolBrand('ADMIN CONTROL')}<button class="v11415RailHome ${active==='dashboard'?'active':''}" onclick="closeV11415AndRender('dashboard')"><span>🏠</span><span>Dashboard</span></button><nav class="v11415RailNav">${groups.map((g,i)=>{const on=(g[2]||[]).some(x=>x[0]===active);return `<details class="v11415RailGroup ${on?'active':''}" ${on?'open':''}><summary><span class="v11415GroupIcon">${esc(g[0])}</span><span>${esc(g[1])}</span></summary><div class="v11415RailLinks">${(g[2]||[]).map(x=>routeButton(x[0],x[1],active)).join('')}</div></details>`}).join('')}</nav><button class="v11415RailFooter" onclick="logout()">⏻ Logout</button>`;
   }
-  window.v11411CleanRoleChrome=cleanRoleChrome;
-
-  try{
-    const shellBase=v90InstallShell;
-    v90InstallShell=function(active=window.__v90Route||'dashboard'){
-      cleanRoleChrome();
-      const r=shellBase.apply(this,arguments);
-      cleanRoleChrome();
-      const erp=document.getElementById('erp');
-      erp?.classList.toggle('v11411Internal',String(active||'dashboard')!=='dashboard');
-      setTimeout(cleanRoleChrome,0);
-      return r;
-    };
-  }catch(e){console.warn('V114.11 shell',e)}
-
-  function adminMasterMarkup(){
-    if(!Array.isArray(window.V90_ADMIN_GROUPS)) return '';
-    return `<section id="v11411AdminMasters" class="v11411Masters"><div class="v11411SectionHead"><div><span>SMART CONTROL</span><h2>Master Management</h2><p>एक category चुनें — उससे जुड़े सभी working options नीचे खुलेंगे।</p></div></div><div class="v11411MasterGrid">${V90_ADMIN_GROUPS.map((g,i)=>`<button class="v11411MasterCard" data-i="${i}" onclick="v11411OpenAdminMaster(${i})"><span class="v11411MasterIcon">${esc11(g[0])}</span><span class="v11411MasterText"><b>${esc11(g[1])}</b><small>${esc11((g[2]||[]).slice(0,3).map(x=>String(x[1]||'').replace(/^\S+\s*/,'')).join(' • '))}</small></span><em>›</em></button>`).join('')}</div><div id="v11411AdminPanel" class="v11411MasterPanel"></div></section>`;
+  function teacherGroups(){
+    const nav=(Array.isArray(window.V90_TEACHER_NAV)?window.V90_TEACHER_NAV:[]).filter(x=>x&&x[0]&&x[0]!=='dashboard');
+    const buckets=[
+      ['👥','My Class',new Set(['teacher_profile','v97_profile','teacher_class','v91_student_photos'])],
+      ['✅','Attendance & Safety',new Set(['attendance','master_attendance','master_gate_pass'])],
+      ['📚','Teaching',new Set(['teacher_bells','v90_teacher_daily','homework'])],
+      ['📝','Exam & Marks',new Set(['v90_teacher_marks','exams'])],
+      ['📣','Communication',new Set(['v90_my_requests','teacher_notices','class_opinions'])],
+      ['🔐','Account & Workspace',new Set(['v93_teacher_password','my_notes'])]
+    ];
+    const used=new Set();for(const g of buckets){g[3]=nav.filter(x=>g[2].has(x[0])&&!used.has(x[0]));g[3].forEach(x=>used.add(x[0]))}
+    const extra=nav.filter(x=>!used.has(x[0]));if(extra.length)buckets.push(['✨','More',new Set(),extra]);
+    return buckets.filter(g=>g[3].length).map(g=>[g[0],g[1],g[3]]);
   }
-  window.v11411OpenAdminMaster=function(i){
-    const g=window.V90_ADMIN_GROUPS?.[i], panel=document.getElementById('v11411AdminPanel'); if(!g||!panel)return;
-    document.querySelectorAll('#v11411AdminMasters .v11411MasterCard').forEach((b,n)=>b.classList.toggle('active',n===i));
-    panel.innerHTML=`<div class="v11411PanelHead"><div><span>${esc11(g[0])}</span><h3>${esc11(g[1])}</h3></div><button onclick="this.closest('.v11411MasterPanel').innerHTML=''">×</button></div><div class="v11411OptionGrid">${(g[2]||[]).map(x=>`<button onclick="render('${esc11(x[0])}')"><span>${esc11(String(x[1]||'').split(/\s+/)[0]||'•')}</span><b>${esc11(String(x[1]||'').replace(/^\S+\s*/,''))}</b></button>`).join('')}</div>`;
-    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-  };
-  function decorateAdmin(){
-    const dash=document.querySelector('#erpContent .v114AdminDash'); if(!dash||!v90Admin?.())return;
-    document.getElementById('v11411AdminMasters')?.remove();
-    const stats=dash.querySelector('#v90Stats,.v90Stats');
-    const wrap=document.createElement('div'); wrap.innerHTML=adminMasterMarkup(); const sec=wrap.firstElementChild;
-    if(sec) (stats||dash.querySelector('.v114AdminHero'))?.insertAdjacentElement('afterend',sec);
+  function buildTeacherRail(active){return `${schoolBrand('TEACHER PORTAL')}<button class="v11415RailHome ${active==='dashboard'?'active':''}" onclick="closeV11415AndRender('dashboard')"><span>🏠</span><span>Home</span></button><nav class="v11415RailNav">${teacherGroups().map(g=>{const on=g[2].some(x=>x[0]===active);return `<details class="v11415RailGroup ${on?'active':''}" ${on?'open':''}><summary><span class="v11415GroupIcon">${g[0]}</span><span>${esc(g[1])}</span></summary><div class="v11415RailLinks">${g[2].map(x=>routeButton(x[0],x[1],active)).join('')}</div></details>`}).join('')}</nav><button class="v11415RailFooter" onclick="logout()">⏻ Logout</button>`}
+  function ensureErpRail(active=window.__v90Route||'dashboard'){
+    const erp=document.getElementById('erp');if(!erp||erp.classList.contains('hidden')||(!isAdmin()&&!isTeacher()))return;
+    erp.classList.add('v11415Shell');
+    let rail=document.getElementById('v11415RoleRail');if(!rail){rail=document.createElement('aside');rail.id='v11415RoleRail';rail.className='v11415RoleRail';erp.insertBefore(rail,erp.firstChild)}
+    rail.innerHTML=isAdmin()?buildAdminRail(active):buildTeacherRail(active);
+    const top=erp.querySelector('.erpTop');if(top&&!document.getElementById('v11415RailToggle')){const b=document.createElement('button');b.id='v11415RailToggle';b.type='button';b.textContent='☰';b.title='Master Menu';b.onclick=v11415ToggleRail;top.insertBefore(b,top.firstChild)}
   }
-
-  const teacherGroups=[
-    ['👥','My Class','Students • Profile • Class work',[['teacher_class','👥 My Class'],['teacher_profile','👤 My Profile']]],
-    ['✅','Attendance','Today • Master Attendance',[['attendance','✅ Attendance'],['master_attendance','📋 Master Attendance']]],
-    ['📚','Teaching','Bell • Daily Teaching • Homework',[['teacher_bells','🔔 My Teaching Bell'],['v90_teacher_daily','📖 Daily Teaching'],['homework','✏ Homework']]],
-    ['📝','Exam & Marks','Marks • Copy Check • Exam',[['v90_teacher_marks','📝 Copy Check / Marks'],['exams','📊 Marks Entry']]],
-    ['📣','Communication','Requests • Notices • Opinion',[['v90_my_requests','📬 My Requests'],['teacher_notices','📣 Orders / Notices'],['class_opinions','💬 Class Opinion']]],
-    ['🗒','Workspace','My Notes',[['my_notes','🗒 My Notes']]]
-  ];
-  window.v11411OpenTeacherMaster=function(i){
-    const g=teacherGroups[i],panel=document.getElementById('v11411TeacherPanel'); if(!g||!panel)return;
-    document.querySelectorAll('#v11411TeacherMasters .v11411MasterCard').forEach((b,n)=>b.classList.toggle('active',n===i));
-    panel.innerHTML=`<div class="v11411PanelHead"><div><span>${g[0]}</span><h3>${esc11(g[1])}</h3></div><button onclick="this.closest('.v11411MasterPanel').innerHTML=''">×</button></div><div class="v11411OptionGrid">${g[3].map(x=>`<button onclick="render('${x[0]}')"><span>${esc11(x[1].split(/\s+/)[0])}</span><b>${esc11(x[1].replace(/^\S+\s*/,''))}</b></button>`).join('')}</div>`;
-    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-  };
-  function decorateTeacher(){
-    const dash=document.querySelector('#erpContent .v114TeacherDash'); if(!dash||!v90Teacher?.())return;
-    document.getElementById('v11411TeacherMasters')?.remove();
-    const sec=document.createElement('section'); sec.id='v11411TeacherMasters';sec.className='v11411Masters';
-    sec.innerHTML=`<div class="v11411SectionHead"><div><span>MY WORK HUB</span><h2>Teacher Masters</h2><p>Class, attendance, teaching और exam के options category-wise.</p></div></div><div class="v11411MasterGrid">${teacherGroups.map((g,i)=>`<button class="v11411MasterCard" onclick="v11411OpenTeacherMaster(${i})"><span class="v11411MasterIcon">${g[0]}</span><span class="v11411MasterText"><b>${esc11(g[1])}</b><small>${esc11(g[2])}</small></span><em>›</em></button>`).join('')}</div><div id="v11411TeacherPanel" class="v11411MasterPanel"></div>`;
-    const stats=dash.querySelector('.v90Stats,.v114TeacherStats'); (stats||dash.querySelector('.v114TeacherHero'))?.insertAdjacentElement('afterend',sec);
-  }
-
-  function findParentTarget(dash,key){
-    const map={profile:'.v114ChildInfo,.parentStudentCard',attendance:'.v114AttendanceBlock,[class*=Attendance]',fee:'.v114FeeBlock,[class*=Fee]',learning:'[id*=Homework],[class*=Homework],[id*=Timetable],[class*=Timetable]',result:'.resultMini,[class*=Result]',communication:'.v32ParentNotices,[id*=Notice],[id*=Gallery],[id*=Help],[id*=Message]'};
-    return dash.querySelector(map[key]||'')||document.querySelector(map[key]||'');
-  }
-  function parentGroups(role){return [
-    ['👤',role==='student'?'My Profile':'My Child','Student details','profile'],['✅','Attendance','Today • Monthly','attendance'],['₹','Fees','Paid • Due','fee'],['📚','Learning','Homework • Timetable','learning'],['🏆','Exam & Result','Result • Admit','result'],['📣','Communication','Notices • Gallery • Help','communication']
-  ]}
-  window.v11411ParentJump=function(idx,uid){
-    const dash=document.querySelector(`[data-v11411-parent="${uid}"]`)?.closest('.v114PortalDash')||document.querySelector('#parentDashboardBody .v114PortalDash');
-    const role=String(profile?.role||'parent').toLowerCase(),g=parentGroups(role)[idx],t=findParentTarget(dash,g?.[3]);
-    if(t)t.scrollIntoView({behavior:'smooth',block:'start'}); else if(g?.[3]==='profile'&&typeof v97ShowParentProfile==='function')v97ShowParentProfile();
-  };
-  function decorateParent(){
-    const role=String(profile?.role||'parent').toLowerCase();
-    document.querySelectorAll('#parentDashboardBody .v114PortalDash').forEach((dash,idx)=>{
-      dash.querySelector('.v11411ParentMasters')?.remove(); const uid='p'+idx;
-      const g=parentGroups(role),sec=document.createElement('section');sec.className='v11411Masters v11411ParentMasters';sec.dataset.v11411Parent=uid;
-      sec.innerHTML=`<div class="v11411SectionHead"><div><span>${role==='student'?'STUDENT HUB':'PARENT HUB'}</span><h2>${role==='student'?'Student Masters':'Parent Masters'}</h2><p>जरूरी options category-wise, बिना side bar.</p></div></div><div class="v11411MasterGrid">${g.map((x,i)=>`<button class="v11411MasterCard" onclick="v11411ParentJump(${i},'${uid}')"><span class="v11411MasterIcon">${x[0]}</span><span class="v11411MasterText"><b>${esc11(x[1])}</b><small>${esc11(x[2])}</small></span><em>›</em></button>`).join('')}</div>`;
-      const stats=dash.querySelector('.v114PortalStats'); (stats||dash.querySelector('.v114PortalHero'))?.insertAdjacentElement('afterend',sec);
-    });
-  }
-
-  try{const a=v90AdminDashboard;v90AdminDashboard=async function(){const r=await a.apply(this,arguments);cleanRoleChrome();setTimeout(decorateAdmin,30);return r}}catch(_e){}
-  try{const t=v90TeacherDashboard;v90TeacherDashboard=async function(){const r=await t.apply(this,arguments);cleanRoleChrome();setTimeout(decorateTeacher,30);return r}}catch(_e){}
-  try{const p=loadParentPortal;loadParentPortal=async function(){const r=await p.apply(this,arguments);setTimeout(decorateParent,60);return r}}catch(_e){}
-
-  const obs=new MutationObserver(()=>{const erp=document.getElementById('erp');if(erp&&!erp.classList.contains('hidden'))cleanRoleChrome()});
-  document.addEventListener('DOMContentLoaded',()=>{cleanRoleChrome();obs.observe(document.body,{childList:true,subtree:true})});
-  window.addEventListener('load',()=>setTimeout(cleanRoleChrome,150));
+  function cleanLegacyRoleChrome(){document.querySelectorAll('#erp>.v11410TopNav,#erp>.v1149RoleRail,#erp>.v115RoleRail').forEach(x=>x.remove())}
+  function masterCard(g,i,fn){return `<button class="v11415MasterCard" onclick="${fn}(${i})"><span>${esc(g[0])}</span><span><b>${esc(g[1])}</b><small>${esc((g[2]||[]).slice(0,3).map(x=>iconLabel(x[1])[1]).join(' • '))}</small></span><em>›</em></button>`}
+  function optionMarkup(items){return `<div class="v11415OptionGrid">${(items||[]).map(x=>{const [ic,tx]=iconLabel(x[1]);return `<button onclick="closeV11415AndRender('${esc(x[0])}')"><span>${esc(ic)}</span><b>${esc(tx)}</b></button>`}).join('')}</div>`}
+  window.v11415AdminMaster=function(i){const g=window.V90_ADMIN_GROUPS?.[i],p=document.getElementById('v11415AdminPanel');if(!g||!p)return;document.querySelectorAll('#v11415AdminDeck .v11415MasterCard').forEach((b,n)=>b.classList.toggle('active',n===i));p.innerHTML=`<div class="v11415MasterPanelBox"><div class="v11415MasterPanelHead"><h3>${esc(g[0])} ${esc(g[1])}</h3><button onclick="this.closest('.v11415MasterPanel').innerHTML=''">×</button></div>${optionMarkup(g[2])}</div>`;p.scrollIntoView({behavior:'smooth',block:'nearest'})};
+  function decorateAdmin(){const dash=document.querySelector('#erpContent .v114AdminDash');if(!dash||!isAdmin())return;document.getElementById('v11415AdminDeck')?.remove();const groups=window.V90_ADMIN_GROUPS||[];const s=document.createElement('section');s.id='v11415AdminDeck';s.className='v11415MasterDeck';s.innerHTML=`<div class="v11415MasterDeckHead"><div><span>MASTER MANAGEMENT</span><h2>School Control Center</h2><p>Category चुनें — उसी category के सभी working options यहीं मिलेंगे।</p></div></div><div class="v11415MasterGrid">${groups.map((g,i)=>masterCard(g,i,'v11415AdminMaster')).join('')}</div><div id="v11415AdminPanel" class="v11415MasterPanel"></div>`;const stats=dash.querySelector('#v90Stats,.v90Stats');(stats||dash.querySelector('.v114AdminHero'))?.insertAdjacentElement('afterend',s)}
+  window.v11415TeacherMaster=function(i){const g=teacherGroups()[i],p=document.getElementById('v11415TeacherPanel');if(!g||!p)return;document.querySelectorAll('#v11415TeacherDeck .v11415MasterCard').forEach((b,n)=>b.classList.toggle('active',n===i));p.innerHTML=`<div class="v11415MasterPanelBox"><div class="v11415MasterPanelHead"><h3>${g[0]} ${esc(g[1])}</h3><button onclick="this.closest('.v11415MasterPanel').innerHTML=''">×</button></div>${optionMarkup(g[2])}</div>`;p.scrollIntoView({behavior:'smooth',block:'nearest'})};
+  function decorateTeacher(){const dash=document.querySelector('#erpContent .v114TeacherDash');if(!dash||!isTeacher())return;document.getElementById('v11415TeacherDeck')?.remove();const s=document.createElement('section');s.id='v11415TeacherDeck';s.className='v11415MasterDeck';s.innerHTML=`<div class="v11415MasterDeckHead"><div><span>TEACHER WORK HUB</span><h2>My Master Options</h2><p>Class, attendance, teaching, exam और communication category-wise.</p></div></div><div class="v11415MasterGrid">${teacherGroups().map((g,i)=>masterCard(g,i,'v11415TeacherMaster')).join('')}</div><div id="v11415TeacherPanel" class="v11415MasterPanel"></div>`;const stats=dash.querySelector('.v90Stats,.v114TeacherStats');(stats||dash.querySelector('.v114TeacherHero'))?.insertAdjacentElement('afterend',s)}
+  const parentItems=[['👤','Profile','My child / profile','profile'],['✅','Attendance','Today • Monthly','attendance'],['₹','Fees','Paid • Due','fee'],['📚','Learning','Homework • Timetable','learning'],['🏆','Exam & Result','Result • Admit Card','result'],['📣','Communication','Notice • Gallery • Help','communication']];
+  function parentTarget(key){const body=document.getElementById('parentDashboardBody');const map={attendance:'.v114AttendanceBlock,[class*=Attendance]',fee:'.v114FeeBlock,[class*=Fee]',learning:'[id*=Homework],[class*=Homework],[id*=Timetable],[class*=Timetable]',result:'.resultMini,#v75ParentAdmit,[class*=Result]',communication:'.v32ParentNotices,[id*=Notice],[id*=Gallery],[id*=Help],[id*=Message]'};return body?.querySelector(map[key]||'')||document.querySelector(map[key]||'')}
+  window.v11415ParentGo=function(key){closeRail();if(key==='profile'&&typeof v97ShowParentProfile==='function')return v97ShowParentProfile();const t=parentTarget(key);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})};
+  function ensureParentRail(){const d=document.getElementById('parentDashboard');if(!d||d.classList.contains('hidden'))return;d.classList.add('v11415ParentShell');let r=d.querySelector(':scope>.v11415ParentRail');if(!r){r=document.createElement('aside');r.className='v11415ParentRail';d.insertBefore(r,d.firstChild)}const rl=role()==='student'?'STUDENT PORTAL':'PARENT PORTAL';r.innerHTML=`${schoolBrand(rl)}<button class="v11415RailHome" onclick="closeRail();loadParentPortal()"><span>🏠</span><span>Dashboard</span></button><nav class="v11415RailNav">${parentItems.map(x=>`<button class="v11415RailLink" onclick="v11415ParentGo('${x[3]}')"><span>${x[0]}</span><span>${esc(x[1])}</span></button>`).join('')}</nav><button class="v11415RailFooter" onclick="parentSignOut()">⏻ Logout</button>`;const h=d.querySelector('.portalHead');if(h&&!h.querySelector('.v11415ParentToggle')){const b=document.createElement('button');b.type='button';b.className='v11415ParentToggle';b.textContent='☰ Menu';b.onclick=v11415ToggleParentRail;h.insertBefore(b,h.firstChild)}}
+  function decorateParent(){ensureParentRail();document.querySelectorAll('#parentDashboardBody .v114PortalDash').forEach((dash,idx)=>{dash.querySelector('.v11415ParentDeck')?.remove();const s=document.createElement('section');s.className='v11415MasterDeck v11415ParentDeck';s.innerHTML=`<div class="v11415MasterDeckHead"><div><span>${role()==='student'?'STUDENT':'PARENT'} DASHBOARD</span><h2>Quick Master Options</h2><p>हर feature साफ category में और सीधे working section से linked.</p></div></div><div class="v11415MasterGrid">${parentItems.map(x=>`<button class="v11415MasterCard" onclick="v11415ParentGo('${x[3]}')"><span>${x[0]}</span><span><b>${esc(x[1])}</b><small>${esc(x[2])}</small></span><em>›</em></button>`).join('')}</div>`;const stats=dash.querySelector('.v114PortalStats');(stats||dash.querySelector('.v114PortalHero'))?.insertAdjacentElement('afterend',s)})}
+  function wrapPublicIcons(){document.querySelectorAll('#v26Nav button').forEach(b=>{if(b.querySelector('.v11415PubIcon')&&b.querySelector('.v11415PubLabel'))return;const raw=String(b.textContent||'').trim();if(!raw)return;const parts=raw.split(/\s+/),ic=parts.shift()||'•',label=parts.join(' ')||raw;b.textContent='';const sp=document.createElement('span');sp.className='v11415PubIcon';sp.textContent=ic;const tx=document.createElement('span');tx.className='v11415PubLabel';tx.textContent=label;b.append(sp,tx)})}
+  /* Compatibility aliases: preserve prior public function names without duplicate UI. */
+  window.closeV11413AndRender=function(route){return window.closeV11415AndRender(route)};
+  window.v11413AdminMaster=function(i){return window.v11415AdminMaster(i)};
+  window.v11413TeacherMaster=function(i){return window.v11415TeacherMaster(i)};
+  window.v11413ParentGo=function(k){return window.v11415ParentGo(k)};
+  function apply(active=window.__v90Route||'dashboard'){cleanLegacyRoleChrome();ensureErpRail(active);wrapPublicIcons();if(active==='dashboard'){setTimeout(()=>{decorateAdmin();decorateTeacher()},20)}if(!document.getElementById('parentDashboard')?.classList.contains('hidden'))setTimeout(decorateParent,30)}
+  try{const base=v90InstallShell;v90InstallShell=function(active=window.__v90Route||'dashboard'){const r=base.apply(this,arguments);apply(active);return r}}catch(e){console.warn('V114.13 shell',e)}
+  try{const a=v90AdminDashboard;v90AdminDashboard=async function(){const r=await a.apply(this,arguments);apply('dashboard');return r}}catch(_e){}
+  try{const t=v90TeacherDashboard;v90TeacherDashboard=async function(){const r=await t.apply(this,arguments);apply('dashboard');return r}}catch(_e){}
+  try{const p=loadParentPortal;loadParentPortal=async function(){const r=await p.apply(this,arguments);setTimeout(decorateParent,40);return r}}catch(_e){}
+  document.addEventListener('click',e=>{if(window.innerWidth<=900){const erp=document.getElementById('erp');if(erp?.classList.contains('v11415RailOpen')&&!e.target.closest('.v11415RoleRail')&&!e.target.closest('#v11415RailToggle'))erp.classList.remove('v11415RailOpen');const pd=document.getElementById('parentDashboard');if(pd?.classList.contains('v11415ParentOpen')&&!e.target.closest('.v11415ParentRail')&&!e.target.closest('.v11415ParentToggle'))pd.classList.remove('v11415ParentOpen')}});
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>apply(),250));window.addEventListener('load',()=>setTimeout(()=>apply(),500));
 })();
 </script>
+
+
 </body></html>
