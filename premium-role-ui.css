@@ -223,3 +223,42 @@ html,body{max-width:100%;overflow-x:hidden}
 /* V114.15 FINAL TEXT CLARITY */
 .v26Brand span{font-size:13px!important;line-height:1.35!important}.v11415RailLink{font-size:11.5px!important;line-height:1.25!important}.v11415RailGroup>summary{font-size:12.5px!important}.v11415OptionGrid>button>b{font-size:12px!important;line-height:1.25!important}.v11415MasterCard b{font-size:13.5px!important}.v11415MasterCard small{font-size:10.5px!important}.v11415RoleBrand small{font-size:9.5px!important}.v11415RoleBrand b{font-size:13.5px!important}#erp.v90Shell .erpTop .v63SchoolHead span{font-size:10.5px!important;line-height:1.3!important}
 @media(max-width:560px){.v26Brand span{font-size:11px!important;letter-spacing:.015em!important}.v26Brand b{font-size:18px!important;line-height:1.05!important}.v11415MasterCard b{font-size:13px!important}.v11415MasterCard small{font-size:11px!important}}
+
+
+/* ===== V114.15.2 HARD LAYOUT FIX — EMBED-SAFE / NO LEGACY OVERLAP ===== */
+#publicSite .v26Home{padding-left:0!important;margin-left:auto!important;margin-right:auto!important;width:100%!important;max-width:1600px!important;min-height:100vh!important}
+#publicSite .v26Top{position:relative!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;justify-content:stretch!important;min-height:0!important;padding:14px 18px 10px!important}
+#publicSite #v26Nav{position:static!important;inset:auto!important;grid-column:1/-1!important;width:100%!important;max-width:none!important;height:auto!important;transform:none!important;display:flex!important;flex-direction:row!important;justify-content:center!important;align-items:stretch!important;flex-wrap:wrap!important;overflow:visible!important;padding:9px!important;margin:7px 0 0!important;gap:8px!important;z-index:auto!important;border-radius:17px!important;background:linear-gradient(90deg,#073b78,#096ccf 55%,#08386f)!important;box-shadow:0 9px 22px rgba(4,57,113,.18)!important}
+#publicSite #v26Nav:before{display:none!important;content:none!important}
+#publicSite #v26Nav button{display:flex!important;width:auto!important;min-width:116px!important;min-height:45px!important;align-items:center!important;justify-content:center!important;gap:7px!important;text-align:center!important;padding:8px 13px!important;border:1px solid rgba(255,255,255,.38)!important;border-radius:13px!important;background:linear-gradient(145deg,#29b9ff,#0876da)!important;color:#fff!important;box-shadow:inset 0 2px 2px rgba(255,255,255,.38),0 4px 0 rgba(2,65,134,.35),0 8px 14px rgba(0,42,95,.20)!important}
+#publicSite .v26Hero{display:flex!important;min-height:390px!important;height:auto!important;margin:14px 18px 0!important;padding:34px!important;align-items:center!important;justify-content:space-between!important;border-radius:22px!important;overflow:hidden!important;background-image:linear-gradient(90deg,rgba(3,44,91,.78),rgba(7,100,175,.32) 55%,rgba(255,255,255,.04)),var(--site-wallpaper,url('v11415-school-wallpaper.jpg'))!important;background-size:cover!important;background-position:center 48%!important;background-repeat:no-repeat!important}
+#publicSite .v26HeroCopy{display:block!important;max-width:690px!important;background:linear-gradient(90deg,rgba(2,42,91,.78),rgba(7,89,159,.58))!important;border-radius:18px!important;padding:18px 22px!important;color:#fff!important;box-shadow:0 12px 28px rgba(0,31,72,.28)!important}
+#publicSite .v26HeroCopy h1,#publicSite .v26HeroCopy h3,#publicSite .v26HeroCopy p{color:#fff!important}
+#publicSite .v26MainGrid{padding:16px 18px!important;background:#f3f9ff!important;min-height:0!important}
+#publicSite .v26LoginCards,#publicSite .v26FeatureArea{width:100%!important;max-width:1120px!important;margin-left:auto!important;margin-right:auto!important}
+#erp.v90Shell #erpContent:before,#erp.v90Shell #erpContent::before{display:none!important;content:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+#erp.v90Shell #erpContent>.v90Dash,#erp.v90Shell #erpContent>.v90Page{margin-top:0!important}
+#erp.v90Shell .v114AdminDash,#erp.v90Shell .v114TeacherDash{padding-top:0!important;gap:16px!important}
+#erp.v90Shell .v90Welcome.v114ReferenceHero{margin-top:0!important;transform:none!important}
+#erp.v90Shell .v114HeroMotto{padding:18px!important;color:#0c4078!important}
+#erp.v90Shell .v114HeroMotto b,#erp.v90Shell .v114HeroMotto small{color:#0c4078!important;text-shadow:none!important}
+@media(min-width:901px){
+ #erp.v90Shell,#erp.v90Shell.v105InternalFocus{display:grid!important;grid-template-columns:228px minmax(0,1fr)!important;gap:0!important}
+ #erp.v90Shell>.v11415RoleRail{width:228px!important;max-width:228px!important;min-width:228px!important;position:sticky!important;left:auto!important;transform:none!important}
+ #erp.v90Shell>main,#erp.v90Shell.v105InternalFocus>main{grid-column:2!important;width:100%!important;min-width:0!important;margin:0!important;transform:none!important}
+ #erp.v90Shell #erpContent{padding:16px!important;max-width:1560px!important;margin:0 auto!important}
+ #parentDashboard.v11415ParentShell{grid-template-columns:228px minmax(0,1fr)!important}
+ #parentDashboard.v11415ParentShell>.v11415ParentRail{width:228px!important;max-width:228px!important}
+}
+@media(max-width:900px){
+ #publicSite .v26Home{padding-left:0!important}
+ #publicSite .v26Top{grid-template-columns:minmax(0,1fr) auto!important;padding:10px!important}
+ #publicSite .v26Top .v26Menu{display:inline-flex!important;position:static!important;left:auto!important;top:auto!important;z-index:auto!important}
+ #publicSite #v26Nav{display:none!important;position:static!important;inset:auto!important;width:100%!important;height:auto!important;grid-column:1/-1!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;flex-direction:unset!important;transform:none!important;padding:8px!important;margin-top:8px!important}
+ #publicSite #v26Nav.show{display:grid!important}
+ #publicSite #v26Nav button{width:100%!important;min-width:0!important;justify-content:flex-start!important}
+ #publicSite .v26Hero{min-height:330px!important;margin:8px!important;padding:18px!important}
+ #publicSite .v26HeroCopy{padding:15px!important}
+ #erp.v90Shell #erpContent:before,#erp.v90Shell #erpContent::before{display:none!important}
+}
+@media(max-width:560px){#publicSite #v26Nav{grid-template-columns:1fr!important}#publicSite .v26HeroCopy h1{font-size:30px!important}}
