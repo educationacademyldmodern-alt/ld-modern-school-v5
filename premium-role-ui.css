@@ -65,11 +65,11 @@
 
 /* ===== V115 EXACT-REFERENCE + ONE-SCREEN FINAL PASS ===== */
 /* Old stored wallpapers no longer control the main reference heroes. */
-.v26Hero{background-image:url('v1149-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
-.v114AdminHero{background-image:linear-gradient(90deg,rgba(1,36,80,.82),rgba(4,80,146,.20) 48%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important;background-position:center!important}
-.v114TeacherHero{background-image:linear-gradient(90deg,rgba(1,36,80,.84),rgba(4,80,146,.18) 48%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important;background-position:center!important}
-.v114PortalDash.parentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
-.v114PortalDash.studentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v26Hero{background-image:url('v11410-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v114AdminHero{background-image:linear-gradient(90deg,rgba(1,36,80,.82),rgba(4,80,146,.20) 48%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important;background-position:center!important}
+.v114TeacherHero{background-image:linear-gradient(90deg,rgba(1,36,80,.84),rgba(4,80,146,.18) 48%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important;background-position:center!important}
+.v114PortalDash.parentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v114PortalDash.studentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
 .v114PortalHero:before{display:none!important}
 
 /* Public desktop uses the reference hero artwork itself, avoiding duplicate overlay text. */
@@ -167,7 +167,7 @@
 #v26Nav{grid-area:nav!important;position:static!important;inset:auto!important;width:100%!important;height:50px!important;min-height:50px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;flex-wrap:nowrap!important;gap:4px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:5px 8px!important;margin:8px 0 0!important;background:linear-gradient(90deg,#073b76,#0876d2,#073b76)!important;border-radius:12px 12px 0 0!important;box-shadow:0 6px 16px rgba(0,45,95,.14)!important;transform:none!important}
 #v26Nav:before{display:none!important;content:none!important}#v26Nav button{flex:0 0 auto!important;width:auto!important;min-height:38px!important;padding:8px 15px!important;border:0!important;border-radius:9px!important;background:transparent!important;color:#fff!important;text-align:center!important;font-size:12px!important;font-weight:900!important;white-space:nowrap!important}#v26Nav button:hover,#v26Nav button.active{background:linear-gradient(180deg,#27a7ff,#0874d8)!important;box-shadow:0 6px 12px rgba(0,54,120,.24),inset 0 1px rgba(255,255,255,.35)!important;transform:none!important}
 .v26Menu{display:none!important}
-.v26Hero{width:100%!important;margin:0!important;min-height:410px!important;padding:0!important;background-image:url('v1149-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important;border:0!important}.v26HeroCopy,.v26Quote{display:none!important}
+.v26Hero{width:100%!important;margin:0!important;min-height:410px!important;padding:0!important;background-image:url('v11410-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important;border:0!important}.v26HeroCopy,.v26Quote{display:none!important}
 .v26MainGrid{width:100%!important;margin:0!important;padding:12px 24px!important;grid-template-columns:minmax(0,1fr) 300px!important}.v114HomeStats{width:100%!important;margin:0!important;padding:0 24px 12px!important}.v26Footer{width:100%!important;margin:0!important}
 
 /* Public sub-pages / Admission: full canvas; no side offset or hidden-under-header effect. */
@@ -196,15 +196,15 @@
 
 /* Reference Admin first view: no scattered duplicate strips. */
 #v97DashTools{display:none!important}.v114AdminDash>#v114AdminClassSlot,.v114AdminDash>.v114PayPanel,.v114AdminDash>.v114ManagementPanel{display:none!important}
-.v90Welcome.v114ReferenceHero{border-radius:0 0 18px 18px!important}.v114AdminHero{background-image:linear-gradient(90deg,rgba(1,36,80,.82),rgba(4,80,146,.18) 50%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
-.v114TeacherHero{background-image:linear-gradient(90deg,rgba(1,36,80,.84),rgba(4,80,146,.18) 50%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v90Welcome.v114ReferenceHero{border-radius:0 0 18px 18px!important}.v114AdminHero{background-image:linear-gradient(90deg,rgba(1,36,80,.82),rgba(4,80,146,.18) 50%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
+.v114TeacherHero{background-image:linear-gradient(90deg,rgba(1,36,80,.84),rgba(4,80,146,.18) 50%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important;background-size:cover!important;background-position:center!important}
 
 /* 3D function cards: actions/onclick remain the existing ones. */
 .v114QuickGrid button,.v90Quick button,.v90Monitor{position:relative!important;overflow:hidden!important;border:1px solid rgba(116,160,204,.28)!important;border-bottom-color:rgba(69,116,168,.42)!important;box-shadow:0 7px 0 rgba(7,65,126,.09),0 12px 22px rgba(8,61,119,.12),inset 0 1px rgba(255,255,255,.65)!important;transition:transform .14s ease,box-shadow .14s ease!important}.v114QuickGrid button:before,.v90Quick button:before,.v90Monitor:before{content:''!important;position:absolute!important;left:0!important;top:0!important;right:0!important;height:38%!important;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0))!important;pointer-events:none!important}.v114QuickGrid button:hover,.v90Quick button:hover,.v90Monitor:hover{transform:translateY(-2px)!important;box-shadow:0 9px 0 rgba(7,65,126,.075),0 16px 27px rgba(8,61,119,.16),inset 0 1px rgba(255,255,255,.7)!important}.v114QuickGrid button:active,.v90Quick button:active,.v90Monitor:active{transform:translateY(2px)!important;box-shadow:0 3px 0 rgba(7,65,126,.09),0 6px 10px rgba(8,61,119,.11)!important}
 
 /* Parent/Student owns its canvas. The slim rail is part of the approved portal, never over content. */
 body.v1143-parent-active #publicPageView>.publicPageBar{display:none!important}body.v1143-parent-active #publicPageView{top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;z-index:21000!important}body.v1143-parent-active #publicPageBody{min-height:100vh!important;width:100%!important;padding:0!important;margin:0!important}body.v1143-parent-active #parentPortal{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
-#parentDashboard{position:relative!important;padding-left:92px!important;width:100%!important;max-width:none!important;min-width:0!important}.v115ParentSide{width:92px!important;padding:80px 7px 10px!important}.v115ParentSide button{min-height:56px!important;font-size:18px!important}.v115ParentSide button span{font-size:8px!important}.v114PortalDash.parentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important}.v114PortalDash.studentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important}
+#parentDashboard{position:relative!important;padding-left:92px!important;width:100%!important;max-width:none!important;min-width:0!important}.v115ParentSide{width:92px!important;padding:80px 7px 10px!important}.v115ParentSide button{min-height:56px!important;font-size:18px!important}.v115ParentSide button span{font-size:8px!important}.v114PortalDash.parentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important}.v114PortalDash.studentRole .v114PortalHero{background-image:linear-gradient(90deg,rgba(2,38,79,.82),rgba(4,83,147,.10) 52%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important}
 
 /* Desktop/laptop reference first screen. Internal modules keep normal vertical scroll. */
 @media(min-width:901px){
@@ -238,7 +238,7 @@ body.v1143-parent-active #publicPageView>.publicPageBar{display:none!important}b
 .v26Hero{
   background-image:
     linear-gradient(90deg,rgba(1,34,72,.78) 0%,rgba(3,65,125,.45) 44%,rgba(3,47,94,.14) 72%,rgba(255,255,255,.03) 100%),
-    url('v1149-school-wallpaper.jpg')!important;
+    url('v11410-school-wallpaper.jpg')!important;
   background-size:cover!important;
   background-position:center!important;
   padding:28px 34px!important;
@@ -311,18 +311,18 @@ body.v1143-parent-active #publicPageView>.publicPageBar{display:none!important}b
 /* All role hero imagery uses the clean campus file; live text stays selectable/clickable. */
 .v114AdminHero{
   background-image:linear-gradient(90deg,rgba(1,36,80,.86),rgba(4,80,146,.42) 48%,rgba(255,255,255,.04)),
-  url('v1149-school-wallpaper.jpg')!important;
+  url('v11410-school-wallpaper.jpg')!important;
   background-size:cover!important;background-position:center!important;
 }
 .v114TeacherHero{
   background-image:linear-gradient(90deg,rgba(1,36,80,.86),rgba(4,80,146,.42) 48%,rgba(255,255,255,.04)),
-  url('v1149-school-wallpaper.jpg')!important;
+  url('v11410-school-wallpaper.jpg')!important;
   background-size:cover!important;background-position:center!important;
 }
 .v114PortalDash.parentRole .v114PortalHero,
 .v114PortalDash.studentRole .v114PortalHero{
   background-image:linear-gradient(90deg,rgba(2,38,79,.86),rgba(4,83,147,.34) 52%,rgba(255,255,255,.04)),
-  url('v1149-school-wallpaper.jpg')!important;
+  url('v11410-school-wallpaper.jpg')!important;
   background-size:cover!important;background-position:center!important;
 }
 
@@ -587,12 +587,12 @@ body.v1143-parent-active #publicPageView>.publicPageBar{display:none!important}b
 
 /* Visible wallpaper — only campus image; all text/buttons are live HTML. */
 .v26Hero{
-  background-image:linear-gradient(90deg,rgba(2,43,92,.70),rgba(0,91,174,.25) 46%,rgba(255,255,255,.04)),url('v1149-school-wallpaper.jpg')!important;
+  background-image:linear-gradient(90deg,rgba(2,43,92,.70),rgba(0,91,174,.25) 46%,rgba(255,255,255,.04)),url('v11410-school-wallpaper.jpg')!important;
   background-size:cover!important;background-position:center 46%!important;background-repeat:no-repeat!important
 }
 #erp.v90Shell .v114AdminHero,#erp.v90Shell .v114TeacherHero{
   min-height:220px!important;padding:24px 28px!important;
-  background-image:linear-gradient(90deg,rgba(2,42,89,.76),rgba(4,93,166,.25) 50%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important;
+  background-image:linear-gradient(90deg,rgba(2,42,89,.76),rgba(4,93,166,.25) 50%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important;
   background-size:cover!important;background-position:center 48%!important;background-repeat:no-repeat!important;
   border:1px solid rgba(190,222,247,.75)!important;box-shadow:0 11px 28px rgba(5,55,108,.15)!important
 }
@@ -601,7 +601,7 @@ body.v1143-parent-active #publicPageView>.publicPageBar{display:none!important}b
 #erp.v90Shell .v114AdminHero>div>span,#erp.v90Shell .v114TeacherHero>div>span{color:#fff!important;text-shadow:0 3px 10px rgba(0,26,61,.65)!important}
 #erp.v90Shell .v114AdminHero h1 b,#erp.v90Shell .v114TeacherHero h1 b{color:#ffd62a!important}
 .v114PortalDash.parentRole .v114PortalHero,.v114PortalDash.studentRole .v114PortalHero{
-  background-image:linear-gradient(90deg,rgba(2,42,89,.76),rgba(4,93,166,.20) 50%,rgba(255,255,255,.02)),url('v1149-school-wallpaper.jpg')!important;
+  background-image:linear-gradient(90deg,rgba(2,42,89,.76),rgba(4,93,166,.20) 50%,rgba(255,255,255,.02)),url('v11410-school-wallpaper.jpg')!important;
   background-size:cover!important;background-position:center 48%!important;background-repeat:no-repeat!important
 }
 
@@ -802,7 +802,7 @@ body.v1143-parent-active #publicPageView>.publicPageBar{display:none!important}b
 }
 .v26Hero,#erp.v90Shell .v114AdminHero,#erp.v90Shell .v114TeacherHero,
 .v114PortalDash.parentRole .v114PortalHero,.v114PortalDash.studentRole .v114PortalHero{
-  background-image:linear-gradient(90deg,rgba(2,41,87,.76),rgba(3,88,161,.22) 50%,rgba(255,255,255,.03)),url('v1149-school-wallpaper.jpg')!important;
+  background-image:linear-gradient(90deg,rgba(2,41,87,.76),rgba(3,88,161,.22) 50%,rgba(255,255,255,.03)),url('v11410-school-wallpaper.jpg')!important;
   background-size:cover!important;background-position:center 48%!important;background-repeat:no-repeat!important
 }
 
@@ -888,4 +888,64 @@ body.v1143-parent-active #publicPageView>.publicPageBar{display:none!important}b
   .v1147MasterGrid,.v1147ParentMasters .v1147MasterGrid{grid-template-columns:1fr 1fr!important}
   .v1147OptionGrid{grid-template-columns:1fr!important}
   .v26Brand b{font-size:clamp(21px,7vw,32px)!important}.v26Brand small{font-size:10px!important}
+}
+
+
+/* =====================================================================
+   V114.10 FINAL — NO FIXED LEFT RAIL / IN-FLOW TOP MASTER NAVIGATION
+   The ERP left rail is physically removed by runtime. Internal navigation
+   lives below the header and pushes content down instead of covering it.
+   ===================================================================== */
+#erp.v90Shell,#erp.v90Shell.v105InternalFocus{display:block!important;grid-template-columns:none!important;width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+#erp.v90Shell>main,#erp.v90Shell.v105InternalFocus>main{display:block!important;grid-column:auto!important;margin:0!important;margin-left:0!important;width:100%!important;max-width:100%!important;min-width:0!important;left:auto!important;right:auto!important}
+#erp.v90Shell .erpTop{position:sticky!important;top:0!important;z-index:250!important;width:100%!important;max-width:100%!important;margin:0!important}
+#erp.v90Shell #erpContent{width:100%!important;max-width:100%!important;margin:0!important;min-width:0!important;padding-left:14px!important;padding-right:14px!important}
+
+.v11410TopNav{
+  width:100%!important;max-width:100%!important;margin:0!important;padding:10px 12px!important;
+  display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:9px!important;
+  background:linear-gradient(180deg,#f7fbff,#eaf4ff)!important;border-bottom:1px solid #cfdfef!important;
+  box-shadow:0 8px 20px rgba(5,55,112,.08)!important;position:relative!important;z-index:90!important;overflow:visible!important
+}
+.v11410TopNav>.v90Home,.v11410TopNav>button,.v11410TopNav>.v90NavGroup>summary{
+  min-height:54px!important;margin:0!important;padding:8px 10px!important;border:1px solid #c9dff2!important;border-radius:15px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;text-align:center!important;
+  color:#0b3c77!important;background:linear-gradient(145deg,#fff,#eaf5ff)!important;font-size:11px!important;font-weight:900!important;
+  box-shadow:inset 0 2px 2px #fff,inset 0 -5px 10px rgba(5,87,166,.07),0 4px 0 rgba(5,71,139,.07),0 9px 15px rgba(5,60,116,.11)!important;
+  cursor:pointer!important;list-style:none!important
+}
+.v11410TopNav>.v90Home:hover,.v11410TopNav>button:hover,.v11410TopNav>.v90NavGroup>summary:hover,
+.v11410TopNav>.v90Home.active,.v11410TopNav>button.active,.v11410TopNav>.v90NavGroup[open]>summary{
+  color:#fff!important;background:linear-gradient(145deg,#1e9df2,#0969d2)!important;border-color:#0d7cdd!important;
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.32),0 4px 0 rgba(1,67,137,.18),0 10px 18px rgba(4,75,147,.18)!important
+}
+.v11410TopNav>.v90NavGroup{min-width:0!important;border:0!important;margin:0!important;padding:0!important;background:transparent!important}
+.v11410TopNav>.v90NavGroup>summary::-webkit-details-marker{display:none!important}
+.v11410TopNav>.v90NavGroup>summary>b{font-size:14px!important;margin-left:auto!important}
+.v11410TopNav>.v90NavGroup[open]{grid-column:1/-1!important;padding:8px!important;border-radius:17px!important;background:#f8fbff!important;border:1px solid #d6e6f4!important;box-shadow:0 8px 18px rgba(5,58,116,.08)!important}
+.v11410TopNav>.v90NavGroup[open]>summary{max-width:260px!important;margin-bottom:8px!important}
+.v11410TopNav>.v90NavGroup>div{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:7px!important;padding:0!important}
+.v11410TopNav>.v90NavGroup>div>button{
+  min-height:48px!important;margin:0!important;padding:7px 8px!important;border:1px solid #d4e5f3!important;border-radius:13px!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:6px!important;text-align:left!important;
+  background:linear-gradient(145deg,#fff,#f0f7ff)!important;color:#174571!important;font-size:10px!important;font-weight:850!important;
+  box-shadow:inset 0 1px #fff,0 3px 0 rgba(4,71,138,.05),0 7px 12px rgba(4,61,116,.08)!important
+}
+.v11410TopNav>.v90NavGroup>div>button:hover,.v11410TopNav>.v90NavGroup>div>button.active{background:linear-gradient(145deg,#e9f7ff,#d9edff)!important;border-color:#7ebfe9!important;color:#0757ad!important;transform:translateY(-1px)!important}
+.v11410TopNav .v1149Icon3D{width:31px!important;height:31px!important;min-width:31px!important;border-radius:10px!important;font-size:16px!important;margin-right:4px!important}
+
+@media(max-width:1100px){
+  .v11410TopNav{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .v11410TopNav>.v90NavGroup>div{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:700px){
+  #erp.v90Shell #erpContent{padding-left:8px!important;padding-right:8px!important}
+  .v11410TopNav{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:8px!important;gap:7px!important}
+  .v11410TopNav>.v90Home,.v11410TopNav>button,.v11410TopNav>.v90NavGroup>summary{min-height:48px!important;font-size:10px!important;padding:7px!important}
+  .v11410TopNav>.v90NavGroup[open]>summary{max-width:none!important}
+  .v11410TopNav>.v90NavGroup>div{grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .v11410TopNav>.v90NavGroup>div>button{min-height:44px!important;font-size:9px!important}
+}
+@media(max-width:430px){
+  .v11410TopNav>.v90NavGroup>div{grid-template-columns:1fr!important}
 }

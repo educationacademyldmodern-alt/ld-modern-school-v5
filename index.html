@@ -1,5 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.9-FINAL-REAL-3D-ICONS-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.9-FINAL-REAL-3D-ICONS-2026-09-15"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
 <link rel="canonical" href="/">
@@ -9129,12 +9129,12 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 })();
 </script>
 
-<link rel="stylesheet" href="premium-role-ui.css?v=1148finalmaster3d1">
-<script>window.V114_BUILD='V114.9-FINAL-REAL-3D-ICONS-2026-09-15';</script>
+<link rel="stylesheet" href="premium-role-ui.css?v=11410norail1">
+<script>window.V114_BUILD='V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16';</script>
 
 <script id="v1147-master-dashboard-runtime">
 (function(){
-  window.V1147_BUILD='V114.9-FINAL-REAL-3D-ICONS-2026-09-15';
+  window.V1147_BUILD='V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16';
   const e7=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const icon7=s=>{const m=String(s||'').match(/^([^A-Za-z0-9₹]+|₹)/);return m?m[0].trim()||'◆':'◆'};
   const label7=s=>String(s||'').replace(/^([^A-Za-z0-9₹]+|₹)\s*/,'').trim();
@@ -9268,73 +9268,74 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 </script>
 
 
-<script id="v1149-real-3d-runtime">
+<script id="v11410-no-left-rail-runtime">
 (function(){
-  window.V1149_BUILD='V114.9-FINAL-REAL-3D-ICONS-2026-09-15';
+  window.V11410_BUILD='V114.10-NO-LEFT-RAIL-TOP-MASTER-NAV-2026-09-16';
 
-  function makeRail(){
-    const erp=document.getElementById('erp');if(!erp)return null;
-    let aside=erp.querySelector(':scope>aside.v1149RoleRail');
-    if(aside)return aside;
-    aside=document.createElement('aside');aside.className='v1149RoleRail';
-    aside.innerHTML='<div class="sideBrand"><div class="logoText small">LD</div><div><b id="sideName">L D MODERN EDUCATION ACADEMY</b><small id="roleText">'+String(profile?.role||'')+'</small></div></div><nav id="erpNav"></nav><button class="logout" onclick="logout()">⏻ Logout</button>';
-    erp.insertBefore(aside,erp.firstChild);
-    return aside;
+  /* V114.10: no fixed left role rail anywhere inside Admin/Teacher ERP.
+     Internal modules use an in-flow top master navigation, so content can never
+     sit underneath or behind a blue sidebar. */
+  function v11410RemoveLegacyRail(){
+    const erp=document.getElementById('erp');if(!erp)return;
+    erp.querySelectorAll(':scope>aside').forEach(x=>x.remove());
+    erp.classList.remove('v58SideHidden');
+    erp.querySelectorAll(':scope>main>.v11410TopNav').forEach((x,i)=>{if(i)x.remove()});
+    erp.querySelectorAll('.erpTop .hamb,.erpTop .v1149Hamb').forEach(x=>x.remove());
   }
-  function ensureHamb(active){
-    const top=document.querySelector('#erp .erpTop');if(!top)return;
-    let h=top.querySelector('.hamb.v1149Hamb');
-    if(active==='dashboard'){
-      if(h)h.remove();
+  function v11410WireAccordion(nav){
+    nav.querySelectorAll(':scope>details').forEach(d=>{
+      if(d.dataset.v11410Accordion==='1')return;
+      d.dataset.v11410Accordion='1';
+      d.addEventListener('toggle',()=>{
+        if(!d.open)return;
+        nav.querySelectorAll(':scope>details').forEach(o=>{if(o!==d)o.open=false});
+      });
+    });
+  }
+  function v11410TopNavigation(active){
+    const erp=document.getElementById('erp'),main=erp?.querySelector(':scope>main'),top=main?.querySelector(':scope>.erpTop');
+    if(!erp||!main||!top)return;
+    v11410RemoveLegacyRail();
+    let nav=main.querySelector(':scope>#erpNav.v11410TopNav');
+    if(String(active||'dashboard')==='dashboard'){
+      nav?.remove();
       return;
     }
-    if(!h){h=document.createElement('button');h.className='hamb v1149Hamb';h.type='button';h.textContent='☰';h.onclick=()=>document.querySelector('#erp>aside.v1149RoleRail')?.classList.toggle('open');top.insertBefore(h,top.firstChild)}
-  }
-  function physicalShell(active){
-    const erp=document.getElementById('erp');if(!erp)return;
-    if(active==='dashboard'){
-      erp.querySelector(':scope>aside.v1149RoleRail')?.remove();
-      erp.querySelector(':scope>aside:not(.v1149RoleRail)')?.remove();
-      ensureHamb('dashboard');
-    }else{
-      // Any legacy fixed rail is physically replaced by the current role rail.
-      erp.querySelectorAll(':scope>aside:not(.v1149RoleRail)').forEach(x=>x.remove());
-      makeRail();ensureHamb(active);
+    if(!nav){
+      const old=document.getElementById('erpNav');if(old&&old!==nav)old.remove();
+      nav=document.createElement('nav');nav.id='erpNav';nav.className='v90Nav v11410TopNav';
+      top.insertAdjacentElement('afterend',nav);
     }
+    try{v90BuildNav(active)}catch(_e){}
+    nav.classList.add('v11410TopNav');
+    v11410WireAccordion(nav);
+    nav.querySelectorAll('.v90NavGroup').forEach(g=>{if(g.querySelector('button.active'))g.open=true});
   }
 
   try{
     const shellBase=v90InstallShell;
     v90InstallShell=function(active=window.__v90Route||'dashboard'){
-      if(String(active)!=='dashboard')physicalShell(active);
+      v11410RemoveLegacyRail();
       const r=shellBase.apply(this,arguments);
-      physicalShell(String(active||'dashboard'));
-      if(String(active)!=='dashboard'){try{v90BuildNav(active)}catch(_e){}}
-      setTimeout(v1149UpgradeIcons,0);
+      v11410RemoveLegacyRail();
+      v11410TopNavigation(String(active||'dashboard'));
+      setTimeout(()=>v1149UpgradeIcons(document),0);
       return r;
     };
-  }catch(e){console.warn('V114.9 shell wrapper',e)}
+  }catch(e){console.warn('V114.10 shell wrapper',e)}
 
-  // Upgrade the ACTUAL leading icon/glyph. No fake diamond pseudo-icons.
   function grapheme(s){
     s=String(s||'').trimStart();if(!s)return null;
     try{const seg=new Intl.Segmenter(undefined,{granularity:'grapheme'});return [...seg.segment(s)][0]?.segment||null}catch(_e){return Array.from(s)[0]||null}
   }
-  function isIconish(g){
-    if(!g)return false;
-    return /[^A-Za-z0-9\s]/u.test(g) || ['A+','LD'].includes(g);
-  }
+  function isIconish(g){return !!g && (/[^A-Za-z0-9\s]/u.test(g)||['A+','LD'].includes(g))}
   function wrapLeading(el){
     if(!el||el.dataset.v1149IconDone==='1')return;
-    // Existing real icon element: enhance, don't duplicate.
-    const known=el.querySelector(':scope > .v1147MasterIcon,:scope > .v1147OptionIcon,:scope > .v1147RailIcon,:scope > .v90MonitorIcon,:scope > .roundIcon,:scope > .v114StudentBadge,:scope > .v114ChildAvatar');
+    const known=el.querySelector(':scope > .v1147MasterIcon,:scope > .v1147OptionIcon,:scope > .v90MonitorIcon,:scope > .roundIcon,:scope > .v114StudentBadge,:scope > .v114ChildAvatar');
     if(known){known.classList.add('v1149Icon3D');el.dataset.v1149IconDone='1';return}
-    // Existing first span containing only a short icon.
     const fs=el.querySelector(':scope > span:first-child');
     if(fs && fs.textContent.trim().length<=4 && !fs.querySelector('*')){fs.classList.add('v1149Icon3D');el.dataset.v1149IconDone='1';return}
-    // Split a real leading glyph from the actual text node.
-    const n=[...el.childNodes].find(x=>x.nodeType===3 && String(x.nodeValue||'').trim());
-    if(!n)return;
+    const n=[...el.childNodes].find(x=>x.nodeType===3 && String(x.nodeValue||'').trim());if(!n)return;
     const raw=n.nodeValue,trim=raw.trimStart(),g=grapheme(trim);if(!isIconish(g))return;
     const start=raw.indexOf(trim),after=trim.slice(g.length).replace(/^\s+/,'');
     const sp=document.createElement('span');sp.className='v1149Icon3D';sp.textContent=g;
@@ -9342,13 +9343,16 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
   }
   window.v1149UpgradeIcons=function(root=document){
     try{
-      root.querySelectorAll?.('#publicSite button,#publicSite a,#publicPageView button,#erp button,#parentPortal button').forEach(wrapLeading);
-      root.querySelectorAll?.('.roundIcon,.v1147MasterIcon,.v1147OptionIcon,.v1147RailIcon,.v90Stat>span,.v90MonitorIcon,.v39StatIcon,.v114StudentBadge,.v114ChildAvatar,.v114PortalStats button>span:first-child,.v114HomeStats button>span:first-child').forEach(x=>x.classList.add('v1149Icon3D'));
+      root.querySelectorAll?.('#publicSite button,#publicSite a,#publicPageView button,#erp button,#erp .v11410TopNav summary>span,#parentPortal button').forEach(wrapLeading);
+      root.querySelectorAll?.('.roundIcon,.v1147MasterIcon,.v1147OptionIcon,.v90Stat>span,.v90MonitorIcon,.v39StatIcon,.v114StudentBadge,.v114ChildAvatar,.v114PortalStats button>span:first-child,.v114HomeStats button>span:first-child').forEach(x=>x.classList.add('v1149Icon3D'));
     }catch(_e){}
   };
   const mo=new MutationObserver(m=>{for(const x of m){for(const n of x.addedNodes){if(n.nodeType===1)v1149UpgradeIcons(n)}}});
-  document.addEventListener('DOMContentLoaded',()=>{physicalShell('dashboard');v1149UpgradeIcons();mo.observe(document.body,{childList:true,subtree:true})});
-  window.addEventListener('load',()=>setTimeout(()=>v1149UpgradeIcons(),250));
+  document.addEventListener('DOMContentLoaded',()=>{
+    v11410RemoveLegacyRail();v11410TopNavigation(window.__v90Route||'dashboard');v1149UpgradeIcons();
+    mo.observe(document.body,{childList:true,subtree:true});
+  });
+  window.addEventListener('load',()=>setTimeout(()=>{v11410RemoveLegacyRail();v11410TopNavigation(window.__v90Route||'dashboard');v1149UpgradeIcons()},250));
 })();
 </script>
 
