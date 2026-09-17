@@ -4969,7 +4969,7 @@ window.addEventListener('load',()=>setTimeout(()=>{
 },160));
 </script>
 
-\n<script id="v59-final-runtime">
+<script id="v59-final-runtime">
 const V59_BUILD='V59-V52-PANEL-CLASSIC-SIDEBAR-ORDERS-AUTO-ADMISSION';
 
 /* ---------- Classic Admin sidebar: larger single items ---------- */
@@ -5153,7 +5153,8 @@ const v59RenderBase=render;
 render=function(p){const r=v59RenderBase(p);Promise.resolve(r).finally(()=>setTimeout(()=>{if(v14Admin())v59AdminSidebar();else if(v14Teacher())v59TeacherSidebar();document.querySelectorAll('#erpNav button').forEach(b=>b.classList.toggle('active',b.dataset.route===p))},0));return r};
 
 window.addEventListener('load',()=>setTimeout(()=>{if(user){if(v14Admin())v59AdminSidebar();else if(v14Teacher())v59TeacherSidebar()}},180));
-</script>\n
+</script>
+
 <script id="v60-student-import-safe-match">
 /* =========================================================
    V60 — SAFE STUDENT EXCEL MATCHING
@@ -9373,99 +9374,301 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 
 <script src="public-final.js?v=FINAL3"></script>
 
-<!-- ===== V117 FUNCTION-ONLY SAFE PATCH • 2026-09-17 ===== -->
-<style id="v117-function-only-style">
-/* Only functional overlays. Existing public website/dashboard design is intentionally untouched. */
-#v117ParentFocus{position:fixed;inset:0;z-index:99990;background:#f6f8fc;overflow:auto;padding:12px}
-#v117ParentFocus .v117Head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e2e9f2;border-radius:12px;padding:9px;margin-bottom:10px}
-#v117ParentFocus .v117Head h3{flex:1;margin:0;text-align:center}
-#v117ParentFocus .v117Head button{border:1px solid #d6dfeb;background:#fff;border-radius:9px;padding:9px 11px;font-weight:800}
-#v117ParentFocus .v117Body{max-width:1200px;margin:auto}
-#v117FirstPw{position:fixed;inset:0;z-index:999999;background:#06152bcc;display:grid;place-items:center;padding:16px}
-#v117FirstPw.hidden{display:none!important}#v117FirstPw .v117PwCard{width:min(460px,100%);background:#fff;border-radius:18px;padding:20px}
-#v117FirstPw input,#v117FirstPw button{width:100%;padding:11px;margin-top:8px;border-radius:9px}#v117FirstPw input{border:1px solid #d5deea}#v117FirstPw button{border:0;background:#1768df;color:#fff;font-weight:900}.v117Msg{font-size:12px;margin-top:8px;color:#9b2c2c;font-weight:800}
+<!-- LD MODERN V114.2 MASTER SAFE CORRECTION 2026-09-17 -->
+<style id="v1142-master-safe-css">
+/* Responsive shell: additive only; existing feature styles remain authoritative. */
+html,body{max-width:100%;overflow-x:hidden}
+#publicSite,#erp,#erpContent,#parentPortal,.v90Page,.v39Dash{max-width:100%;min-width:0}
+#erp main,#erpContent,.v90Page,.v39Dash,.v114AdminFeedGrid,.v39Stats,.v90MonitorGrid{min-width:0}
+img,svg,video,canvas{max-width:100%;height:auto}
+input,select,textarea,button{max-width:100%;box-sizing:border-box}
+.v114AdminFeedGrid>* ,.v39Stats>* ,.v90MonitorGrid>*{min-width:0}
+@media (max-width:900px){
+  #erp{width:100%;max-width:100%;overflow-x:hidden}
+  #erp main,#erpContent{width:100%;max-width:100%;min-width:0;margin-left:0!important}
+  #erpNav{max-width:min(86vw,320px)}
+  .v39Hero,.v39Topbar,.v39Stats,.v114AdminFeedGrid,.v90MonitorGrid{grid-template-columns:1fr!important}
+  .v39Hero,.v39Topbar{display:flex!important;flex-wrap:wrap!important}
+  .v39Hero>* ,.v39Topbar>*{min-width:0;max-width:100%}
+  table{max-width:100%}
+  .tableWrap,.v90TableWrap,.tableScroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+@media (max-width:480px){
+  #erpContent{padding-left:10px!important;padding-right:10px!important}
+  .v90Panel,.panel,.v39Panel{max-width:100%;min-width:0}
+  .v39HeroActions,.tools,.actions,.v95PwActions{display:flex;flex-wrap:wrap;gap:8px}
+}
+/* Device-independent fixed print/PDF layout. */
+@page{size:A4;margin:10mm}
+@media print{
+  html,body{width:210mm!important;max-width:210mm!important;background:#fff!important;overflow:visible!important}
+  body *{box-sizing:border-box}
+  .no-print,.sidebar,#erpNav,.mobileMenu,.menuToggle{display:none!important}
+  .printArea,.pdfArea,.a4,.a4-page,[data-print-page]{width:190mm!important;max-width:190mm!important;margin:0 auto!important;overflow:visible!important;box-shadow:none!important;transform:none!important}
+  img{max-width:100%!important;page-break-inside:avoid}
+  table{width:100%!important;border-collapse:collapse;page-break-inside:auto}
+  tr,.card,.panel,.v90Panel{page-break-inside:avoid;break-inside:avoid}
+}
+.v1142Greeting{font-weight:800;line-height:1.25;white-space:normal}
 </style>
-<script id="v117-function-only-runtime">
+<script id="v1142-master-safe-runtime">
 (()=>{
-'use strict';
-if(window.__V117_FUNCTION_ONLY)return; window.__V117_FUNCTION_ONLY=true;
-window.V117_BUILD='V117-FUNCTION-ONLY-SAFE-2026-09-17';
-const q=s=>document.querySelector(s), safe=v=>typeof window.esc==='function'?esc(v??''):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-
-/* 1) Keep only canonical V90 Back/Home when the modern ERP shell is active. */
-function dedupeNav(){
- const erp=q('#erp'); if(!erp)return;
- if(q('#v90BackBtn')||q('#v90HomeBtn')){
-   erp.querySelectorAll('.v45NavControls,.erpHomeBtn').forEach(x=>x.style.display='none');
-   [...erp.querySelectorAll('#v90BackBtn')].slice(1).forEach(x=>x.remove());
-   [...erp.querySelectorAll('#v90HomeBtn')].slice(1).forEach(x=>x.remove());
+ 'use strict';
+ window.V1142_MASTER_SAFE='2026-09-17';
+ const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
+ const role=()=>String((window.profile&&window.profile.role)||'').toLowerCase();
+ function greeting(){const h=new Date().getHours();return h<12?'सुप्रभात • Good Morning':h<17?'नमस्कार • Good Afternoon':h<21?'शुभ संध्या • Good Evening':'शुभ रात्रि • Good Night'}
+ function person(){try{return String(window.profile?.full_name||window.v14TeacherProfile?.teacher_name||'').trim()}catch(_e){return ''}}
+ function installGreeting(){
+   const r=role(); if(!r)return;
+   let host=q('#v1142AutoGreeting');
+   if(!host){host=document.createElement('div');host.id='v1142AutoGreeting';host.className='v1142Greeting';
+     const target=q('#erp .topbar')||q('#erp header')||q('#erpContent .v39HeroCopy')||q('#erpContent .teacherTop')||q('#parentPortal header');
+     if(target)target.prepend(host); else return;
+   }
+   const label=r==='teacher'?'Teacher':(['admin','super_admin','principal'].includes(r)?'Admin':(['parent','student'].includes(r)?'Parent / Student':''));
+   host.textContent=`${greeting()}${person()?', '+person():label?', '+label:''}`;
  }
-}
-/* Mobile drawer closes after selecting a module. Desktop layout is not changed. */
-document.addEventListener('click',e=>{if(innerWidth<=900&&e.target.closest('#erp aside nav button,#erp aside nav a'))setTimeout(()=>q('#erp aside')?.classList.remove('open'),0)},true);
-
-/* 2) Remove only a standalone stray n/n or literal \\n\\n text node; never alter JS/data strings. */
-function cleanStrayNN(){
- if(!document.body)return; const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n;
- while(n=w.nextNode()){const t=String(n.nodeValue||'').trim();if(/^(?:n\s*\/\s*n|n\s+n|\\n\s*\\n)$/i.test(t))n.nodeValue=''}
-}
-
-/* 3) Automatic local-time greeting. Adds text only when a suitable existing dashboard host is found. */
-function greeting(){const h=new Date().getHours();return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
-function installGreeting(){
- const erp=q('#erp'); if(!erp||erp.classList.contains('hidden'))return;
- let host=q('#v117Greeting'); if(!host){const target=q('#erpContent .v39HeroCopy')||q('#erpContent .teacherTop');if(!target)return;host=document.createElement('div');host.id='v117Greeting';host.style.cssText='font-weight:800;margin-bottom:5px';target.prepend(host)}
- const name=String(window.profile?.full_name||window.v14TeacherProfile?.teacher_name||'').trim();host.textContent=greeting()+(name?', '+name:'');
-}
-
-/* 4) Admin Forgot: identifier required + 2-minute browser cooldown. Server endpoint remains authoritative. */
-window.v95AdminForgot=function(){
- if(q('#v117AdminForgot'))return; const w=document.createElement('div');w.id='v117AdminForgot';w.className='v14Modal';
- w.innerHTML=`<div class="v14ModalCard"><button class="v14Close" onclick="this.closest('.v14Modal').remove()">×</button><h2>🔐 Admin Forgot Password</h2><p class="note">Registered Admin ID / Mobile / Email verify होने पर ही recovery request आगे जाएगी.</p><input id="v117AdminId" autocomplete="username" placeholder="Admin ID / Mobile / Email" style="width:100%;padding:11px;border:1px solid #d6dfeb;border-radius:9px"><button id="v117AdminSend" class="primary" style="margin-top:10px" onclick="v117SendAdminRecovery()">Verify & Send</button><div id="v117AdminStatus" class="note" style="margin-top:9px"></div></div>`;document.body.appendChild(w)
-};
-window.v117SendAdminRecovery=async function(){
- const id=String(q('#v117AdminId')?.value||'').trim(),st=q('#v117AdminStatus'),b=q('#v117AdminSend');if(!id){if(st)st.textContent='पहले registered Admin identifier डालें.';return}
- const now=Date.now(),last=Number(localStorage.getItem('ld_admin_recovery_last')||0),wait=120000-(now-last);if(wait>0){if(st)st.textContent=`कृपया ${Math.ceil(wait/1000)} seconds बाद दोबारा कोशिश करें.`;return}
- if(b)b.disabled=true;if(st)st.textContent='Verifying...';try{const r=await fetch('/api/admin-forgot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier:id})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Admin recovery request failed');localStorage.setItem('ld_admin_recovery_last',String(now));if(st)st.textContent=j.message||'Recovery request accepted.'}catch(e){if(st)st.textContent=e.message||String(e)}finally{if(b)b.disabled=false}
-};
-
-/* 5) Parent quick actions open a focused top view instead of scrolling down. */
-function parentService(i){return (Array.isArray(window.v64ParentServices)?window.v64ParentServices:[])[Number(i)||0]||null}
-function focus(title,html){q('#v117ParentFocus')?.remove();document.body.insertAdjacentHTML('beforeend',`<section id="v117ParentFocus"><div class="v117Head"><button type="button" onclick="v117ParentBack()">← Back</button><h3>${safe(title)}</h3><button type="button" onclick="v117ParentHome()">⌂ Home</button></div><div class="v117Body">${html}</div></section>`);window.scrollTo(0,0)}
-window.v117ParentBack=()=>q('#v117ParentFocus')?.remove();window.v117ParentHome=()=>{q('#v117ParentFocus')?.remove();window.scrollTo(0,0)};
-function clonePart(d,sel,title){const el=d?.querySelector(sel);if(!el)return focus(title,'<div class="empty">Data अभी उपलब्ध नहीं है.</div>');const c=el.cloneNode(true);c.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));focus(title,c.outerHTML)}
-window.v117ParentFocus=async function(type,i=0){
- const d=document.querySelectorAll('#parentDashboardBody .v114PortalDash')[Number(i)||0],s=parentService(i),adm=s?.admission_no||'',cls=s?.class_name||'';
- if(type==='profile'){if(typeof window.v97ShowParentProfile==='function')return v97ShowParentProfile();return}
- if(type==='attendance')return clonePart(d,'.v114AttendanceBlock','Attendance');
- if(type==='fees')return clonePart(d,'.v114FeeBlock','Fee Details');
- if(type==='results')return clonePart(d,'.resultMini','Exam Results');
- if(type==='notices'){const el=q('#parentDashboardBody .v32ParentNotices');return focus('Notices',el?el.cloneNode(true).outerHTML:'<div class="empty">No notice available.</div>')}
- if(type==='gallery'){const el=q('#parentDashboardBody .gallery,#parentDashboardBody [id*=Gallery]');return focus('Gallery',el?el.cloneNode(true).outerHTML:'<div class="empty">Gallery अभी उपलब्ध नहीं है.</div>')}
- if(type==='homework'){
-   if(!adm)return focus('Homework','<div class="empty">Student link नहीं मिला.</div>');focus('Homework / Daily Learning','<div class="empty">Loading...</div>');
-   try{const {data,error}=await sb.rpc('parent_class_learning',{p_admission_no:adm});if(error)throw error;const daily=data?.daily_teaching||[],hw=data?.homework||[];const html=`<div class="panel"><h3>📖 Recent Class Teaching</h3>${daily.length?daily.map(x=>`<p><b>${safe(x.subject||'')} • ${safe(x.teaching_date||'')}</b><br>${safe(x.topic||'')}${x.details?'<br>'+safe(x.details):''}</p>`).join(''):'<p>No teaching update yet.</p>'}</div><div class="panel"><h3>✏ Homework</h3>${hw.length?hw.map(x=>`<p><b>${safe(x.subject||'')} • ${safe(x.title||'Homework')}</b><br>${safe(x.description||'')}<br><small>${safe(x.date||'')}${x.due_date?' • Due '+safe(x.due_date):''}</small></p>`).join(''):'<p>No homework update yet.</p>'}</div>`;q('#v117ParentFocus .v117Body').innerHTML=html}catch(e){q('#v117ParentFocus .v117Body').innerHTML=`<div class="empty">${safe(e.message||e)}</div>`}return
+ function dedupeNav(){
+   const scopes=['#erp','#parentPortal'];
+   scopes.forEach(sc=>{
+     const root=q(sc);if(!root)return;
+     ['home','back'].forEach(kind=>{
+       const candidates=[...root.querySelectorAll('button,a')].filter(el=>{
+         const t=(el.textContent||'').trim().toLowerCase(), oc=(el.getAttribute('onclick')||'').toLowerCase(), ar=(el.getAttribute('aria-label')||'').toLowerCase();
+         return kind==='home'?(ar==='home'||/^🏠\s*home$/.test(t)||oc==="render('dashboard')"||oc==='render("dashboard")'):(ar==='back'||/^←?\s*back$/.test(t)||/^⬅\s*back$/.test(t));
+       });
+       candidates.slice(1).forEach(el=>el.remove());
+     });
+   });
  }
- if(type==='timetable'){
-   if(!cls)return focus('Class Timetable','<div class="empty">Student class नहीं मिला.</div>');focus(`Class ${cls} • Timetable`,'<div class="empty">Loading...</div>');
-   try{const {data,error}=await sb.from('timetable').select('day_name,period_no,start_time,end_time,subject,teacher_name,class_name,section').eq('class_name',cls).order('period_no');if(error)throw error;const rows=data||[],days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];const html=days.map(day=>{const rr=rows.filter(x=>String(x.day_name||'').toLowerCase()===day.toLowerCase());return rr.length?`<div class="panel"><h3>${day}</h3><div class="tableWrap"><table><thead><tr><th>Bell</th><th>Time</th><th>Subject</th><th>Teacher</th></tr></thead><tbody>${rr.map(x=>`<tr><td>${safe(x.period_no||'')}</td><td>${safe(x.start_time||'')}–${safe(x.end_time||'')}</td><td>${safe(x.subject||'')}</td><td>${safe(x.teacher_name||'')}</td></tr>`).join('')}</tbody></table></div></div>`:''}).join('');q('#v117ParentFocus .v117Body').innerHTML=html||'<div class="empty">इस class का timetable अभी Admin ने set नहीं किया है.</div>'}catch(e){q('#v117ParentFocus .v117Body').innerHTML=`<div class="empty">${safe(e.message||e)}</div>`}return
+ function closeMobileNav(){
+   if(innerWidth>900)return;
+   document.body.classList.remove('sidebar-open','nav-open','menu-open','v1142-sidebar-open');
+   q('#erp')?.classList.remove('sidebar-open','nav-open','menu-open');
+   q('#erpNav')?.classList.remove('open','show','active');
  }
-};
-function wireParent(){document.querySelectorAll('#parentDashboardBody .v114PortalDash').forEach((dash,i)=>dash.querySelectorAll('.v114PortalQuick button').forEach(b=>{const t=(b.textContent||'').toLowerCase();const type=t.includes('profile')?'profile':t.includes('attendance')?'attendance':t.includes('fee')?'fees':t.includes('exam')?'results':t.includes('homework')?'homework':t.includes('time table')||t.includes('timetable')?'timetable':t.includes('notice')?'notices':t.includes('gallery')?'gallery':'';if(type)b.onclick=e=>{e.preventDefault();v117ParentFocus(type,i)}}))}
+ document.addEventListener('click',e=>{if(innerWidth<=900&&e.target.closest('#erpNav button,#erpNav a'))setTimeout(closeMobileNav,0)},true);
+ function cleanStrayNN(){
+   const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+   while(n=w.nextNode()){if(/^\s*(?:n\s*[\\/]?\s*n|\\n\s*\\n)\s*$/i.test(n.nodeValue||''))n.nodeValue=''}
+ }
+ function refresh(){try{dedupeNav();installGreeting();cleanStrayNN()}catch(_e){}}
+ const mo=new MutationObserver(()=>{clearTimeout(window.__v1142MasterTimer);window.__v1142MasterTimer=setTimeout(refresh,60)});
+ document.addEventListener('DOMContentLoaded',()=>{refresh();mo.observe(document.body,{childList:true,subtree:true});setInterval(installGreeting,60000)});
+ window.addEventListener('load',()=>setTimeout(refresh,180));
+ window.addEventListener('resize',()=>{if(innerWidth<=900)closeMobileNav()},{passive:true});
 
-/* 6) New Parent accounts: ask secure server API to mark first-login password change. Existing accounts are untouched unless server explicitly sets the flag. */
-if(typeof window.v94ParentApi==='function'&&!window.__v117ParentApiWrapped){window.__v117ParentApiWrapped=true;const base=window.v94ParentApi;window.v94ParentApi=async function(payload){const p=Object.assign({},payload);if(p.action==='create_or_link'&&p.password)p.must_change_password=true;if(/reset/i.test(String(p.action||'')))p.must_change_password=true;return base.call(this,p)}}
-function firstPwModal(){if(q('#v117FirstPw'))return;q('body')?.insertAdjacentHTML('beforeend','<div id="v117FirstPw" class="hidden"><div class="v117PwCard"><h3>🔐 नया Password बनाएँ</h3><p>School Admin द्वारा दिया temporary password पहली login पर बदलें. Email/OTP की जरूरत नहीं है.</p><input id="v117OldPw" type="password" autocomplete="current-password" placeholder="Old / Temporary Password"><input id="v117NewPw" type="password" autocomplete="new-password" placeholder="New Password (कम से कम 8 characters)"><input id="v117NewPw2" type="password" autocomplete="new-password" placeholder="Confirm New Password"><button type="button" onclick="v117SaveFirstPw()">Save New Password</button><div id="v117PwMsg" class="v117Msg"></div></div></div>')}
-async function enforceFirstPw(){try{firstPwModal();const {data}=await sb.auth.getUser(),u=data?.user;if(!u||u.user_metadata?.must_change_password!==true)return;await window.loadProfile?.();const role=String(window.profile?.role||'').toLowerCase();if(role==='parent'||role==='student')q('#v117FirstPw')?.classList.remove('hidden')}catch(_e){}}
-window.v117SaveFirstPw=async function(){const old=String(q('#v117OldPw')?.value||''),a=String(q('#v117NewPw')?.value||''),b=String(q('#v117NewPw2')?.value||''),m=q('#v117PwMsg');const msg=t=>{if(m)m.textContent=t};if(!old)return msg('Old / Temporary Password डालें.');if(a.length<8)return msg('New Password कम से कम 8 characters का रखें.');if(a!==b)return msg('New और Confirm Password समान नहीं हैं.');if(a===old)return msg('New Password पुराने Password से अलग रखें.');try{const {data}=await sb.auth.getUser(),u=data?.user;if(!u?.email)throw new Error('Session expired. दोबारा login करें.');const vr=await sb.auth.signInWithPassword({email:u.email,password:old});if(vr.error)throw new Error('Old / Temporary Password सही नहीं है.');const meta=Object.assign({},vr.data.user?.user_metadata||{},{must_change_password:false,password_changed_at:new Date().toISOString()});const up=await sb.auth.updateUser({password:a,data:meta});if(up.error)throw up.error;msg('Password successfully changed.');setTimeout(()=>q('#v117FirstPw')?.classList.add('hidden'),450)}catch(e){msg(e.message||String(e))}};
-
-/* Re-wire after existing Parent portal render, without replacing its data logic. */
-if(typeof window.loadParentPortal==='function'){const baseParent=window.loadParentPortal;window.loadParentPortal=async function(){const r=await baseParent.apply(this,arguments);setTimeout(wireParent,120);setTimeout(enforceFirstPw,180);return r}}
-
-function refresh(){dedupeNav();cleanStrayNN();installGreeting();wireParent()}
-document.addEventListener('DOMContentLoaded',()=>setTimeout(refresh,250));window.addEventListener('load',()=>{setTimeout(refresh,450);setTimeout(enforceFirstPw,700)});setInterval(installGreeting,60000);
+ /* Primary Admin recovery UI: require identifier before request; browser cooldown reduces accidental/repeated sends.
+    The /api/admin-forgot endpoint remains the authority and must verify the identifier server-side. */
+ window.v95AdminForgot=function(){
+   if(document.getElementById('v95AdminRecoveryModal'))return;
+   const wrap=document.createElement('div');wrap.id='v95AdminRecoveryModal';wrap.className='v14Modal';
+   wrap.innerHTML=`<div class="v14ModalCard"><button class="v14Close" onclick="this.closest('.v14Modal').remove()">×</button><h2>🔐 Primary Admin Forgot Password</h2><div class="v95AdminRecoveryCard"><p>पहले अपना registered Admin ID / Mobile / Email डालें. सही Primary Admin identifier verify होने पर ही recovery request स्वीकार होनी चाहिए.</p><label>Admin ID / Mobile / Email<input id="v1142AdminRecoveryId" autocomplete="username" placeholder="Registered Admin identifier"></label><div class="safe">✓ Primary Admin only • ✓ Teacher/Parent recovery बंद • ✓ repeated request cooldown</div><button id="v95SendRecovery" class="v14Action primary" onclick="v95SendAdminRecovery()">Verify & Send Recovery Link</button><div id="v95RecoveryStatus" class="v95PolicyNote">गलत/खाली identifier पर request आगे नहीं जाएगी.</div></div></div>`;
+   document.body.appendChild(wrap)
+ };
+ window.v95SendAdminRecovery=async function(){
+   const b=document.getElementById('v95SendRecovery'),st=document.getElementById('v95RecoveryStatus'),id=String(document.getElementById('v1142AdminRecoveryId')?.value||'').trim();
+   if(!id){if(st)st.textContent='पहले registered Admin ID / Mobile / Email डालें.';return}
+   const key='ld_admin_recovery_last',now=Date.now(),last=Number(localStorage.getItem(key)||0),wait=120000-(now-last);
+   if(wait>0){if(st)st.textContent=`कृपया ${Math.ceil(wait/1000)} seconds बाद दोबारा कोशिश करें.`;return}
+   if(b)b.disabled=true;if(st)st.textContent='Primary Admin identifier verify किया जा रहा है...';
+   try{
+     const r=await fetch('/api/admin-forgot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier:id})});
+     const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Admin identifier verify/recovery request failed');
+     localStorage.setItem(key,String(now));if(st)st.innerHTML=`<b>✓ Recovery request accepted</b><br>${typeof esc==='function'?esc(j.message||'Registered Primary Admin recovery address check करें.'):String(j.message||'Registered Primary Admin recovery address check करें.')}`;
+   }catch(e){if(st)st.textContent='Recovery: '+(e.message||String(e))}finally{if(b)setTimeout(()=>b.disabled=false,2500)}
+ };
 })();
 </script>
-<!-- ===== END V117 FUNCTION-ONLY SAFE PATCH ===== -->
+<!-- /LD MODERN V114.2 MASTER SAFE CORRECTION -->
+
+
+<!-- ===== FINAL SMART SAFE MASTER 2026-09-17 ===== -->
+<style id="ld-final-safe-master-css">
+/* Responsive guard: no DB/data changes */
+html,body{max-width:100%;overflow-x:hidden}
+*,*:before,*:after{box-sizing:border-box}
+img,svg,video,canvas{max-width:100%;height:auto}
+#publicSite,#publicPageView,#erp,#teacherDashboard,#parentDashboard,#studentDashboard,
+#erp main,#erpContent{max-width:100%;min-width:0}
+@media(max-width:900px){
+  #erp main,#erpContent{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important}
+  #erp aside.open{max-width:min(86vw,320px)!important}
+}
+/* A4 print/PDF guard. Screen UI remains responsive; print becomes fixed. */
+@media print{
+  @page{size:A4;margin:9mm}
+  html,body{width:210mm!important;max-width:210mm!important;margin:0!important;padding:0!important;
+            overflow:visible!important;background:#fff!important}
+  body{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  img,svg,canvas{max-width:100%!important;height:auto!important}
+  table{width:100%!important;border-collapse:collapse!important}
+  tr,td,th,.card,.admit-card,.admitCard,.marksheet,.mark-sheet,.result-card,.resultCard,
+  .fee-receipt,.feeReceipt,.fee-reminder,.notice-card,.noticeCard,.id-card,.idCard,
+  .certificate,.worksheet,[data-print-card]{
+    break-inside:avoid!important;page-break-inside:avoid!important;max-width:100%!important
+  }
+  .no-print,[data-no-print="true"]{display:none!important}
+}
+</style>
+
+<script id="ld-final-smart-safe-master">
+(function(){
+"use strict";
+if(window.LDSmartSafePatch){console.info("[LD SAFE] MASTER ALREADY ACTIVE");return;}
+
+const history=[], applied=new Set(), handlers=new Map();
+function report(status,id,message,extra){
+  const row=Object.assign({time:new Date().toISOString(),status,id,message},extra||{});
+  history.push(row);
+  const fn=(status==="STOPPED"||status==="FAILED")?"error":status==="WARNING"?"warn":"log";
+  console[fn]("[LD SAFE]",status,id,message);
+  try{window.dispatchEvent(new CustomEvent("ldsafe:status",{detail:row}));}catch(_){}
+  return row;
+}
+function qsa(sel,root){
+  try{return Array.from((root||document).querySelectorAll(sel));}catch(_){return [];}
+}
+function one(sel,id,root){
+  const a=qsa(sel,root);
+  if(a.length===1)return a[0];
+  report("STOPPED",id,a.length?"MULTIPLE MATCHES — NO CHANGE":"TARGET NOT FOUND — NO CHANGE",{selector:sel,count:a.length});
+  return null;
+}
+function feature(workKey){
+  try{return qsa('[data-ld-work="'+CSS.escape(String(workKey))+'"]');}catch(_){return [];}
+}
+function run(id,fn){
+  if(!id)return report("STOPPED","UNKNOWN","PATCH ID REQUIRED");
+  if(applied.has(id))return report("ALREADY APPLIED",id,"SKIPPED");
+  try{
+    const r=fn();
+    if(r!==false)applied.add(id);
+    return r;
+  }catch(e){return report("FAILED",id,"NO FURTHER CHANGE",{error:String(e)});}
+}
+function findHost(o){
+  const selectors=[].concat(o.targets||[],o.target||[]).filter(Boolean);
+  for(const sel of selectors){
+    const a=qsa(sel);
+    if(a.length===1)return a[0];
+    if(a.length>1){report("STOPPED",o.id,"PLACE NOT UNIQUE — NO CHANGE",{selector:sel,count:a.length});return null;}
+  }
+  report("STOPPED",o.id,"PLACE NOT CONFIRMED — NO CHANGE");
+  return null;
+}
+const API={
+  version:"3.0",
+  add(o){return run(o.id,function(){
+    if(!o.workKey||typeof o.html!=="string")return report("STOPPED",o.id,"INVALID ADD — NO CHANGE"),false;
+    const old=feature(o.workKey);
+    if(old.length===1)return report("ALREADY EXISTS",o.id,"ONE WORK/ONE FEATURE — DUPLICATE SKIPPED",{workKey:o.workKey}),false;
+    if(old.length>1)return report("STOPPED",o.id,"DUPLICATE OLD FEATURES FOUND — NO GUESS",{workKey:o.workKey,count:old.length}),false;
+    const host=findHost(o); if(!host)return false;
+    const t=document.createElement("template"); t.innerHTML=o.html.trim();
+    const roots=Array.from(t.content.children);
+    if(roots.length!==1)return report("STOPPED",o.id,"ONE WORK MUST HAVE ONE ROOT — NO CHANGE"),false;
+    const el=roots[0]; el.dataset.ldWork=o.workKey; el.dataset.ldPatch=o.id;
+    host.insertAdjacentElement(o.position||"beforeend",el);
+    if(typeof o.setup==="function")o.setup(el);
+    return report("ADDED",o.id,"FEATURE ADDED",{workKey:o.workKey});
+  });},
+  update(o){return run(o.id,function(){
+    const el=one(o.target,o.id); if(!el)return false;
+    if(typeof o.expected==="function"&&!o.expected(el))return report("STOPPED",o.id,"EXPECTED OLD STATE NOT VERIFIED — NO CHANGE"),false;
+    const backup=el.cloneNode(true);
+    try{o.apply(el);return report("UPDATED",o.id,"VERIFIED TARGET UPDATED");}
+    catch(e){el.replaceWith(backup);return report("FAILED",o.id,"UPDATE FAILED — ORIGINAL RESTORED",{error:String(e)}),false;}
+  });},
+  remove(o){return run(o.id,function(){
+    const el=one(o.target,o.id); if(!el)return false;
+    if(typeof o.expected==="function"&&!o.expected(el))return report("STOPPED",o.id,"REMOVE TARGET NOT VERIFIED — NO CHANGE"),false;
+    el.remove(); return report("REMOVED",o.id,"ONLY VERIFIED TARGET REMOVED");
+  });},
+  upsert(o){
+    const old=feature(o.workKey);
+    if(old.length>1)return report("STOPPED",o.id,"MULTIPLE SAME-WORK FEATURES — NO GUESS",{count:old.length});
+    if(old.length===1){
+      if(typeof o.apply!=="function")return report("ALREADY EXISTS",o.id,"EXISTING FEATURE KEPT");
+      return API.update({id:o.id,target:'[data-ld-work="'+CSS.escape(String(o.workKey))+'"]',expected:o.expected,apply:o.apply});
+    }
+    return API.add(o);
+  },
+  bind(action,fn){
+    if(!action||typeof fn!=="function")return report("STOPPED","HANDLER","INVALID HANDLER");
+    handlers.set(String(action),fn); return report("BOUND",String(action),"SINGLE DELEGATED HANDLER ACTIVE");
+  },
+  batch(items){
+    const out=[];
+    (items||[]).forEach(function(o){
+      if(!o||!o.action||typeof API[o.action]!=="function")out.push(report("STOPPED",o&&o.id||"UNKNOWN","UNKNOWN ACTION"));
+      else out.push(API[o.action](o));
+    });
+    return out;
+  },
+  status(){console.table(history);return history.slice();},
+  installed(){return Array.from(applied);}
+};
+document.addEventListener("click",function(e){
+  const el=e.target&&e.target.closest&&e.target.closest("[data-ld-action]");
+  if(!el)return;
+  const fn=handlers.get(el.dataset.ldAction);
+  if(fn){e.preventDefault();fn.call(el,e,el);}
+},false);
+Object.defineProperty(window,"LDSmartSafePatch",{value:API,writable:false,configurable:false});
+
+/* Exact stray n/n cleaner.
+   Removes only isolated visible text nodes equal to n/n, \n/n or n\\n.
+   It never searches/replaces inside normal student/notice/database text. */
+function cleanStrayNN(root){
+  root=root||document.body; if(!root)return 0;
+  let count=0;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const nodes=[];
+  while(w.nextNode())nodes.push(w.currentNode);
+  nodes.forEach(function(n){
+    const p=n.parentElement;
+    if(!p||p.closest("script,style,textarea,input,select,option,[contenteditable=true]"))return;
+    const raw=(n.nodeValue||"").trim().toLowerCase();
+    if(raw==="n/n"||raw==="\\n/n"||raw==="n\\n"){
+      n.nodeValue=""; count++;
+    }
+  });
+  if(count)report("UPDATED","STRAY-NN","REMOVED ISOLATED n/n OUTPUT",{count:count});
+  return count;
+}
+let nnTimer=0;
+const nnObserver=new MutationObserver(function(){
+  clearTimeout(nnTimer); nnTimer=setTimeout(function(){cleanStrayNN(document.body);},60);
+});
+function startNN(){
+  cleanStrayNN(document.body);
+  if(document.body)nnObserver.observe(document.body,{childList:true,subtree:true});
+}
+
+/* Mobile sidebar: close after a real menu selection; do not alter route/function. */
+document.addEventListener("click",function(e){
+  if(innerWidth>900)return;
+  const b=e.target&&e.target.closest&&e.target.closest("#erp aside nav button,#erp aside [data-route],#erp aside .logout");
+  if(!b)return;
+  const aside=document.querySelector("#erp aside");
+  if(aside)aside.classList.remove("open");
+},true);
+
+/* Print preview helper: existing print/PDF functions remain authoritative. */
+window.LDPrintPreview=function(target){
+  const el=typeof target==="string"?document.querySelector(target):target;
+  if(!el){report("STOPPED","PRINT-PREVIEW","TARGET NOT FOUND");return false;}
+  document.documentElement.dataset.ldPrintPreview="1";
+  try{window.print();return true;}finally{delete document.documentElement.dataset.ldPrintPreview;}
+};
+
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",startNN,{once:true});
+else startNN();
+report("READY","LD-SMART-SAFE-MASTER","SAFE PATCH + RESPONSIVE + A4 PRINT GUARD ACTIVE");
+})();
+</script>
+<!-- ===== END FINAL SMART SAFE MASTER 2026-09-17 ===== -->
 
 </body></html>
