@@ -1312,90 +1312,6 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 <!-- V107-CLEAN-PREMIUM-DOCS-2026-09-15 -->
 
 
-
-<!-- ===== V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-<style id="v1142-master-final-nav-css">
-/* Additive shell patch only: DB, CRUD, permissions and module markup stay unchanged. */
-#erp.v90Shell,#erp.erp{position:relative!important;width:100%!important;max-width:100%!important}
-#erp.v90Shell main,#erp.erp main{width:100%!important;max-width:100%!important;margin-left:0!important;min-width:0!important}
-/* Same drawer behaviour on desktop and mobile: closed by default, opens only from Menu. */
-#erp.v90Shell aside,#erp.erp aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(84vw,310px)!important;max-width:310px!important;transform:translateX(-105%)!important;transition:transform .2s ease!important;z-index:2200!important;box-shadow:8px 0 30px #001b3b38!important}
-#erp.v90Shell aside.open,#erp.erp aside.open{transform:translateX(0)!important}
-#erp .erpTop{position:relative!important;z-index:100!important}
-#erp .hamb{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important}
-/* Full role wallpaper across the usable dashboard on every screen size. */
-#erp.roleWallpaper{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#erp.roleWallpaper main{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#parentPortal.parentWallpaper,#parentDashboard.parentWallpaper{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;min-height:100vh!important}
-/* Public mobile navigation is compact; large public tabs never occupy the front screen. */
-@media(max-width:900px){
- .v26Top{position:relative!important}
- .v26Menu{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:44px!important;min-height:44px!important}
- #v26Nav{display:none!important;position:absolute!important;left:auto!important;right:10px!important;top:calc(100% + 4px)!important;bottom:auto!important;width:min(88vw,310px)!important;max-height:72vh!important;padding:10px!important;border-radius:14px!important;z-index:2300!important;overflow:auto!important;box-shadow:0 16px 35px #001b3b45!important}
- #v26Nav.show{display:grid!important;grid-template-columns:1fr!important}
- #v26Nav:before{content:'🏫  SCHOOL MENU'!important;padding:8px 10px 12px!important}
- #v26Nav button{min-height:44px!important}
-}
-/* Header identity: address stays directly below school name and wraps safely. */
-.v26Brand>div{min-width:0!important}.v26Brand b,.v26Brand span{max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}
-/* One Back + one Home in ERP header. */
-#v1142ModuleBack,#v1142ModuleHome{min-height:42px!important;white-space:nowrap!important}
-@media(max-width:560px){#erp .erpTop{display:flex!important;flex-wrap:wrap!important;gap:7px!important}#erp .erpTop>*{min-width:0!important}#v1142ModuleBack,#v1142ModuleHome{padding:8px 10px!important;font-size:12px!important}}
-</style>
-<script id="v1142-master-final-nav-runtime">
-(()=>{
- 'use strict';
- window.V1142_MASTER_FINAL='2026-09-17-NAV2';
- const $=s=>document.querySelector(s);
- function closeDrawer(){const a=$('#erp aside');if(a)a.classList.remove('open')}
- function toggleDrawer(){const a=$('#erp aside');if(a)a.classList.toggle('open')}
- /* Override old desktop-permanent-sidebar patches with one drawer rule for all widths. */
- window.v58ToggleSidebar=function(){toggleDrawer();return false};
- function bindMenu(){const b=$('#erp .hamb');if(!b)return;b.textContent='☰ Menu';b.onclick=window.v58ToggleSidebar}
- document.addEventListener('click',e=>{if(e.target.closest('#erpNav button,#erpNav a'))setTimeout(closeDrawer,0)},true);
- /* Keep Supabase's existing persistent session; this file already initializes auth with persistSession:true. Logout remains authoritative. */
- let route='dashboard', stack=[], suppress=false;
- const baseRender=window.render;
- if(typeof baseRender==='function'){
-   window.render=function(p){
-     p=String(p||'dashboard');
-     if(!suppress && route && p!==route){stack.push(route);if(stack.length>40)stack.shift()}
-     route=p;const r=baseRender.apply(this,arguments);setTimeout(()=>{closeDrawer();ensureNav();},0);return r;
-   };
- }
- window.v1142ModuleBack=function(){
-   const prev=stack.pop();if(!prev)return;
-   suppress=true;try{window.render(prev)}finally{suppress=false}
- };
- window.v1142ModuleHome=function(){
-   if(route==='dashboard')return;stack.push(route);suppress=true;try{window.render('dashboard');route='dashboard'}finally{suppress=false}
- };
- function ensureNav(){
-   bindMenu();const h=$('#erp .erpTop');if(!h)return;
-   /* Remove only duplicate legacy Home/Back controls in this header; module content buttons are untouched. */
-   [...h.querySelectorAll('button')].forEach(b=>{const t=(b.textContent||'').trim().toLowerCase();if((/^🏠?\s*home$/.test(t)||/^←?\s*back$/.test(t)||/^⬅\s*back$/.test(t))&&!['v1142ModuleBack','v1142ModuleHome'].includes(b.id))b.remove()});
-   let back=$('#v1142ModuleBack');if(!back){back=document.createElement('button');back.id='v1142ModuleBack';back.className='erpHomeBtn';back.textContent='← Back';back.onclick=window.v1142ModuleBack;h.insertBefore(back,h.children[1]||null)}
-   let home=$('#v1142ModuleHome');if(!home){home=document.createElement('button');home.id='v1142ModuleHome';home.className='erpHomeBtn';home.textContent='🏠 Home';home.onclick=window.v1142ModuleHome;h.insertBefore(home,back.nextSibling)}
- }
- /* Public menu: close after selection and suppress accidental rapid repeat taps without changing public functions. */
- let lastPublicTap=0;
- document.addEventListener('click',e=>{
-   const b=e.target.closest('#v26Nav button');if(!b)return;
-   const now=Date.now();if(now-lastPublicTap<450){e.preventDefault();e.stopImmediatePropagation();return}lastPublicTap=now;
-   setTimeout(()=>$('#v26Nav')?.classList.remove('show'),0);
- },true);
- /* Keep displayed public identity synced with existing school settings; fallback is the address already used by V114.2. */
- function syncIdentity(){try{const brand=$('.v26Brand');if(!brand)return;const name=brand.querySelector('b'),addr=brand.querySelector('span');if(name)name.textContent=window.school?.school_name||'L D MODERN EDUCATION ACADEMY';if(addr)addr.textContent=window.school?.address||'GAMBHIRIYA BUJURG, SINGHAPATTI, KUSHINAGAR'}catch(_e){}}
- function init(){ensureNav();syncIdentity();closeDrawer()}
- document.addEventListener('DOMContentLoaded',()=>setTimeout(init,80));
- window.addEventListener('load',()=>setTimeout(init,220));
- window.addEventListener('resize',()=>setTimeout(()=>{closeDrawer();ensureNav()},50),{passive:true});
- const mo=new MutationObserver(()=>{clearTimeout(window.__v1142NavTimer);window.__v1142NavTimer=setTimeout(()=>{ensureNav();syncIdentity()},80)});
- document.addEventListener('DOMContentLoaded',()=>{if(document.body)mo.observe(document.body,{childList:true,subtree:true})});
-})();
-</script>
-<!-- ===== /V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
 <!-- ===== V92.1 LOGIN RAW-CODE PARSE FIX: restored V14 print boundary ===== -->
@@ -2450,91 +2366,7 @@ function idStudioChunks(arr,n){let out=[];for(let i=0;i<arr.length;i+=n)out.push
 function idStudioPageHtml(rows,fmt){let cells=rows.map(s=>`<div class="idA4Cell">${renderIdCard(s,fmt)}</div>`);while(cells.length<10)cells.push('<div class="idA4Cell"></div>');return `<section class="idA4Page">${cells.join('')}</section>`}
 async function idStudioPreview(silent=false){let ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');let rows=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));await v14AttachSignedPhotos(rows);let fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),pages=idStudioChunks(rows,10).map(x=>idStudioPageHtml(x,fmt)).join('');let work=$('idWork');if(!work)return;work.innerHTML=`<div class="idStudioPreviewActions"><b>${rows.length} cards • ${Math.ceil(rows.length/10)} A4 page(s) • Format ${fmt}</b><button class="primary" onclick="idStudioPrint()">🖨 Print</button><button class="primary" onclick="idStudioPdf()">PDF</button><button class="secondary" onclick="idStudioPreview()">↻ Refresh Preview</button></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;if(!silent)toast('Preview ready • Print/PDF enabled')}
 function idStudioPrintCss(){return `@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;background:#fff;font-family:Cambria,Georgia,serif}.idA4Page{width:210mm;height:297mm;padding:6mm 7mm;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,54mm);gap:2mm 4mm;align-content:start;page-break-after:always;overflow:hidden}.idA4Page:last-child{page-break-after:auto}.idA4Cell{display:flex;align-items:center;justify-content:center;overflow:hidden}.idCard{position:relative;overflow:hidden;background:#fff;display:flex;flex-direction:column;page-break-inside:avoid}.idCard .v104Band{display:flex;align-items:center;gap:6px;padding:4px 7px;min-height:12mm}.v104Logo{width:10mm;height:10mm;border-radius:50%;object-fit:contain;background:#fff;border:1px solid #ffffff88}.v104LogoFallback{display:grid;place-items:center;font-weight:950;font-size:8px}.v104HeadText{min-width:0;flex:1;text-align:center}.v104HeadText b{display:block;font-size:10px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v104HeadText small{display:block;font-size:5.8px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v104HeadText em{display:block;font-style:normal;font-size:6.3px;font-weight:900;margin-top:1px}.v104Body{display:grid;grid-template-columns:auto 1fr;gap:6px;padding:5px 7px 3px;flex:1;min-height:0}.v104Photo{object-fit:cover;border:1px solid #d6dfeb;background:#eef2f7}.v104Info{min-width:0;align-self:center}.v104Name{font-size:12px;font-weight:950;line-height:1.05;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v104Line{font-size:8px;line-height:1.23;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v104Foot{font-size:6.5px;text-align:center;padding:2.5px 6px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.idCard.t1{border:1.5px solid #123d73}.idCard.t1 .v104Band{background:#123d73;color:#fff}.idCard.t1 .v104Foot{background:#e9f1fb;color:#123d73}.idCard.t2{border:1.5px solid #1768df}.idCard.t2 .v104Band{background:linear-gradient(90deg,#1768df,#79aff8);color:#fff}.idCard.t2 .v104Foot{background:#eef6ff;color:#0d4f9b}.idCard.t3{border:2px solid #138a52}.idCard.t3 .v104Band{background:#e8f8ef;color:#087c5b}.idCard.t3 .v104Foot{background:#138a52;color:#fff}.idCard.t4{border:2px solid #7c3aed}.idCard.t4 .v104Band{background:linear-gradient(90deg,#6d28d9,#9f67ff);color:#fff}.idCard.t4 .v104Foot{background:#f3ecff;color:#6d28d9}.idCard.t5{border:1.5px solid #1f2937}.idCard.t5 .v104Band{background:#111827;color:#fff}.idCard.t5 .v104Foot{background:#f1f5f9;color:#111827}.idCard.t6{border:2px solid #0f766e}.idCard.t6 .v104Band{background:linear-gradient(90deg,#0f766e,#14b8a6);color:#fff}.idCard.t6 .v104Foot{background:#ccfbf1;color:#115e59}.idCard.t7{border:2px solid #b45309}.idCard.t7 .v104Band{background:linear-gradient(90deg,#b45309,#f59e0b);color:#fff}.idCard.t7 .v104Foot{background:#fef3c7;color:#92400e}.idCard.t8{border:2px solid #be123c}.idCard.t8 .v104Band{background:linear-gradient(90deg,#be123c,#fb7185);color:#fff}.idCard.t8 .v104Foot{background:#ffe4e6;color:#9f1239}.idCard.t9{border:2px solid #0369a1}.idCard.t9 .v104Band{background:linear-gradient(90deg,#0369a1,#38bdf8);color:#fff}.idCard.t9 .v104Foot{background:#e0f2fe;color:#075985}.idCard.t10{border:2px solid #334155}.idCard.t10 .v104Band{background:linear-gradient(90deg,#334155,#64748b);color:#fff}.idCard.t10 .v104Foot{background:#f1f5f9;color:#334155}`}
-function idStudioPrint(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');w.document.write(`<html><head><title>ID Cards</title><style>${idStudioPrintCss()}</style></head><body>${el.innerHTML}
-<!-- ===== V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-<style id="v1142-master-final-nav-css">
-/* Additive shell patch only: DB, CRUD, permissions and module markup stay unchanged. */
-#erp.v90Shell,#erp.erp{position:relative!important;width:100%!important;max-width:100%!important}
-#erp.v90Shell main,#erp.erp main{width:100%!important;max-width:100%!important;margin-left:0!important;min-width:0!important}
-/* Same drawer behaviour on desktop and mobile: closed by default, opens only from Menu. */
-#erp.v90Shell aside,#erp.erp aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(84vw,310px)!important;max-width:310px!important;transform:translateX(-105%)!important;transition:transform .2s ease!important;z-index:2200!important;box-shadow:8px 0 30px #001b3b38!important}
-#erp.v90Shell aside.open,#erp.erp aside.open{transform:translateX(0)!important}
-#erp .erpTop{position:relative!important;z-index:100!important}
-#erp .hamb{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important}
-/* Full role wallpaper across the usable dashboard on every screen size. */
-#erp.roleWallpaper{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#erp.roleWallpaper main{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#parentPortal.parentWallpaper,#parentDashboard.parentWallpaper{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;min-height:100vh!important}
-/* Public mobile navigation is compact; large public tabs never occupy the front screen. */
-@media(max-width:900px){
- .v26Top{position:relative!important}
- .v26Menu{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:44px!important;min-height:44px!important}
- #v26Nav{display:none!important;position:absolute!important;left:auto!important;right:10px!important;top:calc(100% + 4px)!important;bottom:auto!important;width:min(88vw,310px)!important;max-height:72vh!important;padding:10px!important;border-radius:14px!important;z-index:2300!important;overflow:auto!important;box-shadow:0 16px 35px #001b3b45!important}
- #v26Nav.show{display:grid!important;grid-template-columns:1fr!important}
- #v26Nav:before{content:'🏫  SCHOOL MENU'!important;padding:8px 10px 12px!important}
- #v26Nav button{min-height:44px!important}
-}
-/* Header identity: address stays directly below school name and wraps safely. */
-.v26Brand>div{min-width:0!important}.v26Brand b,.v26Brand span{max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}
-/* One Back + one Home in ERP header. */
-#v1142ModuleBack,#v1142ModuleHome{min-height:42px!important;white-space:nowrap!important}
-@media(max-width:560px){#erp .erpTop{display:flex!important;flex-wrap:wrap!important;gap:7px!important}#erp .erpTop>*{min-width:0!important}#v1142ModuleBack,#v1142ModuleHome{padding:8px 10px!important;font-size:12px!important}}
-</style>
-<script id="v1142-master-final-nav-runtime">
-(()=>{
- 'use strict';
- window.V1142_MASTER_FINAL='2026-09-17-NAV2';
- const $=s=>document.querySelector(s);
- function closeDrawer(){const a=$('#erp aside');if(a)a.classList.remove('open')}
- function toggleDrawer(){const a=$('#erp aside');if(a)a.classList.toggle('open')}
- /* Override old desktop-permanent-sidebar patches with one drawer rule for all widths. */
- window.v58ToggleSidebar=function(){toggleDrawer();return false};
- function bindMenu(){const b=$('#erp .hamb');if(!b)return;b.textContent='☰ Menu';b.onclick=window.v58ToggleSidebar}
- document.addEventListener('click',e=>{if(e.target.closest('#erpNav button,#erpNav a'))setTimeout(closeDrawer,0)},true);
- /* Keep Supabase's existing persistent session; this file already initializes auth with persistSession:true. Logout remains authoritative. */
- let route='dashboard', stack=[], suppress=false;
- const baseRender=window.render;
- if(typeof baseRender==='function'){
-   window.render=function(p){
-     p=String(p||'dashboard');
-     if(!suppress && route && p!==route){stack.push(route);if(stack.length>40)stack.shift()}
-     route=p;const r=baseRender.apply(this,arguments);setTimeout(()=>{closeDrawer();ensureNav();},0);return r;
-   };
- }
- window.v1142ModuleBack=function(){
-   const prev=stack.pop();if(!prev)return;
-   suppress=true;try{window.render(prev)}finally{suppress=false}
- };
- window.v1142ModuleHome=function(){
-   if(route==='dashboard')return;stack.push(route);suppress=true;try{window.render('dashboard');route='dashboard'}finally{suppress=false}
- };
- function ensureNav(){
-   bindMenu();const h=$('#erp .erpTop');if(!h)return;
-   /* Remove only duplicate legacy Home/Back controls in this header; module content buttons are untouched. */
-   [...h.querySelectorAll('button')].forEach(b=>{const t=(b.textContent||'').trim().toLowerCase();if((/^🏠?\s*home$/.test(t)||/^←?\s*back$/.test(t)||/^⬅\s*back$/.test(t))&&!['v1142ModuleBack','v1142ModuleHome'].includes(b.id))b.remove()});
-   let back=$('#v1142ModuleBack');if(!back){back=document.createElement('button');back.id='v1142ModuleBack';back.className='erpHomeBtn';back.textContent='← Back';back.onclick=window.v1142ModuleBack;h.insertBefore(back,h.children[1]||null)}
-   let home=$('#v1142ModuleHome');if(!home){home=document.createElement('button');home.id='v1142ModuleHome';home.className='erpHomeBtn';home.textContent='🏠 Home';home.onclick=window.v1142ModuleHome;h.insertBefore(home,back.nextSibling)}
- }
- /* Public menu: close after selection and suppress accidental rapid repeat taps without changing public functions. */
- let lastPublicTap=0;
- document.addEventListener('click',e=>{
-   const b=e.target.closest('#v26Nav button');if(!b)return;
-   const now=Date.now();if(now-lastPublicTap<450){e.preventDefault();e.stopImmediatePropagation();return}lastPublicTap=now;
-   setTimeout(()=>$('#v26Nav')?.classList.remove('show'),0);
- },true);
- /* Keep displayed public identity synced with existing school settings; fallback is the address already used by V114.2. */
- function syncIdentity(){try{const brand=$('.v26Brand');if(!brand)return;const name=brand.querySelector('b'),addr=brand.querySelector('span');if(name)name.textContent=window.school?.school_name||'L D MODERN EDUCATION ACADEMY';if(addr)addr.textContent=window.school?.address||'GAMBHIRIYA BUJURG, SINGHAPATTI, KUSHINAGAR'}catch(_e){}}
- function init(){ensureNav();syncIdentity();closeDrawer()}
- document.addEventListener('DOMContentLoaded',()=>setTimeout(init,80));
- window.addEventListener('load',()=>setTimeout(init,220));
- window.addEventListener('resize',()=>setTimeout(()=>{closeDrawer();ensureNav()},50),{passive:true});
- const mo=new MutationObserver(()=>{clearTimeout(window.__v1142NavTimer);window.__v1142NavTimer=setTimeout(()=>{ensureNav();syncIdentity()},80)});
- document.addEventListener('DOMContentLoaded',()=>{if(document.body)mo.observe(document.body,{childList:true,subtree:true})});
-})();
-</script>
-<!-- ===== /V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-
-</body></html>`);w.document.close();setTimeout(()=>w.print(),350)}
+function idStudioPrint(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');w.document.write(`<html><head><title>ID Cards</title><style>${idStudioPrintCss()}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();setTimeout(()=>w.print(),350)}
 function idStudioPdf(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class';html2pdf().set({margin:0,filename:`${c}-ID-Cards-A4-10.pdf`,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()}
 async function findIdStudent(){let z=String($('idSearch')?.value||'').trim();if(idStudioRows.length){idStudioRenderStudentList();return}if(!z)return toast('Search text डालें या Class चुनें');let safe=z.replace(/[%_,]/g,' ');let{data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${safe}%,father_name.ilike.%${safe}%,roll_no.ilike.%${safe}%,admission_no.ilike.%${safe}%`).limit(50);if(error)return toast(error.message);idStudioRows=idStudioSortRows(data||[]);idStudioRenderStudentList()}
 async function loadIdStudent(id){let{data:s,error}=await sb.from('students').select('*').eq('id',id).single();if(error)return toast(error.message);await v14AttachSignedPhotos([s]);idStudioRows=[s];idStudioSelected=new Set([String(s.id)]);idStudioUpdateSelectedCount();idStudioPreview()}
@@ -5137,7 +4969,7 @@ window.addEventListener('load',()=>setTimeout(()=>{
 },160));
 </script>
 
-<script id="v59-final-runtime">
+\n<script id="v59-final-runtime">
 const V59_BUILD='V59-V52-PANEL-CLASSIC-SIDEBAR-ORDERS-AUTO-ADMISSION';
 
 /* ---------- Classic Admin sidebar: larger single items ---------- */
@@ -5321,8 +5153,7 @@ const v59RenderBase=render;
 render=function(p){const r=v59RenderBase(p);Promise.resolve(r).finally(()=>setTimeout(()=>{if(v14Admin())v59AdminSidebar();else if(v14Teacher())v59TeacherSidebar();document.querySelectorAll('#erpNav button').forEach(b=>b.classList.toggle('active',b.dataset.route===p))},0));return r};
 
 window.addEventListener('load',()=>setTimeout(()=>{if(user){if(v14Admin())v59AdminSidebar();else if(v14Teacher())v59TeacherSidebar()}},180));
-</script>
-
+</script>\n
 <script id="v60-student-import-safe-match">
 /* =========================================================
    V60 — SAFE STUDENT EXCEL MATCHING
@@ -6643,91 +6474,7 @@ async function v69ToggleHold(i,hold){let s=v69Candidates[i];if(!s)return;if(hold
 function v69SelectedStudents(){return [...document.querySelectorAll('.v69CandCheck:checked')].map(x=>v69Candidates[Number(x.dataset.i)]).filter(Boolean)}
 function v69CardHtml(s){let rows=v69Timetable.filter(x=>String(x.class_name)===String(s.class_name)).sort((a,b)=>String(a.exam_date).localeCompare(String(b.exam_date))||String(a.start_time||'').localeCompare(String(b.start_time||'')));let logo=document.querySelector('.v26Brand img')?.src||$('pubLogo')?.src||school?.logo_url||new URL('school-logo.png',location.href).href,inst=v69CurrentExam?.instructions||'Bring this Admit Card and School ID. Reach the examination room on time.';return `<article class="v69AdmitCard"><div class="v69AdmitHead"><img src="${esc(logo)}" alt="Logo"><div class="v69School"><b>${esc(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b><span>${esc(school?.address||'GAMBHIRIYA BUJURG, SINGHAPATTI-KUSHINAGAR')}</span><strong>${esc(v69CurrentExam?.exam_name||'EXAMINATION')} • ADMIT CARD • ${esc(v69CurrentExam?.academic_session||'')}</strong></div><div class="seal">PHOTO / SEAL</div></div><div class="v69StudentInfo"><div><b>STUDENT ID</b><br>${esc(s.student_id||s.admission_no||'')}</div><div><b>NAME</b><br>${esc(s.student_name||'')}</div><div><b>FATHER</b><br>${esc(s.father_name||'')}</div><div><b>CLASS / ROLL</b><br>${esc(s.class_name||'')} / ${esc(s.roll_no||'—')}</div><div><b>ADMISSION NO.</b><br>${esc(s.admission_no||'')}</div><div><b>SESSION</b><br>${esc(v69CurrentExam?.academic_session||'')}</div><div><b>EXAM</b><br>${esc(v69CurrentExam?.exam_name||'')}</div><div><b>STATUS</b><br>ELIGIBLE</div></div><table class="v69TT"><tr><th>Date</th><th>Subject</th><th>Time</th></tr>${rows.length?rows.map(r=>`<tr><td>${esc(v69FmtDate(r.exam_date))}</td><td>${esc(r.subject_name||'')}</td><td>${esc(v69FmtTime(r.start_time))} - ${esc(v69FmtTime(r.end_time))}</td></tr>`).join(''):'<tr><td colspan="3">Timetable not set for this class</td></tr>'}</table><div class="v69AdmitFoot"><div class="v69Instructions"><b>Instructions:</b> ${esc(inst)}</div><div class="v69Sign">Principal / Director</div></div></article>`}
 function v69GenerateCards(){if(!v69CurrentExam)return toast('Exam select करें');let ss=v69SelectedStudents();if(!ss.length){$('v69Preview').innerHTML='<div class="empty">Print के लिए eligible students select करें.</div>';return}let pages=[];for(let i=0;i<ss.length;i+=3)pages.push(`<section class="v69PrintPage">${ss.slice(i,i+3).map(v69CardHtml).join('')}</section>`);$('v69Preview').innerHTML=`<div class="v69PreviewShell"><div id="v69PrintArea">${pages.join('')}</div></div><div class="saveStatus saveOk">✓ ${ss.length} Admit Card ready • ${pages.length} A4 page(s) • Maximum 3 cards per page</div>`}
-function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCards();area=$('v69PrintArea')}if(!area)return toast('पहले Admit Cards generate करें');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111}.v69PrintPage{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v69PrintPage:last-child{page-break-after:auto}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a;padding:.8mm 1mm;text-align:center;font-size:6.5px;line-height:1.05}.v69TT th{background:#edf3f9}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm}`;w.document.write(`<html><head><title>${esc(v69CurrentExam?.exam_name||'Exam')} Admit Cards</title><style>${css}</style></head><body>${area.innerHTML}
-<!-- ===== V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-<style id="v1142-master-final-nav-css">
-/* Additive shell patch only: DB, CRUD, permissions and module markup stay unchanged. */
-#erp.v90Shell,#erp.erp{position:relative!important;width:100%!important;max-width:100%!important}
-#erp.v90Shell main,#erp.erp main{width:100%!important;max-width:100%!important;margin-left:0!important;min-width:0!important}
-/* Same drawer behaviour on desktop and mobile: closed by default, opens only from Menu. */
-#erp.v90Shell aside,#erp.erp aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(84vw,310px)!important;max-width:310px!important;transform:translateX(-105%)!important;transition:transform .2s ease!important;z-index:2200!important;box-shadow:8px 0 30px #001b3b38!important}
-#erp.v90Shell aside.open,#erp.erp aside.open{transform:translateX(0)!important}
-#erp .erpTop{position:relative!important;z-index:100!important}
-#erp .hamb{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important}
-/* Full role wallpaper across the usable dashboard on every screen size. */
-#erp.roleWallpaper{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#erp.roleWallpaper main{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#parentPortal.parentWallpaper,#parentDashboard.parentWallpaper{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;min-height:100vh!important}
-/* Public mobile navigation is compact; large public tabs never occupy the front screen. */
-@media(max-width:900px){
- .v26Top{position:relative!important}
- .v26Menu{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:44px!important;min-height:44px!important}
- #v26Nav{display:none!important;position:absolute!important;left:auto!important;right:10px!important;top:calc(100% + 4px)!important;bottom:auto!important;width:min(88vw,310px)!important;max-height:72vh!important;padding:10px!important;border-radius:14px!important;z-index:2300!important;overflow:auto!important;box-shadow:0 16px 35px #001b3b45!important}
- #v26Nav.show{display:grid!important;grid-template-columns:1fr!important}
- #v26Nav:before{content:'🏫  SCHOOL MENU'!important;padding:8px 10px 12px!important}
- #v26Nav button{min-height:44px!important}
-}
-/* Header identity: address stays directly below school name and wraps safely. */
-.v26Brand>div{min-width:0!important}.v26Brand b,.v26Brand span{max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}
-/* One Back + one Home in ERP header. */
-#v1142ModuleBack,#v1142ModuleHome{min-height:42px!important;white-space:nowrap!important}
-@media(max-width:560px){#erp .erpTop{display:flex!important;flex-wrap:wrap!important;gap:7px!important}#erp .erpTop>*{min-width:0!important}#v1142ModuleBack,#v1142ModuleHome{padding:8px 10px!important;font-size:12px!important}}
-</style>
-<script id="v1142-master-final-nav-runtime">
-(()=>{
- 'use strict';
- window.V1142_MASTER_FINAL='2026-09-17-NAV2';
- const $=s=>document.querySelector(s);
- function closeDrawer(){const a=$('#erp aside');if(a)a.classList.remove('open')}
- function toggleDrawer(){const a=$('#erp aside');if(a)a.classList.toggle('open')}
- /* Override old desktop-permanent-sidebar patches with one drawer rule for all widths. */
- window.v58ToggleSidebar=function(){toggleDrawer();return false};
- function bindMenu(){const b=$('#erp .hamb');if(!b)return;b.textContent='☰ Menu';b.onclick=window.v58ToggleSidebar}
- document.addEventListener('click',e=>{if(e.target.closest('#erpNav button,#erpNav a'))setTimeout(closeDrawer,0)},true);
- /* Keep Supabase's existing persistent session; this file already initializes auth with persistSession:true. Logout remains authoritative. */
- let route='dashboard', stack=[], suppress=false;
- const baseRender=window.render;
- if(typeof baseRender==='function'){
-   window.render=function(p){
-     p=String(p||'dashboard');
-     if(!suppress && route && p!==route){stack.push(route);if(stack.length>40)stack.shift()}
-     route=p;const r=baseRender.apply(this,arguments);setTimeout(()=>{closeDrawer();ensureNav();},0);return r;
-   };
- }
- window.v1142ModuleBack=function(){
-   const prev=stack.pop();if(!prev)return;
-   suppress=true;try{window.render(prev)}finally{suppress=false}
- };
- window.v1142ModuleHome=function(){
-   if(route==='dashboard')return;stack.push(route);suppress=true;try{window.render('dashboard');route='dashboard'}finally{suppress=false}
- };
- function ensureNav(){
-   bindMenu();const h=$('#erp .erpTop');if(!h)return;
-   /* Remove only duplicate legacy Home/Back controls in this header; module content buttons are untouched. */
-   [...h.querySelectorAll('button')].forEach(b=>{const t=(b.textContent||'').trim().toLowerCase();if((/^🏠?\s*home$/.test(t)||/^←?\s*back$/.test(t)||/^⬅\s*back$/.test(t))&&!['v1142ModuleBack','v1142ModuleHome'].includes(b.id))b.remove()});
-   let back=$('#v1142ModuleBack');if(!back){back=document.createElement('button');back.id='v1142ModuleBack';back.className='erpHomeBtn';back.textContent='← Back';back.onclick=window.v1142ModuleBack;h.insertBefore(back,h.children[1]||null)}
-   let home=$('#v1142ModuleHome');if(!home){home=document.createElement('button');home.id='v1142ModuleHome';home.className='erpHomeBtn';home.textContent='🏠 Home';home.onclick=window.v1142ModuleHome;h.insertBefore(home,back.nextSibling)}
- }
- /* Public menu: close after selection and suppress accidental rapid repeat taps without changing public functions. */
- let lastPublicTap=0;
- document.addEventListener('click',e=>{
-   const b=e.target.closest('#v26Nav button');if(!b)return;
-   const now=Date.now();if(now-lastPublicTap<450){e.preventDefault();e.stopImmediatePropagation();return}lastPublicTap=now;
-   setTimeout(()=>$('#v26Nav')?.classList.remove('show'),0);
- },true);
- /* Keep displayed public identity synced with existing school settings; fallback is the address already used by V114.2. */
- function syncIdentity(){try{const brand=$('.v26Brand');if(!brand)return;const name=brand.querySelector('b'),addr=brand.querySelector('span');if(name)name.textContent=window.school?.school_name||'L D MODERN EDUCATION ACADEMY';if(addr)addr.textContent=window.school?.address||'GAMBHIRIYA BUJURG, SINGHAPATTI, KUSHINAGAR'}catch(_e){}}
- function init(){ensureNav();syncIdentity();closeDrawer()}
- document.addEventListener('DOMContentLoaded',()=>setTimeout(init,80));
- window.addEventListener('load',()=>setTimeout(init,220));
- window.addEventListener('resize',()=>setTimeout(()=>{closeDrawer();ensureNav()},50),{passive:true});
- const mo=new MutationObserver(()=>{clearTimeout(window.__v1142NavTimer);window.__v1142NavTimer=setTimeout(()=>{ensureNav();syncIdentity()},80)});
- document.addEventListener('DOMContentLoaded',()=>{if(document.body)mo.observe(document.body,{childList:true,subtree:true})});
-})();
-</script>
-<!-- ===== /V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-
-</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
+function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCards();area=$('v69PrintArea')}if(!area)return toast('पहले Admit Cards generate करें');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111}.v69PrintPage{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v69PrintPage:last-child{page-break-after:auto}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a;padding:.8mm 1mm;text-align:center;font-size:6.5px;line-height:1.05}.v69TT th{background:#edf3f9}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm}`;w.document.write(`<html><head><title>${esc(v69CurrentExam?.exam_name||'Exam')} Admit Cards</title><style>${css}</style></head><body>${area.innerHTML}</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
 
 const v69RenderBase=render;
 render=async function(p){if(p==='exam_admit_center'){try{v671ResetERPViewport?.()}catch(_e){}return v69ExamAdmitCenter()}return v69RenderBase(p)};
@@ -8089,91 +7836,7 @@ let v92Exams=[],v92Candidates=[],v92PubMap={};
 
 function v92PrintCss(){return `@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111;background:#fff}.v92A4Page{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v92A4Page:last-child{page-break-after:auto}.v92BlankSlot{height:89mm}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;background:#fff;color:#111;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91;overflow:hidden}.v69AdmitHead .seal img{width:14mm!important;height:14mm!important;object-fit:cover!important;border-radius:2mm!important}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse!important;min-width:0!important;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a!important;padding:.8mm 1mm!important;text-align:center!important;font-size:6.5px!important;line-height:1.05}.v69TT th{background:#edf3f9!important}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm;color:#333}`}
 
-window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');w.document.write(`<html><head><title>Admit Card A4</title><style>${v92PrintCss()}</style></head><body>${el.innerHTML}
-<!-- ===== V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-<style id="v1142-master-final-nav-css">
-/* Additive shell patch only: DB, CRUD, permissions and module markup stay unchanged. */
-#erp.v90Shell,#erp.erp{position:relative!important;width:100%!important;max-width:100%!important}
-#erp.v90Shell main,#erp.erp main{width:100%!important;max-width:100%!important;margin-left:0!important;min-width:0!important}
-/* Same drawer behaviour on desktop and mobile: closed by default, opens only from Menu. */
-#erp.v90Shell aside,#erp.erp aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(84vw,310px)!important;max-width:310px!important;transform:translateX(-105%)!important;transition:transform .2s ease!important;z-index:2200!important;box-shadow:8px 0 30px #001b3b38!important}
-#erp.v90Shell aside.open,#erp.erp aside.open{transform:translateX(0)!important}
-#erp .erpTop{position:relative!important;z-index:100!important}
-#erp .hamb{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important}
-/* Full role wallpaper across the usable dashboard on every screen size. */
-#erp.roleWallpaper{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#erp.roleWallpaper main{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#parentPortal.parentWallpaper,#parentDashboard.parentWallpaper{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;min-height:100vh!important}
-/* Public mobile navigation is compact; large public tabs never occupy the front screen. */
-@media(max-width:900px){
- .v26Top{position:relative!important}
- .v26Menu{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:44px!important;min-height:44px!important}
- #v26Nav{display:none!important;position:absolute!important;left:auto!important;right:10px!important;top:calc(100% + 4px)!important;bottom:auto!important;width:min(88vw,310px)!important;max-height:72vh!important;padding:10px!important;border-radius:14px!important;z-index:2300!important;overflow:auto!important;box-shadow:0 16px 35px #001b3b45!important}
- #v26Nav.show{display:grid!important;grid-template-columns:1fr!important}
- #v26Nav:before{content:'🏫  SCHOOL MENU'!important;padding:8px 10px 12px!important}
- #v26Nav button{min-height:44px!important}
-}
-/* Header identity: address stays directly below school name and wraps safely. */
-.v26Brand>div{min-width:0!important}.v26Brand b,.v26Brand span{max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}
-/* One Back + one Home in ERP header. */
-#v1142ModuleBack,#v1142ModuleHome{min-height:42px!important;white-space:nowrap!important}
-@media(max-width:560px){#erp .erpTop{display:flex!important;flex-wrap:wrap!important;gap:7px!important}#erp .erpTop>*{min-width:0!important}#v1142ModuleBack,#v1142ModuleHome{padding:8px 10px!important;font-size:12px!important}}
-</style>
-<script id="v1142-master-final-nav-runtime">
-(()=>{
- 'use strict';
- window.V1142_MASTER_FINAL='2026-09-17-NAV2';
- const $=s=>document.querySelector(s);
- function closeDrawer(){const a=$('#erp aside');if(a)a.classList.remove('open')}
- function toggleDrawer(){const a=$('#erp aside');if(a)a.classList.toggle('open')}
- /* Override old desktop-permanent-sidebar patches with one drawer rule for all widths. */
- window.v58ToggleSidebar=function(){toggleDrawer();return false};
- function bindMenu(){const b=$('#erp .hamb');if(!b)return;b.textContent='☰ Menu';b.onclick=window.v58ToggleSidebar}
- document.addEventListener('click',e=>{if(e.target.closest('#erpNav button,#erpNav a'))setTimeout(closeDrawer,0)},true);
- /* Keep Supabase's existing persistent session; this file already initializes auth with persistSession:true. Logout remains authoritative. */
- let route='dashboard', stack=[], suppress=false;
- const baseRender=window.render;
- if(typeof baseRender==='function'){
-   window.render=function(p){
-     p=String(p||'dashboard');
-     if(!suppress && route && p!==route){stack.push(route);if(stack.length>40)stack.shift()}
-     route=p;const r=baseRender.apply(this,arguments);setTimeout(()=>{closeDrawer();ensureNav();},0);return r;
-   };
- }
- window.v1142ModuleBack=function(){
-   const prev=stack.pop();if(!prev)return;
-   suppress=true;try{window.render(prev)}finally{suppress=false}
- };
- window.v1142ModuleHome=function(){
-   if(route==='dashboard')return;stack.push(route);suppress=true;try{window.render('dashboard');route='dashboard'}finally{suppress=false}
- };
- function ensureNav(){
-   bindMenu();const h=$('#erp .erpTop');if(!h)return;
-   /* Remove only duplicate legacy Home/Back controls in this header; module content buttons are untouched. */
-   [...h.querySelectorAll('button')].forEach(b=>{const t=(b.textContent||'').trim().toLowerCase();if((/^🏠?\s*home$/.test(t)||/^←?\s*back$/.test(t)||/^⬅\s*back$/.test(t))&&!['v1142ModuleBack','v1142ModuleHome'].includes(b.id))b.remove()});
-   let back=$('#v1142ModuleBack');if(!back){back=document.createElement('button');back.id='v1142ModuleBack';back.className='erpHomeBtn';back.textContent='← Back';back.onclick=window.v1142ModuleBack;h.insertBefore(back,h.children[1]||null)}
-   let home=$('#v1142ModuleHome');if(!home){home=document.createElement('button');home.id='v1142ModuleHome';home.className='erpHomeBtn';home.textContent='🏠 Home';home.onclick=window.v1142ModuleHome;h.insertBefore(home,back.nextSibling)}
- }
- /* Public menu: close after selection and suppress accidental rapid repeat taps without changing public functions. */
- let lastPublicTap=0;
- document.addEventListener('click',e=>{
-   const b=e.target.closest('#v26Nav button');if(!b)return;
-   const now=Date.now();if(now-lastPublicTap<450){e.preventDefault();e.stopImmediatePropagation();return}lastPublicTap=now;
-   setTimeout(()=>$('#v26Nav')?.classList.remove('show'),0);
- },true);
- /* Keep displayed public identity synced with existing school settings; fallback is the address already used by V114.2. */
- function syncIdentity(){try{const brand=$('.v26Brand');if(!brand)return;const name=brand.querySelector('b'),addr=brand.querySelector('span');if(name)name.textContent=window.school?.school_name||'L D MODERN EDUCATION ACADEMY';if(addr)addr.textContent=window.school?.address||'GAMBHIRIYA BUJURG, SINGHAPATTI, KUSHINAGAR'}catch(_e){}}
- function init(){ensureNav();syncIdentity();closeDrawer()}
- document.addEventListener('DOMContentLoaded',()=>setTimeout(init,80));
- window.addEventListener('load',()=>setTimeout(init,220));
- window.addEventListener('resize',()=>setTimeout(()=>{closeDrawer();ensureNav()},50),{passive:true});
- const mo=new MutationObserver(()=>{clearTimeout(window.__v1142NavTimer);window.__v1142NavTimer=setTimeout(()=>{ensureNav();syncIdentity()},80)});
- document.addEventListener('DOMContentLoaded',()=>{if(document.body)mo.observe(document.body,{childList:true,subtree:true})});
-})();
-</script>
-<!-- ===== /V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-
-</body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
+window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');w.document.write(`<html><head><title>Admit Card A4</title><style>${v92PrintCss()}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
 window.v92PdfArea=function(id,name){let el=q92(id);if(!el)return toast('Preview first');if(!window.html2pdf)return v92PrintArea(id);let opt={margin:[10,10,10,10],filename:name||'admit-cards.pdf',image:{type:'jpeg',quality:.94},html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};html2pdf().set(opt).from(el).save();};
 
 function v92BuildPages(cards){let pages=[];for(let i=0;i<cards.length;i+=3){let chunk=cards.slice(i,i+3),html=chunk.map(x=>v75ParentAdmitHtml(x)).join('');for(let j=chunk.length;j<3;j++)html+='<div class="v92BlankSlot"></div>';pages.push(`<section class="v92A4Page">${html}</section>`)}return pages.join('')}
@@ -9710,267 +9373,99 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 
 <script src="public-final.js?v=FINAL3"></script>
 
-<!-- LD MODERN V114.2 MASTER SAFE CORRECTION 2026-09-17 -->
-<style id="v1142-master-safe-css">
-/* Responsive shell: additive only; existing feature styles remain authoritative. */
-html,body{max-width:100%;overflow-x:hidden}
-#publicSite,#erp,#erpContent,#parentPortal,.v90Page,.v39Dash{max-width:100%;min-width:0}
-#erp main,#erpContent,.v90Page,.v39Dash,.v114AdminFeedGrid,.v39Stats,.v90MonitorGrid{min-width:0}
-img,svg,video,canvas{max-width:100%;height:auto}
-input,select,textarea,button{max-width:100%;box-sizing:border-box}
-.v114AdminFeedGrid>* ,.v39Stats>* ,.v90MonitorGrid>*{min-width:0}
-@media (max-width:900px){
-  #erp{width:100%;max-width:100%;overflow-x:hidden}
-  #erp main,#erpContent{width:100%;max-width:100%;min-width:0;margin-left:0!important}
-  #erpNav{max-width:min(86vw,320px)}
-  .v39Hero,.v39Topbar,.v39Stats,.v114AdminFeedGrid,.v90MonitorGrid{grid-template-columns:1fr!important}
-  .v39Hero,.v39Topbar{display:flex!important;flex-wrap:wrap!important}
-  .v39Hero>* ,.v39Topbar>*{min-width:0;max-width:100%}
-  table{max-width:100%}
-  .tableWrap,.v90TableWrap,.tableScroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
-}
-@media (max-width:480px){
-  #erpContent{padding-left:10px!important;padding-right:10px!important}
-  .v90Panel,.panel,.v39Panel{max-width:100%;min-width:0}
-  .v39HeroActions,.tools,.actions,.v95PwActions{display:flex;flex-wrap:wrap;gap:8px}
-}
-/* Device-independent fixed print/PDF layout. */
-@page{size:A4;margin:10mm}
-@media print{
-  html,body{width:210mm!important;max-width:210mm!important;background:#fff!important;overflow:visible!important}
-  body *{box-sizing:border-box}
-  .no-print,.sidebar,#erpNav,.mobileMenu,.menuToggle{display:none!important}
-  .printArea,.pdfArea,.a4,.a4-page,[data-print-page]{width:190mm!important;max-width:190mm!important;margin:0 auto!important;overflow:visible!important;box-shadow:none!important;transform:none!important}
-  img{max-width:100%!important;page-break-inside:avoid}
-  table{width:100%!important;border-collapse:collapse;page-break-inside:auto}
-  tr,.card,.panel,.v90Panel{page-break-inside:avoid;break-inside:avoid}
-}
-.v1142Greeting{font-weight:800;line-height:1.25;white-space:normal}
+<!-- ===== V117 FUNCTION-ONLY SAFE PATCH • 2026-09-17 ===== -->
+<style id="v117-function-only-style">
+/* Only functional overlays. Existing public website/dashboard design is intentionally untouched. */
+#v117ParentFocus{position:fixed;inset:0;z-index:99990;background:#f6f8fc;overflow:auto;padding:12px}
+#v117ParentFocus .v117Head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e2e9f2;border-radius:12px;padding:9px;margin-bottom:10px}
+#v117ParentFocus .v117Head h3{flex:1;margin:0;text-align:center}
+#v117ParentFocus .v117Head button{border:1px solid #d6dfeb;background:#fff;border-radius:9px;padding:9px 11px;font-weight:800}
+#v117ParentFocus .v117Body{max-width:1200px;margin:auto}
+#v117FirstPw{position:fixed;inset:0;z-index:999999;background:#06152bcc;display:grid;place-items:center;padding:16px}
+#v117FirstPw.hidden{display:none!important}#v117FirstPw .v117PwCard{width:min(460px,100%);background:#fff;border-radius:18px;padding:20px}
+#v117FirstPw input,#v117FirstPw button{width:100%;padding:11px;margin-top:8px;border-radius:9px}#v117FirstPw input{border:1px solid #d5deea}#v117FirstPw button{border:0;background:#1768df;color:#fff;font-weight:900}.v117Msg{font-size:12px;margin-top:8px;color:#9b2c2c;font-weight:800}
 </style>
-<script id="v1142-master-safe-runtime">
+<script id="v117-function-only-runtime">
 (()=>{
- 'use strict';
- window.V1142_MASTER_SAFE='2026-09-17';
- const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
- const role=()=>String((window.profile&&window.profile.role)||'').toLowerCase();
- function greeting(){const h=new Date().getHours();return h<12?'सुप्रभात • Good Morning':h<17?'नमस्कार • Good Afternoon':h<21?'शुभ संध्या • Good Evening':'शुभ रात्रि • Good Night'}
- function person(){try{return String(window.profile?.full_name||window.v14TeacherProfile?.teacher_name||'').trim()}catch(_e){return ''}}
- function installGreeting(){
-   const r=role(); if(!r)return;
-   let host=q('#v1142AutoGreeting');
-   if(!host){host=document.createElement('div');host.id='v1142AutoGreeting';host.className='v1142Greeting';
-     const target=q('#erp .topbar')||q('#erp header')||q('#erpContent .v39HeroCopy')||q('#erpContent .teacherTop')||q('#parentPortal header');
-     if(target)target.prepend(host); else return;
-   }
-   const label=r==='teacher'?'Teacher':(['admin','super_admin','principal'].includes(r)?'Admin':(['parent','student'].includes(r)?'Parent / Student':''));
-   host.textContent=`${greeting()}${person()?', '+person():label?', '+label:''}`;
- }
- function dedupeNav(){
-   const scopes=['#erp','#parentPortal'];
-   scopes.forEach(sc=>{
-     const root=q(sc);if(!root)return;
-     ['home','back'].forEach(kind=>{
-       const candidates=[...root.querySelectorAll('button,a')].filter(el=>{
-         const t=(el.textContent||'').trim().toLowerCase(), oc=(el.getAttribute('onclick')||'').toLowerCase(), ar=(el.getAttribute('aria-label')||'').toLowerCase();
-         return kind==='home'?(ar==='home'||/^🏠\s*home$/.test(t)||oc==="render('dashboard')"||oc==='render("dashboard")'):(ar==='back'||/^←?\s*back$/.test(t)||/^⬅\s*back$/.test(t));
-       });
-       candidates.slice(1).forEach(el=>el.remove());
-     });
-   });
- }
- function closeMobileNav(){
-   if(innerWidth>900)return;
-   document.body.classList.remove('sidebar-open','nav-open','menu-open','v1142-sidebar-open');
-   q('#erp')?.classList.remove('sidebar-open','nav-open','menu-open');
-   q('#erpNav')?.classList.remove('open','show','active');
- }
- document.addEventListener('click',e=>{if(innerWidth<=900&&e.target.closest('#erpNav button,#erpNav a'))setTimeout(closeMobileNav,0)},true);
- function cleanStrayNN(){
-   const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
-   while(n=w.nextNode()){if(/^\s*(?:n\s*[\\/]?\s*n|\\n\s*\\n)\s*$/i.test(n.nodeValue||''))n.nodeValue=''}
- }
- function refresh(){try{dedupeNav();installGreeting();cleanStrayNN()}catch(_e){}}
- const mo=new MutationObserver(()=>{clearTimeout(window.__v1142MasterTimer);window.__v1142MasterTimer=setTimeout(refresh,60)});
- document.addEventListener('DOMContentLoaded',()=>{refresh();mo.observe(document.body,{childList:true,subtree:true});setInterval(installGreeting,60000)});
- window.addEventListener('load',()=>setTimeout(refresh,180));
- window.addEventListener('resize',()=>{if(innerWidth<=900)closeMobileNav()},{passive:true});
+'use strict';
+if(window.__V117_FUNCTION_ONLY)return; window.__V117_FUNCTION_ONLY=true;
+window.V117_BUILD='V117-FUNCTION-ONLY-SAFE-2026-09-17';
+const q=s=>document.querySelector(s), safe=v=>typeof window.esc==='function'?esc(v??''):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
- /* Primary Admin recovery UI: require identifier before request; browser cooldown reduces accidental/repeated sends.
-    The /api/admin-forgot endpoint remains the authority and must verify the identifier server-side. */
- window.v95AdminForgot=function(){
-   if(document.getElementById('v95AdminRecoveryModal'))return;
-   const wrap=document.createElement('div');wrap.id='v95AdminRecoveryModal';wrap.className='v14Modal';
-   wrap.innerHTML=`<div class="v14ModalCard"><button class="v14Close" onclick="this.closest('.v14Modal').remove()">×</button><h2>🔐 Primary Admin Forgot Password</h2><div class="v95AdminRecoveryCard"><p>पहले अपना registered Admin ID / Mobile / Email डालें. सही Primary Admin identifier verify होने पर ही recovery request स्वीकार होनी चाहिए.</p><label>Admin ID / Mobile / Email<input id="v1142AdminRecoveryId" autocomplete="username" placeholder="Registered Admin identifier"></label><div class="safe">✓ Primary Admin only • ✓ Teacher/Parent recovery बंद • ✓ repeated request cooldown</div><button id="v95SendRecovery" class="v14Action primary" onclick="v95SendAdminRecovery()">Verify & Send Recovery Link</button><div id="v95RecoveryStatus" class="v95PolicyNote">गलत/खाली identifier पर request आगे नहीं जाएगी.</div></div></div>`;
-   document.body.appendChild(wrap)
- };
- window.v95SendAdminRecovery=async function(){
-   const b=document.getElementById('v95SendRecovery'),st=document.getElementById('v95RecoveryStatus'),id=String(document.getElementById('v1142AdminRecoveryId')?.value||'').trim();
-   if(!id){if(st)st.textContent='पहले registered Admin ID / Mobile / Email डालें.';return}
-   const key='ld_admin_recovery_last',now=Date.now(),last=Number(localStorage.getItem(key)||0),wait=120000-(now-last);
-   if(wait>0){if(st)st.textContent=`कृपया ${Math.ceil(wait/1000)} seconds बाद दोबारा कोशिश करें.`;return}
-   if(b)b.disabled=true;if(st)st.textContent='Primary Admin identifier verify किया जा रहा है...';
-   try{
-     const r=await fetch('/api/admin-forgot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier:id})});
-     const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Admin identifier verify/recovery request failed');
-     localStorage.setItem(key,String(now));if(st)st.innerHTML=`<b>✓ Recovery request accepted</b><br>${typeof esc==='function'?esc(j.message||'Registered Primary Admin recovery address check करें.'):String(j.message||'Registered Primary Admin recovery address check करें.')}`;
-   }catch(e){if(st)st.textContent='Recovery: '+(e.message||String(e))}finally{if(b)setTimeout(()=>b.disabled=false,2500)}
- };
+/* 1) Keep only canonical V90 Back/Home when the modern ERP shell is active. */
+function dedupeNav(){
+ const erp=q('#erp'); if(!erp)return;
+ if(q('#v90BackBtn')||q('#v90HomeBtn')){
+   erp.querySelectorAll('.v45NavControls,.erpHomeBtn').forEach(x=>x.style.display='none');
+   [...erp.querySelectorAll('#v90BackBtn')].slice(1).forEach(x=>x.remove());
+   [...erp.querySelectorAll('#v90HomeBtn')].slice(1).forEach(x=>x.remove());
+ }
+}
+/* Mobile drawer closes after selecting a module. Desktop layout is not changed. */
+document.addEventListener('click',e=>{if(innerWidth<=900&&e.target.closest('#erp aside nav button,#erp aside nav a'))setTimeout(()=>q('#erp aside')?.classList.remove('open'),0)},true);
+
+/* 2) Remove only a standalone stray n/n or literal \\n\\n text node; never alter JS/data strings. */
+function cleanStrayNN(){
+ if(!document.body)return; const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n;
+ while(n=w.nextNode()){const t=String(n.nodeValue||'').trim();if(/^(?:n\s*\/\s*n|n\s+n|\\n\s*\\n)$/i.test(t))n.nodeValue=''}
+}
+
+/* 3) Automatic local-time greeting. Adds text only when a suitable existing dashboard host is found. */
+function greeting(){const h=new Date().getHours();return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
+function installGreeting(){
+ const erp=q('#erp'); if(!erp||erp.classList.contains('hidden'))return;
+ let host=q('#v117Greeting'); if(!host){const target=q('#erpContent .v39HeroCopy')||q('#erpContent .teacherTop');if(!target)return;host=document.createElement('div');host.id='v117Greeting';host.style.cssText='font-weight:800;margin-bottom:5px';target.prepend(host)}
+ const name=String(window.profile?.full_name||window.v14TeacherProfile?.teacher_name||'').trim();host.textContent=greeting()+(name?', '+name:'');
+}
+
+/* 4) Admin Forgot: identifier required + 2-minute browser cooldown. Server endpoint remains authoritative. */
+window.v95AdminForgot=function(){
+ if(q('#v117AdminForgot'))return; const w=document.createElement('div');w.id='v117AdminForgot';w.className='v14Modal';
+ w.innerHTML=`<div class="v14ModalCard"><button class="v14Close" onclick="this.closest('.v14Modal').remove()">×</button><h2>🔐 Admin Forgot Password</h2><p class="note">Registered Admin ID / Mobile / Email verify होने पर ही recovery request आगे जाएगी.</p><input id="v117AdminId" autocomplete="username" placeholder="Admin ID / Mobile / Email" style="width:100%;padding:11px;border:1px solid #d6dfeb;border-radius:9px"><button id="v117AdminSend" class="primary" style="margin-top:10px" onclick="v117SendAdminRecovery()">Verify & Send</button><div id="v117AdminStatus" class="note" style="margin-top:9px"></div></div>`;document.body.appendChild(w)
+};
+window.v117SendAdminRecovery=async function(){
+ const id=String(q('#v117AdminId')?.value||'').trim(),st=q('#v117AdminStatus'),b=q('#v117AdminSend');if(!id){if(st)st.textContent='पहले registered Admin identifier डालें.';return}
+ const now=Date.now(),last=Number(localStorage.getItem('ld_admin_recovery_last')||0),wait=120000-(now-last);if(wait>0){if(st)st.textContent=`कृपया ${Math.ceil(wait/1000)} seconds बाद दोबारा कोशिश करें.`;return}
+ if(b)b.disabled=true;if(st)st.textContent='Verifying...';try{const r=await fetch('/api/admin-forgot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier:id})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Admin recovery request failed');localStorage.setItem('ld_admin_recovery_last',String(now));if(st)st.textContent=j.message||'Recovery request accepted.'}catch(e){if(st)st.textContent=e.message||String(e)}finally{if(b)b.disabled=false}
+};
+
+/* 5) Parent quick actions open a focused top view instead of scrolling down. */
+function parentService(i){return (Array.isArray(window.v64ParentServices)?window.v64ParentServices:[])[Number(i)||0]||null}
+function focus(title,html){q('#v117ParentFocus')?.remove();document.body.insertAdjacentHTML('beforeend',`<section id="v117ParentFocus"><div class="v117Head"><button type="button" onclick="v117ParentBack()">← Back</button><h3>${safe(title)}</h3><button type="button" onclick="v117ParentHome()">⌂ Home</button></div><div class="v117Body">${html}</div></section>`);window.scrollTo(0,0)}
+window.v117ParentBack=()=>q('#v117ParentFocus')?.remove();window.v117ParentHome=()=>{q('#v117ParentFocus')?.remove();window.scrollTo(0,0)};
+function clonePart(d,sel,title){const el=d?.querySelector(sel);if(!el)return focus(title,'<div class="empty">Data अभी उपलब्ध नहीं है.</div>');const c=el.cloneNode(true);c.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));focus(title,c.outerHTML)}
+window.v117ParentFocus=async function(type,i=0){
+ const d=document.querySelectorAll('#parentDashboardBody .v114PortalDash')[Number(i)||0],s=parentService(i),adm=s?.admission_no||'',cls=s?.class_name||'';
+ if(type==='profile'){if(typeof window.v97ShowParentProfile==='function')return v97ShowParentProfile();return}
+ if(type==='attendance')return clonePart(d,'.v114AttendanceBlock','Attendance');
+ if(type==='fees')return clonePart(d,'.v114FeeBlock','Fee Details');
+ if(type==='results')return clonePart(d,'.resultMini','Exam Results');
+ if(type==='notices'){const el=q('#parentDashboardBody .v32ParentNotices');return focus('Notices',el?el.cloneNode(true).outerHTML:'<div class="empty">No notice available.</div>')}
+ if(type==='gallery'){const el=q('#parentDashboardBody .gallery,#parentDashboardBody [id*=Gallery]');return focus('Gallery',el?el.cloneNode(true).outerHTML:'<div class="empty">Gallery अभी उपलब्ध नहीं है.</div>')}
+ if(type==='homework'){
+   if(!adm)return focus('Homework','<div class="empty">Student link नहीं मिला.</div>');focus('Homework / Daily Learning','<div class="empty">Loading...</div>');
+   try{const {data,error}=await sb.rpc('parent_class_learning',{p_admission_no:adm});if(error)throw error;const daily=data?.daily_teaching||[],hw=data?.homework||[];const html=`<div class="panel"><h3>📖 Recent Class Teaching</h3>${daily.length?daily.map(x=>`<p><b>${safe(x.subject||'')} • ${safe(x.teaching_date||'')}</b><br>${safe(x.topic||'')}${x.details?'<br>'+safe(x.details):''}</p>`).join(''):'<p>No teaching update yet.</p>'}</div><div class="panel"><h3>✏ Homework</h3>${hw.length?hw.map(x=>`<p><b>${safe(x.subject||'')} • ${safe(x.title||'Homework')}</b><br>${safe(x.description||'')}<br><small>${safe(x.date||'')}${x.due_date?' • Due '+safe(x.due_date):''}</small></p>`).join(''):'<p>No homework update yet.</p>'}</div>`;q('#v117ParentFocus .v117Body').innerHTML=html}catch(e){q('#v117ParentFocus .v117Body').innerHTML=`<div class="empty">${safe(e.message||e)}</div>`}return
+ }
+ if(type==='timetable'){
+   if(!cls)return focus('Class Timetable','<div class="empty">Student class नहीं मिला.</div>');focus(`Class ${cls} • Timetable`,'<div class="empty">Loading...</div>');
+   try{const {data,error}=await sb.from('timetable').select('day_name,period_no,start_time,end_time,subject,teacher_name,class_name,section').eq('class_name',cls).order('period_no');if(error)throw error;const rows=data||[],days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];const html=days.map(day=>{const rr=rows.filter(x=>String(x.day_name||'').toLowerCase()===day.toLowerCase());return rr.length?`<div class="panel"><h3>${day}</h3><div class="tableWrap"><table><thead><tr><th>Bell</th><th>Time</th><th>Subject</th><th>Teacher</th></tr></thead><tbody>${rr.map(x=>`<tr><td>${safe(x.period_no||'')}</td><td>${safe(x.start_time||'')}–${safe(x.end_time||'')}</td><td>${safe(x.subject||'')}</td><td>${safe(x.teacher_name||'')}</td></tr>`).join('')}</tbody></table></div></div>`:''}).join('');q('#v117ParentFocus .v117Body').innerHTML=html||'<div class="empty">इस class का timetable अभी Admin ने set नहीं किया है.</div>'}catch(e){q('#v117ParentFocus .v117Body').innerHTML=`<div class="empty">${safe(e.message||e)}</div>`}return
+ }
+};
+function wireParent(){document.querySelectorAll('#parentDashboardBody .v114PortalDash').forEach((dash,i)=>dash.querySelectorAll('.v114PortalQuick button').forEach(b=>{const t=(b.textContent||'').toLowerCase();const type=t.includes('profile')?'profile':t.includes('attendance')?'attendance':t.includes('fee')?'fees':t.includes('exam')?'results':t.includes('homework')?'homework':t.includes('time table')||t.includes('timetable')?'timetable':t.includes('notice')?'notices':t.includes('gallery')?'gallery':'';if(type)b.onclick=e=>{e.preventDefault();v117ParentFocus(type,i)}}))}
+
+/* 6) New Parent accounts: ask secure server API to mark first-login password change. Existing accounts are untouched unless server explicitly sets the flag. */
+if(typeof window.v94ParentApi==='function'&&!window.__v117ParentApiWrapped){window.__v117ParentApiWrapped=true;const base=window.v94ParentApi;window.v94ParentApi=async function(payload){const p=Object.assign({},payload);if(p.action==='create_or_link'&&p.password)p.must_change_password=true;if(/reset/i.test(String(p.action||'')))p.must_change_password=true;return base.call(this,p)}}
+function firstPwModal(){if(q('#v117FirstPw'))return;q('body')?.insertAdjacentHTML('beforeend','<div id="v117FirstPw" class="hidden"><div class="v117PwCard"><h3>🔐 नया Password बनाएँ</h3><p>School Admin द्वारा दिया temporary password पहली login पर बदलें. Email/OTP की जरूरत नहीं है.</p><input id="v117OldPw" type="password" autocomplete="current-password" placeholder="Old / Temporary Password"><input id="v117NewPw" type="password" autocomplete="new-password" placeholder="New Password (कम से कम 8 characters)"><input id="v117NewPw2" type="password" autocomplete="new-password" placeholder="Confirm New Password"><button type="button" onclick="v117SaveFirstPw()">Save New Password</button><div id="v117PwMsg" class="v117Msg"></div></div></div>')}
+async function enforceFirstPw(){try{firstPwModal();const {data}=await sb.auth.getUser(),u=data?.user;if(!u||u.user_metadata?.must_change_password!==true)return;await window.loadProfile?.();const role=String(window.profile?.role||'').toLowerCase();if(role==='parent'||role==='student')q('#v117FirstPw')?.classList.remove('hidden')}catch(_e){}}
+window.v117SaveFirstPw=async function(){const old=String(q('#v117OldPw')?.value||''),a=String(q('#v117NewPw')?.value||''),b=String(q('#v117NewPw2')?.value||''),m=q('#v117PwMsg');const msg=t=>{if(m)m.textContent=t};if(!old)return msg('Old / Temporary Password डालें.');if(a.length<8)return msg('New Password कम से कम 8 characters का रखें.');if(a!==b)return msg('New और Confirm Password समान नहीं हैं.');if(a===old)return msg('New Password पुराने Password से अलग रखें.');try{const {data}=await sb.auth.getUser(),u=data?.user;if(!u?.email)throw new Error('Session expired. दोबारा login करें.');const vr=await sb.auth.signInWithPassword({email:u.email,password:old});if(vr.error)throw new Error('Old / Temporary Password सही नहीं है.');const meta=Object.assign({},vr.data.user?.user_metadata||{},{must_change_password:false,password_changed_at:new Date().toISOString()});const up=await sb.auth.updateUser({password:a,data:meta});if(up.error)throw up.error;msg('Password successfully changed.');setTimeout(()=>q('#v117FirstPw')?.classList.add('hidden'),450)}catch(e){msg(e.message||String(e))}};
+
+/* Re-wire after existing Parent portal render, without replacing its data logic. */
+if(typeof window.loadParentPortal==='function'){const baseParent=window.loadParentPortal;window.loadParentPortal=async function(){const r=await baseParent.apply(this,arguments);setTimeout(wireParent,120);setTimeout(enforceFirstPw,180);return r}}
+
+function refresh(){dedupeNav();cleanStrayNN();installGreeting();wireParent()}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(refresh,250));window.addEventListener('load',()=>{setTimeout(refresh,450);setTimeout(enforceFirstPw,700)});setInterval(installGreeting,60000);
 })();
 </script>
-<!-- /LD MODERN V114.2 MASTER SAFE CORRECTION -->
+<!-- ===== END V117 FUNCTION-ONLY SAFE PATCH ===== -->
 
-
-<!-- ===== V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-<style id="v1142-master-final-nav-css">
-/* Additive shell patch only: DB, CRUD, permissions and module markup stay unchanged. */
-#erp.v90Shell,#erp.erp{position:relative!important;width:100%!important;max-width:100%!important}
-#erp.v90Shell main,#erp.erp main{width:100%!important;max-width:100%!important;margin-left:0!important;min-width:0!important}
-/* Same drawer behaviour on desktop and mobile: closed by default, opens only from Menu. */
-#erp.v90Shell aside,#erp.erp aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(84vw,310px)!important;max-width:310px!important;transform:translateX(-105%)!important;transition:transform .2s ease!important;z-index:2200!important;box-shadow:8px 0 30px #001b3b38!important}
-#erp.v90Shell aside.open,#erp.erp aside.open{transform:translateX(0)!important}
-#erp .erpTop{position:relative!important;z-index:100!important}
-#erp .hamb{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important}
-/* Full role wallpaper across the usable dashboard on every screen size. */
-#erp.roleWallpaper{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#erp.roleWallpaper main{background-image:linear-gradient(#f6f8fccc,#f6f8fccc),var(--role-wallpaper)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;min-height:100vh!important}
-#parentPortal.parentWallpaper,#parentDashboard.parentWallpaper{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;min-height:100vh!important}
-/* Public mobile navigation is compact; large public tabs never occupy the front screen. */
-@media(max-width:900px){
- .v26Top{position:relative!important}
- .v26Menu{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:44px!important;min-height:44px!important}
- #v26Nav{display:none!important;position:absolute!important;left:auto!important;right:10px!important;top:calc(100% + 4px)!important;bottom:auto!important;width:min(88vw,310px)!important;max-height:72vh!important;padding:10px!important;border-radius:14px!important;z-index:2300!important;overflow:auto!important;box-shadow:0 16px 35px #001b3b45!important}
- #v26Nav.show{display:grid!important;grid-template-columns:1fr!important}
- #v26Nav:before{content:'🏫  SCHOOL MENU'!important;padding:8px 10px 12px!important}
- #v26Nav button{min-height:44px!important}
-}
-/* Header identity: address stays directly below school name and wraps safely. */
-.v26Brand>div{min-width:0!important}.v26Brand b,.v26Brand span{max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}
-/* One Back + one Home in ERP header. */
-#v1142ModuleBack,#v1142ModuleHome{min-height:42px!important;white-space:nowrap!important}
-@media(max-width:560px){#erp .erpTop{display:flex!important;flex-wrap:wrap!important;gap:7px!important}#erp .erpTop>*{min-width:0!important}#v1142ModuleBack,#v1142ModuleHome{padding:8px 10px!important;font-size:12px!important}}
-</style>
-<script id="v1142-master-final-nav-runtime">
-(()=>{
- 'use strict';
- window.V1142_MASTER_FINAL='2026-09-17-NAV2';
- const $=s=>document.querySelector(s);
- function closeDrawer(){const a=$('#erp aside');if(a)a.classList.remove('open')}
- function toggleDrawer(){const a=$('#erp aside');if(a)a.classList.toggle('open')}
- /* Override old desktop-permanent-sidebar patches with one drawer rule for all widths. */
- window.v58ToggleSidebar=function(){toggleDrawer();return false};
- function bindMenu(){const b=$('#erp .hamb');if(!b)return;b.textContent='☰ Menu';b.onclick=window.v58ToggleSidebar}
- document.addEventListener('click',e=>{if(e.target.closest('#erpNav button,#erpNav a'))setTimeout(closeDrawer,0)},true);
- /* Keep Supabase's existing persistent session; this file already initializes auth with persistSession:true. Logout remains authoritative. */
- let route='dashboard', stack=[], suppress=false;
- const baseRender=window.render;
- if(typeof baseRender==='function'){
-   window.render=function(p){
-     p=String(p||'dashboard');
-     if(!suppress && route && p!==route){stack.push(route);if(stack.length>40)stack.shift()}
-     route=p;const r=baseRender.apply(this,arguments);setTimeout(()=>{closeDrawer();ensureNav();},0);return r;
-   };
- }
- window.v1142ModuleBack=function(){
-   const prev=stack.pop();if(!prev)return;
-   suppress=true;try{window.render(prev)}finally{suppress=false}
- };
- window.v1142ModuleHome=function(){
-   if(route==='dashboard')return;stack.push(route);suppress=true;try{window.render('dashboard');route='dashboard'}finally{suppress=false}
- };
- function ensureNav(){
-   bindMenu();const h=$('#erp .erpTop');if(!h)return;
-   /* Remove only duplicate legacy Home/Back controls in this header; module content buttons are untouched. */
-   [...h.querySelectorAll('button')].forEach(b=>{const t=(b.textContent||'').trim().toLowerCase();if((/^🏠?\s*home$/.test(t)||/^←?\s*back$/.test(t)||/^⬅\s*back$/.test(t))&&!['v1142ModuleBack','v1142ModuleHome'].includes(b.id))b.remove()});
-   let back=$('#v1142ModuleBack');if(!back){back=document.createElement('button');back.id='v1142ModuleBack';back.className='erpHomeBtn';back.textContent='← Back';back.onclick=window.v1142ModuleBack;h.insertBefore(back,h.children[1]||null)}
-   let home=$('#v1142ModuleHome');if(!home){home=document.createElement('button');home.id='v1142ModuleHome';home.className='erpHomeBtn';home.textContent='🏠 Home';home.onclick=window.v1142ModuleHome;h.insertBefore(home,back.nextSibling)}
- }
- /* Public menu: close after selection and suppress accidental rapid repeat taps without changing public functions. */
- let lastPublicTap=0;
- document.addEventListener('click',e=>{
-   const b=e.target.closest('#v26Nav button');if(!b)return;
-   const now=Date.now();if(now-lastPublicTap<450){e.preventDefault();e.stopImmediatePropagation();return}lastPublicTap=now;
-   setTimeout(()=>$('#v26Nav')?.classList.remove('show'),0);
- },true);
- /* Keep displayed public identity synced with existing school settings; fallback is the address already used by V114.2. */
- function syncIdentity(){try{const brand=$('.v26Brand');if(!brand)return;const name=brand.querySelector('b'),addr=brand.querySelector('span');if(name)name.textContent=window.school?.school_name||'L D MODERN EDUCATION ACADEMY';if(addr)addr.textContent=window.school?.address||'GAMBHIRIYA BUJURG, SINGHAPATTI, KUSHINAGAR'}catch(_e){}}
- function init(){ensureNav();syncIdentity();closeDrawer()}
- document.addEventListener('DOMContentLoaded',()=>setTimeout(init,80));
- window.addEventListener('load',()=>setTimeout(init,220));
- window.addEventListener('resize',()=>setTimeout(()=>{closeDrawer();ensureNav()},50),{passive:true});
- const mo=new MutationObserver(()=>{clearTimeout(window.__v1142NavTimer);window.__v1142NavTimer=setTimeout(()=>{ensureNav();syncIdentity()},80)});
- document.addEventListener('DOMContentLoaded',()=>{if(document.body)mo.observe(document.body,{childList:true,subtree:true})});
-})();
-</script>
-<!-- ===== /V114.2 MASTER FINAL NAV / DRAWER / WALLPAPER PATCH ===== -->
-
-
-<!-- ===== V115 PARENT TOP-OPEN + CLASS TIMETABLE/HOMEWORK SAFE PATCH ===== -->
-<style id="v115-parent-focus-css">
-#v115ParentFocus{position:fixed;inset:0;background:#f5f8fc;z-index:5000;overflow:auto;padding:14px}
-#v115ParentFocus .v115Head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #dfe7f0;border-radius:14px;padding:10px 12px;margin-bottom:12px;box-shadow:0 5px 18px #102a4312}
-#v115ParentFocus .v115Head h3{margin:0;min-width:0;flex:1;font-size:17px}
-#v115ParentFocus .v115Head button{min-height:42px;border:1px solid #d5dfeb;background:#fff;border-radius:10px;padding:8px 12px;font-weight:800}
-#v115ParentFocus .v115Body{width:min(1100px,100%);margin:0 auto;padding-bottom:30px}
-#v115ParentFocus .v114PortalCard{display:block!important;margin:0!important}
-.v115TTDay{background:#fff;border:1px solid #dfe7f0;border-radius:14px;margin:10px 0;overflow:hidden}.v115TTDay>h4{margin:0;padding:11px 13px;background:#edf4fd}.v115TTRow{display:grid;grid-template-columns:70px 120px 1fr 1fr;gap:8px;padding:10px 12px;border-top:1px solid #edf1f5;align-items:center}.v115TTRow small{color:#718096}.v115Homework{display:grid;gap:10px}.v115Homework article{background:#fff;border:1px solid #dfe7f0;border-radius:13px;padding:13px}.v115Homework article h4{margin:0 0 6px}.v115Homework article p{white-space:pre-wrap;margin:6px 0}.v115Homework article small{color:#718096}
-@media(max-width:620px){#v115ParentFocus{padding:8px}.v115TTRow{grid-template-columns:58px 1fr}.v115TTRow>*:nth-child(3),.v115TTRow>*:nth-child(4){grid-column:2}.v115TTRow{font-size:12px}}
-</style>
-<script id="v115-parent-focus-runtime">
-(()=>{
- 'use strict';
- window.V115_PARENT_FOCUS='2026-09-17';
- const safe=x=>typeof esc==='function'?esc(x??''):String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
- function service(i=0){return (Array.isArray(window.v64ParentServices)?window.v64ParentServices:[])[Number(i)||0]||null}
- function focusShell(title,html){document.getElementById('v115ParentFocus')?.remove();document.body.insertAdjacentHTML('beforeend',`<section id="v115ParentFocus"><div class="v115Head"><button type="button" onclick="v115ParentBack()">← Back</button><h3>${safe(title)}</h3><button type="button" onclick="v115ParentHome()">⌂ Home</button></div><div class="v115Body">${html}</div></section>`);document.getElementById('v115ParentFocus').scrollTop=0;window.scrollTo({top:0,left:0,behavior:'auto'})}
- window.v115ParentBack=()=>document.getElementById('v115ParentFocus')?.remove();
- window.v115ParentHome=()=>{document.getElementById('v115ParentFocus')?.remove();window.scrollTo({top:0,left:0,behavior:'auto'})};
- function cloneCard(dash,selector,title){let el=dash?.querySelector(selector);if(!el)return focusShell(title,'<div class="empty">Data अभी उपलब्ध नहीं है.</div>');let c=el.cloneNode(true);c.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));focusShell(title,c.outerHTML)}
- window.v115ParentFocus=async function(type,i=0){
-   const d=document.querySelectorAll('#parentDashboardBody .v114PortalDash')[Number(i)||0],s=service(i),adm=s?.admission_no||'',cls=s?.class_name||'';
-   if(type==='profile'){if(typeof v97ShowParentProfile==='function')return v97ShowParentProfile();return}
-   if(type==='attendance')return cloneCard(d,'.v114AttendanceBlock','Attendance');
-   if(type==='fees')return cloneCard(d,'.v114FeeBlock','Fee Details');
-   if(type==='results')return cloneCard(d,'.resultMini','Exam Results');
-   if(type==='homework'){
-     if(!adm)return focusShell('Homework','<div class="empty">Student link नहीं मिला.</div>');
-     focusShell('Homework / Daily Learning','<div class="empty">Loading...</div>');
-     try{let {data,error}=await sb.rpc('parent_class_learning',{p_admission_no:adm});if(error)throw error;let daily=data?.daily_teaching||[],hw=data?.homework||[];let html=`<div class="v115Homework"><article><h4>📖 Recent Class Teaching</h4>${daily.length?daily.map(x=>`<p><b>${safe(x.subject||'')} • ${safe(x.teaching_date||'')}</b><br>${safe(x.topic||'')}${x.details?'<br>'+safe(x.details):''}${x.homework_remark?'<br><strong>Worksheet:</strong> '+safe(x.homework_remark):''}</p>`).join(''):'<p>No teaching update yet.</p>'}</article>${hw.length?hw.map(x=>`<article><h4>✏ ${safe(x.subject||'')} • ${safe(x.title||'Homework')}</h4><p>${safe(x.description||'')}</p><small>${safe(x.date||'')}${x.due_date?' • Due '+safe(x.due_date):''} ${x.teacher_name?' • '+safe(x.teacher_name):''}</small></article>`).join(''):'<article><p>No homework update yet.</p></article>'}</div>`;document.querySelector('#v115ParentFocus .v115Body').innerHTML=html}catch(e){document.querySelector('#v115ParentFocus .v115Body').innerHTML=`<div class="empty">${safe(e.message||e)}</div>`}return;
-   }
-   if(type==='timetable'){
-     if(!cls)return focusShell('Class Timetable','<div class="empty">Student class नहीं मिला.</div>');
-     focusShell(`Class ${cls} • Timetable`,'<div class="empty">Loading Admin timetable...</div>');
-     try{let {data,error}=await sb.from('timetable').select('day_name,period_no,start_time,end_time,subject,teacher_name,class_name,section').eq('class_name',cls).order('period_no');if(error)throw error;let rows=data||[],days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];let html=days.map(day=>{let rr=rows.filter(x=>String(x.day_name||'').toLowerCase()===day.toLowerCase());return rr.length?`<section class="v115TTDay"><h4>${day}</h4>${rr.map(x=>`<div class="v115TTRow"><b>Bell ${safe(x.period_no||'')}</b><small>${safe(x.start_time||'')}–${safe(x.end_time||'')}</small><span><b>${safe(x.subject||'')}</b></span><span>${safe(x.teacher_name||'')}</span></div>`).join('')}</section>`:''}).join('');document.querySelector('#v115ParentFocus .v115Body').innerHTML=html||'<div class="empty">इस class का timetable अभी Admin ने set नहीं किया है.</div>'}catch(e){document.querySelector('#v115ParentFocus .v115Body').innerHTML=`<div class="empty">${safe(e.message||e)}</div>`}return;
-   }
-   if(type==='notices'){let el=document.querySelector('#parentDashboardBody .v32ParentNotices');return focusShell('Notices',el?el.cloneNode(true).outerHTML:'<div class="empty">No notice available.</div>')}
-   if(type==='gallery'){let el=document.querySelector('#parentDashboardBody .gallery,[id*=Gallery]');return focusShell('Gallery',el?el.cloneNode(true).outerHTML:'<div class="empty">Gallery अभी उपलब्ध नहीं है.</div>')}
- };
- function wire(){document.querySelectorAll('#parentDashboardBody .v114PortalDash').forEach((dash,i)=>{dash.querySelectorAll('.v114PortalQuick button').forEach(b=>{let t=(b.textContent||'').toLowerCase();let type=t.includes('profile')?'profile':t.includes('attendance')?'attendance':t.includes('fee')?'fees':t.includes('exam')?'results':t.includes('homework')?'homework':t.includes('time table')||t.includes('timetable')?'timetable':t.includes('notice')?'notices':t.includes('gallery')?'gallery':'';if(type){b.onclick=e=>{e.preventDefault();v115ParentFocus(type,i)}}})})}
- const base=window.loadParentPortal;
- if(typeof base==='function')window.loadParentPortal=async function(){let r=await base.apply(this,arguments);setTimeout(wire,120);return r};
- setTimeout(wire,600);
-})();
-</script>
-<!-- ===== END V115 PARENT TOP-OPEN + CLASS TIMETABLE/HOMEWORK SAFE PATCH ===== -->
-
-
-<style id="v116-parent-first-password-style">
-#v116ParentFirstPassword{position:fixed;inset:0;z-index:999999;background:rgba(7,22,45,.78);display:flex;align-items:center;justify-content:center;padding:18px}#v116ParentFirstPassword.hidden{display:none!important}.v116PwCard{width:min(460px,100%);background:#fff;border-radius:20px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.3)}.v116PwCard h3{margin:0 0 8px}.v116PwCard p{color:#53657a;line-height:1.5}.v116PwCard input{width:100%;margin:6px 0;padding:12px;border:1px solid #ccd8e6;border-radius:11px}.v116PwCard button{width:100%;margin-top:8px;padding:12px;border:0;border-radius:11px;background:#0b4eb8;color:#fff;font-weight:900}.v116PwMsg{font-size:12px;font-weight:800;margin-top:8px;color:#9b2c2c}
-</style>
-<div id="v116ParentFirstPassword" class="hidden" role="dialog" aria-modal="true" aria-labelledby="v116PwTitle"><div class="v116PwCard"><h3 id="v116PwTitle">🔐 अपना नया Password बनाएँ</h3><p>पहली बार Parent/Student login पर School Admin द्वारा दिया temporary password बदलना जरूरी है। इसमें Email या OTP नहीं भेजा जाएगा।</p><input id="v116OldPw" type="password" autocomplete="current-password" placeholder="Old / Temporary Password"><input id="v116NewPw" type="password" autocomplete="new-password" placeholder="New Password (कम से कम 8 characters)"><input id="v116NewPw2" type="password" autocomplete="new-password" placeholder="Confirm New Password"><button type="button" id="v116SavePw">Save New Password</button><div id="v116PwMsg" class="v116PwMsg"></div></div></div>
-<script id="v116-parent-first-password">
-/* V116: Parent/Student first-login mandatory password change. No email/OTP. */
-window.V116_BUILD='V116-PARENT-FIRST-PASSWORD-2026-09-17';
-(function(){
- const q=id=>document.getElementById(id);
- function msg(t){let e=q('v116PwMsg');if(e)e.textContent=t||''}
- function needsChange(u){return !!u && (u.user_metadata?.must_change_password !== false)}
- function show(){q('v116ParentFirstPassword')?.classList.remove('hidden');document.documentElement.style.overflow='hidden'}
- function hide(){q('v116ParentFirstPassword')?.classList.add('hidden');document.documentElement.style.overflow=''}
- async function enforce(){try{let r=await sb.auth.getUser(),u=r?.data?.user;if(!u)return;await loadProfile?.();let role=String(profile?.role||'').toLowerCase();if((role==='parent'||role==='student')&&needsChange(u))show()}catch(e){}}
- async function save(){let old=String(q('v116OldPw')?.value||''),a=String(q('v116NewPw')?.value||''),b=String(q('v116NewPw2')?.value||'');if(!old)return msg('Old / Temporary Password डालें.');if(a.length<8)return msg('New Password कम से कम 8 characters का रखें.');if(a!==b)return msg('New और Confirm Password समान नहीं हैं.');if(old===a)return msg('New Password पुराने Password से अलग रखें.');let btn=q('v116SavePw');if(btn){btn.disabled=true;btn.textContent='Saving...'}try{let gu=await sb.auth.getUser(),u=gu?.data?.user;if(!u?.email)throw new Error('Session expired. दोबारा login करें.');let verify=await sb.auth.signInWithPassword({email:u.email,password:old});if(verify.error)throw new Error('Old / Temporary Password सही नहीं है.');let data=Object.assign({},verify.data.user?.user_metadata||{}, {must_change_password:false,password_changed_at:new Date().toISOString()});let up=await sb.auth.updateUser({password:a,data});if(up.error)throw up.error;msg('Password successfully changed.');setTimeout(()=>{hide();try{window.scrollTo(0,0)}catch(e){}},500)}catch(e){msg(e?.message||'Password change failed.')}finally{if(btn){btn.disabled=false;btn.textContent='Save New Password'}}}
- document.addEventListener('click',e=>{if(e.target?.id==='v116SavePw')save()});
- window.addEventListener('load',()=>setTimeout(enforce,700));
- const oldParent=window.parentPasswordLogin; if(typeof oldParent==='function')window.parentPasswordLogin=async function(){let r=await oldParent.apply(this,arguments);setTimeout(enforce,250);return r};
- window.v116EnforceParentPassword=enforce;
-})();
-</script>\n</body></html>
+</body></html>
