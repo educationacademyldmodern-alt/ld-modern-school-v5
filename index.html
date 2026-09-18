@@ -1835,8 +1835,75 @@ function v11412NoticeDocHtml(o={}){
   let rawTitle=String(o.title||'NOTICE / ORDER'),kind=String(o.kind||'NOTICE').toUpperCase(),title=rawTitle.replace(/^(Notice|Order|Warning|Academic Instruction|Fee Notice|Exam Notice):\s*/i,'')||rawTitle;
   return `<article class="v11412A4Doc v11412NoticeDoc v107OfficialDoc">${v107DocHeader(kind,title,'2026-27')}<div class="v11412NoticeMeta"><span><b>Date</b>${esc(o.date||today())}</span><span><b>To</b>${esc(o.audience||'School Community')}</span><span><b>Reference</b>${esc(o.ref||'Official School Communication')}</span></div><div class="v11412NoticeTitle">${esc(title)}</div><div class="v11412NoticeBody">${esc(o.message||'').replace(/\n/g,'<br>')}</div><div class="v11412NoticeClosing"><p>Issued by order of the school administration.</p><div class="v32SignRow"><span>Prepared By</span><span>Office</span><span>Principal / Director</span></div></div></article>`
 }
+function v11412NoticePdf(elId,file='school-notice.pdf'){
+  const el=$(elId);
+  if(!el)return toast('Preview first');
+  if(!window.html2pdf)return v14Print(elId);
+
+  const clone=el.cloneNode(true);
+  clone.style.width='190mm';
+  clone.style.maxWidth='190mm';
+  clone.style.margin='0';
+  clone.style.padding='0';
+  clone.style.boxSizing='border-box';
+  clone.style.background='#fff';
+  clone.style.overflow='hidden';
+
+  const host=document.createElement('div');
+  host.style.position='fixed';
+  host.style.left='-10000px';
+  host.style.top='0';
+  host.style.width='190mm';
+  host.style.margin='0';
+  host.style.padding='0';
+  host.style.background='#fff';
+  host.style.boxSizing='border-box';
+  host.style.overflow='hidden';
+  host.appendChild(clone);
+  document.body.appendChild(host);
+
+  const maxHeight=277*96/25.4;
+  const h=clone.scrollHeight;
+  if(h>maxHeight){
+    const scale=maxHeight/h;
+    clone.style.transformOrigin='top left';
+    clone.style.transform='scale('+scale+')';
+    clone.style.width=(190/scale)+'mm';
+    host.style.height='277mm';
+  }
+
+  const opt={
+    margin:[10,10,10,10],
+    filename:file,
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{
+      scale:2,
+      useCORS:true,
+      letterRendering:true,
+      backgroundColor:'#ffffff',
+      scrollX:0,
+      scrollY:0
+    },
+    jsPDF:{
+      unit:'mm',
+      format:'a4',
+      orientation:'portrait',
+      compress:true
+    },
+    pagebreak:{mode:['avoid-all','css','legacy']}
+  };
+
+  html2pdf().set(opt).from(clone).save()
+    .then(()=>host.remove())
+    .catch(e=>{
+      host.remove();
+      console.error(e);
+      toast('PDF generation failed');
+    });
+}
+
 function v11412OpenNoticePreview(doc,file='school-notice.pdf'){
-  let id='v11412NoticePreview';v14Modal(`<h2>Official Notice / Order Preview</h2><div id="${id}" class="v11412PreviewStage">${doc}</div><div class="v14Tabs"><button class="v14Action primary" onclick="v14Pdf('${id}','${esc(file)}')">PDF</button><button class="v14Action" onclick="v14Print('${id}')">Print</button></div>`)
+  let id='v11412NoticePreview';v14Modal(`<h2>Official Notice / Order Preview</h2><div id="${id}" class="v11412PreviewStage">${doc}</div><div class="v14Tabs"><button class="v14Action primary" onclick="v11412NoticePdf('${id}','${esc(file)}')">PDF</button><button class="v14Action" onclick="v14Print('${id}')">Print</button></div>`)
 }
 function v11412PreviewCurrentNotice(){
   let kind=$('noKind')?.value||'Notice',title=$('noTitle')?.value.trim()||'Notice / Order',message=$('noMessage')?.value.trim();if(!message)return toast('Preview के लिए Message / Order लिखें');
