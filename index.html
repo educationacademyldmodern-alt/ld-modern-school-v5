@@ -797,6 +797,44 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 </style>
 
 <link rel="stylesheet" href="public-final.css?v=FINAL2">
+<style id="desktop-sidebar-safe-fix">
+/* V1142 SAFE FIX — Desktop sidebar must not cover page content */
+@media (min-width: 769px) {
+  #appShell,
+  .appShell,
+  .dashboard-layout,
+  .dashboardLayout,
+  .admin-layout,
+  .teacher-layout,
+  .parent-layout {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  main,
+  .main,
+  .main-content,
+  .mainContent,
+  .content,
+  .dashboard-content,
+  .page-content {
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  img,
+  table,
+  canvas,
+  iframe {
+    max-width: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+}
+</style>
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
