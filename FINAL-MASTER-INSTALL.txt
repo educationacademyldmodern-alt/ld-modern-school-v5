@@ -1,0 +1,11 @@
+L D MODERN EDUCATION ACADEMY — FINAL MASTER SAFE UPGRADE
+Base: cb3ec25 / V114.2
+
+1) Upload/deploy all files in this folder together. Do not delete existing production data.
+2) In Supabase SQL Editor, take a backup first, then run: supabase-final-master-upgrade.sql
+3) Deploy the frontend after SQL succeeds.
+4) Admin > Reports now opens Master Official Reports. Reports are generated live and Print/Save PDF uses A4; PDFs are not stored in Supabase.
+5) New Admissions, Students (when no number supplied), Staff, Fee receipts, Income/Expense vouchers and Notice letters receive database-side automatic unique numbers.
+6) Existing numbers are preserved; triggers only fill blank numbers.
+7) If a SQL unique-index step reports existing duplicate legacy numbers, do not delete data. Identify/repair the duplicate legacy values first, then rerun this migration.
+8) Test on a non-production preview first: admission, teacher/staff add, fee payment, reports, mobile/desktop, then promote to Production.

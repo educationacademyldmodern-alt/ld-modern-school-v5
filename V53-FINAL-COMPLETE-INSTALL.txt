@@ -1,0 +1,27 @@
+L D MODERN EDUCATION ACADEMY — V53 FINAL COMPLETE CONSOLIDATION
+Base: cb3ec25 / V114.2 production source. Existing design/functions preserved.
+
+INSTALL ORDER
+1) Keep a production backup.
+2) In Supabase SQL Editor run existing required project migrations if not already run.
+3) Run supabase-final-master-upgrade.sql (Master Reports + auto-number support).
+4) Run supabase-v53-complete.sql (additive V53 support tables/functions).
+5) Deploy all files in this ZIP together to a Preview deployment.
+6) Test Admin, Teacher, Parent on mobile + desktop, then promote Preview to Production.
+
+INCLUDED / CONSOLIDATED
+- Existing V53 import/update + fee continuity already present in index.html.
+- Existing V114.2 responsive/public/admin/teacher/parent functionality retained.
+- Master Plan icon/hub.
+- Master Official Reports center (A4 print/save PDF, no generated PDF storage).
+- Auto-number database support for registration/admission/employee/receipt/voucher/letter flows from Final Master migration.
+- Master Fee / due / Call / WhatsApp links.
+- Teacher assigned-class due-fee view.
+- Master timetable bulk blank-period generator without deleting existing timetable.
+- Existing bell-wise teaching diary and syllabus monitor retained.
+- Existing camera/image compression (10–25 KB target) retained.
+- Parent password request, teacher self-attendance, private notes, parent notes, roster request support tables.
+- Non-destructive SQL only. No DROP/RESET/TRUNCATE.
+
+IMPORTANT
+Do not run destructive old test SQL on production. Preview-test all role permissions/RLS with real project configuration before production promotion.
