@@ -1,0 +1,9 @@
+L D MODERN EDUCATION ACADEMY — V55 FINAL RECHECK
+Base preserved: cb3ec25 + V53 + V54.
+Rechecked static integration: all root/API JavaScript syntax OK.
+Mandatory first-login password: Teacher initial/reset and Parent initial/reset now mark profiles.must_change_password=true automatically; successful user password change clears it. Minimum 8 characters.
+Parent multi-child/Leave/Timetable/in-place module integration retained.
+Stray /n/n cleanup retained.
+Print break-inside guards retained.
+SQL V54 migration is additive/idempotent; no DROP/TRUNCATE/DELETE in V54 migration.
+IMPORTANT: live Supabase RLS/data correctness and browser end-to-end behavior still require deployment + SQL migration + role login testing against production data.

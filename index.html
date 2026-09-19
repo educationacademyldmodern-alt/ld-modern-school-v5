@@ -799,6 +799,9 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 <link rel="stylesheet" href="public-final.css?v=FINAL2">
 <link rel="stylesheet" href="final-master-upgrade.css?v=FINAL-MASTER-1">
 <link rel="stylesheet" href="final53-complete.css?v=V53-COMPLETE">
+<link rel="stylesheet" href="v53-final-polish.css?v=V53-FINAL-POLISH-1">
+<link rel="stylesheet" href="v54-final-integration.css?v=V54-FINAL-1">
+<link rel="stylesheet" href="v57-school-operations.css?v=V57-1">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -897,7 +900,7 @@ fee_structures:{title:"Fee Plans",fields:[F("academic_session","Session"),F("cla
 fee_installments:{title:"Fee Installments / Months",fields:[F("fee_structure_id","Fee Plan","planselect",1),F("installment_name","Installment Name"),F("month_name","Month","month"),F("due_date","Due Date","date"),F("amount","Amount","number"),F("late_fee","Late Fee","number"),F("sort_order","Order","number"),F("is_active","Active","yesno")],cols:[["installment_name","Installment"],["month_name","Month"],["due_date","Due Date"],["amount","Amount"],["late_fee","Late Fee"],["is_active","Active"]]},
 fee_heads:{title:"Fee Heads",fields:[F("fee_structure_id","Fee Plan","planselect",1),F("head_name","Fee Head"),F("amount","Amount","number"),F("recurring","Recurring","yesno"),F("frequency","Frequency","frequency"),F("sort_order","Order","number"),F("is_active","Active","yesno")],cols:[["head_name","Head"],["amount","Amount"],["recurring","Recurring"],["frequency","Frequency"],["is_active","Active"]]}
 };Object.keys(M).forEach(k=>M[k].table=k);
-const nav=[["dashboard","🏠 Dashboard"],["admissions","📝 Admissions"],["students","👨‍🎓 Students"],["academics","📚 Academics"],["attendance","✅ Student Attendance"],["staff_attendance","🟢 Staff Attendance"],["fees","💳 Fees & Reminders"],["fee_dashboard","📊 Smart Fee Dashboard"],["fee_structure","🧾 Fee Structure"],["exams","📘 Exams & Results"],["staff","👩‍🏫 Staff"],["leave","🗓️ Staff Leave"],["payroll","💰 Payroll"],["timetable","🕒 Timetable"],["homework","✏️ Homework"],["events","🎉 Events / PTM / Holidays"],["notices","📢 Notices"],["gallery","🖼️ Gallery"],["enquiries","☎️ Enquiries"],["transport","🚌 Transport"],["library","📖 Library"],["income","📈 Income"],["expenses","📉 Expenses"],["balance","⚖️ Balance Sheet"],["users","👥 Users & Roles"],["excel","📊 Excel Center"],["settings","🎨 Website & Settings"]];
+const nav=[["dashboard","🏠 Dashboard"],["admissions","📝 Admissions"],["students","👨‍🎓 Students"],["academics","📚 Academics"],["attendance","✅ Student Attendance"],["staff_attendance","🟢 Staff Attendance"],["fees","💳 Fees & Reminders"],["fee_dashboard","📊 Smart Fee Dashboard"],["fee_structure","🧾 Fee Structure"],["exams","📘 Exams & Results"],["staff","👩‍🏫 Staff"],["leave","🗓️ Staff Leave"],["payroll","💰 Payroll"],["timetable","🕒 Timetable"],["homework","✏️ Homework"],["events","🎉 Events / PTM / Holidays"],["notices","📢 Notices"],["gallery","🖼️ Gallery"],["enquiries","☎️ Enquiries"],["transport","🚌 Transport"],["library","📖 Library"],["income","📈 Income"],["expenses","📉 Expenses"],["balance","⚖️ Balance Sheet"],["users","👥 Users & Roles"],["excel","📊 Excel Center"],["settings","🎨 Website & Settings"],["v57_guidance","📌 Global Guidance"],["v57_handover","🔁 Teacher Handover"],["v58_complaints","🛡️ Complaints & Discipline"]];
 function toast(m){$("toast").textContent=m;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),5000)}function scrollToId(x){$(x).scrollIntoView({behavior:"smooth"})}
 let publicMoved=null;
 function restorePublicMoved(){if(publicMoved&&publicMoved.isConnected){let footer=document.querySelector('#publicSite>footer');if(footer)footer.before(publicMoved);else $('publicSite').appendChild(publicMoved);publicMoved.style.display='none';publicMoved=null}}
@@ -1315,6 +1318,9 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 <!-- V107-CLEAN-PREMIUM-DOCS-2026-09-15 -->
 
 
+
+<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
+<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
 <!-- ===== V92.1 LOGIN RAW-CODE PARSE FIX: restored V14 print boundary ===== -->
@@ -2372,6 +2378,9 @@ function idStudioPrintCss(){return `@page{size:A4 portrait;margin:0}*{box-sizing
 function idStudioPrint(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');w.document.write(`<html><head><title>ID Cards</title><style>${idStudioPrintCss()}</style><link rel="stylesheet" href="final53-complete.css?v=V53-COMPLETE">
 </head><body>${el.innerHTML}
 
+
+<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
+<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>`);w.document.close();setTimeout(()=>w.print(),350)}
 function idStudioPdf(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class';html2pdf().set({margin:0,filename:`${c}-ID-Cards-A4-10.pdf`,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()}
 async function findIdStudent(){let z=String($('idSearch')?.value||'').trim();if(idStudioRows.length){idStudioRenderStudentList();return}if(!z)return toast('Search text डालें या Class चुनें');let safe=z.replace(/[%_,]/g,' ');let{data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${safe}%,father_name.ilike.%${safe}%,roll_no.ilike.%${safe}%,admission_no.ilike.%${safe}%`).limit(50);if(error)return toast(error.message);idStudioRows=idStudioSortRows(data||[]);idStudioRenderStudentList()}
@@ -6483,6 +6492,9 @@ function v69GenerateCards(){if(!v69CurrentExam)return toast('Exam select कर�
 function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCards();area=$('v69PrintArea')}if(!area)return toast('पहले Admit Cards generate करें');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111}.v69PrintPage{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v69PrintPage:last-child{page-break-after:auto}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a;padding:.8mm 1mm;text-align:center;font-size:6.5px;line-height:1.05}.v69TT th{background:#edf3f9}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm}`;w.document.write(`<html><head><title>${esc(v69CurrentExam?.exam_name||'Exam')} Admit Cards</title><style>${css}</style><link rel="stylesheet" href="final53-complete.css?v=V53-COMPLETE">
 </head><body>${area.innerHTML}
 
+
+<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
+<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
 
 const v69RenderBase=render;
@@ -7848,6 +7860,9 @@ function v92PrintCss(){return `@page{size:A4 portrait;margin:10mm}*{box-sizing:b
 window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');w.document.write(`<html><head><title>Admit Card A4</title><style>${v92PrintCss()}</style><link rel="stylesheet" href="final53-complete.css?v=V53-COMPLETE">
 </head><body>${el.innerHTML}
 
+
+<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
+<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
 window.v92PdfArea=function(id,name){let el=q92(id);if(!el)return toast('Preview first');if(!window.html2pdf)return v92PrintArea(id);let opt={margin:[10,10,10,10],filename:name||'admit-cards.pdf',image:{type:'jpeg',quality:.94},html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};html2pdf().set(opt).from(el).save();};
 
@@ -9389,4 +9404,73 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 
 <script src="final53-complete.js?v=V53-COMPLETE"></script>
 <script src="v53-stability-fix.js?v=V53-STABILITY-20260919"></script>
+<script src="v53-final-polish.js?v=V53-FINAL-POLISH-1"></script>
+<script src="v54-final-integration.js?v=V54-FINAL-1"></script>
+<link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1">
+<script src="v57-school-operations.js?v=V57-1"></script>
+<script src="v58-complaint-discipline.js?v=V58-1"></script>
+<script src="v59-academic-calendar.js?v=V59-1"></script>
+
+<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
+<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>
+<!-- ===== V61 ADMIN SMART 3D DASHBOARD SAFE UI ===== -->
+<style id="v61-admin-smart3d">
+#erp.v90Shell.v61AdminUI{--v61side:286px;--v61nav:#071b38;--v61blue:#1479ff}
+@media(min-width:901px){
+ #erp.v90Shell.v61AdminUI aside{width:var(--v61side)!important;background:linear-gradient(180deg,#06162f 0%,#092a57 55%,#061b38 100%)!important;box-shadow:10px 0 32px #071a3526!important;border-right:1px solid #ffffff12!important;transition:width .2s ease!important}
+ #erp.v90Shell.v61AdminUI main{margin-left:var(--v61side)!important;width:calc(100% - var(--v61side))!important;max-width:calc(100% - var(--v61side))!important;transition:margin-left .2s ease,width .2s ease,max-width .2s ease!important}
+ #erp.v90Shell.v61AdminUI.v61Collapsed{--v61side:82px}
+ #erp.v90Shell.v61AdminUI.v61Collapsed aside .brand h2,#erp.v90Shell.v61AdminUI.v61Collapsed aside .brand p,#erp.v90Shell.v61AdminUI.v61Collapsed aside nav button span,#erp.v90Shell.v61AdminUI.v61Collapsed aside nav details summary span:not(:first-child),#erp.v90Shell.v61AdminUI.v61Collapsed aside nav details summary b{display:none!important}
+ #erp.v90Shell.v61AdminUI.v61Collapsed aside nav button{justify-content:center!important;padding:12px 8px!important;font-size:0!important}
+ #erp.v90Shell.v61AdminUI.v61Collapsed aside nav button::first-letter{font-size:20px}
+}
+#erp.v90Shell.v61AdminUI aside nav{padding:8px!important}
+#erp.v90Shell.v61AdminUI aside nav button,#erp.v90Shell.v61AdminUI aside .v90NavGroup summary{border-radius:13px!important;margin:4px 0!important;min-height:43px!important;border:1px solid transparent!important;transition:.16s ease!important}
+#erp.v90Shell.v61AdminUI aside nav button:hover,#erp.v90Shell.v61AdminUI aside .v90NavGroup summary:hover{transform:translateY(-1px);background:#ffffff10!important;border-color:#ffffff18!important}
+#erp.v90Shell.v61AdminUI aside nav button.active{background:linear-gradient(135deg,#1588ff,#0b5ed7)!important;box-shadow:0 8px 22px #006ee766,inset 0 1px #ffffff55!important;border-color:#67b4ff!important;color:white!important}
+#erp.v90Shell.v61AdminUI .erpTop{background:#ffffffed!important;backdrop-filter:blur(10px);box-shadow:0 5px 20px #163b6d10!important;position:sticky!important;top:0!important;z-index:80!important}
+#v61CollapseBtn{border:0;border-radius:12px;background:linear-gradient(145deg,#eaf3ff,#fff);box-shadow:4px 4px 10px #b8cbe3,-3px -3px 8px #fff;color:#0b4d9b;font-weight:900;min-width:42px;min-height:40px;cursor:pointer}
+#erp.v90Shell.v61AdminUI #erpContent{background:linear-gradient(180deg,#f5f9ff,#f9fbff)!important}
+#erp.v90Shell.v61AdminUI .v114AdminDash{max-width:1600px!important;padding-bottom:34px}
+#erp.v90Shell.v61AdminUI .v114AdminHero{background:linear-gradient(125deg,#062b60,#0c64c7 62%,#258bff)!important;box-shadow:0 18px 40px #0a4f9f2b,inset 0 1px #ffffff42!important;border:1px solid #ffffff28!important}
+#erp.v90Shell.v61AdminUI .v90Stat{border:1px solid #dceaff!important;border-radius:19px!important;background:linear-gradient(145deg,#fff,#f0f6ff)!important;box-shadow:8px 8px 20px #c7d5e766,-7px -7px 18px #fff!important;cursor:pointer;transition:.16s ease;min-width:0}
+#erp.v90Shell.v61AdminUI .v90Stat:hover{transform:translateY(-3px);box-shadow:10px 13px 24px #b9cbe366,-7px -7px 18px #fff!important}
+#erp.v90Shell.v61AdminUI .v90Stat>span{display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#fff,#dcecff);box-shadow:4px 5px 10px #b8cce7,-3px -3px 8px #fff;font-size:22px}
+#erp.v90Shell.v61AdminUI .v90Panel,#erp.v90Shell.v61AdminUI .v114ManagementPanel{border:1px solid #dfebfa!important;border-radius:20px!important;box-shadow:0 10px 26px #153b6812!important;background:#fff!important}
+#erp.v90Shell.v61AdminUI .v114QuickGrid button,#erp.v90Shell.v61AdminUI .v90Monitor{border-radius:16px!important;border:1px solid #dbe9fb!important;background:linear-gradient(145deg,#fff,#f1f6fd)!important;box-shadow:5px 6px 13px #c9d6e766,-4px -4px 10px #fff!important;transition:.15s ease!important}
+#erp.v90Shell.v61AdminUI .v114QuickGrid button:hover,#erp.v90Shell.v61AdminUI .v90Monitor:hover{transform:translateY(-2px)!important}
+.v61Clock{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;color:#d9ecff;font-weight:700;font-size:12px}.v61Clock b{color:#fff}.v61MoreTitle{margin:20px 2px 10px;color:#123b6d;font-size:18px}.v61ScrollHint{font-size:12px;color:#6b7e94;font-weight:700}
+@media(max-width:900px){
+ #erp.v90Shell.v61AdminUI{--v61side:0px}
+ #erp.v90Shell.v61AdminUI main{margin-left:0!important;width:100%!important;max-width:100%!important}
+ #erp.v90Shell.v61AdminUI aside{width:min(86vw,310px)!important;max-width:310px!important}
+ #v61CollapseBtn{display:none!important}
+ #erp.v90Shell.v61AdminUI #erpContent{padding-left:10px!important;padding-right:10px!important}
+ #erp.v90Shell.v61AdminUI .v90Stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erp.v90Shell.v61AdminUI .v114AdminMainGrid,#erp.v90Shell.v61AdminUI .v114AdminFeedGrid{grid-template-columns:1fr!important}
+}
+@media(max-width:380px){#erp.v90Shell.v61AdminUI .v90Stats{grid-template-columns:1fr!important}.v114HeroMini{display:grid!important;grid-template-columns:1fr!important;width:100%}.v114HeroMini button{width:100%}}
+</style>
+<script id="v61-admin-smart3d-runtime">
+window.V61_BUILD='V61-ADMIN-SMART-3D-SAFE-UI-2026-09-19';
+function v61IsAdmin(){try{return typeof v90Admin==='function'&&v90Admin()}catch(_e){return false}}
+function v61ApplyShell(){
+ const erp=document.getElementById('erp'); if(!erp||!v61IsAdmin())return; erp.classList.add('v61AdminUI');
+ if(localStorage.getItem('ldm_admin_sidebar_collapsed')==='1'&&innerWidth>900)erp.classList.add('v61Collapsed');
+ const top=erp.querySelector('.erpTop'); if(top&&!document.getElementById('v61CollapseBtn')){const b=document.createElement('button');b.id='v61CollapseBtn';b.title='Collapse / Expand Sidebar';b.textContent='☰';b.onclick=()=>{erp.classList.toggle('v61Collapsed');localStorage.setItem('ldm_admin_sidebar_collapsed',erp.classList.contains('v61Collapsed')?'1':'0')};top.insertBefore(b,top.firstChild)}
+}
+function v61Greeting(){const h=new Date().getHours();return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
+function v61ClockText(){const d=new Date();return `<span>${v61Greeting()}</span><b>${d.toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'short',year:'numeric'})}</b><b>${d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</b>`}
+function v61DecorateDashboard(){
+ if(!v61IsAdmin())return;v61ApplyShell();const dash=document.querySelector('#erpContent .v114AdminDash');if(!dash)return;
+ const hero=dash.querySelector('.v114AdminHero>div');if(hero){let old=hero.querySelector('.v61Clock');if(!old){old=document.createElement('div');old.className='v61Clock';hero.appendChild(old)}old.innerHTML=v61ClockText()}
+ const stats=[...dash.querySelectorAll('#v90Stats .v90Stat')];const routes=['students','staff','fee_dashboard','v90_due_fee_monitor','attendance','v90_student_requests'];stats.forEach((el,i)=>{if(routes[i]){el.setAttribute('role','button');el.tabIndex=0;el.onclick=()=>render(routes[i]);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();render(routes[i])}}}});
+ const mg=dash.querySelector('.v114ManagementPanel');if(mg&&!mg.previousElementSibling?.classList?.contains('v61MoreTitle')){let t=document.createElement('div');t.className='v61MoreTitle';t.innerHTML='<b>All ERP Functions</b> <span class="v61ScrollHint">• नीचे scroll करके पुराने सभी functions उपलब्ध हैं</span>';mg.parentNode.insertBefore(t,mg)}
+}
+setInterval(()=>{const c=document.querySelector('.v61Clock');if(c)c.innerHTML=v61ClockText()},1000);
+try{const _v61Dash=v90AdminDashboard;v90AdminDashboard=async function(){let r=await _v61Dash.apply(this,arguments);setTimeout(v61DecorateDashboard,80);return r}}catch(_e){}
+try{const _v61Install=v90InstallShell;v90InstallShell=function(){let r=_v61Install.apply(this,arguments);setTimeout(v61ApplyShell,0);return r}}catch(_e){}
+window.addEventListener('resize',()=>{const e=document.getElementById('erp');if(e&&innerWidth<=900)e.classList.remove('v61Collapsed')},{passive:true});
+</script>
+<!-- ===== END V61 ADMIN SMART 3D DASHBOARD SAFE UI ===== -->
