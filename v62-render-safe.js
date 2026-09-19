@@ -18,6 +18,5 @@
  document.addEventListener('DOMContentLoaded',()=>setTimeout(install,120));
  window.addEventListener('load',()=>setTimeout(install,250));
  window.addEventListener('resize',()=>{mark();if(window.innerWidth>900)document.querySelector('#erp aside')?.classList.remove('open')},{passive:true});
- const mo=new MutationObserver(()=>install());
- document.addEventListener('DOMContentLoaded',()=>{if(document.body)mo.observe(document.body,{subtree:true,childList:true})});
+ document.addEventListener('click',()=>setTimeout(install,60),true);
 })();
