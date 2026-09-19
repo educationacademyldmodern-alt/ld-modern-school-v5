@@ -1,0 +1,11 @@
+/* V63 scoped final repair: dashboard proportions + parent active-child */
+#erp{--v63-side:286px}
+@media(min-width:901px){#erp aside{width:var(--v63-side)!important}#erp main{margin-left:var(--v63-side)!important;width:calc(100% - var(--v63-side))!important}#erpNav{padding:6px!important}#erpNav button{min-height:38px!important;font-size:11.5px!important}#erp .logout{min-height:40px!important}}
+#erpContent .dashHero,#erpContent .v90Welcome{min-height:0!important;padding:16px 18px!important}
+#erpContent .dashHero h1,#erpContent .v90Welcome h1,#erpContent .v90Welcome h2{font-size:clamp(24px,3vw,40px)!important;line-height:1.05!important;overflow-wrap:anywhere}
+#erpContent .erpCards,#erpContent .v90Stats{align-items:stretch!important}
+#erpContent .stat,#erpContent .v90Stat{min-height:108px!important}
+#erpContent .tableWrap{background:#fff;border-radius:14px}
+.v63ChildChooser{padding:18px}.v63ChildChooser h2{margin:0 0 5px;color:#073b78}.v63ChildChooser p{margin:0 0 14px;color:#607188}.v63ChildGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.v63ChildPick{border:1px solid #d7e6f5;border-radius:18px;background:linear-gradient(145deg,#fff,#eef6ff);padding:16px;text-align:left;box-shadow:0 9px 22px rgba(21,70,120,.09);cursor:pointer}.v63ChildPick b,.v63ChildPick span{display:block}.v63ChildPick b{font-size:18px;color:#073b78}.v63ChildPick span{margin-top:5px;color:#64758a}.v63ChildBack{margin:0 0 12px;border:0;border-radius:10px;padding:9px 13px;background:#0b67c8;color:#fff;font-weight:800;cursor:pointer}
+@media(max-width:900px){#erp main{margin-left:0!important;width:100%!important}#erpContent .v90Stats,#erpContent .erpCards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:520px){#erpContent .v90Stats,#erpContent .erpCards{grid-template-columns:1fr!important}.v63ChildGrid{grid-template-columns:1fr}.v63ChildChooser{padding:10px}}
