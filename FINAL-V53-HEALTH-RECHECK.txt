@@ -1,0 +1,16 @@
+LD MODERN V53 HEALTH RECHECK - 2026-09-19
+Base: cb3ec25 / V114.2 + V53 stability package
+
+Additional corrections:
+1. Removed final53-complete.js and v53-stability-fix.js from isolated print-window HTML. Application JS must load only in the main ERP page; print windows do not contain the ERP DOM and could create false null/route Health errors.
+2. Kept one main-page load of final53-complete.js and one main-page load of v53-stability-fix.js.
+3. Added direct erpContent connected/null guard to the teacher timetable dashboard insertion.
+4. Kept stale insertBefore protection and Master Attendance / Admit Publish route guards.
+5. JavaScript external files and inline script blocks were syntax checked.
+
+Database:
+Run supabase-v53-stability-fix.sql after the prior V53 SQL migrations. It contains the recursion-safe role/RLS repair intended for the teacher-add stack-depth issue.
+
+Acceptance test after deployment:
+Admin login -> add teacher -> assign class -> teacher login -> self attendance -> student attendance -> Master Attendance -> timetable/bell teaching update -> Admit Publish -> fee/due -> Master Reports -> Parent login. Then open System Health and confirm no NEW error is created during those actions.
+Old Alert Log history is not deleted by this package.
