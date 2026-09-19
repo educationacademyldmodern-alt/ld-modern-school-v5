@@ -1318,9 +1318,6 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 <!-- V107-CLEAN-PREMIUM-DOCS-2026-09-15 -->
 
 
-
-<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
-<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
 <!-- ===== V92.1 LOGIN RAW-CODE PARSE FIX: restored V14 print boundary ===== -->
@@ -2378,9 +2375,6 @@ function idStudioPrintCss(){return `@page{size:A4 portrait;margin:0}*{box-sizing
 function idStudioPrint(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');w.document.write(`<html><head><title>ID Cards</title><style>${idStudioPrintCss()}</style><link rel="stylesheet" href="final53-complete.css?v=V53-COMPLETE">
 </head><body>${el.innerHTML}
 
-
-<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
-<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>`);w.document.close();setTimeout(()=>w.print(),350)}
 function idStudioPdf(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class';html2pdf().set({margin:0,filename:`${c}-ID-Cards-A4-10.pdf`,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()}
 async function findIdStudent(){let z=String($('idSearch')?.value||'').trim();if(idStudioRows.length){idStudioRenderStudentList();return}if(!z)return toast('Search text डालें या Class चुनें');let safe=z.replace(/[%_,]/g,' ');let{data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${safe}%,father_name.ilike.%${safe}%,roll_no.ilike.%${safe}%,admission_no.ilike.%${safe}%`).limit(50);if(error)return toast(error.message);idStudioRows=idStudioSortRows(data||[]);idStudioRenderStudentList()}
@@ -6492,9 +6486,6 @@ function v69GenerateCards(){if(!v69CurrentExam)return toast('Exam select कर�
 function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCards();area=$('v69PrintArea')}if(!area)return toast('पहले Admit Cards generate करें');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111}.v69PrintPage{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v69PrintPage:last-child{page-break-after:auto}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a;padding:.8mm 1mm;text-align:center;font-size:6.5px;line-height:1.05}.v69TT th{background:#edf3f9}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm}`;w.document.write(`<html><head><title>${esc(v69CurrentExam?.exam_name||'Exam')} Admit Cards</title><style>${css}</style><link rel="stylesheet" href="final53-complete.css?v=V53-COMPLETE">
 </head><body>${area.innerHTML}
 
-
-<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
-<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
 
 const v69RenderBase=render;
@@ -7860,9 +7851,6 @@ function v92PrintCss(){return `@page{size:A4 portrait;margin:10mm}*{box-sizing:b
 window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');w.document.write(`<html><head><title>Admit Card A4</title><style>${v92PrintCss()}</style><link rel="stylesheet" href="final53-complete.css?v=V53-COMPLETE">
 </head><body>${el.innerHTML}
 
-
-<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
-<script src="v60-session-admit-health.js?v=V60-1"></script>
 </body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
 window.v92PdfArea=function(id,name){let el=q92(id);if(!el)return toast('Preview first');if(!window.html2pdf)return v92PrintArea(id);let opt={margin:[10,10,10,10],filename:name||'admit-cards.pdf',image:{type:'jpeg',quality:.94},html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};html2pdf().set(opt).from(el).save();};
 
@@ -9413,7 +9401,6 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 
 <link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1">
 <script src="v60-session-admit-health.js?v=V60-1"></script>
-</body></html>
 <!-- ===== V61 ADMIN SMART 3D DASHBOARD SAFE UI ===== -->
 <style id="v61-admin-smart3d">
 #erp.v90Shell.v61AdminUI{--v61side:286px;--v61nav:#071b38;--v61blue:#1479ff}
@@ -9474,3 +9461,5 @@ try{const _v61Install=v90InstallShell;v90InstallShell=function(){let r=_v61Insta
 window.addEventListener('resize',()=>{const e=document.getElementById('erp');if(e&&innerWidth<=900)e.classList.remove('v61Collapsed')},{passive:true});
 </script>
 <!-- ===== END V61 ADMIN SMART 3D DASHBOARD SAFE UI ===== -->
+</body></html>
+
