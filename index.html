@@ -1228,7 +1228,7 @@ async function loadParentPortal(){
  let st=data?.students||[];if(!st.length){box.innerHTML='<div class="resultCard"><h3>No student linked</h3><p>इस login से कोई approved student record नहीं मिला। Admin में Student → Parent/Student Login check करें.</p></div>';return}
  const role=String(profile?.role||'parent').toLowerCase();
  const roleName=role==='student'?'Student':'Parent';
- box.innerHTML=st.map((x,idx)=>{let att=x.attendance||{},fee=x.fee||{},recent=x.recent_attendance||[],results=x.results||[];let latest=results[0]||{},attPct=Number(att.total||0)?Math.round(Number(att.present||0)*100/Number(att.total||1)):0;let feeClear=Number(fee.due||0)<=0;return `<article class="parentStudentCard v114PortalDash">
+ box.innerHTML=st.map((x,idx)=>{let att=x.attendance||{},fee=x.fee||{},recent=x.recent_attendance||[],results=x.results||[];let latest=results[0]||{},attPct=Number(att.total||0)?Math.round(Number(att.present||0)*100/Number(att.total||1)):0;let feeClear=Number(fee.due||0)<=0;return `<article class="parentStudentCard v114PortalDash" data-student-id="${esc(x.student_id||x.id||x.admission_no||idx)}" data-admission-no="${esc(x.admission_no||'')}">
    <section class="v114PortalHero"><div class="v114PortalHeroText"><small>${role==='student'?'HELLO':'WELCOME'}</small><h2>${role==='student'?esc(x.student_name||'Student'):'Dear Parent!'}</h2><p>${role==='student'?'Learn Today • Lead Tomorrow':'Your child’s progress is our priority.'}</p><em>${role==='student'?'Dream • Learn • Improve • Achieve':'Support • Guide • Encourage • Excel'}</em></div><div class="v114PortalHeroStudent"><div class="v114StudentBadge">${role==='student'?'🎓':'👨‍👩‍👧'}</div><div><b>${esc(x.student_name||'Student')}</b><span>Class ${esc(x.class_name||'—')} • Admission ${esc(x.admission_no||'—')}</span></div><button onclick="v97ShowParentProfile?.()">Profile</button></div></section>
    <section class="v114PortalStats"><button onclick="this.closest('.v114PortalDash').querySelector('.v114ChildInfo')?.scrollIntoView({behavior:'smooth'})"><span>👤</span><small>${role==='student'?'My Class':'My Child'}</small><b>${role==='student'?esc(x.class_name||'—'):'1'}</b><em>${esc(x.student_name||'Student')}</em></button><button onclick="this.closest('.v114PortalDash').querySelector('.v114AttendanceBlock')?.scrollIntoView({behavior:'smooth'})"><span>✅</span><small>Attendance</small><b>${attPct?attPct+'%':'—'}</b><em>This Session</em></button><button onclick="this.closest('.v114PortalDash').querySelector('.v114FeeBlock')?.scrollIntoView({behavior:'smooth'})"><span>₹</span><small>Fee Status</small><b>${feeClear?'Paid':'Due'}</b><em>${feeClear?'Clear':money(fee.due||0)}</em></button><button onclick="this.closest('.v114PortalDash').querySelector('.resultMini')?.scrollIntoView({behavior:'smooth'})"><span>🏆</span><small>Latest Result</small><b>${esc(latest.grade||'—')}</b><em>${results.length?'Published':'No result'}</em></button></section>
    <section class="v114PortalQuick"><button onclick="v97ShowParentProfile?.()">👤<span>My Profile</span></button><button onclick="this.closest('.v114PortalDash').querySelector('.v114AttendanceBlock')?.scrollIntoView({behavior:'smooth'})">✅<span>Attendance</span></button><button onclick="this.closest('.v114PortalDash').querySelector('.v114FeeBlock')?.scrollIntoView({behavior:'smooth'})">₹<span>Fee Details</span></button><button onclick="this.closest('.v114PortalDash').querySelector('.resultMini')?.scrollIntoView({behavior:'smooth'})">A+<span>Exam Results</span></button><button onclick="document.getElementById('v75ParentAdmit')?.scrollIntoView({behavior:'smooth'})">🎫<span>Admit Card</span></button><button onclick="document.querySelector('#parentDashboardBody .v32ParentNotices')?.scrollIntoView({behavior:'smooth'})">📢<span>Notices</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Homework],#parentDashboardBody .v64Homework')?.scrollIntoView({behavior:'smooth'})">📚<span>Homework</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Gallery],#parentDashboardBody .gallery')?.scrollIntoView({behavior:'smooth'})">🖼<span>Gallery</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Timetable],#parentDashboardBody .v64Timetable')?.scrollIntoView({behavior:'smooth'})">🕐<span>Time Table</span></button><button onclick="document.querySelector('#parentDashboardBody [id*=Help],#parentDashboardBody [id*=Message]')?.scrollIntoView({behavior:'smooth'})">💬<span>Help</span></button></section>
@@ -9391,6 +9391,7 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 </script>
 
 
+<script src="v64-2-state-bridge.js?v=64.2"></script>
 <script src="final-master-upgrade.js?v=FINAL-MASTER-1"></script>
 <script src="public-final.js?v=FINAL3"></script>
 
@@ -9408,7 +9409,7 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 <script src="v60-session-admit-health.js?v=V60-1"></script>
 <link rel="stylesheet" href="v62-render-safe.css?v=V62-1">
 <script src="v62-render-safe.js?v=V62-1"></script>
-<script src="v63-final-repair.js"></script>
-<link rel="stylesheet" href="v64-final-layout-interaction.css?v=V64-1-1">
-<script src="v64-final-layout-interaction.js?v=V64-1-1"></script>
+<script src="v63-final-repair.js?v=64.2"></script>
+<link rel="stylesheet" href="v64-final-layout-interaction.css?v=V64-2-1">
+<script src="v64-final-layout-interaction.js?v=V64-2-1"></script>
 </body></html>

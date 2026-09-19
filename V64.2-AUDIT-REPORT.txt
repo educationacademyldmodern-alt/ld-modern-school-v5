@@ -1,0 +1,35 @@
+V64.2 source audit and corrective patch — 19 September 2026
+Source: LD-MODERN-V64.1-FINAL-RECHECKED-WITH-SQL-cb3ec25.zip
+Scope: supplied archive only. No deployment, live database write or user-message sending.
+
+CONFIRMED DEFECTS CORRECTED
+1. Extensions accessed window.profile/user/sb/cls while the core declared global lexical variables. Added a live getter/setter bridge before extensions. Also exposes school branding and current exam read access.
+2. Mobile #erp display:block!important overrode .hidden. Scoped the mobile rule and explicitly protected hidden portal containers.
+3. Collapsed desktop content max-width still used expanded sidebar width. Unified the width variable for collapsed mode.
+4. Two sibling selectors raced after asynchronous portal loads. Retained one selector, used record ID data attributes, scoped observation to direct portal-child replacement, rebuilt after rerender, and retained Back to My Children. Same names/missing admission numbers no longer serve as child identity. This is UI selection, not a replacement for database authorization of children or all shared service panels.
+5. Password button selected hidden ERP header for parents. It now selects visible portal headers.
+6. Password-profile write errors were ignored. Errors remain visible; a failed profile update no longer reports full success.
+7. Parent sibling linking always forced password change even without changing a password. The API now sets the flag only when password changes.
+8. Teacher assignment edits also forced password change, and short supplied passwords were silently ignored. Corrected both in API and retained root copy.
+9. Session route restoration raced asynchronous openERP/admin verification. Restoration now awaits it and checks ERP visibility.
+10. Parent action arguments now use JSON string serialization plus HTML escaping, preserving admission values containing quotes safely.
+11. Bulk fee reminders had fixed 86mm height plus overflow:hidden, potentially clipping content. Changed to one A4-sized notice per printed page with natural content flow and no clipping rule. Actual printer/page-fit validation remains required, especially unusually long field values.
+12. Existing profiles_update policy permits own-row updates without column restrictions. Added an additive trigger patch protecting role/status/student-link and other non-self-service fields. Existing policies are preserved. Requires live schema/permission verification before use; does not certify all other RLS rules or RPCs.
+
+VERIFICATION COMPLETED
+- 90 JavaScript source blocks/files passed node --check after changes.
+- All local script/stylesheet/image references parsed from index.html resolve in archive.
+- Six isolated Node regression assertions passed (see JSON results): live state bridge, method/auth/role denials for parent API, sibling-link flag preservation, explicit password-reset flag.
+- Regression tests use mocked responses, never live students or accounts.
+- ZIP integrity and file hash inventory checked during packaging.
+
+NOT EXECUTED / REMAINING LIMITATIONS
+- Full browser interaction, screenshots, real responsive measurements and PDF page count: Chromium was absent; its download timed out. No visual pass is claimed.
+- SQL was reviewed as source but not executed: no live schema or PostgreSQL service was connected. Trigger assumes public.profiles and public.my_role exist. Re-run behavior is designed, not database-tested here.
+- Actual Admin/Teacher/Parent login, database RLS, network failures, fee ledger accuracy, print outputs, external CDN availability and concurrent writes require preview testing against the real schema.
+- Supplied teacher handover still consists of multiple client writes and currently transfers class assignments only. Full atomic transfer of subjects/periods/timetable and authentication revocation remains a separate unresolved workflow; do not treat it as fully verified or use it for a real staff handover without further correction and database validation.
+- Teacher-access assignment replacement also uses multiple REST writes and a hard-coded 2026-27 session. Transactional rollback and next-session rollover remain unresolved.
+- Selecting one child does not itself prove filtering of every globally appended homework/admit/notice service panel. Confirm those against server-side parent/student authorization.
+- Historical SQL files and previous installation notes are retained as source history; START-HERE-V64.2-HINDI.txt takes precedence. Do not bulk-run historical migrations.
+
+This is a source-checked corrective package with explicitly incomplete end-to-end validation, not a claim that all requested ERP workflows are finished.

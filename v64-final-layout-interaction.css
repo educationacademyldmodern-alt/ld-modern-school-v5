@@ -43,3 +43,11 @@ html,body{max-width:100%;overflow-x:hidden}
  #erp .erpTop{height:auto!important;min-height:60px!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important;padding:7px 9px!important}
  #erp .erpTop>div{min-width:120px!important;flex:1 1 150px!important}
 }
+
+/* V64.2: hidden portals remain hidden; collapsed sidebar uses the same content width. */
+#erp.hidden,#parentDashboard.hidden,#parentPortal.hidden{display:none!important}
+#parentDashboardBody .parentStudentCard[hidden],#v63ChildChooser[hidden]{display:none!important}
+@media(min-width:901px){
+ #erp.v62Collapsed{--v64-side:78px}
+ #erp.v62Collapsed main{max-width:calc(100% - 78px)!important}
+}

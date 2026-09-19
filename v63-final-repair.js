@@ -1,11 +1,30 @@
+/* V64.2: one child chooser, stable record identity, async render support. */
 (()=>{'use strict';
- const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- function parentCards(){return [...document.querySelectorAll('#parentDashboardBody .parentStudentCard')];}
- function cardMeta(card,i){let txt=card.innerText||'', name=card.querySelector('.v114PortalHeroStudent b,.v114ChildRow b')?.textContent?.trim()||`Student ${i+1}`, sub=card.querySelector('.v114PortalHeroStudent span,.v114ChildRow span')?.textContent?.trim()||'';return {card,name,sub,key:(sub.match(/Admission\s*(?:No\.)?\s*:?\s*([^•\n]+)/i)?.[1]||name).trim()}}
- function showChild(key){let cards=parentCards();cards.forEach((c,i)=>{let m=cardMeta(c,i);c.hidden=m.key!==key});let chooser=document.getElementById('v63ChildChooser');if(chooser)chooser.hidden=true;let selected=cards.find((c,i)=>cardMeta(c,i).key===key);if(selected&&!selected.querySelector('.v63ChildBack')){let b=document.createElement('button');b.className='v63ChildBack';b.textContent='← Back to My Children';b.onclick=()=>showChooser();selected.prepend(b)}sessionStorage.setItem('ld_active_student',key);selected?.scrollIntoView({block:'start'});}
- function showChooser(){let cards=parentCards();cards.forEach(c=>c.hidden=true);sessionStorage.removeItem('ld_active_student');let ch=document.getElementById('v63ChildChooser');if(ch)ch.hidden=false;ch?.scrollIntoView({block:'start'});}
- function applyParentIsolation(){let body=document.getElementById('parentDashboardBody'),cards=parentCards();if(!body||!cards.length)return;let sig=cards.map((c,i)=>cardMeta(c,i).key).join('|');if(body.dataset.v63sig===sig&&document.getElementById('v63ChildChooser'))return;body.dataset.v63sig=sig;document.getElementById('v63ChildChooser')?.remove();if(cards.length===1){cards[0].hidden=false;return}let chooser=document.createElement('section');chooser.id='v63ChildChooser';chooser.className='v63ChildChooser';chooser.innerHTML=`<h2>My Children</h2><p>जिस बच्चे की जानकारी देखनी है उसे चुनें। एक समय में केवल उसी बच्चे का dashboard दिखेगा।</p><div class="v63ChildGrid">${cards.map((c,i)=>{let m=cardMeta(c,i);return `<button class="v63ChildPick" data-k="${esc(m.key)}"><b>👨‍🎓 ${esc(m.name)}</b><span>${esc(m.sub||'Student Profile')}</span></button>`}).join('')}</div>`;body.prepend(chooser);cards.forEach(c=>c.hidden=true);chooser.querySelectorAll('.v63ChildPick').forEach(b=>b.onclick=()=>showChild(b.dataset.k));let saved=sessionStorage.getItem('ld_active_student');if(saved&&cards.some((c,i)=>cardMeta(c,i).key===saved))showChild(saved);}
- let t;function queue(){clearTimeout(t);t=setTimeout(applyParentIsolation,120)}
- document.addEventListener('DOMContentLoaded',queue,{once:true});window.addEventListener('load',queue,{once:true});document.addEventListener('click',()=>setTimeout(queue,80),true);
- window.v63ShowMyChildren=showChooser;
+ const cards=()=>Array.from(document.querySelectorAll('#parentDashboardBody .parentStudentCard'));
+ let previous=[],observer;
+ function meta(c,i){return {key:c.dataset.studentId||`card-${i}`,adm:c.dataset.admissionNo||'',name:c.querySelector('.v114PortalHeroStudent b,.v114ChildRow b')?.textContent?.trim()||`Student ${i+1}`,sub:c.querySelector('.v114PortalHeroStudent span,.v114ChildRow span')?.textContent?.trim()||''}}
+ function save(key,adm){try{if(key){sessionStorage.setItem('ld_active_student_id',key);sessionStorage.setItem('ld_active_student',adm)}else{sessionStorage.removeItem('ld_active_student_id');sessionStorage.removeItem('ld_active_student')}}catch(_){} }
+ function choose(key){const all=cards(),selected=all.find((c,i)=>meta(c,i).key===key);if(!selected)return;
+  all.forEach(c=>c.hidden=c!==selected);const chooser=document.getElementById('v63ChildChooser');if(chooser)chooser.hidden=true;
+  const m=meta(selected,all.indexOf(selected));save(m.key,m.adm);selected.scrollIntoView({block:'start'});
+ }
+ function showChooser(){cards().forEach(c=>c.hidden=true);save('','');const ch=document.getElementById('v63ChildChooser');if(ch){ch.hidden=false;ch.scrollIntoView({block:'start'})}}
+ function apply(){const body=document.getElementById('parentDashboardBody'),all=cards();if(!body||!all.length){previous=[];return}
+  document.getElementById('v54Children')?.remove();
+  if(all.length===previous.length&&all.every((c,i)=>c===previous[i]))return;
+  previous=all;document.getElementById('v63ChildChooser')?.remove();
+  if(all.length===1){all[0].hidden=false;const m=meta(all[0],0);save(m.key,m.adm);return}
+  const ch=document.createElement('section');ch.id='v63ChildChooser';ch.className='v63ChildChooser';
+  const title=document.createElement('h2');title.textContent='My Children';ch.append(title);
+  const grid=document.createElement('div');grid.className='v63ChildGrid';ch.append(grid);
+  all.forEach((c,i)=>{const m=meta(c,i),b=document.createElement('button'),name=document.createElement('b'),sub=document.createElement('span');b.className='v63ChildPick';name.textContent=m.name;sub.textContent=m.sub;b.append(name,sub);b.onclick=()=>choose(m.key);grid.append(b);c.hidden=true;
+   if(!c.querySelector('.v63ChildBack')){const back=document.createElement('button');back.className='v63ChildBack';back.textContent='← Back to My Children';back.onclick=showChooser;c.prepend(back)}
+  });body.prepend(ch);
+  let saved='';try{saved=sessionStorage.getItem('ld_active_student_id')||''}catch(_){}
+  if(all.some((c,i)=>meta(c,i).key===saved))choose(saved);
+ }
+ function install(){apply();const body=document.getElementById('parentDashboardBody');if(body&&!observer){observer=new MutationObserver(apply);observer.observe(body,{childList:true})}}
+ window.v63ApplyParentIsolation=apply;window.v63ShowMyChildren=showChooser;
+ window.v54SelectChild=adm=>{const all=cards(),c=all.find(x=>x.dataset.admissionNo===adm);if(c)choose(meta(c,all.indexOf(c)).key)};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
