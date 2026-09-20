@@ -9783,4 +9783,102 @@ window.V649_BUILD='V64.10-FINAL-BOUNDARY-FIX-2026-09-20';
 })();
 </script>
 <!-- ===== END V64.10 FINAL FUNCTION PATCH ===== -->
-</body></html>
+
+<!-- ===== V64.11 FINAL MASTER SQL COMPAT ===== -->
+<script id="v6411-master-sql-compat">
+window.V6411_BUILD='V64.11-FINAL-MASTER-SQL-COMPAT-2026-09-20';
+</script>
+<!-- ===== END V64.11 ===== -->
+<!-- ===== V64.12 FINAL UI + NAV + ID + TEACHER PHOTO ===== -->
+<style id="v6412-final-css">
+/* One ERP scroll only; role header remains visible. */
+body.v6412ErpOpen{overflow:hidden!important}
+#erp.v6412Final{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+#erp.v6412Final main{height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important;min-width:0!important}
+#erp.v6412Final .erpTop{position:sticky!important;top:0!important;z-index:95!important}
+#erp.v6412Final #erpContent{overflow:visible!important;max-height:none!important;height:auto!important}
+/* Admin clean header: Back + Home + School + Master Search only. */
+#erp.v6412Admin .erpTop{display:grid!important;grid-template-columns:auto auto minmax(220px,1fr) minmax(260px,520px)!important;align-items:center!important;gap:9px!important}
+#erp.v6412Admin .erpTop>.hamb,#erp.v6412Admin .erpTop>.websiteBtn,#erp.v6412Admin .erpTop>.erpHomeBtn{display:none!important}
+#erp.v6412Admin .erpTop>div:not(#v75TopSearch):not(.v6412SchoolIdentity){display:none!important}
+#erp.v6412Admin .v6412SchoolIdentity{display:block!important;min-width:0;text-align:left}
+#erp.v6412Admin .v6412SchoolIdentity b{display:block;font-size:clamp(15px,1.7vw,23px);line-height:1.02;color:#fff;font-weight:950;letter-spacing:.01em}
+#erp.v6412Admin .v6412SchoolIdentity small{display:block;color:#e6f3ff;font-size:9px;font-weight:800;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#erp.v6412Admin #v75TopSearch{width:100%!important;max-width:520px!important;justify-self:end!important}
+/* Five genuinely different premium ID looks (not only color swaps). */
+.idCard.v646PremiumId.t1{border-radius:3mm!important;border:1.5px solid #143c70!important}.idCard.v646PremiumId.t1 .v104Band{background:linear-gradient(135deg,#0b315f,#1678d4)!important;color:#fff}.idCard.v646PremiumId.t1 .v104Photo{border-radius:50%!important;width:16mm!important;height:16mm!important}
+.idCard.v646PremiumId.t2{border:0!important;border-radius:5mm!important;box-shadow:inset 0 0 0 1.3px #1670d2!important}.idCard.v646PremiumId.t2 .v104Band{background:linear-gradient(120deg,#0a57ad 0 68%,#7ec5ff 68%)!important;color:#fff}.idCard.v646PremiumId.t2 .v104Photo{border-radius:2.5mm!important}
+.idCard.v646PremiumId.t3{border:1.5px solid #17835d!important;border-radius:2mm!important}.idCard.v646PremiumId.t3 .v104Band{background:#effbf5!important;color:#12664d!important;border-bottom:2px solid #1b9369}.idCard.v646PremiumId.t3 .v104Photo{border-radius:0!important;box-shadow:4px 4px 0 #d9f4e7!important}
+.idCard.v646PremiumId.t4{border:0!important;border-radius:5mm!important;box-shadow:inset 0 0 0 1.4px #6c39c8!important}.idCard.v646PremiumId.t4:before{content:"";position:absolute;right:-12mm;bottom:-14mm;width:34mm;height:34mm;border-radius:50%;background:#7c4ad51b}.idCard.v646PremiumId.t4 .v104Band{background:linear-gradient(135deg,#5121a5,#a26ef1)!important;color:#fff}.idCard.v646PremiumId.t4 .v104Photo{border-radius:50% 50% 12% 12%!important}
+.idCard.v646PremiumId.t5{border:1.5px solid #1f2937!important;border-radius:1.5mm!important}.idCard.v646PremiumId.t5 .v104Band{background:#111827!important;color:#fff!important;border-bottom:2.2mm solid #e3ad22}.idCard.v646PremiumId.t5 .v104Photo{border-radius:1mm!important;border:1.5px solid #e3ad22!important}
+@media(max-width:900px){#erp.v6412Admin .erpTop{grid-template-columns:auto auto 1fr!important}#erp.v6412Admin #v75TopSearch{grid-column:1/-1;max-width:none!important}#erp.v6412Admin .v6412SchoolIdentity small{white-space:normal}.erpTop .hamb{display:inline-flex!important}}
+@media(max-width:520px){#erp.v6412Admin .v6412SchoolIdentity b{font-size:14px}#erp.v6412Admin .v6412SchoolIdentity small{font-size:8px}}
+</style>
+<script id="v6412-final-runtime">
+window.V6412_BUILD='V64.12-FINAL-UI-NAV-ID-PHOTO-2026-09-20';
+(function(){
+ const role=()=>String(profile?.role||'').toLowerCase(),admin=()=>['admin','super_admin','principal'].includes(role());
+ function syncShell(){
+   const erp=document.getElementById('erp');if(!erp||erp.classList.contains('hidden')){document.body.classList.remove('v6412ErpOpen');return}
+   document.body.classList.add('v6412ErpOpen');erp.classList.add('v6412Final');erp.classList.toggle('v6412Admin',admin());
+   if(admin()){
+    const top=erp.querySelector('.erpTop');if(top&&!top.querySelector('.v6412SchoolIdentity')){let d=document.createElement('div');d.className='v6412SchoolIdentity';d.innerHTML='<b>L D MODERN EDUCATION ACADEMY</b><small>Gambhiriya Bujurg, Singhapatti, Kushinagar</small>';let search=top.querySelector('#v75TopSearch');top.insertBefore(d,search||top.lastElementChild)}
+   }
+   const b=document.getElementById('v90BackBtn');if(b){let h=window.__v90History||['dashboard'];b.disabled=h.length<=1;b.onclick=function(){let hh=window.__v90History||['dashboard'];if(hh.length<=1)return;return typeof v90Back==='function'?v90Back():null}}
+ }
+ const openBase=window.openERP;if(typeof openBase==='function')window.openERP=async function(){let r=await openBase.apply(this,arguments);setTimeout(syncShell,80);return r};
+ const renderBase=window.render;if(typeof renderBase==='function')window.render=async function(){let r=await renderBase.apply(this,arguments);setTimeout(syncShell,30);return r};
+ const shellBase=window.v90InstallShell;if(typeof shellBase==='function')window.v90InstallShell=function(){let r=shellBase.apply(this,arguments);setTimeout(syncShell,0);return r};
+ window.addEventListener('load',()=>setTimeout(syncShell,200),{once:true,passive:true});
+})();
+</script>
+<!-- ===== END V64.12 ===== -->
+
+\n<!-- ===== V64.13 CENTRAL MASTER RECONCILIATION ===== -->
+<script id="v6413-central-master">
+window.V6413_BUILD='V64.13-CENTRAL-MASTER-RECONCILED-2026-09-20';
+(function(){
+ const N=v=>Number(v||0), norm=v=>String(v||'').trim().toLowerCase();
+ const activeStudent=s=>norm(s?.status)!=='inactive';
+ async function feeRegister(){
+   const session=school?.academic_session||school?.current_session||(typeof v90Session==='function'?v90Session():'2026-27');
+   const [sr,schr,ar,pr]=await Promise.all([
+    sb.from('students').select('id,student_name,admission_no,roll_no,class_name,father_name,mother_name,phone,status,fee_category,fee_waiver_percent').limit(10000),
+    sb.from('student_fee_schedules').select('admission_no,amount,paid_amount,status,due_date,academic_session').eq('academic_session',session).limit(30000),
+    sb.from('v65_fee_adjustments').select('admission_no,adjustment_type,amount,is_active').eq('is_active',true).limit(20000),
+    sb.from('fee_payments').select('admission_no,amount,payment_date').limit(30000)
+   ]);
+   if(sr.error||schr.error)throw(sr.error||schr.error); const students=(sr.data||[]).filter(activeStudent), schedules=schr.data||[], adjustments=ar.error?[]:(ar.data||[]), payments=pr.error?[]:(pr.data||[]);
+   const due={}, total={}, paid={};
+   schedules.forEach(x=>{const k=String(x.admission_no||'');if(!k)return;const amt=N(x.amount),pd=N(x.paid_amount),bal=norm(x.status)==='paid'?0:Math.max(amt-pd,0);total[k]=(total[k]||0)+amt;due[k]=(due[k]||0)+bal;});
+   adjustments.forEach(x=>{const k=String(x.admission_no||'');if(!k)return;const sign=['waiver','discount'].includes(norm(x.adjustment_type))?-1:1;due[k]=(due[k]||0)+sign*Math.abs(N(x.amount));});
+   payments.forEach(x=>{const k=String(x.admission_no||'');if(k)paid[k]=(paid[k]||0)+N(x.amount)});
+   const rows=students.map(st=>{const k=String(st.admission_no||''),free=norm(st.fee_category)==='free'||N(st.fee_waiver_percent)>=100,d=free?0:Math.max(N(due[k]),0);return {...st,_total:N(total[k]),_paid:N(paid[k]),_due:d,_free:free}});
+   return {session,rows,payments,totalDue:rows.reduce((a,x)=>a+x._due,0),dueStudents:rows.filter(x=>x._due>0).length,totalCollection:payments.reduce((a,x)=>a+N(x.amount),0)};
+ }
+ window.v6413CentralFeeRegister=feeRegister;
+ /* Fee Dashboard now reads the same schedule+adjustment+payment ledger as Master Due cards/reminders. */
+ window.feeDashboard=async function(filter='all',q='',classFilter=''){
+   head('Smart Student Fee Dashboard','CENTRAL LEDGER • Student • Father • Mobile • Class • Paid • Due');
+   try{
+    const x=await feeRegister(); let rows=x.rows.slice(),z=String(q||'').toLowerCase().trim();
+    if(z)rows=rows.filter(r=>[r.student_name,r.father_name,r.phone,r.admission_no,r.class_name].some(v=>String(v||'').toLowerCase().includes(z)));
+    if(classFilter)rows=rows.filter(r=>String(r.class_name||'')===String(classFilter));
+    if(filter==='paid')rows=rows.filter(r=>!r._free&&r._due<=0&&r._paid>0); if(filter==='due')rows=rows.filter(r=>!r._free&&r._due>0); if(filter==='free')rows=rows.filter(r=>r._free);
+    const all=x.rows.length,paid=x.rows.filter(r=>!r._free&&r._due<=0&&r._paid>0).length,due=x.dueStudents,free=x.rows.filter(r=>r._free).length;
+    $('erpContent').innerHTML=`<div class="feeSummary"><button onclick="feeDashboard('all')"><b>${all}</b><span>Total Students</span></button><button onclick="feeDashboard('paid')"><b>${paid}</b><span>Paid</span></button><button onclick="feeDashboard('due')"><b>${due}</b><span>Due</span></button><button onclick="feeDashboard('free')"><b>${free}</b><span>Free Fee</span></button><div><b>${money(x.totalCollection)}</b><span>Total Collection</span></div><div><b>${money(x.totalDue)}</b><span>Total Pending</span></div></div><div class="panel"><div class="panelHead"><div><h3>Central Student Fee Register</h3><p class="note">Master Fee, Dashboard और Due list एक ही schedule + adjustment + payment ledger से calculate होते हैं.</p></div><div class="tools searchTools"><input id="feeQ" placeholder="🔎 Search student / father / mobile..." value="${esc(q)}"><select id="feeClass"><option value="">All Classes</option>${cls.map(c=>`<option ${c===classFilter?'selected':''}>${esc(c)}</option>`).join('')}</select><button class="secondary" onclick="feeDashboard('${filter}',$('feeQ').value,$('feeClass').value)">Search</button></div></div><div class="feeTabs"><button onclick="feeDashboard('all',$('feeQ').value,$('feeClass').value)">All</button><button onclick="feeDashboard('paid',$('feeQ').value,$('feeClass').value)">Paid</button><button onclick="feeDashboard('due',$('feeQ').value,$('feeClass').value)">Due</button><button onclick="feeDashboard('free',$('feeQ').value,$('feeClass').value)">Free Fee</button></div><div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Mobile</th><th>Class</th><th>Scheduled</th><th>Paid</th><th>Due</th><th>Status</th><th>Action</th></tr>${rows.map(r=>`<tr><td><b>${esc(r.student_name||'')}</b><small class="cellSub">${esc(r.admission_no||'')}</small></td><td>${esc(r.father_name||'')}</td><td>${esc(r.phone||'')}</td><td>${esc(r.class_name||'')}</td><td>${money(r._total)}</td><td>${money(r._paid)}</td><td><b>${money(r._due)}</b></td><td>${r._free?'<span class="badge free">FREE</span>':r._due>0?'<span class="badge due">DUE</span>':'<span class="badge paid">CLEAR</span>'}</td><td><button class="mini edit" onclick="openFeeStudentByAdmission('${esc(r.admission_no||'')}')">Open Fee</button></td></tr>`).join('')||'<tr><td colspan="9">No matching students.</td></tr>'}</table></div></div>`;
+   }catch(e){$('erpContent').innerHTML=`<div class="panel"><div class="empty">Central fee ledger error: ${esc(e.message||String(e))}</div></div>`}
+ };
+ /* Exact Master Plan audit: compare headline and drill-down sources on demand, never via polling. */
+ window.v6413MasterRecheck=async function(){
+   if(typeof v90Admin==='function'&&!v90Admin())return toast('Admin / Principal only');
+   head('✓ Central Master Data Check','Students • Teachers • Attendance • Fee • Income • Expense • Transport');
+   try{const [x,f]=await Promise.all([v647ExactMasterSnapshot(),feeRegister()]); const ok=Math.abs(N(x.totalDue)-N(f.totalDue))<0.01;
+    $('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div><h3>${ok?'✓':'⚠'} Central Master Reconciliation</h3><p class="note">Manual check only • no background refresh.</p></div><button onclick="v6413MasterRecheck()">↻ Recheck</button></div><div class="erpCards">${stat('Students',x.activeStudents,'students master')}${stat('Teachers',x.activeTeachers,'teacher_profiles')}${stat('Present',x.present,'attendance today')}${stat('Total Due',money(f.totalDue),f.dueStudents+' due students')}${stat('Collection',money(f.totalCollection),'fee_payments')}${stat('Income',money(x.income),'income master')}${stat('Expense',money(x.expenses),'expenses master')}${stat('Transport',x.transportStudents,'active assignments')}</div><div class="${ok?'storageSafe':'dangerNote'}">${ok?'✓ Dashboard Due and Central Fee Register use the same calculation.':'⚠ Fee totals do not reconcile; do not move to Production.'}</div></div>`;
+   }catch(e){$('erpContent').innerHTML=`<div class="panel"><div class="empty">${esc(e.message||String(e))}</div></div>`}
+ };
+ try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('control'))||V90_ADMIN_GROUPS[0];if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='v6413_master_recheck'))g[2].push(['v6413_master_recheck','✓ Central Master Check'])}}catch(_e){}
+ const rb=window.render;if(typeof rb==='function')window.render=async function(route){if(route==='v6413_master_recheck'){window.__v90Route=route;v90InstallShell?.(route);return v6413MasterRecheck()}return rb.apply(this,arguments)};
+})();
+</script>
+<!-- ===== END V64.13 ===== -->\n</body></html>
