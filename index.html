@@ -1321,8 +1321,6 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 
 
 
-<link rel="stylesheet" href="v64-4-premium-responsive.css?v=64.4&build=V644">
-<script src="v64-4-final-corrections.js?v=64.4&build=V644"></script>
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
 <!-- ===== V92.1 LOGIN RAW-CODE PARSE FIX: restored V14 print boundary ===== -->
@@ -2379,8 +2377,6 @@ function idStudioPrint(){let el=$('idA4Preview');if(!el)return toast('Preview fi
 </head><body>${el.innerHTML}
 
 
-<link rel="stylesheet" href="v64-4-premium-responsive.css?v=64.4&build=V644">
-<script src="v64-4-final-corrections.js?v=64.4&build=V644"></script>
 </body></html>`);w.document.close();setTimeout(()=>w.print(),350)}
 function idStudioPdf(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class';html2pdf().set({margin:0,filename:`${c}-ID-Cards-A4-10.pdf`,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()}
 async function findIdStudent(){let z=String($('idSearch')?.value||'').trim();if(idStudioRows.length){idStudioRenderStudentList();return}if(!z)return toast('Search text डालें या Class चुनें');let safe=z.replace(/[%_,]/g,' ');let{data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${safe}%,father_name.ilike.%${safe}%,roll_no.ilike.%${safe}%,admission_no.ilike.%${safe}%`).limit(50);if(error)return toast(error.message);idStudioRows=idStudioSortRows(data||[]);idStudioRenderStudentList()}
@@ -6493,8 +6489,6 @@ function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCa
 </head><body>${area.innerHTML}
 
 
-<link rel="stylesheet" href="v64-4-premium-responsive.css?v=64.4&build=V644">
-<script src="v64-4-final-corrections.js?v=64.4&build=V644"></script>
 </body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
 
 const v69RenderBase=render;
@@ -7861,8 +7855,6 @@ window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview fir
 </head><body>${el.innerHTML}
 
 
-<link rel="stylesheet" href="v64-4-premium-responsive.css?v=64.4&build=V644">
-<script src="v64-4-final-corrections.js?v=64.4&build=V644"></script>
 </body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
 window.v92PdfArea=function(id,name){let el=q92(id);if(!el)return toast('Preview first');if(!window.html2pdf)return v92PrintArea(id);let opt={margin:[10,10,10,10],filename:name||'admit-cards.pdf',image:{type:'jpeg',quality:.94},html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};html2pdf().set(opt).from(el).save();};
 
