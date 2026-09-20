@@ -1,0 +1,20 @@
+V64.22 CLEAN FINAL CORRECTION REPORT
+Date: 2026-09-20
+
+Corrected after final recheck:
+1. Teacher login creation now uses existing Admin-only staff-first /api/teacher-access flow; removed duplicate browser signUp path.
+2. Teacher remains Staff/Master first, password/login is created or reset later by Admin.
+3. One Teacher can have one or multiple Classes.
+4. Subject field removed from Teacher Login Manager flow; API receives empty subjects list.
+5. Teacher own Change Password now asks Current Password, verifies it, then saves New Password.
+6. Admin can create/reset Teacher password through Teacher Login Manager without OTP/email.
+7. Removed unused ID Card design CSS t6-t10; V64.22 exposes exactly 5 designs.
+8. Due Master remains: Student Name | Father Name | Selected Month Till Due | Fixed Fee | Total Balance | Update; Total is live Till Due + Fixed Fee.
+9. Public n/n dynamic cleanup retained.
+10. Existing functions/data were not intentionally deleted; SQL remains non-destructive/idempotent.
+
+LIVE TEST REQUIRED AFTER DEPLOYMENT:
+- /api/teacher-access availability and Admin authorization
+- Supabase RLS for teacher assigned classes
+- Real teacher login/change password
+- Mobile/Desktop print previews and session refresh
