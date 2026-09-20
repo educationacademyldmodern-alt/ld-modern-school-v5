@@ -5850,7 +5850,7 @@ async function v64DeleteSelectedAdmissions(){let idx=[...document.querySelectorA
    ========================================================= */
 async function v64LogAlert(severity,module,title,message,fingerprint){try{if(!sb||!user?.id)return;await sb.rpc('log_system_alert',{p_severity:severity,p_module:module,p_title:title,p_message:String(message||'').slice(0,1800),p_fingerprint:fingerprint||null})}catch(_e){}}
 function v64InstallHealthBadge(){
-  if(!v64IsAdmin())return;let top=document.querySelector('#erp .erpTop');if(!top)return;let b=$('v64HealthBadge');if(!b){b=document.createElement('button');b.id='v64HealthBadge';b.className='v64HealthBadge';b.onclick=()=>render('system_health');b.textContent='🟢 Health';let web=top.querySelector('.websiteBtn');top.insertBefore(b,web||null)}v64RefreshHealthBadge();if(!v64HealthTimer)v64HealthTimer=setInterval(()=>{if(!document.hidden)v64RefreshHealthBadge()},300000)
+  if(!v64IsAdmin())return;let top=document.querySelector('#erp .erpTop');if(!top)return;let b=$('v64HealthBadge');if(!b){b=document.createElement('button');b.id='v64HealthBadge';b.className='v64HealthBadge';b.onclick=()=>render('system_health');b.textContent='🟢 Health';let web=top.querySelector('.websiteBtn');top.insertBefore(b,web||null)}v64RefreshHealthBadge();/* V64.17: periodic health polling disabled; health refreshes on open/action */
 }
 async function v64RefreshHealthBadge(){if(!v64IsAdmin()||!$('v64HealthBadge'))return;let{data,error}=await sb.rpc('v64_system_health_summary');let b=$('v64HealthBadge');if(error){b.className='v64HealthBadge bad';b.textContent='🔴 Setup';return}let danger=Number(data?.critical||0)+Number(data?.duplicate_admission_numbers||0)+Number(data?.orphan_marks||0)+Number(data?.orphan_attendance||0),warn=Number(data?.warning||0)+Number(data?.pending_leave||0)+Number(data?.pending_corrections||0)+Number(data?.pending_roster||0);b.className='v64HealthBadge '+(danger?'bad':warn?'warn':'good');b.textContent=danger?`🔴 Alert ${danger}`:warn?`🟠 Check ${warn}`:'🟢 Secure'}
 async function v64SystemHealthCenter(){
@@ -6096,7 +6096,7 @@ if(typeof teacherMyProfile==='function'){
 const v65OpenERPBase=openERP;
 openERP=async function(){let r=await v65OpenERPBase();setTimeout(()=>{v65InstallRoutes();v65AfterRoute();if(v65Admin())v65RefreshDock()},100);return r};
 window.addEventListener('load',()=>setTimeout(()=>{v65EnsureIdentityFields();v65LoadPublicAchievements();if(user)v65AfterRoute()},500));
-setInterval(()=>{if(v65Admin()&&!document.hidden)v65RefreshDock()},300000);
+/* V64.17: periodic control-dock polling disabled; refresh on ERP/module open only */
 </script>
 <!-- ===== END V65 SAFE FUTURE PATCH ===== -->
 
@@ -9881,4 +9881,225 @@ window.V6413_BUILD='V64.13-CENTRAL-MASTER-RECONCILED-2026-09-20';
  const rb=window.render;if(typeof rb==='function')window.render=async function(route){if(route==='v6413_master_recheck'){window.__v90Route=route;v90InstallShell?.(route);return v6413MasterRecheck()}return rb.apply(this,arguments)};
 })();
 </script>
-<!-- ===== END V64.13 ===== -->\n</body></html>
+<!-- ===== END V64.13 ===== -->\n
+<!-- ===== V64.15 FINAL 14-POINT + OFFICIAL LETTER CENTER ===== -->
+<style id="v6415-final-css">
+/* FINAL SHELL: exactly one ERP scroll surface, no right white strip. */
+html:has(#erp.v6415Final:not(.hidden)),body:has(#erp.v6415Final:not(.hidden)){height:100%!important;overflow:hidden!important}
+#erp.v6415Final:not(.hidden){position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;overflow:hidden!important;background:#f4f8fd!important}
+#erp.v6415Final main{height:100dvh!important;max-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important;min-width:0!important;width:calc(100vw - 282px)!important;margin-left:282px!important}
+#erp.v6415Final #erpContent{width:100%!important;max-width:none!important;margin:0!important;overflow:visible!important;padding:16px 18px 30px!important}
+#erp.v6415Final .tableWrap{max-width:100%!important;overflow-x:auto!important}
+#erp.v6415Final .erpTop{position:sticky!important;top:0!important;z-index:120!important;width:100%!important}
+/* Admin header: Back + Home + School + Master Search only. */
+#erp.v6415Final.v6415Admin .erpTop{min-height:72px!important;height:auto!important;display:grid!important;grid-template-columns:auto auto minmax(260px,1fr) minmax(260px,520px)!important;gap:9px!important;padding:8px 14px!important;background:linear-gradient(135deg,#0b315f,#0d68bd)!important;border:0!important;box-shadow:0 3px 14px #0b315f24!important}
+#erp.v6415Final.v6415Admin .erpTop>.hamb,#erp.v6415Final.v6415Admin .erpTop>.erpHomeBtn,#erp.v6415Final.v6415Admin .erpTop>.websiteBtn,#erp.v6415Final.v6415Admin .erpTop>#v63SchoolHead,#erp.v6415Final.v6415Admin .erpTop>#v63AdminBox,#erp.v6415Final.v6415Admin .erpTop>.v45NavControls,#erp.v6415Final.v6415Admin .erpTop>[data-v58-settings],#erp.v6415Final.v6415Admin .erpTop>[data-v58-password],#erp.v6415Final.v6415Admin .erpTop>.v62Bell{display:none!important}
+#erp.v6415Final.v6415Admin .erpTop>div:not(.v6415School):not(#v75TopSearch){display:none!important}
+#erp.v6415Final.v6415Admin #v90BackBtn,#erp.v6415Final.v6415Admin #v90HomeBtn{display:inline-flex!important;min-height:40px!important;align-items:center!important;justify-content:center!important;background:#ffffff!important;color:#123d6d!important;border:0!important;border-radius:11px!important;font-weight:900!important;padding:8px 11px!important}
+#erp.v6415Final .v6415School{min-width:0;color:#fff;text-align:center}
+#erp.v6415Final .v6415School b{display:block;font-size:clamp(16px,1.7vw,23px);font-weight:950;line-height:1.05;letter-spacing:.02em}
+#erp.v6415Final .v6415School small{display:block;font-size:9px;font-weight:800;color:#dceeff;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#erp.v6415Final.v6415Admin #v75TopSearch{display:flex!important;width:100%!important;max-width:520px!important;justify-self:end!important}
+/* Parent: one scroll only; top actions stay visible. */
+#parentDashboard.v6415Parent{height:100dvh!important;max-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important}
+#parentDashboard.v6415Parent .portalHead{position:sticky!important;top:0!important;z-index:100!important}
+#parentDashboard.v6415Parent .portalBody,#parentDashboard.v6415Parent #parentDashboardBody{height:auto!important;max-height:none!important;overflow:visible!important}
+/* Five visibly distinct ID card families, with safe photo fit. */
+.idCard.v646PremiumId .v104Photo{object-fit:cover!important;object-position:center!important;max-width:100%!important}
+.idCard.v646PremiumId.t1{border-radius:4mm!important}.idCard.v646PremiumId.t1 .v104Photo{border-radius:50%!important;width:17mm!important;height:17mm!important}
+.idCard.v646PremiumId.t2{border-radius:1.5mm!important}.idCard.v646PremiumId.t2 .v104Band{clip-path:polygon(0 0,100% 0,100% 72%,0 100%)}.idCard.v646PremiumId.t2 .v104Photo{border-radius:2mm!important}
+.idCard.v646PremiumId.t3{border-radius:0!important;border-width:2px!important}.idCard.v646PremiumId.t3 .v104Band{background:#fff!important;color:#145c46!important}.idCard.v646PremiumId.t3 .v104Photo{border-radius:0!important}
+.idCard.v646PremiumId.t4{border-radius:6mm!important}.idCard.v646PremiumId.t4 .v104Band{border-radius:5mm 5mm 50% 0!important}.idCard.v646PremiumId.t4 .v104Photo{border-radius:50% 50% 16% 16%!important}
+.idCard.v646PremiumId.t5{border-radius:2mm!important}.idCard.v646PremiumId.t5 .v104Band{border-bottom:2.5mm solid #d9a51d!important}.idCard.v646PremiumId.t5 .v104Photo{border-radius:1mm!important}
+/* Common A4 office preview. */
+.v6415A4{width:210mm;min-height:297mm;margin:12px auto;background:#fff;padding:13mm 12mm 14mm;box-shadow:0 8px 30px #0d2a5022;color:#111;font-family:Arial,sans-serif;overflow:hidden}
+.v6415LetterHead{text-align:center;border-bottom:2px solid #173e72;padding-bottom:4mm;margin-bottom:5mm}.v6415LetterHead h1{font-size:19pt;margin:0;color:#103f78}.v6415LetterHead p{font-size:9pt;margin:2mm 0 0}.v6415LetterMeta{display:grid;grid-template-columns:1fr 1fr;gap:3mm;font-size:10pt}.v6415LetterMeta>div:nth-child(even){text-align:right}.v6415LetterTo,.v6415LetterSubject,.v6415LetterBody{font-size:11pt;line-height:1.55;margin-top:5mm}.v6415LetterBody{white-space:pre-wrap;min-height:95mm}.v6415LetterSign{display:flex;justify-content:flex-end;text-align:center;margin-top:10mm}.v6415LetterSign img{display:block;max-width:36mm;max-height:15mm;object-fit:contain;margin:auto}.v6415LetterFoot{margin-top:8mm;padding-top:3mm;border-top:1px solid #bbb;font-size:9pt}.v6415LetterTools{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.v6415LetterTools label{display:grid;gap:4px;font-size:11px;font-weight:900}.v6415LetterTools input,.v6415LetterTools select,.v6415LetterTools textarea{min-width:180px}.v6415LetterEditor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.v6415LetterEditor .full{grid-column:1/-1}.v6415LetterEditor textarea{width:100%;min-height:180px}
+@media(max-width:1050px){#erp.v6415Final main{width:100vw!important;margin-left:0!important}#erp.v6415Final.v6415Admin .erpTop{grid-template-columns:auto auto 1fr!important}#erp.v6415Final.v6415Admin #v75TopSearch{grid-column:1/-1;max-width:none!important}.erpTop .hamb{display:inline-flex!important}.v6415A4{width:100%;min-height:auto;padding:18px;box-shadow:none}.v6415LetterEditor{grid-template-columns:1fr}.v6415LetterEditor .full{grid-column:auto}}
+@media(max-width:560px){#erp.v6415Final.v6415Admin .erpTop{grid-template-columns:auto auto minmax(0,1fr)!important;padding:7px!important}#erp.v6415Final .v6415School b{font-size:13px}#erp.v6415Final .v6415School small{font-size:7.5px;white-space:normal}#erp.v6415Final #erpContent{padding:11px 10px 24px!important}}
+@media print{@page{size:A4 portrait;margin:10mm}body{background:#fff!important}.v6415A4{width:190mm!important;min-height:277mm!important;margin:0!important;padding:0!important;box-shadow:none!important;overflow:visible!important}.v6415NoPrint{display:none!important}.v6415A4 table{width:100%!important;min-width:0!important;table-layout:fixed!important}.v6415A4 th,.v6415A4 td{font-size:8.5pt!important;padding:2mm!important;overflow-wrap:anywhere!important}.v6415A4 thead{display:table-header-group}.v6415A4 tfoot{display:table-footer-group}.v6415A4 tr,.v6415A4 .keepTogether{break-inside:avoid;page-break-inside:avoid}}
+</style>
+<script id="v6415-final-runtime">
+window.V6415_BUILD='V64.15-FINAL-14-POINT-OFFICIAL-WORK-2026-09-20';
+(function(){
+ const q=id=>document.getElementById(id), safe=v=>typeof esc==='function'?esc(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+ const role=()=>String(profile?.role||'').toLowerCase(), isAdmin=()=>['super_admin','admin','principal'].includes(role());
+ function schoolName(){return school?.school_name||'L D MODERN EDUCATION ACADEMY'} function schoolAddr(){return school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar, Uttar Pradesh'}
+ function syncFinalShell(){
+  const erp=q('erp');if(erp&&!erp.classList.contains('hidden')){erp.classList.add('v6415Final');erp.classList.toggle('v6415Admin',isAdmin());
+   const top=erp.querySelector('.erpTop');if(top&&isAdmin()){
+    let s=top.querySelector('.v6415School');if(!s){s=document.createElement('div');s.className='v6415School';let search=top.querySelector('#v75TopSearch');top.insertBefore(s,search||null)}
+    s.innerHTML='<b>'+safe(schoolName())+'</b><small>'+safe(schoolAddr())+'</small>';
+    const back=q('v90BackBtn'),home=q('v90HomeBtn');if(back){back.textContent='← Back';back.onclick=()=>{let h=window.__v90History||['dashboard'];if(h.length>1)return v90Back();return false}}if(home){home.textContent='🏠 Home';home.onclick=()=>v90GoHome?.()}
+   }
+  }
+  const pp=q('parentDashboard');if(pp&&!pp.classList.contains('hidden'))pp.classList.add('v6415Parent');
+ }
+ const ob=window.openERP;if(typeof ob==='function')window.openERP=async function(){let r=await ob.apply(this,arguments);setTimeout(syncFinalShell,40);return r};
+ const rb=window.render;if(typeof rb==='function')window.render=async function(route){if(route==='official_letter_center')return v6415OfficialLetterCenter();let r=await rb.apply(this,arguments);setTimeout(syncFinalShell,20);return r};
+ const pb=window.loadParentPortal;if(typeof pb==='function')window.loadParentPortal=async function(){let r=await pb.apply(this,arguments);setTimeout(syncFinalShell,20);return r};
+ window.addEventListener('load',()=>setTimeout(syncFinalShell,180),{once:true,passive:true});
+ try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('communication'));if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='official_letter_center'))g[2].unshift(['official_letter_center','🏛 Official Letter Center'])}}catch(_e){}
+ const templates={
+  'Education Department':'विद्यालय से संबंधित आवश्यक सूचना/अभिलेख प्रेषित करने के संबंध में।',
+  'BEO / BSA / DIOS':'विद्यालय संबंधी आवश्यक कार्यवाही/सूचना के संबंध में।',
+  'DM / SDM / Tehsil':'विद्यालय संबंधी प्रशासनिक कार्य हेतु निवेदन।',
+  'Police / Thana':'विद्यालय संबंधी आवश्यक सहयोग/सूचना के संबंध में।',
+  'Bank':'विद्यालय के बैंकिंग/अभिलेख संबंधी कार्य के संबंध में।',
+  'Electricity Department':'विद्यालय विद्युत संबंधी कार्यवाही हेतु निवेदन।',
+  'Panchayat / Nagar Nikay':'विद्यालय संबंधी स्थानीय निकाय कार्य हेतु निवेदन।',
+  'Board / University':'विद्यार्थी/विद्यालय अभिलेख एवं शैक्षणिक कार्य के संबंध में।',
+  'Student Verification':'विद्यार्थी विवरण/प्रमाणन के संबंध में।',
+  'Teacher / Staff':'शिक्षक/कर्मचारी संबंधी कार्यालयीय पत्र।',
+  'Parent Official Notice':'अभिभावक हेतु आवश्यक विद्यालयीय सूचना।',
+  'Custom / Blank':''
+ };
+ function nextLetterNo(){let d=new Date(),y=d.getFullYear(),n=String(Date.now()).slice(-6);return 'LDMEA/'+y+'/'+n}
+ window.v6415OfficialLetterCenter=async function(){if(!isAdmin())return toast('Admin / Principal only');head?.('Official Letter Center','Letter Pad • Register • Preview • PDF • Print');v90InstallShell?.('official_letter_center');
+  let opts=Object.keys(templates).map(x=>'<option>'+safe(x)+'</option>').join('');
+  q('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div><h3>🏛 Official Letter / Letter Pad Center</h3><p class="note">Department-wise official draft • Central school header/signature • A4 Preview → PDF → Print</p></div><button class="secondary" onclick="v6415LoadLetters()">↻ Letter Register</button></div><div class="v6415LetterEditor"><label>Template / Department<select id="v6415Tpl" onchange="v6415TemplateChanged()">${opts}</select></label><label>Letter No.<input id="v6415No" value="${safe(nextLetterNo())}"></label><label>Date<input id="v6415Date" type="date" value="${new Date().toISOString().slice(0,10)}"></label><label>Recipient / Officer<input id="v6415To" placeholder="जैसे: खण्ड शिक्षा अधिकारी"></label><label class="full">Office / Address<input id="v6415ToAddr" placeholder="विभाग / कार्यालय / पता"></label><label class="full">Subject<input id="v6415Subject"></label><label class="full">Reference<input id="v6415Ref" placeholder="Optional reference"></label><label class="full">Letter Body<textarea id="v6415Body" placeholder="पत्र का मुख्य विवरण लिखें..."></textarea></label><label>Enclosure<input id="v6415Enc" placeholder="Optional"></label><label>Copy To<input id="v6415Copy" placeholder="Optional"></label></div><div class="tools" style="margin-top:12px"><button class="primary" onclick="v6415SaveLetter()">💾 Save Letter</button><button class="secondary" onclick="v6415PreviewLetter()">👁 Preview</button><button class="secondary" onclick="v6415PrintLetter()">🖨 Print / Save PDF</button></div><div id="v6415Preview"></div><div id="v6415Register"></div></div>`;v6415TemplateChanged();v6415LoadLetters();syncFinalShell()};
+ window.v6415TemplateChanged=function(){let k=q('v6415Tpl')?.value||'Custom / Blank';if(q('v6415Subject')&&!q('v6415Subject').value)q('v6415Subject').value=templates[k]||'';let to={"Education Department":"जिला बेसिक शिक्षा अधिकारी / संबंधित शिक्षा विभाग","BEO / BSA / DIOS":"खण्ड शिक्षा अधिकारी / जिला बेसिक शिक्षा अधिकारी / जिला विद्यालय निरीक्षक","DM / SDM / Tehsil":"जिलाधिकारी / उपजिलाधिकारी / तहसीलदार","Police / Thana":"थाना प्रभारी","Bank":"शाखा प्रबंधक","Electricity Department":"अधिशासी अभियंता / संबंधित अधिकारी","Panchayat / Nagar Nikay":"संबंधित अधिकारी","Board / University":"संबंधित अधिकारी"}[k];if(to&&q('v6415To')&&!q('v6415To').value)q('v6415To').value=to};
+ function letterObj(){return {letter_no:q('v6415No')?.value.trim(),letter_date:q('v6415Date')?.value,department:q('v6415Tpl')?.value,recipient:q('v6415To')?.value.trim(),recipient_address:q('v6415ToAddr')?.value.trim(),subject:q('v6415Subject')?.value.trim(),reference_no:q('v6415Ref')?.value.trim(),body:q('v6415Body')?.value.trim(),enclosure:q('v6415Enc')?.value.trim(),copy_to:q('v6415Copy')?.value.trim(),issued_by:profile?.full_name||user?.email||'Admin',created_by:user?.id||null}}
+ function letterHtml(o){let sig=school?.principal_signature_url||school?.director_signature_url||'';return `<article class="v6415A4" id="v6415A4"><header class="v6415LetterHead"><h1>${safe(schoolName())}</h1><p>${safe(schoolAddr())}</p></header><div class="v6415LetterMeta"><div><b>पत्रांक:</b> ${safe(o.letter_no||'—')}</div><div><b>दिनांक:</b> ${safe(o.letter_date||'—')}</div></div><div class="v6415LetterTo"><b>सेवा में,</b><br>${safe(o.recipient||'संबंधित अधिकारी')}<br>${safe(o.recipient_address||'')}</div>${o.reference_no?`<div class="v6415LetterSubject"><b>संदर्भ:</b> ${safe(o.reference_no)}</div>`:''}<div class="v6415LetterSubject"><b>विषय:</b> ${safe(o.subject||'—')}</div><div class="v6415LetterBody">महोदय/महोदया,\n\n${safe(o.body||'')}</div><div class="v6415LetterSign">${sig?`<div><img src="${safe(sig)}" alt="Signature"><b>Principal / Director</b><br><small>${safe(schoolName())}</small></div>`:`<div><br><br><b>Principal / Director</b><br><small>${safe(schoolName())}</small></div>`}</div>${o.enclosure||o.copy_to?`<div class="v6415LetterFoot">${o.enclosure?`<b>संलग्नक:</b> ${safe(o.enclosure)}<br>`:''}${o.copy_to?`<b>प्रतिलिपि:</b> ${safe(o.copy_to)}`:''}</div>`:''}</article>`}
+ window.v6415PreviewLetter=function(){let o=letterObj();if(!o.subject||!o.body)return toast('Subject और Letter Body जरूरी है');q('v6415Preview').innerHTML=letterHtml(o);q('v6415Preview').scrollIntoView({behavior:'smooth',block:'start'})};
+ window.v6415SaveLetter=async function(){let o=letterObj();if(!o.letter_no||!o.subject||!o.body)return toast('Letter No., Subject और Body जरूरी है');let r=await sb.from('official_letters').upsert(o,{onConflict:'letter_no'});if(r.error)return toast(r.error.message+' • V64.15 SQL run करें');toast('Official letter saved');v6415PreviewLetter();v6415LoadLetters()};
+ window.v6415LoadLetters=async function(){let box=q('v6415Register');if(!box)return;let r=await sb.from('official_letters').select('*').order('letter_date',{ascending:false}).limit(300);if(r.error){box.innerHTML='<div class="empty">Letter Register के लिए V64.15 SQL run करें.</div>';return}box.innerHTML=`<div class="panel"><h3>📚 Outgoing Letter Register</h3><div class="tableWrap"><table><thead><tr><th>Date</th><th>Letter No.</th><th>Department</th><th>Recipient</th><th>Subject</th><th>Status</th></tr></thead><tbody>${(r.data||[]).map(x=>`<tr><td>${safe(x.letter_date||'')}</td><td><b>${safe(x.letter_no||'')}</b></td><td>${safe(x.department||'')}</td><td>${safe(x.recipient||'')}</td><td>${safe(x.subject||'')}</td><td>${safe(x.status||'Issued')}</td></tr>`).join('')||'<tr><td colspan="6">No letters yet.</td></tr>'}</tbody></table></div></div>`};
+ window.v6415PrintLetter=function(){let o=letterObj();if(!o.subject||!o.body)return toast('पहले letter तैयार करें');let w=window.open('','_blank','width=900,height=900');if(!w)return toast('Popup blocked');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}.v6415A4{width:190mm;min-height:277mm;padding:3mm 2mm;margin:auto}.v6415LetterHead{text-align:center;border-bottom:2px solid #173e72;padding-bottom:4mm;margin-bottom:5mm}.v6415LetterHead h1{font-size:19pt;margin:0;color:#103f78}.v6415LetterHead p{font-size:9pt;margin:2mm 0}.v6415LetterMeta{display:grid;grid-template-columns:1fr 1fr}.v6415LetterMeta>div:nth-child(even){text-align:right}.v6415LetterTo,.v6415LetterSubject,.v6415LetterBody{font-size:11pt;line-height:1.55;margin-top:5mm}.v6415LetterBody{white-space:pre-wrap;min-height:95mm}.v6415LetterSign{display:flex;justify-content:flex-end;text-align:center;margin-top:10mm}.v6415LetterSign img{display:block;max-width:36mm;max-height:15mm;object-fit:contain;margin:auto}.v6415LetterFoot{margin-top:8mm;padding-top:3mm;border-top:1px solid #bbb;font-size:9pt}`;w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Official Letter</title><style>'+css+'</style></head><body>'+letterHtml(o)+'</body></html>');w.document.close();setTimeout(()=>w.print(),350)};
+ /* Shared helper for office report print windows: force safe A4 tables without cutting totals. */
+ window.v6415PrintA4Html=function(title,html){let w=window.open('','_blank','width=1000,height=900');if(!w)return toast('Popup blocked');let css='@page{size:A4 portrait;margin:9mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;color:#111}.sheet{width:192mm;margin:auto}table{width:100%;border-collapse:collapse;table-layout:fixed}thead{display:table-header-group}tfoot{display:table-footer-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{border:1px solid #bbb;padding:2mm;font-size:8pt;overflow-wrap:anywhere}h1,h2,h3{text-align:center;margin:2mm 0}.keep{break-inside:avoid;page-break-inside:avoid}';w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+safe(title)+'</title><style>'+css+'</style></head><body><div class="sheet">'+html+'</div></body></html>');w.document.close();setTimeout(()=>w.print(),350)};
+})();
+</script>
+<!-- ===== END V64.15 ===== -->
+<!-- ===== V64.16 FINAL CLEANUP / SINGLE SCROLL / A4 REGRESSION ===== -->
+<style id="v6416-final-cleanup-css">
+/* One authoritative viewport: body never scrolls while an ERP/Parent workspace is open. */
+html.v6416Lock,body.v6416Lock{width:100%!important;height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
+#erp.v6416Final:not(.hidden){position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;max-width:none!important;overflow:hidden!important;display:block!important;background:#f4f8fd!important}
+@media(min-width:901px){
+ #erp.v6416Final aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:300px!important;max-width:300px!important;height:100dvh!important;transform:none!important;overflow-y:auto!important;overflow-x:hidden!important;z-index:130!important}
+ #erp.v6416Final main{position:absolute!important;left:300px!important;right:0!important;top:0!important;bottom:0!important;width:auto!important;max-width:none!important;height:100dvh!important;margin:0!important;padding:0!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-gutter:auto!important}
+}
+#erp.v6416Final #erpContent{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:16px 18px 30px!important;overflow:visible!important;box-sizing:border-box!important}
+#erp.v6416Final #erpContent>*{max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+#erp.v6416Final .tableWrap{width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:visible!important}
+/* Clean Admin header: exactly Back, Home, school identity and Master Search. */
+#erp.v6416Final.v6416Admin .erpTop{position:sticky!important;top:0!important;z-index:150!important;width:100%!important;min-height:64px!important;height:auto!important;display:grid!important;grid-template-columns:auto auto minmax(250px,1fr) minmax(280px,520px)!important;align-items:center!important;gap:9px!important;padding:7px 14px!important;background:linear-gradient(135deg,#0b315f,#0d68bd)!important;border:0!important;box-shadow:0 3px 14px #0b315f24!important}
+#erp.v6416Final.v6416Admin .erpTop>*{min-width:0!important}
+#erp.v6416Final.v6416Admin .erpTop>.hamb,#erp.v6416Final.v6416Admin .erpTop>.erpHomeBtn,#erp.v6416Final.v6416Admin .erpTop>.websiteBtn,#erp.v6416Final.v6416Admin .erpTop>#v63SchoolHead,#erp.v6416Final.v6416Admin .erpTop>#v63AdminBox,#erp.v6416Final.v6416Admin .erpTop>.v45NavControls,#erp.v6416Final.v6416Admin .erpTop>[data-v58-settings],#erp.v6416Final.v6416Admin .erpTop>[data-v58-password],#erp.v6416Final.v6416Admin .erpTop>.v62Bell,#erp.v6416Final.v6416Admin .erpTop>#v97TopIdentity,#erp.v6416Final.v6416Admin .erpTop>#v64HealthBadge,#erp.v6416Final.v6416Admin .erpTop>#v58LiveDot{display:none!important}
+#erp.v6416Final.v6416Admin .erpTop>div:not(.v6416School):not(#v75TopSearch){display:none!important}
+#erp.v6416Final.v6416Admin #v90BackBtn,#erp.v6416Final.v6416Admin #v90HomeBtn{display:inline-flex!important;visibility:visible!important;position:static!important;align-items:center!important;justify-content:center!important;min-height:40px!important;padding:8px 11px!important;border:0!important;border-radius:11px!important;background:#fff!important;color:#123d6d!important;font-size:13px!important;font-weight:900!important;box-shadow:none!important}
+#erp.v6416Final .v6416School{display:block!important;text-align:center!important;color:#fff!important;overflow:hidden!important}
+#erp.v6416Final .v6416School b{display:block!important;font-size:clamp(15px,1.65vw,22px)!important;line-height:1.05!important;font-weight:950!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#erp.v6416Final .v6416School small{display:block!important;margin-top:3px!important;color:#dceeff!important;font-size:9px!important;font-weight:800!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#erp.v6416Final.v6416Admin #v75TopSearch{display:flex!important;width:100%!important;max-width:520px!important;margin:0!important;justify-self:end!important}
+#erp.v6416Final.v6416Admin #v75TopSearch input{width:100%!important;min-width:0!important}
+/* Parent: only parentDashboard owns vertical scrolling; descendants must not. */
+body.v6416ParentOpen{overflow:hidden!important}
+#parentDashboard.v6416Parent{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;max-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;background:#f5f8fc!important}
+#parentDashboard.v6416Parent .portalHead{position:sticky!important;top:0!important;z-index:140!important}
+#parentDashboard.v6416Parent .portalBody,#parentDashboard.v6416Parent #parentDashboardBody,#parentDashboard.v6416Parent main{height:auto!important;max-height:none!important;overflow:visible!important;min-width:0!important;max-width:100%!important}
+/* Common on-screen A4 preview guard. */
+.v6416A4Guard,.v6415A4,.v111NoticePages,.markPreview,.v107Doc,.v644A4{box-sizing:border-box!important;max-width:100%!important}
+@media(max-width:900px){
+ #erp.v6416Final aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(84vw,310px)!important;max-width:310px!important;height:100dvh!important;transform:translateX(-105%)!important;overflow-y:auto!important;z-index:1300!important}
+ #erp.v6416Final aside.open{transform:translateX(0)!important}
+ #erp.v6416Final main{position:absolute!important;inset:0!important;width:100%!important;max-width:100%!important;height:100dvh!important;margin:0!important;overflow-y:auto!important;overflow-x:hidden!important}
+ #erp.v6416Final.v6416Admin .erpTop{grid-template-columns:auto auto minmax(0,1fr)!important;padding:7px 9px!important}
+ #erp.v6416Final.v6416Admin #v75TopSearch{grid-column:1/-1!important;max-width:none!important}
+ #erp.v6416Final.v6416Admin .erpTop>.hamb{display:inline-flex!important;position:absolute!important;right:8px!important;top:8px!important;z-index:2!important}
+ #erp.v6416Final .v6416School b{font-size:14px!important}.v6416School small{font-size:8px!important;white-space:normal!important}
+ #erp.v6416Final #erpContent{padding:11px 10px 24px!important}
+}
+@media print{
+ @page{size:A4 portrait;margin:9mm}
+ html,body{width:auto!important;height:auto!important;overflow:visible!important;background:#fff!important}
+ .v6416NoPrint,.v6415NoPrint{display:none!important}
+ .v6415A4,.v6416A4Guard{width:192mm!important;max-width:192mm!important;min-height:279mm!important;margin:0 auto!important;padding:0!important;box-shadow:none!important;overflow:visible!important}
+ table{max-width:100%!important}thead{display:table-header-group!important}tfoot{display:table-footer-group!important}
+ tr,.keepTogether,.keep{break-inside:avoid!important;page-break-inside:avoid!important}
+}
+</style>
+<script id="v6416-final-cleanup-runtime">
+window.V6416_BUILD='V64.16-FINAL-CLEANUP-A4-2026-09-20';
+(function(){
+ const q=id=>document.getElementById(id), role=()=>String(window.profile?.role||'').toLowerCase(), admin=()=>['admin','super_admin','principal'].includes(role());
+ const safe=v=>typeof window.esc==='function'?esc(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+ function schoolName(){return window.school?.school_name||'L D MODERN EDUCATION ACADEMY'}
+ function schoolAddr(){return window.school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar, Uttar Pradesh'}
+ function sync(){
+   const erp=q('erp'), parent=q('parentDashboard'), erpOpen=!!erp&&!erp.classList.contains('hidden'), parentOpen=!!parent&&!parent.classList.contains('hidden');
+   document.documentElement.classList.toggle('v6416Lock',erpOpen||parentOpen);document.body.classList.toggle('v6416Lock',erpOpen||parentOpen);document.body.classList.toggle('v6416ParentOpen',parentOpen&&!erpOpen);
+   if(erpOpen){erp.classList.add('v6416Final');erp.classList.toggle('v6416Admin',admin());
+     const top=erp.querySelector('.erpTop');if(top&&admin()){
+       top.querySelectorAll('.v6412SchoolIdentity,.v6415School').forEach(x=>x.remove());
+       let s=top.querySelector('.v6416School');if(!s){s=document.createElement('div');s.className='v6416School';let search=top.querySelector('#v75TopSearch');top.insertBefore(s,search||null)}
+       s.innerHTML='<b>'+safe(schoolName())+'</b><small>'+safe(schoolAddr())+'</small>';
+       const back=q('v90BackBtn'),home=q('v90HomeBtn');
+       if(back){back.textContent='← Back';back.disabled=false;back.onclick=function(){let h=window.__v90History||[];if(h.length>1){if(typeof window.v92Back==='function')return v92Back();if(typeof window.v90Back==='function')return v90Back()}return false}}
+       if(home){home.textContent='🏠 Home';home.onclick=function(){if(typeof window.v90GoHome==='function')return v90GoHome();if(typeof window.render==='function')return render('dashboard')}}
+     }
+   }
+   if(parentOpen)parent.classList.add('v6416Parent');
+ }
+ /* Replace the generic print path with one A4-safe engine. ID cards retain their own print CSS. */
+ window.v14Print=function(elId){
+   const el=q(elId);if(!el)return window.toast?.('Preview first');const w=window.open('','_blank','width=1000,height=850');if(!w)return window.toast?.('Allow popup');
+   let extra='';if((el.matches?.('.idCard')||el.querySelector?.('.idCard'))&&typeof window.idStudioPrintCss==='function')extra=idStudioPrintCss().replace(/@page\{[^}]*\}/,'');
+   const css='@page{size:A4 portrait;margin:9mm}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#14233b;font-family:Arial,Cambria,serif}.sheet{width:192mm;max-width:192mm;margin:0 auto}table{width:100%;max-width:100%;border-collapse:collapse;table-layout:fixed}thead{display:table-header-group}tfoot{display:table-footer-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{border:1px solid #8c9aaa;padding:2mm;font-size:8.2pt;overflow-wrap:anywhere;word-break:normal}.v111FeeNotice,.idCard,.markPreview,.v107Doc{break-inside:avoid;page-break-inside:avoid;max-width:100%}img{max-width:100%}h1,h2,h3{break-after:avoid-page}'+extra;
+   w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Print</title><style>'+css+'</style></head><body><div class="sheet">'+el.innerHTML+'</div></body></html>');w.document.close();setTimeout(function(){w.focus();w.print()},350);
+ };
+ /* No polling: sync shell only on meaningful navigation/resize. */
+ const oldOpen=window.openERP;if(typeof oldOpen==='function')window.openERP=async function(){let r=await oldOpen.apply(this,arguments);requestAnimationFrame(sync);return r};
+ const oldRender=window.render;if(typeof oldRender==='function')window.render=async function(){let r=await oldRender.apply(this,arguments);requestAnimationFrame(sync);return r};
+ const oldParent=window.loadParentPortal;if(typeof oldParent==='function')window.loadParentPortal=async function(){let r=await oldParent.apply(this,arguments);requestAnimationFrame(sync);return r};
+ window.addEventListener('resize',sync,{passive:true});window.addEventListener('load',()=>setTimeout(sync,150),{once:true,passive:true});
+})();
+</script>
+<!-- ===== END V64.16 ===== -->
+
+
+<!-- ===== V64.17 RESOURCE + CONNECTION OPTIMIZATION ===== -->
+<script id="v6417-resource-optimization">
+window.V6417_BUILD='V64.17-RESOURCE-CONNECTION-OPTIMIZED-2026-09-20';
+(function(){
+  let cleanupBusy=false, cleanupTimer=null;
+  function role(){return String(window.profile?.role||'').toLowerCase()}
+  async function cleanupLegacyChannels(){
+    if(cleanupBusy||!window.sb||!window.user)return;cleanupBusy=true;
+    try{
+      /* V113 is the single authoritative realtime layer. Remove known legacy channels only. */
+      const legacy=['v49RealtimeChannel','v58LiveChannel','v764ParentChannel','v74ParentLearningChannel'];
+      for(const name of legacy){
+        try{const ch=window[name];if(ch&&ch!==window.v113LiveChannel&&ch!==window.v113ParentChannel){await sb.removeChannel(ch);window[name]=null}}catch(_e){}
+      }
+      /* Start exactly the role-scoped V113 channel; its own key guard prevents duplicates. */
+      try{if(['parent','student'].includes(role()))await v113StartParentRealtime();else await v113StartRealtime()}catch(_e){}
+    }finally{cleanupBusy=false}
+  }
+  function scheduleCleanup(){clearTimeout(cleanupTimer);cleanupTimer=setTimeout(cleanupLegacyChannels,250)}
+  /* No recurring DB poll. Cleanup only at login/open, reconnect, and visibility return. */
+  window.addEventListener('online',scheduleCleanup,{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)scheduleCleanup()},{passive:true});
+  window.addEventListener('load',()=>setTimeout(scheduleCleanup,2100),{once:true,passive:true});
+  try{
+    const base=window.openERP;
+    if(typeof base==='function')window.openERP=async function(){const r=await base.apply(this,arguments);scheduleCleanup();return r}
+  }catch(_e){}
+  try{
+    const base=window.logout;
+    if(typeof base==='function')window.logout=async function(){
+      clearTimeout(cleanupTimer);
+      try{await v113StopChannel(window.v113LiveChannel);await v113StopChannel(window.v113ParentChannel)}catch(_e){}
+      return await base.apply(this,arguments)
+    }
+  }catch(_e){}
+  /* Keep notifications low-frequency and visible-tab only; no writes/heartbeat. */
+  try{window.v62StartNotificationTimer=function(){clearInterval(v62NotifTimer);v62NotifTimer=setInterval(()=>{if(!document.hidden&&window.user)v62RefreshNotifications()},600000)}}catch(_e){}
+  /* Diagnostic only: does not query DB. Useful for Admin resource checks. */
+  window.v6417ConnectionStatus=function(){
+    let channels=[];try{channels=typeof sb.getChannels==='function'?sb.getChannels():[]}catch(_e){}
+    return {role:role(),realtime_channels:channels.length,channel_names:channels.map(x=>x.topic||'channel'),periodic_db_polling:'legacy health/control/fallback disabled'};
+  };
+})();
+</script>
+<!-- ===== END V64.17 RESOURCE + CONNECTION OPTIMIZATION ===== -->
+</body></html>
