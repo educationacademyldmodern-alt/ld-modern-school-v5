@@ -1,0 +1,15 @@
+/* Native A4 fee printing: exactly one student per page, measured before print. */
+(()=>{'use strict';
+ function isFee(id){return !!document.getElementById(id)?.querySelector('.v111FeeNotice')}
+ window.v643PrintFeeNotices=function(id){const source=document.getElementById(id);if(!source)return toast('पहले Preview खोलें।');const cards=[...source.querySelectorAll('.v111FeeNotice')];if(!cards.length)return;
+ const w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Print preview के लिए popup allow करें।');
+ const rules=[];for(const sheet of document.styleSheets){try{for(const rule of sheet.cssRules||[])if(rule.selectorText?.includes('.v111FeeNotice'))rules.push(rule.cssText)}catch(_){}}
+ const base=new URL('.',location.href).href.replace(/"/g,'&quot;');w.document.write(`<!doctype html><html><head><meta charset="utf-8"><base href="${base}"><title>Fee Due Notice — A4</title><style>${rules.join('\n')}@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Arial,sans-serif;color:#14233b}.paper{position:relative;width:190mm;height:277mm;margin:0 auto;break-after:page;page-break-after:always}.paper:last-child{break-after:auto;page-break-after:auto}.paper .v111FeeNotice{width:190mm!important;min-height:270mm!important;height:auto!important;overflow:visible!important;transform-origin:top left;overflow-wrap:anywhere;page-break-inside:avoid;break-inside:avoid}.toolbar{padding:12px;display:flex;gap:10px}.toolbar button{padding:10px}.v111FeeNotice .head{grid-template-columns:18mm 1fr!important}.v111FeeNotice .tag{grid-column:1/-1;text-align:center}.v111FeeNotice .foot{margin-top:12mm}@media print{.toolbar{display:none!important}body{background:#fff}.paper{margin:0}}</style></head><body><div class="toolbar"><button id="print" disabled>Preparing…</button><span id="status"></span></div>${cards.map(c=>'<section class="paper">'+c.outerHTML+'</section>').join('')}</body></html>`);w.document.close();
+ const fit=()=>{for(const paper of w.document.querySelectorAll('.paper')){const c=paper.firstElementChild;c.style.transform='';const scale=Math.min(1,(paper.clientHeight-2)/c.scrollHeight,(paper.clientWidth-2)/c.scrollWidth);c.style.transform=`scale(${scale})`;}w.document.getElementById('print').disabled=false;w.document.getElementById('print').textContent='Print / Save PDF';w.document.getElementById('status').textContent=cards.length+' student(s) • '+cards.length+' A4 page(s)';};
+ w.document.getElementById('print').onclick=()=>{fit();w.print()};w.addEventListener('beforeprint',fit);
+ Promise.all([...w.document.images].map(img=>img.complete?Promise.resolve():new Promise(r=>{img.onload=r;img.onerror=r}))).then(fit);w.setTimeout(fit,1500);
+ };
+ const print=window.v14Print,pdf=window.v14Pdf;
+ if(typeof print==='function')window.v14Print=function(id){return isFee(id)?window.v643PrintFeeNotices(id):print.apply(this,arguments)};
+ if(typeof pdf==='function')window.v14Pdf=function(id){return isFee(id)?window.v643PrintFeeNotices(id):pdf.apply(this,arguments)};
+})();

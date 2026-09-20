@@ -9,6 +9,7 @@ async function changePasswordModal(force=false){
 }
 window.v54ChangePassword=()=>changePasswordModal(false);
 async function enforcePassword(){try{if(!window.user?.id)return;let {data}=await sb.from('profiles').select('must_change_password').eq('id',user.id).maybeSingle();if(data?.must_change_password)changePasswordModal(true)}catch(_e){}}
+window.v643EnforcePassword=enforcePassword;
 function addPasswordButton(){let host=q('#parentDashboard:not(.hidden) .portalHead')||q('#erp:not(.hidden) .erpTop');if(!host||q('#v54ChangePass'))return;let b=document.createElement('button');b.id='v54ChangePass';b.className='secondary';b.textContent='🔐 Password';b.onclick=()=>changePasswordModal(false);host.appendChild(b)}
 function parentCards(){return qa('#parentDashboardBody .parentStudentCard.v114PortalDash')}
 function cardAdm(c){return c?.dataset.admissionNo||c?.querySelector('.v114PortalHeroStudent span')?.textContent.match(/Admission\s+([^•\s]+)/i)?.[1]||''}

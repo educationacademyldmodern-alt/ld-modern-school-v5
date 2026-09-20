@@ -15,9 +15,9 @@ begin
    raise exception 'Profile update not permitted' using errcode='42501';
  end if;
  -- Self-service may edit presentation/contact fields and password-change state only.
- if (to_jsonb(new)-array['full_name','avatar_url','photo_url','phone','updated_at','must_change_password','password_changed_at'])
+ if (to_jsonb(new)-array['full_name','avatar_url','avatar_path','photo_url','phone','updated_at','must_change_password','password_changed_at'])
     is distinct from
-    (to_jsonb(old)-array['full_name','avatar_url','photo_url','phone','updated_at','must_change_password','password_changed_at']) then
+    (to_jsonb(old)-array['full_name','avatar_url','avatar_path','photo_url','phone','updated_at','must_change_password','password_changed_at']) then
    raise exception 'Only Admin can change role, status or student links' using errcode='42501';
  end if;
  return new;
