@@ -1322,72 +1322,7 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 
 
 
-<!-- ===== V64.9 FINAL FUNCTION + TEACHER ID PERMISSION PATCH ===== -->
-<style id="v649-final-function-css">
-.v649Perm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px;border:1px solid #d9e6f3;border-radius:13px;background:#f7fbff}.v649Perm b{color:#174e9a}.v649TeacherIdNote{padding:10px 12px;border-radius:11px;background:#eef8f2;border:1px solid #c5e6d1;color:#17643c;font-weight:800;font-size:12px}
-</style>
-<script id="v649-final-function-runtime">
-window.V649_BUILD='V64.9-FINAL-FUNCTION-PERMISSION-2026-09-20';
-(function(){
- const admin=()=>['super_admin','admin','principal'].includes(String(profile?.role||'').toLowerCase());
- const teacher=()=>String(profile?.role||'').toLowerCase()==='teacher';
- const idEnabled=()=>school?.teacher_id_card_enabled!==false;
- const safe=x=>typeof esc==='function'?esc(x==null?'':String(x)):String(x==null?'':x).replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
 
- /* Teacher bulk ID Card: permission + assigned-class boundary. Admin studio remains unchanged. */
- window.v649TeacherIdCardCenter=async function(){
-   if(!teacher())return toast('Teacher only');
-   if(!idEnabled())return toast('ID Card permission Admin ने बंद की है');
-   try{await v14LoadTeacherContext?.()}catch(_e){}
-   let classes=typeof v14AllowedClassNames==='function'?v14AllowedClassNames():[];
-   if(!classes.length){head('▤ Student ID Card','Assigned class only');$('erpContent').innerHTML='<div class="panel"><div class="empty">Admin ने अभी कोई class assign नहीं की है.</div></div>';return}
-   head('▤ Student ID Card','Assigned class only • Select • Preview • Print / PDF');
-   let set=idStudioGetSettings();
-   $('erpContent').innerHTML=`<div class="panel" id="idStudioPanel"><div class="panelHead"><div><h3>▤ My Class ID Cards</h3><p class="note">केवल Admin-assigned class. Central Student Master का current photo/data और Admin की central signature automatically उपयोग होगी.</p></div></div><div class="v649TeacherIdNote">✓ Teacher permission active • Other classes blocked • Preview first</div><div class="idStudioTop" style="margin-top:12px"><label>Class<select id="idClass" onchange="idLoadClassStudents()">${classes.map(c=>'<option>'+safe(c)+'</option>').join('')}</select></label><label>Live Search<input id="idSearch" placeholder="Name / Father / Roll / Admission" autocomplete="off" oninput="idStudioRenderStudentList()"></label><label>Session<input value="${safe(set.session||'2026-27')}" readonly></label><label>Format<input value="Admin Premium Format ${Math.max(1,Math.min(10,getDocFormat('idcard')||1))}" readonly></label></div><div class="idStudioStudentTools"><button class="secondary" onclick="idStudioSelectVisible(true)">☑ Select Visible</button><button class="secondary" onclick="idStudioSelectVisible(false)">☐ Unselect Visible</button><button class="primary" onclick="idStudioPreview()">👁 Preview Selected</button><span id="idSelectedCount" class="idStudioSelectedCount">0 selected</span></div><div id="idStudentList" class="idStudioStudents"><div class="empty">Loading assigned class...</div></div><div id="idWork"></div></div>`;
-   idStudioRows=[];idStudioSelected=new Set();await idLoadClassStudents();
- };
-
- /* Harden class loader so a teacher can never switch/query an unassigned class through the ID UI. */
- const idLoadBase=window.idLoadClassStudents;
- if(typeof idLoadBase==='function')window.idLoadClassStudents=async function(){
-   if(teacher()){
-     if(!idEnabled())return toast('ID Card permission Admin ने बंद की है');
-     try{await v14LoadTeacherContext?.()}catch(_e){}
-     let c=$('idClass')?.value||'',allowed=v14AllowedClassNames?.()||[];
-     if(!allowed.includes(c)){let b=$('idStudentList');if(b)b.innerHTML='<div class="empty">यह class आपको assigned नहीं है.</div>';return}
-   }
-   return idLoadBase.apply(this,arguments);
- };
-
- /* Route ID Card to restricted teacher studio; Admin keeps full studio. */
- const renderBase=window.render;
- if(typeof renderBase==='function')window.render=async function(route){if(route==='idcard_center'&&teacher())return v649TeacherIdCardCenter();return renderBase.apply(this,arguments)};
-
- /* Add/remove Teacher ID menu from the final rendered teacher sidebar according to Admin setting. */
- function syncTeacherIdNav(){
-   if(!teacher())return;let nav=document.getElementById('erpNav');if(!nav)return;let old=nav.querySelector('[data-v649-idcard]');
-   if(!idEnabled()){old?.remove();return}if(old)return;
-   let b=document.createElement('button');b.dataset.v649Idcard='1';b.innerHTML='▤ ID Card';b.onclick=()=>render('idcard_center');
-   let anchor=[...nav.querySelectorAll('button')].find(x=>/My Class/i.test(x.textContent||''));anchor?anchor.insertAdjacentElement('afterend',b):nav.appendChild(b);
- }
- const openBase=window.openERP;
- if(typeof openBase==='function')window.openERP=async function(){let r=await openBase.apply(this,arguments);setTimeout(syncTeacherIdNav,80);return r};
-
- /* Admin global permission control in existing Website/Settings screen. */
- const settingsBase=window.websiteSettingsCenter;
- if(typeof settingsBase==='function')window.websiteSettingsCenter=async function(){let r=await settingsBase.apply(this,arguments);try{if(!admin())return r;let root=$('erpContent');if(root&&!$('v649TeacherIdPermission')){let p=document.createElement('div');p.className='panel';p.id='v649TeacherIdPermission';p.innerHTML=`<div class="panelHead"><div><h3>👩‍🏫 Teacher ID Card Permission</h3><p class="note">ON होने पर Teacher केवल अपनी assigned class के ID Cards Preview/Print/PDF कर सकता है. Signature setting Admin-only रहती है.</p></div></div><div class="v649Perm"><b>Teacher ID Card View / Generate / Print</b><label><input id="v649TeacherIdToggle" type="checkbox" ${idEnabled()?'checked':''}> Allow</label><button class="primary" onclick="v649SaveTeacherIdPermission()">Save Permission</button></div>`;root.appendChild(p)}}catch(_e){}return r};
- window.v649SaveTeacherIdPermission=async function(){if(!admin())return toast('Admin permission required');let val=!!$('v649TeacherIdToggle')?.checked;let q=await sb.from('school_settings').update({teacher_id_card_enabled:val}).eq('id',1);if(q.error)return toast(q.error.message);school.teacher_id_card_enabled=val;toast(val?'Teacher ID Card permission ON':'Teacher ID Card permission OFF')};
-
- /* Existing individual teacher ID remains restricted by teacherAssertStudent; add permission gate. */
- const oneIdBase=window.teacherViewIdCard;
- if(typeof oneIdBase==='function')window.teacherViewIdCard=async function(){if(!idEnabled())return toast('ID Card permission Admin ने बंद की है');return oneIdBase.apply(this,arguments)};
-
- /* Remove background notification polling too: refresh on ERP open/manual/realtime instead of periodic timer. */
- try{window.v62StartNotificationTimer=function(){try{clearInterval(v62NotifTimer)}catch(_e){}}}catch(_e){}
- window.addEventListener('load',()=>setTimeout(syncTeacherIdNav,250),{once:true,passive:true});
-})();
-</script>
-<!-- ===== END V64.9 FINAL FUNCTION + TEACHER ID PERMISSION PATCH ===== -->
 
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
@@ -9781,4 +9716,71 @@ window.V648_BUILD='V64.8-FINAL-ALL-MASTER-VERIFIED-2026-09-20';
 })();
 </script>
 <!-- ===== END V64.8 FINAL MASTER RECONCILIATION ===== -->
+
+<!-- ===== V64.10 FINAL FUNCTION + TEACHER ID PERMISSION + HTML BOUNDARY FIX ===== -->
+<style id="v649-final-function-css">
+.v649Perm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px;border:1px solid #d9e6f3;border-radius:13px;background:#f7fbff}.v649Perm b{color:#174e9a}.v649TeacherIdNote{padding:10px 12px;border-radius:11px;background:#eef8f2;border:1px solid #c5e6d1;color:#17643c;font-weight:800;font-size:12px}
+</style>
+<script id="v649-final-function-runtime">
+window.V649_BUILD='V64.10-FINAL-BOUNDARY-FIX-2026-09-20';
+(function(){
+ const admin=()=>['super_admin','admin','principal'].includes(String(profile?.role||'').toLowerCase());
+ const teacher=()=>String(profile?.role||'').toLowerCase()==='teacher';
+ const idEnabled=()=>school?.teacher_id_card_enabled!==false;
+ const safe=x=>typeof esc==='function'?esc(x==null?'':String(x)):String(x==null?'':x).replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
+
+ /* Teacher bulk ID Card: permission + assigned-class boundary. Admin studio remains unchanged. */
+ window.v649TeacherIdCardCenter=async function(){
+   if(!teacher())return toast('Teacher only');
+   if(!idEnabled())return toast('ID Card permission Admin ने बंद की है');
+   try{await v14LoadTeacherContext?.()}catch(_e){}
+   let classes=typeof v14AllowedClassNames==='function'?v14AllowedClassNames():[];
+   if(!classes.length){head('▤ Student ID Card','Assigned class only');$('erpContent').innerHTML='<div class="panel"><div class="empty">Admin ने अभी कोई class assign नहीं की है.</div></div>';return}
+   head('▤ Student ID Card','Assigned class only • Select • Preview • Print / PDF');
+   let set=idStudioGetSettings();
+   $('erpContent').innerHTML=`<div class="panel" id="idStudioPanel"><div class="panelHead"><div><h3>▤ My Class ID Cards</h3><p class="note">केवल Admin-assigned class. Central Student Master का current photo/data और Admin की central signature automatically उपयोग होगी.</p></div></div><div class="v649TeacherIdNote">✓ Teacher permission active • Other classes blocked • Preview first</div><div class="idStudioTop" style="margin-top:12px"><label>Class<select id="idClass" onchange="idLoadClassStudents()">${classes.map(c=>'<option>'+safe(c)+'</option>').join('')}</select></label><label>Live Search<input id="idSearch" placeholder="Name / Father / Roll / Admission" autocomplete="off" oninput="idStudioRenderStudentList()"></label><label>Session<input value="${safe(set.session||'2026-27')}" readonly></label><label>Format<input value="Admin Premium Format ${Math.max(1,Math.min(10,getDocFormat('idcard')||1))}" readonly></label></div><div class="idStudioStudentTools"><button class="secondary" onclick="idStudioSelectVisible(true)">☑ Select Visible</button><button class="secondary" onclick="idStudioSelectVisible(false)">☐ Unselect Visible</button><button class="primary" onclick="idStudioPreview()">👁 Preview Selected</button><span id="idSelectedCount" class="idStudioSelectedCount">0 selected</span></div><div id="idStudentList" class="idStudioStudents"><div class="empty">Loading assigned class...</div></div><div id="idWork"></div></div>`;
+   idStudioRows=[];idStudioSelected=new Set();await idLoadClassStudents();
+ };
+
+ /* Harden class loader so a teacher can never switch/query an unassigned class through the ID UI. */
+ const idLoadBase=window.idLoadClassStudents;
+ if(typeof idLoadBase==='function')window.idLoadClassStudents=async function(){
+   if(teacher()){
+     if(!idEnabled())return toast('ID Card permission Admin ने बंद की है');
+     try{await v14LoadTeacherContext?.()}catch(_e){}
+     let c=$('idClass')?.value||'',allowed=v14AllowedClassNames?.()||[];
+     if(!allowed.includes(c)){let b=$('idStudentList');if(b)b.innerHTML='<div class="empty">यह class आपको assigned नहीं है.</div>';return}
+   }
+   return idLoadBase.apply(this,arguments);
+ };
+
+ /* Route ID Card to restricted teacher studio; Admin keeps full studio. */
+ const renderBase=window.render;
+ if(typeof renderBase==='function')window.render=async function(route){if(route==='idcard_center'&&teacher())return v649TeacherIdCardCenter();return renderBase.apply(this,arguments)};
+
+ /* Add/remove Teacher ID menu from the final rendered teacher sidebar according to Admin setting. */
+ function syncTeacherIdNav(){
+   if(!teacher())return;let nav=document.getElementById('erpNav');if(!nav)return;let old=nav.querySelector('[data-v649-idcard]');
+   if(!idEnabled()){old?.remove();return}if(old)return;
+   let b=document.createElement('button');b.dataset.v649Idcard='1';b.innerHTML='▤ ID Card';b.onclick=()=>render('idcard_center');
+   let anchor=[...nav.querySelectorAll('button')].find(x=>/My Class/i.test(x.textContent||''));anchor?anchor.insertAdjacentElement('afterend',b):nav.appendChild(b);
+ }
+ const openBase=window.openERP;
+ if(typeof openBase==='function')window.openERP=async function(){let r=await openBase.apply(this,arguments);setTimeout(syncTeacherIdNav,80);return r};
+
+ /* Admin global permission control in existing Website/Settings screen. */
+ const settingsBase=window.websiteSettingsCenter;
+ if(typeof settingsBase==='function')window.websiteSettingsCenter=async function(){let r=await settingsBase.apply(this,arguments);try{if(!admin())return r;let root=$('erpContent');if(root&&!$('v649TeacherIdPermission')){let p=document.createElement('div');p.className='panel';p.id='v649TeacherIdPermission';p.innerHTML=`<div class="panelHead"><div><h3>👩‍🏫 Teacher ID Card Permission</h3><p class="note">ON होने पर Teacher केवल अपनी assigned class के ID Cards Preview/Print/PDF कर सकता है. Signature setting Admin-only रहती है.</p></div></div><div class="v649Perm"><b>Teacher ID Card View / Generate / Print</b><label><input id="v649TeacherIdToggle" type="checkbox" ${idEnabled()?'checked':''}> Allow</label><button class="primary" onclick="v649SaveTeacherIdPermission()">Save Permission</button></div>`;root.appendChild(p)}}catch(_e){}return r};
+ window.v649SaveTeacherIdPermission=async function(){if(!admin())return toast('Admin permission required');let val=!!$('v649TeacherIdToggle')?.checked;let q=await sb.from('school_settings').update({teacher_id_card_enabled:val}).eq('id',1);if(q.error)return toast(q.error.message);school.teacher_id_card_enabled=val;toast(val?'Teacher ID Card permission ON':'Teacher ID Card permission OFF')};
+
+ /* Existing individual teacher ID remains restricted by teacherAssertStudent; add permission gate. */
+ const oneIdBase=window.teacherViewIdCard;
+ if(typeof oneIdBase==='function')window.teacherViewIdCard=async function(){if(!idEnabled())return toast('ID Card permission Admin ने बंद की है');return oneIdBase.apply(this,arguments)};
+
+ /* Remove background notification polling too: refresh on ERP open/manual/realtime instead of periodic timer. */
+ try{window.v62StartNotificationTimer=function(){try{clearInterval(v62NotifTimer)}catch(_e){}}}catch(_e){}
+ window.addEventListener('load',()=>setTimeout(syncTeacherIdNav,250),{once:true,passive:true});
+})();
+</script>
+<!-- ===== END V64.10 FINAL FUNCTION PATCH ===== -->
 </body></html>
