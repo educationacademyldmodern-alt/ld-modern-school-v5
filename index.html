@@ -9415,6 +9415,132 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 <script src="v64-3-parent-actions.js?v=64.3&build=V643"></script>
 <script src="v64-3-teacher-handover.js?v=64.3&build=V643"></script>
 <script src="v64-3-print.js?v=64.3&build=V643"></script>
-<link rel="stylesheet" href="v64-4-premium-responsive.css?v=64.4&build=V644">
-<script src="v64-4-final-corrections.js?v=64.4&build=V644"></script>
+
+<!-- V64.4 SAFE SINGLE-FILE CORRECTIONS -->
+<style id="v644-safe-css">
+/* V64.4 premium responsive hardening */
+html,body,#erp,#erp main,#erpContent{max-width:100%;box-sizing:border-box}
+#erpContent>*{min-width:0;max-width:100%;box-sizing:border-box}
+#erpContent .panel,#erpContent .v90Panel,#erpContent .v90Welcome,#erpContent .dashHero{min-width:0;max-width:100%;box-sizing:border-box}
+#erpContent .tableWrap{width:100%;max-width:100%;overflow:auto!important;-webkit-overflow-scrolling:touch}
+#erpContent img,#erpContent video,#erpContent canvas,#erpContent svg{max-width:100%;height:auto}
+#erpContent .erpCards,#erpContent .v90Stats,#erpContent .v90MonitorGrid,#erpContent .futureGrid{grid-template-columns:repeat(auto-fit,minmax(min(175px,100%),1fr))!important}
+#erp aside{background:linear-gradient(180deg,#092d54 0%,#0d477d 52%,#082c51 100%)!important;box-shadow:8px 0 28px rgba(5,32,60,.18)!important}
+#erpNav button{border:1px solid rgba(255,255,255,.09)!important;border-radius:12px!important;margin:3px 0!important;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.045))!important;box-shadow:inset 0 1px rgba(255,255,255,.12),0 4px 10px rgba(0,0,0,.08)!important}
+#erpNav button:hover{transform:translateY(-1px);background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08))!important}
+#erp .erpTop{background:linear-gradient(135deg,#fff,#eef7ff)!important;border-bottom:1px solid #d5e5f4!important;box-shadow:0 5px 18px rgba(18,66,110,.08)!important}
+@media(min-width:901px){#erp{--v64-side:230px}#erp main{overflow-x:hidden!important}#erpContent{padding:14px!important}}
+@media(max-width:900px){#erp main{width:100%!important;margin:0!important}#erpContent{padding:10px!important}.tools,.quick,.panelHead,.v111Toolbar,.v111BulkActions{max-width:100%;flex-wrap:wrap!important}.tools>*{min-width:0}}
+@media(max-width:600px){#erpContent .erpCards,#erpContent .v90Stats,#erpContent .v90MonitorGrid,#erpContent .futureGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}#erpContent button{white-space:normal;height:auto;min-height:40px}#erpContent input,#erpContent select,#erpContent textarea{width:100%;min-width:0}}
+@media(max-width:380px){#erpContent .erpCards,#erpContent .v90Stats,#erpContent .v90MonitorGrid,#erpContent .futureGrid{grid-template-columns:1fr!important}}
+
+</style>
+<script id="v644-safe-js">
+/* V64.4 final corrections — additive, non-destructive */
+(()=>{'use strict';
+const E=v=>typeof esc==='function'?esc(v):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const cash=v=>typeof money==='function'?money(Number(v||0)):'₹'+Number(v||0).toLocaleString('en-IN');
+
+/* Admin Due Fee: exactly up to 3 compact notices per A4 page. Preview remains first. */
+window.v57BulkNotice=function(){
+ const rows=[...document.querySelectorAll('.v57Sel:checked')].map(x=>window.v57DueRows?.[Number(x.dataset.i)]).filter(Boolean);
+ if(!rows.length)return typeof toast==='function'&&toast('Student select करें');
+ const card=x=>`<article class="v644FeeNotice"><header><b>${E(window.school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b><small>${E(window.school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar, Uttar Pradesh')}</small><h3>FEE DUE NOTICE</h3></header><div class="v644Info"><span><b>Student:</b> ${E(x.student_name)}</span><span><b>Class:</b> ${E(x.class_name)}</span><span><b>Father:</b> ${E(x.father_name||'—')}</span><span><b>Adm. No.:</b> ${E(x.admission_no||'—')}</span></div><p>आपके बच्चे की विद्यालय शुल्क बकाया राशि <strong>${cash(x._due)}</strong> है। कृपया निर्धारित समय में शुल्क जमा करने का कष्ट करें। यदि शुल्क जमा हो चुका है तो इस सूचना को नजरअंदाज करें।</p><footer><span>Date: ${E(new Date().toLocaleDateString('en-IN'))}</span><span>Principal / Authorized Signatory</span></footer></article>`;
+ let pages=[];for(let i=0;i<rows.length;i+=3)pages.push(`<section class="v644A4">${rows.slice(i,i+3).map(card).join('')}</section>`);
+ const w=window.open('','_blank','width=1050,height=850');if(!w)return typeof toast==='function'&&toast('Popup allow करें');
+ w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Fee Due Notice Preview</title><style>@page{size:A4 portrait;margin:8mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#eef3f8;color:#142b44}.tools{position:sticky;top:0;z-index:5;padding:10px;text-align:center;background:#fff;border-bottom:1px solid #ccd8e5}.tools button{padding:9px 16px;border:0;border-radius:8px;background:#124b82;color:#fff;font-weight:700;cursor:pointer}.v644A4{width:194mm;min-height:281mm;margin:8mm auto;background:#fff;display:grid;grid-template-rows:repeat(3,1fr);gap:4mm;padding:0;break-after:page;page-break-after:always}.v644A4:last-child{break-after:auto;page-break-after:auto}.v644FeeNotice{min-height:0;border:1.4px solid #173f6b;border-radius:3mm;padding:5mm 6mm;display:flex;flex-direction:column;break-inside:avoid;page-break-inside:avoid;overflow:hidden}.v644FeeNotice header{text-align:center}.v644FeeNotice header>b{display:block;font-size:16px}.v644FeeNotice header small{display:block;font-size:10px;margin-top:2px}.v644FeeNotice h3{font-size:13px;margin:4px 0;border-top:1px solid #b8c9d9;border-bottom:1px solid #b8c9d9;padding:3px}.v644Info{display:grid;grid-template-columns:1fr 1fr;gap:3px 12px;font-size:11px}.v644FeeNotice p{font-size:11px;line-height:1.35;margin:5px 0;flex:1}.v644FeeNotice footer{display:flex;justify-content:space-between;gap:10px;font-size:10px;font-weight:700}@media print{body{background:#fff}.tools{display:none}.v644A4{margin:0;width:auto;min-height:281mm}.v644FeeNotice{box-shadow:none}}</style></head><body><div class="tools"><button onclick="print()">Print / Save PDF</button> &nbsp; ${rows.length} Student • ${pages.length} A4 Page</div>${pages.join('')}</body></html>`);w.document.close();
+};
+
+/* Avoid misleading Student-not-found on stale teacher row IDs: re-resolve from current teacher class cache when possible. */
+if(typeof window.teacherAssertStudent==='function'){
+ window.teacherAssertStudent=async function(studentId){
+  await window.v14LoadTeacherContext?.();
+  let r=await sb.from('students').select('*').eq('id',studentId).maybeSingle(),s=r.data;
+  if((r.error||!s)&&window.teacherClassRows){const old=(window.teacherClassRows||[]).find(x=>String(x.id)===String(studentId));if(old?.admission_no){let z=await sb.from('students').select('*').eq('admission_no',old.admission_no).maybeSingle();if(!z.error)s=z.data}}
+  if(!s){toast('Student record refresh करें और फिर खोलें.');return null}
+  const allowed=typeof v14AllowedClassNames==='function'?v14AllowedClassNames():[];
+  if(!allowed.includes(s.class_name)){toast('यह student आपकी assigned class में नहीं है');return null}
+  return s;
+ };
+}
+
+/* Every ERP route opens at top and mobile sidebar closes after a selection. */
+function settle(){try{document.querySelector('#erp aside')?.classList.remove('open');document.querySelector('#erp main')?.scrollTo?.({top:0,left:0});document.getElementById('erpContent')?.scrollTo?.({top:0,left:0});window.scrollTo(0,0)}catch(_){}}
+if(typeof window.render==='function'){const base=window.render;window.render=async function(){const r=await base.apply(this,arguments);setTimeout(settle,0);return r}}
+document.addEventListener('click',e=>{if(e.target.closest('#erpNav button'))setTimeout(settle,0)},true);
+})();
+
+</script>
+
+<!-- V64.5 FINAL STABILITY + PHOTO + RESPONSIVE FIX — 2026-09-20 -->
+<style id="v645-final-fix-css">
+html,body{max-width:100%!important;overflow-x:hidden!important}
+#erp,#erp main,#erpContent,.v90Page,.v90Dash,.panel,.tableWrap{max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+#erp main{overflow-x:hidden!important}.tableWrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+/* Vercel preview toolbar is external to ERP; keep app content clear of floating overlays. */
+@media(min-width:901px){#erp.v90Shell>main{width:100%!important;min-width:0!important}}
+.v645PhotoActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.v645PhotoActions label,.v645PhotoActions button{margin:0!important}
+</style>
+<script id="v645-final-fix-js">
+(function(){
+ const BUILD='V64.5-FINAL-STABILITY-PHOTO-2026-09-20'; window.V645_BUILD=BUILD;
+ const idle=window.requestIdleCallback||function(fn){return setTimeout(fn,1)};
+ function oneGreeting(){
+   try{
+    const roots=[document.getElementById('erpContent'),document.getElementById('parentDashboardBody')].filter(Boolean);
+    roots.forEach(root=>{
+      const seen=[];
+      root.querySelectorAll('[data-v97-clock],.v97ParentWelcome,.v97WelcomeCopy,.v90Welcome').forEach(el=>{
+        if(!el||!el.isConnected)return; const t=(el.textContent||'').trim();
+        if(!/Good Morning|Good Afternoon|Good Evening/i.test(t))return;
+        if(seen.some(x=>x!==el&&(x.contains(el)||el.contains(x))))return;
+        seen.push(el);
+      });
+      /* Remove only duplicate standalone greeting strips; never remove the main welcome hero. */
+      const strips=[...root.children].filter(el=>/^(?:[^A-Za-z]{0,4})?(Good Morning|Good Afternoon|Good Evening)\b/i.test((el.textContent||'').trim())&&!el.classList.contains('v90Dash'));
+      strips.slice(1).forEach(el=>el.remove());
+    });
+   }catch(_e){}
+ }
+ document.addEventListener('click',()=>idle(oneGreeting),{passive:true,capture:false});
+ window.addEventListener('load',()=>idle(oneGreeting),{once:true,passive:true});
+
+ /* Teacher Student Photo: robust central-record lookup + separate Upload and Camera controls. */
+ window.v645TeacherPhotoPick=async function(id,input){
+   let f=input?.files?.[0]; if(!f)return;
+   let rows=(typeof v91TeacherPhotoRows!=='undefined'&&Array.isArray(v91TeacherPhotoRows))?v91TeacherPhotoRows:[];
+   let st=rows.find(x=>String(x.id)===String(id));
+   try{
+     if(!st){let q=await sb.from('students').select('id,admission_no,student_name,father_name,class_name,photo_path,photo_url,student_photo_url').eq('id',id).maybeSingle(); if(q.error)throw q.error; st=q.data; if(st)rows.push(st)}
+     if(!st)throw new Error('Student record नहीं मिला. List refresh करके फिर कोशिश करें.');
+     if(typeof compressImageFile==='function')f=await compressImageFile(f,10,25,640,'student');
+     if(f.size>25*1024){if(typeof compressImageFile==='function')f=await compressImageFile(f,8,25,520,'student')}
+     if(f.size>26*1024)throw new Error('Photo 25 KB तक compress नहीं हो सकी. दूसरा photo चुनें.');
+     const uid=user?.id||'teacher', path=`teacher-student-photo/${uid}/${st.id}.jpg`;
+     let up=await sb.storage.from('student-media').upload(path,f,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'}); if(up.error)throw up.error;
+     let rr=await sb.rpc('v91_teacher_set_student_photo',{p_student_id:st.id,p_photo_path:path}); if(rr.error)throw rr.error;
+     st.photo_path=path;st.photo_url='';st.student_photo_url='';
+     try{if(typeof photoCache91!=='undefined')photoCache91.delete(path)}catch(_e){}
+     try{if(typeof v91AttachStudentPhoto==='function')await v91AttachStudentPhoto(st)}catch(_e){}
+     if(typeof v91RenderTeacherPhotos==='function')v91RenderTeacherPhotos();
+     toast(`Photo updated • ${Math.round(f.size/1024)} KB`);
+   }catch(e){toast(e?.message||String(e))}finally{if(input)input.value=''}
+ };
+ function upgradePhotoCards(){
+   try{document.querySelectorAll('.v91PhotoCard').forEach(card=>{
+     if(card.querySelector('.v645PhotoActions'))return; const old=card.querySelector('.v91PhotoBtn'); if(!old)return;
+     const inp=old.querySelector('input[type=file]'); const m=String(card.id||'').match(/^v91PhotoCard_(.+)$/); if(!m)return; const id=m[1];
+     const box=document.createElement('div');box.className='v645PhotoActions';
+     box.innerHTML=`<label class="v91PhotoBtn">📁 Upload<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label><label class="v91PhotoBtn">📷 Camera<input type="file" accept="image/*" capture="environment" hidden></label>`;
+     box.querySelectorAll('input').forEach(x=>x.addEventListener('change',()=>window.v645TeacherPhotoPick(id,x),{once:true})); old.replaceWith(box);
+   })}catch(_e){}
+ }
+ const oldRender=window.v91RenderTeacherPhotos;
+ if(typeof oldRender==='function')window.v91RenderTeacherPhotos=function(){const r=oldRender.apply(this,arguments);idle(upgradePhotoCards);return r};
+ window.addEventListener('load',()=>idle(upgradePhotoCards),{once:true,passive:true});
+
+ /* Keep navigation responsive: visual cleanup is deferred outside the click handler. */
+ document.addEventListener('click',function(e){if(e.target.closest('button,a,[role=button]'))idle(()=>{oneGreeting();upgradePhotoCards()})},{passive:true});
+})();
+</script>
 </body></html>
