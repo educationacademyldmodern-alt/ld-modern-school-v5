@@ -10366,6 +10366,8 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
   const mobile=v=>String(v||'').replace(/\D/g,'').slice(-10);
   const teacherEmail=m=>'t'+m+'@teacher.ldmodern.local';
   function teacherModal(){
+    // Route lock: prevent any legacy Parent/Admin handler from replacing the Teacher modal.
+    window.__ldTeacherRouteLockUntil=Date.now()+1800;
     const html=`<h2>👩‍🏫 Teacher Login</h2><p class="v14Muted">Admin द्वारा दिए Registered Mobile और Password से login करें.</p><div id="teacherAuthBox"><div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" name="ld_teacher_mobile_only" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="off" autocapitalize="off" spellcheck="false" readonly placeholder="10 digit mobile"></div><div class="full"><label>Password</label><input id="tLoginPassword" name="ld_teacher_password" type="password" autocomplete="new-password" placeholder="Password"></div><div class="full"><button type="button" class="v14Action primary" id="v6422TeacherLoginBtn">Teacher Login</button></div><div id="v6422TeacherLoginStatus" class="v32Info"></div></div></div>`;
     if(typeof window.v14Modal==='function') window.v14Modal(html);
     else return window.toast?.('Teacher Login dialog unavailable');
@@ -10417,10 +10419,29 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
   document.addEventListener('click',function(ev){
     const b=ev.target?.closest?.('button,a'); if(!b)return;
     const txt=String(b.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
-    if(txt==='teacher login' || txt==='teacher login →'){
-      ev.preventDefault();ev.stopImmediatePropagation();teacherModal();
+    // Do not intercept the actual submit button inside the Teacher Login modal.
+    // Otherwise the capture handler re-opens the modal, clears Mobile/Password,
+    // and teacherPasswordLogin() never runs.
+    if(b.id==='v6422TeacherLoginBtn' || b.closest?.('#teacherAuthBox')) return;
+    const isTeacherEntry = txt==='teacher login' || txt==='teacher login →' ||
+      !!b.closest?.('.v26Login.teacher') || /teacherLoginDialog/i.test(String(b.getAttribute?.('onclick')||''));
+    if(isTeacherEntry){
+      ev.preventDefault();ev.stopImmediatePropagation();teacherModal();return;
+    }
+    // An intentional Parent/Student click is always allowed and clears any stale teacher-route lock.
+    if(b.closest?.('.v26Login.parent') || /parentPasswordLoginDialog/i.test(String(b.getAttribute?.('onclick')||''))){
+      window.__ldTeacherRouteLockUntil=0;
     }
   },true);
+  // Legacy builds contain several portal handlers. Guard Parent modal from being opened
+  // as a side-effect immediately after a Teacher click, while leaving normal Parent login untouched.
+  const __ldParentLoginOriginal=window.parentPasswordLoginDialog;
+  if(typeof __ldParentLoginOriginal==='function'){
+    window.parentPasswordLoginDialog=function(){
+      if(Date.now() < Number(window.__ldTeacherRouteLockUntil||0)) return false;
+      return __ldParentLoginOriginal.apply(this,arguments);
+    };
+  }
 })();
 </script>
 </body></html>
