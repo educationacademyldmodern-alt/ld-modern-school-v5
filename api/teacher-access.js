@@ -56,6 +56,16 @@ module.exports = async (req,res)=>{
  const cpr=await fetch(url+'/rest/v1/profiles?on_conflict=id',{method:'POST',headers:{...H,Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(centralProfile)});
  if(!cpr.ok){let e=await cpr.json().catch(()=>({}));return res.status(500).json({error:e.message||'Teacher central login profile save failed'})}
  await fetch(url+'/rest/v1/teacher_class_assignments?teacher_profile_id=eq.'+encodeURIComponent(tpid),{method:'PATCH',headers:{...H,Prefer:'return=minimal'},body:JSON.stringify({is_active:false,updated_at:new Date().toISOString()})});
- for(const c of classes){let rr=await fetch(url+'/rest/v1/teacher_class_assignments?on_conflict=teacher_profile_id,class_name',{method:'POST',headers:{...H,Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({teacher_profile_id:tpid,class_name:c,is_class_teacher:String(b.class_teacher||'')===c,is_active:true,updated_at:new Date().toISOString()})});if(!rr.ok){let e=await rr.json();return res.status(500).json({error:e.message||'Class assignment failed'})}}
+ for(const c of classes){
+   // V64.23: do not depend on PostgREST ON CONFLICT metadata. Older production DBs may
+   // have the rows/index but not a matching constraint visible to ON CONFLICT yet.
+   const q=url+'/rest/v1/teacher_class_assignments?teacher_profile_id=eq.'+encodeURIComponent(tpid)+'&class_name=eq.'+encodeURIComponent(c)+'&select=id&limit=1';
+   const er=await fetch(q,{headers:H}); const ea=await er.json(); const ex=ea?.[0];
+   const body={teacher_profile_id:tpid,class_name:c,is_class_teacher:String(b.class_teacher||'')===c,is_active:true,updated_at:new Date().toISOString()};
+   let rr;
+   if(ex?.id) rr=await fetch(url+'/rest/v1/teacher_class_assignments?id=eq.'+encodeURIComponent(ex.id),{method:'PATCH',headers:{...H,Prefer:'return=minimal'},body:JSON.stringify(body)});
+   else rr=await fetch(url+'/rest/v1/teacher_class_assignments',{method:'POST',headers:{...H,Prefer:'return=minimal'},body:JSON.stringify(body)});
+   if(!rr.ok){let e=await rr.json().catch(()=>({}));return res.status(500).json({error:e.message||'Class assignment save failed'})}
+ }
  return res.status(200).json({ok:true,created,teacher_name:st.staff_name,login_id:mobile,mobile,classes});
 };
