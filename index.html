@@ -4983,7 +4983,7 @@ window.addEventListener('load',()=>setTimeout(()=>{
 },160));
 </script>
 
-\n<script id="v59-final-runtime">
+<script id="v59-final-runtime">
 const V59_BUILD='V59-V52-PANEL-CLASSIC-SIDEBAR-ORDERS-AUTO-ADMISSION';
 
 /* ---------- Classic Admin sidebar: larger single items ---------- */
@@ -5167,7 +5167,7 @@ const v59RenderBase=render;
 render=function(p){const r=v59RenderBase(p);Promise.resolve(r).finally(()=>setTimeout(()=>{if(v14Admin())v59AdminSidebar();else if(v14Teacher())v59TeacherSidebar();document.querySelectorAll('#erpNav button').forEach(b=>b.classList.toggle('active',b.dataset.route===p))},0));return r};
 
 window.addEventListener('load',()=>setTimeout(()=>{if(user){if(v14Admin())v59AdminSidebar();else if(v14Teacher())v59TeacherSidebar()}},180));
-</script>\n
+</script>
 <script id="v60-student-import-safe-match">
 /* =========================================================
    V60 — SAFE STUDENT EXCEL MATCHING
@@ -10102,4 +10102,97 @@ window.V6417_BUILD='V64.17-RESOURCE-CONNECTION-OPTIMIZED-2026-09-20';
 })();
 </script>
 <!-- ===== END V64.17 RESOURCE + CONNECTION OPTIMIZATION ===== -->
+
+<!-- LDMEA FINAL CONSOLIDATED SAFE FIX — 2026-09-20 -->
+<style id="ldmea-final-safe-css">
+html,body{max-width:100%;overflow-x:hidden}body{min-width:0}
+#erp,#erp main,#erpContent,#parentPortal,#parentDashboardBody{max-width:100%;min-width:0;box-sizing:border-box}
+#erp main{overflow-x:hidden}.tableWrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.erpTop{min-height:64px;height:auto;gap:8px;padding:8px 14px;flex-wrap:nowrap}.erpTop>div{min-width:0}.erpTop h2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.erpTop .websiteBtn{margin-left:0!important;white-space:nowrap;padding:7px 9px!important;font-weight:800;color:#174a82;background:linear-gradient(#fff,#f4f8ff)}
+#v75TopSearch{margin-left:auto!important;gap:4px!important;max-width:230px}#v75TopSearch input{width:160px!important;min-width:80px;padding:7px 8px!important}#v75TopSearch button{padding:7px 8px!important}
+.erpTop button{white-space:nowrap}.ldmeaCompactOrder{padding:7px 9px!important;max-width:105px;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:760px){.erpTop{padding:7px 8px;gap:5px}.erpTop #erpSub{display:none}.erpTop h2{font-size:14px}.erpTop .erpHomeBtn,.erpTop .websiteBtn,.erpTop .v75BackBtn{font-size:0;padding:7px!important}.erpTop .erpHomeBtn:before{content:'🏠';font-size:16px}.erpTop .websiteBtn:before{content:'🌐';font-size:16px}#v75TopSearch{max-width:128px}#v75TopSearch input{width:88px!important;font-size:11px}.ldmeaCompactOrder{max-width:70px;font-size:11px}#erpContent{padding:10px!important}}
+/* Parent portal: one document scroll, no sticky white nav obstruction. */
+#parentPortal .v75ParentTop,#parentPortal .parentTop,#parentPortal .portalTop{position:static!important;top:auto!important}#parentPortal,#parentDashboardBody{overflow:visible!important;height:auto!important;max-height:none!important}
+/* Public site safety: preserve approved structure and prevent ERP leakage/overflow. */
+#publicSite,.v26Site,.v114PublicHome{max-width:100%;overflow-x:hidden}.v26Hero img,.hero img{max-width:100%;height:auto;object-fit:cover}
+@media(max-width:760px){.v26Top,.v26Nav,.pubTop,.pubNav{max-width:100%;overflow-x:auto}.v26LoginCards{grid-template-columns:1fr!important}.v26Hero{min-width:0!important}}
+/* Common print guard. Popup-specific layouts retain their own sizes. */
+@media print{@page{size:A4;margin:12mm}html,body{width:210mm;max-width:210mm;overflow:visible!important;background:#fff!important}.noPrint,.erpTop,#erp aside{display:none!important}.tableWrap{overflow:visible!important}table{width:100%!important;table-layout:auto}img{max-width:100%}tr,.panel,.noticeCard,.idCard{break-inside:avoid;page-break-inside:avoid}}
+.ldmeaLetter{max-width:900px;margin:auto}.ldmeaLetterGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ldmeaLetterGrid .full{grid-column:1/-1}.ldmeaLetter input,.ldmeaLetter textarea,.ldmeaLetter select{width:100%;padding:9px;border:1px solid #d7e1ec;border-radius:9px}.ldmeaLetter textarea{min-height:150px}.ldmeaLetterPreview{background:#fff;width:min(100%,210mm);min-height:270mm;margin:14px auto;padding:18mm 19mm;border:1px solid #dbe4ef;box-shadow:0 8px 30px #183b6614}.ldmeaLetterPreview h1{text-align:center;margin:0;color:#124b82}.ldmeaLetterPreview .addr{text-align:center;border-bottom:2px solid #124b82;padding-bottom:8px;margin-bottom:14px}.ldmeaLetterPreview .meta{display:flex;justify-content:space-between;gap:10px}.ldmeaLetterPreview .body{white-space:pre-wrap;line-height:1.55;margin-top:18px}.ldmeaLetterPreview .sign{text-align:right;margin-top:45px}@media(max-width:650px){.ldmeaLetterGrid{grid-template-columns:1fr}.ldmeaLetterGrid .full{grid-column:auto}.ldmeaLetterPreview{padding:12mm 10mm}}
+</style>
+<script id="ldmea-final-safe-js">
+(function(){
+ 'use strict';
+ window.LDMEA_FINAL_BUILD='V64.17+CONSOLIDATED-SAFE-FIX-2026-09-20';
+ const q=(s,r=document)=>r.querySelector(s), qa=(s,r=document)=>[...r.querySelectorAll(s)];
+ function safeText(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+ function roleHome(){try{if(typeof v14Admin==='function'&&v14Admin())return 'dashboard';if(typeof v14Teacher==='function'&&v14Teacher())return 'v90_teacher_dashboard'}catch(e){} return 'dashboard'}
+ function cleanupUI(){
+   try{
+     // Website button is the compact public-site escape; password remains in account/settings.
+     const wb=q('#erp .erpTop .websiteBtn'); if(wb){wb.textContent='🌐 Website';wb.title='Public Website'}
+     // Compact any top-level Order control without moving it or changing its handler.
+     qa('#erp .erpTop button').forEach(b=>{if(/order/i.test((b.textContent||'').trim()))b.classList.add('ldmeaCompactOrder')});
+     // Keep exactly one standalone greeting strip in each dashboard root.
+     [q('#erpContent'),q('#parentDashboardBody')].filter(Boolean).forEach(root=>{
+       const candidates=qa(':scope > *',root).filter(el=>/Good Morning|Good Afternoon|Good Evening/i.test((el.textContent||'')));
+       const strips=candidates.filter(el=>!el.classList.contains('v90Dash')&&!el.classList.contains('v90Welcome')&&!el.classList.contains('v114ReferenceHero'));
+       strips.slice(1).forEach(el=>el.remove());
+     });
+     // Defensive removal of accidental literal escape-only text nodes on public page/body.
+     const walk=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n;
+     while(n=walk.nextNode()){if(/^\s*(?:\\n\s*){1,8}$/.test(n.nodeValue||''))n.nodeValue=''}
+   }catch(e){}
+ }
+ const oldRender=window.render;
+ if(typeof oldRender==='function') window.render=async function(route){
+   const r=await oldRender.apply(this,arguments); requestAnimationFrame(cleanupUI); return r;
+ };
+ // Avoid # links causing page jumps; preserve actual links and existing handlers.
+ document.addEventListener('click',e=>{const a=e.target.closest('a[href="#"]');if(a)e.preventDefault();setTimeout(cleanupUI,0)},true);
+ window.addEventListener('load',()=>setTimeout(cleanupUI,30),{once:true});
+
+ // Clearer user-facing database error mapper. Does not expose schema internals to parents/teachers.
+ window.ldmeaFriendlyError=function(err,context){
+   const raw=String(err?.message||err||'').trim(); const c=context?context+': ':'';
+   if(!raw)return c+'कार्य पूरा नहीं हुआ। दोबारा प्रयास करें।';
+   if(/jwt|session|auth.*required|not authenticated/i.test(raw))return c+'Login session समाप्त या अमान्य है। कृपया दोबारा login करें।';
+   if(/permission|row-level|rls|not allowed|forbidden/i.test(raw))return c+'इस account को इस कार्य की अनुमति नहीं मिली है। Admin से access जाँचें।';
+   if(/network|fetch|offline/i.test(raw))return c+'Network connection के कारण data नहीं मिला। Internet जाँचकर फिर प्रयास करें।';
+   if(/column|relation|schema cache|function .* does not exist|rpc/i.test(raw))return c+'ERP और database structure में compatibility समस्या मिली है। Admin को database update जाँचना होगा।';
+   return c+raw;
+ };
+
+ // Official Letter Center: isolated new route; does not replace existing modules.
+ window.ldmeaOfficialLetterCenter=async function(){
+   try{if(typeof v14Admin==='function'&&!v14Admin())return toast('Official Letter Center केवल Admin के लिए उपलब्ध है।')}catch(e){}
+   const host=q('#erpContent');if(!host)return;
+   const today=new Date().toISOString().slice(0,10); let no='LDMEA/'+new Date().getFullYear()+'/'+String(Date.now()).slice(-6);
+   try{if(window.sb){const r=await sb.rpc('ldmea_next_number',{p_kind:'LETTER'});if(!r.error&&r.data)no=String(r.data)}}catch(e){}
+   host.innerHTML=`<div class="ldmeaLetter"><div class="panel"><div class="panelHead"><div><h2>📄 Official Letter Center</h2><small>Create → Preview → Print / Save PDF</small></div><button class="secondary" type="button" onclick="render('${roleHome()}')">← Back</button></div><div class="ldmeaLetterGrid">
+   <label>Letter No<input id="ldlNo" value="${safeText(no)}"></label><label>Date<input id="ldlDate" type="date" value="${today}"></label>
+   <label>Template<select id="ldlTpl"><option>Blank / Custom</option><option>Education Department / BEO / BSA / DIOS</option><option>DM / SDM / Tehsil</option><option>Police</option><option>Bank</option><option>Electricity</option><option>Panchayat / Nagar Nikay</option><option>Board / University</option><option>Student</option><option>Teacher / Staff</option><option>Parent</option></select></label><label>Recipient / Department<input id="ldlTo" placeholder="Recipient / Department"></label>
+   <label class="full">Address<input id="ldlAddr" placeholder="Address"></label><label class="full">Subject<input id="ldlSub" placeholder="Subject"></label><label class="full">Reference<input id="ldlRef" placeholder="Reference (optional)"></label><label class="full">Letter Body<textarea id="ldlBody" placeholder="Letter content..."></textarea></label><label>Enclosure / Copy To<input id="ldlCopy"></label><label>Authorized Signatory<input id="ldlSign" value="Principal / Director"></label></div><div class="tools" style="margin-top:12px"><button class="primary" type="button" onclick="ldmeaPreviewLetter()">👁 Preview</button><button class="secondary" type="button" onclick="ldmeaSaveLetter()">💾 Save Register</button><button class="secondary" type="button" onclick="ldmeaPrintLetter()">🖨 Print / Save PDF</button></div></div><div id="ldlPreview"></div></div>`;
+   window.scrollTo(0,0);
+ };
+ window.ldmeaPreviewLetter=function(){
+   const v=id=>q('#'+id)?.value||''; const host=q('#ldlPreview');if(!host)return;
+   host.innerHTML=`<section id="ldmeaLetterPaper" class="ldmeaLetterPreview"><h1>L D MODERN EDUCATION ACADEMY</h1><div class="addr">Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar, Uttar Pradesh</div><div class="meta"><b>Letter No: ${safeText(v('ldlNo'))}</b><b>Date: ${safeText(v('ldlDate'))}</b></div><p><b>To:</b> ${safeText(v('ldlTo'))}<br>${safeText(v('ldlAddr'))}</p><p><b>Subject:</b> ${safeText(v('ldlSub'))}</p>${v('ldlRef')?`<p><b>Reference:</b> ${safeText(v('ldlRef'))}</p>`:''}<div class="body">${safeText(v('ldlBody'))}</div>${v('ldlCopy')?`<p><b>Enclosure / Copy To:</b> ${safeText(v('ldlCopy'))}</p>`:''}<div class="sign"><b>${safeText(v('ldlSign'))}</b><br>Authorized Signatory</div></section>`;
+ };
+ window.ldmeaPrintLetter=function(){ldmeaPreviewLetter();const el=q('#ldmeaLetterPaper');if(!el)return;const w=window.open('','_blank','width=1000,height=850');if(!w)return toast('Popup allow करें।');w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Official Letter</title><style>@page{size:A4;margin:18mm 19mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;color:#111}section{width:100%}h1{text-align:center;color:#124b82;margin:0}.addr{text-align:center;border-bottom:2px solid #124b82;padding-bottom:8px;margin-bottom:14px}.meta{display:flex;justify-content:space-between}.body{white-space:pre-wrap;line-height:1.55;margin-top:18px}.sign{text-align:right;margin-top:45px}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},300)};
+ window.ldmeaSaveLetter=async function(){
+   if(!window.sb)return toast('Database connection उपलब्ध नहीं है।'); const v=id=>q('#'+id)?.value||'';
+   const row={letter_no:v('ldlNo'),letter_date:v('ldlDate')||null,template_name:v('ldlTpl'),recipient:v('ldlTo'),recipient_address:v('ldlAddr'),subject:v('ldlSub'),reference_text:v('ldlRef'),body_text:v('ldlBody'),copy_to:v('ldlCopy'),signatory:v('ldlSign'),status:'Issued'};
+   const r=await sb.from('official_letters').insert(row); toast(r.error?ldmeaFriendlyError(r.error,'Letter save'): 'Letter Register में save हो गया।');
+ };
+ // Add Admin-only nav entry without touching existing order.
+ function installLetterNav(){try{if(typeof v14Admin!=='function'||!v14Admin())return;const nav=q('#erpNav');if(!nav||q('#ldmeaLetterNav'))return;const b=document.createElement('button');b.id='ldmeaLetterNav';b.type='button';b.innerHTML='📄 <span>Official Letter</span>';b.onclick=()=>ldmeaOfficialLetterCenter();nav.appendChild(b)}catch(e){}}
+ const oldInstall=window.v48AdminSidebar; if(typeof oldInstall==='function')window.v48AdminSidebar=function(){const r=oldInstall.apply(this,arguments);installLetterNav();return r};
+ window.addEventListener('load',()=>setTimeout(installLetterNav,500),{once:true});
+})();
+</script>
+
+
 </body></html>
