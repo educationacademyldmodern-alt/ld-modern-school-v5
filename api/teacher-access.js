@@ -28,8 +28,28 @@ module.exports = async (req,res)=>{
  }
  const classes=[...new Set((Array.isArray(b.classes)?b.classes:[]).map(x=>String(x).trim()).filter(Boolean))];
  const profile={auth_user_id:uid,employee_id:st.employee_id||null,teacher_name:st.staff_name||'Teacher',mobile,phone:mobile,email:loginEmail,approval_status:'Approved',is_active:true,requested_classes:classes,updated_at:new Date().toISOString()};
- const ph={...H,Prefer:'resolution=merge-duplicates,return=representation'};
- let upr=await fetch(url+'/rest/v1/teacher_profiles?on_conflict=auth_user_id',{method:'POST',headers:ph,body:JSON.stringify(profile)});let upa=await upr.json();if(!upr.ok)return res.status(500).json({error:upa.message||'Teacher profile save failed'});tp=upa?.[0]||tp;
+ // IMPORTANT: an existing Teacher profile must be updated IN PLACE.
+ // Do not POST/upsert it by auth_user_id: legacy rows may have a blank auth_user_id and
+ // an insert can fire old staff-sync triggers, causing staff_employee_id_unique_nonblank.
+ if(tp?.id){
+   const prh={...H,Prefer:'return=representation'};
+   const upr=await fetch(url+'/rest/v1/teacher_profiles?id=eq.'+encodeURIComponent(tp.id),{method:'PATCH',headers:prh,body:JSON.stringify(profile)});
+   const upa=await upr.json();
+   if(!upr.ok)return res.status(500).json({error:upa.message||'Existing Teacher profile update failed'});
+   tp=upa?.[0]||{...tp,...profile};
+ }else{
+   // No teacher_profile row exists yet. Create the login profile WITHOUT copying staff.employee_id.
+   // Legacy DB triggers may mirror teacher_profiles.employee_id back into staff; sending an existing
+   // employee_id here can attempt a second staff insert and hit staff_employee_id_unique_nonblank.
+   // The permanent staff identity stays in staff.id / staff.employee_id; teacher login is linked by
+   // auth_user_id + mobile and class assignments. This is safe for both legacy and newly-added staff.
+   const createProfile={...profile,employee_id:null};
+   const ph={...H,Prefer:'return=representation'};
+   const upr=await fetch(url+'/rest/v1/teacher_profiles',{method:'POST',headers:ph,body:JSON.stringify(createProfile)});
+   const upa=await upr.json();
+   if(!upr.ok)return res.status(500).json({error:upa.message||'Teacher login profile create failed'});
+   tp=upa?.[0];
+ }
  const tpid=tp?.id; if(!tpid)return res.status(500).json({error:'Teacher profile ID unavailable'});
  // Keep the central role profile linked to the SAME auth user, like Parent/Student login mapping.
  const centralProfile={id:uid,email:loginEmail,full_name:st.staff_name||'Teacher',role:'teacher',status:'active'};
