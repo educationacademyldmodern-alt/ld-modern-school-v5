@@ -15,7 +15,10 @@ module.exports = async (req,res)=>{
  if(!st) return res.status(404).json({error:'Teacher staff record not found'});
  const mobile=String(st.phone||'').replace(/\D/g,'').slice(-10); if(mobile.length!==10)return res.status(400).json({error:'Teacher valid 10 digit mobile required'});
  const loginEmail='t'+mobile+'@teacher.ldmodern.local';
- let tpr=await fetch(url+'/rest/v1/teacher_profiles?employee_id=eq.'+encodeURIComponent(st.employee_id||'')+'&select=*&limit=1',{headers:H}); let ta=await tpr.json(); let tp=ta?.[0], uid=tp?.auth_user_id, created=false;
+ let filter=st.employee_id?'employee_id=eq.'+encodeURIComponent(st.employee_id):'mobile=eq.'+encodeURIComponent(mobile); let tpr=await fetch(url+'/rest/v1/teacher_profiles?'+filter+'&select=*&limit=1',{headers:H}); let ta=await tpr.json(); let tp=ta?.[0]; if(!tp){let mr=await fetch(url+'/rest/v1/teacher_profiles?or=(mobile.eq.'+encodeURIComponent(mobile)+',phone.eq.'+encodeURIComponent(mobile)+')&select=*&limit=1',{headers:H});let ma=await mr.json();tp=ma?.[0]} let uid=tp?.auth_user_id, created=false;
+ if(!uid){
+   let lr=await fetch(url+'/auth/v1/admin/users?page=1&per_page=1000',{headers:H});let lu=await lr.json();let ex=(lu?.users||[]).find(x=>String(x.email||'').toLowerCase()===loginEmail.toLowerCase());if(ex?.id)uid=ex.id;
+ }
  if(!uid){
    if(String(b.password||'').length<8)return res.status(400).json({error:'Initial password minimum 8 characters'});
    const cr=await fetch(url+'/auth/v1/admin/users',{method:'POST',headers:H,body:JSON.stringify({email:loginEmail,password:b.password,email_confirm:true,user_metadata:{role:'teacher',mobile,employee_id:st.employee_id||''}})}); const cu=await cr.json();
