@@ -1790,10 +1790,12 @@ v14AddNav();
 async function v14LoadTeacherContext(){
  v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
  if(!user)return;
- let {data:tp}=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
- if(!tp)return;v14TeacherProfile=tp;
+ let {data:tp,error:tpErr}=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
+ if(tpErr)throw new Error('Teacher profile access error: '+(tpErr.message||'Database access blocked'));
+ if(!tp)return;
+ v14TeacherProfile=tp;
  let {data:ca,error:caErr}=await sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.id).eq('is_active',true);
- if(caErr)throw caErr;
+ if(caErr)throw new Error('Teacher class access error: '+(caErr.message||'Database access blocked'));
  v14TeacherClasses=ca||[];v14TeacherSubjects=[];
 }
 function v14AllowedClassNames(){return [...new Set(v14TeacherClasses.map(x=>x.class_name).filter(Boolean))]}
