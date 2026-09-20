@@ -10315,7 +10315,7 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
   };
   window.teacherExistingLoginForm=function(){
     const b=$id('teacherAuthBox'); if(!b)return;
-    b.innerHTML=`<div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" inputmode="numeric" maxlength="10" placeholder="10 digit mobile"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" placeholder="Password"></div><div class="full"><button class="v14Action primary" onclick="teacherPasswordLogin()">Login</button></div></div>`;
+    b.innerHTML=`<form class="v14Form" id="v6428TeacherLoginForm" autocomplete="on" onsubmit="event.preventDefault();teacherPasswordLogin()"><div class="full"><label>Registered Mobile</label><input id="tLoginId" name="username" type="tel" inputmode="numeric" maxlength="10" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="10 digit mobile"></div><div class="full"><label>Password</label><input id="tLoginPassword" name="password" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" placeholder="Password"></div><div class="full"><button type="submit" class="v14Action primary">Login</button></div></form>`;
   };
   window.teacherPasswordRegistrationForm=function(){return window.toast?.('Teacher account केवल Admin बनाता है.');};
   window.teacherPasswordRegister=window.teacherPasswordRegistrationForm;
