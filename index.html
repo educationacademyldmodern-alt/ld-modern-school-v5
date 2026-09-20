@@ -1792,11 +1792,9 @@ async function v14LoadTeacherContext(){
  if(!user)return;
  let {data:tp}=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
  if(!tp)return;v14TeacherProfile=tp;
- let [{data:ca},{data:sa}]=await Promise.all([
-  sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.id).eq('is_active',true),
-  sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.id).eq('is_active',true)
- ]);
- v14TeacherClasses=ca||[];v14TeacherSubjects=sa||[];
+ let {data:ca,error:caErr}=await sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.id).eq('is_active',true);
+ if(caErr)throw caErr;
+ v14TeacherClasses=ca||[];v14TeacherSubjects=[];
 }
 function v14AllowedClassNames(){return [...new Set(v14TeacherClasses.map(x=>x.class_name).filter(Boolean))]}
 function v14ClassOptions(selected=''){let arr=v14Teacher()?v14AllowedClassNames():cls;return `<option value="">Select Class</option>`+arr.map(c=>`<option ${c===selected?'selected':''}>${esc(c)}</option>`).join('')}
@@ -1890,7 +1888,7 @@ function authPayload(identifier,password){
 }
 function teacherLoginDialog(){
  if(!cfg)return openPortal();
- v14Modal(`<h2>Teacher Portal</h2><p class="v14Muted">Teacher अपने Email या Mobile और Password से सीधे login करें.</p><div class="v14Tabs"><button onclick="teacherExistingLoginForm()">Teacher Login</button></div><div id="teacherAuthBox"></div>`);
+ v14Modal(`<h2>Teacher Portal</h2><p class="v14Muted">Teacher अपने Email या Mobile और Password से सीधे login करें.</p><div class="v14Tabs"><button onclick="teacherExistingLoginForm()">Teacher Login</button><button onclick="teacherPasswordRegistrationForm()">First Registration</button></div><div id="teacherAuthBox"></div>`);
  teacherExistingLoginForm();
 }
 function teacherExistingLoginForm(){
@@ -1920,28 +1918,28 @@ async function resumeTeacherEmailFlow(){
    localStorage.removeItem('ld_auth_intent');localStorage.removeItem('ld_teacher_mode');$('v14Modal')?.remove();openERP();return true;
  }
  if(mode==='register'){teacherProfileRegistrationForm(session.user.email);return true}
- await sb.auth.signOut();localStorage.removeItem('ld_auth_intent');toast('Teacher profile/login नहीं मिला। School Admin से Teacher Login बनवाएँ.');return false;
+ await sb.auth.signOut();localStorage.removeItem('ld_auth_intent');toast('Teacher profile नहीं मिला। First Registration चुनें.');return false;
 }
 function teacherProfileRegistrationForm(email){
  if(!$('v14Modal'))v14Modal('<div id="teacherAuthBox"></div>');
  let box=$('teacherAuthBox')||document.querySelector('#v14Modal .v14ModalBody');
- box.innerHTML=`<h3>Teacher Details</h3><div class="v14Form"><div><label>Teacher Name</label><input id="trName" required></div><div><label>Father Name</label><input id="trFather"></div><div><label>Mother Name</label><input id="trMother"></div><div><label>DOB</label><input id="trDob" type="date"></div><div><label>Mobile</label><input id="trPhone" inputmode="tel" placeholder="10 digit mobile"></div><div><label>Email</label><input id="trEmail" type="email" value="${esc(email)}" readonly></div><div><label>Joining Date</label><input id="trJoin" type="date"></div><div class="full"><label>Requested Class Teacher (one or more)</label><div>${cls.map(c=>`<label class="v14ClassPill"><input type="checkbox" name="trClass" value="${c}"> ${c}</label>`).join('')}</div></div><div class="full"><button class="v14Action primary" onclick="submitTeacherRegistration()">Submit for Admin Approval</button></div></div>`;
+ box.innerHTML=`<h3>Teacher Details</h3><div class="v14Form"><div><label>Teacher Name</label><input id="trName" required></div><div><label>Father Name</label><input id="trFather"></div><div><label>Mother Name</label><input id="trMother"></div><div><label>DOB</label><input id="trDob" type="date"></div><div><label>Mobile</label><input id="trPhone" inputmode="tel" placeholder="10 digit mobile"></div><div><label>Email</label><input id="trEmail" type="email" value="${esc(email)}" readonly></div><div><label>Joining Date</label><input id="trJoin" type="date"></div><div class="full"><label>Requested Class Teacher (one or more)</label><div>${cls.map(c=>`<label class="v14ClassPill"><input type="checkbox" name="trClass" value="${c}"> ${c}</label>`).join('')}</div></div><div class="full"><label>Special Subjects (comma separated)</label><input id="trSubjects" placeholder="English, Mathematics, Science"></div><div class="full"><button class="v14Action primary" onclick="submitTeacherRegistration()">Submit for Admin Approval</button></div></div>`;
 }
 async function submitTeacherRegistration(){
  let teacher_name=$('trName').value.trim(),email=$('trEmail').value.trim().toLowerCase(),phone=$('trPhone').value.trim();if(!teacher_name||!email)return toast('Name और email जरूरी है');
- let classes=[...document.querySelectorAll('input[name="trClass"]:checked')].map(x=>x.value);if(!classes.length)return toast('कम से कम एक class चुनें');
- let payload={auth_user_id:user.id,teacher_name,father_name:$('trFather').value.trim(),mother_name:$('trMother').value.trim(),dob:$('trDob').value||null,mobile:phone||null,email,joining_date:$('trJoin').value||null,approval_status:'Pending',password_created:true,requested_classes:classes,updated_at:new Date().toISOString()};
+ let classes=[...document.querySelectorAll('input[name="trClass"]:checked')].map(x=>x.value);if(!classes.length)return toast('कम से कम एक class चुनें');let subjects=$('trSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);
+ let payload={auth_user_id:user.id,teacher_name,father_name:$('trFather').value.trim(),mother_name:$('trMother').value.trim(),dob:$('trDob').value||null,mobile:phone||null,email,joining_date:$('trJoin').value||null,approval_status:'Pending',password_created:true,requested_classes:classes,requested_subjects:subjects,updated_at:new Date().toISOString()};
  let{error}=await sb.from('teacher_profiles').upsert(payload,{onConflict:'auth_user_id'});if(error)return toast(error.message);await sb.auth.signOut();localStorage.removeItem('ld_auth_intent');localStorage.removeItem('ld_teacher_mode');$('v14Modal')?.remove();toast('Registration submitted. Admin approval के बाद Email/Mobile + Password से login करें.');
 }
 
 async function teacherApprovalCenter(){
  if(!v14Admin())return toast('यह विकल्प आपके वर्तमान account role के लिए उपलब्ध नहीं है। Admin से आवश्यक permission/assignment जाँचें।');
- head('Teacher Approval','Password registration • Edit • Assign One or Multiple Classes • Approve/Reject');
+ head('Teacher Approval','Password registration • Edit • Assign Classes/Subjects • Approve/Reject');
  let {data,error}=await sb.from('teacher_profiles').select('*').order('created_at',{ascending:false});if(error)return toast(error.message);
  let rows=data||[];
  $('erpContent').innerHTML=`<div class="v14Grid">${stat('Pending',rows.filter(x=>x.approval_status==='Pending').length,'Needs review')}${stat('Approved',rows.filter(x=>x.approval_status==='Approved').length,'Active teachers')}${stat('Rejected',rows.filter(x=>x.approval_status==='Rejected').length,'Rejected')}${stat('Total',rows.length,'Teacher registrations')}</div>
- <div class="panel"><div class="tableWrap"><table><tr><th>Name</th><th>Mobile</th><th>Joining</th><th>Assigned Classes</th><th>Status</th><th>Action</th></tr>
- ${rows.map(r=>`<tr><td><b>${esc(r.teacher_name)}</b><small class="cellSub">${esc(r.email||'')}</small></td><td>${esc(r.mobile||'')}</td><td>${esc(r.joining_date||'')}</td><td>${(r.requested_classes||[]).map(c=>`<span class="v14ClassPill">${esc(c)}</span>`).join('')}</td><td><span class="v14Badge ${String(r.approval_status||'pending').toLowerCase()}">${esc(r.approval_status||'Pending')}</span></td><td><button class="mini edit" onclick='editTeacherApproval(${JSON.stringify(r).replace(/'/g,"&#39;")})'>Review</button></td></tr>`).join('')}</table></div></div>`;
+ <div class="panel"><div class="tableWrap"><table><tr><th>Name</th><th>Mobile</th><th>Joining</th><th>Requested Classes</th><th>Subjects</th><th>Status</th><th>Action</th></tr>
+ ${rows.map(r=>`<tr><td><b>${esc(r.teacher_name)}</b><small class="cellSub">${esc(r.email||'')}</small></td><td>${esc(r.mobile||'')}</td><td>${esc(r.joining_date||'')}</td><td>${(r.requested_classes||[]).map(c=>`<span class="v14ClassPill">${esc(c)}</span>`).join('')}</td><td>${esc((r.requested_subjects||[]).join(', '))}</td><td><span class="v14Badge ${String(r.approval_status||'pending').toLowerCase()}">${esc(r.approval_status||'Pending')}</span></td><td><button class="mini edit" onclick='editTeacherApproval(${JSON.stringify(r).replace(/'/g,"&#39;")})'>Review</button></td></tr>`).join('')}</table></div></div>`;
 }
 function editTeacherApproval(r){
  let selected=new Set(r.requested_classes||[]);
@@ -1951,23 +1949,23 @@ function editTeacherApproval(r){
  <div><label>Father</label><input id="taFather" value="${esc(r.father_name||'')}"></div>
  <div><label>Mother</label><input id="taMother" value="${esc(r.mother_name||'')}"></div>
  <div class="full"><label>Approved Classes</label><div>${cls.map(c=>`<label class="v14ClassPill"><input type="checkbox" name="taClass" value="${c}" ${selected.has(c)?'checked':''}> ${c}</label>`).join('')}</div></div>
- 
+ <div class="full"><label>Subjects</label><input id="taSubjects" value="${esc((r.requested_subjects||[]).join(', '))}"></div>
  <div class="full v14Tabs"><button class="v14Action good" onclick="approveTeacherV14('${r.id}','${r.auth_user_id}')">Approve</button><button class="v14Action warn" onclick="saveTeacherReviewV14('${r.id}')">Save Edit</button><button class="v14Action bad" onclick="rejectTeacherV14('${r.id}','${r.auth_user_id}')">Reject</button></div></div>`);
 }
 async function saveTeacherReviewV14(id){
- let classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value);
- let {error}=await sb.from('teacher_profiles').update({teacher_name:$('taName').value.trim(),father_name:$('taFather').value.trim(),mother_name:$('taMother').value.trim(),requested_classes:classes,updated_at:new Date().toISOString()}).eq('id',id);
+ let classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value),subjects=$('taSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);
+ let {error}=await sb.from('teacher_profiles').update({teacher_name:$('taName').value.trim(),father_name:$('taFather').value.trim(),mother_name:$('taMother').value.trim(),requested_classes:classes,requested_subjects:subjects,updated_at:new Date().toISOString()}).eq('id',id);
  toast(error?error.message:'Saved');
 }
 async function approveTeacherV14(id,authId){
- let classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value);if(!classes.length)return toast('At least one class चुनें');
+ let classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value),subjects=$('taSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);if(!classes.length)return toast('At least one class चुनें');
  await saveTeacherReviewV14(id);
  let d1=await sb.from('teacher_class_assignments').delete().eq('teacher_profile_id',id);if(d1.error)return toast(d1.error.message);
-
- let ca=classes.map(c=>({teacher_profile_id:id,academic_session:'2026-27',class_name:c,is_class_teacher:false,is_active:true,approved_by:user.id,approved_at:new Date().toISOString()}));
-
+ let d2=await sb.from('teacher_subject_assignments').delete().eq('teacher_profile_id',id);if(d2.error)return toast(d2.error.message);
+ let ca=classes.map(c=>({teacher_profile_id:id,academic_session:'2026-27',class_name:c,is_class_teacher:true,is_active:true,approved_by:user.id,approved_at:new Date().toISOString()}));
+ let sa=subjects.map(s=>({teacher_profile_id:id,academic_session:'2026-27',subject_name:s,is_special_subject:true,is_active:true}));
  let r1=await sb.from('teacher_class_assignments').insert(ca);if(r1.error)return toast(r1.error.message);
-
+ if(sa.length){let r2=await sb.from('teacher_subject_assignments').insert(sa);if(r2.error)return toast(r2.error.message)}
  let r3=await sb.from('teacher_profiles').update({approval_status:'Approved',is_active:true,updated_at:new Date().toISOString()}).eq('id',id);if(r3.error)return toast(r3.error.message);
  let r4=await sb.from('profiles').update({role:'teacher',status:'active'}).eq('id',authId);if(r4.error)return toast(r4.error.message);
  $('v14Modal')?.remove();toast('Teacher approved');teacherApprovalCenter();
@@ -2354,14 +2352,14 @@ async function idCardCenter(){
  </div>`;
  idStudioUpdateSelectedCount();
 }
-const ID_STUDIO_TEMPLATE_NAMES=['Royal Blue Left','Modern Right','Green Center','Purple Left','Executive Right'];
+const ID_STUDIO_TEMPLATE_NAMES=['Royal Blue','Modern Gradient','Green Scholar','Purple Premium','Executive Black','Teal Academy','Golden Achievement','Rose Modern','Sky Digital','Slate Minimal'];
 let idStudioRows=[],idStudioSelected=new Set();
 function idStudioClamp(v,min,max,fallback){v=Number(v);return Number.isFinite(v)?Math.max(min,Math.min(max,v)):fallback}
 function idStudioDefaults(){return {width:85.6,height:54,font:9.2,photo:20,radius:3.2,photoShape:'rounded',session:'2026-27',footer:'Student Identity Card',showAdmission:true,showRoll:true,showDob:true,showFather:true,showMother:false,showMobile:true,showAddress:false}}
 function idStudioGetSettings(){let d=idStudioDefaults(),x={};try{x=JSON.parse(localStorage.getItem('ld_idcard_settings_v104')||'{}')||{}}catch(_e){};x={...d,...x};x.width=idStudioClamp(x.width,72,88,d.width);x.height=idStudioClamp(x.height,42,54,d.height);x.font=idStudioClamp(x.font,7,12,d.font);x.photo=idStudioClamp(x.photo,16,24,d.photo);x.radius=idStudioClamp(x.radius,0,7,d.radius);return x}
 function idStudioCheck(id,label,on){return `<label><input id="${id}" type="checkbox" ${on?'checked':''} onchange="idStudioSaveSettings(true)"> ${label}</label>`}
 function idStudioTemplateButtons(active){return ID_STUDIO_TEMPLATE_NAMES.map((n,i)=>`<button type="button" class="idTemplatePick ${active===i+1?'active':''}" onclick="idStudioSetTemplate(${i+1})"><span class="idTemplateSwatch t${i+1}"></span><b>${i+1}. ${esc(n)}</b></button>`).join('')}
-function idStudioSetTemplate(n){n=Math.max(1,Math.min(5,Number(n)||1));localStorage.setItem('ld_docfmt_idcard',String(n));let g=$('idTemplateGrid');if(g)g.innerHTML=idStudioTemplateButtons(n);if($('idA4Preview'))idStudioPreview(true)}
+function idStudioSetTemplate(n){n=Math.max(1,Math.min(10,Number(n)||1));localStorage.setItem('ld_docfmt_idcard',String(n));let g=$('idTemplateGrid');if(g)g.innerHTML=idStudioTemplateButtons(n);if($('idA4Preview'))idStudioPreview(true)}
 function idStudioReadControls(){let d=idStudioGetSettings();return {...d,width:idStudioClamp($('idWidth')?.value,72,88,d.width),height:idStudioClamp($('idHeight')?.value,42,54,d.height),font:idStudioClamp($('idFont')?.value,7,12,d.font),photo:idStudioClamp($('idPhoto')?.value,16,24,d.photo),radius:idStudioClamp($('idRadius')?.value,0,7,d.radius),photoShape:$('idPhotoShape')?.value||d.photoShape,session:String($('idSession')?.value||d.session).trim()||d.session,footer:String($('idFooter')?.value||d.footer).trim()||d.footer,showAdmission:$('idShowAdmission')?.checked??d.showAdmission,showRoll:$('idShowRoll')?.checked??d.showRoll,showDob:$('idShowDob')?.checked??d.showDob,showFather:$('idShowFather')?.checked??d.showFather,showMother:$('idShowMother')?.checked??d.showMother,showMobile:$('idShowMobile')?.checked??d.showMobile,showAddress:$('idShowAddress')?.checked??d.showAddress}}
 function idStudioSaveSettings(silent=false){let x=idStudioReadControls();localStorage.setItem('ld_idcard_settings_v104',JSON.stringify(x));if(!silent)toast('ID Card settings saved');if(silent&&$('idA4Preview')){clearTimeout(window.__idStudioPreviewTimer);window.__idStudioPreviewTimer=setTimeout(()=>idStudioPreview(true),160)}}
 function idStudioApplyStandard(){let d=idStudioDefaults();localStorage.setItem('ld_idcard_settings_v104',JSON.stringify(d));[['idWidth',d.width],['idHeight',d.height],['idFont',d.font],['idPhoto',d.photo],['idRadius',d.radius],['idSession',d.session],['idFooter',d.footer]].forEach(([id,v])=>{if($(id))$(id).value=v});if($('idPhotoShape'))$('idPhotoShape').value=d.photoShape;[['idShowAdmission',d.showAdmission],['idShowRoll',d.showRoll],['idShowDob',d.showDob],['idShowFather',d.showFather],['idShowMother',d.showMother],['idShowMobile',d.showMobile],['idShowAddress',d.showAddress]].forEach(([id,v])=>{if($(id))$(id).checked=v});toast('Standard A4 × 10 card size applied');if($('idA4Preview'))idStudioPreview(true)}
@@ -3223,15 +3221,15 @@ function v40RefreshClassTeacherOptions(selected=''){
 
 teacherApprovalCenter=async function(){
  if(!v14Admin())return toast('यह विकल्प आपके वर्तमान account role के लिए उपलब्ध नहीं है। Admin से आवश्यक permission/assignment जाँचें।');
- head('Teacher Approval','Password registration • Assign One or Multiple Classes • Approve/Reject');
+ head('Teacher Approval','Password registration • Assign Classes/Subjects • Select ONE Class Teacher • Approve/Reject');
  let [{data,error},{data:ca}]=await Promise.all([
    sb.from('teacher_profiles').select('*').order('created_at',{ascending:false}),
    sb.from('teacher_class_assignments').select('teacher_profile_id,class_name,is_class_teacher,is_active').eq('is_active',true)
  ]); if(error)return toast(error.message);
  let rows=data||[], ct={}; (ca||[]).forEach(x=>{if(x.is_class_teacher&&!ct[x.teacher_profile_id])ct[x.teacher_profile_id]=x.class_name});
  $('erpContent').innerHTML=`<div class="v14Grid">${stat('Pending',rows.filter(x=>x.approval_status==='Pending').length,'Needs review')}${stat('Approved',rows.filter(x=>x.approval_status==='Approved').length,'Active teachers')}${stat('Rejected',rows.filter(x=>x.approval_status==='Rejected').length,'Rejected')}${stat('Total',rows.length,'Teacher registrations')}</div>
- <div class="panel"><div class="tableWrap"><table><tr><th>Name</th><th>Mobile</th><th>Assigned Classes</th><th>Status</th><th>Action</th></tr>
- ${rows.map(r=>`<tr><td><b>${esc(r.teacher_name)}</b><small class="cellSub">${esc(r.email||'')}</small></td><td>${esc(r.mobile||'')}</td><td>${(r.requested_classes||[]).map(c=>`<span class="v14ClassPill">${esc(c)}</span>`).join('')}</td><td><span class="v14Badge ${String(r.approval_status||'pending').toLowerCase()}">${esc(r.approval_status||'Pending')}</span></td><td><button class="mini edit" onclick='editTeacherApproval(${JSON.stringify(r).replace(/'/g,"&#39;")})'>Review</button></td></tr>`).join('')}</table></div></div>`;
+ <div class="panel"><div class="tableWrap"><table><tr><th>Name</th><th>Mobile</th><th>Requested Classes</th><th>Class Teacher</th><th>Subjects</th><th>Status</th><th>Action</th></tr>
+ ${rows.map(r=>`<tr><td><b>${esc(r.teacher_name)}</b><small class="cellSub">${esc(r.email||'')}</small></td><td>${esc(r.mobile||'')}</td><td>${(r.requested_classes||[]).map(c=>`<span class="v14ClassPill">${esc(c)}</span>`).join('')}</td><td>${ct[r.id]?`<span class="v40CTBadge">⭐ ${esc(ct[r.id])}</span>`:'—'}</td><td>${esc((r.requested_subjects||[]).join(', '))}</td><td><span class="v14Badge ${String(r.approval_status||'pending').toLowerCase()}">${esc(r.approval_status||'Pending')}</span></td><td><button class="mini edit" onclick='editTeacherApproval(${JSON.stringify(r).replace(/'/g,"&#39;")})'>Review</button></td></tr>`).join('')}</table></div></div>`;
 }
 
 editTeacherApproval=async function(r){
@@ -3243,24 +3241,24 @@ editTeacherApproval=async function(r){
  <div><label>Father</label><input id="taFather" value="${esc(r.father_name||'')}"></div>
  <div><label>Mother</label><input id="taMother" value="${esc(r.mother_name||'')}"></div>
  <div class="full"><label>Approved Classes</label><div>${cls.map(c=>`<label class="v14ClassPill"><input type="checkbox" name="taClass" value="${c}" ${selected.has(c)?'checked':''} onchange="v40RefreshClassTeacherOptions()"> ${c}</label>`).join('')}</div></div>
- 
- 
+ <div class="full"><label>⭐ Select Class Teacher Class</label><select id="taClassTeacher"></select><small class="v14Muted">Teacher को केवल चुनी हुई class के लिए special “Class Teacher” icon और full class dashboard मिलेगा.</small></div>
+ <div class="full"><label>Subjects</label><input id="taSubjects" value="${esc((r.requested_subjects||[]).join(', '))}"></div>
  <div class="full v14Tabs"><button class="v14Action good" onclick="approveTeacherV14('${r.id}','${r.auth_user_id}')">Approve</button><button class="v14Action warn" onclick="saveTeacherReviewV14('${r.id}')">Save Edit</button><button class="v14Action bad" onclick="rejectTeacherV14('${r.id}','${r.auth_user_id}')">Reject</button></div></div>`);
  v40RefreshClassTeacherOptions(currentCT);
 }
 
 approveTeacherV14=async function(id,authId){
- let classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value),classTeacher=$('taClassTeacher')?.value||'';
+ let classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value),subjects=$('taSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),classTeacher=$('taClassTeacher')?.value||'';
  if(!classes.length)return toast('At least one class चुनें');
  if(classTeacher&&!classes.includes(classTeacher))return toast('Class Teacher वही class होनी चाहिए जो Approved Classes में चुनी गई हो');
- let upd={teacher_name:$('taName').value.trim(),father_name:$('taFather').value.trim(),mother_name:$('taMother').value.trim(),requested_classes:classes,updated_at:new Date().toISOString()};
+ let upd={teacher_name:$('taName').value.trim(),father_name:$('taFather').value.trim(),mother_name:$('taMother').value.trim(),requested_classes:classes,requested_subjects:subjects,updated_at:new Date().toISOString()};
  let s0=await sb.from('teacher_profiles').update(upd).eq('id',id);if(s0.error)return toast(s0.error.message);
  let d1=await sb.from('teacher_class_assignments').delete().eq('teacher_profile_id',id);if(d1.error)return toast(d1.error.message);
-
+ let d2=await sb.from('teacher_subject_assignments').delete().eq('teacher_profile_id',id);if(d2.error)return toast(d2.error.message);
  let ca=classes.map(c=>({teacher_profile_id:id,academic_session:'2026-27',class_name:c,is_class_teacher:(c===classTeacher),is_active:true,approved_by:user.id,approved_at:new Date().toISOString()}));
-
+ let sa=subjects.map(s=>({teacher_profile_id:id,academic_session:'2026-27',subject_name:s,is_special_subject:true,is_active:true}));
  let r1=await sb.from('teacher_class_assignments').insert(ca);if(r1.error)return toast(r1.error.message);
-
+ if(sa.length){let r2=await sb.from('teacher_subject_assignments').insert(sa);if(r2.error)return toast(r2.error.message)}
  let r3=await sb.from('teacher_profiles').update({approval_status:'Approved',is_active:true,updated_at:new Date().toISOString()}).eq('id',id);if(r3.error)return toast(r3.error.message);
  let r4=await sb.from('profiles').update({role:'teacher',status:'active'}).eq('id',authId);if(r4.error)return toast(r4.error.message);
  $('v14Modal')?.remove();toast(classTeacher?`Teacher approved • Class Teacher: ${classTeacher}`:'Teacher approved');teacherApprovalCenter();
@@ -3992,22 +3990,73 @@ async function v50AdminForgot(email){
   }catch(e){toast(e.message||String(e))}
 }
 
-/* ---------- TEACHER MULTI-CLASS SAFE REPLACEMENT + HISTORY ---------- */
+/* ---------- CLASS TEACHER SAFE REPLACEMENT + HISTORY ---------- */
 approveTeacherV14=async function(id,authId){
   const classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value);
+  const subjects=($('taSubjects')?.value||'').split(',').map(x=>x.trim()).filter(Boolean);
+  const classTeacher=$('taClassTeacher')?.value||'';
   if(!classes.length)return toast('At least one class चुनें');
+  if(classTeacher&&!classes.includes(classTeacher))return toast('Class Teacher वही class होनी चाहिए जो Approved Classes में चुनी गई हो');
+
   const now=new Date().toISOString();
-  const upd={teacher_name:$('taName')?.value.trim()||'',father_name:$('taFather')?.value.trim()||'',mother_name:$('taMother')?.value.trim()||'',requested_classes:classes,updated_at:now};
-  let q=await sb.from('teacher_profiles').update(upd).eq('id',id);if(q.error)return toast(q.error.message);
+  const upd={
+    teacher_name:$('taName')?.value.trim()||'',
+    father_name:$('taFather')?.value.trim()||'',
+    mother_name:$('taMother')?.value.trim()||'',
+    requested_classes:classes,requested_subjects:subjects,updated_at:now
+  };
+  let q=await sb.from('teacher_profiles').update(upd).eq('id',id);
+  if(q.error)return toast(q.error.message);
+
+  // 1) Deactivate this teacher's old active assignments instead of deleting history.
   q=await sb.from('teacher_class_assignments').update({is_active:false,ended_at:now}).eq('teacher_profile_id',id).eq('is_active',true);
   if(q.error && !/ended_at/i.test(q.error.message||''))return toast(q.error.message);
-  const ca=classes.map(c=>({teacher_profile_id:id,academic_session:'2026-27',class_name:c,is_class_teacher:false,is_active:true,approved_by:user.id,approved_at:now,started_at:now}));
-  q=await sb.from('teacher_class_assignments').insert(ca);
-  if(q.error){const ca2=ca.map(({started_at,...x})=>x);q=await sb.from('teacher_class_assignments').insert(ca2)}
+
+  // 2) If a class gets a new Class Teacher, deactivate the previous active Class Teacher for that class.
+  if(classTeacher){
+    q=await sb.from('teacher_class_assignments')
+      .update({is_active:false,ended_at:now})
+      .eq('academic_session','2026-27')
+      .eq('class_name',classTeacher)
+      .eq('is_class_teacher',true)
+      .eq('is_active',true)
+      .neq('teacher_profile_id',id);
+    if(q.error && !/ended_at/i.test(q.error.message||''))return toast(q.error.message);
+  }
+
+  // 3) Subject assignments: preserve history by deactivating current set.
+  q=await sb.from('teacher_subject_assignments').update({is_active:false}).eq('teacher_profile_id',id).eq('is_active',true);
   if(q.error)return toast(q.error.message);
-  q=await sb.from('teacher_profiles').update({approval_status:'Approved',is_active:true,updated_at:now}).eq('id',id);if(q.error)return toast(q.error.message);
-  if(authId){q=await sb.from('profiles').update({role:'teacher',status:'active'}).eq('id',authId);if(q.error)return toast(q.error.message)}
-  $('v14Modal')?.remove();toast('Teacher approved • '+classes.length+' class assigned');teacherApprovalCenter();
+
+  const ca=classes.map(c=>({
+    teacher_profile_id:id,academic_session:'2026-27',class_name:c,
+    is_class_teacher:(c===classTeacher),is_active:true,
+    approved_by:user.id,approved_at:now,started_at:now
+  }));
+  q=await sb.from('teacher_class_assignments').insert(ca);
+  if(q.error){
+    // Compatibility fallback if started_at isn't present yet.
+    const ca2=ca.map(({started_at,...x})=>x);
+    q=await sb.from('teacher_class_assignments').insert(ca2);
+  }
+  if(q.error)return toast(q.error.message);
+
+  const sa=subjects.map(s=>({
+    teacher_profile_id:id,academic_session:'2026-27',subject_name:s,is_special_subject:true,is_active:true
+  }));
+  if(sa.length){
+    q=await sb.from('teacher_subject_assignments').insert(sa);
+    if(q.error)return toast(q.error.message);
+  }
+
+  q=await sb.from('teacher_profiles').update({approval_status:'Approved',is_active:true,updated_at:now}).eq('id',id);
+  if(q.error)return toast(q.error.message);
+  q=await sb.from('profiles').update({role:'teacher',status:'active'}).eq('id',authId);
+  if(q.error)return toast(q.error.message);
+
+  $('v14Modal')?.remove();
+  toast(classTeacher?`Teacher approved • ${classTeacher} का नया Class Teacher active`:'Teacher approved');
+  teacherApprovalCenter();
 };
 
 /* ---------- NO EMAIL ON NORMAL LOGIN ---------- */
@@ -7938,24 +7987,24 @@ function v93RenderTeacherRows(){
 async function v93OpenTeacherLogin(staffId){
  if(!v93Admin())return toast('Admin only');let st=(window.__v93Staff||[]).find(x=>String(x.id)===String(staffId));if(!st)return toast('Teacher staff record नहीं मिला');
  if(v93NormPhone(st.phone).length!==10)return toast('पहले Teachers/Staff में valid 10 digit Mobile भरें.');
- let tp=v93ProfileFor(st),classes=[],subjects=[],ct='';
+ let tp=v93ProfileFor(st),classes=[];
  if(tp?.id){
-   let [cr,sr]=await Promise.all([sb.from('teacher_class_assignments').select('class_name,is_class_teacher,is_active').eq('teacher_profile_id',tp.id).eq('is_active',true),sb.from('teacher_subject_assignments').select('subject_name,is_active').eq('teacher_profile_id',tp.id).eq('is_active',true)]);
-   classes=(cr.data||[]).map(x=>x.class_name).filter(Boolean);ct=(cr.data||[]).find(x=>x.is_class_teacher)?.class_name||'';subjects=(sr.data||[]).map(x=>x.subject_name).filter(Boolean);
+   let cr=await sb.from('teacher_class_assignments').select('class_name,is_active').eq('teacher_profile_id',tp.id).eq('is_active',true);
+   classes=(cr.data||[]).map(x=>x.class_name).filter(Boolean);
  }
- if(!classes.length)classes=tp?.requested_classes||[];if(!subjects.length)subjects=tp?.requested_subjects||[];
+ if(!classes.length)classes=tp?.requested_classes||[];
  window.__v93SelectedStaff=st;let pw=tp?'':v93SuggestedPassword(st.staff_name);
- v14Modal(`<h2>🔐 ${tp?'Manage':'Create'} Teacher Login</h2><div class="v93AdminOnly">यह account केवल Admin बना/बदल सकता है. Teacher खुद registration request नहीं भेज सकता.</div><div class="v14Form"><div><label>Teacher Name</label><input value="${esc(st.staff_name||'')}" readonly></div><div><label>Employee ID</label><input value="${esc(st.employee_id||'')}" readonly></div><div><label>Mobile Login</label><input value="${esc(v93NormPhone(st.phone))}" readonly></div><div><label>Email (Optional)</label><input value="${esc(st.email||'Internal login will be used')}" readonly></div><div class="full"><label>Classes</label><div class="v93Checks">${cls.map(c=>`<label><input class="v93ClassCheck" type="checkbox" value="${esc(c)}" ${classes.includes(c)?'checked':''} onchange="v93ClassTeacherSelect()"> ${esc(c)}</label>`).join('')}</div></div><div><label>Class Teacher</label><select id="v93ClassTeacher"><option value="">Not Class Teacher</option>${classes.map(c=>`<option ${c===ct?'selected':''}>${esc(c)}</option>`).join('')}</select></div><div><label>Subjects</label><input id="v93Subjects" value="${esc(subjects.join(', '))}" placeholder="English, Mathematics"></div><div class="full"><label>${tp?'New Password (optional — blank = current password unchanged)':'Initial Password *'}</label><div class="v93Pw"><input id="v93TeacherPw" type="text" value="${esc(pw)}" placeholder="Minimum 8 characters"><button type="button" onclick="document.getElementById('v93TeacherPw').value=v93SuggestedPassword('${esc(st.staff_name||'Teacher').replace(/'/g,"&#39;")}')">⚡ Generate</button><button type="button" onclick="v93Copy(document.getElementById('v93TeacherPw').value)">Copy</button></div></div><div class="full"><button class="v14Action primary" onclick="v93SaveTeacherLogin('${st.id}')">✓ ${tp?'Update Teacher Login':'Create Teacher Login'}</button></div><div id="v93AccessStatus" class="v32Info">First password और reset केवल Admin करेगा. कोई OTP/email नहीं भेजा जाएगा.</div></div>`);
- setTimeout(v93ClassTeacherSelect,0);setTimeout(()=>{let s=document.getElementById('v93ClassTeacher');if(s&&[...s.options].some(o=>o.value===ct))s.value=ct},10);
+ v14Modal(`<h2>🔐 ${tp?'Manage':'Create'} Teacher Login</h2><div class="v93AdminOnly">यह account केवल Admin बना/बदल सकता है. Teacher खुद registration request नहीं भेज सकता.</div><div class="v14Form"><div><label>Teacher Name</label><input value="${esc(st.staff_name||'')}" readonly></div><div><label>Employee ID</label><input value="${esc(st.employee_id||'')}" readonly></div><div><label>Mobile Login</label><input value="${esc(v93NormPhone(st.phone))}" readonly></div><div><label>Email (Optional)</label><input value="${esc(st.email||'Internal login will be used')}" readonly></div><div class="full"><label>Classes</label><div class="v93Checks">${cls.map(c=>`<label><input class="v93ClassCheck" type="checkbox" value="${esc(c)}" ${classes.includes(c)?'checked':''} onchange="v93ClassTeacherSelect()"> ${esc(c)}</label>`).join('')}</div></div><div class="full"><label>${tp?'New Password (optional — blank = current password unchanged)':'Initial Password *'}</label><div class="v93Pw"><input id="v93TeacherPw" type="text" value="${esc(pw)}" placeholder="Minimum 8 characters"><button type="button" onclick="document.getElementById('v93TeacherPw').value=v93SuggestedPassword('${esc(st.staff_name||'Teacher').replace(/'/g,"&#39;")}')">⚡ Generate</button><button type="button" onclick="v93Copy(document.getElementById('v93TeacherPw').value)">Copy</button></div></div><div class="full"><button class="v14Action primary" onclick="v93SaveTeacherLogin('${st.id}')">✓ ${tp?'Update Teacher Login':'Create Teacher Login'}</button></div><div id="v93AccessStatus" class="v32Info">First password और reset केवल Admin करेगा. कोई OTP/email नहीं भेजा जाएगा.</div></div>`);
+
 }
 async function v93SaveTeacherLogin(staffId){
  if(!v93Admin())return toast('Admin only');let st=(window.__v93Staff||[]).find(x=>String(x.id)===String(staffId));if(!st)return toast('Teacher record नहीं मिला');
- let classes=[...document.querySelectorAll('.v93ClassCheck:checked')].map(x=>x.value),classTeacher=document.getElementById('v93ClassTeacher')?.value||'',subjects=String(document.getElementById('v93Subjects')?.value||'').split(',').map(x=>x.trim()).filter(Boolean),password=String(document.getElementById('v93TeacherPw')?.value||'');let tp=v93ProfileFor(st);
+ let classes=[...document.querySelectorAll('.v93ClassCheck:checked')].map(x=>x.value),password=String(document.getElementById('v93TeacherPw')?.value||'');let tp=v93ProfileFor(st);
  if(!tp&&password.length<8)return toast('Initial Password कम से कम 8 characters का रखें');if(tp&&password&&password.length<8)return toast('New Password कम से कम 8 characters का रखें');
  let status=document.getElementById('v93AccessStatus');if(status)status.innerHTML='Teacher Login save किया जा रहा है...';
  try{
    let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. दोबारा login करें.');
-   let r=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'create_or_update',staff_id:staffId,password,classes,class_teacher:classTeacher,subjects})});let j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher Login save failed');
+   let r=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'create_or_update',staff_id:staffId,password,classes})});let j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher Login save failed');
    if(status)status.innerHTML=`<b>✓ Teacher Login Ready</b><br>Name: ${esc(j.teacher_name||st.staff_name)}<br>Login Mobile: <b>${esc(j.login_id||j.mobile||v93NormPhone(st.phone))}</b>${password?`<br>Password: <b>${esc(password)}</b>`:''}<br><small>Teacher अब Mobile + Password से login करेगा. Password भूलने पर Primary Admin नया password देगा; कोई OTP/email नहीं.</small>`;
    toast(j.created?'Teacher Login created':'Teacher Login updated');setTimeout(async()=>{let pr=await sb.from('teacher_profiles').select('id,auth_user_id,email,phone,mobile,teacher_name,employee_id,approval_status,is_active,requested_classes,requested_subjects').order('teacher_name');window.__v93Profiles=pr.data||[]},50);
  }catch(e){if(status)status.innerHTML=`<b>Save नहीं हुआ:</b> ${esc(e.message||String(e))}`;toast(e.message||String(e))}
@@ -8096,12 +8145,12 @@ login=async function(){
 async function v95AdminForgot(){
   if(document.getElementById('v95AdminRecoveryModal'))return;
   let wrap=document.createElement('div');wrap.id='v95AdminRecoveryModal';wrap.className='v14Modal';
-  wrap.innerHTML=`<div class="v14ModalCard"><button class="v14Close" onclick="this.closest('.v14Modal').remove()">×</button><h2>🔐 Primary Admin Forgot Password</h2><div class="v95AdminRecoveryCard"><p>Recovery link केवल locked <b>Primary Admin</b> के registered email पर जाएगा. यहाँ कोई email बदल या type नहीं किया जा सकता.</p><div class="safe">✓ केवल Admin recovery email • ✓ Teacher/Parent recovery email बंद • ✓ cooldown enabled to protect free-tier email limit</div><button id="v95SendRecovery" class="v14Action primary" onclick="v95SendAdminRecovery()">Send Admin Recovery Link</button><div id="v95RecoveryStatus" class="v95PolicyNote">Recovery link बार-बार नहीं भेजा जाएगा.</div></div></div>`;
+  wrap.innerHTML=`<div class="v14ModalCard"><button class="v14Close" onclick="this.closest('.v14Modal').remove()">×</button><h2>🔐 Primary Admin Forgot Password</h2><div class="v95AdminRecoveryCard"><p>पहले Primary Admin ID verify होगा. गलत ID पर कोई recovery message trigger नहीं होगा.</p><label><b>Admin ID</b><input id="v6422AdminRecoveryId" autocomplete="username" placeholder="Primary Admin ID" style="width:100%;min-height:42px;margin:8px 0;padding:9px;border:1px solid #ccd9e8;border-radius:9px"></label><div class="safe">✓ Valid Admin ID required • ✓ Email recovery only • ✓ 30 minute cooldown • ✓ No SMS/Phone OTP</div><button id="v95SendRecovery" class="v14Action primary" onclick="v95SendAdminRecovery()">Send Recovery Instructions</button><div id="v95RecoveryStatus" class="v95PolicyNote">बार-बार request करने पर नया message नहीं भेजा जाएगा.</div></div></div>`;
   document.body.appendChild(wrap)
 }
 async function v95SendAdminRecovery(){
   let b=$('v95SendRecovery'),st=$('v95RecoveryStatus');if(b)b.disabled=true;if(st)st.textContent='Recovery request check हो रहा है...';
-  try{let r=await fetch('/api/admin-forgot',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Recovery request failed');if(st)st.innerHTML=`<b>✓ Recovery link sent</b><br>${esc(j.message||'Primary Admin registered email check करें.')} ${j.masked_email?'('+esc(j.masked_email)+')':''}`}
+  try{let admin_id=String(document.getElementById('v6422AdminRecoveryId')?.value||'').trim();if(!admin_id){if(st)st.textContent='Primary Admin ID डालें.';return}let r=await fetch('/api/admin-forgot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({admin_id})}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Recovery request failed');if(st)st.innerHTML=`<b>✓ Request received</b><br>${esc(j.message||'यदि Admin ID valid है तो registered Admin contact check करें.')}`}
   catch(e){if(st)st.innerHTML='<b>Recovery:</b> '+esc(e.message||String(e))}
   finally{if(b)setTimeout(()=>b.disabled=false,2500)}
 }
@@ -9561,11 +9610,10 @@ window.V646_BUILD='V64.6-FINAL-MASTER-PREMIUM-2026-09-20';
 
  /* ID Card: premium centered vertical identity; central student record + central signature. */
  window.renderIdCard=function(s,t){
-   t=Math.max(1,Math.min(5,Number(t||getDocFormat('idcard')||1)));const set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=(typeof v107DocLogo==='function'?v107DocLogo():(school?.logo_url||'school-logo.png')),addr=school?.address||'',sig=signUrl(),parent=s.father_name||s.guardian_name||s.mother_name||'—';
-   const side=(t===1||t===4)?'left':(t===2||t===5)?'right':'center',row=side==='center'?'column':(side==='right'?'row-reverse':'row');
-   const photoHtml=photo?`<img class="v104Photo" src="${safe(photo)}" alt="Student Photo" style="width:${side==='center'?'24mm':'22mm'};height:${side==='center'?'28mm':'26mm'};object-fit:cover;flex:0 0 auto">`:`<div class="v104Photo v32NoPhoto" style="width:22mm;height:26mm;display:grid;place-items:center;flex:0 0 auto">PHOTO</div>`;
-   return `<div class="idCard t${t} v107IdCard v646PremiumId v6422IdLayout${t}" style="width:${set.width}mm;height:${set.height}mm;border-radius:${set.radius}mm"><div class="v104Band"><img class="v104Logo" src="${safe(logo)}" alt="School Logo"><div class="v104HeadText"><b>${safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b>${addr?`<small>${safe(addr)}</small>`:''}<em>STUDENT ID CARD • ${safe(set.session)}</em></div></div><div class="v6422IdMain" style="display:flex;flex-direction:${row};align-items:${side==='center'?'center':'flex-start'};gap:8px;padding:8px">${photoHtml}<div class="v6422IdInfo" style="flex:1;text-align:${side==='center'?'center':'left'}"><div class="v104Name">${safe(s.student_name||'Student')}</div><div class="v646IdLine"><b>Class:</b> ${safe(s.class_name||'—')}${s.roll_no?` • <b>Roll:</b> ${safe(s.roll_no)}`:''}</div><div class="v646IdLine"><b>Father:</b> ${safe(parent)}</div><div class="v646IdLine"><b>Admission:</b> ${safe(s.admission_no||'—')}</div><div class="v646IdLine"><b>Mobile:</b> ${safe(s.phone||'—')}</div></div></div><div class="v646Sign">${sig?`<img src="${safe(sig)}" alt="Signature">`:''}<span>Principal / Director</span></div><div class="v104Foot">${safe(ID_STUDIO_TEMPLATE_NAMES[t-1]||'Student Identity Card')}</div></div>`;
- }
+   t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));let set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=(typeof v107DocLogo==='function'?v107DocLogo():(school?.logo_url||'school-logo.png')),addr=school?.address||'',sig=signUrl();
+   let parent=s.father_name||s.guardian_name||s.mother_name||'—';
+   return `<div class="idCard t${t} v107IdCard v646PremiumId" style="width:${set.width}mm;height:${set.height}mm;border-radius:${set.radius}mm"><div class="v104Band"><img class="v104Logo" src="${safe(logo)}" alt="School Logo"><div class="v104HeadText"><b>${safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b>${addr?`<small>${safe(addr)}</small>`:''}<em>STUDENT ID CARD • ${safe(set.session)}</em></div></div><div class="v646IdBody">${photo?`<img class="v104Photo" src="${safe(photo)}" alt="Student Photo">`:`<div class="v104Photo v32NoPhoto" style="display:grid;place-items:center">PHOTO</div>`}<div class="v646IdLine"><b>Class:</b> ${safe(s.class_name||'—')}${s.roll_no?` • <b>Roll:</b> ${safe(s.roll_no)}`:''}</div><div class="v104Name">${safe(s.student_name||'Student')}</div><div class="v646IdLine"><b>Parent:</b> ${safe(parent)}</div><div class="v646IdLine"><b>Mobile:</b> ${safe(s.phone||'—')}</div><div class="v646IdLine"><b>Address:</b> ${safe(s.address||'—')}</div><div class="v646Sign">${sig?`<img src="${safe(sig)}" alt="Signature">`:''}<span>Principal / Director</span></div></div><div class="v104Foot">${safe(set.footer||'Student Identity Card')}</div></div>`;
+ };
 
  /* Due Monitor: use the exact same ledger rules as Master Fee (schedule balance + active adjustment + free-fee override). */
  window.v90LoadDueFeeMonitor=async function(){try{
@@ -10207,7 +10255,7 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
  try{window.sb?.auth?.onAuthStateChange?.(ev=>{if(ev==='SIGNED_OUT'){document.body.classList.remove('v6422-parent');document.getElementById('v6422ParentBar')?.remove()}else setTimeout(roleShell,40)})}catch(_e){}
  try{const base=window.openAdd;if(typeof base==='function')window.openAdd=function(k){const r=base.apply(this,arguments);if(k==='staff')setTimeout(()=>{const f=[...document.querySelectorAll('#dataForm .field')].find(x=>/Employee ID/i.test(x.textContent||'')),i=f?.querySelector('input');if(i){i.value='AUTO';i.readOnly=true;i.removeAttribute('name');const l=f.querySelector('label');if(l)l.textContent='Employee ID (Auto Generated)'}},0);return r}}catch(_e){}
  window.v6422DueMaster=async function(){if(!['admin','super_admin','principal','accountant'].includes(role()))return window.toast?.('Due Master केवल authorized Admin/Accounts के लिए है.');if(typeof window.head==='function')window.head('💰 Master Due Fee Update','Name • Father • Till Month Due • Fixed Fee/Month • Total Balance • Update');const ym=new Date().toISOString().slice(0,7),host=document.getElementById('erpContent');if(!host)return;host.innerHTML='<div class="panel"><div class="panelHead"><div><h3>Master Due Fee Update</h3><p class="note">Month चुनें → Till Due amount भरें → Update.</p></div></div><div class="v6422DueToolbar"><label>Class<select id="v6422DueClass"><option value="">All Classes</option></select></label><label>Due Till Month<input id="v6422DueMonth" type="month" value="'+ym+'"></label><label>Search<input id="v6422DueSearch" placeholder="Name / Father"></label><button class="primary" id="v6422DueLoad">Load</button></div><div id="v6422DueRows"><div class="empty">Load दबाएँ.</div></div></div>';document.getElementById('v6422DueLoad')?.addEventListener('click',window.v6422LoadDueRows);try{const r=await window.sb.from('students').select('class_name').limit(6000),cls=[...new Set((r.data||[]).map(x=>x.class_name).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));document.getElementById('v6422DueClass')?.insertAdjacentHTML('beforeend',cls.map(c=>'<option>'+esc(c)+'</option>').join(''))}catch(_e){}await window.v6422LoadDueRows()};
- window.v6422LoadDueRows=async function(){const host=document.getElementById('v6422DueRows');if(!host)return;host.innerHTML='<div class="empty">Loading...</div>';try{const cl=document.getElementById('v6422DueClass')?.value||'',ym=document.getElementById('v6422DueMonth')?.value||new Date().toISOString().slice(0,7),q=String(document.getElementById('v6422DueSearch')?.value||'').trim().toLowerCase(),session=typeof window.v90Session==='function'?window.v90Session():(window.school?.current_session||'2026-27');let sq=window.sb.from('students').select('id,student_name,father_name,admission_no,class_name,status').order('student_name').limit(6000);if(cl)sq=sq.eq('class_name',cl);const [sr,fr,dr]=await Promise.all([sq,window.sb.from('student_fee_settings').select('admission_no,monthly_fee').eq('academic_session',session).limit(8000),window.sb.from('v6421_manual_due').select('*').eq('academic_session',session).eq('due_month',ym).limit(8000)]);if(sr.error||fr.error||dr.error)throw(sr.error||fr.error||dr.error);const fm=Object.fromEntries((fr.data||[]).map(x=>[x.admission_no,Number(x.monthly_fee||0)])),dm=Object.fromEntries((dr.data||[]).map(x=>[x.admission_no,x])),rows=(sr.data||[]).filter(x=>String(x.status||'').toLowerCase()!=='inactive').filter(x=>!q||String(x.student_name||'').toLowerCase().includes(q)||String(x.father_name||'').toLowerCase().includes(q)),label=new Date(ym+'-01T00:00:00').toLocaleDateString('en-IN',{month:'short',year:'2-digit'}).replace(' ','-');let body='';for(const [i,s] of rows.entries()){const d=dm[s.admission_no],fixed=fm[s.admission_no]||0,amt=Number(d?.due_amount||0),total=amt+fixed,m=typeof window.money==='function'?window.money(total):'₹'+total;body+='<tr><td>'+(i+1)+'</td><td><b>'+esc(s.student_name)+'</b><small class="cellSub">'+esc(s.class_name||'')+' • '+esc(s.admission_no||'')+'</small></td><td>'+esc(s.father_name||'—')+'</td><td><input id="v6422Amt_'+esc(s.id)+'" type="number" min="0" step="1" value="'+(amt||'')+'" placeholder="₹ amount"></td><td><input id="v6422Fix_'+esc(s.id)+'" type="number" min="0" step="1" value="'+(fixed||'')+'" placeholder="₹ fixed"></td><td><b>'+m+'</b></td><td>'+(total>0?'Due':'Clear')+'</td><td><button class="primary v6422UpdateDue" data-id="'+esc(s.id)+'" data-adm="'+esc(s.admission_no)+'" data-name="'+esc(s.student_name)+'">Update</button></td></tr>'}host.innerHTML='<div class="tableWrap"><table class="v6422DueTable"><tr><th>S.N.</th><th>Student Name</th><th>Father Name</th><th>Till '+esc(label)+' Due</th><th>Fixed Fee / Month</th><th>Total Balance</th><th>Status</th><th>Update</th></tr>'+(body||'<tr><td colspan="8">No students.</td></tr>')+'</table></div>';host.querySelectorAll('.v6422UpdateDue').forEach(b=>b.addEventListener('click',()=>window.v6422SaveDue(b.dataset.id,b.dataset.adm,b.dataset.name)))}catch(e){host.innerHTML='<div class="empty">'+esc(e.message||e)+' • V64.22 SQL run करें.</div>'}};
+ window.v6422LoadDueRows=async function(){const host=document.getElementById('v6422DueRows');if(!host)return;host.innerHTML='<div class="empty">Loading...</div>';try{const cl=document.getElementById('v6422DueClass')?.value||'',ym=document.getElementById('v6422DueMonth')?.value||new Date().toISOString().slice(0,7),q=String(document.getElementById('v6422DueSearch')?.value||'').trim().toLowerCase(),session=typeof window.v90Session==='function'?window.v90Session():(window.school?.current_session||'2026-27');let sq=window.sb.from('students').select('id,student_name,father_name,admission_no,class_name,status').order('student_name').limit(6000);if(cl)sq=sq.eq('class_name',cl);const [sr,fr,dr]=await Promise.all([sq,window.sb.from('student_fee_settings').select('admission_no,monthly_fee').eq('academic_session',session).limit(8000),window.sb.from('v6421_manual_due').select('*').eq('academic_session',session).eq('due_month',ym).limit(8000)]);if(sr.error||fr.error||dr.error)throw(sr.error||fr.error||dr.error);const fm=Object.fromEntries((fr.data||[]).map(x=>[x.admission_no,Number(x.monthly_fee||0)])),dm=Object.fromEntries((dr.data||[]).map(x=>[x.admission_no,x])),rows=(sr.data||[]).filter(x=>String(x.status||'').toLowerCase()!=='inactive').filter(x=>!q||String(x.student_name||'').toLowerCase().includes(q)||String(x.father_name||'').toLowerCase().includes(q)),label=new Date(ym+'-01T00:00:00').toLocaleDateString('en-IN',{month:'short',year:'2-digit'}).replace(' ','-');let body='';for(const [i,s] of rows.entries()){const d=dm[s.admission_no],fixed=fm[s.admission_no]||0,amt=Number(d?.due_amount||0),m=typeof window.money==='function'?window.money(amt):'₹'+amt;body+='<tr><td>'+(i+1)+'</td><td><b>'+esc(s.student_name)+'</b><small class="cellSub">'+esc(s.class_name||'')+' • '+esc(s.admission_no||'')+'</small></td><td>'+esc(s.father_name||'—')+'</td><td><input id="v6422Amt_'+esc(s.id)+'" type="number" min="0" step="1" value="'+(amt||'')+'" placeholder="₹ amount"></td><td><input id="v6422Fix_'+esc(s.id)+'" type="number" min="0" step="1" value="'+(fixed||'')+'" placeholder="₹ fixed"></td><td><b>'+m+'</b></td><td>'+(amt>0?'Due':'Clear')+'</td><td><button class="primary v6422UpdateDue" data-id="'+esc(s.id)+'" data-adm="'+esc(s.admission_no)+'" data-name="'+esc(s.student_name)+'">Update</button></td></tr>'}host.innerHTML='<div class="tableWrap"><table class="v6422DueTable"><tr><th>S.N.</th><th>Student Name</th><th>Father Name</th><th>Till '+esc(label)+' Due</th><th>Fixed Fee / Month</th><th>Total Balance</th><th>Status</th><th>Update</th></tr>'+(body||'<tr><td colspan="8">No students.</td></tr>')+'</table></div>';host.querySelectorAll('.v6422UpdateDue').forEach(b=>b.addEventListener('click',()=>window.v6422SaveDue(b.dataset.id,b.dataset.adm,b.dataset.name)))}catch(e){host.innerHTML='<div class="empty">'+esc(e.message||e)+' • V64.22 SQL run करें.</div>'}};
  window.v6422SaveDue=async function(id,adm,name){const ym=document.getElementById('v6422DueMonth')?.value,session=typeof window.v90Session==='function'?window.v90Session():(window.school?.current_session||'2026-27'),amt=Math.max(0,Number(document.getElementById('v6422Amt_'+id)?.value||0)),fixed=Math.max(0,Number(document.getElementById('v6422Fix_'+id)?.value||0));try{const a=await window.sb.from('v6421_manual_due').upsert({admission_no:adm,academic_session:session,due_month:ym,due_amount:amt,updated_at:new Date().toISOString()},{onConflict:'admission_no,academic_session,due_month'});if(a.error)throw a.error;const f=await window.sb.from('student_fee_settings').upsert({admission_no:adm,academic_session:session,monthly_fee:fixed},{onConflict:'admission_no,academic_session'});if(f.error)throw f.error;window.toast?.(name+' due updated');await window.v6422LoadDueRows()}catch(e){window.toast?.(e.message||String(e))}};
  document.addEventListener('click',e=>{if(e.target.closest('[data-v6422-due]'))window.v6422DueMaster()});window.addEventListener('load',()=>setTimeout(()=>{roleShell();if(['admin','super_admin','principal','accountant'].includes(role())){const nav=document.getElementById('erpNav');if(nav&&!nav.querySelector('[data-v6422-due]'))nav.insertAdjacentHTML('beforeend','<button data-v6422-due="1">💰 Master Due Update</button>')}},700),{once:true,passive:true});
 })();
@@ -10215,13 +10263,42 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
 <!-- ===== END V64.22 ===== -->
 
 
-<style id="v6422-final-black-back">
-#erp .erpTop .v45NavControls{display:flex!important;gap:7px!important}
-#erp .erpTop #v45BackBtn{display:inline-flex!important;align-items:center!important;justify-content:center!important;background:#050505!important;color:#fff!important;border:1px solid #050505!important;border-radius:10px!important;padding:9px 14px!important;font-weight:900!important;box-shadow:0 4px 12px rgba(0,0,0,.18)!important}
-#erp .erpTop #v45HomeBtn{display:inline-flex!important}
-@media(max-width:760px){#erp .erpTop #v45BackBtn{padding:8px 11px!important;font-size:11px!important}}
+<!-- ===== V64.22 SAFE TEACHER ADD + LOGIN FINAL (REAL BODY END) ===== -->
+<style id="v6422-safe-teacher-css">
+.v6422ClassGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:7px;margin-top:6px}.v6422ClassGrid label{display:flex;gap:6px;align-items:center;border:1px solid #d8e3ef;border-radius:9px;padding:7px;background:#fff}.v6422PwGrid{display:grid;gap:9px;max-width:520px}.v6422PwGrid input{min-height:42px;border:1px solid #ccd9e8;border-radius:9px;padding:8px 10px}
 </style>
-<script id="v6422-final-back-guard">
-(function(){const install=()=>{const top=document.querySelector('#erp:not(.hidden) .erpTop');if(!top)return;let wrap=top.querySelector('.v45NavControls');if(!wrap){wrap=document.createElement('div');wrap.className='v45NavControls';wrap.innerHTML='<button id="v45BackBtn" type="button">← Back</button><button id="v45HomeBtn" type="button">🏠 Home</button>';top.appendChild(wrap)}const b=wrap.querySelector('#v45BackBtn'),h=wrap.querySelector('#v45HomeBtn');if(b)b.onclick=()=>{if(typeof v45Back==='function')v45Back();else if(typeof render==='function')render('dashboard')};if(h)h.onclick=()=>{if(typeof v45Home==='function')v45Home();else if(typeof render==='function')render('dashboard')}};new MutationObserver(()=>setTimeout(install,0)).observe(document.body,{childList:true,subtree:true});window.addEventListener('load',install);setTimeout(install,300)})();
+<script id="v6422-safe-teacher-final">
+(function(){'use strict';
+ const nm=v=>String(v||'').replace(/\D/g,'').slice(-10), tem=m=>'t'+m+'@teacher.ldmodern.local';
+ /* Admin Add Teacher: details + one/multiple classes + first password in one form. */
+ const baseOpenAdd=window.openAdd;
+ window.v6422AddTeacherForm=function(){
+   const classes=['Nursery','LKG','UKG','Class 1','Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
+   const modal=document.getElementById('modal'),body=document.getElementById('modalBody'),title=document.getElementById('modalTitle');if(!modal||!body)return;
+   if(title)title.textContent='Add Teacher • Class Assignment • Login Password';
+   body.innerHTML=`<div class="formGrid"><label>Teacher Name *<input id="v6422TName"></label><label>Mobile Login *<input id="v6422TMobile" inputmode="numeric" maxlength="10"></label><label>Designation<input id="v6422TDesignation" value="Teacher"></label><label>Email (Optional)<input id="v6422TEmail" type="email"></label><label>Joining Date<input id="v6422TJoin" type="date"></label><label>Salary<input id="v6422TSalary" type="number" min="0"></label><div class="full"><b>Assign Class / Classes *</b><div class="v6422ClassGrid">${classes.map(c=>`<label><input type="checkbox" name="v6422TClass" value="${c}"> ${c}</label>`).join('')}</div></div><label>First Password *<input id="v6422TPassword" type="text" minlength="8" placeholder="Minimum 8 characters"></label><div class="full"><button class="primary" type="button" onclick="v6422SaveTeacherAll()">Save Teacher + Classes + Password</button></div><div id="v6422TStatus" class="full note">Teacher इसी Mobile + Password से login करेगा और बाद में अपना Password बदल सकेगा.</div></div>`;
+   modal.classList.remove('hidden');
+ };
+ window.v6422SaveTeacherAll=async function(){
+   const name=String(document.getElementById('v6422TName')?.value||'').trim(),mobile=nm(document.getElementById('v6422TMobile')?.value),password=String(document.getElementById('v6422TPassword')?.value||''),classes=[...document.querySelectorAll('input[name="v6422TClass"]:checked')].map(x=>x.value),st=document.getElementById('v6422TStatus');
+   if(!name)return toast('Teacher Name required');if(mobile.length!==10)return toast('Valid 10 digit Mobile required');if(!classes.length)return toast('कम से कम 1 Class चुनें');if(password.length<8)return toast('First Password कम से कम 8 characters का रखें');
+   try{if(st)st.textContent='Teacher save हो रहा है...';let dup=await sb.from('staff').select('id,staff_name,phone').eq('phone',mobile).limit(1);if(dup.data?.length)throw new Error('इस Mobile से Teacher/Staff पहले से मौजूद है. Existing Teacher को Teacher Login Manager से manage करें.');
+     const row={employee_id:'T'+Date.now().toString().slice(-9),staff_name:name,staff_type:'Teaching',designation:String(document.getElementById('v6422TDesignation')?.value||'Teacher').trim()||'Teacher',phone:mobile,email:String(document.getElementById('v6422TEmail')?.value||'').trim()||null,joining_date:document.getElementById('v6422TJoin')?.value||null,salary:Number(document.getElementById('v6422TSalary')?.value||0),status:'Active'};
+     let sr=await sb.from('staff').insert(row).select('id,employee_id,staff_name,phone').single();if(sr.error)throw sr.error;let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. दोबारा login करें.');
+     let ar=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'create_or_update',staff_id:sr.data.id,password,classes})}),j=await ar.json().catch(()=>({}));if(!ar.ok){await sb.from('staff').update({status:'Inactive'}).eq('id',sr.data.id);throw new Error(j.error||'Teacher Login create failed');}
+     if(st)st.innerHTML=`<b>✓ Teacher Ready</b><br>Login Mobile: <b>${mobile}</b><br>Classes: <b>${classes.join(', ')}</b>`;toast('Teacher + Classes + Login created');setTimeout(()=>{document.getElementById('modal')?.classList.add('hidden');render('staff')},900);
+   }catch(e){if(st)st.textContent='Save failed: '+(e.message||e);toast(e.message||String(e))}
+ };
+ window.openAdd=function(k){if(k==='staff'){window.v6422AddTeacherForm();return}return baseOpenAdd.apply(this,arguments)};
+ /* One Teacher login identity: Registered Mobile + Admin password. */
+ window.teacherLoginDialog=function(){v14Modal(`<h2>👩‍🏫 Teacher Login</h2><p class="v14Muted">Admin द्वारा बनाए गए Teacher account से login करें.</p><div id="teacherAuthBox"><div class="v14Form"><div><label>Registered Mobile</label><input id="tLoginId" inputmode="numeric" maxlength="10" placeholder="10 digit mobile"></div><div><label>Password</label><input id="tLoginPassword" type="password"></div><div class="full"><button class="v14Action primary" onclick="teacherPasswordLogin()">Teacher Login</button></div><div id="v6422TeacherLoginStatus" class="v32Info"></div></div></div>`)};
+ window.teacherExistingLoginForm=window.teacherLoginDialog;window.teacherPasswordRegistrationForm=function(){toast('Teacher Self Registration बंद है. Admin Teacher account बनाएगा.')};window.teacherPasswordRegister=window.teacherPasswordRegistrationForm;window.submitTeacherRegistration=window.teacherPasswordRegistrationForm;
+ window.teacherPasswordLogin=async function(){const mobile=nm(document.getElementById('tLoginId')?.value),password=String(document.getElementById('tLoginPassword')?.value||''),status=document.getElementById('v6422TeacherLoginStatus'),say=m=>{if(status)status.textContent=m;else toast(m)};if(mobile.length!==10)return say('Valid 10 digit Registered Mobile डालें.');if(!password)return say('Password डालें.');say('Teacher login check हो रहा है...');let ar=await sb.auth.signInWithPassword({email:tem(mobile),password});if(ar.error)return say('Mobile या Password सही नहीं है.');user=ar.data.user;try{await loadProfile();await v14LoadTeacherContext()}catch(e){await sb.auth.signOut();user=null;profile=null;return say('Teacher account/class mapping load नहीं हुआ. Admin से mapping check कराएँ.')}if(String(profile?.role||'').toLowerCase()!=='teacher'||!v14TeacherProfile||String(v14TeacherProfile.approval_status||'').toLowerCase()!=='approved'||v14TeacherProfile.is_active===false){await sb.auth.signOut();user=null;profile=null;return say('Teacher account active/mapped नहीं है. School Admin से संपर्क करें.')}document.getElementById('v14Modal')?.remove();openERP()};
+ /* Teacher own password: current password required. */
+ window.v93TeacherPasswordPage=async function(){if(String(profile?.role||'').toLowerCase()!=='teacher')return toast('Teacher only');if(typeof v90Head==='function')v90Head('🔑 My Password','Current Password verify करके नया Password बनाएँ');if(typeof v90InstallShell==='function')v90InstallShell('v93_teacher_password');let html=`<div class="v90Page"><div class="v90Panel"><h3>Change My Password</h3><div class="v6422PwGrid"><input id="v6422CurrentPw" type="password" placeholder="Current Password"><input id="v6422NewPw1" type="password" placeholder="New Password (minimum 8 characters)"><input id="v6422NewPw2" type="password" placeholder="Confirm New Password"><button class="primary" onclick="v6422ChangeTeacherPassword()">Update Password</button></div></div></div>`;if(typeof v90Set==='function')v90Set(html);else document.getElementById('erpContent').innerHTML=html};
+ window.v6422ChangeTeacherPassword=async function(){const cur=String(document.getElementById('v6422CurrentPw')?.value||''),a=String(document.getElementById('v6422NewPw1')?.value||''),b=String(document.getElementById('v6422NewPw2')?.value||'');if(!cur)return toast('Current Password डालें');if(a.length<8)return toast('New Password कम से कम 8 characters का रखें');if(a!==b)return toast('New Password और Confirm Password समान नहीं हैं');const mobile=nm(v14TeacherProfile?.mobile||v14TeacherProfile?.phone||'');if(mobile.length!==10)return toast('Teacher registered mobile mapping नहीं मिला.');let chk=await sb.auth.signInWithPassword({email:tem(mobile),password:cur});if(chk.error)return toast('Current Password सही नहीं है.');let up=await sb.auth.updateUser({password:a});if(up.error)return toast(up.error.message||'Password update नहीं हुआ');toast('Password successfully changed')};
+ const renderBase=window.render;window.render=async function(p){if(p==='v93_teacher_password')return window.v93TeacherPasswordPage();return renderBase.apply(this,arguments)};
+})();
 </script>
+<!-- ===== END V64.22 SAFE TEACHER FINAL ===== -->
 </body></html>
