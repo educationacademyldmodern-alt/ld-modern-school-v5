@@ -999,7 +999,7 @@ async function dashboardTeacherFull(id){
  try{let{data:st,error}=await sb.from('staff').select('*').eq('id',id).single();if(error)throw error;let prof=null;
   try{let{data:ps}=await sb.from('teacher_profiles').select('*').limit(3000);prof=(ps||[]).find(p=>(st.employee_id&&String(p.employee_id||'')===String(st.employee_id))||(st.email&&String(p.email||'').toLowerCase()===String(st.email).toLowerCase())||(st.phone&&String(p.phone||p.mobile||'').replace(/\D/g,'').slice(-10)===String(st.phone).replace(/\D/g,'').slice(-10))||(p.teacher_name&&String(p.teacher_name).trim().toLowerCase()===String(st.staff_name||'').trim().toLowerCase()))||null}catch(_e){}
   let aq=sb.from('staff_attendance').select('*').order('date',{ascending:false}).limit(500);aq=st.employee_id?aq.eq('employee_id',st.employee_id):aq.eq('staff_name',st.staff_name);let pq=sb.from('payroll').select('*').order('month',{ascending:false}).limit(100);pq=st.employee_id?pq.eq('employee_id',st.employee_id):pq.eq('staff_name',st.staff_name);let lq=sb.from('leave').select('*').order('from_date',{ascending:false}).limit(100);lq=st.employee_id?lq.eq('employee_id',st.employee_id):lq.eq('staff_name',st.staff_name);
-  let [ar,pr,lr,cr,sr,tr]=await Promise.all([aq,pq,lq,prof?sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',prof.id).eq('is_active',true):Promise.resolve({data:[]}),prof?sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',prof.id).eq('is_active',true):Promise.resolve({data:[]}),sb.from('timetable').select('*').eq('teacher_name',st.staff_name).order('day_name').order('period_no').limit(80)]);
+  let [ar,pr,lr,cr,sr,tr]=await Promise.all([aq,pq,lq,prof?sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',prof.id).eq('is_active',true):Promise.resolve({data:[]}),Promise.resolve({data:[]}),sb.from('timetable').select('*').eq('teacher_name',st.staff_name).order('day_name').order('period_no').limit(80)]);
   let att=ar.data||[],pay=pr.data||[],leaves=lr.data||[],classes=cr.data||[],subjects=sr.data||[],periods=tr.data||[],present=att.filter(x=>String(x.status||'').toLowerCase()==='present').length,absent=att.filter(x=>String(x.status||'').toLowerCase()==='absent').length,leave=att.filter(x=>String(x.status||'').toLowerCase()==='leave').length,latest=pay[0]||{},classText=classes.map(x=>`${x.class_name}${x.is_class_teacher?' (Class Teacher)':''}`).join(', ')||'—',subText=subjects.map(x=>x.subject_name||x.subject).filter(Boolean).join(', ')||st.subject||'—';
   box.innerHTML=`<div class="v105PersonDetail"><div class="v105PersonHero"><div class="v105PersonPhoto v105PersonPhotoFallback">👩‍🏫</div><div><small>TEACHER / STAFF FULL DETAILS</small><h2>${esc(st.staff_name||'Teacher')}</h2><p>${esc(st.employee_id||'—')} • ${esc(st.designation||st.staff_type||'Teacher')} • ${esc(st.phone||st.email||'')}</p></div><button class="secondary" onclick="this.closest('.v105PersonDetail').remove()">✕ Close</button></div><div class="v105DetailBody"><div class="v105DetailGrid">${v105DetailItem('Employee ID',st.employee_id)}${v105DetailItem('Designation',st.designation||st.staff_type)}${v105DetailItem('Subject',subText)}${v105DetailItem('Mobile',st.phone)}${v105DetailItem('Email',st.email)}${v105DetailItem('Joining Date',st.joining_date)}${v105DetailItem('Status',st.status)}${v105DetailItem('Login',prof?(prof.is_active===false?'Inactive':prof.approval_status||'Ready'):'No login profile')}${v105DetailItem('Assigned Classes',classText)}${v105DetailItem('Salary',st.salary?money(st.salary):'—')}${v105DetailItem('Latest Payroll',latest.month?`${latest.month} • ${latest.status||''}`:'—')}${v105DetailItem('Attendance P / A / L',`${present} / ${absent} / ${leave}`)}</div><div class="v105DetailSection"><h3>Teaching Bell / Schedule</h3><div class="tableWrap"><table><tr><th>Day</th><th>Period</th><th>Class</th><th>Subject</th></tr>${periods.slice(0,30).map(x=>`<tr><td>${esc(x.day_name||'')}</td><td>${esc(x.period_no??'')}</td><td>${esc(x.class_name||'')}</td><td>${esc(x.subject||'')}</td></tr>`).join('')||'<tr><td colspan="4">No assigned period.</td></tr>'}</table></div></div><div class="v105DetailSection"><h3>Recent Attendance</h3><div class="tableWrap"><table><tr><th>Date</th><th>Status</th><th>Remark</th></tr>${att.slice(0,15).map(x=>`<tr><td>${esc(x.date||'')}</td><td>${esc(x.status||'')}</td><td>${esc(x.remark||'')}</td></tr>`).join('')||'<tr><td colspan="3">No attendance.</td></tr>'}</table></div></div><div class="v105DetailSection"><h3>Recent Leave / Payroll</h3><div class="tableWrap"><table><tr><th>Type</th><th>Period</th><th>Status</th><th>Detail</th></tr>${leaves.slice(0,8).map(x=>`<tr><td>Leave</td><td>${esc(x.from_date||'')} ${x.to_date?'→ '+esc(x.to_date):''}</td><td>${esc(x.status||'')}</td><td>${esc(x.leave_type||x.reason||'')}</td></tr>`).join('')}${pay.slice(0,8).map(x=>`<tr><td>Payroll</td><td>${esc(x.month||'')}</td><td>${esc(x.status||'')}</td><td>${money(Number(x.net_salary||0)||Number(x.basic_salary||0)+Number(x.allowance||0)-Number(x.deduction||0))}</td></tr>`).join('')||(!leaves.length?'<tr><td colspan="4">No leave/payroll history.</td></tr>':'')}</table></div></div></div></div>`;
  }catch(e){box.innerHTML=`<div class="empty">${esc(e.message||String(e))}</div>`}
@@ -1888,7 +1888,7 @@ function authPayload(identifier,password){
 }
 function teacherLoginDialog(){
  if(!cfg)return openPortal();
- v14Modal(`<h2>Teacher Portal</h2><p class="v14Muted">Teacher अपने Email या Mobile और Password से सीधे login करें.</p><div class="v14Tabs"><button onclick="teacherExistingLoginForm()">Teacher Login</button><button onclick="teacherPasswordRegistrationForm()">First Registration</button></div><div id="teacherAuthBox"></div>`);
+ v14Modal(`<h2>Teacher Portal</h2><p class="v14Muted">Teacher अपने Email या Mobile और Password से सीधे login करें.</p><div class="v14Tabs"><button onclick="teacherExistingLoginForm()">Teacher Login</button></div><div id="teacherAuthBox"></div>`);
  teacherExistingLoginForm();
 }
 function teacherExistingLoginForm(){
@@ -1928,7 +1928,7 @@ function teacherProfileRegistrationForm(email){
 async function submitTeacherRegistration(){
  let teacher_name=$('trName').value.trim(),email=$('trEmail').value.trim().toLowerCase(),phone=$('trPhone').value.trim();if(!teacher_name||!email)return toast('Name और email जरूरी है');
  let classes=[...document.querySelectorAll('input[name="trClass"]:checked')].map(x=>x.value);if(!classes.length)return toast('कम से कम एक class चुनें');let subjects=$('trSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);
- let payload={auth_user_id:user.id,teacher_name,father_name:$('trFather').value.trim(),mother_name:$('trMother').value.trim(),dob:$('trDob').value||null,mobile:phone||null,email,joining_date:$('trJoin').value||null,approval_status:'Pending',password_created:true,requested_classes:classes,requested_subjects:subjects,updated_at:new Date().toISOString()};
+ let payload={auth_user_id:user.id,teacher_name,father_name:$('trFather').value.trim(),mother_name:$('trMother').value.trim(),dob:$('trDob').value||null,mobile:phone||null,email,joining_date:$('trJoin').value||null,approval_status:'Pending',password_created:true,requested_classes:classes,updated_at:new Date().toISOString()};
  let{error}=await sb.from('teacher_profiles').upsert(payload,{onConflict:'auth_user_id'});if(error)return toast(error.message);await sb.auth.signOut();localStorage.removeItem('ld_auth_intent');localStorage.removeItem('ld_teacher_mode');$('v14Modal')?.remove();toast('Registration submitted. Admin approval के बाद Email/Mobile + Password से login करें.');
 }
 
@@ -1954,7 +1954,7 @@ function editTeacherApproval(r){
 }
 async function saveTeacherReviewV14(id){
  let classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value),subjects=$('taSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);
- let {error}=await sb.from('teacher_profiles').update({teacher_name:$('taName').value.trim(),father_name:$('taFather').value.trim(),mother_name:$('taMother').value.trim(),requested_classes:classes,requested_subjects:subjects,updated_at:new Date().toISOString()}).eq('id',id);
+ let {error}=await sb.from('teacher_profiles').update({teacher_name:$('taName').value.trim(),father_name:$('taFather').value.trim(),mother_name:$('taMother').value.trim(),requested_classes:classes,updated_at:new Date().toISOString()}).eq('id',id);
  toast(error?error.message:'Saved');
 }
 async function approveTeacherV14(id,authId){
@@ -3251,7 +3251,7 @@ approveTeacherV14=async function(id,authId){
  let classes=[...document.querySelectorAll('input[name="taClass"]:checked')].map(x=>x.value),subjects=$('taSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),classTeacher=$('taClassTeacher')?.value||'';
  if(!classes.length)return toast('At least one class चुनें');
  if(classTeacher&&!classes.includes(classTeacher))return toast('Class Teacher वही class होनी चाहिए जो Approved Classes में चुनी गई हो');
- let upd={teacher_name:$('taName').value.trim(),father_name:$('taFather').value.trim(),mother_name:$('taMother').value.trim(),requested_classes:classes,requested_subjects:subjects,updated_at:new Date().toISOString()};
+ let upd={teacher_name:$('taName').value.trim(),father_name:$('taFather').value.trim(),mother_name:$('taMother').value.trim(),requested_classes:classes,updated_at:new Date().toISOString()};
  let s0=await sb.from('teacher_profiles').update(upd).eq('id',id);if(s0.error)return toast(s0.error.message);
  let d1=await sb.from('teacher_class_assignments').delete().eq('teacher_profile_id',id);if(d1.error)return toast(d1.error.message);
  let d2=await sb.from('teacher_subject_assignments').delete().eq('teacher_profile_id',id);if(d2.error)return toast(d2.error.message);
@@ -4003,7 +4003,7 @@ approveTeacherV14=async function(id,authId){
     teacher_name:$('taName')?.value.trim()||'',
     father_name:$('taFather')?.value.trim()||'',
     mother_name:$('taMother')?.value.trim()||'',
-    requested_classes:classes,requested_subjects:subjects,updated_at:now
+    requested_classes:classes,updated_at:now
   };
   let q=await sb.from('teacher_profiles').update(upd).eq('id',id);
   if(q.error)return toast(q.error.message);
@@ -7970,7 +7970,7 @@ async function v93TeacherAccessCenter(){
  if(typeof v90InstallShell==='function')v90InstallShell('teacher_access');
  let [sr,pr]=await Promise.all([
    sb.from('staff').select('id,employee_id,staff_name,staff_type,designation,phone,email,joining_date,status').order('staff_name').limit(3000),
-   sb.from('teacher_profiles').select('id,auth_user_id,email,phone,mobile,teacher_name,employee_id,approval_status,is_active,requested_classes,requested_subjects').order('teacher_name').limit(3000)
+   sb.from('teacher_profiles').select('id,auth_user_id,email,phone,mobile,teacher_name,employee_id,approval_status,is_active,requested_classes').order('teacher_name').limit(3000)
  ]);
  if(sr.error||pr.error){let m=(sr.error||pr.error).message;return (typeof v90Set==='function'?v90Set(`<div class="empty">${esc(m)}</div>`):toast(m))}
  window.__v93Profiles=pr.data||[];
@@ -8006,7 +8006,7 @@ async function v93SaveTeacherLogin(staffId){
    let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. दोबारा login करें.');
    let r=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'create_or_update',staff_id:staffId,password,classes})});let j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher Login save failed');
    if(status)status.innerHTML=`<b>✓ Teacher Login Ready</b><br>Name: ${esc(j.teacher_name||st.staff_name)}<br>Login Mobile: <b>${esc(j.login_id||j.mobile||v93NormPhone(st.phone))}</b>${password?`<br>Password: <b>${esc(password)}</b>`:''}<br><small>Teacher अब Mobile + Password से login करेगा. Password भूलने पर Primary Admin नया password देगा; कोई OTP/email नहीं.</small>`;
-   toast(j.created?'Teacher Login created':'Teacher Login updated');setTimeout(async()=>{let pr=await sb.from('teacher_profiles').select('id,auth_user_id,email,phone,mobile,teacher_name,employee_id,approval_status,is_active,requested_classes,requested_subjects').order('teacher_name');window.__v93Profiles=pr.data||[]},50);
+   toast(j.created?'Teacher Login created':'Teacher Login updated');setTimeout(async()=>{let pr=await sb.from('teacher_profiles').select('id,auth_user_id,email,phone,mobile,teacher_name,employee_id,approval_status,is_active,requested_classes').order('teacher_name');window.__v93Profiles=pr.data||[]},50);
  }catch(e){if(status)status.innerHTML=`<b>Save नहीं हुआ:</b> ${esc(e.message||String(e))}`;toast(e.message||String(e))}
 }
 
@@ -10263,42 +10263,99 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
 <!-- ===== END V64.22 ===== -->
 
 
-<!-- ===== V64.22 SAFE TEACHER ADD + LOGIN FINAL (REAL BODY END) ===== -->
-<style id="v6422-safe-teacher-css">
-.v6422ClassGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:7px;margin-top:6px}.v6422ClassGrid label{display:flex;gap:6px;align-items:center;border:1px solid #d8e3ef;border-radius:9px;padding:7px;background:#fff}.v6422PwGrid{display:grid;gap:9px;max-width:520px}.v6422PwGrid input{min-height:42px;border:1px solid #ccd9e8;border-radius:9px;padding:8px 10px}
+<!-- ===== V64.22 TEACHER MASTER + LOGIN REPAIR ===== -->
+<style id="v6422-teacher-master-css">
+.v6422ClassGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px;margin-top:6px}.v6422ClassGrid label{display:flex;gap:6px;align-items:center;border:1px solid #d8e3ef;border-radius:9px;padding:7px;background:#fff}.v6422PwGrid{display:grid;gap:9px;max-width:520px}.v6422PwGrid input{min-height:42px;border:1px solid #ccd9e8;border-radius:9px;padding:8px 10px}.v6422LoginBox{grid-column:1/-1;padding:12px;border:1px solid #cfe0f4;border-radius:12px;background:#f7fbff}.v6422LoginBox h4{margin:0 0 8px}.v6422Hint{font-size:11px;color:#60748b;margin-top:6px}
 </style>
-<script id="v6422-safe-teacher-final">
+<script id="v6422-teacher-master-final">
 (function(){'use strict';
  const nm=v=>String(v||'').replace(/\D/g,'').slice(-10), tem=m=>'t'+m+'@teacher.ldmodern.local';
- /* Admin Add Teacher: details + one/multiple classes + first password in one form. */
- const baseOpenAdd=window.openAdd;
- window.v6422AddTeacherForm=function(){
-   const classes=['Nursery','LKG','UKG','Class 1','Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
-   const modal=document.getElementById('modal'),body=document.getElementById('modalBody'),title=document.getElementById('modalTitle');if(!modal||!body)return;
-   if(title)title.textContent='Add Teacher • Class Assignment • Login Password';
-   body.innerHTML=`<div class="formGrid"><label>Teacher Name *<input id="v6422TName"></label><label>Mobile Login *<input id="v6422TMobile" inputmode="numeric" maxlength="10"></label><label>Designation<input id="v6422TDesignation" value="Teacher"></label><label>Email (Optional)<input id="v6422TEmail" type="email"></label><label>Joining Date<input id="v6422TJoin" type="date"></label><label>Salary<input id="v6422TSalary" type="number" min="0"></label><div class="full"><b>Assign Class / Classes *</b><div class="v6422ClassGrid">${classes.map(c=>`<label><input type="checkbox" name="v6422TClass" value="${c}"> ${c}</label>`).join('')}</div></div><label>First Password *<input id="v6422TPassword" type="text" minlength="8" placeholder="Minimum 8 characters"></label><div class="full"><button class="primary" type="button" onclick="v6422SaveTeacherAll()">Save Teacher + Classes + Password</button></div><div id="v6422TStatus" class="full note">Teacher इसी Mobile + Password से login करेगा और बाद में अपना Password बदल सकेगा.</div></div>`;
-   modal.classList.remove('hidden');
- };
- window.v6422SaveTeacherAll=async function(){
-   const name=String(document.getElementById('v6422TName')?.value||'').trim(),mobile=nm(document.getElementById('v6422TMobile')?.value),password=String(document.getElementById('v6422TPassword')?.value||''),classes=[...document.querySelectorAll('input[name="v6422TClass"]:checked')].map(x=>x.value),st=document.getElementById('v6422TStatus');
-   if(!name)return toast('Teacher Name required');if(mobile.length!==10)return toast('Valid 10 digit Mobile required');if(!classes.length)return toast('कम से कम 1 Class चुनें');if(password.length<8)return toast('First Password कम से कम 8 characters का रखें');
-   try{if(st)st.textContent='Teacher save हो रहा है...';let dup=await sb.from('staff').select('id,staff_name,phone').eq('phone',mobile).limit(1);if(dup.data?.length)throw new Error('इस Mobile से Teacher/Staff पहले से मौजूद है. Existing Teacher को Teacher Login Manager से manage करें.');
-     const row={employee_id:'T'+Date.now().toString().slice(-9),staff_name:name,staff_type:'Teaching',designation:String(document.getElementById('v6422TDesignation')?.value||'Teacher').trim()||'Teacher',phone:mobile,email:String(document.getElementById('v6422TEmail')?.value||'').trim()||null,joining_date:document.getElementById('v6422TJoin')?.value||null,salary:Number(document.getElementById('v6422TSalary')?.value||0),status:'Active'};
-     let sr=await sb.from('staff').insert(row).select('id,employee_id,staff_name,phone').single();if(sr.error)throw sr.error;let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. दोबारा login करें.');
-     let ar=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'create_or_update',staff_id:sr.data.id,password,classes})}),j=await ar.json().catch(()=>({}));if(!ar.ok){await sb.from('staff').update({status:'Inactive'}).eq('id',sr.data.id);throw new Error(j.error||'Teacher Login create failed');}
-     if(st)st.innerHTML=`<b>✓ Teacher Ready</b><br>Login Mobile: <b>${mobile}</b><br>Classes: <b>${classes.join(', ')}</b>`;toast('Teacher + Classes + Login created');setTimeout(()=>{document.getElementById('modal')?.classList.add('hidden');render('staff')},900);
-   }catch(e){if(st)st.textContent='Save failed: '+(e.message||e);toast(e.message||String(e))}
- };
- window.openAdd=function(k){if(k==='staff'){window.v6422AddTeacherForm();return}return baseOpenAdd.apply(this,arguments)};
- /* One Teacher login identity: Registered Mobile + Admin password. */
+ const classes=['Nursery','LKG','UKG','Class 1','Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
+ const baseOpenAdd=window.openAdd, baseOpenEdit=window.openEdit;
+ const E2=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function checks(selected=[]){return `<div class="v6422ClassGrid">${classes.map(c=>`<label><input type="checkbox" name="v6422TClass" value="${E2(c)}" ${selected.includes(c)?'checked':''}> ${E2(c)}</label>`).join('')}</div>`}
+ function modalForm(title, row={}, selected=[], existing=false){
+   const modal=document.getElementById('modal'),form=document.getElementById('dataForm'),ttl=document.getElementById('modalTitle');if(!modal||!form)return false;
+   ttl.textContent=title;
+   form.innerHTML=`<div class="field"><label>Teacher Name *</label><input name="staff_name" id="v6422TName" value="${E2(row.staff_name||'')}" required></div><div class="field"><label>Registered Mobile *</label><input name="phone" id="v6422TMobile" inputmode="numeric" maxlength="10" value="${E2(nm(row.phone||''))}" required></div><div class="field"><label>Designation</label><input name="designation" id="v6422TDesignation" value="${E2(row.designation||'Teacher')}"></div><div class="field"><label>Email (Optional)</label><input name="email" id="v6422TEmail" type="email" value="${E2(row.email||'')}"></div><div class="field"><label>Joining Date</label><input name="joining_date" id="v6422TJoin" type="date" value="${E2(row.joining_date||'')}"></div><div class="field"><label>Salary</label><input name="salary" id="v6422TSalary" type="number" min="0" value="${E2(row.salary||0)}"></div><div class="v6422LoginBox"><h4>🔐 Teacher Login + Class Assignment</h4><b>Assign 1 or Multiple Classes *</b>${checks(selected)}<div class="field" style="margin-top:9px"><label>${existing?'New Password (blank = keep current password)':'First Password *'}</label><input id="v6422TPassword" type="text" minlength="8" placeholder="Minimum 8 characters"></div><div class="v6422Hint">Teacher इसी Registered Mobile + Password से login करेगा. Subject assignment यहाँ नहीं है.</div></div><button type="submit" class="primary">${existing?'Update Teacher + Login':'Save Teacher + Login'}</button><div id="v6422TStatus" class="saveStatus">Ready</div>`;
+   modal.classList.remove('hidden');return form;
+ }
+ async function existingClasses(staff){try{let q=sb.from('teacher_profiles').select('id,employee_id,phone,mobile').limit(1000),r=await q;if(r.error)return[];let tp=(r.data||[]).find(x=>(staff.employee_id&&String(x.employee_id||'')===String(staff.employee_id))||nm(x.phone||x.mobile||'')===nm(staff.phone||''));if(!tp)return[];let cr=await sb.from('teacher_class_assignments').select('class_name,is_active').eq('teacher_profile_id',tp.id).eq('is_active',true);return(cr.data||[]).map(x=>x.class_name).filter(Boolean)}catch(_){return[]}}
+ async function apiSave(staffId,password,selected){let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. दोबारा login करें.');let r=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'create_or_update',staff_id:staffId,password,classes:selected})}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher Login save failed');return j}
+ window.v6422AddTeacherForm=function(){let form=modalForm('Add Teacher • Classes • Login Password',{},[],false);if(!form)return;form.onsubmit=async e=>{e.preventDefault();let st=document.getElementById('v6422TStatus'),name=String(document.getElementById('v6422TName')?.value||'').trim(),mobile=nm(document.getElementById('v6422TMobile')?.value),password=String(document.getElementById('v6422TPassword')?.value||''),selected=[...document.querySelectorAll('input[name="v6422TClass"]:checked')].map(x=>x.value);if(!name)return toast('Teacher Name required');if(mobile.length!==10)return toast('Valid 10 digit Mobile required');if(!selected.length)return toast('कम से कम 1 Class चुनें');if(password.length<8)return toast('First Password कम से कम 8 characters का रखें');try{st.textContent='Checking existing Teacher...';let dup=await sb.from('staff').select('id,staff_name,phone').eq('phone',mobile).limit(1);if(dup.error)throw dup.error;if(dup.data?.length)throw new Error('यह Mobile पहले से Staff Database में है. उस Teacher के Edit से Classes/Password update करें.');let row={employee_id:'T'+Date.now().toString().slice(-9),staff_name:name,staff_type:'Teaching',designation:String(document.getElementById('v6422TDesignation')?.value||'Teacher').trim()||'Teacher',phone:mobile,email:String(document.getElementById('v6422TEmail')?.value||'').trim()||null,joining_date:document.getElementById('v6422TJoin')?.value||null,salary:Number(document.getElementById('v6422TSalary')?.value||0),status:'Active'};let sr=await sb.from('staff').insert(row).select('id,employee_id,staff_name,phone').single();if(sr.error)throw sr.error;try{await apiSave(sr.data.id,password,selected)}catch(err){await sb.from('staff').update({status:'Inactive'}).eq('id',sr.data.id);throw err}st.innerHTML=`✓ Teacher Ready • Mobile <b>${mobile}</b> • Classes <b>${selected.join(', ')}</b>`;toast('Teacher + Classes + Login created');setTimeout(()=>{closeModal();render('staff')},700)}catch(err){st.textContent='Save failed: '+(err.message||err);toast(err.message||String(err))}}};
+ window.v6422EditTeacher=async function(row){let selected=await existingClasses(row),form=modalForm('Edit Teacher • Classes • Password',row,selected,true);if(!form)return;form.onsubmit=async e=>{e.preventDefault();let st=document.getElementById('v6422TStatus'),mobile=nm(document.getElementById('v6422TMobile')?.value),password=String(document.getElementById('v6422TPassword')?.value||''),selected=[...document.querySelectorAll('input[name="v6422TClass"]:checked')].map(x=>x.value);if(mobile.length!==10)return toast('Valid 10 digit Mobile required');if(!selected.length)return toast('कम से कम 1 Class चुनें');if(password&&password.length<8)return toast('New Password कम से कम 8 characters का रखें');try{st.textContent='Updating Teacher...';let dup=await sb.from('staff').select('id').eq('phone',mobile).neq('id',row.id).limit(1);if(dup.data?.length)throw new Error('यह Mobile किसी दूसरे Staff record में है.');let upd={staff_name:String(document.getElementById('v6422TName')?.value||'').trim(),phone:mobile,designation:String(document.getElementById('v6422TDesignation')?.value||'Teacher').trim()||'Teacher',email:String(document.getElementById('v6422TEmail')?.value||'').trim()||null,joining_date:document.getElementById('v6422TJoin')?.value||null,salary:Number(document.getElementById('v6422TSalary')?.value||0),staff_type:'Teaching'};let ur=await sb.from('staff').update(upd).eq('id',row.id);if(ur.error)throw ur.error;let j=await apiSave(row.id,password,selected);st.innerHTML=`✓ Existing Teacher updated • Mobile <b>${mobile}</b> • Classes <b>${selected.join(', ')}</b>${password?' • Password reset':''}`;toast(j.created?'Teacher Login created':'Teacher/Login updated');setTimeout(()=>{closeModal();render('staff')},700)}catch(err){st.textContent='Update failed: '+(err.message||err);toast(err.message||String(err))}}};
+ window.openAdd=function(k){if(k==='staff')return window.v6422AddTeacherForm();return baseOpenAdd.apply(this,arguments)};
+ window.openEdit=function(k,r){if(k==='staff'&&String(r?.staff_type||'').toLowerCase().includes('teach'))return window.v6422EditTeacher(r);return baseOpenEdit.apply(this,arguments)};
  window.teacherLoginDialog=function(){v14Modal(`<h2>👩‍🏫 Teacher Login</h2><p class="v14Muted">Admin द्वारा बनाए गए Teacher account से login करें.</p><div id="teacherAuthBox"><div class="v14Form"><div><label>Registered Mobile</label><input id="tLoginId" inputmode="numeric" maxlength="10" placeholder="10 digit mobile"></div><div><label>Password</label><input id="tLoginPassword" type="password"></div><div class="full"><button class="v14Action primary" onclick="teacherPasswordLogin()">Teacher Login</button></div><div id="v6422TeacherLoginStatus" class="v32Info"></div></div></div>`)};
  window.teacherExistingLoginForm=window.teacherLoginDialog;window.teacherPasswordRegistrationForm=function(){toast('Teacher Self Registration बंद है. Admin Teacher account बनाएगा.')};window.teacherPasswordRegister=window.teacherPasswordRegistrationForm;window.submitTeacherRegistration=window.teacherPasswordRegistrationForm;
  window.teacherPasswordLogin=async function(){const mobile=nm(document.getElementById('tLoginId')?.value),password=String(document.getElementById('tLoginPassword')?.value||''),status=document.getElementById('v6422TeacherLoginStatus'),say=m=>{if(status)status.textContent=m;else toast(m)};if(mobile.length!==10)return say('Valid 10 digit Registered Mobile डालें.');if(!password)return say('Password डालें.');say('Teacher login check हो रहा है...');let ar=await sb.auth.signInWithPassword({email:tem(mobile),password});if(ar.error)return say('Mobile या Password सही नहीं है.');user=ar.data.user;try{await loadProfile();await v14LoadTeacherContext()}catch(e){await sb.auth.signOut();user=null;profile=null;return say('Teacher account/class mapping load नहीं हुआ. Admin से mapping check कराएँ.')}if(String(profile?.role||'').toLowerCase()!=='teacher'||!v14TeacherProfile||String(v14TeacherProfile.approval_status||'').toLowerCase()!=='approved'||v14TeacherProfile.is_active===false){await sb.auth.signOut();user=null;profile=null;return say('Teacher account active/mapped नहीं है. School Admin से संपर्क करें.')}document.getElementById('v14Modal')?.remove();openERP()};
- /* Teacher own password: current password required. */
  window.v93TeacherPasswordPage=async function(){if(String(profile?.role||'').toLowerCase()!=='teacher')return toast('Teacher only');if(typeof v90Head==='function')v90Head('🔑 My Password','Current Password verify करके नया Password बनाएँ');if(typeof v90InstallShell==='function')v90InstallShell('v93_teacher_password');let html=`<div class="v90Page"><div class="v90Panel"><h3>Change My Password</h3><div class="v6422PwGrid"><input id="v6422CurrentPw" type="password" placeholder="Current Password"><input id="v6422NewPw1" type="password" placeholder="New Password (minimum 8 characters)"><input id="v6422NewPw2" type="password" placeholder="Confirm New Password"><button class="primary" onclick="v6422ChangeTeacherPassword()">Update Password</button></div></div></div>`;if(typeof v90Set==='function')v90Set(html);else document.getElementById('erpContent').innerHTML=html};
  window.v6422ChangeTeacherPassword=async function(){const cur=String(document.getElementById('v6422CurrentPw')?.value||''),a=String(document.getElementById('v6422NewPw1')?.value||''),b=String(document.getElementById('v6422NewPw2')?.value||'');if(!cur)return toast('Current Password डालें');if(a.length<8)return toast('New Password कम से कम 8 characters का रखें');if(a!==b)return toast('New Password और Confirm Password समान नहीं हैं');const mobile=nm(v14TeacherProfile?.mobile||v14TeacherProfile?.phone||'');if(mobile.length!==10)return toast('Teacher registered mobile mapping नहीं मिला.');let chk=await sb.auth.signInWithPassword({email:tem(mobile),password:cur});if(chk.error)return toast('Current Password सही नहीं है.');let up=await sb.auth.updateUser({password:a});if(up.error)return toast(up.error.message||'Password update नहीं हुआ');toast('Password successfully changed')};
  const renderBase=window.render;window.render=async function(p){if(p==='v93_teacher_password')return window.v93TeacherPasswordPage();return renderBase.apply(this,arguments)};
 })();
 </script>
-<!-- ===== END V64.22 SAFE TEACHER FINAL ===== -->
+<!-- ===== END V64.22 TEACHER MASTER + LOGIN REPAIR ===== -->
+
+<script id="v6422-teacher-clean-authoritative">
+/* V64.22 CLEAN TEACHER FLOW — one authoritative path only.
+   Admin Staff → Add/Edit → Mobile → 1/Multiple Classes → Password → Teacher Login → Change Password.
+   No teacher self-registration and no teacher subject-assignment handler. */
+(function(){
+  const $id=(x)=>document.getElementById(x);
+  const norm=(v)=>String(v||'').replace(/\D/g,'').slice(-10);
+  function admin(){return String(window.profile?.role||'').toLowerCase()==='admin'}
+  function teacher(){return String(window.profile?.role||'').toLowerCase()==='teacher'}
+
+  window.teacherLoginDialog=function(){
+    if(!window.cfg)return window.openPortal?.();
+    window.v14Modal(`<h2>Teacher Login</h2><p class="v14Muted">Admin द्वारा registered Mobile और Password से login करें.</p><div id="teacherAuthBox"></div>`);
+    window.teacherExistingLoginForm();
+  };
+  window.teacherExistingLoginForm=function(){
+    const b=$id('teacherAuthBox'); if(!b)return;
+    b.innerHTML=`<div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" inputmode="numeric" maxlength="10" placeholder="10 digit mobile"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" placeholder="Password"></div><div class="full"><button class="v14Action primary" onclick="teacherPasswordLogin()">Login</button></div></div>`;
+  };
+  window.teacherPasswordRegistrationForm=function(){return window.toast?.('Teacher account केवल Admin बनाता है.');};
+  window.teacherPasswordRegister=window.teacherPasswordRegistrationForm;
+  window.submitTeacherRegistration=window.teacherPasswordRegistrationForm;
+  window.teacherProfileRegistrationForm=window.teacherPasswordRegistrationForm;
+
+  window.teacherPasswordLogin=async function(){
+    const mobile=norm($id('tLoginId')?.value), password=String($id('tLoginPassword')?.value||'');
+    if(mobile.length!==10||!password)return window.toast?.('Registered 10 digit Mobile और Password डालें');
+    try{
+      const authEmail='t'+mobile+'@teacher.ldmodern.local';
+      const {data,error}=await window.sb.auth.signInWithPassword({email:authEmail,password}); if(error)throw error;
+      window.user=data.user; await window.loadProfile(); await window.v14LoadTeacherContext?.();
+      if(String(window.profile?.role||'').toLowerCase()!=='teacher')throw new Error('Teacher account mapping active नहीं है. Admin से login setup जाँचें.');
+      $id('v14Modal')?.remove(); window.openERP();
+    }catch(e){try{await window.sb.auth.signOut()}catch(_e){} window.toast?.(e.message||String(e));}
+  };
+
+  // Old approval center is no longer a second teacher-account workflow.
+  window.teacherApprovalCenter=function(){return window.v93TeacherAccessCenter?.()};
+  window.editTeacherApproval=function(){return window.toast?.('Teacher को Teachers/Staff → Edit से update करें.');};
+  window.saveTeacherReviewV14=window.editTeacherApproval;
+  window.approveTeacherV14=window.editTeacherApproval;
+
+  // Password change requires current password verification.
+  window.v93TeacherPasswordPage=async function(){
+    if(!teacher())return window.toast?.('Teacher only');
+    window.v90Head?.('🔑 Password','Current Password verify करके नया Password बनाएं'); window.v90InstallShell?.('v93_teacher_password');
+    const html=`<div class="v90Page"><div class="v90Panel"><h3>Change My Password</h3><div class="v93PasswordForm"><input id="v6422OldPw" type="password" placeholder="Current Password"><input id="v93OwnPass1" type="password" placeholder="New Password (minimum 8)"><input id="v93OwnPass2" type="password" placeholder="Confirm New Password"><button class="primary" onclick="v93SaveOwnPassword()">Update Password</button></div></div></div>`;
+    if(window.v90Set)window.v90Set(html);else $id('erpContent').innerHTML=html;
+  };
+  window.v93SaveOwnPassword=async function(){
+    const old=String($id('v6422OldPw')?.value||''), a=String($id('v93OwnPass1')?.value||''), b=String($id('v93OwnPass2')?.value||'');
+    if(!old)return window.toast?.('Current Password डालें'); if(a.length<8)return window.toast?.('New Password कम से कम 8 characters का रखें'); if(a!==b)return window.toast?.('दोनों New Password समान नहीं हैं');
+    const {data:{user:u}}=await window.sb.auth.getUser(); if(!u?.email)return window.toast?.('Teacher login session नहीं मिला');
+    const chk=await window.sb.auth.signInWithPassword({email:u.email,password:old}); if(chk.error)return window.toast?.('Current Password गलत है');
+    const up=await window.sb.auth.updateUser({password:a}); if(up.error)return window.toast?.(up.error.message); window.toast?.('Password successfully changed'); window.v93TeacherPasswordPage();
+  };
+
+  // Force duplicate teacher approval routes to the one login manager.
+  const oldRender=window.render;
+  window.render=async function(page){if(page==='teacher_approval'||page==='teacher_access')return window.v93TeacherAccessCenter?.();return oldRender.apply(this,arguments)};
+})();
+</script>
 </body></html>
