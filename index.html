@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="en" class="v6423-auth-pending"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -803,6 +803,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 <link rel="stylesheet" href="v54-final-integration.css?v=V54-FINAL-1&build=V643">
 <link rel="stylesheet" href="v57-school-operations.css?v=V57-1&build=V643">
 <link rel="stylesheet" href="v63-final-repair.css?build=V643">
+
+<style id="v6423-auth-gate">html.v6423-auth-pending #publicSite,html.v6423-auth-pending #login,html.v6423-auth-pending #erp,html.v6423-auth-pending #parentDashboard{visibility:hidden!important}html.v6423-auth-pending body:before{content:"Loading secure session…";position:fixed;inset:0;display:grid;place-items:center;background:#f7fbff;color:#174f87;font:800 14px system-ui;z-index:2147483646}</style>
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -940,7 +942,27 @@ function publicModule(k){
 }
 
 function init(){sb=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}function saveCloud(){let url=$("cloudUrl").value.trim().replace(/\/+$/,""),key=$("cloudKey").value.trim();if(!url||!key)return toast("URL and key required");localStorage.setItem(K,JSON.stringify({url,key}));location.reload()}function resetCloud(){localStorage.removeItem(K);location.reload()}
-async function boot(){if(cfg){init();await loadSchool();await publicData()}else{fillClasses();return}fillClasses();let{data:{session}}=cfg?await sb.auth.getSession():{data:{session:null}};if(session){user=session.user;await loadProfile()}}
+async function boot(){
+  /* V64.23: resolve auth BEFORE public data/render. Prevents hard-refresh ERP -> Public Home flash. */
+  if(!cfg){fillClasses();document.documentElement.classList.remove('v6423-auth-pending');return}
+  init();
+  let session=null;
+  try{session=(await sb.auth.getSession())?.data?.session||null}catch(_e){}
+  try{await loadSchool()}catch(_e){}
+  fillClasses();
+  if(session?.user){
+    user=session.user;
+    try{await loadProfile()}catch(_e){}
+    const r=String(profile?.role||'').toLowerCase();
+    if(['parent','student'].includes(r)){
+      try{parentVerifiedEmail=String(user.email||'').toLowerCase();$('publicSite')?.classList.add('hidden');$('login')?.classList.add('hidden');$('erp')?.classList.add('hidden');$('parentGate')?.classList.add('hidden');$('parentDashboard')?.classList.remove('hidden');await loadParentPortal()}catch(_e){}
+    }else if(r){try{await openERP()}catch(_e){}}
+    window.__v6423AuthResolved=true;window.__v100ResumeDone=true;
+    document.documentElement.classList.remove('v6423-auth-pending');return;
+  }
+  try{await publicData()}catch(_e){}
+  window.__v6423AuthResolved=true;document.documentElement.classList.remove('v6423-auth-pending');
+}
 function fillClasses(){document.querySelectorAll('select[name="class_name"]').forEach(s=>{if(!s.options.length||s.options.length===1)s.innerHTML='<option value="">Select Class</option>'+cls.map(x=>`<option>${x}</option>`).join("")})}
 async function loadSchool(){let{data}=await sb.from("school_settings").select("*").eq("id",1).maybeSingle();school=data||{};applySchool()}
 function renderRunningNotices(){let host=$('runningNotices');if(!host)return;let defaults=['📢 L D MODERN EDUCATION ACADEMY','🎓 Admission & Academic Updates','✅ Important School Notice'];let rows=[[school.notice1_text||defaults[0],school.notice1_enabled!==false,'r1'],[school.notice2_text||defaults[1],school.notice2_enabled!==false,'r2'],[school.notice3_text||defaults[2],school.notice3_enabled!==false,'r3']].filter(x=>x[1]);host.innerHTML=rows.map(x=>`<div class="runStrip ${x[2]}"><span>${esc(x[0])}</span></div>`).join('');host.style.display=rows.length?'block':'none'}
@@ -10264,4 +10286,18 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
 </script>
 <!-- ===== END V64.22 ===== -->
 
+
+<!-- ===== V64.23 HARD-REFRESH SESSION / ROLE COLLISION FIX ===== -->
+<script id="v6423-session-collision-fix">
+window.V6423_BUILD='V64.23-HARD-REFRESH-SESSION-COLLISION-FIX-2026-09-20';
+(function(){'use strict';
+ const erpRoles=new Set(['admin','super_admin','principal','admission','accountant','teacher']);
+ const role=()=>String(window.profile?.role||'').toLowerCase();
+ function lockCorrectShell(){const r=role();if(!window.user||!r)return;if(erpRoles.has(r)){document.getElementById('publicSite')?.classList.add('hidden');document.getElementById('login')?.classList.add('hidden');document.getElementById('parentDashboard')?.classList.add('hidden');document.getElementById('erp')?.classList.remove('hidden');document.body.classList.add('v1142-erp-active');document.body.classList.remove('v1142-public-page','v1142-parent-active','v6422-parent')}else if(r==='parent'||r==='student'){document.getElementById('erp')?.classList.add('hidden');document.getElementById('login')?.classList.add('hidden');document.getElementById('parentDashboard')?.classList.remove('hidden');document.body.classList.remove('v1142-erp-active','v1142-public-page')}}
+ try{const base=window.showPublicPage;if(typeof base==='function')window.showPublicPage=function(){const r=role();if(window.user&&erpRoles.has(r)&&document.getElementById('erp')&&!document.getElementById('erp').classList.contains('hidden')){lockCorrectShell();return false}return base.apply(this,arguments)}}catch(_e){}
+ try{window.sb?.auth?.onAuthStateChange?.((event,session)=>{if(event==='SIGNED_OUT'){window.__v6423AuthResolved=false;return}if(session?.user)setTimeout(lockCorrectShell,0)})}catch(_e){}
+ window.addEventListener('pageshow',()=>setTimeout(lockCorrectShell,0),{passive:true});document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(lockCorrectShell,0)},{passive:true});[0,80,250,700,1500].forEach(ms=>setTimeout(lockCorrectShell,ms));
+})();
+</script>
+<!-- ===== END V64.23 ===== -->
 </body></html>
