@@ -10366,10 +10366,20 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
   const mobile=v=>String(v||'').replace(/\D/g,'').slice(-10);
   const teacherEmail=m=>'t'+m+'@teacher.ldmodern.local';
   function teacherModal(){
-    const html=`<h2>👩‍🏫 Teacher Login</h2><p class="v14Muted">Admin द्वारा दिए Registered Mobile और Password से login करें.</p><div id="teacherAuthBox"><div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" inputmode="numeric" maxlength="10" autocomplete="username" placeholder="10 digit mobile"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" autocomplete="current-password" placeholder="Password"></div><div class="full"><button type="button" class="v14Action primary" id="v6422TeacherLoginBtn">Teacher Login</button></div><div id="v6422TeacherLoginStatus" class="v32Info"></div></div></div>`;
+    const html=`<h2>👩‍🏫 Teacher Login</h2><p class="v14Muted">Admin द्वारा दिए Registered Mobile और Password से login करें.</p><div id="teacherAuthBox"><div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" name="ld_teacher_mobile_only" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="off" autocapitalize="off" spellcheck="false" readonly placeholder="10 digit mobile"></div><div class="full"><label>Password</label><input id="tLoginPassword" name="ld_teacher_password" type="password" autocomplete="new-password" placeholder="Password"></div><div class="full"><button type="button" class="v14Action primary" id="v6422TeacherLoginBtn">Teacher Login</button></div><div id="v6422TeacherLoginStatus" class="v32Info"></div></div></div>`;
     if(typeof window.v14Modal==='function') window.v14Modal(html);
     else return window.toast?.('Teacher Login dialog unavailable');
-    setTimeout(()=>{const b=el('v6422TeacherLoginBtn');if(b)b.onclick=window.teacherPasswordLogin;},0);
+    setTimeout(()=>{
+      const b=el('v6422TeacherLoginBtn'), m=el('tLoginId'), p=el('tLoginPassword');
+      if(b)b.onclick=window.teacherPasswordLogin;
+      if(m){
+        m.value='';
+        m.removeAttribute('readonly');
+        m.oninput=()=>{m.value=String(m.value||'').replace(/\D/g,'').slice(0,10)};
+        m.onpaste=()=>setTimeout(()=>{m.value=String(m.value||'').replace(/\D/g,'').slice(0,10)},0);
+      }
+      if(p)p.value='';
+    },60);
   }
   window.teacherLoginDialog=teacherModal;
   window.teacherExistingLoginForm=teacherModal;
