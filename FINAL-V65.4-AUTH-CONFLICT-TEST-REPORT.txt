@@ -1,0 +1,22 @@
+LDMEA V65.4 FINAL AUTH/CONFLICT CHECK
+Build date: 2026-09-21 IST
+
+ROOT FIX:
+- Admin Forgot Password now has one dedicated final client guard JS.
+- Immediate repeated clicks are locked.
+- 30-minute browser cooldown persists across refresh/tabs via localStorage.
+- Server endpoint already calls v95_take_admin_recovery_slot(30).
+- Added missing idempotent/non-destructive SQL that creates the atomic server cooldown state/function.
+- Teacher authority remains loaded before the isolated recovery guard; no Teacher JS was mixed into the recovery file.
+
+TESTS:
+PASS 74/74 inline JavaScript syntax
+PASS 6/6 existing behavior/regression tests
+PASS all standalone .js node syntax checks
+PASS api/admin-forgot.js syntax
+PASS new recovery guard syntax
+PASS new SQL destructive-keyword scan
+PASS ZIP integrity (performed at packaging)
+
+NOT CLAIMED AS LIVE TEST:
+Live Supabase Auth/RLS and deployed Vercel email delivery require production environment/credentials.

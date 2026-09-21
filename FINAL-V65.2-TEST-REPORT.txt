@@ -1,0 +1,20 @@
+L D MODERN EDUCATION ACADEMY — V65.2 FINAL VERIFIED PACKAGE
+Build/Test Date-Time: 21-09-2026 08:53:52 PM IST
+
+OFFLINE FINAL TESTS
+PASS — index.html inline JavaScript syntax: 74/74
+PASS — verify.cjs behavior regression: 6/6
+PASS — standalone JavaScript syntax: 36/36
+PASS — final patch linking check: Public CSS/JS, Dashboard CSS/JS, Website Control
+PASS — V65.1 teacher SQL destructive-operation scan: no DELETE FROM / TRUNCATE / DROP TABLE detected
+PASS — A4 generic print engine broken multiline JavaScript string found during this final audit and corrected at source
+
+IMPORTANT LIVE TEST BOUNDARY
+NOT EXECUTED — live Supabase Auth/RLS/database writes
+NOT EXECUTED — deployed Vercel browser/mobile physical session testing
+These require the production environment/credentials after deployment and are not falsely marked PASS.
+
+INSTALL ORDER
+1. Run LDMEA-V65.1-FINAL-DEEP-SAFE-TEACHER-MIGRATION-2026-09-21.sql in Supabase SQL Editor.
+2. Deploy this package.
+3. Smoke test Admin, existing Teacher, new Teacher, Parent, refresh/back/open and Public page.
