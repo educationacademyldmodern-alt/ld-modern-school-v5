@@ -1,0 +1,41 @@
+L D MODERN EDUCATION ACADEMY — V65.0 FINAL SAFE TEACHER ROOT CORRECTION
+Date: 2026-09-21
+
+BASE SOURCE OF TRUTH:
+ld-modern-school-v5-340dddc10390cdd3b6907bce7f3a53f5fa0713e3.zip
+
+ACTUAL CORRECTIONS:
+1. Admin-created Teacher flow made authoritative: one Add New Teacher form.
+2. Teacher staff record + auth login + teacher profile + class/subject assignment are created/updated from one Submit.
+3. Teacher self-registration remains disabled; approval routes are redirected to authoritative Add New Teacher flow.
+4. New accounts are Active + Approved directly; no second approval step.
+5. Mobile login resolves central teacher profile/internal auth email and validates active mapping.
+6. Existing teacher/history records are not deleted/reset/truncated.
+7. Class/subject replacement is performed through server-side transaction RPC with advisory lock.
+8. Employee/auth uniqueness indexes are created only when existing data has no duplicates; otherwise SQL safely skips unique index and preserves data.
+9. Final body-wide MutationObserver Back guard was removed to reduce repeated DOM work; existing navigation stack remains.
+10. Responsive CSS added only for the new Teacher form.
+11. /n/n audit: no source literal that generates /n/n was found in index/app modules; existing v64 layout file contains only a cleanup detector. No new hide patch was added.
+
+STATIC VERIFICATION:
+- node --check api/teacher-access.js: PASS
+- node --check teacher-access.js: PASS
+- node --check ldmea-v65-final-teacher-safe.js: PASS
+- existing verify.cjs: PASS (74 inline script syntax checks + 6 behavior checks)
+- destructive SQL scan: PASS (no DELETE/TRUNCATE/DROP operation in V65 migration)
+
+NOT LIVE-TESTED HERE:
+- Supabase production DB/RLS/Auth network calls
+- Real Vercel deployment
+- Physical mobile/desktop browser rendering
+These require running the SQL in the actual Supabase project and deploying the ZIP.
+
+INSTALL ORDER:
+1. Supabase SQL Editor: run LDMEA-V65.0-FINAL-SAFE-TEACHER-MIGRATION-2026-09-21.sql once. It is designed to be rerunnable.
+2. Upload/deploy the ZIP contents.
+3. Test Admin -> Add New Teacher -> Submit.
+4. Log out and test Teacher with registered mobile + password.
+5. Refresh Teacher dashboard and verify Assigned Classes.
+
+IMPORTANT:
+Do not run old destructive/reset SQL. Do not delete production teacher records.

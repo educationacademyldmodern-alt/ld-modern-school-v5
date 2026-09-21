@@ -8,7 +8,7 @@
  }
  function clearAccidentalSelection(){try{const s=window.getSelection?.();if(s&&!document.activeElement?.matches?.('input,textarea,[contenteditable=true]'))s.removeAllRanges()}catch(_e){};try{document.activeElement?.blur?.()}catch(_e){};try{window.scrollTo({top:0,left:0,behavior:'auto'})}catch(_e){window.scrollTo(0,0)}}
  let cleanQueued=false;function queueClean(){if(cleanQueued)return;cleanQueued=true;requestAnimationFrame(()=>{cleanQueued=false;cleanStray();})}
- const mo=new MutationObserver(queueClean);document.addEventListener('DOMContentLoaded',()=>{cleanStray();try{mo.observe(document.body,{childList:true,subtree:true,characterData:true})}catch(_e){}});
+ document.addEventListener('DOMContentLoaded',()=>cleanStray(),{once:true});
  // Preserve authenticated ERP on browser/mobile Back. Logout remains explicit via the existing Logout action.
  function armHistory(){try{if(erpOpen()&&history.state?.ldERP!==1)history.pushState({...(history.state||{}),ldERP:1},'',location.href)}catch(_e){}}
  window.addEventListener('popstate',()=>{if(erpOpen()){try{history.pushState({ldERP:1},'',location.href)}catch(_e){};try{if(typeof render==='function')render('dashboard')}catch(_e){};setTimeout(clearAccidentalSelection,20)}});

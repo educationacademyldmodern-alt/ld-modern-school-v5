@@ -1,0 +1,27 @@
+LDMEA V65.1 DEEP AUDIT — 2026-09-21
+
+BASE: ld-modern-school-v5-340dddc10390cdd3b6907bce7f3a53f5fa0713e3.zip / V65.0 correction lineage
+
+ROOT FINDINGS CORRECTED:
+1. V65.0 authoritative Teacher override final dashboard/public scripts से पहले load हो रहा था; बाद के scripts पुराने handlers वापस override कर सकते थे. V65.1 teacher root script अब absolute last load होता है.
+2. Legacy teacherPasswordLogin में Approval check मौजूद था; final last-loaded handler approval dependency के बिना active/mapped Teacher login करता है.
+3. Pre-login mobile lookup client-side teacher_profiles RLS पर निर्भर था. अब /api/teacher-access resolve_login server lookup use करता है; login anonymous table-select policy पर निर्भर नहीं है.
+4. Add Teacher API में downstream failure के बाद newly-created Auth/Staff orphan risk था. Newly-created Auth/Staff rollback cleanup जोड़ा गया है.
+5. Staff email duplicate guard जोड़ा गया है.
+6. Automatic Employee ID trigger V65.1 SQL में idempotently included है; existing nonblank IDs preserve होते हैं.
+7. Existing duplicate employee IDs होने पर migration data delete नहीं करती; unique index skip + NOTICE करती है.
+8. Public /n/n के लिए DOM text scrubber patch हटाया गया. Source audit में /n/n generator literal नहीं मिला; technical text को DOM scan से hide नहीं किया जाता.
+9. एक वास्तविक inline JavaScript syntax defect मिला: A4 print engine की single-quoted HTML string literal line-break से टूटी हुई थी. इसे root source पर correct किया गया.
+10. Visible Teacher Approval dashboard/menu labels authoritative Add New Teacher wording में बदले; legacy route compatibility retained but dispatch final Add New Teacher पर जाता है.
+
+STATIC VERIFICATION:
+- ldmea-v65-final-teacher-safe.js: node --check PASS
+- api/teacher-access.js: node --check PASS
+- v64-final-layout-interaction.js: node --check PASS
+- verify.cjs: 74 inline script syntax PASS
+- verify.cjs behavior checks: 6 PASS
+- targeted V65.1 assertions: PASS
+- destructive SQL scan: no TRUNCATE / DROP TABLE
+
+IMPORTANT LIMITATION:
+Live Supabase Auth/RLS/database और deployed Vercel browser/mobile session इस offline package audit में execute नहीं किए गए. इसलिए live production behavior को falsely "tested" नहीं कहा गया है. SQL run + deployment के बाद real Admin/New Teacher/Existing Teacher/Parent login smoke test जरूरी है.

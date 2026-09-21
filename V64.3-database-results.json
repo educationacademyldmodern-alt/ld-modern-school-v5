@@ -1,0 +1,15 @@
+[
+  "Migration runs twice without deleting records",
+  "Same-name sibling attendance separated",
+  "Other family denied server-side",
+  "Class and section timetable/homework isolated",
+  "Only general and own notices returned",
+  "Fee amounts retained",
+  "Leave submit and duplicate retry return one record",
+  "Invalid leave dates and blank reason denied",
+  "Correction pending approval; protected field rejected",
+  "Help form linked to selected child",
+  "Self role escalation rejected",
+  "Teacher profile RLS read completes without recursion",
+  "Student records unchanged"
+]

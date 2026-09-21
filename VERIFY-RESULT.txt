@@ -1,0 +1,9 @@
+PASS Open student uses exact ID and replaces blocking popup
+PASS Back restores same popup and cached results
+PASS Open staff uses exact ID
+PASS Role guard prevents detail access
+PASS Missing record ID reports specific error
+PASS Page search discards late response
+{"inline_script_syntax_pass":73,"behavior_pass":6,"live_database_tested":false,"browser_tested":false}
+
+FINAL CLEANUP: generic Permission denied/Login required/Data not found/checking login strings = 0
