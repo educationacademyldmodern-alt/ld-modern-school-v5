@@ -1,0 +1,23 @@
+/* LDMEA V66.2 clean correction — authoritative final layout layer */
+html,body{max-width:100%;overflow-x:hidden}
+#erp.v90Shell{width:100%;max-width:100vw;overflow-x:hidden}
+#erp.v90Shell>aside{width:280px;max-width:280px}
+#erp.v90Shell>main{width:auto!important;max-width:none!important;min-width:0!important;overflow-x:hidden!important}
+#erp.v90Shell #erpContent{min-width:0;max-width:100%;overflow-x:hidden}
+#erp.v90Shell .erpTop{width:100%;max-width:100%;min-height:70px!important;height:auto!important;display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important;padding:8px 12px!important;overflow:visible!important;background:linear-gradient(180deg,#fff,#eef7ff)!important;border-bottom:1px solid #cfe1f4!important;box-shadow:0 4px 16px #12385b14!important}
+#erp.v90Shell .erpTop>*{min-width:0;max-width:100%}
+#erp.v90Shell .erpTop button,#erp.v90Shell .erpTop input,#erp.v90Shell .erpTop select{max-width:100%;min-height:36px}
+#erp.v90Shell .erpTop h2{font-size:clamp(16px,2vw,23px)!important;white-space:normal!important;line-height:1.1}
+#erp.v90Shell .erpTop p{white-space:normal!important;margin:2px 0!important}
+#erp.v90Shell .v90Stats,#erp.v90Shell .erpCards{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important;min-width:0}
+#erp.v90Shell .v90Stat,#erp.v90Shell .panel,#erp.v90Shell .v90Panel{min-width:0;max-width:100%}
+#erp.v90Shell .tableWrap{max-width:100%;overflow-x:auto}
+.v93Page,.v93Hero,.v93Rule{max-width:100%;min-width:0}.v93Hero{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}.v93Hero>div:last-child{display:flex;gap:7px;flex-wrap:wrap}.v93Checks{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:7px}.v93Checks label{min-width:0}
+/* Parent owns one clean canvas; selector first, child dashboard second. */
+body.v6436-parent-role{overflow-x:hidden!important}
+body.v6436-parent-role #parentPortal,body.v6436-parent-role #parentDashboard,body.v6436-parent-role #parentDashboardBody{width:100%!important;max-width:100vw!important;min-width:0!important;overflow-x:hidden!important}
+body.v6436-parent-role .portalHead{position:relative!important;top:auto!important;width:100%!important;max-width:100%!important;display:flex!important;gap:8px!important;align-items:center!important;flex-wrap:wrap!important;padding:10px 14px!important}
+.v662ChildChooser{max-width:1180px;margin:18px auto;padding:0 14px}.v662ChildChooserHead{display:flex;gap:12px;align-items:center;margin-bottom:14px}.v662ChildChooserHead img{width:54px;height:54px;object-fit:contain;border-radius:14px}.v662ChildChooserHead h2{margin:0;font-size:clamp(18px,3vw,28px)}.v662ChildChooserHead p{margin:3px 0;color:#65758a}.v662ChildGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.v662ChildCard{border:1px solid #d8e5f2;background:#fff;border-radius:18px;padding:18px;text-align:left;cursor:pointer;box-shadow:0 8px 24px #183b5c12;min-width:0}.v662ChildCard:hover{transform:translateY(-1px);box-shadow:0 12px 28px #183b5c1d}.v662ChildCard b{display:block;font-size:17px;color:#123b68}.v662ChildCard span{display:block;color:#617187;margin-top:5px;font-size:12px}.v662ChildBack{margin:10px 14px 0;border:1px solid #cbd9e8;background:#fff;border-radius:10px;padding:9px 13px;font-weight:800;cursor:pointer}
+@media(min-width:901px){#erp.v90Shell>main{margin-left:280px!important;width:calc(100vw - 280px)!important}}
+@media(max-width:900px){#erp.v90Shell>aside{width:min(86vw,290px)!important;max-width:min(86vw,290px)!important}#erp.v90Shell>main{margin-left:0!important;width:100%!important}.v93Hero>div:last-child{width:100%}}
+@media(max-width:600px){#erp.v90Shell .erpTop{padding:7px 8px!important}.v662ChildGrid{grid-template-columns:1fr}.v662ChildChooser{margin-top:10px}.v93Checks{grid-template-columns:1fr 1fr}}

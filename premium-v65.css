@@ -1,0 +1,38 @@
+/* Scoped layout: print document dimensions remain controlled by their own templates. */
+@media screen {
+ #erp,#erp * ,#parentDashboard,#parentDashboard * {box-sizing:border-box}
+ #erp main,#erpContent,#parentDashboardBody{min-width:0!important}
+ #erp .erpTop{display:flex!important;flex-wrap:wrap;gap:10px;align-items:center;max-width:100%}
+ #erp .erpTop>div{min-width:0;flex:1 1 160px}
+ #erp .erpTop #v75TopSearch{flex:1 1 280px;max-width:100%}
+ #erpContent .erpCards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px}
+ #erpContent .panel,#erpContent .card{min-width:0;max-width:100%}
+ #erpContent .tableWrap,#parentDashboard .tableWrap{overflow-x:auto!important;max-width:100%;overscroll-behavior-x:contain}
+ #erp button,#parentDashboard button,.v14Modal button{min-height:40px;white-space:normal;overflow-wrap:anywhere}
+ #erp nav button{width:100%;text-align:left;border-radius:12px;margin:3px 0;padding:11px 12px}
+ #erp nav button:hover,#erp nav button:focus-visible{background:#e5f0ff;color:#123e71;outline:2px solid #7cb4fa;outline-offset:1px}
+ #erp aside{background:linear-gradient(160deg,#102d55,#194c7e);box-shadow:4px 0 18px #102d5520}
+ #erp aside button{color:#f5f9ff}
+ .v14ModalCard{max-width:min(900px,calc(100vw - 24px))!important;max-height:calc(100dvh - 24px);overflow:auto}
+ .v14Modal input,.v14Modal select,#parentGate input{max-width:100%;min-width:0;font-size:16px}
+ @media(min-width:901px){
+  #erp:not(.hidden){display:grid!important;grid-template-columns:260px minmax(0,1fr)!important}
+  #erp>aside{position:sticky!important;top:0!important;left:auto!important;width:260px!important;height:100dvh;overflow-y:auto;transform:none!important}
+  #erp>main{width:100%!important;margin-left:0!important;max-width:100%!important}
+ }
+ @media(max-width:900px){
+  #erp:not(.hidden){display:block!important}
+  #erp>main{width:100%!important;margin:0!important}
+  #erp>aside{position:fixed!important;left:0;top:0;bottom:0;width:min(280px,85vw)!important;z-index:1500;overflow-y:auto;transform:translateX(-105%)!important}
+  #erp>aside.open{transform:translateX(0)!important}
+  #erp .hamb{display:inline-flex!important}
+ }
+ @media(max-width:560px){
+  #erpContent{padding:12px!important}
+  #erp .erpTop{padding:10px!important}
+  #erp .erpTop h2{font-size:18px}
+  .v14Modal .v14Form{grid-template-columns:1fr!important}
+  #parentGate .searchBox{display:flex;flex-wrap:wrap;gap:10px}
+  #parentGate .searchBox>*{flex:1 1 180px}
+ }
+}

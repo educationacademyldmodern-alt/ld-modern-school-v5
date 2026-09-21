@@ -1,0 +1,29 @@
+/* Final, scoped screen layout. A4 templates keep their own print styles. */
+@media screen {
+ #erp.v90Shell:not(.hidden),#erp:not(.hidden){min-height:100dvh;max-width:100%;gap:0}
+ #erp.v90Shell>main,#erp>main{min-width:0!important;margin-left:0!important;width:100%!important;max-width:100%!important}
+ #erp.v90Shell .erpTop{flex-wrap:wrap!important;overflow:visible;gap:8px}
+ #erp.v90Shell .erpTop>div{min-width:0;flex:1 1 160px}
+ #erp.v90Shell .erpTop h2,#erp.v90Shell .erpTop p{white-space:normal;overflow-wrap:anywhere}
+ #erpContent .erpCards,#erpContent .v90Stats{grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr))!important}
+ #erpContent :is(.tools,.quick,.panelHead){flex-wrap:wrap;gap:8px;min-width:0}
+ #erp input[type=checkbox],#erp input[type=radio]{width:auto!important;flex:0 0 auto}
+ #parentDashboard [hidden]{display:none!important}
+ #v66PasswordGate{position:fixed;inset:0;z-index:2147483640;overflow:auto;padding:24px 12px;background:#edf4fc;display:grid;place-items:center}
+ #v66PasswordGate form{width:min(420px,100%);padding:24px;border-radius:20px;background:white;box-shadow:0 16px 48px #173f6b20;color:#173f6b}
+ #v66PasswordGate label{display:block;margin:14px 0}
+ #v66PasswordGate input{display:block;width:100%;box-sizing:border-box;padding:12px;margin-top:6px;font-size:16px;border:1px solid #bdd0e4;border-radius:10px}
+ #v66PasswordGate button{padding:12px;border-radius:10px;margin:4px;border:1px solid #bdd0e4;cursor:pointer}
+ @media(min-width:901px){
+  #erp.v90Shell:not(.hidden),#erp:not(.hidden){display:grid!important;grid-template-columns:250px minmax(0,1fr)!important}
+  #erp.v90Shell>aside,#erp>aside{position:sticky!important;top:0!important;left:auto!important;transform:none!important;width:250px!important;height:100dvh;overflow-y:auto}
+  #erp .hamb{display:none!important}
+ }
+ @media(max-width:900px){
+  #erp.v90Shell:not(.hidden),#erp:not(.hidden){display:block!important}
+  #erp.v90Shell>aside,#erp>aside{position:fixed!important;inset:0 auto 0 0!important;width:min(280px,85vw)!important;height:100dvh;z-index:1500;transform:translateX(-105%)!important}
+  #erp.v90Shell>aside.open,#erp>aside.open{transform:translateX(0)!important}
+  #erp .hamb{display:inline-flex!important}
+ }
+ @media(max-width:560px){#erpContent .v90MonitorGrid,#erpContent .futureGrid{grid-template-columns:1fr!important}.v6422ClassGrid input{width:auto!important}}
+}

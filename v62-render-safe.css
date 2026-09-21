@@ -1,0 +1,55 @@
+/* V62 Render-Safe Responsive UI — scoped to ERP/Parent only */
+html,body{max-width:100%;overflow-x:hidden}
+#erp{--v62-side:270px;--v62-side-mini:78px;min-height:100vh;background:#f5f8fc}
+#erp aside{width:var(--v62-side)!important;background:linear-gradient(180deg,#071f42 0%,#073d78 52%,#062a59 100%)!important;box-shadow:10px 0 30px rgba(4,29,67,.16);overflow-x:hidden}
+#erp main{margin-left:var(--v62-side)!important;width:calc(100% - var(--v62-side))!important;min-width:0!important;max-width:none!important}
+#erp .sideBrand{background:rgba(255,255,255,.09)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);min-height:64px}
+#erpNav{padding:7px!important;gap:6px!important;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+#erpNav button{min-height:42px!important;border-radius:12px!important;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.035))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 5px 12px rgba(0,0,0,.08);font-size:12px!important;white-space:normal!important;line-height:1.2}
+#erpNav button:hover,#erpNav button.active{background:linear-gradient(135deg,#12a8ff,#1672e8)!important;color:#fff!important;border-color:rgba(255,255,255,.28)!important;box-shadow:0 8px 20px rgba(13,122,232,.28),inset 0 1px 0 rgba(255,255,255,.28)!important;transform:none!important}
+#erp .logout{margin:8px!important;width:calc(100% - 16px)!important;border-radius:12px!important}
+#erp .erpTop{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.96)!important;backdrop-filter:blur(8px);padding:9px 14px!important;min-width:0;flex-wrap:wrap}
+#erp .erpTop>div{min-width:150px;flex:1}
+#erp .erpTop h2,#erp .erpTop p{overflow-wrap:anywhere}
+#erpContent{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:16px!important;overflow-x:hidden!important}
+#erpContent .dashHero{border-radius:20px!important;background:linear-gradient(135deg,#f9fcff,#eaf4ff)!important;border:1px solid #d4e7fa!important;box-shadow:0 12px 30px rgba(29,83,139,.10)!important;padding:20px!important}
+#erpContent .erpCards{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}
+#erpContent .stat{min-width:0!important;border-radius:18px!important;border:1px solid #dbe9f6!important;background:linear-gradient(145deg,#fff,#f1f7fd)!important;box-shadow:0 10px 24px rgba(32,82,133,.10),inset 0 1px 0 #fff!important;padding:16px!important;overflow:hidden}
+#erpContent .stat b{font-size:clamp(20px,2vw,30px)!important;overflow-wrap:anywhere}
+#erpContent .smartDashGrid,#erpContent .futureGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+#erpContent .panel,#erpContent .futureCard,#erpContent .v90Panel,#erpContent .v39Panel,#erpContent .v97DashTool{min-width:0!important;max-width:100%!important;box-sizing:border-box!important;border-radius:16px!important}
+#erpContent .quick,#erpContent .tools,#erpContent .masterBar,#erpContent .smartSearchBox{display:flex!important;gap:8px!important;flex-wrap:wrap!important;min-width:0}
+#erpContent input,#erpContent select,#erpContent textarea,#erpContent button{max-width:100%;box-sizing:border-box}
+#erpContent .tableWrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+#erpContent table{max-width:none}
+#parentPortal,#parentDashboard,#parentDashboardBody{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+#parentDashboard .portalHead{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#parentDashboardBody>*{max-width:100%;box-sizing:border-box}
+#parentDashboardBody .tableWrap{max-width:100%;overflow-x:auto}
+@media(min-width:901px){
+ #erp.v62Collapsed aside{width:var(--v62-side-mini)!important}
+ #erp.v62Collapsed main{margin-left:var(--v62-side-mini)!important;width:calc(100% - var(--v62-side-mini))!important}
+ #erp.v62Collapsed .sideBrand>div:not(.logoText),#erp.v62Collapsed #erpNav button{font-size:0!important}
+ #erp.v62Collapsed #erpNav button{justify-content:center!important;padding:9px 4px!important}
+ #erp.v62Collapsed #erpNav button::first-letter{font-size:20px}
+}
+@media(max-width:1200px) and (min-width:901px){#erp{--v62-side:240px}#erpContent .erpCards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:900px){
+ #erp{display:block!important;width:100%!important;max-width:100vw!important}
+ #erp aside{position:fixed!important;left:0;top:0;bottom:0;z-index:1000;width:min(86vw,300px)!important;transform:translateX(-105%);transition:transform .2s ease!important}
+ #erp aside.open{transform:translateX(0)!important}
+ #erp main{margin-left:0!important;width:100%!important;max-width:100vw!important}
+ #erp .erpTop{padding:8px 10px!important}
+ #erpContent{padding:10px!important}
+ #erpContent .erpCards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ #erpContent .smartDashGrid,#erpContent .futureGrid{grid-template-columns:1fr!important}
+ #erpContent .dashHero{padding:14px!important}
+}
+@media(max-width:520px){
+ #erpContent .erpCards{grid-template-columns:1fr!important}
+ #erp .erpTop{align-items:center!important}
+ #erp .erpTop .websiteBtn,#erp .erpHomeBtn{padding:7px 8px!important;font-size:11px!important}
+ #erpContent .quick>*,#erpContent .tools>*{flex:1 1 140px}
+ #parentPortal{padding-left:10px!important;padding-right:10px!important}
+}
+@media(max-width:360px){#erpContent{padding:8px!important}#erpContent .stat{padding:12px!important}#erp .erpTop{gap:5px!important}}
