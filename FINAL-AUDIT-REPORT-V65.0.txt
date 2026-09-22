@@ -1,0 +1,42 @@
+L D MODERN EDUCATION ACADEMY ERP — V65.0 FINAL AUDIT REPORT
+Date: 2026-09-22
+
+AUDIT SCOPE
+- 133 files recursively inspected/inventoried.
+- index.html is the active monolithic runtime (~1.5 MB) with multiple historical layers.
+- JS/API files were syntax-checked with node --check.
+- SQL, Auth/RLS references, navigation, teacher, fee, parent, print and public-page code paths were searched and traced statically.
+
+ROOT FINDINGS / SAFE CORRECTIONS IN THIS BUILD
+1. Removed repeated final53-complete.css stylesheet inclusions from active index; one canonical include remains.
+2. Admin forgot-password endpoint was only 30-minute server cooldown although requirement is 24 hours. Both deployed /api and mirror endpoint now request 1440 minutes and return the correct 24-hour message.
+3. Required V95 Primary Admin / recovery database objects were referenced by runtime/API but were not present as a self-contained final delta SQL. Added a non-destructive idempotent V65 SQL creating the lock, claim/check RPCs, recovery state and atomic 24-hour recovery slot.
+4. Existing global internal navigation stack (v90) is present: separate Back and Home functions; later cleanup binds header Back/Home to that stack.
+5. Existing 3-notices-per-A4 override is present in active index and single-record print guards exist.
+6. Existing teacher handover SQL preserves history and deactivates old assignments rather than deleting teacher history.
+7. Public stray-text cleanup exists in runtime layers; the codebase still contains historical cleanup layers, so claiming a complete architectural de-duplication would be inaccurate without a live regression environment.
+
+DUPLICATE AUDIT SUMMARY
+FEATURE | DUPLICATE FOUND | CANONICAL KEPT | OLD RETIRED | TEST STATUS
+CSS final53 include | YES | one active include | repeated tags removed | STATIC VERIFIED
+Navigation Back/Home | YES historical handlers | v90 internal stack + final header binding | older paths remain but final binding wins | CODE VERIFIED / LIVE TEST REQUIRED
+Teacher management | YES historical staff/approval/access layers | teacher_profiles + assignment/handover/access APIs are current data path | full old UI removal NOT performed because dependency risk is high | LIVE ENV REQUIRED
+Student add/update | YES historical layers | current central students path in active index | destructive retirement NOT attempted | LIVE ENV REQUIRED
+Fee/Due | YES multiple historical views | current ledger/reconciliation + v111 reminder path | historical views still callable in some menus | LIVE ENV REQUIRED
+Admin recovery | YES mirror/deployed endpoint | /api/admin-forgot + V95 DB lock | 30-min behavior replaced | STATIC VERIFIED / LIVE EMAIL TEST REQUIRED
+ID Card | YES historical renderers | latest active renderer in index | not destructively removed | PRINT/LIVE DATA TEST REQUIRED
+Print | YES many @page/@media layers | final runtime print override + document-specific rules | old CSS remains for specialized docs | BROWSER PRINT TEST REQUIRED
+Parent selection | YES historical layers | latest parent dashboard/actions layer | not destructively removed | LIVE AUTH TEST REQUIRED
+
+IMPORTANT TEST HONESTY
+No Supabase production credentials, live Auth session, browser deployment, printer driver, or production data were available inside this offline ZIP audit. Therefore Admin/Teacher/Parent login, RLS behavior, real fee reconciliation, email delivery, camera upload, PDF pagination, and production data migration are NOT marked Passed. They require Preview/Production environment testing.
+
+DATABASE SAFETY
+V65 SQL contains no DROP TABLE, TRUNCATE, mass DELETE, password storage, OTP storage, or reset-token storage. It is intended to be repeat-safe.
+
+RECOMMENDED APPLY ORDER
+1. Upload this V65.0 ZIP to a NEW Vercel Preview branch/deployment.
+2. Run only LDMEA-V65.0-FINAL-2026-09-22-SAFE-UPDATE.sql for this build (assuming your prior V64.3/V64.4 migrations are already applied).
+3. Login once as the intended Primary Admin so the existing v95 claim flow can lock that account.
+4. Test Admin forgot password once; a second request inside 24 hours must be blocked before Supabase recovery is called.
+5. Test Teacher login/class mapping, Parent child selection, Due totals, Back stack, ID cards and print preview before Production promotion.
