@@ -1906,8 +1906,8 @@ function teacherLoginDialog(){
  v14Modal(`<h2>Teacher Portal</h2><p class="v14Muted">Teacher अपने Email या Mobile और Password से सीधे login करें.</p><div class="v14Tabs"><button onclick="teacherExistingLoginForm()">Teacher Login</button><button onclick="teacherPasswordRegistrationForm()">First Registration</button></div><div id="teacherAuthBox"></div>`);
  teacherExistingLoginForm();
 }
-function teacherExistingLoginForm(){
- $('teacherAuthBox').innerHTML=`<div class="v14Form"><div class="full"><label>Email या Mobile</label><input id="tLoginId" placeholder="teacher@example.com / 10 digit mobile"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" placeholder="Password"></div><div class="full"><button class="v14Action primary" onclick="teacherPasswordLogin()">Login</button></div></div>`;
+  function teacherExistingLoginForm(){
+   $('teacherAuthBox').innerHTML=`<div class="v14Form"><div class="full"><label>Teacher ID / Mobile / Email</label><input id="tLoginId" placeholder="Teacher ID / 10 digit mobile / email"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" placeholder="Password"></div><div class="full"><button class="v14Action primary" onclick="teacherPasswordLogin()">Login</button></div></div>`;
 }
 async function legacyTeacherPasswordLogin(){
  let id=$('tLoginId')?.value||'',password=$('tLoginPassword')?.value||'';if(!id||!password)return toast('Email/Mobile और Password डालें');
@@ -2662,11 +2662,16 @@ openERP=function(){
 // ---------- stronger email/mobile password login ----------
 async function v32ResolveEmail(identifier,role){
   let raw=String(identifier||'').trim();
-  if(raw.includes('@')) return raw.toLowerCase();
+    if(raw.includes('@')){
+      if(role==='teacher'){
+        try{let {data}=await sb.from('teacher_profiles').select('email').or(`email.eq.${raw.toLowerCase()},contact_email.eq.${raw.toLowerCase()}`).limit(1);if(data?.[0]?.email)return String(data[0].email).toLowerCase()}catch(_e){}
+      }
+      return raw.toLowerCase();
+    }
   let digits=raw.replace(/\D/g,'').slice(-10); if(digits.length!==10) return null;
   try{
-    if(role==='teacher'){
-      let {data}=await sb.from('teacher_profiles').select('email').or(`phone.eq.${digits},phone.eq.+91${digits}`).limit(1);
+      if(role==='teacher'){
+        let {data}=await sb.from('teacher_profiles').select('email').or(`phone.eq.${digits},phone.eq.+91${digits}`).limit(1);
       if(data?.[0]?.email) return String(data[0].email).toLowerCase();
     }
     if(role==='parent'){
@@ -2685,8 +2690,14 @@ async function v32PasswordSignIn(identifier,password,role){
   let email=await v32ResolveEmail(raw,role);
   if(email) return await sb.auth.signInWithPassword({email,password});
   if(raw.includes('@')) return await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-  let phone=normalizePhone(raw);
-  return await sb.auth.signInWithPassword({phone,password});
+    if(role==='teacher'){
+      try{
+        let {data}=await sb.from('teacher_profiles').select('email').eq('employee_id',raw).limit(1);
+        if(data?.[0]?.email)return await sb.auth.signInWithPassword({email:String(data[0].email).toLowerCase(),password});
+      }catch(_e){}
+    }
+    let phone=normalizePhone(raw);
+    return await sb.auth.signInWithPassword({phone,password});
 }
 
 login=async function(){
@@ -7553,8 +7564,8 @@ async function v90LoadDashboardStats(){
 
 async function v90TeacherDashboard(){
  window.__v90Route='dashboard';v90Head('Teacher Dashboard','Today Schedule • My Class • Daily Teaching');v90InstallShell('dashboard');
- try{if(typeof v14LoadTeacherContext==='function')await v14LoadTeacherContext()}catch(_e){}
- const tp=window.v14TeacherProfile||{};const name=tp.teacher_name||profile?.full_name||'Teacher';let classes=[];try{classes=typeof v14AllowedClassNames==='function'?v14AllowedClassNames():[]}catch(_e){}
+  if(typeof v14LoadTeacherContext==='function')await v14LoadTeacherContext();
+  const tp=window.v14TeacherProfile;if(!tp?.id)throw new Error(v14TeacherContextError?.message||'Teacher profile mapping failed');const name=tp.teacher_name||profile?.full_name||'Teacher';let classes=typeof v14AllowedClassNames==='function'?v14AllowedClassNames():[];
  let sched=[];try{let day=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];let r=await sb.from('timetable').select('*').eq('teacher_name',name).eq('day_name',day).order('period_no');sched=r.data||[]}catch(_e){}
  v90Set(`<div class="v90Dash v114TeacherDash"><section class="v90Welcome teacher v114ReferenceHero v114TeacherHero"><div><span>GOOD MORNING</span><h1>${v90Safe(name)} 👋</h1><p>A great teacher shapes a better tomorrow.</p></div><div class="v114HeroMotto teacher"><b>Teach<br>Inspire<br>Empower</b><small>A Teacher Changes the World One Child at a Time</small></div></section>
  <section class="v90Stats v114TeacherStats">${[['👥','My Classes',classes.length],['👨‍🎓','Class Data','Live'],['📖',"Today's Periods",sched.length],['✅','Attendance','Today'],['☑','Pending Tasks','Open']].map(x=>`<div class="v90Stat"><span>${x[0]}</span><div><small>${x[1]}</small><b>${x[2]}</b></div></div>`).join('')}</section>
@@ -8573,18 +8584,11 @@ teacherPasswordLogin=async function(){
   let raw=String(document.getElementById('tLoginId')?.value||'').trim();
   let password=String(document.getElementById('tLoginPassword')?.value||'');
   let host=document.getElementById('teacherAuthBox');
-  if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
+  if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher ID / Mobile / Email और Password डालें');return}
   if(window.__v99TeacherBusy)return;window.__v99TeacherBusy=true;
   try{
     v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-    let auth=null;
-    if(raw.includes('@'))auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-    else{
-      let digits=raw.replace(/\D/g,'').slice(-10);
-      if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-      auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      if(auth.error)auth=await v32PasswordSignIn(raw,password,'teacher');
-    }
+      let auth=await v32PasswordSignIn(raw,password,'teacher');
     if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',v1142LoginMsg(auth?.error,'Teacher login'));return}
     user=auth.data.user;await loadProfile();let context=await v14LoadTeacherContext();
     if(!context){await sb.auth.signOut();user=null;profile=null;v75AuthStatus?.(host,'v75TeacherLoginStatus',v14TeacherContextError?.message||'Teacher profile mapping failed');return}
