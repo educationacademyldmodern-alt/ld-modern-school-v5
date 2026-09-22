@@ -1,0 +1,9 @@
+L D MODERN EDUCATION ACADEMY — V64.1 FINAL
+
+1. Upload/replace ALL extracted project files to v1142-production-safe branch root.
+2. Do NOT upload the ZIP itself into the website root.
+3. Commit and wait for Vercel Preview.
+4. In Supabase SQL Editor run ONLY: supabase-v64-final.sql
+5. Test Preview before touching main/production.
+
+V64.1 hardening: desktop/laptop/mobile responsive fit, no visible sidebar scrollbar, no floating control dock, public /n/n cleanup, reduced page-wide DOM observers to prevent select/dropdown/button lag, Parent multi-child chooser retained, V63 SQL reliability repair included.

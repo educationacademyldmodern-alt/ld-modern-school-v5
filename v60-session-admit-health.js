@@ -6,40 +6,8 @@ const safeToast=m=>{try{window.toast?.(m)}catch(_){}};
 const keyOf=s=>String(s?.student_id||s?.admission_no||'').trim();
 const state={issues:new Map(), restoring:false};
 
-/* Keep ERP state on refresh. Never sign out on browser/mobile Back. */
-function erpVisible(){const e=$id('erp');return !!(e&&!e.classList.contains('hidden'));}
-function remember(route){try{localStorage.setItem('ld_erp_open','1');if(route)localStorage.setItem('ld_erp_route',route)}catch(_){}}
-function forget(){try{localStorage.removeItem('ld_erp_open');localStorage.removeItem('ld_erp_route')}catch(_){}}
-function routeFromState(){try{return localStorage.getItem('ld_erp_route')||'dashboard'}catch(_){return'dashboard'}}
-async function restore(){
- if(state.restoring||!window.sb)return; state.restoring=true;
- try{
-   const {data}=await sb.auth.getSession(); const session=data?.session;
-   if(!session?.user)return;
-   window.user=session.user;
-   if(typeof window.loadProfile==='function')await window.loadProfile();
-   if(localStorage.getItem('ld_erp_open')==='1'){
-     window.openERP?.();
-     const r=routeFromState(); if(r&&r!=='dashboard')setTimeout(()=>window.render?.(r),80);
-   }
- }catch(e){console.warn('V60 restore',e)}finally{state.restoring=false}
-}
-function installSessionHooks(){
- if(window.__v60SessionHooks)return;window.__v60SessionHooks=true;
- const oldOpen=window.openERP;if(typeof oldOpen==='function')window.openERP=function(){const r=oldOpen.apply(this,arguments);remember(routeFromState());return r};
- const oldRender=window.render;if(typeof oldRender==='function')window.render=function(route){remember(route||'dashboard');return oldRender.apply(this,arguments)};
- const oldLogout=window.logout;if(typeof oldLogout==='function')window.logout=async function(){forget();return oldLogout.apply(this,arguments)};
- // Capture first so older popstate handlers cannot turn Back into logout/public-login navigation.
- window.addEventListener('popstate',function(ev){
-   if(!erpVisible())return;
-   ev.stopImmediatePropagation();
-   const current=routeFromState();
-   if(current!=='dashboard'){window.render?.('dashboard');remember('dashboard');}
-   try{history.pushState({ldERP:1},'',location.href)}catch(_){ }
- },true);
- try{history.pushState({ldERP:1},'',location.href)}catch(_){ }
- restore();
-}
+/* V64.21: legacy session/navigation block removed after dependency audit.
+   Authoritative session + Back handling: ldmea-v6421-root-correction.js */
 
 /* Smart Admit Card issue tracking. Preview/print alone does NOT create first issue. */
 async function loadIssues(){
@@ -71,6 +39,6 @@ function installAdmitHooks(){
  const oldRender=window.v69RenderCandidates;if(typeof oldRender==='function')window.v69RenderCandidates=function(){const r=oldRender.apply(this,arguments);setTimeout(injectTracking,0);return r};
  const oldPrint=window.v69PrintAdmitCards;if(typeof oldPrint==='function')window.v69PrintAdmitCards=function(){const ss=selected();const r=oldPrint.apply(this,arguments);if(window.v69CurrentExam?.id&&ss.length){const now=new Date().toISOString();const hist=ss.filter(s=>state.issues.has(keyOf(s))).map(s=>({exam_id:v69CurrentExam.id,student_key:keyOf(s),action:'REPRINT',action_by:window.user?.id||null,action_at:now}));if(hist.length)sb.from('v60_admit_issue_history').insert(hist).then(()=>{}).catch(()=>{})}return r};
 }
-function install(){installSessionHooks();installAdmitHooks()}
+function install(){installAdmitHooks()}
 document.addEventListener('DOMContentLoaded',()=>setTimeout(install,650));window.addEventListener('load',()=>setTimeout(install,850));
 })();

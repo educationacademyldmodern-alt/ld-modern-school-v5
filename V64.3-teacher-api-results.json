@@ -1,0 +1,7 @@
+[
+  "Missing migration stops before Auth account mutation",
+  "Teacher edit retains password state and selected academic session",
+  "Assignment updates use one atomic RPC",
+  "Assignment failure is returned as error, never false success",
+  "Short supplied password rejected before Auth updates"
+]

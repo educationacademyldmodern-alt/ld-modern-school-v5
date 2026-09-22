@@ -1,0 +1,88 @@
+L D MODERN EDUCATION ACADEMY ERP — V64.20 FINAL RECHECK
+Base: current supplied ZIP only
+Date: 2026-09-22
+
+STATUS
+[FIXED-STATIC] code/ZIP में correction verify
+[LIVE-VERIFY] केवल deployed Vercel + actual Supabase data/session पर final proof possible
+[NOT-REMOVED] legacy code मौजूद है लेकिन dependency proof के बिना delete नहीं किया गया
+
+A. DEMAND vs RESULT
+1 [FIXED-STATIC] Current ZIP only base; old ZIP mix नहीं.
+2 [FIXED-STATIC] Teacher self-registration blocked; Admin-created credential path authoritative.
+3 [FIXED-STATIC] Teacher auth API = Admin session → staff → deterministic auth → teacher profile → class/subject assignments.
+4 [FIXED-STATIC] Duplicate teacher identity silent overwrite blocked.
+5 [FIXED-STATIC] Teacher login now requires Approved + Active + at least one active class assignment; missing assignment gets exact message.
+6 [FIXED-STATIC] Existing Teacher Dashboard/functions preserved, not rebuilt.
+7 [FIXED-STATIC] Back handler centralized by final runtime and internal route stack.
+8 [FIXED-STATIC] Refresh restore bug corrected: current route is now stored separately from Back stack.
+9 [FIXED-STATIC] Due Fee Master added and reads existing student_fee_schedules / fees; no parallel due table.
+10 [FIXED-STATIC] Paid schedule amount subtracts from due; students sorted highest due first.
+11 [FIXED-STATIC] Due Update opens existing fee ledger.
+12 [FIXED-STATIC] ID Card renderer now has 5 distinct usable layouts: Standard, Left Photo, Right Photo, Compact, Alternative Official.
+13 [FIXED-STATIC] ID photo uses central signed/photo URL and object-fit:contain to avoid distortion/crop.
+14 [FIXED-STATIC] ID includes class, student, father/parent, mother, mobile, address, central signature.
+15 [FIXED-STATIC] ID cards protected from print page split.
+16 [FIXED-STATIC] Fresh V64.20 SQL supplied; no Student/Parent/Fee delete/reset.
+17 [FIXED-STATIC] SQL adds teacher compatibility/indexes, assignment integrity indexes, fee compatibility/index, identity audit view, and RLS inspection query.
+18 [FIXED-STATIC] Obsolete root teacher-access.js removed; active /api/teacher-access.js retained.
+19 [FIXED-STATIC] Obsolete backup index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html removed to prevent accidental old-page deployment.
+20 [NOT-REMOVED] Historical enhancement blocks v90-v100 and older CSS/JS remain because they are referenced by working modules; deleting by version/name alone would violate dependency-safety rule.
+
+B. PUBLIC / REFRESH
+21 [FIXED-STATIC] Final package has one actual index.html entry point; backup HTML removed.
+22 [FIXED-STATIC] Existing public cleanup removes accidental stray text nodes and current public renderer is preserved.
+23 [LIVE-VERIFY] Hard-refresh visual OLD→NEW flash cannot be truthfully certified without deployed browser paint test.
+24 [LIVE-VERIFY] Admin/Teacher/Parent Ctrl+Shift+R exact visual restoration requires real Supabase session.
+
+C. BACK / SESSION
+25 [FIXED-STATIC] Current route stored independently; Back stack no longer doubles as refresh target.
+26 [FIXED-STATIC] Back does not call signOut.
+27 [LIVE-VERIFY] Exact Edit→Profile→Teacher Management sequence requires UI interaction test.
+
+D. TEACHER
+28 [FIXED-STATIC] Initial password is sent server-side to Supabase Auth; no new plaintext password DB storage.
+29 [FIXED-STATIC] Mobile login maps to t<MOBILE>@teacher.ldmodern.local.
+30 [FIXED-STATIC] Auth/profile/employee/classes/subjects mapping save path present.
+31 [FIXED-STATIC] Class assignment is mandatory for successful Teacher dashboard entry.
+32 [LIVE-VERIFY] Real Teacher login, My Class, Attendance, Timetable, Homework, Due Fee depend on live RLS/data.
+33 [FIXED-STATIC] Change Password existing function preserved.
+
+E. DUE FEE
+34 [FIXED-STATIC] Class selection auto-loads students.
+35 [FIXED-STATIC] Till Month control present.
+36 [FIXED-STATIC] Schedule due uses amount-paid_amount through selected month.
+37 [FIXED-STATIC] fees fallback used when schedule data absent.
+38 [LIVE-VERIFY] Exact Master Fee reconciliation must be checked against production ledger rows.
+
+F. ID CARD
+39 [FIXED-STATIC] 5 distinct formats implemented.
+40 [FIXED-STATIC] Left-photo/right-details format implemented.
+41 [FIXED-STATIC] Right-photo/left-details format implemented.
+42 [FIXED-STATIC] Compact + official alternative implemented.
+43 [FIXED-STATIC] Central signature and mother name included.
+44 [LIVE-VERIFY] Chrome print/PDF physical A4 clipping needs preview/print test.
+
+G. REMOVED
+- root teacher-access.js (duplicate/obsolete non-API copy)
+- index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (obsolete backup HTML)
+- V64.19 verification/migration files replaced by V64.20 versions
+
+H. MODIFIED / ADDED
+- index.html
+- api/teacher-access.js (retained V64.19 corrected API)
+- ldmea-v6420-root-correction.js
+- LDMEA-V64.20-FRESH-SAFE-MIGRATION.sql
+- V64.20-FINAL-VERIFICATION-HINDI.txt
+
+I. SQL ORDER
+1. Preview deploy V64.20.
+2. Supabase SQL Editor: run ONLY LDMEA-V64.20-FRESH-SAFE-MIGRATION.sql for this update.
+3. Check duplicate auth_user_id query = 0 rows.
+4. Check duplicate employee_id query = 0 rows.
+5. Review teacher identity audit + RLS inspection output.
+6. Admin → Teacher Login Manager → create/update teacher → class/subject/password.
+7. Incognito Teacher login.
+8. Test Refresh/Back/Due Fee/ID Card/Admin/Parent before Production promotion.
+
+IMPORTANT: Static source audit is complete, but items explicitly marked LIVE-VERIFY are not falsely labelled PASS because they require the deployed browser and your actual Supabase data/RLS.

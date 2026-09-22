@@ -1,0 +1,81 @@
+L D MODERN EDUCATION ACADEMY ERP — V64.21 FINAL COMMAND RECHECK
+Date: 2026-09-22
+Base: CURRENT V64.20 package derived only from the user-provided current working ZIP.
+
+STATUS KEY:
+[PASS-STATIC] = source/package level verified
+[LIVE-VERIFY] = Vercel Preview + live Supabase required; not falsely certified offline
+
+A. SAFETY
+[PASS-STATIC] Existing ERP retained; no rebuild.
+[PASS-STATIC] Student/Parent/Fee production delete/reset SQL is not added by V64.21 migration.
+[PASS-STATIC] Fresh SQL uses compatibility ALTER/INDEX/audit checks; teacher duplicates are not blindly deleted.
+
+B. PUBLIC / HARD REFRESH
+[PASS-STATIC] V64.21 authoritative root runtime is included exactly once.
+[PASS-STATIC] Duplicate V64.20 ID-card renderer/style blocks found during recheck were removed.
+[LIVE-VERIFY] Old→new visual flash must be checked on deployed Vercel with Ctrl+Shift+R.
+[LIVE-VERIFY] Public bottom stray n/n/ERP rendering must be visually checked on deployment.
+
+C. SESSION / REFRESH
+[PASS-STATIC] V60 legacy session/navigation block was removed after dependency audit; V64.21 is authoritative for session/navigation restoration.
+[LIVE-VERIFY] Admin/Teacher/Parent exact module/record restoration needs real authenticated browser sessions.
+
+D. BLACK BACK
+[PASS-STATIC] V53 legacy popstate Back handler removed.
+[PASS-STATIC] V60 legacy popstate block removed.
+[PASS-STATIC] One active project popstate registration remains: V64.21 authoritative Back system.
+[LIVE-VERIFY] Detail→profile→module and Search record→same results should be exercised in Preview.
+
+E/F/G. TEACHER ADD / AUTH / LOGIN / DASHBOARD
+[PASS-STATIC] Admin-created Teacher API uses one Auth↔teacher_profiles↔employee_id mapping path.
+[PASS-STATIC] Duplicate Teacher identity is rejected instead of silently overwriting a different auth mapping.
+[PASS-STATIC] Class/subject assignments are written against teacher_profile_id.
+[PASS-STATIC] Existing Teacher Dashboard modules are retained rather than rebuilt.
+[PASS-STATIC] New teacher password is sent to Supabase Auth API and is not stored as a plaintext teacher_profiles password field by V64.21 API.
+[LIVE-VERIFY] Real Admin Add Teacher → Mobile/password login → My Class/permissions/RLS requires live Supabase.
+[LIVE-VERIFY] Change Password requires live auth test.
+
+H/I. DUE FEE MASTER
+[PASS-STATIC] Due Fee Master route/menu exists in authoritative runtime.
+[PASS-STATIC] It reads existing students/fees and optional student_fee_schedules; no parallel fee database is introduced.
+[LIVE-VERIFY] Actual production ledger totals, paid-month handling and installment reconciliation must be tested against live fee rows.
+
+J. ID CARD
+[PASS-STATIC] Five layout selector paths are present.
+[PASS-STATIC] Student photo uses contain sizing to avoid stretching.
+[PASS-STATIC] Father/Parent, Mother, Mobile, Address and authorized signature rendering are present.
+[PASS-STATIC] Duplicate V64.20 ID-card style/renderer injection was removed in this recheck.
+[LIVE-VERIFY] A4 Preview/PDF/Print margins and device visual consistency require browser print testing.
+
+K/L. RELOAD / PERFORMANCE / DUPLICATES
+[PASS-STATIC] Normal authoritative render path does not intentionally require browser full reload.
+[PASS-STATIC] Conflicting V53/V60 Back/session navigation hooks were removed/disabled after dependency recheck.
+[PASS-STATIC] All project JS and api/*.js pass node --check.
+[LIVE-VERIFY] Network duplicate requests, Supabase request count, hanging and popup behavior require runtime DevTools/browser testing.
+
+M/N. RESPONSIVE / REGRESSION
+[LIVE-VERIFY] Mobile/tablet/laptop/desktop and Public/Admin/Teacher/Parent visual regression cannot be truthfully certified by static ZIP inspection alone.
+
+FILES MODIFIED IN V64.21 RECHECK:
+- index.html
+- v53-final-polish.js
+- v60-session-admit-health.js
+- ldmea-v6421-root-correction.js (renamed/upgraded authoritative runtime)
+- LDMEA-V64.21-FRESH-SAFE-MIGRATION.sql
+- V64.21-FINAL-COMMAND-VERIFICATION-HINDI.txt
+
+REMOVED/DEACTIVATED CONFLICTS:
+- active V53 popstate navigation handler
+- active V60 legacy session/navigation installation
+- duplicate second V64.20 ID-card style block
+- duplicate second V64.20 ID-card renderer block
+- old V64.20 authoritative runtime filename replaced by V64.21 runtime
+
+SQL EXECUTION:
+Run only: LDMEA-V64.21-FRESH-SAFE-MIGRATION.sql
+Then review the read-only duplicate/RLS result queries at its end.
+Do NOT rerun older migration files merely because they remain as historical project files.
+
+FINAL NOTE:
+Static/package demands above are corrected and verified. Items marked LIVE-VERIFY are intentionally not claimed as passed until tested against the real Vercel Preview and live Supabase data/session/RLS.

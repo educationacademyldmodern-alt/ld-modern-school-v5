@@ -1,0 +1,19 @@
+L D MODERN EDUCATION ACADEMY — V61.1 HOTFIX
+
+Purpose:
+- Fix public homepage raw JavaScript/source text rendering introduced by misplaced V60 asset injection.
+- Keep V61 Smart 3D Admin Dashboard UI.
+- Keep V60 session/navigation and Smart Admit tracking files.
+- Preserve all existing ERP modules and production data.
+
+Static checks completed:
+- V60 CSS/JS asset references reduced to one intended global include each.
+- V61 UI block placed inside BODY before closing HTML.
+- HTML parse check confirms idStudio/function source is not exposed as body text.
+- External JavaScript syntax checks pass.
+- Inline JavaScript checks pass except JSON-LD, which is data (not executable JS).
+- No database migration added by this UI hotfix.
+
+Required live Preview checks after upload:
+Public page, Admin/Teacher/Parent login, Admin dashboard desktop/mobile, sidebar/drawer,
+refresh/back/session, Students, Fees, Attendance, Admit Card, PDF/Print.
