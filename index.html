@@ -7979,16 +7979,16 @@ async function v93OpenTeacherLogin(staffId){
  setTimeout(v93ClassTeacherSelect,0);setTimeout(()=>{let s=document.getElementById('v93ClassTeacher');if(s&&[...s.options].some(o=>o.value===ct))s.value=ct},10);
 }
 async function v93SaveTeacherLogin(staffId){
- if(!v93Admin())return toast('Admin only');let st=(window.__v93Staff||[]).find(x=>String(x.id)===String(staffId));if(!st)return toast('Teacher record नहीं मिला');
+  if(!v93Admin())return toast('Admin only');if(window.__v93TeacherLoginBusy)return toast('Teacher Login save already in progress');let st=(window.__v93Staff||[]).find(x=>String(x.id)===String(staffId));if(!st)return toast('Teacher record नहीं मिला');
  let classes=[...document.querySelectorAll('.v93ClassCheck:checked')].map(x=>x.value),classTeacher=document.getElementById('v93ClassTeacher')?.value||'',subjects=String(document.getElementById('v93Subjects')?.value||'').split(',').map(x=>x.trim()).filter(Boolean),password=String(document.getElementById('v93TeacherPw')?.value||'');let tp=v93ProfileFor(st);
  if(!tp&&password.length<8)return toast('Initial Password कम से कम 8 characters का रखें');if(tp&&password&&password.length<8)return toast('New Password कम से कम 8 characters का रखें');
- let status=document.getElementById('v93AccessStatus');if(status)status.innerHTML='Teacher Login save किया जा रहा है...';
+  window.__v93TeacherLoginBusy=true;let status=document.getElementById('v93AccessStatus');if(status)status.innerHTML='Teacher Login save किया जा रहा है...';
  try{
    let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. दोबारा login करें.');
    let r=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'create_or_update',staff_id:staffId,password,classes,class_teacher:classTeacher,subjects})});let j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher Login save failed');
-   if(status)status.innerHTML=`<b>✓ Teacher Login Ready</b><br>Name: ${esc(j.teacher_name||st.staff_name)}<br>Login Mobile: <b>${esc(j.login_id||j.mobile||v93NormPhone(st.phone))}</b>${password?`<br>Password: <b>${esc(password)}</b>`:''}<br><small>Teacher अब Mobile + Password से login करेगा. Password भूलने पर Primary Admin नया password देगा; कोई OTP/email नहीं.</small>`;
+  if(status)status.innerHTML=`<b>✓ Teacher Login Ready</b><br>Name: ${esc(j.teacher_name||st.staff_name)}<br>Login Mobile: <b>${esc(j.login_id||j.mobile||v93NormPhone(st.phone))}</b><br><small>Teacher अब Mobile + Password से login करेगा. Password भूलने पर Primary Admin नया password देगा; कोई OTP/email नहीं.</small>`;
    toast(j.created?'Teacher Login created':'Teacher Login updated');setTimeout(async()=>{let pr=await sb.from('teacher_profiles').select('id,auth_user_id,email,phone,mobile,teacher_name,employee_id,approval_status,is_active,requested_classes,requested_subjects').order('teacher_name');window.__v93Profiles=pr.data||[]},50);
- }catch(e){if(status)status.innerHTML=`<b>Save नहीं हुआ:</b> ${esc(e.message||String(e))}`;toast(e.message||String(e))}
+  }catch(e){let message=String(e.message||e);if(/duplicate key|teacher_class_assignment_uq/i.test(message))message='Teacher class assignment conflict. Existing assignments were preserved; refresh and try again.';console.error('[teacher-login] save failed',message);if(status)status.innerHTML=`<b>Save नहीं हुआ:</b> ${esc(message)}`;toast(message)}finally{window.__v93TeacherLoginBusy=false}
 }
 
 /* Old pending self-registration can no longer be approved into a Teacher login. Existing approved teachers still allow assignment edits. */
