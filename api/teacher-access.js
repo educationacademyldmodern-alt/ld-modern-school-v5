@@ -13,8 +13,40 @@ async function authCreate(email,password,meta){const r=await fetch(SUPABASE_URL+
 async function authUpdate(id,email,password,meta){const body={email,email_confirm:true,user_metadata:meta};if(password)body.password=password;const r=await fetch(SUPABASE_URL+'/auth/v1/admin/users/'+encodeURIComponent(id),{method:'PUT',headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}),j=await asJson(r);if(!r.ok)throw new Error(j?.msg||j?.message||j?.error_description||'Teacher auth update failed');return j?.user||j}
 async function upsertProfile(id,email,name){const r=await rest('profiles?on_conflict=id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({id,email,full_name:name,role:'teacher',status:'active'})}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Teacher role/profile update failed')}
 async function saveTP(existing,row){let path=existing?.id?`teacher_profiles?id=eq.${encodeURIComponent(existing.id)}`:'teacher_profiles',method=existing?.id?'PATCH':'POST';const r=await rest(path,{method,headers:{Prefer:'return=representation'},body:JSON.stringify(row)}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Teacher profile save failed');return Array.isArray(j)?j[0]:j}
-async function replaceAssignments(tpId,classes,classTeacher,subjects,adminId,academicSession='2026-27'){const now=new Date().toISOString();let r=await rest(`teacher_class_assignments?teacher_profile_id=eq.${encodeURIComponent(tpId)}&is_active=eq.true`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_active:false,ended_at:now})});if(!r.ok)throw new Error((await asJson(r))?.message||'Old class assignment close failed');if(classTeacher){r=await rest(`teacher_class_assignments?academic_session=eq.${encodeURIComponent(academicSession)}&class_name=eq.${encodeURIComponent(classTeacher)}&is_class_teacher=eq.true&is_active=eq.true`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_active:false,ended_at:now})});if(!r.ok)throw new Error((await asJson(r))?.message||'Previous Class Teacher assignment close failed')}if(classes.length){r=await rest('teacher_class_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(classes.map(c=>({teacher_profile_id:tpId,academic_session:academicSession,class_name:c,is_class_teacher:c===classTeacher,is_active:true,approved_by:adminId,approved_at:now,started_at:now})))});if(!r.ok)throw new Error((await asJson(r))?.message||'Class assignment failed')}r=await rest(`teacher_subject_assignments?teacher_profile_id=eq.${encodeURIComponent(tpId)}&is_active=eq.true`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_active:false})});if(!r.ok)throw new Error((await asJson(r))?.message||'Old subject assignment close failed');if(subjects.length){r=await rest('teacher_subject_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(subjects.map(s=>({teacher_profile_id:tpId,academic_session:academicSession,subject_name:s,is_special_subject:true,is_active:true})))});if(!r.ok)throw new Error((await asJson(r))?.message||'Subject assignment failed')}}
-async function nextTeacherCode(){const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/teacher_v2_next_code',{method:'POST',headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY,'Content-Type':'application/json'},body:'{}'}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Teacher ID generation failed');return String(j||'').replace(/^\"|\"$/g,'')}
+async function replaceAssignments(tpId,classes,classTeacher,subjects,adminId,academicSession='2026-27'){
+ const now=new Date().toISOString();
+ // Preserve history: close active rows, then REACTIVATE an existing same teacher/session/class row instead of blindly inserting a duplicate.
+ let r=await rest(`teacher_class_assignments?teacher_profile_id=eq.${encodeURIComponent(tpId)}&is_active=eq.true`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_active:false,ended_at:now})});
+ if(!r.ok)throw new Error((await asJson(r))?.message||'Old class assignment close failed');
+ if(classTeacher){r=await rest(`teacher_class_assignments?academic_session=eq.${encodeURIComponent(academicSession)}&class_name=eq.${encodeURIComponent(classTeacher)}&is_class_teacher=eq.true&is_active=eq.true&teacher_profile_id=neq.${encodeURIComponent(tpId)}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_active:false,ended_at:now})});if(!r.ok)throw new Error((await asJson(r))?.message||'Previous Class Teacher assignment close failed')}
+ for(const c of classes){
+   const old=await rows(`teacher_class_assignments?teacher_profile_id=eq.${encodeURIComponent(tpId)}&academic_session=eq.${encodeURIComponent(academicSession)}&class_name=eq.${encodeURIComponent(c)}&select=id&limit=1`);
+   const payload={is_class_teacher:c===classTeacher,is_active:true,approved_by:adminId,approved_at:now,started_at:now,ended_at:null};
+   if(old[0]?.id) r=await rest(`teacher_class_assignments?id=eq.${encodeURIComponent(old[0].id)}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+   else r=await rest('teacher_class_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({teacher_profile_id:tpId,academic_session:academicSession,class_name:c,...payload})});
+   if(!r.ok)throw new Error((await asJson(r))?.message||('Class assignment failed: '+c));
+ }
+ r=await rest(`teacher_subject_assignments?teacher_profile_id=eq.${encodeURIComponent(tpId)}&is_active=eq.true`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_active:false})});
+ if(!r.ok)throw new Error((await asJson(r))?.message||'Old subject assignment close failed');
+ for(const subj of subjects){
+   const old=await rows(`teacher_subject_assignments?teacher_profile_id=eq.${encodeURIComponent(tpId)}&academic_session=eq.${encodeURIComponent(academicSession)}&subject_name=eq.${encodeURIComponent(subj)}&select=id&limit=1`);
+   const payload={is_special_subject:true,is_active:true};
+   if(old[0]?.id) r=await rest(`teacher_subject_assignments?id=eq.${encodeURIComponent(old[0].id)}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+   else r=await rest('teacher_subject_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({teacher_profile_id:tpId,academic_session:academicSession,subject_name:subj,...payload})});
+   if(!r.ok)throw new Error((await asJson(r))?.message||('Subject assignment failed: '+subj));
+ }
+}
+async function nextTeacherCode(){
+ for(let i=0;i<80;i++){
+  const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/teacher_v2_next_code',{method:'POST',headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY,'Content-Type':'application/json'},body:'{}'}),j=await asJson(r);
+  if(!r.ok)throw new Error(j?.message||'Teacher ID generation failed');
+  const code=String(j||'').replace(/^"|"$/g,'');
+  if(!code)continue;
+  const [a,b]=await Promise.all([rows(`staff?employee_id=eq.${encodeURIComponent(code)}&select=id&limit=1`),rows(`teacher_v2_master?teacher_code=eq.${encodeURIComponent(code)}&select=id&limit=1`)]);
+  if(!a.length&&!b.length)return code;
+ }
+ throw new Error('Unique Teacher ID reserve नहीं हो सकी. Teacher V2 sequence sync SQL चलाएँ.');
+}
 async function insertStaff(row){const r=await rest('staff',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(row)}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Teacher staff record save failed');return Array.isArray(j)?j[0]:j}
 
 async function removeWhere(path){const r=await rest(path,{method:'DELETE',headers:{Prefer:'return=minimal'}});return r.ok}
