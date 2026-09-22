@@ -10145,7 +10145,58 @@ window.openAdd=function(k){if(k==='staff' && ['admin','super_admin','principal']
 window.v2CreateTeacherComplete=v2CreateTeacherComplete;
 })();
 </script>
+<!-- LDMEA V2026.09.23 ADMIN SCROLL + SIDEBAR FINAL ROOT FIX -->
+<style id="ldmea-admin-scroll-sidebar-final">
+/* One controlled vertical scroll for ERP content. This must be the LAST layout rule. */
+html.v6416Lock,body.v6416Lock,body.v6412ErpOpen{height:100%!important;overflow:hidden!important}
+#erp:not(.hidden){height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+@media (min-width:901px){
+ #erp:not(.hidden) aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:255px!important;max-width:255px!important;height:100dvh!important;overflow:hidden!important;z-index:130!important}
+ #erp:not(.hidden) aside nav,#erp:not(.hidden) #erpNav{height:calc(100dvh - 132px)!important;max-height:calc(100dvh - 132px)!important;overflow-y:auto!important;overflow-x:hidden!important;padding-bottom:18px!important;scrollbar-width:thin!important;overscroll-behavior:contain!important}
+ #erp:not(.hidden) aside nav::-webkit-scrollbar,#erp:not(.hidden) #erpNav::-webkit-scrollbar{width:4px!important}
+ #erp:not(.hidden) main{position:absolute!important;left:255px!important;right:0!important;top:0!important;bottom:0!important;width:auto!important;height:100dvh!important;max-height:100dvh!important;margin:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-y:contain!important;scrollbar-gutter:stable!important}
+ #erp:not(.hidden) #erpContent{height:auto!important;min-height:calc(100dvh - 72px)!important;max-height:none!important;overflow:visible!important;padding-bottom:48px!important}
+}
+@media (max-width:900px){
+ #erp:not(.hidden) main{position:absolute!important;inset:0!important;width:100%!important;height:100dvh!important;max-height:100dvh!important;margin:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important}
+ #erp:not(.hidden) #erpContent{height:auto!important;max-height:none!important;overflow:visible!important;padding-bottom:54px!important}
+ #erp:not(.hidden) aside{height:100dvh!important;overflow:hidden!important}
+ #erp:not(.hidden) aside nav,#erp:not(.hidden) #erpNav{max-height:calc(100dvh - 132px)!important;overflow-y:auto!important;overflow-x:hidden!important}
+}
+/* Keep logout reachable and menu rows compact/clean. */
+#erp:not(.hidden) aside .logout,#erp:not(.hidden) aside [onclick*="logout"]{position:relative!important;margin-top:8px!important}
+#erp:not(.hidden) #erpNav button{min-height:38px!important;padding:8px 10px!important;margin:2px 0!important;line-height:1.2!important}
+</style>
+<script id="ldmea-admin-scroll-sidebar-final-js">
+(()=>{if(window.__LDMEA_ADMIN_SCROLL_FINAL__)return;window.__LDMEA_ADMIN_SCROLL_FINAL__=1;
+ const fix=()=>{const erp=document.getElementById('erp');if(!erp||erp.classList.contains('hidden'))return;const main=erp.querySelector('main');if(main){main.style.removeProperty('overflow');main.scrollTop=Math.max(0,main.scrollTop)} };
+ document.addEventListener('click',e=>{if(e.target.closest('#erpNav button,#erp .v90Stat,#erp .v114AdminStats button'))setTimeout(fix,40)},true);
+ window.addEventListener('resize',fix,{passive:true});setTimeout(fix,0);
+})();
+</script>
+
+<style id="v120-master-due-style">
+.v120DuePage{padding-bottom:80px}.v120DueHero{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 16px;margin-bottom:12px;border:1px solid #dbe7f5;border-radius:16px;background:#fff}.v120DueHero h2{margin:0;font-size:20px}.v120DueHero p{margin:4px 0 0;color:#66758a;font-size:12px}.v120DueTools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.v120DueTools input,.v120DueTools select{min-height:38px;border:1px solid #d6e1ee;border-radius:10px;padding:8px 10px;background:#fff}.v120DueTable{overflow:auto;border:1px solid #e1e8f0;border-radius:14px;background:#fff}.v120DueTable table{min-width:930px;width:100%;border-collapse:collapse}.v120DueTable th{position:sticky;top:0;z-index:1;background:#f3f7fc;font-size:11px;text-transform:uppercase;color:#56677b}.v120DueTable th,.v120DueTable td{padding:9px;border-bottom:1px solid #edf1f6;text-align:left}.v120DueTable input,.v120DueTable select{width:100%;min-width:120px;padding:8px;border:1px solid #d7e0eb;border-radius:8px}.v120DueTable .money{font-weight:900}.v120DueTable .saving{opacity:.55;pointer-events:none}.v120DueBadge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#eef6ff;color:#145a9d;font-size:10px;font-weight:800}.v120DashBtn{font-weight:800!important}
+@media(max-width:700px){.v120DueHero{align-items:flex-start;flex-direction:column}.v120DueTools>*{flex:1 1 145px}.v120DueTools input,.v120DueTools select,.v120DueTools button{width:100%}}
+</style>
+<script id="v120-master-due-runtime">
+window.V120_MASTER_DUE='V120-SEPARATE-MASTER-DUE-2026-09-23';
+function v120Admin(){return ['super_admin','admin','principal'].includes(String(window.profile?.role||''))}
+function v120Esc(v){return typeof v75Esc==='function'?v75Esc(v):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function v120Money(n){return typeof v75Money==='function'?v75Money(n):'₹'+Number(n||0).toLocaleString('en-IN')}
+function v120MonthLabel(k){try{let[y,m]=String(k).split('-').map(Number);return new Date(y,m-1,1).toLocaleString('en-IN',{month:'long',year:'numeric'})}catch(_e){return k}}
+function v120NextMonth(k){let[y,m]=String(k).split('-').map(Number),d=new Date(y,m,1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
+function v120MonthEnd(k){let[y,m]=String(k).split('-').map(Number);return new Date(Date.UTC(y,m,0)).toISOString().slice(0,10)}
+function v120Classes(){let a=(window.cls||[]).filter(Boolean);if(!a.length)a=['Nursery','LKG','UKG','1','2','3','4','5','6','7','8','9','10'];return [...new Set(a)]}
+function v120InstallIcon(){if(!v120Admin())return;let nav=document.getElementById('erpNav');if(nav&&!nav.querySelector('[data-v120-master-due]')){let b=document.createElement('button');b.type='button';b.dataset.v120MasterDue='1';b.innerHTML='<span>⚡ Master Due Fee</span>';b.onclick=()=>render('master_due_fee');let ref=[...nav.querySelectorAll('button')].find(x=>(x.textContent||'').includes('Master Fee'));if(ref)ref.after(b);else nav.appendChild(b)}let root=document.getElementById('erpContent');if(!root)return;let quick=root.querySelector('.dashHero .quick,.v39HeroActions,.v65Quick');if(quick&&!document.getElementById('v120MasterDueDash')){let b=document.createElement('button');b.id='v120MasterDueDash';b.className='v120DashBtn';b.innerHTML='⚡ Master Due Fee';b.onclick=()=>render('master_due_fee');quick.appendChild(b)}}
+async function v120MasterDue(){if(!v120Admin())return toast('Admin / Principal only');head('⚡ Master Due Fee','Fast Update • Name • Father • Till Due • Fixed Monthly Fee • Total • Update');let current=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');document.getElementById('erpContent').innerHTML=`<div class="v120DuePage"><div class="v120DueHero"><div><span class="v120DueBadge">SEPARATE ADMIN TOOL</span><h2>Master Due Fee Fast Update</h2><p>Due जिस महीने तक है वह चुनें, Fixed Monthly Fee और Total Due भरें, फिर Update करें.</p></div><button class="secondary" onclick="render('master_fee')">💼 Full Master Fee</button></div><div class="v120DueTools"><select id="v120Class"><option value="">All Classes</option>${v120Classes().map(c=>`<option>${v120Esc(c)}</option>`).join('')}</select><input id="v120Q" placeholder="Student / Father / Admission / Mobile"><label>Till Due <input id="v120TillAll" type="month" value="${current}"></label><button class="primary" onclick="v120Load()">Search / Refresh</button></div><div id="v120Summary"></div><div id="v120Body" class="v120DueTable"><div class="empty">Loading...</div></div></div>`;document.getElementById('v120Class').onchange=v120Load;let t;document.getElementById('v120Q').oninput=()=>{clearTimeout(t);t=setTimeout(v120Load,180)};document.getElementById('v120TillAll').onchange=()=>document.querySelectorAll('.v120Till').forEach(x=>x.value=document.getElementById('v120TillAll').value);await v120Load();window.scrollTo(0,0)}
+async function v120Load(){let c=document.getElementById('v120Class')?.value||'',q=String(document.getElementById('v120Q')?.value||'').trim().toLowerCase(),till=document.getElementById('v120TillAll')?.value||'';let sq=sb.from('students').select('id,student_name,admission_no,student_id,roll_no,class_name,father_name,phone,status').order('student_name').limit(c?400:200);if(c)sq=sq.eq('class_name',c);let r=await sq;if(r.error)return toast(r.error.message);let rows=(r.data||[]).filter(s=>!['inactive','deleted','left','withdrawn'].includes(String(s.status||'active').toLowerCase())).filter(s=>!q||[s.student_name,s.father_name,s.admission_no,s.student_id,s.phone].some(v=>String(v||'').toLowerCase().includes(q))).slice(0,c?300:120);window.v120Rows=rows;let adms=rows.map(x=>x.admission_no).filter(Boolean),settings=[],sched=[];for(let i=0;i<adms.length;i+=100){let p=adms.slice(i,i+100),[a,b]=await Promise.all([sb.from('student_fee_settings').select('admission_no,monthly_fee,auto_start_month').in('admission_no',p),sb.from('student_fee_schedules').select('admission_no,amount,paid_amount,status,due_date,plan_mode,schedule_label').in('admission_no',p)]);if(a.error)return toast(a.error.message);if(b.error)return toast(b.error.message);settings.push(...(a.data||[]));sched.push(...(b.data||[]))}let sm=new Map(settings.map(x=>[String(x.admission_no),x])),dm=new Map();sched.forEach(x=>{let k=String(x.admission_no||''),d=String(x.status||'').toLowerCase()==='paid'?0:Math.max(Number(x.amount||0)-Number(x.paid_amount||0),0);dm.set(k,(dm.get(k)||0)+d)});window.v120Settings=sm;window.v120Due=dm;let total=rows.reduce((a,s)=>a+Number(dm.get(String(s.admission_no))||0),0);let sum=document.getElementById('v120Summary');if(sum)sum.innerHTML=`<div class="v75Grid" style="margin-bottom:10px"><div class="v75Card"><span>Students</span><b>${rows.length}</b></div><div class="v75Card"><span>Current Total Due</span><b>${v120Money(total)}</b></div><div class="v75Card"><span>Till Due</span><b>${v120Esc(v120MonthLabel(till))}</b></div></div>`;let box=document.getElementById('v120Body');if(!rows.length){box.innerHTML='<div class="empty">No students found.</div>';return}box.innerHTML=`<table><thead><tr><th>Student Name</th><th>Father Name</th><th>Class</th><th>Till Due</th><th>Fixed Monthly Fee</th><th>Total Due</th><th>Update</th></tr></thead><tbody>${rows.map(s=>{let cfg=sm.get(String(s.admission_no))||{},due=Number(dm.get(String(s.admission_no))||0);return `<tr id="v120Row_${s.id}"><td><b>${v120Esc(s.student_name||'')}</b><small class="cellSub">${v120Esc(s.admission_no||'')} • Roll ${v120Esc(s.roll_no||'—')}</small></td><td>${v120Esc(s.father_name||'')}<small class="cellSub">${v120Esc(s.phone||'')}</small></td><td>${v120Esc(s.class_name||'')}</td><td><input class="v120Till" id="v120Till_${s.id}" type="month" value="${v120Esc(till)}"></td><td><input id="v120Monthly_${s.id}" type="number" min="0" step="1" value="${Number(cfg.monthly_fee||0)}"></td><td><input class="money" id="v120Total_${s.id}" type="number" min="0" step="1" value="${Math.round(due*100)/100}"></td><td><button class="primary" onclick="v120Save('${s.id}')">✓ Update</button></td></tr>`}).join('')}</tbody></table>`}
+async function v120Save(id){let s=(window.v120Rows||[]).find(x=>String(x.id)===String(id));if(!s)return toast('Student not found');let till=document.getElementById('v120Till_'+id)?.value||'',monthly=Number(document.getElementById('v120Monthly_'+id)?.value||0),total=Number(document.getElementById('v120Total_'+id)?.value||0);if(!till)return toast('Till Due month चुनें');if(!Number.isFinite(monthly)||monthly<0||!Number.isFinite(total)||total<0)return toast('Valid fee amount डालें');let tr=document.getElementById('v120Row_'+id);tr?.classList.add('saving');try{let session=school?.academic_session||'2026-27',label='Master Due up to '+v120MonthLabel(till),dueDate=v120MonthEnd(till),start=v120NextMonth(till);let set={admission_no:s.admission_no,student_id:String(s.id||''),student_name:s.student_name||'',class_name:s.class_name||'',academic_session:session,monthly_fee:monthly,auto_start_month:start,is_active:true,updated_at:new Date().toISOString()};let u=await sb.from('student_fee_settings').upsert(set,{onConflict:'admission_no,academic_session'});if(u.error)throw u.error;let old=await sb.from('student_fee_schedules').select('*').eq('admission_no',s.admission_no).eq('academic_session',session).eq('plan_mode','Opening Due').order('due_date').limit(20);if(old.error)throw old.error;let target=(old.data||[])[0];if(target){let paid=Number(target.paid_amount||0),amount=paid+total,up=await sb.from('student_fee_schedules').update({schedule_label:label,due_date:dueDate,amount,status:total<=0?'Paid':paid>0?'Partial':'Due',updated_at:new Date().toISOString()}).eq('id',target.id);if(up.error)throw up.error}else if(total>0){let ins=await sb.from('student_fee_schedules').insert({admission_no:s.admission_no,academic_session:session,class_name:s.class_name||'',plan_mode:'Opening Due',schedule_label:label,due_date:dueDate,amount:total,paid_amount:0,status:'Due',is_free_fee:false});if(ins.error)throw ins.error}if(typeof v49BroadcastChange==='function')v49BroadcastChange('master-due-fee');toast(`${s.student_name} • Due updated`);await v120Load()}catch(e){toast(e.message||String(e))}finally{tr?.classList.remove('saving')}}
+const v120RenderBase=window.render;window.render=async function(p){if(p==='master_due_fee')return v120MasterDue();let r=await v120RenderBase.apply(this,arguments);setTimeout(v120InstallIcon,80);return r};setTimeout(v120InstallIcon,250);
+</script>
+
 </body></html>
+
 <!-- LDMEA 2026-09-23 LIVE-PREVIEW ROOT FIXES: final override -->
 <style id="ldmea-live-root-fix-css">
 /* Compact Admin command center without removing any function */
@@ -10242,5 +10293,46 @@ window.v2CreateTeacherComplete=v2CreateTeacherComplete;
  // Realtime/add-on reloads may rebuild the body; restore the requested portal state without exposing sibling core cards.
  const obs=new MutationObserver(()=>{const body=q('parentDashboardBody');if(!body||q('parentDashboard')?.classList.contains('hidden'))return;if(body.dataset.vpcBusy)return;let cards=body.querySelectorAll(':scope > .parentStudentCard');if(cards.length&&!q('vpcChooser')){body.dataset.vpcBusy='1';setTimeout(()=>{try{installChooser();if(selectedKey)openChild(selectedKey)}finally{delete body.dataset.vpcBusy}},60)}});
  document.addEventListener('DOMContentLoaded',()=>{let body=q('parentDashboardBody');if(body)obs.observe(body,{childList:true})});
+})();
+</script>
+
+
+<!-- ===== V2026-09-23 FINAL THREE-DASHBOARD STABILITY PATCH ===== -->
+<style id="vFinalThreeDashboardPatch">
+/* Parent: chooser OR one child account, never both */
+#parentDashboardBody.vpc-child-mode>#vpcChooser{display:none!important}
+#parentDashboardBody.vpc-child-mode>#vpcBackBar{display:flex!important}
+#parentDashboardBody.vpc-child-mode>.parentStudentCard:not(.vpc-selected-child){display:none!important}
+#parentDashboardBody.vpc-child-mode>.parentStudentCard.vpc-selected-child{display:block!important}
+#parentDashboardBody.vpc-chooser-mode>#vpcChooser{display:grid!important}
+#parentDashboardBody.vpc-chooser-mode>#vpcBackBar{display:none!important}
+/* Admin: one usable viewport; content scrolls, sidebar stays usable */
+#erp.v90Shell:not(.hidden){height:100dvh!important;min-height:100vh!important;overflow:hidden!important}
+#erp.v90Shell>main,#erp.v90Shell .erpMain,#erp.v90Shell #erpContent{min-height:0!important}
+#erp.v90Shell #erpContent{overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;padding-bottom:90px!important}
+#erp.v90Shell #erpNav{overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain}
+/* Teacher/Parent full-screen portals must have exactly one vertical scroll path */
+#teacherDashboard:not(.hidden),#parentDashboard:not(.hidden){overflow-y:auto!important;overflow-x:hidden!important;max-height:100dvh!important}
+@media(max-width:820px){#erp.v90Shell:not(.hidden){height:100dvh!important}.vpcCards{grid-template-columns:1fr!important}}
+</style>
+<script id="vFinalThreeDashboardScript">
+(function(){
+  const $=id=>document.getElementById(id);
+  function parentStateGuard(){
+    const body=$('parentDashboardBody'); if(!body)return;
+    const chosen=body.querySelector(':scope > .parentStudentCard.vpc-selected-child');
+    const chooser=$('vpcChooser');
+    if(body.classList.contains('vpc-child-mode')&&chosen){ if(chooser)chooser.style.display='none'; }
+    if(body.classList.contains('vpc-chooser-mode')&&chooser)chooser.style.removeProperty('display');
+  }
+  // Preserve selected child across add-on/realtime DOM updates.
+  const oldOpen=window.vpcOpenChild, oldShow=window.vpcShowChildren;
+  if(typeof oldOpen==='function') window.vpcOpenChild=function(k){window.__ldmeaSelectedParentChild=String(k||'');let r=oldOpen.apply(this,arguments);setTimeout(parentStateGuard,0);return r};
+  if(typeof oldShow==='function') window.vpcShowChildren=function(){window.__ldmeaSelectedParentChild='';let r=oldShow.apply(this,arguments);setTimeout(parentStateGuard,0);return r};
+  document.addEventListener('click',e=>{const b=e.target.closest?.('[data-vpc-open]');if(b)window.__ldmeaSelectedParentChild=String(b.dataset.vpcOpen||'');if(e.target.closest?.('#vpcBackBar button'))window.__ldmeaSelectedParentChild='';setTimeout(parentStateGuard,20)},true);
+  // Teacher login entry always points to Teacher V2 dialog, never generic login landing.
+  document.addEventListener('click',e=>{const b=e.target.closest?.('button,a');if(!b)return;const t=(b.textContent||'').trim();if(/Teacher\s*Login/i.test(t)&&typeof window.teacherLoginDialog==='function'){e.preventDefault();e.stopImmediatePropagation();window.teacherLoginDialog()}},true);
+  const mo=new MutationObserver(()=>{clearTimeout(window.__threeDashT);window.__threeDashT=setTimeout(parentStateGuard,35)});mo.observe(document.documentElement,{subtree:true,childList:true});
+  setTimeout(parentStateGuard,50);
 })();
 </script>
