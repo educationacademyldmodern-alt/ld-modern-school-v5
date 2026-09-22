@@ -2699,6 +2699,7 @@ async function v32PasswordSignIn(identifier,password,role){
     let phone=normalizePhone(raw);
     return await sb.auth.signInWithPassword({phone,password});
 }
+async function v99ResolveTeacherLoginEmail(identifier){let r=await fetch('/api/teacher-login-resolve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier})}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher login mapping failed');return String(j.email||'').trim().toLowerCase()||(()=>{throw new Error('Teacher Auth account is not linked to this profile')})()}
 
 login=async function(){
   let id=$('email').value.trim(),password=$('password').value;
@@ -8588,7 +8589,7 @@ teacherPasswordLogin=async function(){
   if(window.__v99TeacherBusy)return;window.__v99TeacherBusy=true;
   try{
     v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth=await v32PasswordSignIn(raw,password,'teacher');
+      let loginEmail;try{loginEmail=await v99ResolveTeacherLoginEmail(raw)}catch(e){v75AuthStatus?.(host,'v75TeacherLoginStatus',e.message||'Teacher login mapping failed');return}let auth=await sb.auth.signInWithPassword({email:loginEmail,password});
     if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',v1142LoginMsg(auth?.error,'Teacher login'));return}
     user=auth.data.user;await loadProfile();let context=await v14LoadTeacherContext();
     if(!context){await sb.auth.signOut();user=null;profile=null;v75AuthStatus?.(host,'v75TeacherLoginStatus',v14TeacherContextError?.message||'Teacher profile mapping failed');return}
