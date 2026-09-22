@@ -1,0 +1,27 @@
+L D MODERN EDUCATION ACADEMY — V64.17 FINAL CONSOLIDATED SAFE FIX
+Date: 2026-09-20
+
+BASE:
+index-V64.17-RESOURCE-CONNECTION-OPTIMIZED.html
+The V64.17 resource/connection optimization layer is preserved. The consolidated safe-fix layer is appended on top; this is not rebuilt from the older V114.2 base.
+
+FILES:
+1) index-LDMEA-V64.17-FINAL-CONSOLIDATED-SAFE-FIX.html
+2) LDMEA-V64.17-FINAL-SAFE-MIGRATION.sql
+
+SAFE DEPLOYMENT ORDER:
+1. Create a NEW GitHub test branch from the currently working production branch.
+2. Run/review the SQL migration in Supabase SQL Editor. It is intended to be re-runnable and non-destructive; it does not DROP/TRUNCATE/reset existing school data.
+3. Replace the branch index.html with the supplied final HTML (rename it to index.html in the repo).
+4. Wait for Vercel Preview to become Ready. Do not promote to Production yet.
+5. Hard refresh / Incognito and test Public, Admin, Teacher and Parent workflows.
+6. Verify existing students/teachers/fees/attendance/results remain correct before Production promotion.
+
+STATIC VERIFICATION COMPLETED HERE:
+- Base file contains V64.17 resource/connection optimization marker.
+- Final file has one HTML body and one HTML root.
+- Literal stray \\n before the V59 script marker was removed at source level.
+- 72 executable inline JavaScript blocks were checked with node --check: 0 syntax errors.
+
+LIVE LIMITATION:
+This environment cannot certify your live Supabase RLS/auth/data or Vercel production behavior. Those must be verified in Preview against your actual database before Production.

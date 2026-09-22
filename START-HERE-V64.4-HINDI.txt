@@ -1,0 +1,22 @@
+L D MODERN EDUCATION ACADEMY — V64.4 FINAL CORRECTION PACKAGE
+Base: V64.3 checked package supplied by user.
+
+इस update में:
+1. Admin Due Fee Notice Preview/Print/PDF में A4 पर अधिकतम 3 students के compact notices.
+2. Teacher student document lookup को stale row ID पर safer refresh/fallback; misleading "Student not found" कम किया.
+3. हर ERP route पर content top पर खुले और mobile sidebar selection के बाद बंद हो.
+4. Desktop sidebar/content overlap के विरुद्ध extra responsive guard.
+5. Mobile/Tablet/Desktop पर cards, panels, tables, media auto-fit hardening.
+6. Left sidebar + ERP top header को premium layered look.
+7. Parent V64.3 Data Correction workflow intact: request सीधे master data overwrite नहीं करती; Admin approval से जाती है.
+8. Teacher/Admin login stack-depth के लिए V64.3 recursion-safe SQL को preserve किया; unsafe stack-limit increase या trigger/RLS disable नहीं किया.
+
+लगाने का सुरक्षित क्रम:
+A. पहले existing production/DB backup रखें.
+B. V64.3 SQL यदि पहले नहीं चला है तो पहले RUN-THIS-V64.3-SAFE-UPDATE.sql test/preview DB पर चलाएँ.
+C. फिर RUN-THIS-V64.4-SAFE-UPDATE.sql चलाएँ (यह केवल prerequisite check है; data destructive change नहीं करता).
+D. इस ZIP की सभी files folder structure सहित Preview branch पर upload करें.
+E. Admin/Teacher/Parent real login, fee notice 1/2/3/4 students, mobile + desktop, back/navigation test करें.
+F. Preview सही होने के बाद ही Production promote करें.
+
+महत्वपूर्ण: live Supabase के unknown private triggers/policies के बिना SQLSTATE 54001 को झूठी guarantee से hide नहीं किया गया है. यदि live DB पर stack depth फिर भी आए, DIAGNOSE-STACK-DEPTH-READONLY.sql चलाकर exact trigger/RLS cause निकालें.

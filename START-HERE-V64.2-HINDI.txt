@@ -1,0 +1,12 @@
+L D MODERN EDUCATION ACADEMY — V64.2 REVIEW PATCH
+आधार: आपकी LD-MODERN-V64.1-FINAL-RECHECKED-WITH-SQL-cb3ec25.zip
+यह उसी source की सुधारी हुई अलग copy है। Live website/database नहीं बदले गए हैं।
+
+1. वर्तमान चलती website का backup रखें। इस ZIP को निकालकर project files preview/test branch पर upload करें। index.html अकेला upload न करें: साथ की JS/CSS/API files जरूरी हैं।
+2. किसी branch का नाम अनुमान से न चुनें। Vercel में वर्तमान deployment की source branch सत्यापित करें।
+3. यदि V64 database migrations पहले से लागू हैं तो नया additive patch supabase-v64-2-profile-guard.sql पहले test database पर चलाएँ। यह records delete नहीं करता।
+4. पुरानी supabase-schema / v6 / v7 / v8 / v53 आदि SQL एक साथ न चलाएँ। ये ऐतिहासिक files हैं। नई installation या missing tables के लिए database schema मिलान आवश्यक है। मूल V64 SQL में existing policies बदलने वाले statements हैं; उसे बिना समीक्षा दोबारा न चलाएँ।
+5. Admin/Teacher/Parent login, first password change, same-mobile siblings, fee payment/due, attendance, photo upload, teacher handover और PDF print को Preview में जाँचें।
+6. Mobile/Desktop दृश्य परीक्षण तथा live Supabase RLS/SQL execution इस जाँच में पूरे नहीं हुए। जाँच रिपोर्ट पढ़ें; इसे पूर्ण production certification न मानें।
+
+ZIP में updated frontend/API, नया SQL, मूल files और जाँच report शामिल हैं।
