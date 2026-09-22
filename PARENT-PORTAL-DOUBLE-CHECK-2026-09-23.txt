@@ -1,0 +1,26 @@
+L D MODERN EDUCATION ACADEMY ERP
+PARENT PORTAL CHILD-SELECTION AUDIT
+Date: 2026-09-23
+
+BASE: LDMEA-FINAL-UPLOAD-WITH-SQL-2026-09-23.zip
+
+PASS 1
+- Full index inline JavaScript syntax: 98 script blocks checked, 0 syntax errors.
+- api/teacher-access.js Node syntax: PASS.
+- Existing Parent password login path preserved.
+- Existing Parent portal modules preserved.
+
+PASS 2
+- After Parent/Student login, Parent body enters MY CHILDREN chooser mode.
+- Chooser mode hides dashboard/module content until a child card is selected.
+- Student cards are generated from linked parent_portal_summary student records.
+- Clicking a card shows only that selected core student dashboard card.
+- Other linked student core dashboard cards remain hidden.
+- Back to My Children returns to the child-card chooser.
+- School logo/name/address header is shown in chooser.
+- Mobile responsive child-card layout included.
+- Existing Attendance / Fees / Result / Homework / Timetable / Notices and add-on functions were not removed.
+
+LIVE PREVIEW STILL REQUIRED
+- Real Supabase parent account and linked children determine runtime data/RLS.
+- Test one single-child parent and one multi-child parent before Production promote.

@@ -10101,7 +10101,7 @@ if(window.__LDMEA_TEACHER_ADD_COMPLETE_V2__) return; window.__LDMEA_TEACHER_ADD_
 const baseOpenAdd=window.openAdd;
 function e(s){return typeof esc==='function'?esc(s):String(s||'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
 function teacherAddForm(){
- const classes=(window.cls||[]);
+ const classes=(Array.isArray(window.cls)&&window.cls.length?window.cls:['Nursery','LKG','UKG','1','2','3','4','5','6','7','8','9','10']);
  $('modalTitle').textContent='+ Add Teacher — Complete Setup';
  $('dataForm').innerHTML=`
  <div class="section">Teacher Basic Details</div>
@@ -10146,3 +10146,101 @@ window.v2CreateTeacherComplete=v2CreateTeacherComplete;
 })();
 </script>
 </body></html>
+<!-- LDMEA 2026-09-23 LIVE-PREVIEW ROOT FIXES: final override -->
+<style id="ldmea-live-root-fix-css">
+/* Compact Admin command center without removing any function */
+.v114AdminHero,.v90Welcome.v114AdminHero{min-height:82px!important;padding:11px 16px!important;border-radius:15px!important;gap:12px!important}
+.v114AdminHero h1,.v90Welcome.v114AdminHero h1{font-size:21px!important;margin:2px 0!important}.v114AdminHero p{font-size:10px!important}.v114HeroMotto{padding:7px 12px!important;min-width:190px!important}.v114HeroMotto b{font-size:18px!important;line-height:1.05!important}.v114HeroMini button{padding:6px 9px!important;font-size:9px!important}
+.v114AdminStats{gap:8px!important;margin:8px 0!important}.v114AdminStats .v90Stat{min-height:62px!important;padding:8px 10px!important;border-radius:12px!important}.v114AdminStats .v90Stat b{font-size:17px!important}
+#erp.v90Shell .erpTop{min-height:58px!important;padding:6px 10px!important;gap:6px!important}#erp.v90Shell .erpTop button,#erp.v90Shell .erpTop input{min-height:34px!important}
+/* Desktop: one page scroll; sidebar remains usable but no permanent ugly scrollbar */
+@media(min-width:901px){#erp.v90Shell aside{overflow:hidden!important}#erp.v90Shell aside nav{overflow-y:auto!important;scrollbar-width:thin;max-height:calc(100vh - 150px)!important}#erp.v90Shell aside nav::-webkit-scrollbar{width:4px}#erp.v90Shell main{overflow:visible!important}#erp.v90Shell #erpContent{overflow:visible!important}}
+/* Readable screen report preview; print remains A4 */
+#erpContent .v107Doc,#erpContent .markPreview,#erpContent [id*="Preview"] .v107Doc{max-width:980px!important;width:min(100%,980px)!important;margin-left:auto!important;margin-right:auto!important}
+/* Premium ID cards: use card area instead of tiny centered content */
+.idCard.v646PremiumId .v646IdBody{justify-content:flex-start!important;padding:1.4mm 2.2mm .8mm!important;gap:.55mm!important}.idCard.v646PremiumId .v104Photo{width:16mm!important;height:18mm!important}.idCard.v646PremiumId .v104Name{font-size:9.4px!important}.idCard.v646PremiumId .v646IdLine{font-size:6.2px!important;line-height:1.15!important}.idCard.v646PremiumId .v646Sign{min-height:5.5mm!important}
+@media(max-width:700px){.v114AdminHero,.v90Welcome.v114AdminHero{min-height:auto!important;padding:10px!important}.v114HeroMotto{display:none!important}.v114AdminStats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
+<script id="ldmea-live-root-fix-js">
+(()=>{'use strict';
+ if(window.__LDMEA_LIVE_ROOT_FIX_20260923__)return;window.__LDMEA_LIVE_ROOT_FIX_20260923__=1;
+ const CANON=['Nursery','LKG','UKG','1','2','3','4','5','6','7','8','9','10'];
+ const classes=()=>{let a=Array.isArray(window.cls)?window.cls.filter(Boolean):[];return a.length?a:CANON.slice()};
+ // Teacher login must never fall through to the generic Premium Secure ERP page.
+ window.teacherLoginDialog=function(){
+   const html=`<h2>👩‍🏫 Teacher V2 Login</h2><p class="v14Muted">Teacher ID <b>या</b> Registered Mobile Number और Password से login करें.</p><div id="teacherAuthBox"><div class="v14Form"><div class="full"><label>Teacher ID / Registered Mobile</label><input id="tLoginId" autocomplete="username" placeholder="TCH-2026-1001 / 10 digit mobile"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" autocomplete="current-password" placeholder="Password"></div><div class="full"><button id="teacherV2LoginBtn" class="v14Action primary" type="button">Login</button></div><div class="full"><div id="teacherV2Status" class="v14Muted"></div></div></div><div class="v93LoginRule"><b>Teacher V2 Central Login</b><br>Account केवल Admin बनाता है.</div></div>`;
+   if(typeof window.v14Modal==='function')window.v14Modal(html);else{let d=document.createElement('div');d.id='v14Modal';d.className='v14Modal';d.innerHTML=`<div class="v14ModalCard"><button type="button" onclick="this.closest('#v14Modal').remove()">✕</button>${html}</div>`;document.body.appendChild(d)}
+   const b=document.getElementById('teacherV2LoginBtn');if(b)b.onclick=window.teacherPasswordLogin;const pw=document.getElementById('tLoginPassword');if(pw)pw.onkeydown=e=>{if(e.key==='Enter')window.teacherPasswordLogin?.()};
+ };
+ // Global empty class selectors get the same central canonical fallback; existing populated lists are untouched.
+ function healClassSelects(root=document){root.querySelectorAll?.('select').forEach(s=>{let key=((s.id||'')+' '+(s.name||'')+' '+(s.getAttribute('aria-label')||'')).toLowerCase();if(!key.includes('class'))return;let real=[...s.options].filter(o=>o.value&& !/all classes|select class/i.test(o.textContent||''));if(real.length)return;let keep=[...s.options].filter(o=>!o.value).map(o=>o.outerHTML).join('');s.innerHTML=keep+classes().map(c=>`<option value="${c}">${c}</option>`).join('')})}
+ // Remove duplicate greeting strips at source-render time. Keep first visible strip only.
+ function dedupeGreeting(){const root=document.getElementById('erpContent');if(!root)return;let arr=[...root.children].filter(el=>/Good Morning|Good Afternoon|Good Evening/i.test((el.textContent||'').trim())&&!el.classList.contains('v90Dash'));if(arr.length>1)arr.slice(1).forEach(x=>x.remove())}
+ function settle(){healClassSelects();dedupeGreeting();}
+ const mo=new MutationObserver(()=>{clearTimeout(window.__ldmeaRootFixT);window.__ldmeaRootFixT=setTimeout(settle,25)});mo.observe(document.documentElement,{childList:true,subtree:true});setTimeout(settle,0);
+ // Make Add Teacher use central/fallback classes even when legacy window.cls is empty.
+ const oldOpen=window.openAdd;if(typeof oldOpen==='function')window.openAdd=function(kind){if(kind==='staff'&&(!Array.isArray(window.cls)||!window.cls.length))window.cls=CANON.slice();return oldOpen.apply(this,arguments)};
+})();
+</script>
+
+<!-- ===== V2026-09-23 PARENT CHILD-SELECT FINAL GUARD ===== -->
+<style id="vParentChildSelectStyle">
+#parentDashboardBody.vpc-chooser-mode> :not(#vpcChooser){display:none!important}
+#parentDashboardBody.vpc-child-mode>.parentStudentCard{display:none!important}
+#parentDashboardBody.vpc-child-mode>.parentStudentCard.vpc-selected-child{display:block!important}
+#vpcChooser{display:grid;gap:14px;padding:6px 0 18px}
+.vpcSchoolHead{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:16px;border:1px solid #d9e5f2;border-radius:18px;background:linear-gradient(135deg,#fff,#f4f8ff);box-shadow:0 10px 26px #102a430d}
+.vpcSchoolHead img{width:58px;height:58px;object-fit:contain;border-radius:14px;background:#fff}.vpcSchoolHead h2{margin:0;color:#0b3765;font-size:clamp(18px,3vw,25px)}.vpcSchoolHead p{margin:4px 0 0;color:#6b7c91;font-size:11px}
+.vpcTitle{margin:2px 0 0}.vpcTitle h3{margin:0;font-size:18px}.vpcTitle p{margin:4px 0;color:#718096;font-size:12px}
+.vpcCards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.vpcChildCard{appearance:none;width:100%;border:1px solid #d6e2f0;background:#fff;border-radius:17px;padding:16px;text-align:left;cursor:pointer;box-shadow:0 8px 22px #102a430b;display:grid;grid-template-columns:48px 1fr auto;gap:11px;align-items:center}.vpcChildCard:hover{transform:translateY(-1px);border-color:#8fb8ec}.vpcAvatar{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:#eaf3ff;font-size:24px}.vpcChildCard b{display:block;color:#173e72;font-size:15px}.vpcChildCard small{display:block;color:#718096;margin-top:3px}.vpcChildCard em{font-style:normal;font-weight:900;color:#1768df;font-size:18px}
+#vpcBackBar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px;padding:10px 12px;border:1px solid #d9e5f2;border-radius:13px;background:#f8fbff}#vpcBackBar button{border:1px solid #cddbea;background:#fff;border-radius:9px;padding:8px 11px;font-weight:800;cursor:pointer}#vpcBackBar span{font-size:12px;color:#60748b;font-weight:800}
+@media(max-width:650px){.vpcSchoolHead{grid-template-columns:48px 1fr;padding:12px}.vpcSchoolHead img{width:48px;height:48px}.vpcCards{grid-template-columns:1fr}.vpcChildCard{padding:13px}}
+</style>
+<script id="vParentChildSelectScript">
+(function(){
+ const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const q=id=>document.getElementById(id);
+ let selectedKey='';
+ function childKey(card,i){return String(card?.dataset?.studentId||card?.dataset?.admissionNo||i)}
+ function childMeta(card,i){
+   const hero=card.querySelector('.v114PortalHeroStudent');
+   const b=hero?.querySelector('b'); const sp=hero?.querySelector('span');
+   let name=(b?.textContent||'Student').trim(), line=(sp?.textContent||'').trim();
+   return {key:childKey(card,i),name,line,admission:String(card.dataset.admissionNo||'')};
+ }
+ function cleanupChooserArtifacts(body){
+   body.querySelectorAll('#v97ParentWelcome,.v646ParentBrand').forEach(x=>x.remove());
+ }
+ function installChooser(){
+   const body=q('parentDashboardBody'); if(!body)return;
+   const cards=[...body.querySelectorAll(':scope > .parentStudentCard')]; if(!cards.length)return;
+   cards.forEach((c,i)=>{c.dataset.vpcKey=childKey(c,i);c.classList.remove('vpc-selected-child')});
+   cleanupChooserArtifacts(body);
+   let chooser=q('vpcChooser'); if(chooser)chooser.remove();
+   const logo=(window.school?.logo_url||'school-logo.png'), schoolName=(window.school?.school_name||'L D MODERN EDUCATION ACADEMY'), address=(window.school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar, Uttar Pradesh');
+   chooser=document.createElement('section');chooser.id='vpcChooser';
+   chooser.innerHTML=`<div class="vpcSchoolHead"><img src="${safe(logo)}" alt="School Logo"><div><h2>${safe(schoolName)}</h2><p>${safe(address)}</p></div></div><div class="vpcTitle"><h3>MY CHILDREN</h3><p>जिस विद्यार्थी की जानकारी देखनी है, उसके card पर tap करें.</p></div><div class="vpcCards">${cards.map((c,i)=>{let m=childMeta(c,i);return `<button type="button" class="vpcChildCard" data-vpc-open="${safe(m.key)}"><span class="vpcAvatar">🎓</span><span><b>${safe(m.name)}</b><small>${safe(m.line||('Admission '+m.admission))}</small></span><em>›</em></button>`}).join('')}</div>`;
+   body.prepend(chooser);body.classList.remove('vpc-child-mode');body.classList.add('vpc-chooser-mode');selectedKey='';window.scrollTo(0,0);
+   chooser.querySelectorAll('[data-vpc-open]').forEach(btn=>btn.addEventListener('click',()=>openChild(btn.dataset.vpcOpen)));
+ }
+ function openChild(key){
+   const body=q('parentDashboardBody');if(!body)return; const cards=[...body.querySelectorAll(':scope > .parentStudentCard')];
+   let target=cards.find(c=>String(c.dataset.vpcKey)===String(key));if(!target)return;
+   selectedKey=String(key);body.classList.remove('vpc-chooser-mode');body.classList.add('vpc-child-mode');cards.forEach(c=>c.classList.toggle('vpc-selected-child',c===target));
+   q('vpcBackBar')?.remove();let bar=document.createElement('div');bar.id='vpcBackBar';let meta=childMeta(target,cards.indexOf(target));bar.innerHTML=`<button type="button">← Back to My Children</button><span>${safe(meta.name)}</span>`;bar.querySelector('button').onclick=showChildren;body.insertBefore(bar,target);window.scrollTo(0,0);
+ }
+ function showChildren(){
+   const body=q('parentDashboardBody');if(!body)return;q('vpcBackBar')?.remove();body.querySelectorAll(':scope > .parentStudentCard').forEach(c=>c.classList.remove('vpc-selected-child'));body.classList.remove('vpc-child-mode');body.classList.add('vpc-chooser-mode');selectedKey='';window.scrollTo(0,0);
+ }
+ window.vpcShowChildren=showChildren;window.vpcOpenChild=openChild;
+ const base=window.loadParentPortal;
+ if(typeof base==='function')window.loadParentPortal=async function(){
+   const r=await base.apply(this,arguments);
+   setTimeout(()=>{try{installChooser()}catch(e){console.warn('Parent child chooser',e)}},180);
+   return r;
+ };
+ // Realtime/add-on reloads may rebuild the body; restore the requested portal state without exposing sibling core cards.
+ const obs=new MutationObserver(()=>{const body=q('parentDashboardBody');if(!body||q('parentDashboard')?.classList.contains('hidden'))return;if(body.dataset.vpcBusy)return;let cards=body.querySelectorAll(':scope > .parentStudentCard');if(cards.length&&!q('vpcChooser')){body.dataset.vpcBusy='1';setTimeout(()=>{try{installChooser();if(selectedKey)openChild(selectedKey)}finally{delete body.dataset.vpcBusy}},60)}});
+ document.addEventListener('DOMContentLoaded',()=>{let body=q('parentDashboardBody');if(body)obs.observe(body,{childList:true})});
+})();
+</script>
