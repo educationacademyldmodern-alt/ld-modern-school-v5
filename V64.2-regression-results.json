@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Live lexical state read/write bridge",
+    "pass": true
+  },
+  {
+    "name": "Parent API rejects GET",
+    "pass": true
+  },
+  {
+    "name": "Parent API rejects unauthenticated writes",
+    "pass": true
+  },
+  {
+    "name": "Parent API rejects teacher administration",
+    "pass": true
+  },
+  {
+    "name": "Sibling link preserves existing password-change flag",
+    "pass": true
+  },
+  {
+    "name": "Explicit reset requires first-login password change",
+    "pass": true
+  }
+]

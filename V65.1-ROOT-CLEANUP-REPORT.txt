@@ -1,0 +1,26 @@
+LDMEA V65.1 ROOT CLEANUP REPORT
+Date: 2026-09-22 IST
+
+SAFE ROOT RETIREMENTS
+1. Removed auth-fix.js — legacy Teacher/Parent login patch; not referenced by index/runtime.
+2. Removed index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html — archived alternate index; not production entry point.
+3. Removed root teacher-access.js duplicate after promoting its newer canonical implementation into api/teacher-access.js.
+4. Removed root admin-forgot.js duplicate; canonical Vercel endpoint remains api/admin-forgot.js.
+5. Removed root student-media.js duplicate; canonical Vercel endpoint remains api/student-media.js.
+
+TEACHER API CANONICALIZATION
+- api/teacher-access.js now contains the more complete implementation previously present at root.
+- Includes v643_teacher_preflight RPC validation.
+- Uses v643_teacher_assignments RPC for assignment replacement.
+- Academic session is derived safely instead of hard-coded only to 2026-27.
+- New/changed password can set must_change_password.
+- Existing teacher update remains same central teacher profile record path.
+
+NOT REMOVED BLINDLY
+Older version-named modules still referenced by index.html were not deleted merely because their names are old. They remain runtime dependencies and require feature-by-feature migration before removal. This follows the no-blind-delete rule.
+
+STATIC VERIFICATION
+- ZIP/runtime references checked before retirement.
+- Removed files had no runtime references (except API canonical destination noted above).
+- Production data is untouched.
+- No destructive SQL introduced.

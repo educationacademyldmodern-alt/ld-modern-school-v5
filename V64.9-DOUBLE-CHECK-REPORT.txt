@@ -1,0 +1,25 @@
+L D MODERN EDUCATION ACADEMY — V64.9 FINAL FUNCTION VERIFIED
+Date: 2026-09-20
+Base: V64.8 FINAL ALL MASTER VERIFIED
+
+FINAL CORRECTIONS
+1. Teacher ID Card no longer routes into the Admin-only studio.
+2. Teacher gets My Class ID Card center only when Admin permission is ON.
+3. Teacher ID Card queries are restricted to Admin-assigned classes.
+4. Individual Teacher ID Card action also obeys the Admin permission.
+5. Admin gets Teacher ID Card View/Generate/Print permission toggle in Settings.
+6. Central signature remains Admin-managed and is reused on ID cards.
+7. V64.8 exact Master reconciliation retained: Students, Teachers, Fee Due/Collection, Attendance, Income, Expense, Balance, Transport.
+8. V64.5 teacher photo fixes retained: separate Upload/Camera, mobile capture hint, <=25 KB compression, central student lookup/sync.
+9. Background notification interval disabled in V64.9 to further reduce hanging; realtime/module-open/manual refresh remain available.
+10. Existing data and functions preserved; no destructive SQL.
+
+DOUBLE CHECK
+PASS 1: V64.9 patch JavaScript node --check.
+PASS 2: V64.9 patch JavaScript node --check repeated.
+PASS: critical inherited markers/features present.
+PASS: inline onclick/onchange/oninput custom-handler static reference audit (no unresolved custom handler names).
+PASS: SQL uses ADD COLUMN IF NOT EXISTS; no DROP/TRUNCATE/DELETE.
+
+IMPORTANT LIVE CHECK
+Static/source checks cannot prove Supabase RLS, real production data, browser camera permission, popup/print permission, or Vercel runtime behavior. Test Admin + Teacher + Parent on Vercel Preview before promoting to Production.

@@ -19,8 +19,8 @@ async function restore(){
    window.user=session.user;
    if(typeof window.loadProfile==='function')await window.loadProfile();
    if(localStorage.getItem('ld_erp_open')==='1'){
-     window.openERP?.();
-     const r=routeFromState(); if(r&&r!=='dashboard')setTimeout(()=>window.render?.(r),80);
+     await window.openERP?.();
+     const r=routeFromState(); if(erpVisible()&&r&&r!=='dashboard')await window.render?.(r);
    }
  }catch(e){console.warn('V60 restore',e)}finally{state.restoring=false}
 }

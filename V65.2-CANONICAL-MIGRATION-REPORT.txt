@@ -1,0 +1,13 @@
+LDMEA V65.2 CANONICAL RUNTIME MIGRATION
+
+Migration method:
+- All runtime-loaded version/patch JavaScript files were merged IN THEIR ORIGINAL EXECUTION ORDER into erp-canonical.js.
+- All runtime-loaded version/patch CSS files were merged IN THEIR ORIGINAL CASCADE ORDER into erp-canonical.css.
+- index.html now loads one canonical local CSS bundle and one canonical local JS bundle for these migrated runtime layers.
+- Migrated source patch files were removed from the deployment package after their content was transferred.
+- CDN libraries remain separate.
+- API routes remain separate serverless endpoints.
+- SQL/history/report files were not executed or destructively modified.
+- Production database data is untouched.
+
+This is a structural runtime migration, not a rewrite. Function bodies and CSS rules are preserved in original order to minimize regression risk.

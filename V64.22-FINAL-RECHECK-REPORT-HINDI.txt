@@ -1,0 +1,37 @@
+L D MODERN EDUCATION ACADEMY — V64.22 FINAL RECHECK
+Date: 2026-09-20
+
+IMPLEMENTED IN THIS PACKAGE
+1. Teacher Admin-created login flow: Teacher details -> one/multiple Classes -> initial password.
+2. Teacher subject assignment removed from the new V64.22 Teacher Manager flow.
+3. Teacher self Change Password option added.
+4. Existing single-class teacher data remains compatible; class assignments are activated/deactivated, not deleted by the new flow.
+5. Teacher employee/system ID SQL support + blank-ID backfill added.
+6. Due Master format corrected: Student | Father | Selected Month Till Due | Fixed Fee | Total Balance | Update.
+7. Total Balance now calculates live as Till Due + Fixed Fee; null/blank values safely become zero.
+8. ID Card Studio limited to 5 designs with Left / Right / Center photo placements included.
+9. Official Letter Center gets 6 visual design choices and Preview -> Print flow.
+10. Exact duplicate dashboard/menu action routes are cleaned without deleting underlying functions.
+11. Public stray exact n/n / n n / literal \\n\\n text cleanup added for dynamically generated page text.
+12. Matching V64.22 SQL remains re-runnable/non-destructive in intent; no DROP/TRUNCATE/data reset added.
+
+STATIC VERIFICATION
+- node verify.cjs: PASS
+- Inline script syntax checked: 75 scripts PASS
+- Existing behavior checks: 6/6 PASS
+
+IMPORTANT LIVE CHECKS AFTER DEPLOYMENT
+- Supabase SQL must be run before testing Teacher creation/multi-class.
+- Live Supabase Auth account creation cannot be proven by offline static verification.
+- Browser/mobile visual checks for all 5 ID designs and 6 letter designs are still required on Preview deployment.
+- Existing Supabase RLS/project-specific policies may affect Teacher creation; if a live permission error appears, capture the exact message before changing policy.
+
+SAFE ORDER
+A. Run LDMEA-V64.22-SAFE-MIGRATION-2026-09-20.sql in Supabase SQL Editor.
+B. Deploy index.html on Preview branch first.
+C. Test Admin -> Teacher Login Manager with a test teacher and 2 classes.
+D. Test Teacher login + Change Password.
+E. Test Due Master calculation.
+F. Test 5 ID designs + 6 Official Letter designs.
+G. Check public page bottom on desktop/mobile for stray n/n.
+H. Promote to Production only after the above live checks pass.

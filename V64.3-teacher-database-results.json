@@ -1,0 +1,12 @@
+[
+  "Teacher migration rerunnable",
+  "Parent/Teacher cannot invoke service-only provisioning",
+  "Provisioning actor checked against primary admin lock",
+  "Failed subject insert rolls back entire class reassignment",
+  "Class/subject assignment commits together; duplicates removed",
+  "Previous academic session unchanged",
+  "Handover migration rerunnable",
+  "Relief disables old profile without deleting teacher",
+  "Subject and timetable transfer together",
+  "Previous timetable and responsibility snapshots preserved"
+]

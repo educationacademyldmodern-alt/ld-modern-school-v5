@@ -1,0 +1,9 @@
+L D MODERN EDUCATION ACADEMY — V64 FINAL INSTALL
+
+1. Upload ALL files from this ZIP to the root of branch: v1142-production-safe
+2. Do NOT run older SQL files.
+3. In Supabase SQL Editor run ONLY: supabase-v64-final.sql
+4. Deploy/check Vercel Preview first. Do not update main/production until Preview passes.
+5. Verify Admin/Teacher/Parent desktop + mobile, dropdown/select clicks, Create Teacher, Parent multi-child, Contact enquiry, refresh/back/session.
+
+supabase-v64-final.sql contains the V63 database reliability repair required for V64. It is intended to be re-runnable and does not DROP/TRUNCATE/DELETE application data.

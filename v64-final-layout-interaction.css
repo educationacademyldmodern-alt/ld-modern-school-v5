@@ -1,0 +1,53 @@
+/* V64 Final Layout + Interaction Repair — scoped, no database changes */
+html,body{max-width:100%;overflow-x:hidden}
+#erp{--v64-side:236px}
+@media(min-width:901px){
+ #erp aside{width:var(--v64-side)!important;max-width:var(--v64-side)!important;overflow:hidden!important}
+ #erp main{margin-left:var(--v64-side)!important;width:calc(100% - var(--v64-side))!important;max-width:calc(100% - var(--v64-side))!important;min-width:0!important}
+ #erpNav{padding:8px!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:thin}
+ #erpNav button{width:100%!important;min-height:40px!important;font-size:12px!important;padding:8px 10px!important;white-space:normal!important}
+ #erpContent{width:100%!important;max-width:100%!important;min-width:0!important;padding-left:14px!important;padding-right:14px!important;box-sizing:border-box!important}
+}
+/* The floating CONTROL dock covered content and duplicated normal navigation. */
+#v65Dock,.v65Dock{display:none!important;pointer-events:none!important}
+#erpContent .v90Welcome,#erpContent .dashHero{min-height:0!important;padding:14px 16px!important;overflow:hidden!important}
+#erpContent .v90Welcome h1,#erpContent .v90Welcome h2,#erpContent .dashHero h1{font-size:clamp(22px,2.25vw,34px)!important;line-height:1.08!important;overflow-wrap:anywhere!important;word-break:break-word!important;max-width:100%!important}
+#erpContent .v97WelcomeCopy{min-width:0!important;max-width:100%!important}
+#erpContent .v97WelcomeCopy p{overflow-wrap:anywhere!important}
+#erpContent .v90Stats,#erpContent .erpCards{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(155px,1fr))!important;gap:10px!important;width:100%!important;min-width:0!important}
+#erpContent .v90Stat,#erpContent .stat{min-width:0!important;min-height:98px!important;padding:12px!important;overflow:hidden!important}
+#erpContent table{max-width:100%}.tableWrap{max-width:100%;overflow:auto!important}
+#erp header,#erp .erpTop,#erp .topbar{max-width:100%!important;min-width:0!important}
+#erp input,#erp select,#erp textarea,#erp button{max-width:100%;box-sizing:border-box}
+#erp select,#erp input,#erp button{touch-action:manipulation}
+@media(max-width:1100px) and (min-width:901px){#erp{--v64-side:218px}#erpContent .v90Stats,#erpContent .erpCards{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:900px){
+ #erp aside{max-width:min(86vw,290px)!important}
+ #erp main{margin-left:0!important;width:100%!important;max-width:100%!important;min-width:0!important}
+ #erpContent{width:100%!important;max-width:100%!important;padding:10px!important;box-sizing:border-box!important}
+ #erpContent .v90Stats,#erpContent .erpCards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erpContent .v90Welcome,#erpContent .dashHero{padding:12px!important}
+}
+@media(max-width:520px){#erpContent .v90Stats,#erpContent .erpCards{grid-template-columns:1fr!important}#erpContent{padding:8px!important}}
+
+/* V64.1 interaction/layout hardening */
+@media(min-width:901px){
+ #erp aside{transform:none!important}
+ #erpNav{scrollbar-width:none!important;-ms-overflow-style:none}
+ #erpNav::-webkit-scrollbar{width:0!important;height:0!important}
+ #erp .erpTop{height:auto!important;min-height:68px!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;padding:8px 14px!important}
+ #erp .erpTop>div{min-width:140px!important;flex:1 1 220px!important}
+ #erp .erpTop .websiteBtn{flex:0 0 auto!important}
+}
+@media(max-width:900px){
+ #erp .erpTop{height:auto!important;min-height:60px!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important;padding:7px 9px!important}
+ #erp .erpTop>div{min-width:120px!important;flex:1 1 150px!important}
+}
+
+/* V64.2: hidden portals remain hidden; collapsed sidebar uses the same content width. */
+#erp.hidden,#parentDashboard.hidden,#parentPortal.hidden{display:none!important}
+#parentDashboardBody .parentStudentCard[hidden],#v63ChildChooser[hidden]{display:none!important}
+@media(min-width:901px){
+ #erp.v62Collapsed{--v64-side:78px}
+ #erp.v62Collapsed main{max-width:calc(100% - 78px)!important}
+}
