@@ -1,0 +1,24 @@
+LDMEA FINAL ADMIN + PARENT + TEACHER CHECK — 2026-09-23
+
+Merged on latest Master Due Fee + SQL package.
+
+ADMIN
+- Main dashboard vertical scroll guard added.
+- Sidebar keeps its own usable scroll.
+- Master Due Fee separate icon/module preserved.
+- Existing compact/dashboard/class-selector fixes preserved.
+
+PARENT
+- Login opens MY CHILDREN chooser.
+- Chooser is explicitly hidden after a child card is selected.
+- Only selected direct child card remains visible; sibling child cards stay hidden.
+- Back to My Children restores chooser.
+- Selected-child state guarded across DOM/add-on refreshes.
+
+TEACHER
+- Teacher Login click is captured to Teacher V2 dialog.
+- Generic/old teacher login landing is bypassed.
+- Existing Teacher V2 API and SQL preserved.
+
+IMPORTANT LIVE TESTS
+Actual Supabase RLS/data still requires Preview verification with real Admin, Parent and Teacher accounts.
