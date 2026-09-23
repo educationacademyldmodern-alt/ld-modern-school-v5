@@ -1,0 +1,31 @@
+L D MODERN EDUCATION ACADEMY — V64.20 FINAL CLEANUP / AUDIT REPORT
+Date: 20-09-2026
+Base: V64.17 -> V64.19 audited package -> V64.20 final cleanup
+
+FINAL STATIC RECHECK
+- 73 inline JavaScript blocks syntax-pass.
+- 6/6 existing behavior verification checks pass after cleanup.
+- Duplicate ID/static navigation/profile protections from V64.19 are preserved.
+- Generic user-facing "Permission denied" and "Login required" strings were removed from index.html and replaced with clear role/session guidance.
+- No generic "Data not found" / "Data Not Found" / "checking login" string remains in index.html.
+- Existing teacher photo Upload + Camera + ~25KB flow preserved.
+- Existing A4/fee-notice print protections preserved.
+- V64.19 single-flight profile loader, stale identity clearing, double-click navigation guard, responsive overflow guards, greeting de-duplication and legacy realtime cleanup preserved.
+
+DATABASE SAFETY
+- Matching SQL remains non-destructive/idempotent support SQL.
+- No blind destructive trigger/RLS replacement is included because a live production diagnostic result was not supplied in this package.
+- The SQL returns trigger/function and RLS definitions for live recursion diagnosis and adds only safe lookup indexes where tables exist.
+
+IMPORTANT LIMITATION
+Static source verification cannot prove live Supabase RLS/trigger behavior, credentials, network behavior, or real-device rendering. Therefore live preview verification is still required before production promotion.
+
+SAFE ORDER
+1. Keep current production backup/branch.
+2. Run LDMEA-V64.20-SAFE-MIGRATION-2026-09-20.sql in Supabase SQL Editor.
+3. Deploy index.html to preview/test branch.
+4. Test Admin + Teacher + Parent login/session; student photo upload/camera; fee notice preview/print; master search/navigation/back; mobile + desktop.
+5. If stack-depth appears, use the diagnostic result included by SQL and repair the exact recursive DB object rather than deleting/resetting data.
+6. Promote only after live checks pass.
+
+No production data was deleted/reset by this package.

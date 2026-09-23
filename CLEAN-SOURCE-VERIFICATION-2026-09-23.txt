@@ -1,0 +1,25 @@
+L D MODERN EDUCATION ACADEMY ERP — CLEAN SOURCE VERIFICATION
+Date: 2026-09-23
+
+SOURCE CLEANUP COMPLETED
+- Removed 10 duplicated legacy Parent root-state CSS controllers.
+- Removed 10 duplicated legacy Parent root-state JS controllers/listeners.
+- Kept exactly 1 Parent Child Select controller/style.
+- Removed obsolete 255px Admin scroll/sidebar override.
+- Removed obsolete 300px desktop layout override.
+- Normalized higher-specificity V64.16 desktop shell from 300px to 282px.
+- Kept exactly 1 final Admin desktop repair controller.
+- Removed duplicate Master Due Fee icon installer; kept central Master Due Fee module/route.
+- Removed stray injected HTML markers that had broken 3 print-runtime JavaScript strings.
+
+DOUBLE CHECK
+PASS: 80 executable inline JavaScript blocks checked with node --check — 0 syntax errors.
+PASS: api/teacher-access.js node --check.
+PASS: Parent legacy root controllers remaining = 0.
+PASS: Parent final controller style = 1; script = 1.
+PASS: Master Due Fee route wrapper = 1; duplicate icon installer = 0.
+PASS: Admin final desktop layout controller = 1.
+PASS: V64.16 desktop shell uses 282px sidebar and left offset.
+
+LIVE TEST STILL REQUIRED
+Actual Supabase/RLS/auth/data behavior must be tested on Vercel Preview with real Admin, multi-child Parent and Teacher accounts before Production promotion.

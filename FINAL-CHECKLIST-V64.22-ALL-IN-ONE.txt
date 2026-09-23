@@ -1,0 +1,50 @@
+V64.22 ALL-IN-ONE FINAL CHECK — 2026-09-20
+
+STATUS KEY
+[CODE PASS] = actual active code path inspected/changed in this package.
+[LIVE TEST] = requires Supabase/Vercel/browser deployment; not falsely marked ready.
+
+[CODE PASS] Teacher public self-registration button removed from active Teacher Portal.
+[CODE PASS] Teacher assignment UI is class-only; legacy Subject field/taSubjects/Assign Classes-Subjects text removed from Teacher approval flow.
+[CODE PASS] Teacher can be assigned one or multiple classes through teacher_class_assignments.
+[CODE PASS] Teacher Login Manager/API included (api/teacher-access.js) for Admin-created/reset access.
+[CODE PASS] Teacher own password screen includes current-password verification in final active override.
+[LIVE TEST] Create one teacher, assign 2+ classes, set password, login, verify only assigned classes.
+[LIVE TEST] Admin reset password and Teacher self-change password against real Supabase Auth.
+
+[CODE PASS] ID Card studio has exactly 5 format names.
+[CODE PASS] Final active renderIdCard is clamped to 1..5.
+[CODE PASS] Actual final ID renderer changes photo position: Designs 1/4 Left, 2/5 Right, 3 Center.
+[CODE PASS] Student Master photo/details feed the ID renderer.
+[LIVE TEST] Preview/Print/PDF visual check on phone + desktop.
+
+[CODE PASS] Due Master columns: Student, Father, selected-month Till Due, Fixed Fee, Total Balance, Update.
+[CODE PASS] Total Balance renderer now uses Till Due + Fixed Fee.
+[CODE PASS] Matching V64.22 SQL included; existing records are preserved by migration approach.
+[LIVE TEST] Save/reload due rows against production-schema clone/Supabase.
+
+[CODE PASS] Official Letter Center existing 6-format system retained.
+[LIVE TEST] A4 preview/print visual check.
+
+[CODE PASS] Black Back button CSS/guard added at final document level.
+[CODE PASS] Existing v45 Back/Home navigation is reused; final guard restores controls if later UI shell removes them.
+[CODE PASS] Back button forced visible in Admin/Teacher/Parent ERP top bar, including later shell CSS conflicts.
+[LIVE TEST] Open each major module and verify previous-route behavior.
+
+[CODE PASS] Public stray n/n cleanup retained.
+[CODE PASS] Existing duplicate-dashboard cleanup retained.
+[CODE PASS] Existing working ERP code/data not intentionally deleted; Teacher conflicting assignment UI was removed from active flow rather than CSS-hidden.
+
+STATIC VERIFICATION
+75 inline JavaScript syntax checks: PASS
+6 behavior checks: PASS
+Live database tested: NO
+Real browser/device tested: NO
+
+DEPLOY ORDER
+1. Backup current production.
+2. Run LDMEA-V64.22-SAFE-MIGRATION-2026-09-20.sql in Supabase SQL Editor.
+3. Ensure Vercel env contains SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY for Admin Teacher access API.
+4. Deploy this package to Preview branch first.
+5. Live-test Teacher multi-class/password, Due save/reload, ID 5 designs, Black Back, Official Letter print.
+6. Promote to Production only after live checks pass.

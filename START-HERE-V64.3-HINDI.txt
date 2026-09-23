@@ -1,0 +1,26 @@
+L D MODERN EDUCATION ACADEMY — V64.3 CHECKED UPDATE
+आधार: आपकी V64.1 ZIP, उसके V64.2 सुधार और अब Parent/Teacher की कार्यात्मक जाँच।
+
+इस ZIP के सभी frontend/API files साथ काम करते हैं। केवल index.html बदलना पर्याप्त नहीं है।
+
+क्या सुधारा गया:
+• Parent के 15 options अलग screen/data/form खोलते हैं। Leave, Correction और Help/Complaint forms तथा request history हैं।
+• My Children: एक बच्चा चुनें; उसके ही admission/class/section का data खुलेगा। Back से लौटें और दूसरा बच्चा चुनें।
+• Teacher class/subject assignment एक database transaction में होता है। failure पर पुरानी assignment लौटती है।
+• Teacher Handover: classes, subjects और timetable transfer; पुरानी history सुरक्षित; पुराने profile को inactive किया जाता है।
+• Profile role/RLS recursion के लिए helper repair; role/status/student link को स्वयं बदलने पर रोक।
+• 320, 360, 390, 768, 1024, 1366 और 1920px पर Parent layout जाँचा गया। Sidebar overlap और mobile public-page leakage ठीक किए। लंबे tables अपने अंदर scroll होंगे।
+• एक छात्र का Fee Notice एक A4 page; Preview → Print / Save PDF। PDF database में save नहीं होता।
+
+लगाने का क्रम:
+1. चलती website तथा database का backup रखें। यह existing ERP का update है, खाली Supabase project का पूरा installer नहीं।
+2. पहले test database/Preview पर RUN-THIS-V64.3-SAFE-UPDATE.sql चलाएँ। इसमें इसी update के सभी SQL एक transaction में हैं। पुराने master/schema SQL एक साथ न चलाएँ।
+3. उसी production source से बनी test branch में extracted files को उनकी folder structure के साथ upload करें। api folder सहित सभी changed JS/CSS चाहिए। ZIP स्वयं website root में न डालें।
+4. Vercel Preview में असली Admin, Teacher, Parent login; Teacher create/update; Leave approval; fee/result/admit permissions जाँचें।
+5. अपने वास्तविक database पर यह verification होने के बाद ही production branch/deployment बदलें।
+
+सीमा:
+यहाँ वास्तविक browser और स्थानीय PostgreSQL engine पर sample records से परीक्षण किया गया है। आपके live Supabase के triggers/policies/functions की वर्तमान प्रतिलिपि या authenticated live access उपलब्ध नहीं है। इसलिए हर पुराने module तथा हर production record के लिए 'अब कभी error नहीं आएगा' की गारंटी नहीं दी गई है। SQLSTATE 54001 रह जाए तो DIAGNOSE-STACK-DEPTH-READONLY.sql से वास्तविक trigger/RLS definitions निकालकर कारण जाँचना होगा; unknown triggers को अंधाधुंध disable नहीं किया गया है।
+
+विस्तृत परिणाम: V64.3-VERIFICATION-REPORT.md
+पुरानी instructions केवल docs/history में हैं; इस START-HERE file को प्राथमिकता दें।

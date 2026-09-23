@@ -1,0 +1,8 @@
+V120 Separate Master Due Fee
+- Separate Admin sidebar icon: ⚡ Master Due Fee
+- Separate Admin dashboard shortcut
+- Columns: Student Name | Father Name | Class | Till Due | Fixed Monthly Fee | Total Due | Update
+- Class + search filters
+- Till Due month can be applied to visible rows
+- Update writes student_fee_settings and Opening Due schedule safely; no table drop/delete.
+- Existing Master Fee Management remains separate and unchanged.
