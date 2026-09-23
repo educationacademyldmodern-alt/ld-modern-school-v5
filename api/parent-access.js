@@ -1,145 +1,16 @@
-// Secure Vercel Serverless API for Parent login create/update.
-// IMPORTANT: SUPABASE_SERVICE_ROLE_KEY must be stored only in Vercel Environment Variables.
-
-const SUPABASE_URL = process.env.SUPABASE_URL || "https://xleagfmdueyalkdnicyr.supabase.co";
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-function send(res, status, obj){
-  res.status(status).setHeader("Content-Type","application/json; charset=utf-8");
-  res.end(JSON.stringify(obj));
-}
-async function asJson(r){
-  let t=await r.text();
-  try{return t?JSON.parse(t):null}catch{return {raw:t}}
-}
-async function rest(path, opts={}){
-  return fetch(SUPABASE_URL + "/rest/v1/" + path,{
-    ...opts,
-    headers:{
-      "apikey":SERVICE_KEY,
-      "Authorization":"Bearer "+SERVICE_KEY,
-      "Content-Type":"application/json",
-      ...(opts.headers||{})
-    }
-  });
-}
-async function verifyAdmin(req){
-  const auth=String(req.headers.authorization||"");
-  if(!auth.startsWith("Bearer ")) throw new Error("Admin login required");
-  const ur=await fetch(SUPABASE_URL+"/auth/v1/user",{
-    headers:{"apikey":SERVICE_KEY,"Authorization":auth}
-  });
-  if(!ur.ok) throw new Error("Invalid/expired Admin session");
-  const u=await ur.json();
-  const pr=await rest(`profiles?id=eq.${encodeURIComponent(u.id)}&select=role,status`);
-  const rows=await asJson(pr);
-  const p=Array.isArray(rows)?rows[0]:null;
-  if(!p || !["super_admin","admin","principal"].includes(p.role) || String(p.status||"active").toLowerCase()==="disabled"){
-    throw new Error("Admin permission required");
-  }
-  return u;
-}
-async function getStudent(id){
-  const r=await rest(`students?id=eq.${encodeURIComponent(id)}&select=id,student_name,admission_no,class_name,phone,parent_email`);
-  const rows=await asJson(r);
-  if(!r.ok) throw new Error(rows?.message||"Student lookup failed");
-  if(!Array.isArray(rows)||!rows[0]) throw new Error("Student not found");
-  return rows[0];
-}
-async function findProfileByAdmission(adm){
-  if(!adm)return null;
-  const r=await rest(`profiles?linked_admission_no=eq.${encodeURIComponent(adm)}&role=eq.parent&select=id,email,linked_admission_no&limit=1`);
-  const rows=await asJson(r);
-  return Array.isArray(rows)?rows[0]||null:null;
-}
-async function findProfileByEmail(email){
-  if(!email)return null;
-  const r=await rest(`profiles?email=eq.${encodeURIComponent(email)}&role=eq.parent&select=id,email,linked_admission_no&limit=1`);
-  const rows=await asJson(r);
-  return Array.isArray(rows)?rows[0]||null:null;
-}
-async function authCreate(email,password,meta){
-  const r=await fetch(SUPABASE_URL+"/auth/v1/admin/users",{
-    method:"POST",
-    headers:{"apikey":SERVICE_KEY,"Authorization":"Bearer "+SERVICE_KEY,"Content-Type":"application/json"},
-    body:JSON.stringify({email,password,email_confirm:true,user_metadata:meta})
-  });
-  const j=await asJson(r);
-  if(!r.ok) throw new Error(j?.msg||j?.message||j?.error_description||"Parent auth create failed");
-  return j;
-}
-async function authUpdate(id,email,password,meta){
-  const r=await fetch(SUPABASE_URL+"/auth/v1/admin/users/"+encodeURIComponent(id),{
-    method:"PUT",
-    headers:{"apikey":SERVICE_KEY,"Authorization":"Bearer "+SERVICE_KEY,"Content-Type":"application/json"},
-    body:JSON.stringify({email,password,email_confirm:true,user_metadata:meta})
-  });
-  const j=await asJson(r);
-  if(!r.ok) throw new Error(j?.msg||j?.message||j?.error_description||"Parent auth update failed");
-  return j;
-}
-async function upsertProfile(userId,email,student){
-  const r=await rest("profiles?on_conflict=id",{
-    method:"POST",
-    headers:{"Prefer":"resolution=merge-duplicates,return=representation"},
-    body:JSON.stringify({
-      id:userId,email,
-      full_name:`Parent of ${student.student_name||""}`,
-      role:"parent",status:"active",
-      linked_admission_no:student.admission_no||""
-    })
-  });
-  const j=await asJson(r);
-  if(!r.ok) throw new Error(j?.message||"Parent profile link failed");
-}
-async function updateStudent(studentId,mobile,email){
-  const r=await rest(`students?id=eq.${encodeURIComponent(studentId)}`,{
-    method:"PATCH",
-    headers:{"Prefer":"return=representation"},
-    body:JSON.stringify({phone:mobile,parent_email:email})
-  });
-  const j=await asJson(r);
-  if(!r.ok) throw new Error(j?.message||"Student link update failed");
-}
-
-module.exports = async function handler(req,res){
-  if(req.method!=="POST") return send(res,405,{error:"POST only"});
-  if(!SERVICE_KEY) return send(res,500,{error:"SUPABASE_SERVICE_ROLE_KEY is not configured in Vercel"});
-  try{
-    await verifyAdmin(req);
-    const body=typeof req.body==="string"?JSON.parse(req.body||"{}"):(req.body||{});
-    if(body.action!=="create_or_update") return send(res,400,{error:"Invalid action"});
-    const student=await getStudent(body.student_id);
-    const mobile=String(body.mobile||"").replace(/\D/g,"").slice(-10);
-    const emailInput=String(body.email||"").trim().toLowerCase();
-    const password=String(body.password||"");
-    if(mobile.length!==10) throw new Error("Valid 10 digit Parent Mobile required");
-    if(password.length<6) throw new Error("Password must be at least 6 characters");
-
-    // Same mobile gets the same internal login email, so siblings can share one Parent account.
-    const loginEmail=emailInput || `p${mobile}@parent.ldmodern.local`;
-    let prof=await findProfileByAdmission(student.admission_no);
-    if(!prof) prof=await findProfileByEmail(loginEmail);
-
-    const meta={full_name:`Parent of ${student.student_name||""}`,role:"parent",mobile,linked_admission_no:student.admission_no||""};
-    let authUser,created=false;
-    if(prof?.id){
-      authUser=await authUpdate(prof.id,loginEmail,password,meta);
-    }else{
-      try{
-        authUser=await authCreate(loginEmail,password,meta);created=true;
-      }catch(e){
-        // If an auth user already exists but the profile lookup missed it, fail safely.
-        throw new Error(e.message+" • यदि account पहले से है तो Parent profile/link check करें.");
-      }
-    }
-    const uid=authUser?.id||authUser?.user?.id||prof?.id;
-    if(!uid) throw new Error("Parent user id not returned");
-    await upsertProfile(uid,loginEmail,student);
-    await updateStudent(student.id,mobile,loginEmail);
-
-    return send(res,200,{ok:true,created,login_email:loginEmail,mobile});
-  }catch(e){
-    return send(res,400,{error:e.message||String(e)});
-  }
-};
+const SUPABASE_URL=process.env.SUPABASE_URL||process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SERVICE_KEY=process.env.SUPABASE_SERVICE_ROLE_KEY;
+function send(res,status,obj){res.status(status).setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store, max-age=0');res.setHeader('X-Content-Type-Options','nosniff');res.end(JSON.stringify(obj))}
+async function asJson(r){const t=await r.text();try{return t?JSON.parse(t):null}catch{return {raw:t}}}
+async function rest(path,opts={}){return fetch(SUPABASE_URL+'/rest/v1/'+path,{...opts,headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY,'Content-Type':'application/json',...(opts.headers||{})}})}
+async function rows(path){const r=await rest(path),j=await asJson(r);if(!r.ok)throw new Error(j?.message||j?.error||'Database lookup failed');return Array.isArray(j)?j:[]}
+async function verifyPrimaryAdmin(req){const auth=String(req.headers.authorization||'');if(!auth.startsWith('Bearer '))throw Object.assign(new Error('Primary Admin login required'),{status:401});const ur=await fetch(SUPABASE_URL+'/auth/v1/user',{headers:{apikey:SERVICE_KEY,Authorization:auth}});if(!ur.ok)throw Object.assign(new Error('Invalid/expired Admin session'),{status:401});const u=await ur.json(),pr=await rows(`profiles?id=eq.${encodeURIComponent(u.id)}&select=role,status&limit=1`),p=pr[0],role=String(p?.role||'').toLowerCase(),st=String(p?.status||'active').toLowerCase();if(!p||!['admin','super_admin'].includes(role)||['disabled','inactive','pending','suspended','rejected'].includes(st))throw Object.assign(new Error('Primary Admin permission required'),{status:403});const lock=await rows('v95_primary_admin?singleton_id=eq.1&select=user_id&limit=1');if(!lock[0]||String(lock[0].user_id)!==String(u.id))throw Object.assign(new Error('Only locked Primary Admin can manage Parent login'),{status:403});return u}
+async function getStudent(id){const r=await rows(`students?id=eq.${encodeURIComponent(id)}&select=id,student_name,admission_no,class_name,phone,parent_email,parent_login_status,parent_login_updated_at&limit=1`);if(!r[0])throw new Error('Student not found');return r[0]}
+async function findAdmission(adm){const r=await rows(`profiles?linked_admission_no=eq.${encodeURIComponent(adm)}&role=eq.parent&select=id,email,linked_admission_no&limit=1`);return r[0]||null}
+async function findEmail(email){const r=await rows(`profiles?email=eq.${encodeURIComponent(email)}&role=eq.parent&select=id,email,linked_admission_no&limit=1`);return r[0]||null}
+async function findSiblingParentByMobile(mobile){const variants=[mobile,`+91${mobile}`];for(const ph of variants){const r=await rows(`students?phone=eq.${encodeURIComponent(ph)}&parent_email=not.is.null&select=parent_email&limit=10`);for(const x of r){const em=String(x?.parent_email||'').trim().toLowerCase();if(em){const pr=await findEmail(em);if(pr)return pr}}}return null}
+async function authCreate(email,password,meta){const r=await fetch(SUPABASE_URL+'/auth/v1/admin/users',{method:'POST',headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password,email_confirm:true,user_metadata:meta})}),j=await asJson(r);if(!r.ok)throw Object.assign(new Error(j?.msg||j?.message||j?.error_description||'Parent auth create failed'),{status:r.status});return j?.user||j}
+async function authUpdate(id,email,password,meta){const body={email,email_confirm:true,user_metadata:meta};if(password)body.password=password;const r=await fetch(SUPABASE_URL+'/auth/v1/admin/users/'+encodeURIComponent(id),{method:'PUT',headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}),j=await asJson(r);if(!r.ok)throw Object.assign(new Error(j?.msg||j?.message||j?.error_description||'Parent auth update failed'),{status:r.status});return j?.user||j}
+async function upsertProfile(id,email,student,keepAdm){const r=await rest('profiles?on_conflict=id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({id,email,full_name:`Parent of ${student.student_name||''}`,role:'parent',status:'active',linked_admission_no:keepAdm||student.admission_no||''})}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Parent profile link failed')}
+async function updateStudent(id,mobile,email,status){const body={phone:mobile,parent_email:email,parent_login_status:status,parent_login_updated_at:new Date().toISOString()};const r=await rest(`students?id=eq.${encodeURIComponent(id)}`,{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(body)}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Student link update failed')}
+module.exports=async function handler(req,res){if(req.method!=='POST')return send(res,405,{error:'POST only'});if(!SUPABASE_URL||!SERVICE_KEY)return send(res,500,{error:'Supabase server environment is not configured'});try{await verifyPrimaryAdmin(req);const body=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{}),action=String(body.action||'');if(!['create_or_link','reset_password','create_or_set_password'].includes(action))return send(res,400,{error:'Invalid action'});if(!body.student_id)throw new Error('Student required');const student=await getStudent(body.student_id),mobile=String(body.mobile||student.phone||'').replace(/\D/g,'').slice(-10),password=String(body.password||'');if(mobile.length!==10)throw new Error('Valid 10 digit Parent Mobile required');if(password.length<8)throw new Error('Parent Password कम से कम 8 characters का रखें');const internal=`p${mobile}@parent.ldmodern.local`;let prof=await findAdmission(student.admission_no);if(!prof&&student.parent_email)prof=await findEmail(String(student.parent_email).trim().toLowerCase());if(!prof)prof=await findSiblingParentByMobile(mobile);if(!prof)prof=await findEmail(internal);const loginEmail=internal,keepAdm=prof?.linked_admission_no||student.admission_no||'',meta={full_name:`Parent of ${student.student_name||''}`,role:'parent',mobile,linked_admission_no:keepAdm};let authUser,created=false,passwordChanged=false,loginStatus='Not Generated';if(prof?.id){const mustSet=(action==='reset_password'||action==='create_or_set_password');const pw=mustSet?password:'';authUser=await authUpdate(prof.id,loginEmail,pw,meta);passwordChanged=!!pw;loginStatus=mustSet?'Regenerated':'Linked'}else{if(action==='reset_password')throw new Error('Parent login अभी बना नहीं है. पहले Create / Link करें.');authUser=await authCreate(loginEmail,password,meta);created=true;passwordChanged=true;loginStatus='Generated'}const uid=authUser?.id||prof?.id;if(!uid)throw new Error('Parent user id not returned');await upsertProfile(uid,loginEmail,student,keepAdm);await updateStudent(student.id,mobile,loginEmail,loginStatus);return send(res,200,{ok:true,created,password_changed:passwordChanged,status:loginStatus,login_email:loginEmail,mobile,linked_admission_no:keepAdm,internal_auth:loginEmail.endsWith('@parent.ldmodern.local')})}catch(e){return send(res,e.status||400,{error:e.message||String(e)})}}
