@@ -1325,76 +1325,7 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 
 
 
-\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
-<script id="v1143-teacher-login-safe-fix">
-window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
-(function(){'use strict';
-  const el=id=>document.getElementById(id);
-  const cleanRole=v=>String(v||'').trim().toLowerCase();
-  const approved=v=>cleanRole(v)==='approved';
-  const msg=e=>{let m=String(e?.message||e||'');if(/invalid login credentials/i.test(m))return 'Registered Mobile या Password सही नहीं है.';if(/permission denied|row-level security|rls/i.test(m))return 'Teacher permission/mapping में समस्या है. Admin से Teacher Login दोबारा Save/Update कराएँ.';if(/failed to fetch|network|connection/i.test(m))return 'Server/Internet connection problem. फिर कोशिश करें.';return m||'Teacher login नहीं हो सका.'};
-
-  // One authoritative context loader. SQL RPC uses auth.uid() and avoids recursive client-side RLS lookups.
-  window.v1143LoadTeacherContext=async function(){
-    v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-    if(!user?.id)return {ok:false,reason:'no-user'};
-    let r=await sb.rpc('v1143_my_teacher_context');
-    if(!r.error&&r.data){
-      let x=r.data||{};
-      if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};
-      v14TeacherProfile=x.teacher;
-      v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];
-      v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
-      return {ok:true};
-    }
-    // Compatibility fallback if SQL has not been applied yet; never hides the actual DB error.
-    let tp=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
-    if(tp.error)throw new Error(tp.error.message);
-    if(!tp.data)return {ok:false,reason:'teacher-profile-missing'};
-    v14TeacherProfile=tp.data;
-    let [ca,sa]=await Promise.all([
-      sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true),
-      sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true)
-    ]);
-    if(ca.error||sa.error)throw new Error((ca.error||sa.error).message);
-    v14TeacherClasses=ca.data||[];v14TeacherSubjects=sa.data||[];
-    return {ok:true};
-  };
-  // All later teacher modules calling the historical name now use the same loader.
-  window.v14LoadTeacherContext=window.v1143LoadTeacherContext;
-  try{v14LoadTeacherContext=window.v1143LoadTeacherContext}catch(_e){}
-
-  window.teacherPasswordLogin=async function(){
-    const raw=String(el('tLoginId')?.value||'').trim(),password=String(el('tLoginPassword')?.value||''),host=el('teacherAuthBox'),btn=host?.querySelector('button[onclick*="teacherPasswordLogin"]');
-    if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
-    if(window.__v1143TeacherBusy)return;window.__v1143TeacherBusy=true;if(btn)btn.disabled=true;
-    try{
-      v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth;
-      if(raw.includes('@')) auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-      else{
-        const digits=raw.replace(/\D/g,'').slice(-10);
-        if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-        // Teacher Access API creates this deterministic private auth alias. No pre-login RLS lookup is needed.
-        auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      }
-      if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(auth?.error));return}
-      user=auth.data.user;
-      await loadProfile();
-      if(cleanRole(profile?.role)!=='teacher')throw new Error('यह Teacher account नहीं है.');
-      const ctx=await window.v1143LoadTeacherContext();
-      if(!ctx.ok||!v14TeacherProfile)throw new Error('Teacher profile mapping नहीं मिली. Admin → Teachers/Staff → Teacher Login में इस Teacher को Save/Update करें.');
-      if(!approved(v14TeacherProfile.approval_status)||v14TeacherProfile.is_active===false)throw new Error('Teacher access अभी Active/Approved नहीं है.');
-      el('v14Modal')?.remove();
-      await openERP();
-    }catch(e){
-      try{await sb.auth.signOut()}catch(_e){} user=null;profile=null;v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-      v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(e));
-    }finally{window.__v1143TeacherBusy=false;if(btn)btn.disabled=false}
-  };
-})();
-</script>
-<!-- ===== END V114.3 ===== -->\n</body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
+</body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
 <!-- ===== V92.1 LOGIN RAW-CODE PARSE FIX: restored V14 print boundary ===== -->
 <style>
@@ -2450,76 +2381,7 @@ function idStudioPrint(){let el=$('idA4Preview');if(!el)return toast('Preview fi
 </head><body>${el.innerHTML}
 
 
-\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
-<script id="v1143-teacher-login-safe-fix">
-window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
-(function(){'use strict';
-  const el=id=>document.getElementById(id);
-  const cleanRole=v=>String(v||'').trim().toLowerCase();
-  const approved=v=>cleanRole(v)==='approved';
-  const msg=e=>{let m=String(e?.message||e||'');if(/invalid login credentials/i.test(m))return 'Registered Mobile या Password सही नहीं है.';if(/permission denied|row-level security|rls/i.test(m))return 'Teacher permission/mapping में समस्या है. Admin से Teacher Login दोबारा Save/Update कराएँ.';if(/failed to fetch|network|connection/i.test(m))return 'Server/Internet connection problem. फिर कोशिश करें.';return m||'Teacher login नहीं हो सका.'};
-
-  // One authoritative context loader. SQL RPC uses auth.uid() and avoids recursive client-side RLS lookups.
-  window.v1143LoadTeacherContext=async function(){
-    v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-    if(!user?.id)return {ok:false,reason:'no-user'};
-    let r=await sb.rpc('v1143_my_teacher_context');
-    if(!r.error&&r.data){
-      let x=r.data||{};
-      if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};
-      v14TeacherProfile=x.teacher;
-      v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];
-      v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
-      return {ok:true};
-    }
-    // Compatibility fallback if SQL has not been applied yet; never hides the actual DB error.
-    let tp=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
-    if(tp.error)throw new Error(tp.error.message);
-    if(!tp.data)return {ok:false,reason:'teacher-profile-missing'};
-    v14TeacherProfile=tp.data;
-    let [ca,sa]=await Promise.all([
-      sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true),
-      sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true)
-    ]);
-    if(ca.error||sa.error)throw new Error((ca.error||sa.error).message);
-    v14TeacherClasses=ca.data||[];v14TeacherSubjects=sa.data||[];
-    return {ok:true};
-  };
-  // All later teacher modules calling the historical name now use the same loader.
-  window.v14LoadTeacherContext=window.v1143LoadTeacherContext;
-  try{v14LoadTeacherContext=window.v1143LoadTeacherContext}catch(_e){}
-
-  window.teacherPasswordLogin=async function(){
-    const raw=String(el('tLoginId')?.value||'').trim(),password=String(el('tLoginPassword')?.value||''),host=el('teacherAuthBox'),btn=host?.querySelector('button[onclick*="teacherPasswordLogin"]');
-    if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
-    if(window.__v1143TeacherBusy)return;window.__v1143TeacherBusy=true;if(btn)btn.disabled=true;
-    try{
-      v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth;
-      if(raw.includes('@')) auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-      else{
-        const digits=raw.replace(/\D/g,'').slice(-10);
-        if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-        // Teacher Access API creates this deterministic private auth alias. No pre-login RLS lookup is needed.
-        auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      }
-      if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(auth?.error));return}
-      user=auth.data.user;
-      await loadProfile();
-      if(cleanRole(profile?.role)!=='teacher')throw new Error('यह Teacher account नहीं है.');
-      const ctx=await window.v1143LoadTeacherContext();
-      if(!ctx.ok||!v14TeacherProfile)throw new Error('Teacher profile mapping नहीं मिली. Admin → Teachers/Staff → Teacher Login में इस Teacher को Save/Update करें.');
-      if(!approved(v14TeacherProfile.approval_status)||v14TeacherProfile.is_active===false)throw new Error('Teacher access अभी Active/Approved नहीं है.');
-      el('v14Modal')?.remove();
-      await openERP();
-    }catch(e){
-      try{await sb.auth.signOut()}catch(_e){} user=null;profile=null;v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-      v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(e));
-    }finally{window.__v1143TeacherBusy=false;if(btn)btn.disabled=false}
-  };
-})();
-</script>
-<!-- ===== END V114.3 ===== -->\n</body></html>`);w.document.close();setTimeout(()=>w.print(),350)}
+</body></html>`);w.document.close();setTimeout(()=>w.print(),350)}
 function idStudioPdf(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class';html2pdf().set({margin:0,filename:`${c}-ID-Cards-A4-10.pdf`,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()}
 async function findIdStudent(){let z=String($('idSearch')?.value||'').trim();if(idStudioRows.length){idStudioRenderStudentList();return}if(!z)return toast('Search text डालें या Class चुनें');let safe=z.replace(/[%_,]/g,' ');let{data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${safe}%,father_name.ilike.%${safe}%,roll_no.ilike.%${safe}%,admission_no.ilike.%${safe}%`).limit(50);if(error)return toast(error.message);idStudioRows=idStudioSortRows(data||[]);idStudioRenderStudentList()}
 async function loadIdStudent(id){let{data:s,error}=await sb.from('students').select('*').eq('id',id).single();if(error)return toast(error.message);await v14AttachSignedPhotos([s]);idStudioRows=[s];idStudioSelected=new Set([String(s.id)]);idStudioUpdateSelectedCount();idStudioPreview()}
@@ -6580,76 +6442,7 @@ function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCa
 </head><body>${area.innerHTML}
 
 
-\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
-<script id="v1143-teacher-login-safe-fix">
-window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
-(function(){'use strict';
-  const el=id=>document.getElementById(id);
-  const cleanRole=v=>String(v||'').trim().toLowerCase();
-  const approved=v=>cleanRole(v)==='approved';
-  const msg=e=>{let m=String(e?.message||e||'');if(/invalid login credentials/i.test(m))return 'Registered Mobile या Password सही नहीं है.';if(/permission denied|row-level security|rls/i.test(m))return 'Teacher permission/mapping में समस्या है. Admin से Teacher Login दोबारा Save/Update कराएँ.';if(/failed to fetch|network|connection/i.test(m))return 'Server/Internet connection problem. फिर कोशिश करें.';return m||'Teacher login नहीं हो सका.'};
-
-  // One authoritative context loader. SQL RPC uses auth.uid() and avoids recursive client-side RLS lookups.
-  window.v1143LoadTeacherContext=async function(){
-    v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-    if(!user?.id)return {ok:false,reason:'no-user'};
-    let r=await sb.rpc('v1143_my_teacher_context');
-    if(!r.error&&r.data){
-      let x=r.data||{};
-      if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};
-      v14TeacherProfile=x.teacher;
-      v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];
-      v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
-      return {ok:true};
-    }
-    // Compatibility fallback if SQL has not been applied yet; never hides the actual DB error.
-    let tp=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
-    if(tp.error)throw new Error(tp.error.message);
-    if(!tp.data)return {ok:false,reason:'teacher-profile-missing'};
-    v14TeacherProfile=tp.data;
-    let [ca,sa]=await Promise.all([
-      sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true),
-      sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true)
-    ]);
-    if(ca.error||sa.error)throw new Error((ca.error||sa.error).message);
-    v14TeacherClasses=ca.data||[];v14TeacherSubjects=sa.data||[];
-    return {ok:true};
-  };
-  // All later teacher modules calling the historical name now use the same loader.
-  window.v14LoadTeacherContext=window.v1143LoadTeacherContext;
-  try{v14LoadTeacherContext=window.v1143LoadTeacherContext}catch(_e){}
-
-  window.teacherPasswordLogin=async function(){
-    const raw=String(el('tLoginId')?.value||'').trim(),password=String(el('tLoginPassword')?.value||''),host=el('teacherAuthBox'),btn=host?.querySelector('button[onclick*="teacherPasswordLogin"]');
-    if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
-    if(window.__v1143TeacherBusy)return;window.__v1143TeacherBusy=true;if(btn)btn.disabled=true;
-    try{
-      v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth;
-      if(raw.includes('@')) auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-      else{
-        const digits=raw.replace(/\D/g,'').slice(-10);
-        if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-        // Teacher Access API creates this deterministic private auth alias. No pre-login RLS lookup is needed.
-        auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      }
-      if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(auth?.error));return}
-      user=auth.data.user;
-      await loadProfile();
-      if(cleanRole(profile?.role)!=='teacher')throw new Error('यह Teacher account नहीं है.');
-      const ctx=await window.v1143LoadTeacherContext();
-      if(!ctx.ok||!v14TeacherProfile)throw new Error('Teacher profile mapping नहीं मिली. Admin → Teachers/Staff → Teacher Login में इस Teacher को Save/Update करें.');
-      if(!approved(v14TeacherProfile.approval_status)||v14TeacherProfile.is_active===false)throw new Error('Teacher access अभी Active/Approved नहीं है.');
-      el('v14Modal')?.remove();
-      await openERP();
-    }catch(e){
-      try{await sb.auth.signOut()}catch(_e){} user=null;profile=null;v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-      v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(e));
-    }finally{window.__v1143TeacherBusy=false;if(btn)btn.disabled=false}
-  };
-})();
-</script>
-<!-- ===== END V114.3 ===== -->\n</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
+</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
 
 const v69RenderBase=render;
 render=async function(p){if(p==='exam_admit_center'){try{v671ResetERPViewport?.()}catch(_e){}return v69ExamAdmitCenter()}return v69RenderBase(p)};
@@ -8040,76 +7833,7 @@ window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview fir
 </head><body>${el.innerHTML}
 
 
-\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
-<script id="v1143-teacher-login-safe-fix">
-window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
-(function(){'use strict';
-  const el=id=>document.getElementById(id);
-  const cleanRole=v=>String(v||'').trim().toLowerCase();
-  const approved=v=>cleanRole(v)==='approved';
-  const msg=e=>{let m=String(e?.message||e||'');if(/invalid login credentials/i.test(m))return 'Registered Mobile या Password सही नहीं है.';if(/permission denied|row-level security|rls/i.test(m))return 'Teacher permission/mapping में समस्या है. Admin से Teacher Login दोबारा Save/Update कराएँ.';if(/failed to fetch|network|connection/i.test(m))return 'Server/Internet connection problem. फिर कोशिश करें.';return m||'Teacher login नहीं हो सका.'};
-
-  // One authoritative context loader. SQL RPC uses auth.uid() and avoids recursive client-side RLS lookups.
-  window.v1143LoadTeacherContext=async function(){
-    v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-    if(!user?.id)return {ok:false,reason:'no-user'};
-    let r=await sb.rpc('v1143_my_teacher_context');
-    if(!r.error&&r.data){
-      let x=r.data||{};
-      if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};
-      v14TeacherProfile=x.teacher;
-      v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];
-      v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
-      return {ok:true};
-    }
-    // Compatibility fallback if SQL has not been applied yet; never hides the actual DB error.
-    let tp=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
-    if(tp.error)throw new Error(tp.error.message);
-    if(!tp.data)return {ok:false,reason:'teacher-profile-missing'};
-    v14TeacherProfile=tp.data;
-    let [ca,sa]=await Promise.all([
-      sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true),
-      sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true)
-    ]);
-    if(ca.error||sa.error)throw new Error((ca.error||sa.error).message);
-    v14TeacherClasses=ca.data||[];v14TeacherSubjects=sa.data||[];
-    return {ok:true};
-  };
-  // All later teacher modules calling the historical name now use the same loader.
-  window.v14LoadTeacherContext=window.v1143LoadTeacherContext;
-  try{v14LoadTeacherContext=window.v1143LoadTeacherContext}catch(_e){}
-
-  window.teacherPasswordLogin=async function(){
-    const raw=String(el('tLoginId')?.value||'').trim(),password=String(el('tLoginPassword')?.value||''),host=el('teacherAuthBox'),btn=host?.querySelector('button[onclick*="teacherPasswordLogin"]');
-    if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
-    if(window.__v1143TeacherBusy)return;window.__v1143TeacherBusy=true;if(btn)btn.disabled=true;
-    try{
-      v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth;
-      if(raw.includes('@')) auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-      else{
-        const digits=raw.replace(/\D/g,'').slice(-10);
-        if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-        // Teacher Access API creates this deterministic private auth alias. No pre-login RLS lookup is needed.
-        auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      }
-      if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(auth?.error));return}
-      user=auth.data.user;
-      await loadProfile();
-      if(cleanRole(profile?.role)!=='teacher')throw new Error('यह Teacher account नहीं है.');
-      const ctx=await window.v1143LoadTeacherContext();
-      if(!ctx.ok||!v14TeacherProfile)throw new Error('Teacher profile mapping नहीं मिली. Admin → Teachers/Staff → Teacher Login में इस Teacher को Save/Update करें.');
-      if(!approved(v14TeacherProfile.approval_status)||v14TeacherProfile.is_active===false)throw new Error('Teacher access अभी Active/Approved नहीं है.');
-      el('v14Modal')?.remove();
-      await openERP();
-    }catch(e){
-      try{await sb.auth.signOut()}catch(_e){} user=null;profile=null;v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-      v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(e));
-    }finally{window.__v1143TeacherBusy=false;if(btn)btn.disabled=false}
-  };
-})();
-</script>
-<!-- ===== END V114.3 ===== -->\n</body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
+</body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
 window.v92PdfArea=function(id,name){let el=q92(id);if(!el)return toast('Preview first');if(!window.html2pdf)return v92PrintArea(id);let opt={margin:[10,10,10,10],filename:name||'admit-cards.pdf',image:{type:'jpeg',quality:.94},html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};html2pdf().set(opt).from(el).save();};
 
 function v92BuildPages(cards){let pages=[];for(let i=0;i<cards.length;i+=3){let chunk=cards.slice(i,i+3),html=chunk.map(x=>v75ParentAdmitHtml(x)).join('');for(let j=chunk.length;j<3;j++)html+='<div class="v92BlankSlot"></div>';pages.push(`<section class="v92A4Page">${html}</section>`)}return pages.join('')}
@@ -9702,76 +9426,7 @@ window.v57BulkNotice=function(){
  const card=x=>`<article class="v644FeeNotice"><header><b>${E(window.school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b><small>${E(window.school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar, Uttar Pradesh')}</small><h3>FEE DUE NOTICE</h3></header><div class="v644Info"><span><b>Student:</b> ${E(x.student_name)}</span><span><b>Class:</b> ${E(x.class_name)}</span><span><b>Father:</b> ${E(x.father_name||'—')}</span><span><b>Adm. No.:</b> ${E(x.admission_no||'—')}</span></div><p>आपके बच्चे की विद्यालय शुल्क बकाया राशि <strong>${cash(x._due)}</strong> है। कृपया निर्धारित समय में शुल्क जमा करने का कष्ट करें। यदि शुल्क जमा हो चुका है तो इस सूचना को नजरअंदाज करें।</p><footer><span>Date: ${E(new Date().toLocaleDateString('en-IN'))}</span><span>Principal / Authorized Signatory</span></footer></article>`;
  let pages=[];for(let i=0;i<rows.length;i+=3)pages.push(`<section class="v644A4">${rows.slice(i,i+3).map(card).join('')}</section>`);
  const w=window.open('','_blank','width=1050,height=850');if(!w)return typeof toast==='function'&&toast('Popup allow करें');
- w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Fee Due Notice Preview</title><style>@page{size:A4 portrait;margin:8mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#eef3f8;color:#142b44}.tools{position:sticky;top:0;z-index:5;padding:10px;text-align:center;background:#fff;border-bottom:1px solid #ccd8e5}.tools button{padding:9px 16px;border:0;border-radius:8px;background:#124b82;color:#fff;font-weight:700;cursor:pointer}.v644A4{width:194mm;min-height:281mm;margin:8mm auto;background:#fff;display:grid;grid-template-rows:repeat(3,1fr);gap:4mm;padding:0;break-after:page;page-break-after:always}.v644A4:last-child{break-after:auto;page-break-after:auto}.v644FeeNotice{min-height:0;border:1.4px solid #173f6b;border-radius:3mm;padding:5mm 6mm;display:flex;flex-direction:column;break-inside:avoid;page-break-inside:avoid;overflow:hidden}.v644FeeNotice header{text-align:center}.v644FeeNotice header>b{display:block;font-size:16px}.v644FeeNotice header small{display:block;font-size:10px;margin-top:2px}.v644FeeNotice h3{font-size:13px;margin:4px 0;border-top:1px solid #b8c9d9;border-bottom:1px solid #b8c9d9;padding:3px}.v644Info{display:grid;grid-template-columns:1fr 1fr;gap:3px 12px;font-size:11px}.v644FeeNotice p{font-size:11px;line-height:1.35;margin:5px 0;flex:1}.v644FeeNotice footer{display:flex;justify-content:space-between;gap:10px;font-size:10px;font-weight:700}@media print{body{background:#fff}.tools{display:none}.v644A4{margin:0;width:auto;min-height:281mm}.v644FeeNotice{box-shadow:none}}</style></head><body><div class="tools"><button onclick="print()">Print / Save PDF</button> &nbsp; ${rows.length} Student • ${pages.length} A4 Page</div>${pages.join('')}\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
-<script id="v1143-teacher-login-safe-fix">
-window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
-(function(){'use strict';
-  const el=id=>document.getElementById(id);
-  const cleanRole=v=>String(v||'').trim().toLowerCase();
-  const approved=v=>cleanRole(v)==='approved';
-  const msg=e=>{let m=String(e?.message||e||'');if(/invalid login credentials/i.test(m))return 'Registered Mobile या Password सही नहीं है.';if(/permission denied|row-level security|rls/i.test(m))return 'Teacher permission/mapping में समस्या है. Admin से Teacher Login दोबारा Save/Update कराएँ.';if(/failed to fetch|network|connection/i.test(m))return 'Server/Internet connection problem. फिर कोशिश करें.';return m||'Teacher login नहीं हो सका.'};
-
-  // One authoritative context loader. SQL RPC uses auth.uid() and avoids recursive client-side RLS lookups.
-  window.v1143LoadTeacherContext=async function(){
-    v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-    if(!user?.id)return {ok:false,reason:'no-user'};
-    let r=await sb.rpc('v1143_my_teacher_context');
-    if(!r.error&&r.data){
-      let x=r.data||{};
-      if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};
-      v14TeacherProfile=x.teacher;
-      v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];
-      v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
-      return {ok:true};
-    }
-    // Compatibility fallback if SQL has not been applied yet; never hides the actual DB error.
-    let tp=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
-    if(tp.error)throw new Error(tp.error.message);
-    if(!tp.data)return {ok:false,reason:'teacher-profile-missing'};
-    v14TeacherProfile=tp.data;
-    let [ca,sa]=await Promise.all([
-      sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true),
-      sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true)
-    ]);
-    if(ca.error||sa.error)throw new Error((ca.error||sa.error).message);
-    v14TeacherClasses=ca.data||[];v14TeacherSubjects=sa.data||[];
-    return {ok:true};
-  };
-  // All later teacher modules calling the historical name now use the same loader.
-  window.v14LoadTeacherContext=window.v1143LoadTeacherContext;
-  try{v14LoadTeacherContext=window.v1143LoadTeacherContext}catch(_e){}
-
-  window.teacherPasswordLogin=async function(){
-    const raw=String(el('tLoginId')?.value||'').trim(),password=String(el('tLoginPassword')?.value||''),host=el('teacherAuthBox'),btn=host?.querySelector('button[onclick*="teacherPasswordLogin"]');
-    if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
-    if(window.__v1143TeacherBusy)return;window.__v1143TeacherBusy=true;if(btn)btn.disabled=true;
-    try{
-      v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth;
-      if(raw.includes('@')) auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-      else{
-        const digits=raw.replace(/\D/g,'').slice(-10);
-        if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-        // Teacher Access API creates this deterministic private auth alias. No pre-login RLS lookup is needed.
-        auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      }
-      if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(auth?.error));return}
-      user=auth.data.user;
-      await loadProfile();
-      if(cleanRole(profile?.role)!=='teacher')throw new Error('यह Teacher account नहीं है.');
-      const ctx=await window.v1143LoadTeacherContext();
-      if(!ctx.ok||!v14TeacherProfile)throw new Error('Teacher profile mapping नहीं मिली. Admin → Teachers/Staff → Teacher Login में इस Teacher को Save/Update करें.');
-      if(!approved(v14TeacherProfile.approval_status)||v14TeacherProfile.is_active===false)throw new Error('Teacher access अभी Active/Approved नहीं है.');
-      el('v14Modal')?.remove();
-      await openERP();
-    }catch(e){
-      try{await sb.auth.signOut()}catch(_e){} user=null;profile=null;v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-      v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(e));
-    }finally{window.__v1143TeacherBusy=false;if(btn)btn.disabled=false}
-  };
-})();
-</script>
-<!-- ===== END V114.3 ===== -->\n</body></html>`);w.document.close();
+ w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Fee Due Notice Preview</title><style>@page{size:A4 portrait;margin:8mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#eef3f8;color:#142b44}.tools{position:sticky;top:0;z-index:5;padding:10px;text-align:center;background:#fff;border-bottom:1px solid #ccd8e5}.tools button{padding:9px 16px;border:0;border-radius:8px;background:#124b82;color:#fff;font-weight:700;cursor:pointer}.v644A4{width:194mm;min-height:281mm;margin:8mm auto;background:#fff;display:grid;grid-template-rows:repeat(3,1fr);gap:4mm;padding:0;break-after:page;page-break-after:always}.v644A4:last-child{break-after:auto;page-break-after:auto}.v644FeeNotice{min-height:0;border:1.4px solid #173f6b;border-radius:3mm;padding:5mm 6mm;display:flex;flex-direction:column;break-inside:avoid;page-break-inside:avoid;overflow:hidden}.v644FeeNotice header{text-align:center}.v644FeeNotice header>b{display:block;font-size:16px}.v644FeeNotice header small{display:block;font-size:10px;margin-top:2px}.v644FeeNotice h3{font-size:13px;margin:4px 0;border-top:1px solid #b8c9d9;border-bottom:1px solid #b8c9d9;padding:3px}.v644Info{display:grid;grid-template-columns:1fr 1fr;gap:3px 12px;font-size:11px}.v644FeeNotice p{font-size:11px;line-height:1.35;margin:5px 0;flex:1}.v644FeeNotice footer{display:flex;justify-content:space-between;gap:10px;font-size:10px;font-weight:700}@media print{body{background:#fff}.tools{display:none}.v644A4{margin:0;width:auto;min-height:281mm}.v644FeeNotice{box-shadow:none}}</style></head><body><div class="tools"><button onclick="print()">Print / Save PDF</button> &nbsp; ${rows.length} Student • ${pages.length} A4 Page</div>${pages.join('')}</body></html>`);w.document.close();
 };
 
 /* Avoid misleading Student-not-found on stale teacher row IDs: re-resolve from current teacher class cache when possible. */
@@ -10284,147 +9939,9 @@ window.V6415_BUILD='V64.15-FINAL-14-POINT-OFFICIAL-WORK-2026-09-20';
  window.v6415PreviewLetter=function(){let o=letterObj();if(!o.subject||!o.body)return toast('Subject और Letter Body जरूरी है');q('v6415Preview').innerHTML=letterHtml(o);q('v6415Preview').scrollIntoView({behavior:'smooth',block:'start'})};
  window.v6415SaveLetter=async function(){let o=letterObj();if(!o.letter_no||!o.subject||!o.body)return toast('Letter No., Subject और Body जरूरी है');let r=await sb.from('official_letters').upsert(o,{onConflict:'letter_no'});if(r.error)return toast(r.error.message+' • V64.15 SQL run करें');toast('Official letter saved');v6415PreviewLetter();v6415LoadLetters()};
  window.v6415LoadLetters=async function(){let box=q('v6415Register');if(!box)return;let r=await sb.from('official_letters').select('*').order('letter_date',{ascending:false}).limit(300);if(r.error){box.innerHTML='<div class="empty">Letter Register के लिए V64.15 SQL run करें.</div>';return}box.innerHTML=`<div class="panel"><h3>📚 Outgoing Letter Register</h3><div class="tableWrap"><table><thead><tr><th>Date</th><th>Letter No.</th><th>Department</th><th>Recipient</th><th>Subject</th><th>Status</th></tr></thead><tbody>${(r.data||[]).map(x=>`<tr><td>${safe(x.letter_date||'')}</td><td><b>${safe(x.letter_no||'')}</b></td><td>${safe(x.department||'')}</td><td>${safe(x.recipient||'')}</td><td>${safe(x.subject||'')}</td><td>${safe(x.status||'Issued')}</td></tr>`).join('')||'<tr><td colspan="6">No letters yet.</td></tr>'}</tbody></table></div></div>`};
- window.v6415PrintLetter=function(){let o=letterObj();if(!o.subject||!o.body)return toast('पहले letter तैयार करें');let w=window.open('','_blank','width=900,height=900');if(!w)return toast('Popup blocked');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}.v6415A4{width:190mm;min-height:277mm;padding:3mm 2mm;margin:auto}.v6415LetterHead{text-align:center;border-bottom:2px solid #173e72;padding-bottom:4mm;margin-bottom:5mm}.v6415LetterHead h1{font-size:19pt;margin:0;color:#103f78}.v6415LetterHead p{font-size:9pt;margin:2mm 0}.v6415LetterMeta{display:grid;grid-template-columns:1fr 1fr}.v6415LetterMeta>div:nth-child(even){text-align:right}.v6415LetterTo,.v6415LetterSubject,.v6415LetterBody{font-size:11pt;line-height:1.55;margin-top:5mm}.v6415LetterBody{white-space:pre-wrap;min-height:95mm}.v6415LetterSign{display:flex;justify-content:flex-end;text-align:center;margin-top:10mm}.v6415LetterSign img{display:block;max-width:36mm;max-height:15mm;object-fit:contain;margin:auto}.v6415LetterFoot{margin-top:8mm;padding-top:3mm;border-top:1px solid #bbb;font-size:9pt}`;w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Official Letter</title><style>'+css+'</style></head><body>'+letterHtml(o)+'\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
-<script id="v1143-teacher-login-safe-fix">
-window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
-(function(){'use strict';
-  const el=id=>document.getElementById(id);
-  const cleanRole=v=>String(v||'').trim().toLowerCase();
-  const approved=v=>cleanRole(v)==='approved';
-  const msg=e=>{let m=String(e?.message||e||'');if(/invalid login credentials/i.test(m))return 'Registered Mobile या Password सही नहीं है.';if(/permission denied|row-level security|rls/i.test(m))return 'Teacher permission/mapping में समस्या है. Admin से Teacher Login दोबारा Save/Update कराएँ.';if(/failed to fetch|network|connection/i.test(m))return 'Server/Internet connection problem. फिर कोशिश करें.';return m||'Teacher login नहीं हो सका.'};
-
-  // One authoritative context loader. SQL RPC uses auth.uid() and avoids recursive client-side RLS lookups.
-  window.v1143LoadTeacherContext=async function(){
-    v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-    if(!user?.id)return {ok:false,reason:'no-user'};
-    let r=await sb.rpc('v1143_my_teacher_context');
-    if(!r.error&&r.data){
-      let x=r.data||{};
-      if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};
-      v14TeacherProfile=x.teacher;
-      v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];
-      v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
-      return {ok:true};
-    }
-    // Compatibility fallback if SQL has not been applied yet; never hides the actual DB error.
-    let tp=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
-    if(tp.error)throw new Error(tp.error.message);
-    if(!tp.data)return {ok:false,reason:'teacher-profile-missing'};
-    v14TeacherProfile=tp.data;
-    let [ca,sa]=await Promise.all([
-      sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true),
-      sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true)
-    ]);
-    if(ca.error||sa.error)throw new Error((ca.error||sa.error).message);
-    v14TeacherClasses=ca.data||[];v14TeacherSubjects=sa.data||[];
-    return {ok:true};
-  };
-  // All later teacher modules calling the historical name now use the same loader.
-  window.v14LoadTeacherContext=window.v1143LoadTeacherContext;
-  try{v14LoadTeacherContext=window.v1143LoadTeacherContext}catch(_e){}
-
-  window.teacherPasswordLogin=async function(){
-    const raw=String(el('tLoginId')?.value||'').trim(),password=String(el('tLoginPassword')?.value||''),host=el('teacherAuthBox'),btn=host?.querySelector('button[onclick*="teacherPasswordLogin"]');
-    if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
-    if(window.__v1143TeacherBusy)return;window.__v1143TeacherBusy=true;if(btn)btn.disabled=true;
-    try{
-      v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth;
-      if(raw.includes('@')) auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-      else{
-        const digits=raw.replace(/\D/g,'').slice(-10);
-        if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-        // Teacher Access API creates this deterministic private auth alias. No pre-login RLS lookup is needed.
-        auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      }
-      if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(auth?.error));return}
-      user=auth.data.user;
-      await loadProfile();
-      if(cleanRole(profile?.role)!=='teacher')throw new Error('यह Teacher account नहीं है.');
-      const ctx=await window.v1143LoadTeacherContext();
-      if(!ctx.ok||!v14TeacherProfile)throw new Error('Teacher profile mapping नहीं मिली. Admin → Teachers/Staff → Teacher Login में इस Teacher को Save/Update करें.');
-      if(!approved(v14TeacherProfile.approval_status)||v14TeacherProfile.is_active===false)throw new Error('Teacher access अभी Active/Approved नहीं है.');
-      el('v14Modal')?.remove();
-      await openERP();
-    }catch(e){
-      try{await sb.auth.signOut()}catch(_e){} user=null;profile=null;v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-      v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(e));
-    }finally{window.__v1143TeacherBusy=false;if(btn)btn.disabled=false}
-  };
-})();
-</script>
-<!-- ===== END V114.3 ===== -->\n</body></html>');w.document.close();setTimeout(()=>w.print(),350)};
+ window.v6415PrintLetter=function(){let o=letterObj();if(!o.subject||!o.body)return toast('पहले letter तैयार करें');let w=window.open('','_blank','width=900,height=900');if(!w)return toast('Popup blocked');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}.v6415A4{width:190mm;min-height:277mm;padding:3mm 2mm;margin:auto}.v6415LetterHead{text-align:center;border-bottom:2px solid #173e72;padding-bottom:4mm;margin-bottom:5mm}.v6415LetterHead h1{font-size:19pt;margin:0;color:#103f78}.v6415LetterHead p{font-size:9pt;margin:2mm 0}.v6415LetterMeta{display:grid;grid-template-columns:1fr 1fr}.v6415LetterMeta>div:nth-child(even){text-align:right}.v6415LetterTo,.v6415LetterSubject,.v6415LetterBody{font-size:11pt;line-height:1.55;margin-top:5mm}.v6415LetterBody{white-space:pre-wrap;min-height:95mm}.v6415LetterSign{display:flex;justify-content:flex-end;text-align:center;margin-top:10mm}.v6415LetterSign img{display:block;max-width:36mm;max-height:15mm;object-fit:contain;margin:auto}.v6415LetterFoot{margin-top:8mm;padding-top:3mm;border-top:1px solid #bbb;font-size:9pt}`;w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Official Letter</title><style>'+css+'</style></head><body>'+letterHtml(o)+'</body></html>');w.document.close();setTimeout(()=>w.print(),350)};
  /* Shared helper for office report print windows: force safe A4 tables without cutting totals. */
- window.v6415PrintA4Html=function(title,html){let w=window.open('','_blank','width=1000,height=900');if(!w)return toast('Popup blocked');let css='@page{size:A4 portrait;margin:9mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;color:#111}.sheet{width:192mm;margin:auto}table{width:100%;border-collapse:collapse;table-layout:fixed}thead{display:table-header-group}tfoot{display:table-footer-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{border:1px solid #bbb;padding:2mm;font-size:8pt;overflow-wrap:anywhere}h1,h2,h3{text-align:center;margin:2mm 0}.keep{break-inside:avoid;page-break-inside:avoid}';w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+safe(title)+'</title><style>'+css+'</style></head><body><div class="sheet">'+html+'</div>\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
-<script id="v1143-teacher-login-safe-fix">
-window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
-(function(){'use strict';
-  const el=id=>document.getElementById(id);
-  const cleanRole=v=>String(v||'').trim().toLowerCase();
-  const approved=v=>cleanRole(v)==='approved';
-  const msg=e=>{let m=String(e?.message||e||'');if(/invalid login credentials/i.test(m))return 'Registered Mobile या Password सही नहीं है.';if(/permission denied|row-level security|rls/i.test(m))return 'Teacher permission/mapping में समस्या है. Admin से Teacher Login दोबारा Save/Update कराएँ.';if(/failed to fetch|network|connection/i.test(m))return 'Server/Internet connection problem. फिर कोशिश करें.';return m||'Teacher login नहीं हो सका.'};
-
-  // One authoritative context loader. SQL RPC uses auth.uid() and avoids recursive client-side RLS lookups.
-  window.v1143LoadTeacherContext=async function(){
-    v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-    if(!user?.id)return {ok:false,reason:'no-user'};
-    let r=await sb.rpc('v1143_my_teacher_context');
-    if(!r.error&&r.data){
-      let x=r.data||{};
-      if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};
-      v14TeacherProfile=x.teacher;
-      v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];
-      v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
-      return {ok:true};
-    }
-    // Compatibility fallback if SQL has not been applied yet; never hides the actual DB error.
-    let tp=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
-    if(tp.error)throw new Error(tp.error.message);
-    if(!tp.data)return {ok:false,reason:'teacher-profile-missing'};
-    v14TeacherProfile=tp.data;
-    let [ca,sa]=await Promise.all([
-      sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true),
-      sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true)
-    ]);
-    if(ca.error||sa.error)throw new Error((ca.error||sa.error).message);
-    v14TeacherClasses=ca.data||[];v14TeacherSubjects=sa.data||[];
-    return {ok:true};
-  };
-  // All later teacher modules calling the historical name now use the same loader.
-  window.v14LoadTeacherContext=window.v1143LoadTeacherContext;
-  try{v14LoadTeacherContext=window.v1143LoadTeacherContext}catch(_e){}
-
-  window.teacherPasswordLogin=async function(){
-    const raw=String(el('tLoginId')?.value||'').trim(),password=String(el('tLoginPassword')?.value||''),host=el('teacherAuthBox'),btn=host?.querySelector('button[onclick*="teacherPasswordLogin"]');
-    if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
-    if(window.__v1143TeacherBusy)return;window.__v1143TeacherBusy=true;if(btn)btn.disabled=true;
-    try{
-      v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth;
-      if(raw.includes('@')) auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-      else{
-        const digits=raw.replace(/\D/g,'').slice(-10);
-        if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-        // Teacher Access API creates this deterministic private auth alias. No pre-login RLS lookup is needed.
-        auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      }
-      if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(auth?.error));return}
-      user=auth.data.user;
-      await loadProfile();
-      if(cleanRole(profile?.role)!=='teacher')throw new Error('यह Teacher account नहीं है.');
-      const ctx=await window.v1143LoadTeacherContext();
-      if(!ctx.ok||!v14TeacherProfile)throw new Error('Teacher profile mapping नहीं मिली. Admin → Teachers/Staff → Teacher Login में इस Teacher को Save/Update करें.');
-      if(!approved(v14TeacherProfile.approval_status)||v14TeacherProfile.is_active===false)throw new Error('Teacher access अभी Active/Approved नहीं है.');
-      el('v14Modal')?.remove();
-      await openERP();
-    }catch(e){
-      try{await sb.auth.signOut()}catch(_e){} user=null;profile=null;v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-      v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(e));
-    }finally{window.__v1143TeacherBusy=false;if(btn)btn.disabled=false}
-  };
-})();
-</script>
-<!-- ===== END V114.3 ===== -->\n</body></html>');w.document.close();setTimeout(()=>w.print(),350)};
+ window.v6415PrintA4Html=function(title,html){let w=window.open('','_blank','width=1000,height=900');if(!w)return toast('Popup blocked');let css='@page{size:A4 portrait;margin:9mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;color:#111}.sheet{width:192mm;margin:auto}table{width:100%;border-collapse:collapse;table-layout:fixed}thead{display:table-header-group}tfoot{display:table-footer-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{border:1px solid #bbb;padding:2mm;font-size:8pt;overflow-wrap:anywhere}h1,h2,h3{text-align:center;margin:2mm 0}.keep{break-inside:avoid;page-break-inside:avoid}';w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+safe(title)+'</title><style>'+css+'</style></head><body><div class="sheet">'+html+'</div></body></html>');w.document.close();setTimeout(()=>w.print(),350)};
 })();
 </script>
 <!-- ===== END V64.15 ===== -->
@@ -10504,76 +10021,7 @@ window.V6416_BUILD='V64.16-FINAL-CLEANUP-A4-2026-09-20';
    const el=q(elId);if(!el)return window.toast?.('Preview first');const w=window.open('','_blank','width=1000,height=850');if(!w)return window.toast?.('Allow popup');
    let extra='';if((el.matches?.('.idCard')||el.querySelector?.('.idCard'))&&typeof window.idStudioPrintCss==='function')extra=idStudioPrintCss().replace(/@page\{[^}]*\}/,'');
    const css='@page{size:A4 portrait;margin:9mm}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#14233b;font-family:Arial,Cambria,serif}.sheet{width:192mm;max-width:192mm;margin:0 auto}table{width:100%;max-width:100%;border-collapse:collapse;table-layout:fixed}thead{display:table-header-group}tfoot{display:table-footer-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{border:1px solid #8c9aaa;padding:2mm;font-size:8.2pt;overflow-wrap:anywhere;word-break:normal}.v111FeeNotice,.idCard,.markPreview,.v107Doc{break-inside:avoid;page-break-inside:avoid;max-width:100%}img{max-width:100%}h1,h2,h3{break-after:avoid-page}'+extra;
-   w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Print</title><style>'+css+'</style></head><body><div class="sheet">'+el.innerHTML+'</div>\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
-<script id="v1143-teacher-login-safe-fix">
-window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
-(function(){'use strict';
-  const el=id=>document.getElementById(id);
-  const cleanRole=v=>String(v||'').trim().toLowerCase();
-  const approved=v=>cleanRole(v)==='approved';
-  const msg=e=>{let m=String(e?.message||e||'');if(/invalid login credentials/i.test(m))return 'Registered Mobile या Password सही नहीं है.';if(/permission denied|row-level security|rls/i.test(m))return 'Teacher permission/mapping में समस्या है. Admin से Teacher Login दोबारा Save/Update कराएँ.';if(/failed to fetch|network|connection/i.test(m))return 'Server/Internet connection problem. फिर कोशिश करें.';return m||'Teacher login नहीं हो सका.'};
-
-  // One authoritative context loader. SQL RPC uses auth.uid() and avoids recursive client-side RLS lookups.
-  window.v1143LoadTeacherContext=async function(){
-    v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-    if(!user?.id)return {ok:false,reason:'no-user'};
-    let r=await sb.rpc('v1143_my_teacher_context');
-    if(!r.error&&r.data){
-      let x=r.data||{};
-      if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};
-      v14TeacherProfile=x.teacher;
-      v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];
-      v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
-      return {ok:true};
-    }
-    // Compatibility fallback if SQL has not been applied yet; never hides the actual DB error.
-    let tp=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
-    if(tp.error)throw new Error(tp.error.message);
-    if(!tp.data)return {ok:false,reason:'teacher-profile-missing'};
-    v14TeacherProfile=tp.data;
-    let [ca,sa]=await Promise.all([
-      sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true),
-      sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',tp.data.id).eq('is_active',true)
-    ]);
-    if(ca.error||sa.error)throw new Error((ca.error||sa.error).message);
-    v14TeacherClasses=ca.data||[];v14TeacherSubjects=sa.data||[];
-    return {ok:true};
-  };
-  // All later teacher modules calling the historical name now use the same loader.
-  window.v14LoadTeacherContext=window.v1143LoadTeacherContext;
-  try{v14LoadTeacherContext=window.v1143LoadTeacherContext}catch(_e){}
-
-  window.teacherPasswordLogin=async function(){
-    const raw=String(el('tLoginId')?.value||'').trim(),password=String(el('tLoginPassword')?.value||''),host=el('teacherAuthBox'),btn=host?.querySelector('button[onclick*="teacherPasswordLogin"]');
-    if(!raw||!password){v75AuthStatus?.(host,'v75TeacherLoginStatus','Registered Mobile और Password डालें');return}
-    if(window.__v1143TeacherBusy)return;window.__v1143TeacherBusy=true;if(btn)btn.disabled=true;
-    try{
-      v75AuthStatus?.(host,'v75TeacherLoginStatus','Teacher login check हो रहा है...',true);
-      let auth;
-      if(raw.includes('@')) auth=await sb.auth.signInWithPassword({email:raw.toLowerCase(),password});
-      else{
-        const digits=raw.replace(/\D/g,'').slice(-10);
-        if(digits.length!==10){v75AuthStatus?.(host,'v75TeacherLoginStatus','Valid 10 digit Registered Mobile डालें');return}
-        // Teacher Access API creates this deterministic private auth alias. No pre-login RLS lookup is needed.
-        auth=await sb.auth.signInWithPassword({email:`t${digits}@teacher.ldmodern.local`,password});
-      }
-      if(!auth||auth.error){v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(auth?.error));return}
-      user=auth.data.user;
-      await loadProfile();
-      if(cleanRole(profile?.role)!=='teacher')throw new Error('यह Teacher account नहीं है.');
-      const ctx=await window.v1143LoadTeacherContext();
-      if(!ctx.ok||!v14TeacherProfile)throw new Error('Teacher profile mapping नहीं मिली. Admin → Teachers/Staff → Teacher Login में इस Teacher को Save/Update करें.');
-      if(!approved(v14TeacherProfile.approval_status)||v14TeacherProfile.is_active===false)throw new Error('Teacher access अभी Active/Approved नहीं है.');
-      el('v14Modal')?.remove();
-      await openERP();
-    }catch(e){
-      try{await sb.auth.signOut()}catch(_e){} user=null;profile=null;v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
-      v75AuthStatus?.(host,'v75TeacherLoginStatus',msg(e));
-    }finally{window.__v1143TeacherBusy=false;if(btn)btn.disabled=false}
-  };
-})();
-</script>
-<!-- ===== END V114.3 ===== -->\n</body></html>');w.document.close();setTimeout(function(){w.focus();w.print()},350);
+   w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Print</title><style>'+css+'</style></head><body><div class="sheet">'+el.innerHTML+'</div></body></html>');w.document.close();setTimeout(function(){w.focus();w.print()},350);
  };
  /* No polling: sync shell only on meaningful navigation/resize. */
  const oldOpen=window.openERP;if(typeof oldOpen==='function')window.openERP=async function(){let r=await oldOpen.apply(this,arguments);requestAnimationFrame(sync);return r};
@@ -10776,7 +10224,8 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
 <script id="v6422-final-back-guard">
 (function(){const install=()=>{const top=document.querySelector('#erp:not(.hidden) .erpTop');if(!top)return;let wrap=top.querySelector('.v45NavControls');if(!wrap){wrap=document.createElement('div');wrap.className='v45NavControls';wrap.innerHTML='<button id="v45BackBtn" type="button">← Back</button><button id="v45HomeBtn" type="button">🏠 Home</button>';top.appendChild(wrap)}const b=wrap.querySelector('#v45BackBtn'),h=wrap.querySelector('#v45HomeBtn');if(b)b.onclick=()=>{if(typeof v45Back==='function')v45Back();else if(typeof render==='function')render('dashboard')};if(h)h.onclick=()=>{if(typeof v45Home==='function')v45Home();else if(typeof render==='function')render('dashboard')}};new MutationObserver(()=>setTimeout(install,0)).observe(document.body,{childList:true,subtree:true});window.addEventListener('load',install);setTimeout(install,300)})();
 </script>
-\n<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
+
+<!-- ===== V114.3 TEACHER LOGIN SINGLE-SOURCE SAFE FIX ===== -->
 <script id="v1143-teacher-login-safe-fix">
 window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23';
 (function(){'use strict';
@@ -10845,4 +10294,5 @@ window.V1143_TEACHER_LOGIN_BUILD='V114.3-TEACHER-LOGIN-SINGLE-SOURCE-2026-09-23'
   };
 })();
 </script>
-<!-- ===== END V114.3 ===== -->\n</body></html>
+<!-- ===== END V114.3 ===== -->
+</body></html>
