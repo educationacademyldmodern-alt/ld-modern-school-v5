@@ -10121,6 +10121,681 @@ async function v120Save(id){let s=(window.v120Rows||[]).find(x=>String(x.id)===S
 const v120RenderBase=window.render;window.render=async function(p){if(p==='master_due_fee')return v120MasterDue();let r=await v120RenderBase.apply(this,arguments);setTimeout(v120InstallIcon,80);return r};setTimeout(v120InstallIcon,250);
 </script>
 
+
+
+<!-- LDMEA FINAL BACK HOME FIX 2026-09-23 -->
+<script id="ldmea-final-back-home-fix-20260923">
+(()=>{
+'use strict';
+
+const KEY='ldmea_final_route_stack';
+
+function clean(r){
+  r=String(r||'').trim();
+  return r || 'dashboard';
+}
+
+function readStack(){
+  try{
+    const x=JSON.parse(sessionStorage.getItem(KEY)||'[]');
+    return Array.isArray(x)&&x.length ? x : ['dashboard'];
+  }catch(e){
+    return ['dashboard'];
+  }
+}
+
+function writeStack(a){
+  a=(Array.isArray(a)?a:[])
+    .map(clean)
+    .filter(Boolean);
+
+  if(!a.length) a=['dashboard'];
+  if(a.length>40) a=a.slice(-40);
+
+  try{
+    sessionStorage.setItem(KEY,JSON.stringify(a));
+    sessionStorage.setItem('ldmea_active_route',a[a.length-1]);
+  }catch(e){}
+
+  window.__v90History=a.slice();
+  window.__v90Route=a[a.length-1];
+}
+
+function roleHomeRoute(){
+  const role=String(window.profile?.role||'').toLowerCase();
+
+  if(role==='teacher') return 'v90_teacher_dashboard';
+
+  if(role==='parent' || role==='student')
+    return 'dashboard';
+
+  return 'dashboard';
+}
+
+/* Capture the FINAL render after every older patch has loaded */
+const realRender=window.render;
+
+if(typeof realRender!=='function'){
+  console.error('LDMEA BACK FIX: render() not found');
+  return;
+}
+
+window.__LDMEA_FINAL_RENDER__=realRender;
+
+window.render=async function(route){
+  route=clean(route);
+
+  if(!window.__LDMEA_BACK_REPLAY__){
+    let a=readStack();
+    const last=clean(a[a.length-1]);
+
+    if(last!==route){
+      a.push(route);
+      writeStack(a);
+    }else{
+      writeStack(a);
+    }
+  }
+
+  window.__v90Route=route;
+
+  try{
+    sessionStorage.setItem('ldmea_active_route',route);
+  }catch(e){}
+
+  const result=await realRender.apply(this,arguments);
+
+  setTimeout(()=>{
+    window.scrollTo(0,0);
+    bindButtons();
+  },0);
+
+  return result;
+};
+
+window.v90Back=async function(){
+  let a=readStack();
+
+  const current=clean(
+    window.__v90Route ||
+    sessionStorage.getItem('ldmea_active_route') ||
+    a[a.length-1]
+  );
+
+  if(clean(a[a.length-1])!==current)
+    a.push(current);
+
+  if(a.length<=1){
+    return false;
+  }
+
+  a.pop();
+
+  const target=clean(a[a.length-1]);
+  writeStack(a);
+
+  window.__LDMEA_BACK_REPLAY__=true;
+
+  try{
+    await window.render(target);
+  }finally{
+    window.__LDMEA_BACK_REPLAY__=false;
+  }
+
+  window.scrollTo(0,0);
+  bindButtons();
+  return false;
+};
+
+window.v92Back=window.v90Back;
+
+window.v90GoHome=async function(){
+  const home=roleHomeRoute();
+
+  writeStack([home]);
+
+  window.__LDMEA_BACK_REPLAY__=true;
+
+  try{
+    await window.render(home);
+  }finally{
+    window.__LDMEA_BACK_REPLAY__=false;
+  }
+
+  window.scrollTo(0,0);
+  bindButtons();
+  return false;
+};
+
+function bindButtons(){
+  const back=document.getElementById('v90BackBtn');
+  const home=document.getElementById('v90HomeBtn');
+
+  if(back){
+    back.disabled=readStack().length<=1;
+    back.onclick=function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      return window.v90Back();
+    };
+  }
+
+  if(home){
+    home.onclick=function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      return window.v90GoHome();
+    };
+  }
+}
+
+/* Existing session route becomes starting point */
+try{
+  const active=sessionStorage.getItem('ldmea_active_route');
+
+  if(active){
+    let a=readStack();
+
+    if(a.length===1 && a[0]==='dashboard' && active!=='dashboard')
+      writeStack(['dashboard',active]);
+    else
+      writeStack(a);
+  }else{
+    writeStack(readStack());
+  }
+}catch(e){}
+
+const observer=new MutationObserver(()=>{
+  clearTimeout(window.__LDMEA_BACK_BIND_TIMER__);
+  window.__LDMEA_BACK_BIND_TIMER__=setTimeout(bindButtons,20);
+});
+
+observer.observe(document.documentElement,{
+  childList:true,
+  subtree:true
+});
+
+bindButtons();
+
+})();
+</script>
+
+
+
+<!-- LDMEA CENTRAL TEACHER FINAL 2026-09-23 -->
+<script id="ldmea-central-teacher-final-20260923">
+(()=>{
+'use strict';
+
+window.LDMEA_TEACHER_ACTIVE_SYSTEM='CENTRAL-V2-FINAL';
+
+/* ---------- helpers ---------- */
+
+function teacherMobile(v){
+  let d=String(v||'').replace(/\D/g,'');
+  if(d.length>10)d=d.slice(-10);
+  return d.length===10 ? d : '';
+}
+
+function teacherStatus(msg,bad=false){
+  const h=document.getElementById('teacherCentralStatus');
+  if(!h)return;
+  h.textContent=msg||'';
+  h.style.color=bad?'#b42318':'#36546f';
+}
+
+async function teacherLogoutSafe(){
+  try{await sb.auth.signOut()}catch(e){}
+  window.user=null;
+  window.profile=null;
+  try{
+    window.v14TeacherProfile=null;
+    window.v14TeacherClasses=[];
+    window.v14TeacherSubjects=[];
+  }catch(e){}
+}
+
+/* ---------- ONLY ACTIVE TEACHER LOGIN DIALOG ---------- */
+
+window.teacherLoginDialog=function(){
+
+  if(!window.cfg){
+    return typeof window.openPortal==='function'
+      ? window.openPortal()
+      : null;
+  }
+
+  if(typeof window.v14Modal!=='function'){
+    alert('Teacher Login window उपलब्ध नहीं है.');
+    return;
+  }
+
+  v14Modal(`
+    <h2>👩‍🏫 Teacher Login</h2>
+
+    <p class="v14Muted">
+      Registered Mobile Number और Password से login करें.
+    </p>
+
+    <div id="teacherAuthBox">
+
+      <div class="v14Form">
+
+        <div class="full">
+          <label>Registered Mobile Number</label>
+
+          <input
+            id="tLoginId"
+            type="tel"
+            inputmode="numeric"
+            maxlength="10"
+            autocomplete="tel"
+            name="ldmea_teacher_mobile"
+            placeholder="10 digit registered mobile"
+            value=""
+          >
+        </div>
+
+        <div class="full">
+          <label>Password</label>
+
+          <input
+            id="tLoginPassword"
+            type="password"
+            autocomplete="current-password"
+            name="ldmea_teacher_password"
+            placeholder="Password"
+            value=""
+          >
+        </div>
+
+        <div class="full">
+          <button
+            id="teacherCentralLoginBtn"
+            class="v14Action primary"
+            type="button">
+            Login
+          </button>
+        </div>
+
+        <div class="full">
+          <div
+            id="teacherCentralStatus"
+            class="v14Muted">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="v93LoginRule">
+        <b>Central Teacher Login</b><br>
+        Teacher account केवल Admin बनाता है.
+        Self Registration बंद है.
+      </div>
+
+    </div>
+  `);
+
+  const mobile=document.getElementById('tLoginId');
+  const password=document.getElementById('tLoginPassword');
+  const button=document.getElementById('teacherCentralLoginBtn');
+
+  /* stale browser email/autofill हटाएँ */
+  if(mobile){
+    mobile.value='';
+    mobile.setAttribute('type','tel');
+    mobile.setAttribute('inputmode','numeric');
+
+    mobile.addEventListener('input',()=>{
+      mobile.value=String(mobile.value||'')
+        .replace(/\D/g,'')
+        .slice(0,10);
+    });
+
+    setTimeout(()=>{
+      mobile.value='';
+      mobile.focus();
+    },60);
+  }
+
+  if(password){
+    password.value='';
+
+    password.addEventListener('keydown',e=>{
+      if(e.key==='Enter')
+        window.teacherPasswordLogin();
+    });
+  }
+
+  if(button)
+    button.onclick=window.teacherPasswordLogin;
+};
+
+
+/* ---------- ONLY ACTIVE LOGIN FUNCTION ---------- */
+
+window.teacherPasswordLogin=async function(){
+
+  if(window.__LDMEA_CENTRAL_TEACHER_BUSY__)return;
+
+  const mobile=teacherMobile(
+    document.getElementById('tLoginId')?.value
+  );
+
+  const password=String(
+    document.getElementById('tLoginPassword')?.value||''
+  );
+
+  if(!mobile)
+    return teacherStatus(
+      'Valid 10 digit Registered Mobile Number डालें.',
+      true
+    );
+
+  if(!password)
+    return teacherStatus(
+      'Password डालें.',
+      true
+    );
+
+  window.__LDMEA_CENTRAL_TEACHER_BUSY__=true;
+
+  const btn=document.getElementById('teacherCentralLoginBtn');
+
+  if(btn)btn.disabled=true;
+
+  try{
+
+    teacherStatus('Teacher account check हो रहा है...');
+
+    /*
+       CENTRAL RULE:
+       Mobile -> internal Supabase Auth email
+
+       Example:
+       8960304396
+       =>
+       t8960304396@teacher.ldmodern.local
+    */
+
+    let loginEmail=`t${mobile}@teacher.ldmodern.local`;
+
+    /*
+       Resolver मौजूद हो तो central mapping से verify करें.
+       Resolver failure होने पर direct generated email fallback रहेगा.
+    */
+
+    try{
+
+      const r=await sb.rpc(
+        'teacher_v2_resolve_login',
+        {p_identifier:mobile}
+      );
+
+      if(!r.error){
+
+        const row=Array.isArray(r.data)
+          ? r.data[0]
+          : r.data;
+
+        if(row?.error_code){
+          return teacherStatus(
+            row.error_message ||
+            'Teacher Mobile mapping active नहीं है.',
+            true
+          );
+        }
+
+        if(row?.login_email)
+          loginEmail=String(row.login_email).trim().toLowerCase();
+
+      }
+
+    }catch(e){
+      /* safe generated-email fallback */
+    }
+
+
+    /* ---------- Supabase password login ---------- */
+
+    const auth=await sb.auth.signInWithPassword({
+      email:loginEmail,
+      password
+    });
+
+    if(auth.error){
+
+      const m=String(auth.error.message||'');
+
+      return teacherStatus(
+        /invalid login credentials/i.test(m)
+          ? 'Mobile Number या Password सही नहीं है.'
+          : m || 'Teacher login failed.',
+        true
+      );
+    }
+
+
+    window.user=auth.data?.user||null;
+
+    if(!window.user?.id){
+      await teacherLogoutSafe();
+
+      return teacherStatus(
+        'Teacher Auth User नहीं मिला.',
+        true
+      );
+    }
+
+
+    /* ---------- central role profile ---------- */
+
+    await loadProfile();
+
+    if(String(window.profile?.role||'').toLowerCase()!=='teacher'){
+
+      await teacherLogoutSafe();
+
+      return teacherStatus(
+        'यह account Teacher role से mapped नहीं है.',
+        true
+      );
+    }
+
+
+    /* ---------- exact teacher profile ---------- */
+
+    const tpResult=await sb
+      .from('teacher_profiles')
+      .select('*')
+      .eq('auth_user_id',window.user.id)
+      .maybeSingle();
+
+    if(tpResult.error){
+
+      await teacherLogoutSafe();
+
+      return teacherStatus(
+        'Teacher profile check failed: '+
+        tpResult.error.message,
+        true
+      );
+    }
+
+    const tp=tpResult.data;
+
+    if(!tp){
+
+      await teacherLogoutSafe();
+
+      return teacherStatus(
+        'Teacher profile mapping नहीं मिला. Admin से account update कराएँ.',
+        true
+      );
+    }
+
+
+    /* ---------- account status ---------- */
+
+    const approval=String(
+      tp.approval_status||''
+    ).toLowerCase();
+
+    const accountStatus=String(
+      tp.status||''
+    ).toLowerCase();
+
+    if(
+      approval!=='approved' ||
+      tp.is_active===false ||
+      ['inactive','relieved','disabled','rejected','suspended']
+        .includes(accountStatus)
+    ){
+
+      await teacherLogoutSafe();
+
+      return teacherStatus(
+        'Teacher account Active / Approved नहीं है.',
+        true
+      );
+    }
+
+
+    /* ---------- central runtime context ---------- */
+
+    window.v14TeacherProfile=tp;
+
+    if(typeof window.v14LoadTeacherContext==='function')
+      await window.v14LoadTeacherContext();
+
+
+    if(!window.v14TeacherProfile){
+
+      await teacherLogoutSafe();
+
+      return teacherStatus(
+        'Teacher central mapping load नहीं हुई.',
+        true
+      );
+    }
+
+
+    /* ---------- session ---------- */
+
+    try{
+
+      sessionStorage.setItem(
+        'ldmea_active_role',
+        'teacher'
+      );
+
+      sessionStorage.setItem(
+        'ldmea_active_route',
+        'v90_teacher_dashboard'
+      );
+
+      sessionStorage.setItem(
+        'ldmea_teacher_auth_uid',
+        window.user.id
+      );
+
+    }catch(e){}
+
+
+    /* ---------- close login ---------- */
+
+    document.getElementById('v14Modal')?.remove();
+
+
+    /* ---------- open ERP ---------- */
+
+    await openERP();
+
+    /*
+       openERP के बाद Teacher Dashboard खोलें.
+       Existing permissions/navigation untouched.
+    */
+
+    if(typeof window.render==='function'){
+
+      try{
+        await window.render('v90_teacher_dashboard');
+      }catch(e){
+        /* openERP dashboard fallback */
+      }
+
+    }
+
+    window.scrollTo(0,0);
+
+
+  }catch(e){
+
+    await teacherLogoutSafe();
+
+    teacherStatus(
+      typeof window.ldmeaFriendlyError==='function'
+        ? window.ldmeaFriendlyError(e,'Teacher Login')
+        : (e?.message||String(e)),
+      true
+    );
+
+  }finally{
+
+    window.__LDMEA_CENTRAL_TEACHER_BUSY__=false;
+
+    if(btn)btn.disabled=false;
+  }
+};
+
+
+/* ---------- OLD REGISTRATION ENTRYPOINTS DISABLED ---------- */
+
+const registrationClosed=function(){
+  if(typeof window.toast==='function')
+    toast('Teacher Self Registration बंद है. Teacher account Admin बनाएगा.');
+  else
+    alert('Teacher Self Registration बंद है. Teacher account Admin बनाएगा.');
+  return false;
+};
+
+window.teacherPasswordRegistrationForm=registrationClosed;
+window.teacherPasswordRegister=registrationClosed;
+window.submitTeacherRegistration=registrationClosed;
+
+
+/* ---------- FORCE EVERY TEACHER LOGIN BUTTON TO CENTRAL ---------- */
+
+document.addEventListener('click',function(e){
+
+  const el=e.target.closest?.('button,a');
+
+  if(!el)return;
+
+  const text=String(el.textContent||'').trim();
+
+  if(
+    /teacher\s*(portal|login)/i.test(text) &&
+    !/add teacher|teacher approval|teacher attendance/i.test(text)
+  ){
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    window.teacherLoginDialog();
+
+  }
+
+},true);
+
+
+/* ---------- expose final active functions ---------- */
+
+window.LDMEA_CENTRAL_TEACHER_LOGIN_READY=true;
+
+})();
+</script>
+
 </body></html>
 
 <!-- LDMEA 2026-09-23 LIVE-PREVIEW ROOT FIXES: final override -->
