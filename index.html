@@ -1,4 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="ld-modern-build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="ld-modern-build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Login, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -10795,6 +10796,283 @@ window.LDMEA_CENTRAL_TEACHER_LOGIN_READY=true;
 
 })();
 </script>
+
+
+<!-- LDMEA TEACHER ROOT SINGLE AUTHORITY START -->
+<script id="ldmea-teacher-root-single-authority">
+(function(){
+
+  if(window.__LDMEA_TEACHER_ROOT_SINGLE_AUTHORITY__) return;
+  window.__LDMEA_TEACHER_ROOT_SINGLE_AUTHORITY__ = true;
+
+  /* ==========================================================
+     CENTRAL TEACHER = ONLY TEACHER IDENTITY AUTHORITY
+     Admin / Parent behaviour is NOT changed.
+     ========================================================== */
+
+  function isTeacher(){
+    try{
+      return String(
+        (window.profile && window.profile.role) || ''
+      ).toLowerCase() === 'teacher';
+    }catch(e){
+      return false;
+    }
+  }
+
+  function active(tp){
+    if(!tp) return false;
+
+    const approval =
+      String(tp.approval_status || 'Approved').toLowerCase();
+
+    const status =
+      String(tp.status || 'Active').toLowerCase();
+
+    return approval === 'approved' &&
+           tp.is_active !== false &&
+           !['inactive','relieved','disabled'].includes(status);
+  }
+
+  /* ----------------------------------------------------------
+     One central teacher resolver.
+     No polling.
+     No MutationObserver.
+     No realtime dependency.
+     ---------------------------------------------------------- */
+
+  let resolving = null;
+
+  window.ldmeaTeacherRootContext = async function(force=false){
+
+    if(!isTeacher()) return null;
+
+    if(
+      !force &&
+      active(window.v14TeacherProfile)
+    ){
+      return window.v14TeacherProfile;
+    }
+
+    if(resolving && !force) return resolving;
+
+    resolving = (async function(){
+
+      let u = window.user || null;
+
+      if(!u && window.sb){
+        const ar = await sb.auth.getUser();
+        u = ar?.data?.user || null;
+        if(u) window.user = u;
+      }
+
+      if(!u) throw new Error("Teacher login required");
+
+      let r = await sb
+        .from("teacher_profiles")
+        .select("*")
+        .eq("auth_user_id",u.id)
+        .maybeSingle();
+
+      if((r.error || !r.data)){
+        r = await sb
+          .from("teacher_profiles")
+          .select("*")
+          .eq("teacher_user_id",u.id)
+          .maybeSingle();
+      }
+
+      if(r.error) throw r.error;
+
+      const tp = r.data || null;
+
+      if(!active(tp))
+        throw new Error("Teacher profile Active/Approved नहीं है");
+
+      window.v14TeacherProfile = tp;
+
+      return tp;
+
+    })();
+
+    try{
+      return await resolving;
+    }finally{
+      resolving = null;
+    }
+  };
+
+
+  /* ----------------------------------------------------------
+     Replace legacy V14 context loader.
+     All old modules calling v14LoadTeacherContext()
+     now arrive here.
+     ---------------------------------------------------------- */
+
+  window.v14LoadTeacherContext = async function(){
+
+    if(!isTeacher()) return;
+
+    const tp = await window.ldmeaTeacherRootContext();
+
+    window.v14TeacherProfile = tp;
+    window.v14TeacherClasses = [];
+    window.v14TeacherSubjects = [];
+
+    const results = await Promise.all([
+      sb.from("teacher_class_assignments")
+        .select("*")
+        .eq("teacher_profile_id",tp.id)
+        .eq("is_active",true),
+
+      sb.from("teacher_subject_assignments")
+        .select("*")
+        .eq("teacher_profile_id",tp.id)
+        .eq("is_active",true)
+    ]);
+
+    const cr = results[0];
+    const sr = results[1];
+
+    /*
+       Do not turn a subject-table issue into a total
+       Teacher dashboard crash.
+    */
+
+    if(!cr.error)
+      window.v14TeacherClasses = cr.data || [];
+    else
+      console.warn("Teacher class assignment:",cr.error.message);
+
+    if(!sr.error)
+      window.v14TeacherSubjects = sr.data || [];
+    else
+      console.warn("Teacher subject assignment:",sr.error.message);
+
+    return tp;
+  };
+
+
+  /* ----------------------------------------------------------
+     Compatibility for legacy modules.
+     ---------------------------------------------------------- */
+
+  window.ldmeaTeacherProfileId = async function(){
+    const tp = await window.ldmeaTeacherRootContext();
+    return tp ? tp.id : null;
+  };
+
+  window.ldmeaTeacherAccess = async function(){
+
+    const role =
+      String(window.profile?.role || '').toLowerCase();
+
+    if(
+      role === 'admin' ||
+      role === 'super_admin' ||
+      role === 'principal'
+    ) return true;
+
+    if(role !== 'teacher') return false;
+
+    try{
+      return !!(await window.ldmeaTeacherRootContext());
+    }catch(e){
+      console.error("Teacher access:",e);
+      return false;
+    }
+  };
+
+
+  /* ----------------------------------------------------------
+     IMPORTANT:
+     Stop OLD realtime generations for TEACHER ONLY.
+
+     We are NOT deleting V49/V58/V76/V113 because Admin uses
+     portions of those systems.
+
+     Teacher gets stable on-demand data instead.
+     ---------------------------------------------------------- */
+
+  function disableTeacherLegacyLive(){
+
+    if(!isTeacher()) return;
+
+    try{
+      if(window.v113LiveChannel && window.sb){
+        sb.removeChannel(window.v113LiveChannel);
+      }
+    }catch(e){}
+
+    try{
+      window.v113LiveChannel = null;
+      window.v113LiveKey = "";
+    }catch(e){}
+
+    try{
+      if(window.v113FallbackTimer){
+        clearInterval(window.v113FallbackTimer);
+        clearTimeout(window.v113FallbackTimer);
+        window.v113FallbackTimer = null;
+      }
+    }catch(e){}
+
+    /*
+       Empty teacher V113 live-table list.
+       Admin list remains untouched.
+    */
+    try{
+      if(typeof v113TeacherLiveTables !== "undefined"){
+        v113TeacherLiveTables.splice(
+          0,
+          v113TeacherLiveTables.length
+        );
+      }
+    }catch(e){}
+
+    window.__LDMEA_TEACHER_LEGACY_LIVE_DISABLED__ = true;
+  }
+
+
+  /* ----------------------------------------------------------
+     One startup execution only.
+     No observer / no repeated interval.
+     ---------------------------------------------------------- */
+
+  async function boot(){
+
+    if(!isTeacher()) return;
+
+    disableTeacherLegacyLive();
+
+    try{
+      await window.v14LoadTeacherContext();
+      window.__LDMEA_TEACHER_ROOT_READY__ = true;
+      console.log(
+        "LDMEA Teacher Root Authority READY",
+        window.v14TeacherProfile?.id || ""
+      );
+    }catch(e){
+      console.error(
+        "LDMEA Teacher Root Authority:",
+        e?.message || e
+      );
+    }
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener(
+      "DOMContentLoaded",
+      ()=>setTimeout(boot,0),
+      {once:true}
+    );
+  }else{
+    setTimeout(boot,0);
+  }
+
+})();
+</script>
+<!-- LDMEA TEACHER ROOT SINGLE AUTHORITY END -->
 
 </body></html>
 
