@@ -7887,167 +7887,34 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(v92Init,330));window
 </script>
 <!-- ===== END V92 ===== -->
 
-<script id="v93-admin-teacher-access">
-/* ===== V93 ADMIN-CREATED TEACHER ACCESS =====
-   Security/flow only: Teacher self-registration is disabled.
-   Admin first fills Teachers/Staff data, then creates/manages login here.
-   Existing Teacher attendance/marks/classes/requests and all other modules remain unchanged. */
-window.V93_BUILD='V93-ADMIN-CREATED-TEACHER-ACCESS-2026-09-15';
-window.__v93Staff=[];window.__v93Profiles=[];window.__v93SelectedStaff=null;
-function v93Admin(){return ['super_admin','admin','principal'].includes(String(profile?.role||'').toLowerCase())}
-function v93Teacher(){return String(profile?.role||'').toLowerCase()==='teacher'}
-function v93NormPhone(v){return String(v||'').replace(/\D/g,'').slice(-10)}
-function v93Norm(v){return String(v||'').trim().toLowerCase()}
-function v93SuggestedPassword(name){if(typeof v97StrongPassword==='function')return v97StrongPassword(16);if(typeof v95StrongPassword==='function')return v95StrongPassword();const A='ABCDEFGHJKLMNPQRSTUVWXYZ',a='abcdefghijkmnopqrstuvwxyz',n='23456789',x='@#$%&*!?';const pool=A+a+n+x,rand=z=>z[crypto.getRandomValues(new Uint32Array(1))[0]%z.length];let out=rand(A)+rand(a)+rand(n)+rand(x);while(out.length<16)out+=rand(pool);return out}
-function v93ProfileFor(st){let mail=v93Norm(st?.email),mob=v93NormPhone(st?.phone);return (window.__v93Profiles||[]).find(x=>(mail&&v93Norm(x.email)===mail)||(mob&&v93NormPhone(x.mobile||x.phone)===mob))||null}
-function v93ClassTeacherSelect(){let sel=document.getElementById('v93ClassTeacher');if(!sel)return;let old=sel.value,arr=[...document.querySelectorAll('.v93ClassCheck:checked')].map(x=>x.value);sel.innerHTML='<option value="">Not Class Teacher</option>'+arr.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if(arr.includes(old))sel.value=old}
-function v93Copy(v){v=String(v||'');if(!v)return toast('Password खाली है');navigator.clipboard?.writeText(v).then(()=>toast('Password copied')).catch(()=>prompt('Copy password',v))}
-
-/* PUBLIC TEACHER LOGIN: LOGIN ONLY, NO FIRST REGISTRATION */
-teacherLoginDialog=function(){
- if(!cfg)return openPortal();
- v14Modal(`<h2>👩‍🏫 Teacher Login</h2><p class="v14Muted">केवल Primary Admin द्वारा बनाए गए Teacher account से Registered Mobile + Password login करें.</p><div id="teacherAuthBox"></div><div class="v93LoginRule"><b>🔒 Self Registration बंद है</b><br>पहले Admin → Teachers/Staff में आपका data और Teacher Login बनाता है. उसके बाद केवल Login करें. Password बदलने के लिए login के बाद My Password में Current Password डालें.</div>`);
- teacherExistingLoginForm();
- setTimeout(()=>{let b=document.getElementById('v49TeacherForgot');if(b)b.textContent='Forgot / Reset Password';},0);
-};
-teacherPasswordRegistrationForm=function(){return toast('Teacher Self Registration बंद है. Admin से Teacher Login बनवाएँ.')};
-teacherPasswordRegister=async function(){return toast('Teacher Self Registration बंद है. Admin से Teacher Login बनवाएँ.')};
-submitTeacherRegistration=async function(){return toast('Teacher Self Registration बंद है. Admin से Teacher Login बनवाएँ.')};
-resumeTeacherEmailFlow=async function(){
- let{data:{session}}=await sb.auth.getSession();if(!session?.user)return false;user=session.user;await loadProfile();await v14LoadTeacherContext();
- if(profile?.role==='teacher'&&v14TeacherProfile&&v14TeacherProfile.approval_status==='Approved'&&v14TeacherProfile.is_active!==false){$('v14Modal')?.remove();openERP();return true}
- await sb.auth.signOut();toast('Teacher account Admin द्वारा active नहीं है. School Admin से संपर्क करें.');return false;
-};
-
-/* ADMIN-ONLY TEACHER LOGIN MANAGER */
-async function v93TeacherAccessCenter(){
- if(!v93Admin())return toast('Admin / Principal only');
- window.__v90Route='teacher_access';if(typeof v90Head==='function')v90Head('🔐 Teacher Login Manager','Admin Data First • Login Only • Admin Reset Only');else head('Teacher Login Manager','Admin-created accounts only');
- if(typeof v90InstallShell==='function')v90InstallShell('teacher_access');
- let [sr,pr]=await Promise.all([
-   sb.from('staff').select('id,employee_id,staff_name,staff_type,designation,phone,email,joining_date,status').order('staff_name').limit(3000),
-   sb.from('teacher_profiles').select('id,auth_user_id,email,phone,mobile,teacher_name,employee_id,approval_status,is_active,requested_classes,requested_subjects').order('teacher_name').limit(3000)
- ]);
- if(sr.error||pr.error){let m=(sr.error||pr.error).message;return (typeof v90Set==='function'?v90Set(`<div class="empty">${esc(m)}</div>`):toast(m))}
- window.__v93Profiles=pr.data||[];
- let rows=(sr.data||[]).filter(x=>/teacher|faculty/i.test(String(x.staff_type||'')+' '+String(x.designation||''))&&v93Norm(x.status)!=='inactive');
- window.__v93Staff=rows;
- let html=`<div class="v93Page"><div class="v93Hero"><div><h2>🔐 Admin-Created Teacher Login</h2><p>पहले Teachers/Staff में Teacher data भरें. केवल वही Teacher login पा सकता है.</p></div><div><button class="primary" onclick="render('staff')">➕ Add / Edit Teacher Data</button><button onclick="v93TeacherAccessCenter()">↻ Refresh</button></div></div><div class="v93Rule">✓ Teacher self-registration बंद &nbsp; • &nbsp; ✓ Admin creates/updates login &nbsp; • &nbsp; ✓ Teacher Registered Mobile + Password login &nbsp; • &nbsp; ✓ Password Reset केवल Admin से • No OTP/Email</div><div class="v90Panel"><div class="v90Toolbar"><label style="flex:1">Search<input id="v93TeacherQ" placeholder="Teacher / Mobile / Email / Employee ID" oninput="v93RenderTeacherRows()"></label></div><div id="v93TeacherRows"></div></div></div>`;
- if(typeof v90Set==='function')v90Set(html);else $('erpContent').innerHTML=html;
- v93RenderTeacherRows();
+<script id="ldm-new-teacher-system">
+/* LDM NEW TEACHER SYSTEM — ONE MASTER: teacher_profiles */
+window.LDM_TEACHER_BUILD='NEW-TEACHER-ONE-MASTER-2026-09-24';
+function ldmTA(){return ['admin','super_admin'].includes(String(profile?.role||'').toLowerCase())}
+function ldmTT(){return String(profile?.role||'').toLowerCase()==='teacher'}
+function v93Admin(){return ldmTA()}
+function v93Teacher(){return ldmTT()}
+function ldmPhone(v){return String(v||'').replace(/\D/g,'').slice(-10)}
+function ldmPw(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ',a='abcdefghijkmnopqrstuvwxyz',n='23456789',x='@#$%&*!?';const pool=A+a+n+x,R=z=>z[crypto.getRandomValues(new Uint32Array(1))[0]%z.length];let o=R(A)+R(a)+R(n)+R(x);while(o.length<12)o+=R(pool);return o}
+async function ldmTeacherManager(){
+ if(!ldmTA())return toast('Admin only');window.__v90Route='teacher_access';v90Head?.('👩‍🏫 Teacher Master','New Teacher System • One Central Record');v90InstallShell?.('teacher_access');
+ let r=await sb.from('teacher_profiles').select('id,employee_id,teacher_name,mobile,contact_email,joining_date,approval_status,is_active,auth_user_id').order('teacher_name');
+ if(r.error)return v90Set?.(`<div class="empty">${esc(r.error.message)}</div>`);
+ window.__ldmTeachers=r.data||[];let h=`<div class="v90Page"><div class="v90Panel"><div class="panelHead"><div><h3>Teacher Master</h3><p class="note">Add Teacher → Classes/Subjects → Login. यही एक Teacher source है.</p></div><button class="primary" onclick="ldmTeacherAdd()">➕ Add Teacher</button></div><div class="tableWrap"><table><tr><th>ID</th><th>Teacher</th><th>Mobile</th><th>Status</th><th>Action</th></tr>${window.__ldmTeachers.map(t=>`<tr><td><b>${esc(t.employee_id||'AUTO')}</b></td><td>${esc(t.teacher_name||'')}</td><td>${esc(t.mobile||'')}</td><td>${t.is_active!==false?'Active':'Inactive'}</td><td><button onclick="ldmTeacherEdit('${t.id}')">Manage</button> <button class="secondary" onclick="ldmTeacherActive('${t.id}',${t.is_active===false?'true':'false'})">${t.is_active===false?'Activate':'Deactivate'}</button></td></tr>`).join('')||'<tr><td colspan="5">No Teacher. Add Teacher करें.</td></tr>'}</table></div></div></div>`;v90Set?v90Set(h):($('erpContent').innerHTML=h)
 }
-function v93RenderTeacherRows(){
- let host=document.getElementById('v93TeacherRows');if(!host)return;let q=v93Norm(document.getElementById('v93TeacherQ')?.value);let rows=(window.__v93Staff||[]).filter(x=>!q||[x.staff_name,x.phone,x.email,x.employee_id,x.designation].some(v=>v93Norm(v).includes(q)));
- host.innerHTML=rows.length?`<div class="tableWrap"><table class="v90Table"><tr><th>Teacher</th><th>Employee</th><th>Mobile</th><th>Email</th><th>Login Status</th><th>Action</th></tr>${rows.map(st=>{let tp=v93ProfileFor(st),ok=tp&&v93Norm(tp.approval_status)==='approved'&&tp.is_active!==false;return `<tr><td><button class="v105PersonLink" onclick="dashboardTeacherFull('${st.id}')">${esc(st.staff_name||'')}</button><small>${esc(st.designation||st.staff_type||'Teacher')}</small></td><td>${esc(st.employee_id||'—')}</td><td>${esc(st.phone||'—')}</td><td>${esc(st.email||'—')}</td><td>${ok?'<span class="v93Ok">✓ Active Login</span>':tp?'<span class="v93Warn">Needs Admin Setup</span>':'<span class="v93Off">No Login</span>'}</td><td><button class="primary" onclick="v93OpenTeacherLogin('${st.id}')">${ok?'Manage / Reset':'Create Login'}</button></td></tr>`}).join('')}</table></div>`:`<div class="empty"><b>Teacher Staff record नहीं मिला.</b><br>पहले Admin → Teachers/Staff में Teacher का Name और valid Mobile भरें. Email optional है.<br><button class="primary" onclick="render('staff')">Open Teachers/Staff</button></div>`;
-}
-async function v93OpenTeacherLogin(staffId){
- if(!v93Admin())return toast('Admin only');let st=(window.__v93Staff||[]).find(x=>String(x.id)===String(staffId));if(!st)return toast('Teacher staff record नहीं मिला');
- if(v93NormPhone(st.phone).length!==10)return toast('पहले Teachers/Staff में valid 10 digit Mobile भरें.');
- let tp=v93ProfileFor(st),classes=[],subjects=[],ct='';
- if(tp?.id){
-   let [cr,sr]=await Promise.all([sb.from('teacher_class_assignments').select('class_name,is_class_teacher,is_active').eq('teacher_profile_id',tp.id).eq('is_active',true),sb.from('teacher_subject_assignments').select('subject_name,is_active').eq('teacher_profile_id',tp.id).eq('is_active',true)]);
-   classes=(cr.data||[]).map(x=>x.class_name).filter(Boolean);ct=(cr.data||[]).find(x=>x.is_class_teacher)?.class_name||'';subjects=(sr.data||[]).map(x=>x.subject_name).filter(Boolean);
- }
- if(!classes.length)classes=tp?.requested_classes||[];if(!subjects.length)subjects=tp?.requested_subjects||[];
- window.__v93SelectedStaff=st;let pw=tp?'':v93SuggestedPassword(st.staff_name);
- v14Modal(`<h2>🔐 ${tp?'Manage':'Create'} Teacher Login</h2><div class="v93AdminOnly">यह account केवल Admin बना/बदल सकता है. Teacher खुद registration request नहीं भेज सकता.</div><div class="v14Form"><div><label>Teacher Name</label><input value="${esc(st.staff_name||'')}" readonly></div><div><label>Employee ID</label><input value="${esc(st.employee_id||'')}" readonly></div><div><label>Mobile Login</label><input value="${esc(v93NormPhone(st.phone))}" readonly></div><div><label>Email (Optional)</label><input value="${esc(st.email||'Internal login will be used')}" readonly></div><div class="full"><label>Classes</label><div class="v93Checks">${cls.map(c=>`<label><input class="v93ClassCheck" type="checkbox" value="${esc(c)}" ${classes.includes(c)?'checked':''} onchange="v93ClassTeacherSelect()"> ${esc(c)}</label>`).join('')}</div></div><div><label>Class Teacher</label><select id="v93ClassTeacher"><option value="">Not Class Teacher</option>${classes.map(c=>`<option ${c===ct?'selected':''}>${esc(c)}</option>`).join('')}</select></div><div><label>Subjects</label><input id="v93Subjects" value="${esc(subjects.join(', '))}" placeholder="English, Mathematics"></div><div class="full"><label>${tp?'New Password (optional — blank = current password unchanged)':'Initial Password *'}</label><div class="v93Pw"><input id="v93TeacherPw" type="text" value="${esc(pw)}" placeholder="Minimum 8 characters"><button type="button" onclick="document.getElementById('v93TeacherPw').value=v93SuggestedPassword('${esc(st.staff_name||'Teacher').replace(/'/g,"&#39;")}')">⚡ Generate</button><button type="button" onclick="v93Copy(document.getElementById('v93TeacherPw').value)">Copy</button></div></div><div class="full"><button class="v14Action primary" onclick="v93SaveTeacherLogin('${st.id}')">✓ ${tp?'Update Teacher Login':'Create Teacher Login'}</button></div><div id="v93AccessStatus" class="v32Info">First password और reset केवल Admin करेगा. कोई OTP/email नहीं भेजा जाएगा.</div></div>`);
- setTimeout(v93ClassTeacherSelect,0);setTimeout(()=>{let s=document.getElementById('v93ClassTeacher');if(s&&[...s.options].some(o=>o.value===ct))s.value=ct},10);
-}
-async function v93SaveTeacherLogin(staffId){
- if(!v93Admin())return toast('Admin only');let st=(window.__v93Staff||[]).find(x=>String(x.id)===String(staffId));if(!st)return toast('Teacher record नहीं मिला');
- let classes=[...document.querySelectorAll('.v93ClassCheck:checked')].map(x=>x.value),classTeacher=document.getElementById('v93ClassTeacher')?.value||'',subjects=String(document.getElementById('v93Subjects')?.value||'').split(',').map(x=>x.trim()).filter(Boolean),password=String(document.getElementById('v93TeacherPw')?.value||'');let tp=v93ProfileFor(st);
- if(!tp&&password.length<8)return toast('Initial Password कम से कम 8 characters का रखें');if(tp&&password&&password.length<8)return toast('New Password कम से कम 8 characters का रखें');
- let status=document.getElementById('v93AccessStatus');if(status)status.innerHTML='Teacher Login save किया जा रहा है...';
- try{
-   let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. दोबारा login करें.');
-   let r=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'create_or_update',staff_id:staffId,password,classes,class_teacher:classTeacher,subjects})});let j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher Login save failed');
-   if(status)status.innerHTML=`<b>✓ Teacher Login Ready</b><br>Name: ${esc(j.teacher_name||st.staff_name)}<br>Login Mobile: <b>${esc(j.login_id||j.mobile||v93NormPhone(st.phone))}</b>${password?`<br>Password: <b>${esc(password)}</b>`:''}<br><small>Teacher अब Mobile + Password से login करेगा. Password भूलने पर Primary Admin नया password देगा; कोई OTP/email नहीं.</small>`;
-   toast(j.created?'Teacher Login created':'Teacher Login updated');setTimeout(async()=>{let pr=await sb.from('teacher_profiles').select('id,auth_user_id,email,phone,mobile,teacher_name,employee_id,approval_status,is_active,requested_classes,requested_subjects').order('teacher_name');window.__v93Profiles=pr.data||[]},50);
- }catch(e){if(status)status.innerHTML=`<b>Save नहीं हुआ:</b> ${esc(e.message||String(e))}`;toast(e.message||String(e))}
-}
-
-/* Old pending self-registration can no longer be approved into a Teacher login. Existing approved teachers still allow assignment edits. */
-const v93ApproveTeacherBase=approveTeacherV14;
-approveTeacherV14=async function(id,authId){let r=await sb.from('teacher_profiles').select('approval_status').eq('id',id).maybeSingle();if(r.data&&v93Norm(r.data.approval_status)!=='approved')return toast('Self Registration approval बंद है. पहले Teachers/Staff data भरकर Teacher Login Manager से account बनाएँ.');return v93ApproveTeacherBase.apply(this,arguments)};
-const v93TeacherApprovalBase=teacherApprovalCenter;
-teacherApprovalCenter=async function(){let r=await v93TeacherApprovalBase.apply(this,arguments);setTimeout(()=>{let h=document.getElementById('erpContent');if(h&&!document.getElementById('v93TeacherRuleBanner'))h.insertAdjacentHTML('afterbegin','<div id="v93TeacherRuleBanner" class="v93Rule"><b>🔒 New Rule:</b> New Teacher self-registration approval बंद है. नया login बनाने के लिए <button onclick="render(\'teacher_access\')">Teacher Login Manager</button> इस्तेमाल करें. यह page existing Teacher classes/subjects/records के लिए है.</div>')},0);return r};
-
-/* Teacher can change own password after login; Forgot/Reset remains on login screen. */
-async function v93TeacherPasswordPage(){if(!v93Teacher())return toast('Teacher only');if(typeof v90Head==='function')v90Head('🔑 Password','Change Password • Forgot/Reset on Login');if(typeof v90InstallShell==='function')v90InstallShell('v93_teacher_password');let html=`<div class="v90Page"><div class="v90Panel"><h3>Change My Password</h3><p class="note">नया password कम से कम 6 characters का रखें.</p><div class="v93PasswordForm"><input id="v93OwnPass1" type="password" placeholder="New Password"><input id="v93OwnPass2" type="password" placeholder="Confirm Password"><button class="primary" onclick="v93SaveOwnPassword()">Update Password</button></div><div class="v93Rule">Password भूलने पर Logout करके Teacher Login → <b>Forgot / Reset Password</b> इस्तेमाल करें. Reset link registered Email पर आएगा.</div></div></div>`;if(typeof v90Set==='function')v90Set(html);else $('erpContent').innerHTML=html}
-async function v93SaveOwnPassword(){let a=String(document.getElementById('v93OwnPass1')?.value||''),b=String(document.getElementById('v93OwnPass2')?.value||'');if(a.length<6)return toast('Password कम से कम 6 characters का रखें');if(a!==b)return toast('दोनों Password समान नहीं हैं');let r=await sb.auth.updateUser({password:a});if(r.error)return toast(r.error.message);document.getElementById('v93OwnPass1').value='';document.getElementById('v93OwnPass2').value='';toast('Password successfully updated')}
-
-/* Route + premium navigation install */
-try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('teacher'));if(g&&Array.isArray(g[2])){if(!g[2].some(x=>x[0]==='teacher_access'))g[2].splice(1,0,['teacher_access','🔐 Teacher Login Manager']);let a=g[2].find(x=>x[0]==='teacher_approval');if(a)a[1]='🧩 Teacher Classes / Records'}}}catch(_e){}
-try{if(Array.isArray(V90_TEACHER_NAV)&&!V90_TEACHER_NAV.some(x=>x[0]==='v93_teacher_password'))V90_TEACHER_NAV.splice(2,0,['v93_teacher_password','🔑 Password'])}catch(_e){}
-const v93RenderBase=render;
-render=async function(p){if(p==='teacher_access')return v93TeacherAccessCenter();if(p==='v93_teacher_password')return v93TeacherPasswordPage();return v93RenderBase.apply(this,arguments)};window.render=render;
-
-function v93Init(){try{document.querySelectorAll('.teacherCard small,.v26Login.teacher small').forEach(x=>x.textContent='Admin-Created Login • Admin Reset Only')}catch(_e){};try{if(user&&!document.getElementById('erp')?.classList.contains('hidden')&&typeof v90InstallShell==='function')v90InstallShell(window.__v90Route||'dashboard')}catch(_e){}}
-document.addEventListener('DOMContentLoaded',()=>setTimeout(v93Init,250));window.addEventListener('load',()=>setTimeout(v93Init,250));
+function ldmTeacherAdd(){ldmTeacherForm(null)}
+async function ldmTeacherActive(id,active){if(!ldmTA())return toast('Admin only');try{let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired');let r=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'set_active',teacher_profile_id:id,is_active:active})}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher status update failed');toast(active?'Teacher activated':'Teacher deactivated');await ldmTeacherManager()}catch(e){toast(e.message||String(e))}}
+async function ldmTeacherEdit(id){let t=(window.__ldmTeachers||[]).find(x=>String(x.id)===String(id));if(!t)return toast('Teacher नहीं मिला');let [c,s]=await Promise.all([sb.from('teacher_class_assignments').select('class_name,is_class_teacher').eq('teacher_profile_id',id).eq('is_active',true),sb.from('teacher_subject_assignments').select('subject_name').eq('teacher_profile_id',id).eq('is_active',true)]);ldmTeacherForm(t,(c.data||[]),(s.data||[]))}
+function ldmTeacherForm(t,ca=[],sa=[]){let classes=ca.map(x=>x.class_name),ct=ca.find(x=>x.is_class_teacher)?.class_name||'',subjects=sa.map(x=>x.subject_name).join(', '),pw=t?'':ldmPw();v14Modal(`<h2>${t?'Manage':'Add'} Teacher</h2><div class="v14Form"><div><label>Teacher Name</label><input id="ldmTN" value="${esc(t?.teacher_name||'')}"></div><div><label>Mobile Login</label><input id="ldmTM" inputmode="numeric" maxlength="10" value="${esc(ldmPhone(t?.mobile||''))}"></div><div><label>Contact Email (optional)</label><input id="ldmTE" value="${esc(t?.contact_email||'')}"></div><div><label>Joining Date</label><input id="ldmTJ" type="date" value="${esc(t?.joining_date||'')}"></div><div class="full"><label>Classes</label><div class="v93Checks">${cls.map(c=>`<label><input class="ldmCC" type="checkbox" value="${esc(c)}" ${classes.includes(c)?'checked':''}> ${esc(c)}</label>`).join('')}</div></div><div><label>Class Teacher</label><select id="ldmCT"><option value="">Not Class Teacher</option>${cls.map(c=>`<option value="${esc(c)}" ${c===ct?'selected':''}>${esc(c)}</option>`).join('')}</select></div><div><label>Subjects</label><input id="ldmTS" value="${esc(subjects)}" placeholder="English, Mathematics"></div><div class="full"><label>${t?'New Password (blank = unchanged)':'Initial Password'}</label><div style="display:flex;gap:8px"><input id="ldmTP" type="text" value="${esc(pw)}"><button type="button" onclick="$('ldmTP').value=ldmPw()">Generate</button></div></div><div class="full"><button class="primary" onclick="ldmTeacherSave('${t?.id||''}')">${t?'Update Teacher':'Create Teacher'}</button></div><div id="ldmTStatus" class="note"></div></div>`)}
+async function ldmTeacherSave(id){if(!ldmTA())return toast('Admin only');let name=$('ldmTN').value.trim(),mobile=ldmPhone($('ldmTM').value),email=$('ldmTE').value.trim(),joining=$('ldmTJ').value||null,password=$('ldmTP').value,classes=[...document.querySelectorAll('.ldmCC:checked')].map(x=>x.value),ct=$('ldmCT').value,subjects=String($('ldmTS').value||'').split(',').map(x=>x.trim()).filter(Boolean);if(!name)return toast('Teacher Name required');if(mobile.length!==10)return toast('Valid 10 digit Mobile required');if(!id&&password.length<8)return toast('Initial Password minimum 8 characters');let st=$('ldmTStatus');st.textContent='Saving...';try{let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired');let r=await fetch('/api/teacher-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:id?'update':'create',teacher_profile_id:id||null,teacher:{teacher_name:name,mobile,contact_email:email,joining_date:joining},password,classes,class_teacher:classes.includes(ct)?ct:'',subjects,academic_session:'2026-27'})}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Teacher save failed');st.innerHTML=`✓ Saved • Teacher ID <b>${esc(j.teacher_code||'')}</b> • Login <b>${esc(mobile)}</b>`;toast(id?'Teacher updated':'Teacher created');setTimeout(()=>{$('v14Modal')?.remove();ldmTeacherManager()},500)}catch(e){st.textContent=e.message||String(e);toast(st.textContent)}}
+async function v14LoadTeacherContext(){v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];if(!user?.id)return {ok:false,reason:'no-user'};let r=await sb.rpc('ldm_teacher_context');if(r.error)throw new Error(r.error.message);let x=r.data||{};if(!x.teacher)return {ok:false,reason:'teacher-profile-missing'};v14TeacherProfile=x.teacher;v14TeacherClasses=Array.isArray(x.classes)?x.classes:[];v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];return {ok:true}}
+function v14AllowedClassNames(){return [...new Set((v14TeacherClasses||[]).filter(x=>x.is_active!==false).map(x=>x.class_name).filter(Boolean))]}
+teacherLoginDialog=function(){v14Modal(`<h2>👩‍🏫 Teacher Login</h2><p class="v14Muted">Admin द्वारा बनाया गया Mobile + Password</p><div id="teacherAuthBox"><div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" inputmode="numeric" maxlength="10"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password"></div><div class="full"><button class="primary" onclick="teacherPasswordLogin()">Login</button></div></div></div>`)};
+teacherPasswordLogin=async function(){let m=ldmPhone($('tLoginId')?.value),p=String($('tLoginPassword')?.value||'');if(m.length!==10||!p)return toast('Mobile और Password डालें');let a=await sb.auth.signInWithPassword({email:`t${m}@teacher.ldmodern.local`,password:p});if(a.error)return toast('Registered Mobile या Password सही नहीं है.');try{user=a.data.user;await loadProfile();if(String(profile?.role||'').toLowerCase()!=='teacher')throw new Error('यह Teacher account नहीं है');let c=await v14LoadTeacherContext();if(!c.ok||!v14TeacherProfile||v14TeacherProfile.is_active===false)throw new Error('Teacher account Active नहीं है');$('v14Modal')?.remove();await openERP()}catch(e){await sb.auth.signOut();user=null;profile=null;toast(e.message)}};window.teacherPasswordLogin=teacherPasswordLogin;
+teacherApprovalCenter=ldmTeacherManager;
+try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('teacher'));if(g&&Array.isArray(g[2])){g[2]=g[2].filter(x=>!['teacher_approval','teacher_access'].includes(x[0]));g[2].splice(1,0,['teacher_access','👩‍🏫 Teacher Master'])}}}catch(_e){}
+const __ldmRender=window.render;window.render=async function(p){if(p==='teacher_access'||p==='teacher_approval')return ldmTeacherManager();return __ldmRender.apply(this,arguments)};
 </script>
-
-<style id="v94-limit-safe-auth-style">
-.v94AuthNote{margin-top:8px;padding:9px 11px;border:1px solid #cfe1f4;background:#eef7ff;color:#174d83;border-radius:10px;font-size:11px;font-weight:800;line-height:1.5}.v94AuthNote.warn{background:#fff8e7;border-color:#f1d287;color:#7b5500}.v94AdminPw{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}.v94AdminPw input{width:100%}@media(max-width:650px){.v94AdminPw{grid-template-columns:1fr}}
-</style>
-<script id="v94-limit-safe-auth">
-/* ===== V94 LIMIT-SAFE PASSWORD AUTH =====
-   No OTP, no public self-signup, no automatic reset email.
-   Parent + Teacher first password/reset are Admin-controlled.
-   Admin uses password login; logged-in Admin can change own password. */
-window.V94_BUILD='V94-LIMIT-SAFE-PASSWORD-AUTH-2026-09-15';
-function v94Msg(host,id,msg,warn=false){let root=typeof host==='string'?document.querySelector(host):host;if(!root)return toast(msg);let b=document.getElementById(id);if(!b){b=document.createElement('div');b.id=id;root.appendChild(b)}b.className='v94AuthNote'+(warn?' warn':'');b.textContent=msg;return b}
-
-/* School Admin provisions accounts; browser self-signup stays disabled. */
-signup=async function(){v94Msg(document.querySelector('#login .authCard'),'v94NoSignup','New account self-registration बंद है. Account School Admin बनाएगा.',true)};
-teacherPasswordRegistrationForm=function(){v94Msg(document.getElementById('teacherAuthBox'),'v94NoTeacherSignup','Teacher self-registration बंद है. पहले Admin Teachers/Staff में data भरेगा और Teacher Login Manager से first password बनाएगा.',true)};
-teacherPasswordRegister=async function(){return teacherPasswordRegistrationForm()};
-submitTeacherRegistration=async function(){return teacherPasswordRegistrationForm()};
-
-/* Forgot remains a help action but sends ZERO email/OTP. */
-v49ForgotPassword=async function(role){
-  if(role==='teacher')return v94Msg(document.getElementById('teacherAuthBox'),'v94TeacherForgot','Password भूल गए? School Admin → Teacher Login Manager से नया password set/reset कराएँ. कोई email/OTP नहीं भेजा जाएगा.',true);
-  return v94Msg(document.querySelector('#login .authCard'),'v94AdminForgot','Admin password भूल गए? दूसरे authorized Admin/Super Admin या Supabase Auth dashboard से reset करें. Automatic email/OTP disabled है.',true);
-};
-v50AdminForgot=async function(){return toast('Teacher password reset: Admin → Teacher Login Manager इस्तेमाल करें. Email/OTP नहीं भेजा जाएगा.')};
-
-/* Prevent rapid repeated login submissions. */
-window.__v94LoginBusy={admin:false,teacher:false,parent:false};
-async function v94Guard(kind,fn,ctx,args){if(window.__v94LoginBusy[kind])return toast('Login check चल रहा है...');window.__v94LoginBusy[kind]=true;try{return await fn.apply(ctx,args)}finally{setTimeout(()=>window.__v94LoginBusy[kind]=false,1200)}}
-const v94AdminLoginBase=login;login=async function(){return v94Guard('admin',v94AdminLoginBase,this,arguments)};
-const v94ParentLoginBase=parentPasswordLogin;parentPasswordLogin=async function(){return v94Guard('parent',v94ParentLoginBase,this,arguments)};
-
-/* Parent creation/link/reset uses secure server Admin API only — never browser signUp. */
-async function v94ParentApi(payload){
-  let {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. दोबारा login करें.');let tries=0;
-  while(true){let r=await fetch('/api/parent-access',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify(payload)});let j=await r.json().catch(()=>({}));if(r.ok)return j;if(r.status===429&&tries<2){tries++;await new Promise(x=>setTimeout(x,1200*tries));continue}throw new Error(j.error||'Parent access update failed')}
-}
-/* V108: old V94 bulk Parent manager hooks removed; unified manager calls v94ParentApi directly. */
-
-/* Any older Parent setup screens also route through the same secure server API. */
-async function v94LegacyParentCreate(st,statusEl){
-  if(!st)throw new Error('Student चुनें');let mobile=String(document.getElementById('paMobile')?.value||st.phone||'').replace(/\D/g,'').slice(-10),email=String(document.getElementById('paEmail')?.value||'').trim().toLowerCase(),pw=String(document.getElementById('paPassword')?.value||''),pw2=String(document.getElementById('paPassword2')?.value||pw);if(mobile.length!==10)throw new Error('सही 10 digit Parent Mobile डालें');if(pw.length<8)throw new Error('Password कम से कम 8 characters का रखें');if(pw!==pw2)throw new Error('दोनों Password समान नहीं हैं');let pool=window.__v73ParentStudents||window.__paStudents||[],sib=pool.find(x=>String(x.id)!==String(st.id)&&String(x.phone||'').replace(/\D/g,'').slice(-10)===mobile&&x.parent_email);if(!email&&sib?.parent_email)email=String(sib.parent_email).trim().toLowerCase();if(statusEl)statusEl.innerHTML='Limit-safe Parent account update...';let j=await v94ParentApi({action:'create_or_link',student_id:st.id,mobile,email,password:pw});st.phone=mobile;st.parent_email=j.login_email||st.parent_email;if(statusEl)statusEl.innerHTML=`<b>✓ Parent Login Ready</b><br>Login Mobile: <b>${esc(mobile)}</b><br>${j.created?'First password Admin ने बनाया.':'Existing Parent link हुआ; पुराना password नहीं बदला.'}<br><small>No OTP / verification email / reset email.</small>`;return j
-}
-createParentAccess=async function(){try{let st=(window.__paStudents||[]).find(z=>String(z.id)===String(document.getElementById('paStudent')?.value));let j=await v94LegacyParentCreate(st,document.getElementById('paStatus'));toast(j.created?'Parent Login created':'Parent linked — password unchanged')}catch(e){let b=document.getElementById('paStatus');if(b)b.innerHTML='<b>Error:</b> '+esc(e.message||String(e));toast(e.message||String(e))}};
-v73CreateParentAccess=async function(){try{let st=window.__v73SelectedParentStudent;let j=await v94LegacyParentCreate(st,document.getElementById('paStatus'));toast(j.created?'Parent Login created':'Parent linked — password unchanged')}catch(e){let b=document.getElementById('paStatus');if(b)b.innerHTML='<b>Error:</b> '+esc(e.message||String(e));toast(e.message||String(e))}};
-
-/* Teacher forgot/reset is Admin-controlled. Teacher can still change own password when logged in. */
-v93TeacherPasswordPage=async function(){if(!v93Teacher())return toast('Teacher only');if(typeof v90Head==='function')v90Head('🔑 Password','Direct Change • No OTP / Email');if(typeof v90InstallShell==='function')v90InstallShell('v93_teacher_password');let html=`<div class="v90Page"><div class="v90Panel"><h3>Change My Password</h3><p class="note">नया password कम से कम 6 characters का रखें. यह direct authenticated change है.</p><div class="v93PasswordForm"><input id="v93OwnPass1" type="password" placeholder="New Password"><input id="v93OwnPass2" type="password" placeholder="Confirm Password"><button class="primary" onclick="v93SaveOwnPassword()">Update Password</button></div><div class="v93Rule">Password भूलने पर School Admin → <b>Teacher Login Manager</b> से नया password set/reset करेगा. कोई OTP/email नहीं भेजा जाएगा.</div></div></div>`;if(typeof v90Set==='function')v90Set(html);else $('erpContent').innerHTML=html};
-
-/* Logged-in Admin changes own password directly, with no email/OTP. */
-async function v94AdminPasswordPage(){if(!v90Admin())return toast('Admin only');if(typeof v90Head==='function')v90Head('🔑 Admin Password','Direct Password Change • No OTP / Email');if(typeof v90InstallShell==='function')v90InstallShell('v94_admin_password');let html=`<div class="v90Page"><div class="v90Panel"><h3>Change My Admin Password</h3><p class="note">यह direct authenticated change है. कोई OTP/email नहीं भेजा जाएगा.</p><div class="v94AdminPw"><label>New Password<input id="v94AdminPw1" type="password" placeholder="Minimum 8 characters"></label><label>Confirm Password<input id="v94AdminPw2" type="password" placeholder="Repeat password"></label><button class="primary" onclick="v94SaveAdminPassword()">Update Password</button></div></div></div>`;if(typeof v90Set==='function')v90Set(html);else $('erpContent').innerHTML=html}
-async function v94SaveAdminPassword(){let a=String(document.getElementById('v94AdminPw1')?.value||''),b=String(document.getElementById('v94AdminPw2')?.value||'');if(a.length<8)return toast('Admin password कम से कम 8 characters का रखें');if(a!==b)return toast('दोनों password समान नहीं हैं');let r=await sb.auth.updateUser({password:a});if(r.error)return toast(r.error.message);document.getElementById('v94AdminPw1').value='';document.getElementById('v94AdminPw2').value='';toast('Admin password updated • No OTP/email')}
-try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('reports')||String(x[1]).toLowerCase().includes('settings'));if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='v94_admin_password'))g[2].push(['v94_admin_password','🔑 Admin Password'])}}catch(_e){}
-const v94RenderBase=render;render=async function(p){if(p==='v94_admin_password')return v94AdminPasswordPage();return v94RenderBase.apply(this,arguments)};window.render=render;
-
-function v94Init(){
-  try{document.querySelector('#login .loginLinks')?.querySelectorAll('a').forEach(a=>{if(/create account/i.test(a.textContent||''))a.remove()})}catch(_e){}
-  try{document.querySelectorAll('.teacherCard small,.v26Login.teacher small').forEach(x=>x.textContent='Admin-Created Password • No OTP/Email')}catch(_e){}
-  try{let a=document.getElementById('v49AdminForgot');if(a)a.textContent='Forgot Admin Password?'}catch(_e){}
-  try{let gate=document.getElementById('parentGate');if(gate&&!document.getElementById('v94ParentHelp')){let d=document.createElement('div');d.id='v94ParentHelp';d.className='v94AuthNote';d.textContent='Parent और Student का Password School Admin देगा. Student Admission No. से login कर सकता है — कोई OTP/email नहीं.';gate.appendChild(d)}}catch(_e){}
-}
-document.addEventListener('DOMContentLoaded',()=>setTimeout(v94Init,300));window.addEventListener('load',()=>setTimeout(v94Init,300));
-</script>
-
 
 <!-- ===== V95 SINGLE ADMIN + PREMIUM LOGIN POLICY ===== -->
 <style id="v95-auth-premium-style">
