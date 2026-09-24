@@ -4938,8 +4938,7 @@ window.addEventListener('load',()=>setTimeout(()=>{
   if(typeof v14Admin==='function' && v14Admin()){v58AdminSidebar();v58EnsureTopBar()}
 },160));
 </script>
-
-\n<script id="v59-final-runtime">
+<script id="v59-final-runtime">
 const V59_BUILD='V59-V52-PANEL-CLASSIC-SIDEBAR-ORDERS-AUTO-ADMISSION';
 
 /* ---------- Classic Admin sidebar: larger single items ---------- */
@@ -5123,7 +5122,7 @@ const v59RenderBase=render;
 render=function(p){const r=v59RenderBase(p);Promise.resolve(r).finally(()=>setTimeout(()=>{if(v14Admin())v59AdminSidebar();else if(v14Teacher())v59TeacherSidebar();document.querySelectorAll('#erpNav button').forEach(b=>b.classList.toggle('active',b.dataset.route===p))},0));return r};
 
 window.addEventListener('load',()=>setTimeout(()=>{if(user){if(v14Admin())v59AdminSidebar();else if(v14Teacher())v59TeacherSidebar()}},180));
-</script>\n
+</script>
 <script id="v60-student-import-safe-match">
 /* =========================================================
    V60 — SAFE STUDENT EXCEL MATCHING
@@ -9655,8 +9654,7 @@ window.V6412_BUILD='V64.12-FINAL-UI-NAV-ID-PHOTO-2026-09-20';
 })();
 </script>
 <!-- ===== END V64.12 ===== -->
-
-\n<!-- ===== V64.13 CENTRAL MASTER RECONCILIATION ===== -->
+<!-- ===== V64.13 CENTRAL MASTER RECONCILIATION ===== -->
 <script id="v6413-central-master">
 window.V6413_BUILD='V64.13-CENTRAL-MASTER-RECONCILED-2026-09-20';
 (function(){
@@ -9703,7 +9701,7 @@ window.V6413_BUILD='V64.13-CENTRAL-MASTER-RECONCILED-2026-09-20';
  const rb=window.render;if(typeof rb==='function')window.render=async function(route){if(route==='v6413_master_recheck'){window.__v90Route=route;v90InstallShell?.(route);return v6413MasterRecheck()}return rb.apply(this,arguments)};
 })();
 </script>
-<!-- ===== END V64.13 ===== -->\n
+<!-- ===== END V64.13 ===== -->
 <!-- ===== V64.15 FINAL 14-POINT + OFFICIAL LETTER CENTER ===== -->
 <style id="v6415-final-css">
 /* FINAL SHELL: exactly one ERP scroll surface, no right white strip. */
@@ -10072,4 +10070,77 @@ window.V6422_BUILD='V64.22-FINAL-SYNTAX-CORRECTED-2026-09-20';
 </script>
 
 
+
+<!-- ===== V114.6 AUDITED TEACHER AUTHORIZATION + ROUTE + PUBLIC SOURCE FIX ===== -->
+<style id="v1146-teacher-authz-css">
+body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
+#erp:not(.hidden){min-height:100vh}#erp:not(.hidden) #erpContent{min-height:55vh}
+</style>
+<script id="v1146-teacher-authz-js">
+(function(){'use strict';
+ const $id=id=>document.getElementById(id), norm=v=>String(v??'').trim(), role=()=>norm(window.profile?.role).toLowerCase();
+ const isTeacher=()=>role()==='teacher', uniq=a=>[...new Set((a||[]).map(norm).filter(Boolean))];
+ const SELF=new Set(['dashboard','teacher_profile','v97_profile','v93_teacher_password','teacher_notices','gallery','v90_my_requests','teacher_attendance','my_notes']);
+ const CLASS=new Set(['teacher_class','attendance','master_attendance','fees','class_opinions']);
+ const TEACHING=new Set(['teacher_bells','teacher_schedule','timetable','v90_teacher_daily','teaching_diary','homework']);
+ const MARKS=new Set(['exams','v90_teacher_marks']);
+ function state(){
+   const ca=Array.isArray(window.v14TeacherClasses)?window.v14TeacherClasses.filter(x=>x&&x.is_active!==false):[];
+   const sa=Array.isArray(window.v14TeacherSubjects)?window.v14TeacherSubjects.filter(x=>x&&x.is_active!==false):[];
+   return {classes:uniq(ca.map(x=>x.class_name)),classTeacher:uniq(ca.filter(x=>x.is_class_teacher===true).map(x=>x.class_name)),subjects:uniq(sa.map(x=>x.subject_name||x.subject))};
+ }
+ async function refresh(force=false){
+   if(!isTeacher())return state();
+   if(!force&&window.v14TeacherProfile&&Array.isArray(window.v14TeacherClasses)&&Array.isArray(window.v14TeacherSubjects))return state();
+   if(typeof window.v14LoadTeacherContext!=='function')throw new Error('Teacher permission loader उपलब्ध नहीं है.');
+   const r=await window.v14LoadTeacherContext();
+   if(r?.ok===false)throw new Error(r.reason==='teacher-profile-missing'?'Teacher profile mapping नहीं मिली.':'Teacher permission context load नहीं हुआ.');
+   const p=window.v14TeacherProfile;
+   if(!p)throw new Error('Teacher profile mapping नहीं मिली.');
+   if(p.is_active===false)throw new Error('Teacher account Deactivated है.');
+   if(norm(p.approval_status).toLowerCase()!=='approved')throw new Error('Teacher account Admin Approved नहीं है.');
+   return state();
+ }
+ function rule(route,st){
+   route=norm(route||'dashboard');
+   if(SELF.has(route))return {ok:true};
+   if(route==='class_teacher')return st.classTeacher.length?{ok:true}:{ok:false,msg:'Admin ने Class Teacher permission नहीं दी है.'};
+   if(CLASS.has(route))return st.classes.length?{ok:true}:{ok:false,msg:'Admin ने इस Teacher को कोई Class permission assign नहीं की है.'};
+   if(TEACHING.has(route))return (st.classes.length||st.subjects.length)?{ok:true}:{ok:false,msg:'Admin ने Class/Subject teaching permission assign नहीं की है.'};
+   if(MARKS.has(route))return (st.classes.length&&st.subjects.length)?{ok:true}:{ok:false,msg:!st.classes.length?'Marks के लिए Class permission नहीं है.':'Marks के लिए Subject permission नहीं है.'};
+   return {ok:false,msg:'यह Teacher module Admin permission list में नहीं है.'};
+ }
+ window.v1146TeacherPermissionState=state;
+ window.v1146TeacherAuthorize=async function(route,quiet=false){try{const st=await refresh(false),r=rule(route,st);if(!r.ok&&!quiet)window.toast?.(r.msg);return {...r,...st}}catch(e){const msg=e?.message||String(e);if(!quiet)window.toast?.(msg);return {ok:false,msg,classes:[],classTeacher:[],subjects:[]}}};
+ /* Compatibility permission list: prevent the old can(route) layer from falsely rejecting valid Teacher routes. */
+ try{if(window.permissions){permissions.teacher=uniq([...(permissions.teacher||[]),...SELF,...CLASS,...TEACHING,...MARKS,'class_teacher'])}}catch(_e){}
+ /* These are the only class boundaries used by legacy Teacher modules. */
+ window.v14AllowedClassNames=function(){return state().classes};
+ window.v40ClassTeacherNames=function(){return state().classTeacher};
+ function teacherHome(){
+   try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){}
+   try{window.__v90Route='dashboard';window.__v90History=['dashboard'];if(typeof window.v90TeacherDashboard==='function')return window.v90TeacherDashboard();if(typeof window.teacherHomeDashboard==='function')return window.teacherHomeDashboard()}catch(e){console.error('Teacher home',e)}
+ }
+ function applyPermissionUI(){
+   if(!isTeacher())return;document.body.classList.add('v1146-teacher');const st=state();
+   document.querySelectorAll('#erp aside button,#erp aside a,#erpContent button').forEach(el=>{
+     const oc=el.getAttribute('onclick')||'',m=oc.match(/render\(['\"]([^'\"]+)/);if(!m)return;const r=rule(m[1],st);if(!r.ok)el.setAttribute('data-v1146-hidden','1');else el.removeAttribute('data-v1146-hidden');
+   });
+ }
+ const baseRender=window.render;
+ if(typeof baseRender==='function')window.render=async function(route='dashboard'){
+   if(!isTeacher())return baseRender.apply(this,arguments);
+   route=norm(route||'dashboard');
+   const a=await window.v1146TeacherAuthorize(route,false);if(!a.ok)return teacherHome();
+   try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden');const r=await baseRender.apply(this,arguments);setTimeout(applyPermissionUI,20);return r}
+   catch(e){console.error('V114.6 Teacher route failed',route,e);window.toast?.('Teacher module error: '+(e?.message||String(e)));return teacherHome()}
+ };
+ const baseOpen=window.openERP;
+ if(typeof baseOpen==='function')window.openERP=async function(){const r=await baseOpen.apply(this,arguments);if(isTeacher()){try{await refresh(true)}catch(e){window.toast?.(e?.message||String(e))}try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){};setTimeout(()=>{applyPermissionUI();teacherHome()},40)}return r};
+ /* Filter Teacher sidebar at construction time, not by a permanent DOM observer. */
+ try{const baseBuild=window.v90BuildNav;if(typeof baseBuild==='function')window.v90BuildNav=function(active){const r=baseBuild.apply(this,arguments);if(isTeacher())setTimeout(applyPermissionUI,0);return r}}catch(_e){}
+ window.addEventListener('load',()=>setTimeout(applyPermissionUI,400),{once:true,passive:true});
+})();
+</script>
+<!-- ===== END V114.6 ===== -->
 </body></html>
