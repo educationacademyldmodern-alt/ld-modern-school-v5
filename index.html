@@ -1,6 +1,18 @@
 <!doctype html><html lang="en"><head>
 <script>document.documentElement.classList.add('ldmBootLock');</script>
 <script id="ldm-v146-boot-safety">/* V146: no global visibility boot-lock. It could remain forever and blank the whole ERP. */</script>
+<style id="ldm-v158-early-surface-owner">
+/* First-frame ownership only; never hides body. Public refresh cannot paint ERP/login/parent surfaces. */
+html.ldmFirstPublic #erp,html.ldmFirstPublic #login,html.ldmFirstPublic #setup,html.ldmFirstPublic #parentDashboard,html.ldmFirstPublic #publicPageView{display:none!important}
+body.ldmSurfacePublic #erp,body.ldmSurfacePublic #login,body.ldmSurfacePublic #setup,body.ldmSurfacePublic #parentDashboard{display:none!important}
+body.ldmSurfaceERP #publicSite,body.ldmSurfaceERP #publicPageView,body.ldmSurfaceERP #login,body.ldmSurfaceERP #setup,body.ldmSurfaceERP #parentDashboard{display:none!important}
+body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #setup{display:none!important}
+#erp.ldmTeacherCanonical .sideBrand{display:none!important}
+#erp.ldmTeacherCanonical .erpTop>div:has(#erpTitle){display:none!important}
+</style>
+<script id="ldm-v158-first-frame-owner">
+(function(){try{let s=sessionStorage.getItem('ldm_surface');if(!s||s==='public')document.documentElement.classList.add('ldmFirstPublic')}catch(_e){document.documentElement.classList.add('ldmFirstPublic')}})();
+</script>
 <!-- ===== LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
 <script id="ldm-runtime-dedup-bootstrap">
 (function(){
@@ -14,12 +26,7 @@
    const key=String(type)+'|'+cap+'|'+once+'|'+src;
    if(m.has(key))return; m.add(key); return nativeAdd.apply(this,arguments);
  };
- const nativeInterval=window.setInterval.bind(window), intervals=new Map();
- window.setInterval=function(fn,delay){
-   let src='';try{src=typeof fn==='function'?Function.prototype.toString.call(fn).replace(/\\s+/g,' '):String(fn)}catch(_e){src=String(fn)}
-   const key=String(delay||0)+'|'+src; if(intervals.has(key))return intervals.get(key);
-   const id=nativeInterval.apply(window,arguments); intervals.set(key,id); return id;
- };
+ // V160: native setInterval retained; module timers/scanners own their lifecycle.
 })();
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
@@ -2399,6 +2406,8 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 
 
 \n\n
+
+
 
 
 
@@ -6548,11 +6557,11 @@ function v62BellHost(){let erp=$('erp'),parent=$('parentDashboard');if(erp&&!erp
 function v62EnsureBell(){let top=v62BellHost();if(!top)return null;let b=$('v62Bell');if(!b){b=document.createElement('button');b.id='v62Bell';b.className='v62Bell';b.type='button';b.innerHTML='🔔<span id="v62Badge" class="v62Badge zero">0</span>';b.onclick=v62ToggleNotifications}else if(b.parentElement!==top){b.remove()}if(!b.isConnected){let anchor=top.querySelector('.websiteBtn,.secondary');top.insertBefore(b,anchor||null)}v62ApplyBellMode();return b}
 function v62CurrentMap(items){let m={};(items||[]).forEach(x=>m[x.key||x.title]=Number(x.n||0));return m}
 function v62MaybeTone(items){let key='ld_v62_notif_state_'+String(user?.id||'guest'),now=v62CurrentMap(items),old={};try{old=JSON.parse(localStorage.getItem(key)||'null')||null}catch(_e){}if(old&&v62Prefs().mode==='sound'){let inc=Object.keys(now).some(k=>Number(now[k]||0)>Number(old[k]||0));if(inc)v62PlayTone()}localStorage.setItem(key,JSON.stringify(now))}
-async function v62RefreshNotifications(){let erpVisible=!$('erp')?.classList.contains('hidden'),parentVisible=!$('parentDashboard')?.classList.contains('hidden');if(!user||(!erpVisible&&!parentVisible))return;v62EnsureBell();let next=await v62BuildNotifications();v62MaybeTone(next);v62NotifItems=next;const total=v62NotifItems.reduce((a,x)=>a+Number(x.n||0),0),b=$('v62Bell'),badge=$('v62Badge'),prefs=v62Prefs();if(b)b.classList.toggle('hasAlert',total>0&&prefs.mode!=='silent');if(badge){badge.textContent=total>99?'99+':String(total);badge.classList.toggle('zero',!total)}let panel=$('v62NotifPanel');if(panel&&!panel.classList.contains('hidden'))v62RenderNotifPanel()}
+async function v62RefreshNotifications(force=false){let erpVisible=!$('erp')?.classList.contains('hidden'),parentVisible=!$('parentDashboard')?.classList.contains('hidden');if(!user||(!erpVisible&&!parentVisible))return;const now=Date.now();if(!force&&window.__v160NotifReadAt&&now-window.__v160NotifReadAt<300000)return;window.__v160NotifReadAt=now;v62EnsureBell();let next=await v62BuildNotifications();v62MaybeTone(next);v62NotifItems=next;const total=v62NotifItems.reduce((a,x)=>a+Number(x.n||0),0),b=$('v62Bell'),badge=$('v62Badge'),prefs=v62Prefs();if(b)b.classList.toggle('hasAlert',total>0&&prefs.mode!=='silent');if(badge){badge.textContent=total>99?'99+':String(total);badge.classList.toggle('zero',!total)}let panel=$('v62NotifPanel');if(panel&&!panel.classList.contains('hidden'))v62RenderNotifPanel()}
 function v62RenderNotifPanel(){let top=v62BellHost();if(!top)return;let p=$('v62NotifPanel');if(!p){p=document.createElement('div');p.id='v62NotifPanel';p.className='v62NotifPanel'}if(p.parentElement!==top)top.appendChild(p);let pref=v62Prefs();p.innerHTML=`<div class="v62NotifHead"><b>🔔 Notifications</b><div class="v62NotifHeadActions"><button class="secondary" onclick="v62RefreshNotifications()">↻</button><button class="secondary" onclick="$(&quot;v62NotifPanel&quot;).classList.add(&quot;hidden&quot;)">✕</button></div></div><div class="v62NotifPrefs"><label>Sound Mode<select onchange="v62SetPref('mode',this.value)"><option value="sound" ${pref.mode==='sound'?'selected':''}>🔊 Sound On</option><option value="mute" ${pref.mode==='mute'?'selected':''}>🔇 Mute</option><option value="silent" ${pref.mode==='silent'?'selected':''}>◌ Silent</option></select></label><label>Tone<select onchange="v62SetPref('tone',this.value)"><option value="classic" ${pref.tone==='classic'?'selected':''}>Classic Bell</option><option value="soft" ${pref.tone==='soft'?'selected':''}>Soft Chime</option><option value="bright" ${pref.tone==='bright'?'selected':''}>Bright Alert</option></select></label><div class="v62ModeHint">Sound On = नए notification पर tone • Mute = badge/pulse रहेगा, sound नहीं • Silent = sound और pulse दोनों बंद.</div></div>`+(v62NotifItems.length?v62NotifItems.map((x,i)=>`<button class="v62NotifItem" onclick="v62OpenNotification(${i})"><b><span class="v62Dot"></span>${esc(x.title)} <strong>(${x.n})</strong></b><small>${esc(x.sub||'')} • Tap to open</small></button>`).join(''):'<div class="empty">✓ अभी कोई pending notification नहीं है.</div>')}
 function v62ToggleNotifications(e){if(e?.stopPropagation)e.stopPropagation();let p=$('v62NotifPanel');if(p&&!p.classList.contains('hidden')){p.classList.add('hidden');return}v62RenderNotifPanel();$('v62NotifPanel')?.classList.remove('hidden')}
 function v62OpenNotification(i){const x=v62NotifItems[i];$('v62NotifPanel')?.classList.add('hidden');if(x?.go)x.go()}
-function v62StartNotificationTimer(){clearInterval(v62NotifTimer);v62NotifTimer=setInterval(v62RefreshNotifications,45000)}
+function v62StartNotificationTimer(){clearInterval(v62NotifTimer);v62NotifTimer=null}
 document.addEventListener('click',e=>{const p=$('v62NotifPanel'),b=$('v62Bell');if(p&&!p.classList.contains('hidden')&&!p.contains(e.target)&&!b?.contains(e.target))p.classList.add('hidden')});
 const v62OpenERPBase=openERP;openERP=function(){const r=v62OpenERPBase.apply(this,arguments);setTimeout(()=>{v62EnsureBell();v62RefreshNotifications();v62StartNotificationTimer()},350);return r};
 /* Keep My Profile clean: Orders live only in My Orders / Notices. */
@@ -8340,7 +8349,10 @@ function v764PageNeeds(table){
  return false;
 }
 function v764QueueRefresh(reason='data'){
- if(!user||document.getElementById('erp')?.classList.contains('hidden'))return;v764Pending.add(String(reason||'data'));if(!v764FirstPending)v764FirstPending=Date.now();v764Badge('sync','↻ Syncing');clearTimeout(v764SyncTimer);let age=Date.now()-v764FirstPending;v764SyncTimer=setTimeout(v764FlushRefresh,age>1300?120:520);
+ reason=String(reason||'data');
+ // V160: passive focus/visibility are not data changes; old shells may emit them, canonical queue ignores them.
+ if(reason==='focus'||reason==='visible'||reason==='v159-visible')return;
+ if(!user||document.getElementById('erp')?.classList.contains('hidden'))return;v764Pending.add(reason);if(!v764FirstPending)v764FirstPending=Date.now();v764Badge('sync','↻ Syncing');clearTimeout(v764SyncTimer);let age=Date.now()-v764FirstPending;v764SyncTimer=setTimeout(v764FlushRefresh,age>1300?120:520);
 }
 async function v764FlushRefresh(){
  if(!v764Pending.size)return;if(v764BulkDepth>0||v764SyncBusy){v764SyncTimer=setTimeout(v764FlushRefresh,450);return}if(v764IsEditing()){v764SyncTimer=setTimeout(v764FlushRefresh,700);return}
@@ -8573,7 +8585,7 @@ async function v90AdminDashboard(){
  </section></section>
  <section id="v90Stats" class="v90Stats v114AdminStats v156ClickableStats">${(window.__ldmAdminStatsHTML||Array.from({length:6},()=>'<div class="v90Stat ldmStatHold"><span>•</span><div><small>Loading</small><b>—</b></div></div>').join(''))}</section>
  <section class="ldmMasterControl"><div class="ldmMasterTitle"><div><small>ADMIN MASTER CONTROL</small><h2>School Control Center</h2></div><span>Central • Safe • Live</span></div><div class="ldmMasterGrid"><button onclick="render('class_teacher_control')"><i>👨‍🏫</i><b>Class Teacher Control</b><small>Assign • Repair • Change • Handover • Open Class</small><em>OPEN →</em></button><button onclick="render('v150_student_master')"><i>🎓</i><b>Student Master Control</b><small>Full Details • Edit • Correct • Update • Delete Safety</small><em>OPEN →</em></button><button onclick="v6422DueMaster()"><i>⚡</i><b>Quick Due Fee Update</b><small>Central Ledger • Monthly • Installment • Reminder</small><em>OPEN →</em></button><button onclick="render('idcard_center')"><i>🪪</i><b>ID Card Center</b><small>5 Formats • Preview • A4 Print</small><em>OPEN →</em></button></div></section>
- <div id="v149AdminQuickSlot"></div>
+ <div id="v149AdminQuickSlot"><section id="v147AdminQuick" class="panel"><h3>⚡ QR / Storage Quick Access</h3><div class="ldmTeacherModules"><button onclick="render('v147_admin_presence')"><i>🏫</i><b>QR Gate & Presence</b><small>Entered • Inside • Exited • Not Arrived</small></button><button onclick="render('v130_qr_scanner')"><i>📷</i><b>Admin QR Scanner</b><small>Entry / Exit / Teacher Gate</small></button><button onclick="render('v147_admin_student_qr')"><i>▦</i><b>Student QR Center</b><small>View • Print • Regenerate</small></button><button onclick="render('v130_storage')"><i>🗄</i><b>Storage Center</b><small>Usage • Safe Cleanup</small></button></div></section></div>
  <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">● LIVE</span></div><div class="v90MonitorGrid">${v90Card('📅','Attendance Status','Class-wise done / not marked','v90_attendance_monitor')}${v90Card('💰','Due Fee Status','Old due + current month due','v90_due_fee_monitor')}${v90Card('📝','Exam Participation','Selected • Admit • Appeared','v90_exam_monitor')}${v90Card('📊','Marks Entry Progress','Teacher • Subject • Pending','v90_marks_monitor')}${v90Card('🚌','Transport Trip','Pickup / Drop attendance','v90_transport_monitor')}${v90Card('👥','Presence & Leave','Students + Teachers today','v90_presence_monitor')}${v90Card('🎓','Student Requests','Leave • Correction • Add/Remove','v90_student_requests')}${v90Card('👨‍🏫','Teacher Requests','Personal + class related','v90_teacher_requests')}${v90Card('🗓','Timetable Master','Fast bell + whole week','timetable_master','strong')}${v90Card('📚','Daily Teaching','Timetable → lesson update','v90_teaching_monitor')}${v90Card('🔐','Student / Parent Login','One Password • Live Status','parent_access','strong')}${v90Card('🔎','Full Master Search','Student / Teacher / Fee / Exam','dashboard_search')}</div></section>
  <section class="v114AdminFeedGrid"><article class="v90Panel"><div class="v114PanelHead"><h3>Recent Activities</h3><button onclick="v39LoadAdminPanels()">View All →</button></div><div id="v39Activities"><div class="v39Empty">Loading…</div></div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Important Notices</h3><button onclick="render('notices')">View All →</button></div><div id="v39Notices"><div class="v39Empty">Loading…</div></div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Calendar & Events</h3><button onclick="render('events')">View Calendar →</button></div><div id="v39Events"><div class="v39Empty">Loading…</div></div></article></section>
  <section id="v105DashPay" class="v90Panel v105DashPay v114PayPanel"><div class="v105PayHead"><div><h3>💳 Pay Fee • Front Quick Entry</h3><p>Student name का letter लिखें → fee details auto खुलेगा → amount भरें → Paid करें.</p></div><button class="secondary" onclick="render('master_fee')">Master Fee Management</button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" oninput="v105DashboardFeeInput()"><select id="v105FeeClass" onchange="v105DashboardFeeSearch()"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">नाम का पहला letter लिखें या Class चुनें.</div></div><div id="v105FeeAccount"></div></section>
@@ -10165,14 +10177,14 @@ async function v113StartParentRealtime(){
   }catch(_e){}
 }
 /* Economy fallback: no heartbeat writes, no cron. Refresh only when screen returns, plus a light 5-minute visible check. */
-function v113StartFallback(){clearInterval(v113FallbackTimer);v113FallbackTimer=setInterval(()=>{if(!document.hidden&&user){if(['parent','student'].includes(v113Role())){if(typeof v764ParentQueue==='function')v764ParentQueue('v113-fallback')}else v113Queue('fallback')}},300000)}
-window.addEventListener('focus',()=>{if(user){if(['parent','student'].includes(v113Role())){if(typeof v764ParentQueue==='function')v764ParentQueue('v113-focus')}else v113Queue('focus')}});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&user){if(['parent','student'].includes(v113Role())){if(typeof v764ParentQueue==='function')v764ParentQueue('v113-visible')}else v113Queue('visible')}});
+function v113StartFallback(){clearInterval(v113FallbackTimer);v113FallbackTimer=null}
+/* V159: focus polling removed; realtime + bounded visibility recovery owns refresh. */
+/* V159: duplicate visibility refresh removed; one bounded governor listener remains. */
 try{v764StartRealtime=v113StartRealtime;v58StartRealtime=v113StartRealtime;v49StartRealtime=v113StartRealtime}catch(_e){}
 try{v764StartParentRealtime=v113StartParentRealtime}catch(_e){}
 try{if(Array.isArray(v764CoreLiveTables)){v764CoreLiveTables.splice(0,v764CoreLiveTables.length,...v113AdminLiveTables)}}catch(_e){}
 /* Reduce background read frequency. Realtime handles urgent workflow changes. */
-try{v62StartNotificationTimer=function(){clearInterval(v62NotifTimer);v62NotifTimer=setInterval(()=>{if(!document.hidden)v62RefreshNotifications()},180000)}}catch(_e){}
+try{v62StartNotificationTimer=function(){clearInterval(v62NotifTimer);v62NotifTimer=null}}catch(_e){}
 
 /* One-transaction Admin admission approval. Prevents two devices racing the same approval. */
 async function v113ApproveAdmission(id){
@@ -10520,7 +10532,7 @@ window.V646_BUILD='V64.6-FINAL-MASTER-PREMIUM-2026-09-20';
  try{if(window.v113FallbackTimer)clearInterval(window.v113FallbackTimer)}catch(_e){}
  try{window.v113StartFallback=function(){try{if(window.v113FallbackTimer)clearInterval(window.v113FallbackTimer)}catch(_e){}}}catch(_e){}
  try{window.v113Queue=function(){try{v113SetBadge('sync','● Data Updated')}catch(_e){}}}catch(_e){}
- try{window.v62StartNotificationTimer=function(){clearInterval(v62NotifTimer);v62NotifTimer=setInterval(()=>{if(!document.hidden)v62RefreshNotifications()},600000)}}catch(_e){}
+ try{window.v62StartNotificationTimer=function(){clearInterval(v62NotifTimer);v62NotifTimer=null}}catch(_e){}
 
  /* Central signature control inside existing Website & Settings. */
  const settingsBase=window.websiteSettingsCenter;
@@ -11003,7 +11015,7 @@ window.V6417_BUILD='V64.17-RESOURCE-CONNECTION-OPTIMIZED-2026-09-20';
     }
   }catch(_e){}
   /* Keep notifications low-frequency and visible-tab only; no writes/heartbeat. */
-  try{window.v62StartNotificationTimer=function(){clearInterval(v62NotifTimer);v62NotifTimer=setInterval(()=>{if(!document.hidden&&user)v62RefreshNotifications()},600000)}}catch(_e){}
+  try{window.v62StartNotificationTimer=function(){clearInterval(v62NotifTimer);v62NotifTimer=null}}catch(_e){}
   /* Diagnostic only: does not query DB. Useful for Admin resource checks. */
   window.v6417ConnectionStatus=function(){
     let channels=[];try{channels=typeof sb.getChannels==='function'?sb.getChannels():[]}catch(_e){}
@@ -11505,6 +11517,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
    document.querySelectorAll('#erp .v90Greeting,#erp [class*="Greeting"],#erp [class*="greeting"]').forEach(x=>x.style.display='none');
  }
  function surface(name){
+   document.documentElement.classList.remove('ldmFirstPublic');
    document.body.classList.remove('ldmSurfacePublic','ldmSurfaceERP','ldmSurfaceParent','ldmSurfaceLogin','ldmSurfaceSetup');
    document.body.classList.add(name==='public'?'ldmSurfacePublic':name==='parent'?'ldmSurfaceParent':name==='login'?'ldmSurfaceLogin':'ldmSurfaceERP');
    ['publicSite','publicPageView','erp','parentDashboard','login','setup'].forEach(id=>$(id)?.classList.add('hidden'));
@@ -11606,7 +11619,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
    $('erp')?.classList.toggle('ldmTeacherCanonical',teacher());if(!teacher())return;
    const top=document.querySelector('#erp .erpTop');if(!top)return;
    top.querySelectorAll('#v63SchoolHead,.v6412SchoolIdentity,.v6415School,#v97TopIdentity,.ldmTeacherSchoolIdentity').forEach(x=>x.remove());
-   const d=document.createElement('div');d.className='ldmTeacherSchoolIdentity';d.innerHTML='<b>L D MODERN EDUCATION ACADEMY</b><small>Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar</small>';const title=top.querySelector('#erpTitle')?.parentElement;top.insertBefore(d,title||top.firstChild);
+   const d=document.createElement('div');d.className='ldmTeacherSchoolIdentity';d.innerHTML='<b>L D MODERN EDUCATION ACADEMY</b><small>Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar</small>';const title=top.querySelector('#erpTitle')?.parentElement;if(title)title.style.display='none';top.insertBefore(d,title||top.firstChild);
    const unique=sel=>{let a=[...top.querySelectorAll(sel)];a.slice(1).forEach(x=>x.remove())};unique('#v90BackBtn');unique('#v90HomeBtn');
    $('v6418WebsiteBtn')?.remove();let ws=[...top.querySelectorAll('.websiteBtn')];ws.slice(1).forEach(x=>x.remove());if(ws[0]){ws[0].style.display='inline-flex';ws[0].textContent='🌐 Website';ws[0].onclick=()=>window.backWebsite?.()}
  }
@@ -11962,7 +11975,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
    rows.forEach(s=>{let a=byAdm.get(norm(s.admission_no))||bySid.get(norm(s.student_id||s.id))||byPhoto.get(String(s.photo_path||''));if(!a)return;['student_name','father_name','class_name','section','roll_no','admission_no'].forEach(k=>{if(!s[k]&&a[k])s[k]=a[k]})});return rows;
  }
  window.v136TeacherPhotos=async function(){
-   if(!(typeof window.teacher==='function'&&teacher()))return window.toast?.('Teacher only');
+   if(String(window.profile?.role||'').toLowerCase()!=='teacher')return window.toast?.('Teacher only');
    try{surface('erp');teacherShell();window.__v90Route='v91_student_photos';const host=$('erpContent');if(!host)return;host.innerHTML='<div class="v136PhotoPage"><div class="empty">Loading assigned students…</div></div>';
      const classes=await classTeacherClasses();if(!classes.length){host.innerHTML='<div class="v136PhotoPage"><div class="panel"><h2>📷 Student Photos</h2><div class="empty">No Class Teacher Assignment.</div></div></div>';return}
      let r=await sb.from('students').select('id,student_id,admission_no,student_name,father_name,class_name,section,roll_no,photo_path,photo_url,student_photo_url,status').in('class_name',classes).order('class_name').order('student_name').limit(5000);if(r.error)throw r.error;
@@ -12064,3 +12077,103 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 })();
 </script>
 <!-- ===== END V155 ROOT FINAL ===== -->
+<!-- ===== V158 CANONICAL RENDER OWNERSHIP ===== -->
+<style id="v158-canonical-ui">
+#erp.ldmTeacherCanonical .ldmTeacherSchoolIdentity{min-width:0;flex:1;display:grid;line-height:1.05}
+#erp.ldmTeacherCanonical .ldmTeacherSchoolIdentity b{font-size:clamp(14px,1.45vw,20px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#erp.ldmTeacherCanonical .ldmTeacherSchoolIdentity small{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#eaf5ff}
+#erp.ldmTeacherCanonical .erpTop{background:linear-gradient(100deg,#0877c9,#0d56a8)!important;color:#fff!important}
+#erp.ldmTeacherCanonical .erpTop .v90TopBtn,#erp.ldmTeacherCanonical .erpTop .websiteBtn{background:#fff!important;color:#173b68!important}
+.v158PremiumGreeting{border:1px solid #dbe9f7!important;border-radius:14px!important;background:linear-gradient(110deg,#fff,#f3f9ff)!important;box-shadow:0 7px 20px #0b4c8610!important}
+#v103AdminClassPanel{border:1px solid #dbe9f7!important;border-radius:18px!important;background:linear-gradient(145deg,#fff,#f5faff)!important;box-shadow:0 9px 26px #0b4c8610!important}
+</style>
+<script id="v158-canonical-render-owner">
+(function(){'use strict';
+ const role=()=>String(window.profile?.role||'').trim().toLowerCase();
+ const isTeacher=()=>role()==='teacher',isAdmin=()=>['admin','super_admin','principal'].includes(role());
+ window.ldmCanonicalTeacher=isTeacher;window.ldmCanonicalAdmin=isAdmin;
+ // Surface exclusivity is authoritative even if an older delayed callback tries to reveal another root.
+ const baseSurface=window.ldmSetSurface||window.surface;
+ function ownSurface(name){
+   document.documentElement.classList.remove('ldmFirstPublic');
+   if(typeof baseSurface==='function')baseSurface(name);
+   const b=document.body;if(!b)return;
+   b.classList.remove('ldmSurfacePublic','ldmSurfaceERP','ldmSurfaceParent','ldmSurfaceLogin','ldmSurfaceSetup');
+   b.classList.add(name==='public'?'ldmSurfacePublic':name==='parent'?'ldmSurfaceParent':name==='login'?'ldmSurfaceLogin':'ldmSurfaceERP');
+ }
+ window.surface=ownSurface;window.ldmSetSurface=ownSurface;
+ // Teacher shell: one identity, one Back, one Home. Legacy side identity and title identity are retired visually, nav/functions stay intact.
+ const baseTeacherShell=window.teacherShell;
+ window.teacherShell=function(){
+   if(typeof baseTeacherShell==='function')baseTeacherShell();
+   const erp=document.getElementById('erp');if(!erp||!isTeacher())return;erp.classList.add('ldmTeacherCanonical');
+   erp.querySelector('.sideBrand')?.setAttribute('aria-hidden','true');
+   const title=erp.querySelector('.erpTop #erpTitle')?.parentElement;if(title)title.style.display='none';
+   const top=erp.querySelector('.erpTop');if(top){let ids=[...top.querySelectorAll('.ldmTeacherSchoolIdentity')];ids.slice(1).forEach(x=>x.remove())}
+ };
+ // Home must pass through the final renderer chain, so canonical dashboard additions cannot disappear.
+ window.v90GoHome=async function(){
+   let h=['dashboard'];window.__v90History=h;window.__v90Route='dashboard';
+   try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route','dashboard');history.pushState({ldmInternal:true,route:'dashboard',stack:h},'',location.href)}catch(_e){}
+   ownSurface('erp');return window.render?.('dashboard');
+ };window.erpGoHome=window.v90GoHome;
+ // Rebind existing top buttons without creating another navigation controller.
+ document.addEventListener('click',function(e){const b=e.target.closest?.('#v90HomeBtn,.erpHomeBtn');if(!b||!document.getElementById('erp')?.contains(b))return;e.preventDefault();e.stopImmediatePropagation();window.v90GoHome()},true);
+ // Final teacher photo gate uses verified profile role; assignment scope remains enforced inside the module.
+ const photo=window.v136TeacherPhotos;if(typeof photo==='function')window.v136TeacherPhotos=async function(){if(!isTeacher())return window.toast?.('Teacher only');ownSurface('erp');window.teacherShell?.();return photo.apply(this,arguments)};
+ // Keep current surface exclusive after delayed legacy initializers, without rerendering or global body locks.
+ let last='';const enforce=()=>{let s='';try{s=sessionStorage.getItem('ldm_surface')||''}catch(_e){};if(s&&s!==last){last=s}if(s==='public')document.body?.classList.add('ldmSurfacePublic')};
+ window.addEventListener('pageshow',enforce,{passive:true});
+ window.LDM_FINAL_BUILD='V158-CANONICAL-RENDER-OWNERSHIP-2026-09-25';
+})();
+</script>
+<!-- ===== END V158 CANONICAL RENDER OWNERSHIP ===== -->
+
+<!-- ===== V159 FREE-TIER LOG/QUERY GOVERNOR ===== -->
+<script id="v159-free-tier-governor">
+(function(){'use strict';
+  // Root goal: stop background query churn. User actions and critical module loads remain live.
+  const S=window.__v159Gov=window.__v159Gov||{lastNotif:0,lastFallback:0,bound:false};
+  const visible=()=>!document.hidden && !!window.user;
+  // Notifications: refresh on demand/visibility, never every 45s/3m/10m in background.
+  if(typeof window.v62RefreshNotifications==='function'){
+    const refresh=window.v62RefreshNotifications;
+    window.v62StartNotificationTimer=function(){
+      try{clearInterval(window.v62NotifTimer)}catch(_e){}
+      window.v62NotifTimer=null;
+      if(visible() && Date.now()-S.lastNotif>300000){S.lastNotif=Date.now();Promise.resolve(refresh()).catch(()=>{})}
+    };
+  }
+  // Realtime fallback: remove five-minute polling loop. Realtime stays primary; visibility/online gives a bounded recovery refresh.
+  window.v113StartFallback=function(){
+    try{clearInterval(window.v113FallbackTimer)}catch(_e){}
+    window.v113FallbackTimer=null;
+  };
+  async function boundedRefresh(reason){
+    if(!visible())return;
+    const now=Date.now();
+    if(now-S.lastFallback<300000)return;
+    S.lastFallback=now;
+    try{
+      const r=String(window.profile?.role||'').toLowerCase();
+      if(['parent','student'].includes(r)){if(typeof window.v764ParentQueue==='function')window.v764ParentQueue('v159-'+reason)}
+      else if(typeof window.v113Queue==='function')window.v113Queue('v159-'+reason);
+    }catch(_e){}
+    try{if(typeof window.v62RefreshNotifications==='function'&&now-S.lastNotif>300000){S.lastNotif=now;await window.v62RefreshNotifications()}}catch(_e){}
+  }
+  if(!S.bound){
+    S.bound=true;
+    window.addEventListener('online',()=>boundedRefresh('online'),{passive:true});
+  }
+  // Shared helper for modules that want cheap dedupe without stale-caching critical writes.
+  const inflight=new Map();
+  window.ldmOnceFlight=function(key,fn){
+    if(inflight.has(key))return inflight.get(key);
+    let p=Promise.resolve().then(fn).finally(()=>inflight.delete(key));inflight.set(key,p);return p;
+  };
+  window.LDM_FREE_TIER_GOVERNOR='V160-ROOT';
+  window.LDM_FINAL_BUILD='V160-ROOT-LOG-INGEST-GOVERNOR-2026-09-25';
+})();
+</script>
+<!-- ===== END V159 FREE-TIER LOG/QUERY GOVERNOR (HARDENED BY V160) ===== -->
+<!-- V160 ROOT LOG FIX: passive focus/visibility DB refresh suppressed; notification reads throttled; native interval lifecycle restored. -->
