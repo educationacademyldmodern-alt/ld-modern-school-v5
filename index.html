@@ -8604,9 +8604,16 @@ try{const v102DispatchBase=v90Dispatch;v90Dispatch=async function(route='dashboa
 try{const v102RenderBase=window.render;window.render=async function(route='dashboard'){if(route==='master_gate_pass'){v90Push?.(route);return v102GatePassCenter()}return v102RenderBase.apply(this,arguments)}}catch(_e){}
 
 /* Dashboard front data: important Gate Pass control visible immediately. */
-async function v102UpdateDashboardGateBadge(){try{let r=await sb.from('v102_student_gate_pass').select('id,status',{count:'exact'}).eq('gate_date',v102Today()).limit(500);let rows=r.data||[],pending=rows.filter(x=>v102Norm(x.status)==='pending').length,total=rows.length;document.querySelectorAll('[data-v102-gate-badge]').forEach(x=>x.textContent=pending?`${pending} Pending`:String(total)+' Today')}catch(_e){}}
-function v102DecorateAdminDashboard(){try{let g=document.querySelector('#erpContent .v90MonitorGrid');if(g&&!g.querySelector('[data-v102-gate-card]')){let b=document.createElement('button');b.className='v90Monitor strong v102DashGate';b.dataset.v102GateCard='1';b.onclick=()=>render('master_gate_pass');b.innerHTML='<span class="v90MonitorIcon">🚪</span><span><b>Master Gate Pass</b><small>Early Leave • Group • Approval</small></span><em data-v102-gate-badge class="v102DashBadge">Today</em>';g.prepend(b)}v102UpdateDashboardGateBadge()}catch(_e){}}
-function v102DecorateTeacherDashboard(){try{let q=document.querySelector('#erpContent .v90Quick');if(q&&!q.querySelector('[data-v102-gate-card]')){let b=document.createElement('button');b.dataset.v102GateCard='1';b.onclick=()=>render('master_gate_pass');b.innerHTML='<b>🚪</b><span>Gate Pass</span>';q.prepend(b)}v102UpdateDashboardGateBadge()}catch(_e){}}
+async function v102UpdateDashboardGateBadge(){try{
+ if(!user||!sb||!(v102IsAdmin()||v102IsTeacher()))return;
+ let erp=document.getElementById('erp');if(!erp||erp.classList.contains('hidden'))return;
+ let r=await sb.from('v102_student_gate_pass').select('id,status',{count:'exact'}).eq('gate_date',v102Today()).limit(500);
+ if(r.error){console.warn('Gate pass badge deferred',r.error.message);return}
+ let rows=r.data||[],pending=rows.filter(x=>v102Norm(x.status)==='pending').length,total=rows.length;
+ document.querySelectorAll('[data-v102-gate-badge]').forEach(x=>x.textContent=pending?`${pending} Pending`:String(total)+' Today')
+ }catch(_e){}}
+function v102DecorateAdminDashboard(){try{if(!user||!v102IsAdmin())return;let g=document.querySelector('#erpContent .v90MonitorGrid');if(g&&!g.querySelector('[data-v102-gate-card]')){let b=document.createElement('button');b.className='v90Monitor strong v102DashGate';b.dataset.v102GateCard='1';b.onclick=()=>render('master_gate_pass');b.innerHTML='<span class="v90MonitorIcon">🚪</span><span><b>Master Gate Pass</b><small>Early Leave • Group • Approval</small></span><em data-v102-gate-badge class="v102DashBadge">Today</em>';g.prepend(b)}v102UpdateDashboardGateBadge()}catch(_e){}}
+function v102DecorateTeacherDashboard(){try{if(!user||!v102IsTeacher())return;let q=document.querySelector('#erpContent .v90Quick');if(q&&!q.querySelector('[data-v102-gate-card]')){let b=document.createElement('button');b.dataset.v102GateCard='1';b.onclick=()=>render('master_gate_pass');b.innerHTML='<b>🚪</b><span>Gate Pass</span>';q.prepend(b)}v102UpdateDashboardGateBadge()}catch(_e){}}
 try{const v102AdminDashBase=v90AdminDashboard;v90AdminDashboard=async function(){let r=await v102AdminDashBase.apply(this,arguments);setTimeout(v102DecorateAdminDashboard,25);return r}}catch(_e){}
 try{const v102TeacherDashBase=v90TeacherDashboard;v90TeacherDashboard=async function(){let r=await v102TeacherDashBase.apply(this,arguments);setTimeout(v102DecorateTeacherDashboard,25);return r}}catch(_e){}
 
@@ -10366,7 +10373,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
 </script>
 
 
-<!-- ===== V143 FINAL TEACHER QR ATTENDANCE • ROOT VERIFIED ===== -->
+<!-- ===== V144 401/404 ROOT FIX • V143 PRESERVED ===== -->
 <style id="ldm-v143-final-root-css">
 /* Production has a built-in publishable config. Never expose legacy cloud setup in normal flow. */
 #setup{display:none!important}
@@ -10441,7 +10448,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 (function(){'use strict';
  const $=id=>document.getElementById(id),role=()=>String(window.profile?.role||'').toLowerCase();
  const teacher=()=>role()==='teacher',parent=()=>['parent','student'].includes(role()),admin=()=>['admin','super_admin','principal'].includes(role());
- window.LDM_FINAL_BUILD='V143-FINAL-TEACHER-QR-2026-09-25';
+ window.LDM_FINAL_BUILD='V144-401-404-ROOT-FIX-2026-09-25';
 
  function hideGreetingOnPublic(){
    if(!document.body.classList.contains('ldmSurfacePublic'))return;
