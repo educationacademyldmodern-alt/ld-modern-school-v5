@@ -10373,7 +10373,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
 </script>
 
 
-<!-- ===== V144 401/404 ROOT FIX • V143 PRESERVED ===== -->
+<!-- ===== V145 V57 SCHEMA FIX • V144/V143 PRESERVED ===== -->
 <style id="ldm-v143-final-root-css">
 /* Production has a built-in publishable config. Never expose legacy cloud setup in normal flow. */
 #setup{display:none!important}
@@ -10448,7 +10448,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 (function(){'use strict';
  const $=id=>document.getElementById(id),role=()=>String(window.profile?.role||'').toLowerCase();
  const teacher=()=>role()==='teacher',parent=()=>['parent','student'].includes(role()),admin=()=>['admin','super_admin','principal'].includes(role());
- window.LDM_FINAL_BUILD='V144-401-404-ROOT-FIX-2026-09-25';
+ window.LDM_FINAL_BUILD='V145-MISSING-V57-SCHEMA-FIX-2026-09-25';
 
  function hideGreetingOnPublic(){
    if(!document.body.classList.contains('ldmSurfacePublic'))return;
