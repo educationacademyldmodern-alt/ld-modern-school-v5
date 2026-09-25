@@ -1,7 +1,6 @@
 <!doctype html><html lang="en"><head>
 <script>document.documentElement.classList.add('ldmBootLock');</script>
-<script id="ldm-v128-early-boot">document.documentElement.classList.add('ldmV128Booting');</script>
-<style id="ldm-v128-early-style">html.ldmV128Booting body{visibility:hidden!important}html.ldmV128Booting body:before{content:"";position:fixed;inset:0;background:#f7fbff;visibility:visible;z-index:2147483647}</style>
+<script id="ldm-v146-boot-safety">/* V146: no global visibility boot-lock. It could remain forever and blank the whole ERP. */</script>
 <!-- ===== LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
 <script id="ldm-runtime-dedup-bootstrap">
 (function(){
@@ -10373,7 +10372,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
 </script>
 
 
-<!-- ===== V145 V57 SCHEMA FIX • V144/V143 PRESERVED ===== -->
+<!-- ===== V146 WHITE-SCREEN ROOT FIX • V145/V144/V143 PRESERVED ===== -->
 <style id="ldm-v143-final-root-css">
 /* Production has a built-in publishable config. Never expose legacy cloud setup in normal flow. */
 #setup{display:none!important}
@@ -10448,7 +10447,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 (function(){'use strict';
  const $=id=>document.getElementById(id),role=()=>String(window.profile?.role||'').toLowerCase();
  const teacher=()=>role()==='teacher',parent=()=>['parent','student'].includes(role()),admin=()=>['admin','super_admin','principal'].includes(role());
- window.LDM_FINAL_BUILD='V145-MISSING-V57-SCHEMA-FIX-2026-09-25';
+ window.LDM_FINAL_BUILD='V146-WHITE-SCREEN-ROOT-FIX-2026-09-25';
 
  function hideGreetingOnPublic(){
    if(!document.body.classList.contains('ldmSurfacePublic'))return;
