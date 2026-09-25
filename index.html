@@ -1534,7 +1534,7 @@ html,body{max-width:100%;overflow-x:hidden}
 #v113EcoBadge{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;border:1px solid #cfe1ef;background:#f6fbff;color:#275c88;font:800 11px Cambria,Georgia,serif;white-space:nowrap}
 #v113EcoBadge.live{background:#eefaf3;border-color:#c8e8d5;color:#14734b}#v113EcoBadge.sync{background:#fff8e7;border-color:#ead79f;color:#7d5b08}
 @media(max-width:900px){#v113EcoBadge{order:9;font-size:10px;padding:5px 8px}}
-</style><link rel="stylesheet" href="premium-role-ui.css?v=1142fix1&build=V643"><link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1&build=V643"><link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1&build=V643"><link rel="stylesheet" href="v62-render-safe.css?v=V62-1&build=V643"><link rel="stylesheet" href="v64-final-layout-interaction.css?v=V64-2-1&build=V643"><link rel="stylesheet" href="v64-3-responsive.css?v=64.3&build=V643"><style>
+</style><link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1&build=V643"><link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1&build=V643"><link rel="stylesheet" href="v62-render-safe.css?v=V62-1&build=V643"><link rel="stylesheet" href="v64-final-layout-interaction.css?v=V64-2-1&build=V643"><link rel="stylesheet" href="v64-3-responsive.css?v=64.3&build=V643"><style>
 /* V64.4 premium responsive hardening */
 html,body,#erp,#erp main,#erpContent{max-width:100%;box-sizing:border-box}
 #erpContent>*{min-width:0;max-width:100%;box-sizing:border-box}
@@ -1881,6 +1881,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @media(max-width:900px){.v26Home{padding-left:0!important}#v26Nav{top:0!important;transform:translateX(-105%);transition:.2s}#v26Nav.show{transform:translateX(0)}.v26Menu{display:block!important;position:absolute!important;left:10px!important;top:15px!important;z-index:160!important}.v26Top{min-height:120px!important;padding-left:55px!important}.v26Brand b{font-size:18px!important}.v26Brand img{width:66px!important;height:66px!important}.v26Motto{display:none!important}.erpTop{grid-template-columns:auto auto 1fr auto!important;min-height:88px!important}.v63SchoolHead{display:none}.v63AdminBox small{display:none}.v63TopLogout{display:none!important}#erpContent:before{height:110px}#erpContent .dashHero{margin-top:-124px!important;min-height:110px!important}}
 @media(max-width:620px){.v26Hero{min-height:280px!important}.v26Hero h1{font-size:25px!important}.v26Quote{display:none!important}.v26LoginCards{grid-template-columns:1fr!important}.erpTop #erpTitle{font-size:17px!important}.v63AdminBox{padding:3px}.v63Avatar{width:34px;height:34px;font-size:19px}}
 </style>
+<link rel="stylesheet" href="premium-role-ui.css?v=1142fix1&build=V643">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -10216,7 +10217,6 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 </script>
 <!-- ===== END V113 LONG-TERM FREE-TIER SMART SYNC + APPROVAL HARDENING ===== -->
 
-<link rel="stylesheet" href="premium-role-ui.css?v=1142fix1&build=V643">
 <script>window.V114_BUILD='V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15';</script>
 
 
@@ -11410,7 +11410,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  function scanShell(title,sub){return '<div class="v130Scan"><div class="panelHead"><div><h2>'+E(title)+'</h2><p>'+E(sub)+'</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>'}
  window.v130StopScanner=()=>{cameraStop();window.toast?.('Scanner stopped')};
  window.ldmTeacherQrCard=async function(id){if(!admin())return toast('Admin only');try{let r=await sb.rpc('ldm_get_teacher_qr',{p_teacher_id:id});if(r.error)throw r.error;let x=r.data||{};await ensureQR();document.getElementById('v131TeacherQrModal')?.remove();let m=document.createElement('div');m.id='v131TeacherQrModal';m.className='modal show';m.innerHTML='<div class="modalCard" style="max-width:420px"><button class="close" onclick="this.closest(\'.modal\').remove()">×</button><div id="v131TeacherCard" style="padding:24px;text-align:center;border:2px solid #123b6d;border-radius:18px;background:#fff"><b style="font-size:20px">L D MODERN EDUCATION ACADEMY</b><p style="margin:4px 0 14px">TEACHER ID CARD</p><div id="v131TeacherQr" style="width:150px;height:150px;margin:8px auto"></div><h2 style="margin:8px 0">'+E(x.teacher_name||'Teacher')+'</h2><p><b>Employee ID:</b> '+E(x.employee_id||'—')+'</p><p style="font-size:12px">Secure QR • Gate Attendance</p></div><p style="text-align:center"><button class="primary" onclick="window.print()">🖨 Print</button></p></div>';document.body.appendChild(m);new QRCode(document.getElementById('v131TeacherQr'),{text:baseUrl()+'?teacher_verify='+encodeURIComponent(x.token),width:150,height:150,correctLevel:QRCode.CorrectLevel.H})}catch(e){toast(e.message||String(e))}};
- window.v130SchoolScanner=async function(){if(!['admin','super_admin','principal','teacher'].includes(role()))return toast('Authorized Admin / Teacher only');head?.('⚡ Fast QR Attendance','One camera • Student Present + Teacher Check-In');let host=document.getElementById('erpContent');host.innerHTML='<div class="v130Scan"><div class="panelHead"><div><h2>Gate / Class Attendance Scanner</h2><p>Student QR = Entry/Present or Exit • Teacher QR = Check-In/Check-Out</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Grid" style="margin-bottom:8px"><label>Scanner Mode<select id="v131GateMode"><option value="ARRIVAL">🟢 ENTRY • Student Present / Teacher Check-In</option><option value="STUDENT_EXIT">🔵 STUDENT EXIT • School Leave Time</option><option value="TEACHER_CHECKOUT">🔵 TEACHER CHECK-OUT</option></select></label></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>';scanState={...scanState,scanned:0,synced:0,pending:0,last:'',lastAt:0};let v=document.getElementById('v130Video');try{await cameraStart(v);document.getElementById('v130Result').textContent='Scanner ready • Mode चुनें और Student / Teacher ID QR दिखाएँ';await decodeLoop(v,async token=>{scanState.scanned++;scanState.pending++;v130Counts();let mode=document.getElementById('v131GateMode')?.value||'ARRIVAL',key='gate:'+mode+':'+new Date().toISOString().slice(0,10)+':'+token;try{let r=await sb.rpc('ldm_scan_gate_qr',{p_token:token,p_mode:mode,p_sync_key:key});if(r.error)throw r.error;let x=r.data||{},b=document.getElementById('v130Result');if(x.ok===false)throw Error(x.message||'Scan rejected');scanState.synced++;b.className='v130Result ok';b.innerHTML='<b class="v130Big">✓ '+E(x.name||'Verified')+'</b><br>'+E(x.person_type||'')+' • '+E(x.message||'Saved');beep(true)}catch(e){let b=document.getElementById('v130Result');b.className='v130Result bad';b.innerHTML='<b>✕ '+E(e.message||e)+'</b>';beep(false)}finally{scanState.pending=Math.max(0,scanState.pending-1);v130Counts()}})}catch(e){document.getElementById('v130Result').className='v130Result bad';document.getElementById('v130Result').textContent=e.message}};
+ window.v130SchoolScanner=async function(){if(!['admin','super_admin','principal'].includes(role()))return toast('Admin / Principal only');head?.('⚡ Fast QR Attendance','One camera • Student Present + Teacher Check-In');let host=document.getElementById('erpContent');host.innerHTML='<div class="v130Scan"><div class="panelHead"><div><h2>Gate / Class Attendance Scanner</h2><p>Student QR = Entry/Present or Exit • Teacher QR = Check-In/Check-Out</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Grid" style="margin-bottom:8px"><label>Scanner Mode<select id="v131GateMode"><option value="ARRIVAL">🟢 ENTRY • Student Present / Teacher Check-In</option><option value="STUDENT_EXIT">🔵 STUDENT EXIT • School Leave Time</option><option value="TEACHER_CHECKOUT">🔵 TEACHER CHECK-OUT</option></select></label></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>';scanState={...scanState,scanned:0,synced:0,pending:0,last:'',lastAt:0};let v=document.getElementById('v130Video');try{await cameraStart(v);document.getElementById('v130Result').textContent='Scanner ready • Mode चुनें और Student / Teacher ID QR दिखाएँ';await decodeLoop(v,async token=>{scanState.scanned++;scanState.pending++;v130Counts();let mode=document.getElementById('v131GateMode')?.value||'ARRIVAL',key='gate:'+mode+':'+new Date().toISOString().slice(0,10)+':'+token;try{let r=await sb.rpc('ldm_scan_gate_qr',{p_token:token,p_mode:mode,p_sync_key:key});if(r.error)throw r.error;let x=r.data||{},b=document.getElementById('v130Result');if(x.ok===false)throw Error(x.message||'Scan rejected');scanState.synced++;b.className='v130Result ok';b.innerHTML='<b class="v130Big">✓ '+E(x.name||'Verified')+'</b><br>'+E(x.person_type||'')+' • '+E(x.message||'Saved');beep(true)}catch(e){let b=document.getElementById('v130Result');b.className='v130Result bad';b.innerHTML='<b>✕ '+E(e.message||e)+'</b>';beep(false)}finally{scanState.pending=Math.max(0,scanState.pending-1);v130Counts()}})}catch(e){document.getElementById('v130Result').className='v130Result bad';document.getElementById('v130Result').textContent=e.message}};
 
  window.v130DriverSetup=async function(){if(!admin())return toast('Admin only');head?.('🚌 Driver Scanner Setup','Simple PIN • route scoped • no ERP access');let host=document.getElementById('erpContent');host.innerHTML='<div class="panel"><h3>Create Driver Scanner</h3><div class="v130Grid"><label>Driver Name<input id="v130Dn"></label><label>Route<input id="v130Dr"></label><label>Vehicle No.<input id="v130Dv"></label><label>4–6 Digit PIN<input id="v130Dp" inputmode="numeric" maxlength="6"></label></div><p><button class="primary" onclick="v130CreateDriver()">Create Scanner Link</button></p><div id="v130DriverLink" class="v130SecurityNote">Driver को पूरा ERP login नहीं मिलेगा.</div></div>'}
  window.v130CreateDriver=async function(){let r=await sb.rpc('ldm_admin_create_driver_scanner',{p_driver_name:v130Dn.value,p_route_name:v130Dr.value,p_vehicle_no:v130Dv.value,p_pin:v130Dp.value});if(r.error)return toast(r.error.message);let url=baseUrl()+'?driver_scanner='+encodeURIComponent(r.data.scanner_token);v130DriverLink.innerHTML='<b>Driver Home-Screen Link</b><br><input style="width:100%" value="'+E(url)+'" readonly><p>इस link को Driver mobile में खोलकर Add to Home Screen करें. PIN अलग से दें.</p>'}
@@ -11543,7 +11543,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
    try{window.showPublicPage?.('home');history.pushState({ldmV138Public:true,returnRoute:r},'',location.href)}catch(_e){}
    window.scrollTo(0,0);
  };
- window.addEventListener('popstate',async function(e){
+ window.addEventListener('ldm-v138-legacy-popstate-disabled',async function(e){
    if(v138PopBusy)return;v138PopBusy=true;
    try{
      if(window.user&&document.body.classList.contains('ldmSurfacePublic')){
@@ -12177,3 +12177,122 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 </script>
 <!-- ===== END V159 FREE-TIER LOG/QUERY GOVERNOR (HARDENED BY V160) ===== -->
 <!-- V160 ROOT LOG FIX: passive focus/visibility DB refresh suppressed; notification reads throttled; native interval lifecycle restored. -->
+
+<!-- ===== V161 ROOT CANONICAL NAV/QR/ID FINAL ===== -->
+<style id="v161-root-final-css">
+/* ID formats 3/4 are true portrait cards; 1/2/5 remain landscape. */
+.idA4Page.v161Portrait{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;gap:4mm 8mm!important;justify-content:center!important;align-content:start!important;padding:10mm 8mm!important}
+.idA4Page.v161Portrait .idCard{width:54mm!important;height:85.6mm!important}
+.idA4Page.v161Portrait .v6422IdMain{flex-direction:column!important;align-items:center!important;text-align:center!important;padding-right:8px!important}
+.idA4Page.v161Portrait .v6422IdInfo{text-align:center!important;width:100%!important}
+.idA4Page.v161Portrait .v104Photo{width:24mm!important;height:29mm!important}
+.idA4Page.v161Portrait .v130IdQr{right:2.5mm!important;bottom:6mm!important;width:17mm!important;height:17mm!important}
+.idTemplatePick[data-orientation]::after{content:attr(data-orientation);display:block;font-size:9px;margin-top:3px;opacity:.7}
+</style>
+<script id="v161-root-final-runtime">
+(function(){'use strict';
+ const $=id=>document.getElementById(id);
+ const role=()=>String(window.profile?.role||'').trim().toLowerCase();
+ const logged=()=>!!window.user;
+ const admin=()=>['admin','super_admin','principal'].includes(role());
+ const teacher=()=>role()==='teacher';
+ const parent=()=>['parent','student'].includes(role());
+
+ /* ROOT 1 — QR runtime is one shared dependency. Older V130 had ensureQR only in local scope,
+    while Student QR Center called window.ensureQR?.(), producing "QRCode is not defined". */
+ let qrPromise=null;
+ window.ensureQR=async function(){
+   if(window.QRCode)return window.QRCode;
+   if(qrPromise)return qrPromise;
+   qrPromise=new Promise((resolve,reject)=>{
+     let old=document.getElementById('v161-qrcode-lib')||document.getElementById('v130-qrcode-lib');
+     const done=()=>window.QRCode?resolve(window.QRCode):reject(new Error('QR library loaded but QRCode is unavailable'));
+     if(old){if(window.QRCode)return done();old.addEventListener('load',done,{once:true});old.addEventListener('error',()=>reject(new Error('QR library load failed')),{once:true});return}
+     let s=document.createElement('script');s.id='v161-qrcode-lib';s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.async=true;s.onload=done;s.onerror=()=>reject(new Error('QR library load failed • internet/CDN check करें'));document.head.appendChild(s);
+   }).finally(()=>{if(!window.QRCode)qrPromise=null});
+   return qrPromise;
+ };
+ const qrPaintBase=window.v147PaintStudentQr;
+ if(typeof qrPaintBase==='function')window.v147PaintStudentQr=async function(id,adm){try{await window.ensureQR();return await qrPaintBase.apply(this,arguments)}catch(e){window.toast?.(e?.message||String(e))}};
+
+ /* ROOT 2 — one app-like internal history owner. Logged-in ERP root never falls through to public/external page.
+    One guard state is maintained, not a polling/history loop. Logout remains the explicit exit. */
+ const saveNav=(route,stack)=>{try{sessionStorage.setItem('ldm_current_route',route);sessionStorage.setItem('ldm_nav_history',JSON.stringify(stack));sessionStorage.setItem('ldm_surface',parent()?'parent':'erp')}catch(_e){}};
+ function seedRootGuard(){
+   if(!logged())return;
+   let r=String(window.__v90Route||'dashboard'),h=Array.isArray(window.__v90History)&&window.__v90History.length?window.__v90History:['dashboard'];
+   saveNav(r,h);
+   try{
+     let st=history.state||{};
+     if(!st.ldmV161Guard){history.replaceState({ldmInternal:true,ldmV161Guard:true,route:r,stack:h},'',location.href);history.pushState({ldmInternal:true,ldmV161Top:true,route:r,stack:h},'',location.href)}
+   }catch(_e){}
+ }
+ const homeBase=window.v90GoHome;
+ window.v90GoHome=window.erpGoHome=async function(){
+   window.__v90History=['dashboard'];window.__v90Route='dashboard';saveNav('dashboard',['dashboard']);
+   try{history.replaceState({ldmInternal:true,ldmV161Top:true,route:'dashboard',stack:['dashboard']},'',location.href)}catch(_e){}
+   if(typeof window.surface==='function')window.surface('erp');
+   return typeof window.render==='function'?window.render('dashboard'):homeBase?.();
+ };
+ const backBase=window.v90Back;
+ window.v90Back=async function(){
+   let h=Array.isArray(window.__v90History)?window.__v90History.slice():['dashboard'];
+   if(h.length<=1){if(String(window.__v90Route||'dashboard')!=='dashboard')return window.v90GoHome();seedRootGuard();return false}
+   return typeof backBase==='function'?backBase.apply(this,arguments):false;
+ };
+ window.addEventListener('popstate',function(e){
+   if(!logged())return;
+   let h=Array.isArray(window.__v90History)?window.__v90History:[];
+   if(h.length<=1){e.stopImmediatePropagation();window.__v90History=['dashboard'];window.__v90Route='dashboard';saveNav('dashboard',['dashboard']);try{history.pushState({ldmInternal:true,ldmV161Top:true,route:'dashboard',stack:['dashboard']},'',location.href)}catch(_e){};Promise.resolve(parent()?window.loadParentPortal?.():window.render?.('dashboard')).catch(()=>{});}
+ },true);
+ window.addEventListener('pageshow',()=>setTimeout(seedRootGuard,0),{passive:true});
+
+ /* ROOT 3 — remove duplicate greeting nodes at the renderer boundary, not with display:none. */
+ function dedupeGreeting(){
+   let root=$('erpContent');if(!root)return;
+   let a=[...root.querySelectorAll('.v90Greeting,.v158PremiumGreeting,.v114Greeting,.v103Greeting,[class*="Greeting"],[class*="greeting"]')].filter(x=>/Good Morning|Good Afternoon|Good Evening/i.test(x.textContent||''));
+   a.slice(1).forEach(x=>x.remove());
+ }
+ const renderBase=window.render;
+ if(typeof renderBase==='function')window.render=async function(route='dashboard'){
+   let out=await renderBase.apply(this,arguments);dedupeGreeting();if(logged())seedRootGuard();return out;
+ };
+
+ /* ROOT 4 — Admin/Teacher scanner errors distinguish browser camera permission from database/RPC permission. */
+ const scanBase=window.v130SchoolScanner;
+ if(typeof scanBase==='function')window.v130SchoolScanner=async function(){
+   if(!admin())return window.toast?.('Admin / Principal only');
+   try{return await scanBase.apply(this,arguments)}catch(e){let m=String(e?.message||e);window.toast?.(/permission denied|42501/i.test(m)?'Admin database permission denied • Gate Scanner RPC/RLS check required':m)}
+ };
+ const tqBase=window.v143TeacherQrAttendance;
+ if(typeof tqBase==='function')window.v143TeacherQrAttendance=async function(){
+   if(!teacher())return window.toast?.('Teacher only');
+   if(!window.isSecureContext)return window.toast?.('Camera requires HTTPS secure connection');
+   if(!navigator.mediaDevices?.getUserMedia)return window.toast?.('This browser does not support camera access');
+   return tqBase.apply(this,arguments);
+ };
+
+ /* ROOT 5 — five genuinely selectable ID formats: 1/2/5 landscape, 3/4 portrait.
+    Preview/Print/PDF share the same DOM and CSS. */
+ window.ID_STUDIO_TEMPLATE_NAMES=['Royal Blue Left','Modern Right','Green Portrait Center','Purple Portrait','Executive Right'];
+ if(typeof window.idStudioTemplateButtons==='function'){
+   const btnBase=window.idStudioTemplateButtons;
+   window.idStudioTemplateButtons=function(active){let h=btnBase(active);return h.replace(/class="idTemplatePick ([^"]*)" onclick="idStudioSetTemplate\((\d)\)"/g,(m,c,n)=>`class="idTemplatePick ${c}" data-orientation="${['3','4'].includes(n)?'PORTRAIT':'LANDSCAPE'}" onclick="idStudioSetTemplate(${n})"`)};
+ }
+ const pageBase=window.idStudioPageHtml;
+ window.idStudioPageHtml=function(rows,fmt){let portrait=[3,4].includes(Number(fmt)),limit=portrait?9:10,cells=rows.slice(0,limit).map(s=>`<div class="idA4Cell">${window.renderIdCard(s,fmt)}</div>`);while(cells.length<limit)cells.push('<div class="idA4Cell"></div>');return `<section class="idA4Page ${portrait?'v161Portrait':'v161Landscape'}">${cells.join('')}</section>`};
+ const previewBase=window.idStudioPreview;
+ if(typeof previewBase==='function')window.idStudioPreview=async function(silent=false){
+   let fmt=Math.max(1,Math.min(5,Number(window.getDocFormat?.('idcard')||1))),portrait=[3,4].includes(fmt);
+   /* Existing closure owns selected rows; let it render first, then rebuild page grouping only when portrait. */
+   let r=await previewBase.apply(this,arguments);if(!portrait)return r;
+   let box=$('idA4Preview');if(!box)return r;let cards=[...box.querySelectorAll('.idCard')].map(x=>x.outerHTML),pages=[];for(let i=0;i<cards.length;i+=9){let chunk=cards.slice(i,i+9).map(x=>`<div class="idA4Cell">${x}</div>`);while(chunk.length<9)chunk.push('<div class="idA4Cell"></div>');pages.push(`<section class="idA4Page v161Portrait">${chunk.join('')}</section>`)}box.innerHTML=pages.join('');let info=box.previousElementSibling?.querySelector('b');if(info)info.textContent=info.textContent.replace(/\d+ A4 page\(s\)/,`${pages.length} A4 page(s) • Portrait`);return r;
+ };
+ const cssBase=window.idStudioPrintCss;
+ if(typeof cssBase==='function')window.idStudioPrintCss=function(){return cssBase()+`.idA4Page.v161Portrait{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;gap:4mm 8mm!important;justify-content:center!important;align-content:start!important;padding:10mm 8mm!important}.idA4Page.v161Portrait .idCard{width:54mm!important;height:85.6mm!important}.idA4Page.v161Portrait .v6422IdMain{flex-direction:column!important;align-items:center!important;text-align:center!important;padding-right:8px!important}.idA4Page.v161Portrait .v6422IdInfo{text-align:center!important;width:100%!important}.idA4Page.v161Portrait .v104Photo{width:24mm!important;height:29mm!important}.idA4Page.v161Portrait .v130IdQr{width:17mm!important;height:17mm!important}`};
+
+ window.LDM_FINAL_BUILD='V162-ROOT-DOUBLE-AUDITED-2026-09-25';
+ setTimeout(()=>{dedupeGreeting();if(logged())seedRootGuard()},80);
+})();
+</script>
+<!-- ===== END V161 ROOT FINAL ===== -->
