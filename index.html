@@ -2399,6 +2399,10 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 
 
 \n\n
+
+
+
+
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
 <!-- ===== V92.1 LOGIN RAW-CODE PARSE FIX: restored V14 print boundary ===== -->
@@ -8561,15 +8565,15 @@ async function v90AdminDashboard(){
  window.__v90Route='dashboard';v90Head('Admin Dashboard','Full School Control • Live Monitoring');v90InstallShell('dashboard');
  const adminName=v90Safe(profile?.full_name||'Admin');if(!window.__ldmAdminStatsHTML){try{window.__ldmAdminStatsHTML=sessionStorage.getItem('ldm_admin_stats_html')||''}catch(_e){}}
  v90Set(`<div class="v90Dash v114AdminDash ldmRootAdminDash"><section class="ldmAdminIdentity"><div class="ldmAdminSchool"><span class="ldmAdminCrest">🏫</span><div><h1>L D MODERN EDUCATION ACADEMY</h1><p>Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar</p></div></div><div class="ldmAdminHello"><b>${adminName}</b><span>${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'short',year:'numeric'})}</span></div></section>
- <section id="v90Stats" class="v90Stats v114AdminStats">${(window.__ldmAdminStatsHTML||Array.from({length:6},()=>'<div class="v90Stat ldmStatHold"><span>•</span><div><small>Loading</small><b>—</b></div></div>').join(''))}</section>
- <section class="ldmMasterControl"><div class="ldmMasterTitle"><div><small>ADMIN MASTER CONTROL</small><h2>School Control Center</h2></div><span>Central • Safe • Live</span></div><div class="ldmMasterGrid"><button onclick="render('class_teacher_control')"><i>👨‍🏫</i><b>Class Teacher Control</b><small>Assign • Repair • Change • Handover • Open Class</small><em>OPEN →</em></button><button onclick="render('v150_student_master')"><i>🎓</i><b>Student Master Control</b><small>Full Details • Edit • Correct • Update • Delete Safety</small><em>OPEN →</em></button><button onclick="v6422DueMaster()"><i>⚡</i><b>Quick Due Fee Update</b><small>Central Ledger • Monthly • Installment • Reminder</small><em>OPEN →</em></button><button onclick="render('idcard_center')"><i>🪪</i><b>ID Card Center</b><small>5 Formats • Preview • A4 Print</small><em>OPEN →</em></button></div></section>
- <div id="v149AdminQuickSlot"></div>
- <div id="v114AdminClassSlot"></div>
+ <section class="v156DailyControl" aria-label="Daily School Control"><div id="v114AdminClassSlot"></div>
  <section class="v114AdminMainGrid">
   <article class="v90Panel v114AttendancePanel"><div class="v114PanelHead"><h3>Student Attendance (Today)</h3><button onclick="render('attendance')">View Details →</button></div><div class="v114AttendanceVisual"><div id="v114AttDonut" class="v114Donut" style="--p:0"><div><b id="v114AttPct">—</b><small>Present</small></div></div><div class="v114Legend"><span><i class="p"></i>Present <b id="v114AttPresent">—</b></span><span><i class="a"></i>Absent <b id="v114AttAbsent">—</b></span><span><i class="l"></i>Leave <b id="v114AttLeave">—</b></span><span><i class="t"></i>Marked <b id="v114AttMarked">—</b></span></div></div></article>
   <article class="v90Panel v114FeeChartPanel"><div class="v114PanelHead"><h3>Fee Collection</h3><button onclick="render('fee_dashboard')">View Report →</button></div><div class="v114Bars"><div><span id="v114FeeBarCollected" class="green" style="height:25%"></span><small>Collected</small><b id="v114FeeCollected">—</b></div><div><span id="v114FeeBarDue" class="orange" style="height:25%"></span><small>Total Due</small><b id="v114FeeDue">—</b></div><div><span class="red" style="height:45%"></span><small>Requests</small><b id="v114PendingReq">—</b></div></div></article>
   <article class="v90Panel v114QuickPanel"><div class="v114PanelHead"><h3>Quick Links</h3><button onclick="render('settings')">⚙</button></div><div class="v114QuickGrid">${[['👤+','Add Student','admissions'],['👩‍🏫','Add Teacher','staff'],['📅','Mark Attendance','attendance'],['₹','Collect Fee','smart_fee_center'],['📉','Add Expense','expenses'],['📊','Generate Report','reports'],['✉','Send Notice','notice_order_center'],['⚙','Settings','settings']].map(x=>`<button onclick="render('${x[2]}')"><b>${x[0]}</b><span>${x[1]}</span></button>`).join('')}</div></article>
- </section>
+ </section></section>
+ <section id="v90Stats" class="v90Stats v114AdminStats v156ClickableStats">${(window.__ldmAdminStatsHTML||Array.from({length:6},()=>'<div class="v90Stat ldmStatHold"><span>•</span><div><small>Loading</small><b>—</b></div></div>').join(''))}</section>
+ <section class="ldmMasterControl"><div class="ldmMasterTitle"><div><small>ADMIN MASTER CONTROL</small><h2>School Control Center</h2></div><span>Central • Safe • Live</span></div><div class="ldmMasterGrid"><button onclick="render('class_teacher_control')"><i>👨‍🏫</i><b>Class Teacher Control</b><small>Assign • Repair • Change • Handover • Open Class</small><em>OPEN →</em></button><button onclick="render('v150_student_master')"><i>🎓</i><b>Student Master Control</b><small>Full Details • Edit • Correct • Update • Delete Safety</small><em>OPEN →</em></button><button onclick="v6422DueMaster()"><i>⚡</i><b>Quick Due Fee Update</b><small>Central Ledger • Monthly • Installment • Reminder</small><em>OPEN →</em></button><button onclick="render('idcard_center')"><i>🪪</i><b>ID Card Center</b><small>5 Formats • Preview • A4 Print</small><em>OPEN →</em></button></div></section>
+ <div id="v149AdminQuickSlot"></div>
  <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">● LIVE</span></div><div class="v90MonitorGrid">${v90Card('📅','Attendance Status','Class-wise done / not marked','v90_attendance_monitor')}${v90Card('💰','Due Fee Status','Old due + current month due','v90_due_fee_monitor')}${v90Card('📝','Exam Participation','Selected • Admit • Appeared','v90_exam_monitor')}${v90Card('📊','Marks Entry Progress','Teacher • Subject • Pending','v90_marks_monitor')}${v90Card('🚌','Transport Trip','Pickup / Drop attendance','v90_transport_monitor')}${v90Card('👥','Presence & Leave','Students + Teachers today','v90_presence_monitor')}${v90Card('🎓','Student Requests','Leave • Correction • Add/Remove','v90_student_requests')}${v90Card('👨‍🏫','Teacher Requests','Personal + class related','v90_teacher_requests')}${v90Card('🗓','Timetable Master','Fast bell + whole week','timetable_master','strong')}${v90Card('📚','Daily Teaching','Timetable → lesson update','v90_teaching_monitor')}${v90Card('🔐','Student / Parent Login','One Password • Live Status','parent_access','strong')}${v90Card('🔎','Full Master Search','Student / Teacher / Fee / Exam','dashboard_search')}</div></section>
  <section class="v114AdminFeedGrid"><article class="v90Panel"><div class="v114PanelHead"><h3>Recent Activities</h3><button onclick="v39LoadAdminPanels()">View All →</button></div><div id="v39Activities"><div class="v39Empty">Loading…</div></div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Important Notices</h3><button onclick="render('notices')">View All →</button></div><div id="v39Notices"><div class="v39Empty">Loading…</div></div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Calendar & Events</h3><button onclick="render('events')">View Calendar →</button></div><div id="v39Events"><div class="v39Empty">Loading…</div></div></article></section>
  <section id="v105DashPay" class="v90Panel v105DashPay v114PayPanel"><div class="v105PayHead"><div><h3>💳 Pay Fee • Front Quick Entry</h3><p>Student name का letter लिखें → fee details auto खुलेगा → amount भरें → Paid करें.</p></div><button class="secondary" onclick="render('master_fee')">Master Fee Management</button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" oninput="v105DashboardFeeInput()"><select id="v105FeeClass" onchange="v105DashboardFeeSearch()"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">नाम का पहला letter लिखें या Class चुनें.</div></div><div id="v105FeeAccount"></div></section>
@@ -10571,7 +10575,7 @@ window.V647_BUILD='V64.7-FINAL-ALL-MASTER-EXACT-2026-09-20';
    const host=v90Q('v90Stats');if(!host)return;try{let x=await v647ExactMasterSnapshot();let pending=0;try{let q=await Promise.all([sb.from('student_leave_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('student_correction_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('student_roster_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('v90_teacher_requests').select('id',{count:'exact',head:true}).eq('status','Pending')]);pending=q.reduce((a,z)=>a+(z.count||0),0)}catch(_e){}
    let pct=x.activeStudents?Math.round(x.present*100/x.activeStudents):0;
    const data=[['👥','Total Students',x.activeStudents],['👩‍🏫','Total Teachers',x.activeTeachers],['₹','Fee Collection',v90Money(x.todayCollection)],['💰','Total Due',v90Money(x.totalDue)],['✅','Attendance',pct+'%'],['📬','Pending Requests',pending]];
-   host.innerHTML=data.map(z=>`<div class="v90Stat"><span>${z[0]}</span><div><small>${z[1]}</small><b>${z[2]}</b></div></div>`).join('');
+   host.innerHTML=data.map((z,i)=>`<button type="button" class="v90Stat v156SummaryCard" onclick="v156AdminSummaryDrill('${['students','teachers','collection','due','attendance','requests'][i]}')" aria-label="Open ${z[1]} details"><span>${z[0]}</span><div><small>${z[1]}</small><b>${z[2]}</b></div><em>Details ›</em></button>`).join('');
    let ids={v114AttPresent:x.present,v114AttAbsent:x.absent,v114AttLeave:x.leave,v114AttMarked:x.marked,v114PendingReq:pending};Object.entries(ids).forEach(([id,v])=>{let e=v90Q(id);if(e)e.textContent=String(v)});let pe=v90Q('v114AttPct'),dn=v90Q('v114AttDonut');if(pe)pe.textContent=pct+'%';if(dn)dn.style.setProperty('--p',String(pct));let fc=v90Q('v114FeeCollected'),fd=v90Q('v114FeeDue');if(fc)fc.textContent=v90Money(x.todayCollection);if(fd)fd.textContent=v90Money(x.totalDue);let mx=Math.max(x.todayCollection,x.totalDue,1),bc=v90Q('v114FeeBarCollected'),bd=v90Q('v114FeeBarDue');if(bc)bc.style.height=Math.max(12,Math.round(x.todayCollection*100/mx))+'%';if(bd)bd.style.height=Math.max(12,Math.round(x.totalDue*100/mx))+'%';
    }catch(e){host.innerHTML=`<div class="empty">Master data check: ${typeof v90Safe==='function'?v90Safe(e.message):e.message}</div>`}
  };
@@ -11915,3 +11919,148 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 </script>
 
 </body></html>
+<!-- ===== V154 FINAL LIVE CORRECTIONS: canonical photo metadata + one greeting + ID 1:1 + storage truth ===== -->
+<style id="v154-final-live-css">
+/* One visual contract for ID preview / print / PDF. School name owns the hierarchy. */
+.idCard.v646PremiumId .v104Band{min-height:13mm!important;padding:2.2mm 2.4mm!important;gap:1.5mm!important}
+.idCard.v646PremiumId .v104Logo{width:9.5mm!important;height:9.5mm!important;flex:0 0 9.5mm!important}
+.idCard.v646PremiumId .v104HeadText b{font-size:10.5px!important;line-height:1.05!important;font-weight:950!important;letter-spacing:.12px!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+.idCard.v646PremiumId .v104HeadText small{font-size:5.25px!important;line-height:1.05!important;font-weight:750!important;margin-top:.45mm!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+.idCard.v646PremiumId .v104HeadText em{font-size:5.5px!important;line-height:1!important;margin-top:.35mm!important}
+.idCard.v646PremiumId .v6422IdMain{flex:1!important;min-height:0!important;padding:2mm 2.5mm 1mm!important;gap:2mm!important;overflow:hidden!important}
+.idCard.v646PremiumId .v104Name{font-size:9px!important;font-weight:950!important;color:#10233e!important}
+.idCard.v646PremiumId .v646IdLine{font-size:6.4px!important;line-height:1.18!important;color:#17263a!important}
+.idCard.v646PremiumId .v646Sign{min-height:5.5mm!important}
+.idCard.v646PremiumId .v104Foot{font-size:5.5px!important;padding:.7mm 2mm!important}
+.v154StorageTruth{display:grid;grid-template-columns:repeat(4,minmax(135px,1fr));gap:10px;margin:10px 0}.v154StorageTruth>div{background:#fff;border:1px solid #d7e6f5;border-radius:14px;padding:13px}.v154StorageTruth small{display:block}.v154StorageTruth b{display:block;font-size:20px;color:#0c477c;margin-top:4px}.v154StorageTruth .unknown b{font-size:13px;color:#7a4b00}.v154StorageTruthNote{padding:9px 11px;border-radius:10px;background:#fff8e8;color:#6c4b00;font-size:12px}
+@media(max-width:760px){.v154StorageTruth{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script id="v154-final-live-runtime">
+(function(){'use strict';
+ const $=id=>document.getElementById(id), esc=v=>typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const norm=v=>String(v??'').trim().toLowerCase();
+
+ /* ROOT: exactly one standalone greeting in ERP, even after async route render. */
+ function greetingCandidates(root){
+   if(!root)return[];
+   const sel='.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting,.v6418GreetingSingleton,[data-v97-clock],.v90Welcome';
+   let a=[...root.querySelectorAll(sel)].filter(el=>/Good Morning|Good Afternoon|Good Evening/i.test(el.textContent||'')&&!el.querySelector('button,a,input,table,.erpCards,.stat'));
+   const direct=[...root.children].filter(el=>/^\s*[^A-Za-z]{0,5}(Good Morning|Good Afternoon|Good Evening)\b/i.test((el.textContent||'').trim())&&!el.querySelector('button,a,input,table,.erpCards,.stat'));
+   return [...new Set([...direct,...a])].filter(el=>!a.some(other=>other!==el&&el.contains(other)));
+ }
+ function oneGreeting(){let root=$('erpContent');let a=greetingCandidates(root);a.slice(1).forEach(el=>el.remove())}
+ let greetQueued=false;function queueGreeting(){if(greetQueued)return;greetQueued=true;queueMicrotask(()=>{greetQueued=false;oneGreeting()})}
+ const installGreetingObserver=()=>{let root=$('erpContent');if(!root||root.__v154GreetingObserver)return;let mo=new MutationObserver(queueGreeting);mo.observe(root,{childList:true,subtree:true});root.__v154GreetingObserver=mo;queueGreeting()};
+ window.addEventListener('load',installGreetingObserver,{once:true});document.addEventListener('click',()=>setTimeout(installGreetingObserver,0),{passive:true});
+
+ /* TEACHER PHOTOS: students remains canonical; admissions only hydrates missing master metadata. */
+ let rows154=[];
+ async function hydrateStudentMeta(rows){
+   let need=rows.filter(x=>!x.student_name||!x.class_name||!x.father_name||!x.roll_no||!x.admission_no);if(!need.length)return rows;
+   let ar=await sb.from('admissions').select('id,admission_no,student_id,student_name,father_name,class_name,section,roll_no,photo_path,admission_status').limit(10000);if(ar.error)return rows;
+   let byAdm=new Map(),bySid=new Map(),byPhoto=new Map();(ar.data||[]).forEach(a=>{if(a.admission_no)byAdm.set(norm(a.admission_no),a);if(a.student_id)bySid.set(norm(a.student_id),a);if(a.photo_path)byPhoto.set(String(a.photo_path),a)});
+   rows.forEach(s=>{let a=byAdm.get(norm(s.admission_no))||bySid.get(norm(s.student_id||s.id))||byPhoto.get(String(s.photo_path||''));if(!a)return;['student_name','father_name','class_name','section','roll_no','admission_no'].forEach(k=>{if(!s[k]&&a[k])s[k]=a[k]})});return rows;
+ }
+ window.v136TeacherPhotos=async function(){
+   if(!(typeof window.teacher==='function'&&teacher()))return window.toast?.('Teacher only');
+   try{surface('erp');teacherShell();window.__v90Route='v91_student_photos';const host=$('erpContent');if(!host)return;host.innerHTML='<div class="v136PhotoPage"><div class="empty">Loading assigned students…</div></div>';
+     const classes=await classTeacherClasses();if(!classes.length){host.innerHTML='<div class="v136PhotoPage"><div class="panel"><h2>📷 Student Photos</h2><div class="empty">No Class Teacher Assignment.</div></div></div>';return}
+     let r=await sb.from('students').select('id,student_id,admission_no,student_name,father_name,class_name,section,roll_no,photo_path,photo_url,student_photo_url,status').in('class_name',classes).order('class_name').order('student_name').limit(5000);if(r.error)throw r.error;
+     rows154=(r.data||[]).filter(x=>!['inactive','deleted','left','withdrawn'].includes(norm(x.status)));await hydrateStudentMeta(rows154);if(typeof window.v91AttachStudentPhotos==='function')await window.v91AttachStudentPhotos(rows154);
+     host.innerHTML=`<div class="v136PhotoPage"><div class="v136PhotoTop"><div><h2>📷 Student Photos</h2><div class="note">Student Master details automatic • ${classes.map(esc).join(', ')}</div></div><div class="v136PhotoTools"><select id="v136PhotoClass"><option value="">All My Classes</option>${classes.map(c=>`<option>${esc(c)}</option>`).join('')}</select><input id="v136PhotoQ" placeholder="Student / Father / Admission"></div></div><div id="v136PhotoGrid" class="v136PhotoGrid"></div></div>`;
+     $('v136PhotoClass').onchange=render154;$('v136PhotoQ').oninput=render154;render154();window.scrollTo(0,0);
+   }catch(e){let host=$('erpContent');if(host)host.innerHTML=`<div class="dangerNote">${esc(e?.message||e)}</div>`}
+ };
+ function render154(){let cl=$('v136PhotoClass')?.value||'',q=norm($('v136PhotoQ')?.value),a=rows154.filter(x=>(!cl||x.class_name===cl)&&(!q||[x.student_name,x.father_name,x.admission_no,x.roll_no].some(v=>norm(v).includes(q))));let h=$('v136PhotoGrid');if(!h)return;h.innerHTML=a.map(x=>`<article class="v136PhotoCard"><div class="v136PhotoFace">${x._signed_photo?`<img src="${esc(x._signed_photo)}" alt="Student">`:'NO PHOTO'}</div><div class="v136PhotoInfo"><b>${esc(x.student_name||'—')}</b><small><strong>Class:</strong> ${esc(x.class_name||'—')}</small><small><strong>Roll No.:</strong> ${esc(x.roll_no||'—')}</small><small><strong>Father Name:</strong> ${esc(x.father_name||'—')}</small><small><strong>Admission No.:</strong> ${esc(x.admission_no||'—')}</small><div class="v136PhotoActions"><button type="button" onclick="v136OpenCamera('${esc(x.id)}')">📷 Camera</button><label>🖼 Gallery<input type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="v136Gallery('${esc(x.id)}',this)"></label>${x.photo_path?`<button class="del" onclick="v138RemoveStudentPhoto('${esc(x.id)}')">Remove</button>`:''}</div></div></article>`).join('')||'<div class="empty">No students.</div>'}
+ async function upload154(id,input){let f=input?.files?.[0];if(!f)return;let row=rows154.find(x=>String(x.id)===String(id));if(!row)return window.toast?.('Student current Class Teacher list में नहीं मिला');try{if(typeof compressImageFile==='function')f=await compressImageFile(f,10,25,640,'student');if(f.size>35*1024)throw Error('Photo 35KB से बड़ी रह गई. दूसरा photo चुनें.');let path=`teacher-student-photo/${window.user.id}/${row.id}.jpg`,up=await sb.storage.from('student-media').upload(path,f,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'});if(up.error)throw up.error;let rr=await sb.rpc('v91_teacher_set_student_photo',{p_student_id:row.id,p_photo_path:path});if(rr.error)throw rr.error;row.photo_path=path;row.photo_url='';row.student_photo_url='';row._signed_photo='';if(typeof window.v91AttachStudentPhoto==='function')await window.v91AttachStudentPhoto(row);window.toast?.(`Photo updated • ${Math.round(f.size/1024)} KB`);await window.v136TeacherPhotos()}catch(e){window.toast?.(e?.message||e)}finally{if(input)input.value=''}}
+ window.v136Gallery=upload154;
+ window.v138RemoveStudentPhoto=async function(id){let row=rows154.find(x=>String(x.id)===String(id));if(!row||!row.photo_path)return;if(!confirm('इस student की current photo remove करनी है?'))return;try{let old=row.photo_path,rr=await sb.rpc('ldm_teacher_remove_student_photo',{p_student_id:row.id});if(rr.error)throw rr.error;try{await sb.storage.from('student-media').remove([old])}catch(_e){}row.photo_path='';row.photo_url='';row.student_photo_url='';row._signed_photo='';window.toast?.('Student photo removed • Central Student Master synced');await window.v136TeacherPhotos()}catch(e){window.toast?.(e?.message||e)}};
+
+ /* ID: preview is source of truth; print receives the same exact card CSS; PDF already captures preview DOM. */
+ const oldPrintCss=window.idStudioPrintCss;
+ const exactIdCss=`.idCard.v646PremiumId .v104Band{min-height:13mm!important;padding:2.2mm 2.4mm!important;gap:1.5mm!important}.idCard.v646PremiumId .v104Logo{width:9.5mm!important;height:9.5mm!important;flex:0 0 9.5mm!important}.idCard.v646PremiumId .v104HeadText b{font-size:10.5px!important;line-height:1.05!important;font-weight:950!important;letter-spacing:.12px!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}.idCard.v646PremiumId .v104HeadText small{font-size:5.25px!important;line-height:1.05!important;font-weight:750!important;margin-top:.45mm!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}.idCard.v646PremiumId .v104HeadText em{font-size:5.5px!important;line-height:1!important;margin-top:.35mm!important}.idCard.v646PremiumId .v6422IdMain{flex:1!important;min-height:0!important;padding:2mm 2.5mm 1mm!important;gap:2mm!important;overflow:hidden!important}.idCard.v646PremiumId .v104Name{font-size:9px!important;font-weight:950!important;color:#10233e!important}.idCard.v646PremiumId .v646IdLine{font-size:6.4px!important;line-height:1.18!important;color:#17263a!important}.idCard.v646PremiumId .v646Sign{min-height:5.5mm!important}.idCard.v646PremiumId .v104Foot{font-size:5.5px!important;padding:.7mm 2mm!important}@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.idCard{break-inside:avoid!important;page-break-inside:avoid!important}}`;
+ if(typeof oldPrintCss==='function')window.idStudioPrintCss=function(){return oldPrintCss()+exactIdCss};
+ const print154=window.idStudioPrint;window.idStudioPrint=async function(){let el=$('idA4Preview');if(!el)return window.toast?.('Preview first');try{if(typeof window.sharpQR==='function')await window.sharpQR(el)}catch(_e){}let old=$('v154PrintFrame');old?.remove();let f=document.createElement('iframe');f.id='v154PrintFrame';f.style='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:.01;pointer-events:none';document.body.appendChild(f);let d=f.contentDocument;d.open();d.write(`<html><head><title>ID Cards</title><style>${idStudioPrintCss()}</style></head><body>${el.innerHTML}</body></html>`);d.close();setTimeout(()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){window.toast?.(e.message||e)}},400)};
+
+ /* STORAGE: never fabricate quota. Used is exact inventory; total/free are shown only when a real configured/API limit exists. */
+ const storageBase=window.v147StorageCenter;
+ if(typeof storageBase==='function')window.v147StorageCenter=async function(){await storageBase.apply(this,arguments);try{let panel=$('erpContent')?.querySelector('.panel');if(!panel||panel.querySelector('.v154StorageTruth'))return;let usedText=[...panel.querySelectorAll('.v147Kpi')].find(x=>/Used Storage/i.test(x.textContent||''))?.querySelector('b')?.textContent||'—';let limit=Number(window.school?.storage_limit_bytes||0),usedMatch=String(usedText).match(/[\d.]+/),usedMB=usedMatch?Number(usedMatch[0]):0,limitMB=limit/1048576,freeMB=limit?Math.max(limitMB-usedMB,0):0,pct=limit?Math.min(100,(usedMB/limitMB)*100):null;panel.insertAdjacentHTML('beforeend',`<div class="v154StorageTruth"><div><small>Used Storage</small><b>${esc(usedText)}</b></div><div class="${limit?'':'unknown'}"><small>Total / Plan Limit</small><b>${limit?limitMB.toFixed(2)+' MB':'Not exposed to browser'}</b></div><div class="${limit?'':'unknown'}"><small>Available</small><b>${limit?freeMB.toFixed(2)+' MB':'Not safely calculable'}</b></div><div class="${limit?'':'unknown'}"><small>Usage</small><b>${pct===null?'—':pct.toFixed(1)+'%'}</b></div></div>${limit?'':`<div class="v154StorageTruthNote">Used storage is measured from real bucket objects. Supabase plan quota is not exposed by the normal browser client, so Total/Available is intentionally not guessed. If a verified project limit is configured centrally later, these cards calculate remaining storage automatically.</div>`}`)}catch(_e){}};
+
+ setTimeout(()=>{installGreetingObserver();oneGreeting()},50);
+})();
+</script>
+<!-- ===== END V154 FINAL LIVE CORRECTIONS ===== -->
+
+<!-- ===== V155 ROOT FINAL: navigation + student master recycle/full-details ===== -->
+<style id="v155-root-final-css">
+#v150SMDetail:empty{display:none}.v155DeletedNote{padding:10px 12px;border-radius:10px;background:#eef7ff;color:#174f80;font-size:12px;margin:8px 0}
+
+.v156DailyControl{display:block;min-width:0;margin:0 0 14px}.v156DailyControl>#v114AdminClassSlot:empty{display:none}.v156DailyControl .v114AdminMainGrid{margin-top:10px}
+.v156ClickableStats .v156SummaryCard{position:relative;width:100%;text-align:left;border:0;cursor:pointer}.v156SummaryCard em{position:absolute;right:10px;bottom:7px;font-style:normal;font-size:9px;opacity:.72}.v156SummaryCard:focus-visible{outline:3px solid rgba(37,99,235,.35);outline-offset:2px}
+.v156RequestChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.v156RequestChoices button{min-height:110px;text-align:left;padding:18px;border:1px solid #dbe7f4;border-radius:16px;background:#fff}.v156RequestChoices b,.v156RequestChoices small,.v156RequestChoices em{display:block}.v156RequestChoices small{margin-top:7px;color:#60738a}.v156RequestChoices em{margin-top:12px;font-style:normal;font-weight:800;color:#1769aa}
+@media(max-width:900px){.v156DailyControl{overflow:visible}.v156RequestChoices{grid-template-columns:1fr}.v156ClickableStats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
+<script id="v155-root-final-runtime">
+(function(){'use strict';
+ const E=v=>typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const admin=()=>{let r=String(window.profile?.role||'').toLowerCase();return ['admin','super_admin','principal'].includes(r)||(typeof window.v90Admin==='function'&&window.v90Admin())};
+ const inactive=s=>['inactive','deleted','trashed','recycled','archived','left','withdrawn'].includes(String(s||'').trim().toLowerCase());
+
+ /* ROOT NAVIGATION: one internal stack. Back never re-adds the route it just popped. */
+ const pushBase=window.v90Push;
+ window.__v155NoPush=false;
+ if(typeof pushBase==='function'){
+   window.v90Push=v90Push=function(route){if(window.__v155NoPush){window.__v90Route=String(route||'dashboard');return}return pushBase.apply(this,arguments)};
+ }
+ async function renderWithoutPush(route){window.__v155NoPush=true;try{return await window.render(route)}finally{window.__v155NoPush=false}}
+ window.v90Back=async function(){
+   let h=Array.isArray(window.__v90History)?window.__v90History.slice():[];
+   if(h.length<=1){let r=String(window.__v90Route||'dashboard');if(r!=='dashboard'){h=['dashboard'];window.__v90History=h;window.__v90Route='dashboard';try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route','dashboard');history.replaceState({ldmInternal:true,route:'dashboard',stack:h},'',location.href)}catch(_e){}return renderWithoutPush('dashboard')}return false}
+   h.pop();let r=String(h[h.length-1]||'dashboard');window.__v90History=h;window.__v90Route=r;
+   try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route',r);history.replaceState({ldmInternal:true,route:r,stack:h},'',location.href)}catch(_e){}
+   return renderWithoutPush(r);
+ };
+
+ /* Student Full Details: Student Master owns a real detail host, so the button cannot target an old hidden search result. */
+ if(typeof window.v105DetailHost==='function'){
+   window.v105DetailHost=v105DetailHost=function(){
+     if(String(window.__v90Route||'')==='v150_student_master'){
+       let h=document.getElementById('v150SMDetail');if(h)return h;
+     }
+     let searchDetail=document.getElementById('v6419SearchDetail');if(searchDetail)return searchDetail;
+     let direct=document.getElementById('globalStudentResults')||document.getElementById('v90MasterSearchBody')||document.getElementById('masterResults');if(direct)return direct;
+     let old=document.getElementById('v105PersonDetailHost');if(old)return old;
+     let host=document.createElement('section');host.id='v105PersonDetailHost';host.className='v105PersonDetailHost';let root=document.getElementById('erpContent');root?.prepend(host);return host;
+   };
+ }
+
+ /* Student Master: active master list excludes recycled/deleted records; Delete Safety uses the existing central Recycle Bin RPC. */
+ let masterRows=[];
+ window.v150StudentMaster=async function(){
+   if(!admin())return window.toast?.('Admin / Principal only');window.__v90Route='v150_student_master';window.head?.('🎓 Student Master Control','Full Details • Edit • Correct • Recycle Safety');
+   let h=document.getElementById('erpContent');if(!h)return;h.innerHTML='<div class="panel"><div class="empty">Loading central Student Master…</div></div>';
+   let r=await sb.from('students').select('*').order('class_name').order('roll_no').limit(5000);if(r.error){h.innerHTML='<div class="dangerNote">'+E(r.error.message)+'</div>';return}
+   masterRows=(r.data||[]).filter(x=>!inactive(x.status));
+   h.innerHTML=`<div class="panel"><div class="panelHead"><div><h2>🎓 Student Master Control</h2><p class="note">Same central Student record • no duplicate master table</p></div><div class="v150MasterActions"><button class="primary" onclick="openAdd('students')">＋ Add Student</button><button onclick="studentExcelCenter?.()">Excel Import / Update</button><button onclick="render('v65_recycle')">♻ Recycle Bin</button></div></div><div class="v150MasterKpis"><button><small>Active Records</small><b>${masterRows.length}</b></button><button><small>Classes</small><b>${new Set(masterRows.map(x=>x.class_name).filter(Boolean)).size}</b></button><button><small>Delete Rule</small><b>Recycle First</b></button><button><small>Safety</small><b>Central</b></button></div><div class="v155DeletedNote">Delete Safety → Recycle Bin. Recycle Bin से Admin Permanent Delete करने पर ही final purge होगा.</div><div class="v150MasterToolbar"><label>Class<select id="v150SMClass" onchange="v150RenderStudents()"><option value="">All Classes</option>${[...new Set(masterRows.map(x=>x.class_name).filter(Boolean))].map(x=>`<option>${E(x)}</option>`).join('')}</select></label><label>Search<input id="v150SMQ" placeholder="Name / Father / Roll / Admission / Mobile" oninput="clearTimeout(window.__v150SMD);window.__v150SMD=setTimeout(v150RenderStudents,150)"></label></div><div id="v150SMBody"></div><section id="v150SMDetail"></section></div>`;
+   window.v150RenderStudents();window.scrollTo(0,0);
+ };
+ window.v150RenderStudents=function(){let q=String(document.getElementById('v150SMQ')?.value||'').toLowerCase().trim(),cl=document.getElementById('v150SMClass')?.value||'',a=masterRows.filter(x=>(!cl||x.class_name===cl)&&(!q||[x.student_name,x.father_name,x.roll_no,x.admission_no,x.student_id,x.phone].some(v=>String(v||'').toLowerCase().includes(q))));let b=document.getElementById('v150SMBody');if(!b)return;b.innerHTML=`<div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Class</th><th>Roll</th><th>Admission / Student ID</th><th>Mobile</th><th>Status</th><th>Master Actions</th></tr>${a.map(x=>`<tr><td><b>${E(x.student_name||'')}</b></td><td>${E(x.father_name||'—')}</td><td>${E(x.class_name||'—')}</td><td>${E(x.roll_no||'—')}</td><td>${E(x.admission_no||'—')}<small class="cellSub">${E(x.student_id||'')}</small></td><td>${E(x.phone||'—')}</td><td>${E(x.status||'Active')}</td><td><div class="v150MasterActions"><button onclick="dashboardStudentFull('${E(x.id)}');setTimeout(()=>document.getElementById('v150SMDetail')?.scrollIntoView({behavior:'smooth',block:'start'}),50)">Full Details</button><button class="edit" onclick='openEdit("students",${JSON.stringify(x).replace(/'/g,"&#39;")})'>Edit / Correct</button><button onclick="openStudentFeeAccount?.('${E(x.id)}')">Fee Link</button><button class="del" onclick="v150SafeStudentDelete('${E(x.id)}')">Delete Safety</button></div></td></tr>`).join('')||'<tr><td colspan="8">No matching active students</td></tr>'}</table></div>`};
+ window.v150SafeStudentDelete=async function(id){let x=masterRows.find(r=>String(r.id)===String(id));if(!x)return;if(!confirm(`Student को Recycle Bin में भेजना है?\n${x.student_name||''}\nRestore possible रहेगा.`))return;let rr=await sb.rpc('v65_move_to_recycle',{p_table:'students',p_id:String(id)});if(rr.error)return window.toast?.(rr.error.message+' • Recycle Bin SQL check करें');masterRows=masterRows.filter(r=>String(r.id)!==String(id));window.v150RenderStudents();window.toast?.('✓ Student Recycle Bin में भेजा गया • main list से हट गया')};
+
+
+ /* V156 Admin Dashboard canonical order + summary drill-down. Existing module renderers remain the single owners. */
+ window.v156AdminSummaryDrill=function(kind){
+   if(!admin())return window.toast?.('Admin / Principal only');
+   const routes={students:'v150_student_master',teachers:'staff',collection:'fee_dashboard',due:'v90_due_fee_monitor',attendance:'v90_attendance_monitor'};
+   if(routes[kind])return window.render?.(routes[kind]);
+   if(kind==='requests'){
+     window.__v90Route='v156_pending_requests';window.head?.('📬 Pending Requests','Student + Teacher pending work');
+     let h=document.getElementById('erpContent');if(!h)return;
+     h.innerHTML=`<div class="panel"><div class="panelHead"><div><h2>📬 Pending Requests</h2><p class="note">ऊपर Dashboard का Pending Requests count इन्हीं central request sources से आता है.</p></div></div><div class="v156RequestChoices"><button onclick="render('v90_student_requests')"><b>🎓 Student Requests</b><small>Leave • Correction • Add / Remove</small><em>OPEN →</em></button><button onclick="render('v90_teacher_requests')"><b>👨‍🏫 Teacher Requests</b><small>Teacher personal • class related</small><em>OPEN →</em></button></div></div>`;
+     try{window.v90Push?.('v156_pending_requests')}catch(_e){}window.scrollTo(0,0);
+   }
+ };
+ window.LDM_FINAL_BUILD='V156-ROOT-FINAL-2026-09-25';
+})();
+</script>
+<!-- ===== END V155 ROOT FINAL ===== -->
