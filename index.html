@@ -10332,7 +10332,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @media print{.v69AdmitCard,.idCard{filter:none!important;opacity:1!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.v69AdmitCard *,.idCard *{opacity:1!important}.v69AdmitCard .v69School b,.idCard .v104HeadText b{color:#000!important;font-weight:950!important}.v69AdmitCard .v69Sign{margin-left:auto!important;text-align:right!important}}
 </style>
 <script id="ldm-v129-canonical-js">
-window.LDM_FINAL_BUILD='V129-ROOT-CANONICAL-HISTORY-2026-09-25';
+window.LDM_FINAL_BUILD='V133-ROOT-LOGIN-SURFACE-FIX-2026-09-25';
 (function(){'use strict';
  const $=id=>document.getElementById(id), getRole=()=>String(window.profile?.role||'').toLowerCase();
  const isParent=()=>['parent','student'].includes(getRole()), isTeacher=()=>getRole()==='teacher';
@@ -10425,4 +10425,49 @@ window.LDM_FINAL_BUILD='V129-ROOT-CANONICAL-HISTORY-2026-09-25';
 })();
 </script>
 
+
+<!-- ===== V133 ROOT LOGIN SURFACE FIX ===== -->
+<style id="ldm-v133-login-surface-fix">
+body.ldmSurfaceLogin #publicSite,body.ldmSurfaceLogin #publicPageView,body.ldmSurfaceLogin #setup,body.ldmSurfaceLogin #erp,body.ldmSurfaceLogin #parentDashboard{display:none!important}
+body.ldmSurfaceLogin #login{display:block!important}
+body.ldmSurfaceSetup #publicSite,body.ldmSurfaceSetup #publicPageView,body.ldmSurfaceSetup #login,body.ldmSurfaceSetup #erp,body.ldmSurfaceSetup #parentDashboard{display:none!important}
+body.ldmSurfaceSetup #setup{display:block!important}
+</style>
+<script id="ldm-v133-login-surface-js">
+(function(){
+ const oldSet=window.ldmSetSurface;
+ function setSurface(name){
+   document.body.classList.remove('ldmSurfacePublic','ldmSurfaceERP','ldmSurfaceParent','ldmSurfaceLogin','ldmSurfaceSetup');
+   const cls=name==='public'?'ldmSurfacePublic':name==='parent'?'ldmSurfaceParent':name==='login'?'ldmSurfaceLogin':name==='setup'?'ldmSurfaceSetup':'ldmSurfaceERP';
+   document.body.classList.add(cls);
+   try{sessionStorage.setItem('ldm_surface',name)}catch(_e){}
+ }
+ window.ldmSetSurface=setSurface;
+ const baseOpen=window.openPortal;
+ if(typeof baseOpen==='function') window.openPortal=function(target){
+   if(target)try{localStorage.setItem('ld_after_login_target',target)}catch(_e){}
+   window.__ldmPublicMode=false;
+   setSurface(window.cfg?'login':'setup');
+   ['publicSite','publicPageView','erp','parentDashboard'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));
+   const id=window.cfg?'login':'setup'; document.getElementById(id)?.classList.remove('hidden');
+   window.scrollTo(0,0);
+ };
+ const baseTeacher=window.teacherLoginDialog;
+ if(typeof baseTeacher==='function') window.teacherLoginDialog=function(){
+   window.__ldmPublicMode=true; setSurface('public'); document.getElementById('publicSite')?.classList.remove('hidden');
+   return baseTeacher.apply(this,arguments);
+ };
+ const baseParent=window.parentPasswordLoginDialog;
+ if(typeof baseParent==='function') window.parentPasswordLoginDialog=function(){
+   window.__ldmPublicMode=true; setSurface('public'); document.getElementById('publicSite')?.classList.remove('hidden');
+   return baseParent.apply(this,arguments);
+ };
+ const baseBack=window.backWebsite;
+ window.backWebsite=function(){setSurface('public');return typeof baseBack==='function'?baseBack.apply(this,arguments):window.showPublicPage?.('home')};
+ const baseLogin=window.login;
+ if(typeof baseLogin==='function') window.login=async function(){setSurface('login');return await baseLogin.apply(this,arguments)};
+ const baseOpenERP=window.openERP;
+ if(typeof baseOpenERP==='function') window.openERP=function(){setSurface('erp');return baseOpenERP.apply(this,arguments)};
+})();
+</script>
 </body></html>
