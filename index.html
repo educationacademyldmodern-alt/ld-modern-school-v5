@@ -890,7 +890,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 <footer class="premiumFooter"><div class="footBrand"><img src="school-logo.png" alt="School Logo"><div><b id="footSchool">L D MODERN EDUCATION ACADEMY</b><span>Knowledge • Discipline • Character</span></div></div><div class="footMotto">A Better Education • A Brighter Tomorrow</div><span>Public Website + Smart Cloud ERP<br><small>© 2026 L D MODERN EDUCATION ACADEMY. All Rights Reserved.</small></span></footer>
 </div>
 
-<section id="setup" class="auth hidden"><div class="authCard"><h1>Connect School Cloud</h1><p>Supabase Project URL और Publishable Key डालें।</p><input id="cloudUrl" placeholder="https://xxxx.supabase.co"><input id="cloudKey" placeholder="sb_publishable_..."><button onclick="saveCloud()">Connect</button></div></section>
+
 <section id="login" class="auth hidden"><div class="loginGrid"><div class="loginHero"><img src="school-logo.png" alt="School Logo" style="width:104px;height:104px;object-fit:contain"><h1>L D MODERN EDUCATION ACADEMY</h1><p>Premium Secure School ERP</p><button class="ghost" onclick="backWebsite()">← Public Website</button></div><div class="authCard"><span class="pill">SECURE CLOUD LOGIN</span><h2>Welcome Back</h2><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password"><button onclick="login()">Login</button><div class="loginLinks"><small>Accounts are created by School Admin only.</small></div><small>Admin • Principal • Admission • Accountant • Teacher • Student • Parent</small></div></div></section>
 
 <div id="erp" class="erp hidden"><aside><div class="sideBrand"><div class="logoText small">LD</div><div><b id="sideName">L D MODERN EDUCATION ACADEMY</b><small id="roleText"></small></div></div><nav id="erpNav"></nav><button class="logout" onclick="logout()">⇥ Logout</button></aside><main><header class="erpTop"><button class="hamb" onclick="document.querySelector('#erp aside').classList.toggle('open')">☰</button><button class="erpHomeBtn" onclick="erpGoHome()" title="Home">🏠 Home</button><div><h2 id="erpTitle">Dashboard</h2><p id="erpSub"></p></div><button class="websiteBtn" onclick="backWebsite()">View Website</button></header><section id="erpContent"></section></main></div>
@@ -10253,7 +10253,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    if(!isTeacher())return;let ctx=window.ldmTeacherContext;try{if(!ctx)ctx=await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}
    window.__v90Route='dashboard';if(typeof v90Head==='function')v90Head('Teacher Dashboard','NEW Teacher Access • Teacher Master controlled');if(typeof v90InstallShell==='function')v90InstallShell('dashboard');
    const t=ctx.teacher||{},allClasses=(ctx.classes||[]).map(x=>x.class_name).filter(Boolean),classes=(typeof v103ClassTeacherClasses==='function'?v103ClassTeacherClasses():[]),subjects=(ctx.subjects||[]).map(x=>x.subject_name||x.subject).filter(Boolean),host=document.getElementById('erpContent');if(!host)return;
-   host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero"><small>NEW TEACHER ACCESS</small><h1>${typeof v90Safe==='function'?v90Safe(t.teacher_name||profile?.full_name||'Teacher'):(t.teacher_name||'Teacher')}</h1><p>Teacher Master से verified Active account</p></section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📋','Master Attendance','Own class status','master_attendance'],['📷','Student Photo','Camera / upload','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','Assigned subject','exams'],['💰','Fee Status','Permitted read-only','teacher_fee'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
+   host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero"><small>NEW TEACHER ACCESS</small><h1>${typeof v90Safe==='function'?v90Safe(t.teacher_name||profile?.full_name||'Teacher'):(t.teacher_name||'Teacher')}</h1><p>Teacher Master से verified Active account</p></section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📷','QR Attendance Scanner','Scan My Class QR → Present','v143_teacher_qr_attendance'],['📋','Master Attendance','Own class status','master_attendance'],['📷','Student Photo','Camera / upload','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','Assigned subject','exams'],['💰','Fee Status','Permitted read-only','teacher_fee'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
    host.querySelectorAll('[data-new-teacher-route]').forEach(b=>b.onclick=async()=>{let r=b.dataset.newTeacherRoute;if(r==='__logout'){try{await sb.auth.signOut()}catch(_e){};location.reload();return}try{await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}if(typeof render==='function')return render(r)});try{scrollTo(0,0)}catch(_e){}
  };
  // Canonical dispatch: NEW teacher dashboard bypasses all legacy teacher dashboard/context entry paths.
@@ -10310,67 +10310,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
 })();
 </script>
 <!-- ===== END V127 ROOT INTEGRATION ===== -->
-<!-- ===== V129 ROOT CANONICAL SURFACE + HISTORY CONTROLLER ===== -->
-<style id="ldm-v129-canonical-style">
-html.ldmBootLock body{visibility:hidden!important}
-body.ldmSurfacePublic #erp,body.ldmSurfacePublic #login,body.ldmSurfacePublic #setup,body.ldmSurfacePublic #parentDashboard{display:none!important}
-body.ldmSurfaceERP #publicSite,body.ldmSurfaceERP #publicPageView,body.ldmSurfaceERP #login,body.ldmSurfaceERP #setup,body.ldmSurfaceERP #parentDashboard{display:none!important}
-body.ldmSurfaceParent #publicSite,body.ldmSurfaceParent #publicPageView,body.ldmSurfaceParent #login,body.ldmSurfaceParent #setup,body.ldmSurfaceParent #erp{display:none!important}
-#erp.ldmTeacherCanonical #v63SchoolHead,#erp.ldmTeacherCanonical #v63AdminBox,#erp.ldmTeacherCanonical .v63TopLogout,#erp.ldmTeacherCanonical .v6412SchoolIdentity,#erp.ldmTeacherCanonical .v6415School,#erp.ldmTeacherCanonical .v6416School{display:none!important}
-#erp.ldmTeacherCanonical .erpTop{display:flex!important;align-items:center!important;gap:8px!important;min-height:62px!important;flex-wrap:nowrap!important}
-#erp.ldmTeacherCanonical .erpTop>div:not(#v75TopSearch):not(#v97TopIdentity):not(#v62NotifPanel){min-width:0!important}
-#erp.ldmTeacherCanonical #erpTitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#erp.ldmTeacherCanonical .v90Stats,#erp.ldmTeacherCanonical .erpCards{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))!important;gap:12px!important}
-#erp.ldmTeacherCanonical .v90DashGrid,#erp.ldmTeacherCanonical .v90TeacherGrid,#erp.ldmTeacherCanonical .teacherDashGrid{grid-template-columns:minmax(280px,.9fr) minmax(440px,1.6fr)!important;gap:16px!important;align-items:start!important}
-#erp.ldmTeacherCanonical [class*="TeachingSchedule"],#erp.ldmTeacherCanonical [class*="teachingSchedule"]{min-width:0!important;overflow-x:auto!important}
-#erp.ldmTeacherCanonical .ldmTeacherModules{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))!important;gap:12px!important}
-body.ldmSurfaceParent #parentDashboard>.portalHead{display:none!important}
-body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!important;display:flex!important;min-height:58px!important;padding:8px 12px!important}
-.v69AdmitCard .v69School b,.idCard .v104HeadText b{color:#082b55!important;opacity:1!important;font-weight:950!important;text-shadow:none!important}
-.v69AdmitCard .v69School span,.v69AdmitCard .v69StudentInfo,.idCard{opacity:1!important}.v69AdmitCard .v69AdmitFoot{display:flex!important;justify-content:space-between!important;align-items:flex-end!important}.v69AdmitCard .v69Sign{margin-left:auto!important;text-align:right!important;min-width:34mm!important;font-weight:900!important}
-@media(max-width:900px){#erp.ldmTeacherCanonical .v90DashGrid,#erp.ldmTeacherCanonical .v90TeacherGrid,#erp.ldmTeacherCanonical .teacherDashGrid{grid-template-columns:1fr!important}#erp.ldmTeacherCanonical .erpTop{flex-wrap:wrap!important}}
-@media print{.v69AdmitCard,.idCard{filter:none!important;opacity:1!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.v69AdmitCard *,.idCard *{opacity:1!important}.v69AdmitCard .v69School b,.idCard .v104HeadText b{color:#000!important;font-weight:950!important}.v69AdmitCard .v69Sign{margin-left:auto!important;text-align:right!important}}
-</style>
-<script id="ldm-v129-canonical-js">
-window.LDM_FINAL_BUILD='V133-ROOT-LOGIN-SURFACE-FIX-2026-09-25';
-(function(){'use strict';
- const $=id=>document.getElementById(id), getRole=()=>String(window.profile?.role||'').toLowerCase();
- const isParent=()=>['parent','student'].includes(getRole()), isTeacher=()=>getRole()==='teacher';
- let restoring=false, popBusy=false;
- function surface(name,persist=true){
-   document.body.classList.remove('ldmSurfacePublic','ldmSurfaceERP','ldmSurfaceParent');
-   document.body.classList.add(name==='public'?'ldmSurfacePublic':name==='parent'?'ldmSurfaceParent':'ldmSurfaceERP');
-   if(persist)try{sessionStorage.setItem('ldm_surface',name)}catch(_e){}
-   const all=[$('publicSite'),$('publicPageView'),$('erp'),$('parentDashboard'),$('login'),$('setup')];all.forEach(x=>x?.classList.add('hidden'));
-   if(name==='public')$('publicSite')?.classList.remove('hidden');else if(name==='parent')$('parentDashboard')?.classList.remove('hidden');else $('erp')?.classList.remove('hidden');
-   document.documentElement.classList.remove('ldmBootLock','ldmV128Booting');
- }
- function teacherShell(){const erp=$('erp');if(!erp)return;erp.classList.toggle('ldmTeacherCanonical',isTeacher());if(!isTeacher())return;['v63SchoolHead','v63AdminBox'].forEach(id=>$(id)?.remove());erp.querySelectorAll('.v63TopLogout,.v6412SchoolIdentity,.v6415School,.v6416School').forEach(x=>x.remove())}
- function currentRoute(){try{return sessionStorage.getItem('ldm_current_route')||window.__v90Route||'dashboard'}catch(_e){return window.__v90Route||'dashboard'}}
- async function roleSurface(route=currentRoute()){
-   if(isParent()){surface('parent');await window.loadParentPortal?.();return}
-   surface('erp');teacherShell();if(isTeacher()&&route==='dashboard'&&typeof window.ldmNewTeacherDashboard==='function')await window.ldmNewTeacherDashboard();else if(typeof window.v90Dispatch==='function')await window.v90Dispatch(route,true);else await window.render?.(route);teacherShell();
- }
- async function publicSurface(push=true){window.__ldmPublicMode=true;surface('public');try{window.showPublicPage?.('home')}catch(_e){};if(push)try{history.pushState({ldmCanonical:true,surface:'public',returnRoute:currentRoute()},'',location.href)}catch(_e){};scrollTo(0,0)}
- window.ldmSetSurface=surface;window.backWebsite=function(){return publicSurface(true)};
- async function boot(){if(restoring)return;restoring=true;try{
-   if(!window.cfg){surface('public');try{window.showPublicPage?.('home')}catch(_e){};return}
-   if(!window.sb&&typeof window.init==='function')window.init();const rs=await window.sb?.auth?.getSession?.(),session=rs?.data?.session;if(!session){surface('public');try{window.showPublicPage?.('home')}catch(_e){};return}
-   window.user=session.user;if(!window.profile||window.profile.id!==session.user.id)await window.loadProfile?.();let wanted='';try{wanted=sessionStorage.getItem('ldm_surface')||''}catch(_e){}
-   if(wanted==='public'){surface('public');try{window.showPublicPage?.('home')}catch(_e){};return}await roleSurface();
- }catch(e){console.error('LDM canonical boot',e);surface('public');try{window.showPublicPage?.('home')}catch(_e){}}finally{restoring=false}}
- /* One browser-history owner. Internal V90 state is restored from history state/route; Website Back returns to authenticated role. */
- window.addEventListener('popstate',async function(e){if(popBusy)return;popBusy=true;try{
-   if(window.user&&document.body.classList.contains('ldmSurfacePublic')){window.__ldmPublicMode=false;const r=String(e.state?.route||e.state?.returnRoute||currentRoute()||'dashboard');try{sessionStorage.setItem('ldm_surface',isParent()?'parent':'erp')}catch(_e){};await roleSurface(r);return}
-   if(window.user&&e.state?.ldmInternal){const r=String(e.state.route||'dashboard');if(Array.isArray(e.state.stack)){window.__v90History=e.state.stack;try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(e.state.stack))}catch(_e){}}try{sessionStorage.setItem('ldm_current_route',r)}catch(_e){};await roleSurface(r);return}
- }catch(err){console.error('LDM canonical back',err)}finally{popBusy=false}},true);
- const openERP0=window.openERP;if(typeof openERP0==='function')window.openERP=async function(){surface('erp');const r=await openERP0.apply(this,arguments);teacherShell();return r};
- const parent0=window.loadParentPortal;if(typeof parent0==='function')window.loadParentPortal=async function(){surface('parent');return await parent0.apply(this,arguments)};
- const render0=window.render;if(typeof render0==='function')window.render=async function(){surface('erp');const r=await render0.apply(this,arguments);teacherShell();return r};
- document.addEventListener('click',()=>setTimeout(teacherShell,0),{passive:true});window.addEventListener('load',boot,{once:true});if(document.readyState==='complete')boot();
-})();
-</script>
-<!-- ===== END V129 ===== -->
+
 <style id="v130-root-style">
 .v130Grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.v130Card{background:#fff;border:1px solid #dce7f3;border-radius:16px;padding:15px}.v130Scan{max-width:760px;margin:auto}.v130Camera{position:relative;background:#071421;border-radius:20px;overflow:hidden;min-height:330px;display:grid;place-items:center}.v130Camera video{width:100%;max-height:68vh;object-fit:cover}.v130Aim{position:absolute;width:220px;height:220px;border:3px solid #fff;border-radius:22px;box-shadow:0 0 0 9999px #0005;pointer-events:none}.v130Result{margin-top:12px;padding:14px;border-radius:14px;background:#eef5ff;min-height:74px}.v130Result.ok{background:#e8f8ef;color:#075f36}.v130Result.bad{background:#ffeded;color:#9b1c1c}.v130Count{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.v130Count b{background:#fff;border:1px solid #dce7f3;border-radius:999px;padding:7px 11px}.v130Qr{width:66px;height:66px;background:#fff;padding:3px;border:1px solid #ccd7e5;border-radius:6px;margin-left:auto}.v130Qr img,.v130Qr canvas{width:100%!important;height:100%!important}.v130IdQr{position:absolute;right:5px;bottom:14px;width:15mm;height:15mm;background:#fff;padding:1mm;border-radius:2mm}.v130IdQr canvas,.v130IdQr img{width:100%!important;height:100%!important}.v130StorageBar{height:16px;background:#e8eef6;border-radius:999px;overflow:hidden}.v130StorageBar i{display:block;height:100%;background:#1768df}.v130FeeMsg{width:100%;min-height:120px}.v130Driver{min-height:100vh;background:#eef6ff;padding:18px}.v130Driver .v130Scan{max-width:680px}.v130Big{font-size:24px;font-weight:950}.v130SecurityNote{background:#fff8e6;border:1px solid #f0d38a;border-radius:12px;padding:12px}.v130PublicVerify{min-height:100vh;background:linear-gradient(145deg,#eaf3ff,#fff);display:grid;place-items:center;padding:20px}.v130VerifyCard{width:min(520px,100%);background:#fff;border-radius:24px;padding:24px;box-shadow:0 20px 70px #1232;text-align:center}.v130VerifyCard img{width:120px;height:140px;object-fit:cover;border-radius:16px;background:#edf2f7}.v130VerifyCard h1{font-size:20px;color:#0b3d77}.v130VerifyCard .verified{display:inline-block;background:#e7f8ee;color:#087a47;padding:7px 12px;border-radius:999px;font-weight:900}@media(max-width:800px){.v130Grid{grid-template-columns:1fr}.v130Aim{width:190px;height:190px}}
 @media print{.v104HeadText b,.v107DocSchool h2,.v92AdmitSchool,.v69AdmitSchool{color:#000!important;opacity:1!important;text-shadow:none!important;font-weight:950!important}.v130IdQr{display:block!important}.v646Sign{margin-left:auto!important;text-align:right!important;align-items:flex-end!important}}
@@ -10383,7 +10323,7 @@ window.LDM_FINAL_BUILD='V133-ROOT-LOGIN-SURFACE-FIX-2026-09-25';
  function addScript(src,id){return new Promise((res,rej)=>{if(document.getElementById(id))return res();let s=document.createElement('script');s.id=id;s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
  async function ensureQR(){if(window.QRCode)return;await addScript('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js','v130-qrcode-lib')}
  async function tokenFor(adm){let r=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(r.error)throw r.error;return r.data?.token}
- async function paintQR(root=document){await ensureQR();let cards=[...root.querySelectorAll('.idCard[data-v130-adm]')];for(let c of cards){if(c.querySelector('.v130IdQr'))continue;try{let t=await tokenFor(c.dataset.v130Adm),q=document.createElement('div');q.className='v130IdQr';q.title='Student Verification QR';c.appendChild(q);new QRCode(q,{text:baseUrl()+'?student_verify='+encodeURIComponent(t),width:110,height:110,correctLevel:QRCode.CorrectLevel.M})}catch(_e){}}}
+ async function paintQR(root=document){await ensureQR();let cards=[...root.querySelectorAll('.idCard[data-v130-adm]')];for(let c of cards){if(c.querySelector('.v130IdQr'))continue;try{let t=await tokenFor(c.dataset.v130Adm),q=document.createElement('div');q.className='v130IdQr';q.title='Student Verification QR';c.appendChild(q);new QRCode(q,{text:baseUrl()+'?student_verify='+encodeURIComponent(t),width:110,height:110,correctLevel:QRCode.CorrectLevel.H})}catch(_e){}}}
  if(typeof window.renderIdCard==='function'){const b=window.renderIdCard;window.renderIdCard=function(s,t){let h=b.apply(this,arguments),adm=E(s?.admission_no||'');return h.replace(/<div class="idCard /,'<div data-v130-adm="'+adm+'" class="idCard ')}}
  if(typeof window.idStudioPreview==='function'){const b=window.idStudioPreview;window.idStudioPreview=async function(){let r=await b.apply(this,arguments);setTimeout(()=>paintQR(document),80);return r}}
 
@@ -10400,7 +10340,7 @@ window.LDM_FINAL_BUILD='V133-ROOT-LOGIN-SURFACE-FIX-2026-09-25';
  async function decodeLoop(video,onCode){if(!('BarcodeDetector'in window))throw Error('Fast QR scanner के लिए Android Chrome/compatible browser उपयोग करें.');let det=new BarcodeDetector({formats:['qr_code']});scanState.timer=setInterval(async()=>{if(scanState.busy||video.readyState<2)return;scanState.busy=true;try{let rs=await det.detect(video),raw=rs?.[0]?.rawValue;if(raw){let now=Date.now();if(raw!==scanState.last||now-scanState.lastAt>2500){scanState.last=raw;scanState.lastAt=now;onCode(qrToken(raw))}}}catch(_e){}finally{scanState.busy=false}},130)}
  function scanShell(title,sub){return '<div class="v130Scan"><div class="panelHead"><div><h2>'+E(title)+'</h2><p>'+E(sub)+'</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>'}
  window.v130StopScanner=()=>{cameraStop();window.toast?.('Scanner stopped')};
- window.ldmTeacherQrCard=async function(id){if(!admin())return toast('Admin only');try{let r=await sb.rpc('ldm_get_teacher_qr',{p_teacher_id:id});if(r.error)throw r.error;let x=r.data||{};await ensureQR();document.getElementById('v131TeacherQrModal')?.remove();let m=document.createElement('div');m.id='v131TeacherQrModal';m.className='modal show';m.innerHTML='<div class="modalCard" style="max-width:420px"><button class="close" onclick="this.closest(\'.modal\').remove()">×</button><div id="v131TeacherCard" style="padding:24px;text-align:center;border:2px solid #123b6d;border-radius:18px;background:#fff"><b style="font-size:20px">L D MODERN EDUCATION ACADEMY</b><p style="margin:4px 0 14px">TEACHER ID CARD</p><div id="v131TeacherQr" style="width:150px;height:150px;margin:8px auto"></div><h2 style="margin:8px 0">'+E(x.teacher_name||'Teacher')+'</h2><p><b>Employee ID:</b> '+E(x.employee_id||'—')+'</p><p style="font-size:12px">Secure QR • Gate Attendance</p></div><p style="text-align:center"><button class="primary" onclick="window.print()">🖨 Print</button></p></div>';document.body.appendChild(m);new QRCode(document.getElementById('v131TeacherQr'),{text:baseUrl()+'?teacher_verify='+encodeURIComponent(x.token),width:150,height:150,correctLevel:QRCode.CorrectLevel.M})}catch(e){toast(e.message||String(e))}};
+ window.ldmTeacherQrCard=async function(id){if(!admin())return toast('Admin only');try{let r=await sb.rpc('ldm_get_teacher_qr',{p_teacher_id:id});if(r.error)throw r.error;let x=r.data||{};await ensureQR();document.getElementById('v131TeacherQrModal')?.remove();let m=document.createElement('div');m.id='v131TeacherQrModal';m.className='modal show';m.innerHTML='<div class="modalCard" style="max-width:420px"><button class="close" onclick="this.closest(\'.modal\').remove()">×</button><div id="v131TeacherCard" style="padding:24px;text-align:center;border:2px solid #123b6d;border-radius:18px;background:#fff"><b style="font-size:20px">L D MODERN EDUCATION ACADEMY</b><p style="margin:4px 0 14px">TEACHER ID CARD</p><div id="v131TeacherQr" style="width:150px;height:150px;margin:8px auto"></div><h2 style="margin:8px 0">'+E(x.teacher_name||'Teacher')+'</h2><p><b>Employee ID:</b> '+E(x.employee_id||'—')+'</p><p style="font-size:12px">Secure QR • Gate Attendance</p></div><p style="text-align:center"><button class="primary" onclick="window.print()">🖨 Print</button></p></div>';document.body.appendChild(m);new QRCode(document.getElementById('v131TeacherQr'),{text:baseUrl()+'?teacher_verify='+encodeURIComponent(x.token),width:150,height:150,correctLevel:QRCode.CorrectLevel.H})}catch(e){toast(e.message||String(e))}};
  window.v130SchoolScanner=async function(){if(!['admin','super_admin','principal','teacher'].includes(role()))return toast('Authorized Admin / Teacher only');head?.('⚡ Fast QR Attendance','One camera • Student Present + Teacher Check-In');let host=document.getElementById('erpContent');host.innerHTML='<div class="v130Scan"><div class="panelHead"><div><h2>Gate / Class Attendance Scanner</h2><p>Student QR = Entry/Present or Exit • Teacher QR = Check-In/Check-Out</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Grid" style="margin-bottom:8px"><label>Scanner Mode<select id="v131GateMode"><option value="ARRIVAL">🟢 ENTRY • Student Present / Teacher Check-In</option><option value="STUDENT_EXIT">🔵 STUDENT EXIT • School Leave Time</option><option value="TEACHER_CHECKOUT">🔵 TEACHER CHECK-OUT</option></select></label></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>';scanState={...scanState,scanned:0,synced:0,pending:0,last:'',lastAt:0};let v=document.getElementById('v130Video');try{await cameraStart(v);document.getElementById('v130Result').textContent='Scanner ready • Mode चुनें और Student / Teacher ID QR दिखाएँ';await decodeLoop(v,async token=>{scanState.scanned++;scanState.pending++;v130Counts();let mode=document.getElementById('v131GateMode')?.value||'ARRIVAL',key='gate:'+mode+':'+new Date().toISOString().slice(0,10)+':'+token;try{let r=await sb.rpc('ldm_scan_gate_qr',{p_token:token,p_mode:mode,p_sync_key:key});if(r.error)throw r.error;let x=r.data||{},b=document.getElementById('v130Result');if(x.ok===false)throw Error(x.message||'Scan rejected');scanState.synced++;b.className='v130Result ok';b.innerHTML='<b class="v130Big">✓ '+E(x.name||'Verified')+'</b><br>'+E(x.person_type||'')+' • '+E(x.message||'Saved');beep(true)}catch(e){let b=document.getElementById('v130Result');b.className='v130Result bad';b.innerHTML='<b>✕ '+E(e.message||e)+'</b>';beep(false)}finally{scanState.pending=Math.max(0,scanState.pending-1);v130Counts()}})}catch(e){document.getElementById('v130Result').className='v130Result bad';document.getElementById('v130Result').textContent=e.message}};
 
  window.v130DriverSetup=async function(){if(!admin())return toast('Admin only');head?.('🚌 Driver Scanner Setup','Simple PIN • route scoped • no ERP access');let host=document.getElementById('erpContent');host.innerHTML='<div class="panel"><h3>Create Driver Scanner</h3><div class="v130Grid"><label>Driver Name<input id="v130Dn"></label><label>Route<input id="v130Dr"></label><label>Vehicle No.<input id="v130Dv"></label><label>4–6 Digit PIN<input id="v130Dp" inputmode="numeric" maxlength="6"></label></div><p><button class="primary" onclick="v130CreateDriver()">Create Scanner Link</button></p><div id="v130DriverLink" class="v130SecurityNote">Driver को पूरा ERP login नहीं मिलेगा.</div></div>'}
@@ -10426,273 +10366,392 @@ window.LDM_FINAL_BUILD='V133-ROOT-LOGIN-SURFACE-FIX-2026-09-25';
 </script>
 
 
-<!-- ===== V133 ROOT LOGIN SURFACE FIX ===== -->
-<style id="ldm-v133-login-surface-fix">
-body.ldmSurfaceLogin #publicSite,body.ldmSurfaceLogin #publicPageView,body.ldmSurfaceLogin #setup,body.ldmSurfaceLogin #erp,body.ldmSurfaceLogin #parentDashboard{display:none!important}
+<!-- ===== V143 FINAL TEACHER QR ATTENDANCE • ROOT VERIFIED ===== -->
+<style id="ldm-v143-final-root-css">
+/* Production has a built-in publishable config. Never expose legacy cloud setup in normal flow. */
+#setup{display:none!important}
 body.ldmSurfaceLogin #login{display:block!important}
-body.ldmSurfaceSetup #publicSite,body.ldmSurfaceSetup #publicPageView,body.ldmSurfaceSetup #login,body.ldmSurfaceSetup #erp,body.ldmSurfaceSetup #parentDashboard{display:none!important}
-body.ldmSurfaceSetup #setup{display:block!important}
-</style>
-<script id="ldm-v133-login-surface-js">
-(function(){
- const oldSet=window.ldmSetSurface;
- function setSurface(name){
-   document.body.classList.remove('ldmSurfacePublic','ldmSurfaceERP','ldmSurfaceParent','ldmSurfaceLogin','ldmSurfaceSetup');
-   const cls=name==='public'?'ldmSurfacePublic':name==='parent'?'ldmSurfaceParent':name==='login'?'ldmSurfaceLogin':name==='setup'?'ldmSurfaceSetup':'ldmSurfaceERP';
-   document.body.classList.add(cls);
-   try{sessionStorage.setItem('ldm_surface',name)}catch(_e){}
- }
- window.ldmSetSurface=setSurface;
- const baseOpen=window.openPortal;
- if(typeof baseOpen==='function') window.openPortal=function(target){
-   if(target)try{localStorage.setItem('ld_after_login_target',target)}catch(_e){}
-   window.__ldmPublicMode=false;
-   setSurface(window.cfg?'login':'setup');
-   ['publicSite','publicPageView','erp','parentDashboard'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));
-   const id=window.cfg?'login':'setup'; document.getElementById(id)?.classList.remove('hidden');
-   window.scrollTo(0,0);
- };
- const baseTeacher=window.teacherLoginDialog;
- if(typeof baseTeacher==='function') window.teacherLoginDialog=function(){
-   window.__ldmPublicMode=true; setSurface('public'); document.getElementById('publicSite')?.classList.remove('hidden');
-   return baseTeacher.apply(this,arguments);
- };
- const baseParent=window.parentPasswordLoginDialog;
- if(typeof baseParent==='function') window.parentPasswordLoginDialog=function(){
-   window.__ldmPublicMode=true; setSurface('public'); document.getElementById('publicSite')?.classList.remove('hidden');
-   return baseParent.apply(this,arguments);
- };
- const baseBack=window.backWebsite;
- window.backWebsite=function(){setSurface('public');return typeof baseBack==='function'?baseBack.apply(this,arguments):window.showPublicPage?.('home')};
- const baseLogin=window.login;
- if(typeof baseLogin==='function') window.login=async function(){setSurface('login');return await baseLogin.apply(this,arguments)};
- const baseOpenERP=window.openERP;
- if(typeof baseOpenERP==='function') window.openERP=function(){setSurface('erp');return baseOpenERP.apply(this,arguments)};
-})();
-</script>
-<!-- ===== V135 ROOT CORRECTION • PARENT/BACK/CAMERA/QR/PRINT ===== -->
-<style id="ldm-v135-root-fix-css">
-/* Parent is physically nested inside publicSite, so the parent surface must keep that root visible. */
+body.ldmSurfaceLogin #publicSite,body.ldmSurfaceLogin #publicPageView,body.ldmSurfaceLogin #erp,body.ldmSurfaceLogin #parentDashboard{display:none!important}
+
+/* Parent Portal is moved into publicPageView by showPublicPage(), therefore BOTH ancestors must stay visible. */
 body.ldmSurfaceParent #publicSite{display:block!important}
-body.ldmSurfaceParent #parentPortal{display:block!important;padding-top:18px!important}
-body.ldmSurfaceParent #parentGate{display:none!important}
+body.ldmSurfaceParent #publicPageView{display:block!important}
+body.ldmSurfaceParent #parentPortal{display:block!important}
 body.ldmSurfaceParent #parentDashboard{display:block!important}
+body.ldmSurfaceParent #parentGate{display:none!important}
 body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #setup{display:none!important}
+body.ldmSurfaceParent #publicHome,body.ldmSurfaceParent .publicTicker,body.ldmSurfaceParent .publicTop,body.ldmSurfaceParent .publicHero,body.ldmSurfaceParent .v26PortalRow,body.ldmSurfaceParent .v114HomeStats{display:none!important}
 
-/* Teacher: exactly one Website control. */
+/* Responsive shell rules retained without the removed legacy controller. */
+#erp.ldmTeacherCanonical .erpTop{display:flex!important;align-items:center!important;gap:8px!important;min-height:62px!important;flex-wrap:nowrap!important}
+#erp.ldmTeacherCanonical #erpTitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#erp.ldmTeacherCanonical .v90DashGrid,#erp.ldmTeacherCanonical .v90TeacherGrid,#erp.ldmTeacherCanonical .teacherDashGrid{grid-template-columns:minmax(280px,.9fr) minmax(440px,1.6fr)!important;gap:16px!important;align-items:start!important}
+#erp.ldmTeacherCanonical [class*="TeachingSchedule"],#erp.ldmTeacherCanonical [class*="teachingSchedule"]{min-width:0!important;overflow-x:auto!important}
+body.ldmSurfaceParent #parentDashboard>.portalHead{display:none!important}
+body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!important;display:flex!important;min-height:58px!important;padding:8px 12px!important}
+@media(max-width:900px){#erp.ldmTeacherCanonical .v90DashGrid,#erp.ldmTeacherCanonical .v90TeacherGrid,#erp.ldmTeacherCanonical .teacherDashGrid{grid-template-columns:1fr!important}#erp.ldmTeacherCanonical .erpTop{flex-wrap:wrap!important}}
+
+/* Current/new Teacher shell only. */
+#erp.ldmTeacherCanonical .ldmTeacherModules{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button{color:#fff!important;border:0!important;min-height:120px!important;border-radius:19px!important;box-shadow:0 8px 0 rgba(4,35,70,.20),0 16px 28px rgba(4,35,70,.18)!important;transform:translateY(0);transition:.15s ease}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:hover{transform:translateY(-2px)}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:nth-child(8n+1){background:linear-gradient(145deg,#1587e8,#0758ad)!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:nth-child(8n+2){background:linear-gradient(145deg,#19b98d,#08765e)!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:nth-child(8n+3){background:linear-gradient(145deg,#735be1,#4e34b5)!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:nth-child(8n+4){background:linear-gradient(145deg,#f29c32,#d46408)!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:nth-child(8n+5){background:linear-gradient(145deg,#d85aa7,#9a2a71)!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:nth-child(8n+6){background:linear-gradient(145deg,#1ca6c8,#087895)!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:nth-child(8n+7){background:linear-gradient(145deg,#ef6574,#b92e48)!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:nth-child(8n){background:linear-gradient(145deg,#64748b,#34445b)!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button b,#erp.ldmTeacherCanonical .ldmTeacherModules button small{color:#fff!important}
+#erp.ldmTeacherCanonical .ldmTeacherModules button small{opacity:.92!important}
 #erp.ldmTeacherCanonical #v6418WebsiteBtn{display:none!important}
-#erp.ldmTeacherCanonical .erpTop>.websiteBtn{display:inline-flex!important}
 
-/* Real camera/gallery actions. */
-.v135PhotoActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.v135PhotoActions button,.v135PhotoActions label{border:0;border-radius:10px;padding:9px 11px;font-weight:850;cursor:pointer;background:#e9f2ff;color:#1558b0}
-.v135PhotoActions label{display:inline-flex;align-items:center}
-.v135PhotoActions .gallery{background:#eef8ef;color:#087c5b}
-.v135CameraModal{position:fixed;inset:0;background:#06152be8;z-index:10000;display:grid;place-items:center;padding:12px}
-.v135CameraBox{width:min(620px,98vw);background:#fff;border-radius:18px;padding:12px}
-.v135CameraBox video{display:block;width:100%;max-height:68vh;object-fit:cover;background:#071421;border-radius:14px}
-.v135CameraTools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding-top:10px}
+.v138ProfileGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:14px}.v138ProfileCard{background:linear-gradient(145deg,#f7fbff,#e9f3ff);border:1px solid #d6e8fb;border-radius:15px;padding:13px;box-shadow:0 5px 0 #0b4c8618,0 10px 20px #0b4c8612}.v138ProfileCard small,.v138ProfileCard b{display:block}.v138ProfileCard small{color:#60778e;font-weight:800}.v138ProfileCard b{color:#123d70;margin-top:5px;font-size:16px}
 
-/* ID card QR: reserve a real in-card zone, never hang below the card. */
-.idCard[data-v130-adm]{padding-bottom:1mm!important}
-.idCard[data-v130-adm] .v6422IdMain,.idCard[data-v130-adm] .v104Body{padding-right:23mm!important}
+/* Canonical Student Photo page stays inside current Teacher shell. */
+.v136PhotoPage{max-width:1250px;margin:auto}.v136PhotoTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
+.v136PhotoTop h2{margin:0;color:#123d70}.v136PhotoTools{display:flex;gap:8px;flex-wrap:wrap}.v136PhotoTools select,.v136PhotoTools input{min-height:42px;border:1px solid #cfe0f2;border-radius:10px;padding:8px}
+.v136PhotoGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.v136PhotoCard{background:#fff;border-radius:18px;padding:14px;box-shadow:0 7px 0 #0b4c8620,0 14px 25px #0b4c8615;border:1px solid #dbeafa}
+.v136PhotoFace{height:170px;border-radius:14px;background:#edf5fc;display:grid;place-items:center;overflow:hidden;font-weight:900;color:#64809c}.v136PhotoFace img{width:100%;height:100%;object-fit:cover}
+.v136PhotoInfo b,.v136PhotoInfo small{display:block}.v136PhotoInfo b{font-size:17px;color:#123d70;margin-top:10px}.v136PhotoInfo small{margin-top:3px;color:#60778e}
+.v136PhotoActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.v136PhotoActions button,.v136PhotoActions label{border:0;border-radius:10px;padding:9px 11px;font-weight:900;cursor:pointer;background:#087fe1;color:#fff}.v136PhotoActions label{background:#0a9b75}.v136PhotoActions .del{background:#b83b50}
+.v136CameraModal{position:fixed;inset:0;background:#06152bea;z-index:10000;display:grid;place-items:center;padding:12px}.v136CameraBox{width:min(640px,98vw);background:#fff;border-radius:18px;padding:12px}.v136CameraBox video{display:block;width:100%;max-height:68vh;object-fit:cover;background:#071421;border-radius:14px}.v136CameraTools{display:flex;justify-content:center;gap:8px;padding-top:10px;flex-wrap:wrap}
+
+/* ID/QR print protection retained at root. */
+.idCard[data-v130-adm]{padding-bottom:1mm!important}.idCard[data-v130-adm] .v6422IdMain,.idCard[data-v130-adm] .v104Body{padding-right:23mm!important}
 .idCard .v130IdQr{position:absolute!important;right:2.5mm!important;bottom:5.5mm!important;width:20mm!important;height:20mm!important;padding:1.5mm!important;background:#fff!important;border:1px solid #c9d5e3!important;border-radius:1.5mm!important;overflow:hidden!important;z-index:4!important}
-.idCard .v130IdQr img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;image-rendering:auto!important}
-.idCard .v130IdQr canvas{display:none!important}
-.idCard .v104HeadText b{font-size:10.2px!important;font-weight:950!important;color:#071d38!important;opacity:1!important;text-shadow:none!important;letter-spacing:.08px!important}
-.idCard.t1 .v104HeadText b,.idCard.t2 .v104HeadText b,.idCard.t4 .v104HeadText b,.idCard.t5 .v104HeadText b,.idCard.t6 .v104HeadText b,.idCard.t7 .v104HeadText b,.idCard.t8 .v104HeadText b,.idCard.t9 .v104HeadText b,.idCard.t10 .v104HeadText b{color:#fff!important}
-@media print{
- .idA4Cell,.idCard{overflow:hidden!important;break-inside:avoid!important;page-break-inside:avoid!important}
- .idCard .v130IdQr{right:2.5mm!important;bottom:5.5mm!important;width:20mm!important;height:20mm!important;padding:1.5mm!important}
- .idCard .v104HeadText b{font-size:10.2px!important;font-weight:950!important;opacity:1!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-}
-</style>
-<script id="ldm-v135-root-fix-js">
-(function(){'use strict';
- const q=id=>document.getElementById(id);
- const role=()=>String(window.profile?.role||'').trim().toLowerCase();
- const isTeacher=()=>role()==='teacher', isParent=()=>['parent','student'].includes(role()), isAdmin=()=>['admin','super_admin','principal'].includes(role());
- window.LDM_FINAL_BUILD='V135-ROOT-CORRECTION-2026-09-25';
+.idCard .v130IdQr img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important}.idCard .v130IdQr canvas{display:none!important}
+.idCard .v104HeadText b{font-size:10.2px!important;font-weight:950!important;color:#071d38!important;opacity:1!important;text-shadow:none!important}
+@media print{.idA4Cell,.idCard{overflow:hidden!important;break-inside:avoid!important;page-break-inside:avoid!important}.idCard .v104HeadText b{font-weight:950!important;opacity:1!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
 
- /* ---------- ONE ROOT SURFACE ---------- */
+.v143QrPage{max-width:980px;margin:0 auto}.v143QrHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.v143QrScope{padding:10px 12px;border:1px solid #cfe0f3;background:#f4f9ff;border-radius:12px;font-size:12px;color:#244e7d}
+.v143QrCamera{position:relative;max-width:720px;margin:14px auto;border-radius:20px;overflow:hidden;background:#07182d;min-height:280px}
+.v143QrCamera video{display:block;width:100%;min-height:280px;max-height:58vh;object-fit:cover;background:#07182d}
+.v143QrAim{position:absolute;inset:18% 16%;border:3px solid #fff;border-radius:18px;box-shadow:0 0 0 999px rgba(0,0,0,.20);pointer-events:none}
+.v143QrStats{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.v143QrStats b{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid #d7e4f2}
+.v143QrResult{margin:12px 0;padding:15px;border-radius:15px;background:#f5f8fc;border:1px solid #dce7f3;min-height:68px}
+.v143QrResult.ok{background:#edf9f2;border-color:#b9e3ca;color:#135f38}.v143QrResult.warn{background:#fff8e8;border-color:#f1d38b;color:#7a5200}.v143QrResult.bad{background:#fff0f0;border-color:#efbcbc;color:#8c2020}
+.v143QrStudent{display:flex;gap:12px;align-items:center}.v143QrStudent img{width:62px;height:62px;border-radius:14px;object-fit:cover;background:#fff;border:1px solid #d8e2ee}
+@media(max-width:700px){.v143QrHead{display:block}.v143QrHead button{margin-top:8px;width:100%}.v143QrCamera,.v143QrCamera video{min-height:230px}.v143QrAim{inset:17% 10%}}
+
+</style>
+<script id="ldm-v143-final-root-js">
+(function(){'use strict';
+ const $=id=>document.getElementById(id),role=()=>String(window.profile?.role||'').toLowerCase();
+ const teacher=()=>role()==='teacher',parent=()=>['parent','student'].includes(role()),admin=()=>['admin','super_admin','principal'].includes(role());
+ window.LDM_FINAL_BUILD='V143-FINAL-TEACHER-QR-2026-09-25';
+
+ function hideGreetingOnPublic(){
+   if(!document.body.classList.contains('ldmSurfacePublic'))return;
+   document.querySelectorAll('#erp .v90Greeting,#erp [class*="Greeting"],#erp [class*="greeting"]').forEach(x=>x.style.display='none');
+ }
  function surface(name){
    document.body.classList.remove('ldmSurfacePublic','ldmSurfaceERP','ldmSurfaceParent','ldmSurfaceLogin','ldmSurfaceSetup');
    document.body.classList.add(name==='public'?'ldmSurfacePublic':name==='parent'?'ldmSurfaceParent':name==='login'?'ldmSurfaceLogin':'ldmSurfaceERP');
-   ['publicSite','publicPageView','erp','parentDashboard','login','setup'].forEach(id=>q(id)?.classList.add('hidden'));
-   if(name==='public') q('publicSite')?.classList.remove('hidden');
-   if(name==='login') q('login')?.classList.remove('hidden');
-   if(name==='erp') q('erp')?.classList.remove('hidden');
+   ['publicSite','publicPageView','erp','parentDashboard','login','setup'].forEach(id=>$(id)?.classList.add('hidden'));
+   if(name==='public')$('publicSite')?.classList.remove('hidden');
+   if(name==='login')$('login')?.classList.remove('hidden');
+   if(name==='erp')$('erp')?.classList.remove('hidden');
    if(name==='parent'){
-     q('publicSite')?.classList.remove('hidden');
-     q('parentDashboard')?.classList.remove('hidden');
-     q('parentGate')?.classList.add('hidden');
+     $('publicSite')?.classList.remove('hidden');
      try{window.showPublicPage?.('parentPortal')}catch(_e){}
+     $('publicPageView')?.classList.remove('hidden');
+     $('parentPortal')?.classList.remove('hidden');
+     $('parentGate')?.classList.add('hidden');
+     $('parentDashboard')?.classList.remove('hidden');
    }
    try{sessionStorage.setItem('ldm_surface',name)}catch(_e){}
+   hideGreetingOnPublic();
  }
  window.ldmSetSurface=surface;
-
- /* Parent login success must expose the parent root, not hide its ancestor. */
- const parentLogin0=window.parentPasswordLogin;
- if(typeof parentLogin0==='function')window.parentPasswordLogin=async function(){
-   let r=await parentLogin0.apply(this,arguments);
-   if(window.user&&isParent()){surface('parent');try{await window.loadParentPortal?.()}catch(e){console.error('Parent portal render',e)}}
-   return r;
+ let v138PopBusy=false;
+ function currentRoute(){try{return sessionStorage.getItem('ldm_current_route')||window.__v90Route||'dashboard'}catch(_e){return window.__v90Route||'dashboard'}}
+ window.backWebsite=function(){
+   let r=currentRoute();window.__ldmPublicMode=true;surface('public');
+   try{window.showPublicPage?.('home');history.pushState({ldmV138Public:true,returnRoute:r},'',location.href)}catch(_e){}
+   window.scrollTo(0,0);
  };
- window.parentPasswordLoginDialog=function(){
-   window.__ldmPublicMode=true;surface('public');
-   try{window.showPublicPage?.('parentPortal')}catch(_e){}
-   q('parentGate')?.classList.remove('hidden');q('parentDashboard')?.classList.add('hidden');
-   setTimeout(()=>q('parentIdentifier')?.focus(),50);
- };
-
- /* Admin login: one in-flight request; no duplicate click/query chain. */
- let adminLoginBusy=false;
- const login0=window.login;
- if(typeof login0==='function')window.login=async function(){
-   if(adminLoginBusy)return;
-   adminLoginBusy=true;
-   const btn=q('login')?.querySelector('.authCard button');
-   const old=btn?.textContent;
-   if(btn){btn.disabled=true;btn.textContent='Login check…'}
-   try{return await login0.apply(this,arguments)}
-   finally{adminLoginBusy=false;if(btn){btn.disabled=false;btn.textContent=old||'Login'}}
- };
-
- /* ---------- TRUE STEP-BY-STEP BACK ---------- */
- window.v90Back=async function(){
-   let h=Array.isArray(window.__v90History)?window.__v90History.slice():[];
-   if(h.length<=1)return false;
-   h.pop();
-   const r=String(h[h.length-1]||'dashboard');
-   window.__v90History=h;window.__v90Route=r;
+ window.addEventListener('popstate',async function(e){
+   if(v138PopBusy)return;v138PopBusy=true;
    try{
-     sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));
-     sessionStorage.setItem('ldm_current_route',r);
-     history.replaceState({ldmInternal:true,route:r,stack:h},'',location.href);
-   }catch(_e){}
-   if(isTeacher()&&r==='dashboard'&&typeof window.ldmNewTeacherDashboard==='function')return window.ldmNewTeacherDashboard();
-   if(typeof window.v90Dispatch==='function')return window.v90Dispatch(r,true);
-   if(typeof window.render==='function')return window.render(r);
-   return false;
- };
- document.addEventListener('click',function(e){
-   const b=e.target.closest?.('#v90BackBtn,#v90HomeBtn');if(!b)return;
-   e.preventDefault();e.stopImmediatePropagation();
-   return b.id==='v90BackBtn'?window.v90Back():window.v90GoHome?.();
+     if(window.user&&document.body.classList.contains('ldmSurfacePublic')){
+       window.__ldmPublicMode=false;
+       if(parent()){surface('parent');await window.loadParentPortal?.();surface('parent');return}
+       surface('erp');let r=String(e.state?.route||e.state?.returnRoute||currentRoute()||'dashboard');await window.render?.(r);teacherShell();return;
+     }
+     if(window.user&&e.state?.ldmInternal){
+       let r=String(e.state.route||'dashboard');
+       if(Array.isArray(e.state.stack)){window.__v90History=e.state.stack;try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(e.state.stack))}catch(_e){}}
+       try{sessionStorage.setItem('ldm_current_route',r)}catch(_e){}
+       if(parent()){surface('parent');await window.loadParentPortal?.();surface('parent')}else{surface('erp');await window.render?.(r);teacherShell()}
+     }
+   }catch(err){console.error('V138 browser back',err)}finally{v138PopBusy=false}
  },true);
 
- /* ---------- TEACHER WEBSITE: ONE BUTTON ---------- */
- function oneWebsite(){
-   if(!isTeacher())return;
-   q('erp')?.classList.add('ldmTeacherCanonical');
-   q('v6418WebsiteBtn')?.remove();
-   const all=[...document.querySelectorAll('#erp .erpTop .websiteBtn')];
-   all.forEach((x,i)=>{x.style.display=i===0?'inline-flex':'none'});
-   if(all[0]){all[0].textContent='🌐 Website';all[0].onclick=()=>window.backWebsite?.()}
- }
-
- /* ---------- REAL CAMERA + SEPARATE GALLERY ---------- */
- let camStream=null,camStudent='';
- function stopCamera(){
-   try{camStream?.getTracks?.().forEach(t=>t.stop())}catch(_e){}
-   camStream=null;q('v135CameraModal')?.remove();
- }
- window.v135CloseCamera=stopCamera;
- window.v135OpenStudentCamera=async function(id){
-   camStudent=String(id||'');
-   if(!navigator.mediaDevices?.getUserMedia)return window.toast?.('इस browser में direct Camera उपलब्ध नहीं है. Gallery इस्तेमाल करें.');
-   stopCamera();
-   const m=document.createElement('div');m.id='v135CameraModal';m.className='v135CameraModal';
-   m.innerHTML='<div class="v135CameraBox"><video id="v135CameraVideo" playsinline autoplay muted></video><div class="v135CameraTools"><button class="primary" id="v135CaptureBtn">📷 Capture Photo</button><button class="secondary" type="button" onclick="v135CloseCamera()">Cancel</button></div></div>';
-   document.body.appendChild(m);
+ /* ADMIN: default publishable config is already embedded. Legacy School Cloud Setup is never a normal route. */
+ window.openPortal=function(target){
+   if(target)try{localStorage.setItem('ld_after_login_target',target)}catch(_e){}
+   window.__ldmPublicMode=false;surface('login');window.scrollTo(0,0);setTimeout(()=>$('email')?.focus(),40);
+ };
+ let adminBusy=false;
+ window.login=async function(){
+   if(adminBusy)return;adminBusy=true;
+   const host=document.querySelector('#login .authCard'),id=String($('email')?.value||'').trim(),password=String($('password')?.value||'');
+   const status=(msg,busy=false)=>{if(typeof window.v75AuthStatus==='function')return v75AuthStatus(host,'v75AdminLoginStatus',msg,busy);window.toast?.(msg)};
+   if(!id||!password){adminBusy=false;return status('Email/Mobile और Password डालें')}
+   status('Verifying School Admin…',true);
    try{
-     camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:960}},audio:false});
-     const v=q('v135CameraVideo');v.srcObject=camStream;await v.play();
-     q('v135CaptureBtn').onclick=async function(){
-       const c=document.createElement('canvas'),max=900,ratio=Math.min(1,max/Math.max(v.videoWidth||1,v.videoHeight||1));
-       c.width=Math.max(1,Math.round((v.videoWidth||640)*ratio));c.height=Math.max(1,Math.round((v.videoHeight||480)*ratio));
-       c.getContext('2d').drawImage(v,0,0,c.width,c.height);
-       c.toBlob(async blob=>{
-         if(!blob)return window.toast?.('Camera photo capture नहीं हुई.');
-         const file=new File([blob],'camera.jpg',{type:'image/jpeg',lastModified:Date.now()});
-         stopCamera();
-         try{
-           const dt=new DataTransfer();dt.items.add(file);
-           await window.v645TeacherPhotoPick?.(camStudent,{files:dt.files,value:''});
-         }catch(e){window.toast?.(e?.message||String(e))}
-       },'image/jpeg',0.90);
-     };
-   }catch(e){stopCamera();window.toast?.(e?.name==='NotAllowedError'?'Camera permission Allow करें.':(e?.message||String(e)))}
+     if(!window.sb&&typeof window.init==='function')window.init();
+     let a=await window.v32PasswordSignIn(id,password,'admin');if(a.error)throw a.error;
+     window.user=a.data.user;await window.loadProfile();
+     if(!window.profile)throw new Error('Admin profile नहीं मिला.');
+     if(!admin())throw new Error('यह Admin / Principal account नहीं है.');
+     surface('erp');
+     if(typeof window.openERP==='function')window.openERP();
+   }catch(e){
+     try{await window.sb?.auth?.signOut?.()}catch(_e){}
+     window.user=null;window.profile=null;surface('login');status('Login failed: '+(e?.message||String(e)));
+   }finally{adminBusy=false}
  };
- function upgradePhotos(){
-   if(!isTeacher())return;
-   document.querySelectorAll('.v91PhotoCard').forEach(card=>{
-     const m=String(card.id||'').match(/^v91PhotoCard_(.+)$/);if(!m)return;
-     const id=m[1],old=card.querySelector('.v91PhotoBtn,.v645PhotoActions,.v134CamActions');
-     if(card.querySelector('.v135PhotoActions')){old?.remove();return}
-     const box=document.createElement('div');box.className='v135PhotoActions';
-     box.innerHTML='<button type="button">📷 Camera</button><label class="gallery">🖼 Gallery<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label>';
-     box.querySelector('button').onclick=()=>window.v135OpenStudentCamera(id);
-     box.querySelector('input').onchange=function(){window.v645TeacherPhotoPick?.(id,this)};
-     old?.replaceWith(box);
-   });
- }
- const photo0=window.v91RenderTeacherPhotos;
- if(typeof photo0==='function')window.v91RenderTeacherPhotos=function(){let r=photo0.apply(this,arguments);setTimeout(upgradePhotos,0);return r};
+ /* Any legacy attempt to reveal setup is redirected back to the real Admin login. */
+ window.resetCloud=function(){surface('login');window.toast?.('School Cloud पहले से configured है.')};
+ window.saveCloud=function(){surface('login');window.toast?.('School Cloud configuration normal login में बदलने की जरूरत नहीं है.')};
 
- /* ---------- HIGH-QUALITY CENTRAL STUDENT QR ---------- */
- async function ensureQR(){
-   if(window.QRCode)return true;
-   return await new Promise((res,rej)=>{let old=q('v130-qrcode-lib');if(old){old.addEventListener('load',()=>res(true),{once:true});setTimeout(()=>window.QRCode?res(true):rej(Error('QR library unavailable')),2500);return}
-     let s=document.createElement('script');s.id='v130-qrcode-lib';s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=()=>res(true);s.onerror=()=>rej(Error('QR library unavailable'));document.head.appendChild(s)});
- }
- function qrUrl(token){return location.origin+location.pathname+'?student_verify='+encodeURIComponent(token)}
- async function paintSharpQR(root=document){
-   await ensureQR();
-   const cards=[...root.querySelectorAll('.idCard[data-v130-adm]')];
-   for(const c of cards){
-     const adm=String(c.dataset.v130Adm||'').trim();if(!adm)continue;
-     try{
-       let rr=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(rr.error)throw rr.error;
-       const token=rr.data?.token;if(!token)throw Error('QR token unavailable');
-       let box=c.querySelector('.v130IdQr');if(!box){box=document.createElement('div');box.className='v130IdQr';c.appendChild(box)}
-       box.innerHTML='';
-       new QRCode(box,{text:qrUrl(token),width:240,height:240,correctLevel:QRCode.CorrectLevel.M});
-       await new Promise(r=>setTimeout(r,25));
-       const cv=box.querySelector('canvas');
-       if(cv){const img=document.createElement('img');img.alt='Student Verification QR';img.src=cv.toDataURL('image/png');box.innerHTML='';box.appendChild(img)}
-       box.dataset.qrReady='1';
-     }catch(e){console.error('Student QR',adm,e)}
-   }
- }
- window.v135PaintSharpQR=paintSharpQR;
- const preview0=window.idStudioPreview;
- if(typeof preview0==='function')window.idStudioPreview=async function(){let r=await preview0.apply(this,arguments);await paintSharpQR(q('idA4Preview')||document);return r};
-
- /* Print/PDF must carry an IMG QR, never an empty copied canvas. */
- const print0=window.idStudioPrint;
- if(typeof print0==='function')window.idStudioPrint=async function(){await paintSharpQR(q('idA4Preview')||document);return print0.apply(this,arguments)};
- const pdf0=window.idStudioPdf;
- if(typeof pdf0==='function')window.idStudioPdf=async function(){await paintSharpQR(q('idA4Preview')||document);return pdf0.apply(this,arguments)};
-
- /* Extend central print CSS rather than creating a second print engine. */
- const css0=window.idStudioPrintCss;
- if(typeof css0==='function')window.idStudioPrintCss=function(){
-   return css0.apply(this,arguments)+
-   '.idCard[data-v130-adm]{padding-bottom:1mm!important}.idCard[data-v130-adm] .v6422IdMain,.idCard[data-v130-adm] .v104Body{padding-right:23mm!important}.idCard .v130IdQr{position:absolute!important;right:2.5mm!important;bottom:5.5mm!important;width:20mm!important;height:20mm!important;padding:1.5mm!important;background:#fff!important;border:1px solid #c9d5e3!important;border-radius:1.5mm!important;overflow:hidden!important}.idCard .v130IdQr img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important}.idCard .v130IdQr canvas{display:none!important}.idCard .v104HeadText b{font-size:10.2px!important;font-weight:950!important;opacity:1!important;text-shadow:none!important}.idA4Cell,.idCard{overflow:hidden!important;break-inside:avoid!important;page-break-inside:avoid!important}';
+ /* PARENT: login success owns one surface; public home/greeting cannot win afterward. */
+ window.parentPasswordLoginDialog=function(){
+   window.__ldmPublicMode=true;surface('public');window.showPublicPage?.('parentPortal');
+   $('parentGate')?.classList.remove('hidden');$('parentDashboard')?.classList.add('hidden');setTimeout(()=>$('parentIdentifier')?.focus(),40);
+ };
+ let parentBusy=false;
+ const parentLoginCanonicalBase=window.parentPasswordLogin;
+ window.parentPasswordLogin=async function(){
+   if(parentBusy)return;parentBusy=true;
+   const id=String($('parentIdentifier')?.value||'').trim(),password=String($('parentPassword')?.value||''),host=$('parentGate');
+   const status=(msg,busy=false)=>{if(typeof window.v75AuthStatus==='function')return v75AuthStatus(host,'v75ParentLoginStatus',msg,busy);window.toast?.(msg)};
+   if(!id||!password){parentBusy=false;return status('Email/Mobile और Password डालें')}
+   status('Login check किया जा रहा है…',true);
+   try{
+     if(typeof parentLoginCanonicalBase!=='function')throw new Error('Parent login handler उपलब्ध नहीं है');
+     await parentLoginCanonicalBase.apply(this,arguments);
+     if(!window.user||!parent())return;
+     window.parentVerifiedEmail=String(window.user?.email||'').toLowerCase();
+     surface('parent');await window.loadParentPortal?.();surface('parent');window.scrollTo(0,0);
+   }catch(e){
+     try{await window.sb?.auth?.signOut?.()}catch(_e){}
+     window.user=null;window.profile=null;window.showPublicPage?.('parentPortal');$('parentGate')?.classList.remove('hidden');status('Parent login failed: '+(e?.message||String(e)));
+   }finally{parentBusy=false}
  };
 
- /* Keep working scanner routes untouched; only ensure their entries remain present. */
- function polish(){
-   oneWebsite();upgradePhotos();
-   if(isTeacher()){let nav=q('erpNav');if(nav&&!nav.querySelector('[data-v135-scan]')&&!nav.querySelector('[data-v134-scan]')){let b=document.createElement('button');b.dataset.v135Scan='1';b.onclick=()=>window.render?.('v130_qr_scanner');b.textContent='📷 QR Attendance Scanner';nav.appendChild(b)}}
-   if(isAdmin()){let nav=q('erpNav');if(nav&&!nav.querySelector('[data-v130="scan"]'))nav.insertAdjacentHTML('beforeend','<button data-v130="scan" onclick="render(\'v130_qr_scanner\')">⚡ QR Gate Scanner</button>')}
+ /* CURRENT TEACHER DASHBOARD is the only teacher home. Full-color 3D cards are CSS above. */
+ function teacherShell(){
+   $('erp')?.classList.toggle('ldmTeacherCanonical',teacher());
+   if(!teacher())return;
+   $('v6418WebsiteBtn')?.remove();
+   const ws=[...document.querySelectorAll('#erp .erpTop .websiteBtn')];ws.forEach((x,i)=>x.style.display=i?'none':'inline-flex');
+   if(ws[0]){ws[0].textContent='🌐 Website';ws[0].onclick=()=>window.backWebsite?.()}
  }
- document.addEventListener('click',()=>setTimeout(polish,0),{passive:true});
- window.addEventListener('load',()=>setTimeout(polish,350),{once:true,passive:true});
- setTimeout(polish,0);
+ const newDash0=window.ldmNewTeacherDashboard;
+ if(typeof newDash0==='function')window.ldmNewTeacherDashboard=async function(){surface('erp');let r=await newDash0.apply(this,arguments);teacherShell();return r};
+
+
+ /* CURRENT Teacher Profile: standard personal details, no internal auth email. Uses only columns already returned by teacher_profiles. */
+ function pv(o,...keys){for(const k of keys){let v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return String(v)}return '—'}
+ window.v138TeacherProfile=async function(){
+   if(!teacher())return window.toast?.('Teacher only');
+   surface('erp');teacherShell();window.__v90Route='v138_teacher_profile';window.v90Push?.('v138_teacher_profile');
+   const host=$('erpContent');if(!host)return;
+   host.innerHTML='<div class="panel"><div class="empty">Loading profile…</div></div>';
+   try{
+     let ctx=await ldmTeacherMasterContext(),p=ctx?.profile||window.ldmTeacherContext?.profile||window.profile||{};
+     let rows=[
+       ['Employee ID',pv(p,'employee_id','teacher_id')],['Teacher Name',pv(p,'teacher_name','full_name')],
+       ['DOB',pv(p,'date_of_birth','dob')],['Gender',pv(p,'gender')],['Father / Husband',pv(p,'father_husband_name','father_name','husband_name')],
+       ['Mobile',pv(p,'mobile','phone')],['Alternate Mobile',pv(p,'alternate_mobile','alt_mobile')],
+       ['Personal Email',pv(p,'personal_email')],['Qualification',pv(p,'qualification')],
+       ['Experience',pv(p,'experience','experience_years')],['Address',pv(p,'address','full_address')],
+       ['Joining Date',pv(p,'joining_date','date_of_joining')],['Designation',pv(p,'designation')],
+       ['Status',pv(p,'status','employment_status')]
+     ];
+     host.innerHTML=`<div class="panel"><h2>👤 My Profile</h2><div class="note">Personal profile • Official assignment fields Admin controlled</div><div class="v138ProfileGrid">${rows.map(x=>`<div class="v138ProfileCard"><small>${window.esc?.(x[0])||x[0]}</small><b>${window.esc?.(x[1])||x[1]}</b></div>`).join('')}</div></div>`;
+     window.scrollTo(0,0);
+   }catch(e){host.innerHTML=`<div class="dangerNote">${window.esc?.(e?.message||String(e))||String(e)}</div>`}
+ };
+ /* ACTUAL Class Teacher assignment only — never broad legacy Teaching Classes/Subjects permission. */
+ async function classTeacherClasses(){
+   let ctx=await ldmTeacherMasterContext();
+   return [...new Set((ctx?.classes||[]).filter(x=>x.is_active!==false&&x.is_class_teacher===true).map(x=>String(x.class_name||'').trim()).filter(Boolean))];
+ }
+ window.v103ClassTeacherClasses=function(){
+   const c=window.ldmTeacherContext?.classes||[];
+   return [...new Set(c.filter(x=>x.is_active!==false&&x.is_class_teacher===true).map(x=>x.class_name).filter(Boolean))];
+ };
+
+ /* Canonical Student Photos: NO v90InstallShell / legacy dashboard renderer. */
+ let photoRows=[];
+ async function signed(row){
+   try{if(typeof window.v91AttachStudentPhoto==='function'){await window.v91AttachStudentPhoto(row);return}}catch(_e){}
+ }
+ window.v136TeacherPhotos=async function(){
+   if(!teacher())return window.toast?.('Teacher only');
+   surface('erp');teacherShell();window.__v90Route='v91_student_photos';if(typeof window.v90Push==='function')window.v90Push('v91_student_photos');
+   const host=$('erpContent');if(!host)return;
+   host.innerHTML='<div class="v136PhotoPage"><div class="empty">Loading assigned students…</div></div>';
+   try{
+     const classes=await classTeacherClasses();
+     if(!classes.length){host.innerHTML='<div class="v136PhotoPage"><div class="panel"><h2>📷 Student Photos</h2><div class="empty">No Class Teacher Assignment.</div></div></div>';return}
+     let r=await sb.from('students').select('id,admission_no,student_name,father_name,class_name,section,roll_no,photo_path,photo_url,student_photo_url,status').in('class_name',classes).order('class_name').order('student_name').limit(5000);
+     if(r.error)throw r.error;
+     photoRows=(r.data||[]).filter(x=>!['inactive','deleted','left','withdrawn'].includes(String(x.status||'').toLowerCase()));
+     if(typeof window.v91AttachStudentPhotos==='function')await window.v91AttachStudentPhotos(photoRows);else for(const x of photoRows)await signed(x);
+     host.innerHTML=`<div class="v136PhotoPage"><div class="v136PhotoTop"><div><h2>📷 Student Photos</h2><div class="note">Class Teacher assignment: ${classes.map(window.esc||String).join(', ')}</div></div><div class="v136PhotoTools"><select id="v136PhotoClass"><option value="">All My Classes</option>${classes.map(c=>`<option>${window.esc?.(c)||c}</option>`).join('')}</select><input id="v136PhotoQ" placeholder="Student / Father / Admission"></div></div><div id="v136PhotoGrid" class="v136PhotoGrid"></div></div>`;
+     $('v136PhotoClass').onchange=renderPhotos;$('v136PhotoQ').oninput=renderPhotos;renderPhotos();window.scrollTo(0,0);
+   }catch(e){host.innerHTML=`<div class="v136PhotoPage"><div class="dangerNote">${window.esc?.(e?.message||String(e))||String(e)}</div></div>`}
+ };
+ function renderPhotos(){
+   const cl=$('v136PhotoClass')?.value||'',q=String($('v136PhotoQ')?.value||'').trim().toLowerCase();let rows=photoRows;
+   if(cl)rows=rows.filter(x=>x.class_name===cl);if(q)rows=rows.filter(x=>[x.student_name,x.father_name,x.admission_no].some(v=>String(v||'').toLowerCase().includes(q)));
+   const h=$('v136PhotoGrid');if(!h)return;
+   h.innerHTML=rows.map(x=>`<article class="v136PhotoCard"><div class="v136PhotoFace">${x._signed_photo?`<img src="${window.esc?.(x._signed_photo)||x._signed_photo}" alt="Student">`:'NO PHOTO'}</div><div class="v136PhotoInfo"><b>${window.esc?.(x.student_name||'')||''}</b><small>Father: ${window.esc?.(x.father_name||'—')||'—'}</small><small>Class ${window.esc?.(x.class_name||'')||''} • ${window.esc?.(x.admission_no||'')||''}</small><div class="v136PhotoActions"><button type="button" onclick="v136OpenCamera('${x.id}')">📷 Camera</button><label>🖼 Gallery<input type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="v136Gallery('${x.id}',this)"></label>${x.photo_path?`<button class="del" onclick="v138RemoveStudentPhoto('${x.id}')">Remove</button>`:''}</div></div></article>`).join('')||'<div class="empty">No students.</div>';
+ }
+ async function v138UploadStudentPhoto(id,input){
+   let f=input?.files?.[0];if(!f)return;let row=photoRows.find(x=>String(x.id)===String(id));if(!row)return window.toast?.('Student current Class Teacher list में नहीं मिला');
+   try{
+     if(typeof compressImageFile==='function')f=await compressImageFile(f,10,25,640,'student');
+     if(f.size>35*1024)throw new Error('Photo 35KB से बड़ी रह गई. दूसरा photo चुनें.');
+     let path=`teacher-student-photo/${window.user.id}/${row.id}.jpg`;
+     let up=await sb.storage.from('student-media').upload(path,f,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'});if(up.error)throw up.error;
+     let rr=await sb.rpc('v91_teacher_set_student_photo',{p_student_id:row.id,p_photo_path:path});if(rr.error)throw rr.error;
+     row.photo_path=path;row.photo_url='';row.student_photo_url='';row._signed_photo='';
+     try{await signed(row)}catch(_e){}
+     window.toast?.(`Photo updated • ${Math.round(f.size/1024)} KB`);
+     await window.v136TeacherPhotos();
+   }catch(e){window.toast?.(e?.message||String(e))}finally{if(input)input.value=''}
+ }
+ window.v136Gallery=v138UploadStudentPhoto;
+ window.v138RemoveStudentPhoto=async function(id){
+   let row=photoRows.find(x=>String(x.id)===String(id));if(!row||!row.photo_path)return;
+   if(!confirm('इस student की current photo remove करनी है?'))return;
+   try{
+     let oldPath=row.photo_path,rr=await sb.rpc('ldm_teacher_remove_student_photo',{p_student_id:row.id});if(rr.error)throw rr.error;
+     try{await sb.storage.from('student-media').remove([oldPath])}catch(_e){}
+     row.photo_path='';row.photo_url='';row.student_photo_url='';row._signed_photo='';
+     window.toast?.('Student photo removed • Central Student Master synced');await window.v136TeacherPhotos();
+   }catch(e){window.toast?.(e?.message||String(e))}
+ };
+ let cam=null,camId='';
+ function closeCam(){try{cam?.getTracks?.().forEach(t=>t.stop())}catch(_e){}cam=null;$('v136CameraModal')?.remove()}
+ window.v136CloseCamera=closeCam;
+ window.v136OpenCamera=async function(id){
+   camId=id;closeCam();if(!navigator.mediaDevices?.getUserMedia)return window.toast?.('Direct camera इस browser में उपलब्ध नहीं है.');
+   const m=document.createElement('div');m.id='v136CameraModal';m.className='v136CameraModal';m.innerHTML='<div class="v136CameraBox"><video id="v136Video" autoplay muted playsinline></video><div class="v136CameraTools"><button class="primary" id="v136Snap">📷 Capture</button><button onclick="v136CloseCamera()">Cancel</button></div></div>';document.body.appendChild(m);
+   try{cam=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:960}},audio:false});let v=$('v136Video');v.srcObject=cam;await v.play();$('v136Snap').onclick=()=>capture(v)}
+   catch(e){closeCam();window.toast?.(e?.name==='NotAllowedError'?'Camera permission Allow करें.':(e?.message||String(e)))}
+ };
+ function capture(v){
+   const c=document.createElement('canvas'),ratio=Math.min(1,900/Math.max(v.videoWidth||640,v.videoHeight||480));c.width=Math.round((v.videoWidth||640)*ratio);c.height=Math.round((v.videoHeight||480)*ratio);c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+   c.toBlob(async b=>{if(!b)return;const f=new File([b],'camera.jpg',{type:'image/jpeg'});closeCam();try{const dt=new DataTransfer();dt.items.add(f);await v138UploadStudentPhoto(camId,{files:dt.files,value:''})}catch(e){window.toast?.(e?.message||String(e))}},'image/jpeg',.90);
+ }
+
+
+ /* Teacher QR Attendance Scanner — same Student QR, same central attendance table. */
+ let v143QrStream=null,v143QrTimer=null,v143QrBusy=false,v143QrLast='',v143QrLastAt=0,v143QrScanned=0,v143QrMarked=0;
+ function v143Esc(v){return typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function v143Today(){return new Date().toLocaleDateString('en-CA')}
+ function v143Token(raw){try{let u=new URL(String(raw||''),location.href);return u.searchParams.get('student_verify')||''}catch(_e){return ''}}
+ function v143Counts(){let a=$('v143Scanned'),b=$('v143Marked');if(a)a.textContent='Scanned '+v143QrScanned;if(b)b.textContent='Present '+v143QrMarked}
+ function v143Result(kind,html){let b=$('v143QrResult');if(!b)return;b.className='v143QrResult '+kind;b.innerHTML=html}
+ function v143Beep(ok=true){try{navigator.vibrate?.(ok?60:[90,50,90])}catch(_e){}}
+ window.v143StopTeacherQr=function(){if(v143QrTimer){clearInterval(v143QrTimer);v143QrTimer=null}try{v143QrStream?.getTracks?.().forEach(t=>t.stop())}catch(_e){}v143QrStream=null;v143QrBusy=false};
+ async function v143ResolveStudent(token,allowed){
+   let vr=await sb.rpc('ldm_public_student_verify',{p_token:token});if(vr.error)throw vr.error;let x=vr.data||{};
+   if(!x.ok)throw new Error(x.message||'Student QR verify नहीं हुआ');
+   let cl=String(x.class_name||'').trim();if(!allowed.includes(cl))throw new Error('यह student आपकी Class Teacher assignment में नहीं है');
+   let q=sb.from('students').select('id,admission_no,student_name,father_name,class_name,section,photo_path,photo_url,student_photo_url,status').eq('class_name',cl).eq('student_name',String(x.student_name||'').trim()).eq('status','Active').limit(3);
+   if(String(x.father_name||'').trim())q=q.eq('father_name',String(x.father_name).trim());
+   let sr=await q;if(sr.error)throw sr.error;let rows=sr.data||[];
+   if(rows.length!==1)throw new Error(rows.length?'QR student match unique नहीं है; Admin Student Master जाँचें':'QR student Central Student Master में नहीं मिला');
+   return rows[0];
+ }
+ async function v143MarkQr(token,allowed){
+   v143QrScanned++;v143Counts();let st=await v143ResolveStudent(token,allowed),d=v143Today();
+   let old=await sb.from('attendance').select('status,remark').eq('date',d).eq('admission_no',st.admission_no).maybeSingle();if(old.error)throw old.error;
+   if(String(old.data?.status||'').toLowerCase()==='present'){v143Result('warn',`<b>⚠ Already Marked</b><br>${v143Esc(st.student_name)} • ${v143Esc(st.class_name)} ${v143Esc(st.section||'')}<br><small>${v143Esc(st.admission_no)}</small>`);v143Beep(false);return}
+   if(String(old.data?.status||'').toLowerCase()==='leave'){v143Result('warn',`<b>⚠ Leave already marked</b><br>${v143Esc(st.student_name)} • ${v143Esc(st.class_name)}<br><small>Leave को QR scan से overwrite नहीं किया गया.</small>`);v143Beep(false);return}
+   let row={date:d,student_name:st.student_name,admission_no:st.admission_no,class_name:st.class_name,section:st.section||'',status:'Present',remark:'Teacher QR Attendance'};
+   let wr=await sb.from('attendance').upsert([row],{onConflict:'date,admission_no'});if(wr.error)throw wr.error;v143QrMarked++;v143Counts();
+   let photo=st.photo_url||st.student_photo_url||'';
+   v143Result('ok',`<div class="v143QrStudent">${photo?`<img src="${v143Esc(photo)}" alt="Student">`:''}<div><b>✓ Present Marked</b><br>${v143Esc(st.student_name)} • ${v143Esc(st.class_name)} ${v143Esc(st.section||'')}<br><small>${v143Esc(st.admission_no)}</small></div></div>`);v143Beep(true);
+ }
+ async function v143StartLoop(video,allowed){
+   if(!('BarcodeDetector' in window))throw new Error('QR Scanner के लिए Android Chrome / compatible browser उपयोग करें');
+   let detector=new BarcodeDetector({formats:['qr_code']});
+   v143QrTimer=setInterval(async()=>{if(v143QrBusy||video.readyState<2)return;v143QrBusy=true;try{
+     let found=await detector.detect(video),raw=found?.[0]?.rawValue;if(!raw)return;let token=v143Token(raw);
+     if(!token){v143Result('bad','✕ यह Student Verification QR नहीं है');v143Beep(false);return}
+     let now=Date.now();if(token===v143QrLast&&now-v143QrLastAt<2500)return;v143QrLast=token;v143QrLastAt=now;
+     try{await v143MarkQr(token,allowed)}catch(e){v143Result('bad','✕ '+v143Esc(e?.message||String(e)));v143Beep(false)}
+   }catch(_e){}finally{v143QrBusy=false}},150);
+ }
+ window.v143TeacherQrAttendance=async function(){
+   if(!teacher())return window.toast?.('Teacher only');surface('erp');teacherShell();window.__v90Route='v143_teacher_qr_attendance';window.v90Push?.('v143_teacher_qr_attendance');
+   const host=$('erpContent');if(!host)return;window.v143StopTeacherQr();v143QrScanned=0;v143QrMarked=0;v143QrLast='';v143QrLastAt=0;
+   host.innerHTML='<div class="panel"><div class="empty">Checking Class Teacher assignment…</div></div>';
+   try{
+     let allowed=await classTeacherClasses();if(!allowed.length){host.innerHTML='<div class="panel"><h2>📷 QR Attendance Scanner</h2><div class="empty">No Class Teacher Assignment.</div></div>';return}
+     host.innerHTML=`<div class="v143QrPage"><div class="panel"><div class="v143QrHead"><div><h2>📷 QR Attendance Scanner</h2><p>Student ID का वही central QR scan करें.</p></div><button type="button" onclick="v143StopTeacherQr()">■ Stop Camera</button></div><div class="v143QrScope"><b>Allowed Class:</b> ${allowed.map(v143Esc).join(', ')} • केवल आपकी Class Teacher assignment.</div><div class="v143QrStats"><b id="v143Scanned">Scanned 0</b><b id="v143Marked">Present 0</b></div><div class="v143QrCamera"><video id="v143QrVideo" playsinline muted></video><div class="v143QrAim"></div></div><div id="v143QrResult" class="v143QrResult">Camera शुरू हो रहा है…</div></div></div>`;
+     if(!navigator.mediaDevices?.getUserMedia)throw new Error('Camera इस browser में उपलब्ध नहीं है');
+     v143QrStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+     let video=$('v143QrVideo');video.srcObject=v143QrStream;await video.play();v143Result('','Scanner ready • Student ID QR दिखाएँ');await v143StartLoop(video,allowed);window.scrollTo(0,0);
+   }catch(e){window.v143StopTeacherQr();v143Result('bad','✕ '+v143Esc(e?.name==='NotAllowedError'?'Camera permission Allow करें.':(e?.message||String(e))))}
+ };
+
+ /* One dispatch gate: Student Photos can never enter legacy v91Special/v90InstallShell. */
+ const renderBase=window.render;
+ window.render=async function(route='dashboard'){
+   route=String(route||'dashboard');
+   if(route!=='v143_teacher_qr_attendance')window.v143StopTeacherQr?.();
+   if(teacher()&&route==='dashboard')return window.ldmNewTeacherDashboard?.();
+   if(teacher()&&['teacher_profile','v14_teacher_profile','v138_teacher_profile'].includes(route))return window.v138TeacherProfile();
+   if(teacher()&&route==='v91_student_photos')return window.v136TeacherPhotos();
+   if(teacher()&&route==='v143_teacher_qr_attendance')return window.v143TeacherQrAttendance();
+   return renderBase.apply(this,arguments);
+ };
+
+ /* TRUE Back: one stack pop; no Home fallback and no legacy permission toast. */
+ window.v90Back=async function(){
+   let h=Array.isArray(window.__v90History)?window.__v90History.slice():[];
+   if(h.length<=1)return false;h.pop();let r=String(h[h.length-1]||'dashboard');window.__v90History=h;window.__v90Route=r;
+   try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route',r);history.replaceState({ldmInternal:true,route:r,stack:h},'',location.href)}catch(_e){}
+   return window.render(r);
+ };
+ document.addEventListener('click',function(e){let b=e.target.closest?.('#v90BackBtn,#v90HomeBtn');if(!b)return;e.preventDefault();e.stopImmediatePropagation();return b.id==='v90BackBtn'?window.v90Back():window.v90GoHome?.()},true);
+
+ /* Restore authenticated role after refresh; never leak greeting into Public. */
+ async function restore(){
+   try{
+     if(!window.sb&&typeof window.init==='function')window.init();
+     let ss=await window.sb?.auth?.getSession?.(),session=ss?.data?.session;if(!session){surface('public');return}
+     window.user=session.user;await window.loadProfile?.();
+     if(parent()){surface('parent');await window.loadParentPortal?.();surface('parent');return}
+     if(teacher()){surface('erp');await window.ldmTeacherMasterContext?.();let r=sessionStorage.getItem('ldm_current_route')||'dashboard';await window.render(r);teacherShell();return}
+     if(admin()){surface('erp');if(typeof window.openERP==='function')window.openERP();return}
+     surface('public');
+   }catch(e){console.error('V136 restore',e)}
+ }
+ window.addEventListener('load',()=>setTimeout(restore,250),{once:true});
+
+ /* QR print: preserve a real raster image in copied Print/PDF HTML. */
+ async function qrLib(){if(window.QRCode)return;await new Promise((res,rej)=>{let s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+ async function sharpQR(root=document){await qrLib();for(const c of root.querySelectorAll('.idCard[data-v130-adm]')){let adm=String(c.dataset.v130Adm||'').trim();if(!adm)continue;try{let rr=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(rr.error||!rr.data?.token)continue;let box=c.querySelector('.v130IdQr')||c.appendChild(Object.assign(document.createElement('div'),{className:'v130IdQr'}));box.innerHTML='';new QRCode(box,{text:location.origin+location.pathname+'?student_verify='+encodeURIComponent(rr.data.token),width:240,height:240,correctLevel:QRCode.CorrectLevel.H});await new Promise(r=>setTimeout(r,20));let cv=box.querySelector('canvas');if(cv){let im=new Image();im.alt='Student Verification QR';im.src=cv.toDataURL('image/png');box.innerHTML='';box.appendChild(im)}}catch(e){console.error('QR',adm,e)}}}
+ window.v136SharpQR=sharpQR;
+ const pr0=window.idStudioPreview;if(typeof pr0==='function')window.idStudioPreview=async function(){let r=await pr0.apply(this,arguments);await sharpQR($('idA4Preview')||document);return r};
+ const pt0=window.idStudioPrint;if(typeof pt0==='function')window.idStudioPrint=async function(){await sharpQR($('idA4Preview')||document);return pt0.apply(this,arguments)};
+ const pd0=window.idStudioPdf;if(typeof pd0==='function')window.idStudioPdf=async function(){await sharpQR($('idA4Preview')||document);return pd0.apply(this,arguments)};
+
+ setTimeout(teacherShell,0);
 })();
 </script>
-<!-- ===== END V135 ===== -->
+<!-- ===== END V143 FINAL TEACHER QR ATTENDANCE ===== -->
 </body></html>
