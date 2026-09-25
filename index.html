@@ -1534,7 +1534,7 @@ html,body{max-width:100%;overflow-x:hidden}
 #v113EcoBadge{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;border:1px solid #cfe1ef;background:#f6fbff;color:#275c88;font:800 11px Cambria,Georgia,serif;white-space:nowrap}
 #v113EcoBadge.live{background:#eefaf3;border-color:#c8e8d5;color:#14734b}#v113EcoBadge.sync{background:#fff8e7;border-color:#ead79f;color:#7d5b08}
 @media(max-width:900px){#v113EcoBadge{order:9;font-size:10px;padding:5px 8px}}
-</style><link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1&build=V643"><link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1&build=V643"><link rel="stylesheet" href="v62-render-safe.css?v=V62-1&build=V643"><link rel="stylesheet" href="v64-final-layout-interaction.css?v=V64-2-1&build=V643"><link rel="stylesheet" href="v64-3-responsive.css?v=64.3&build=V643"><style>
+</style><link rel="stylesheet" href="premium-role-ui.css?v=1142fix1&build=V643"><link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1&build=V643"><link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1&build=V643"><link rel="stylesheet" href="v62-render-safe.css?v=V62-1&build=V643"><link rel="stylesheet" href="v64-final-layout-interaction.css?v=V64-2-1&build=V643"><link rel="stylesheet" href="v64-3-responsive.css?v=64.3&build=V643"><style>
 /* V64.4 premium responsive hardening */
 html,body,#erp,#erp main,#erpContent{max-width:100%;box-sizing:border-box}
 #erpContent>*{min-width:0;max-width:100%;box-sizing:border-box}
@@ -1881,7 +1881,6 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @media(max-width:900px){.v26Home{padding-left:0!important}#v26Nav{top:0!important;transform:translateX(-105%);transition:.2s}#v26Nav.show{transform:translateX(0)}.v26Menu{display:block!important;position:absolute!important;left:10px!important;top:15px!important;z-index:160!important}.v26Top{min-height:120px!important;padding-left:55px!important}.v26Brand b{font-size:18px!important}.v26Brand img{width:66px!important;height:66px!important}.v26Motto{display:none!important}.erpTop{grid-template-columns:auto auto 1fr auto!important;min-height:88px!important}.v63SchoolHead{display:none}.v63AdminBox small{display:none}.v63TopLogout{display:none!important}#erpContent:before{height:110px}#erpContent .dashHero{margin-top:-124px!important;min-height:110px!important}}
 @media(max-width:620px){.v26Hero{min-height:280px!important}.v26Hero h1{font-size:25px!important}.v26Quote{display:none!important}.v26LoginCards{grid-template-columns:1fr!important}.erpTop #erpTitle{font-size:17px!important}.v63AdminBox{padding:3px}.v63Avatar{width:34px;height:34px;font-size:19px}}
 </style>
-<link rel="stylesheet" href="premium-role-ui.css?v=1142fix1&build=V643">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -2413,6 +2412,7 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 
 
 
+<script id="v165-root-consolidation-marker">window.V165_BUILD="V165-ERP-ROOT-CONSOLIDATED-2PASS-2026-09-25";</script>
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
 <!-- ===== V92.1 LOGIN RAW-CODE PARSE FIX: restored V14 print boundary ===== -->
@@ -2875,7 +2875,7 @@ function v14AddNav(){
 }
 v14AddNav();
 
-async function v14LoadTeacherContext(){
+async function v14LoadTeacherContext_LEGACY_V14(){
  v14TeacherProfile=null;v14TeacherClasses=[];v14TeacherSubjects=[];
  if(!user?.id)return {ok:false,reason:'no-user'};
  const r=await sb.rpc('v1143_my_teacher_context');
@@ -2887,7 +2887,7 @@ async function v14LoadTeacherContext(){
  v14TeacherSubjects=Array.isArray(x.subjects)?x.subjects:[];
  return {ok:true};
 }
-function v14AllowedClassNames(){return [...new Set(v14TeacherClasses.map(x=>x.class_name).filter(Boolean))]}
+function v14AllowedClassNames_LEGACY_V14(){return [...new Set(v14TeacherClasses.map(x=>x.class_name).filter(Boolean))]}
 function v14ClassOptions(selected=''){let arr=v14Teacher()?v14AllowedClassNames():cls;return `<option value="">Select Class</option>`+arr.map(c=>`<option ${c===selected?'selected':''}>${esc(c)}</option>`).join('')}
 
 const v14OldLogin=login;
@@ -10217,6 +10217,7 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 </script>
 <!-- ===== END V113 LONG-TERM FREE-TIER SMART SYNC + APPROVAL HARDENING ===== -->
 
+<link rel="stylesheet" href="premium-role-ui.css?v=1142fix1&build=V643">
 <script>window.V114_BUILD='V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15';</script>
 
 
@@ -11390,7 +11391,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  const role=()=>String(window.profile?.role||'').toLowerCase(),admin=()=>['admin','super_admin','principal'].includes(role());
  const baseUrl=()=>location.origin+location.pathname;
  function addScript(src,id){return new Promise((res,rej)=>{if(document.getElementById(id))return res();let s=document.createElement('script');s.id=id;s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
- async function ensureQR(){if(window.QRCode)return;await addScript('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js','v130-qrcode-lib')}
+ async function ensureQR(){if(window.QRCode)return window.QRCode;let old=document.getElementById('v130-qrcode-lib');if(old&&!window.QRCode)old.remove();await addScript('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js','v130-qrcode-lib');if(!window.QRCode)throw Error('QR generator load नहीं हुआ. Internet/CDN connection जाँचें.');return window.QRCode} window.ensureQR=ensureQR;
  async function tokenFor(adm){let r=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(r.error)throw r.error;return r.data?.token}
  async function paintQR(root=document){await ensureQR();let cards=[...root.querySelectorAll('.idCard[data-v130-adm]')];for(let c of cards){if(c.querySelector('.v130IdQr'))continue;try{let t=await tokenFor(c.dataset.v130Adm),q=document.createElement('div');q.className='v130IdQr';q.title='Student Verification QR';c.appendChild(q);new QRCode(q,{text:baseUrl()+'?student_verify='+encodeURIComponent(t),width:110,height:110,correctLevel:QRCode.CorrectLevel.H})}catch(_e){}}}
  if(typeof window.renderIdCard==='function'){const b=window.renderIdCard;window.renderIdCard=function(s,t){let h=b.apply(this,arguments),adm=E(s?.admission_no||'');return h.replace(/<div class="idCard /,'<div data-v130-adm="'+adm+'" class="idCard ')}}
@@ -11406,11 +11407,11 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  function cameraStop(){clearInterval(scanState.timer);scanState.stream?.getTracks().forEach(t=>t.stop());scanState.stream=null}
  function beep(ok=true){try{navigator.vibrate?.(ok?60:[90,50,90]);let a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.frequency.value=ok?900:260;g.gain.value=.04;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+.08)}catch(_e){}}
  function qrToken(raw){try{let u=new URL(raw,location.href);return u.searchParams.get('student_verify')||u.searchParams.get('teacher_verify')||raw}catch(_e){return raw}}
- async function decodeLoop(video,onCode){if(!('BarcodeDetector'in window))throw Error('इस browser में QR decoding capability (BarcodeDetector) उपलब्ध नहीं है. Camera permission/secure browser support जाँचें.');let det=new BarcodeDetector({formats:['qr_code']});scanState.timer=setInterval(async()=>{if(scanState.busy||video.readyState<2)return;scanState.busy=true;try{let rs=await det.detect(video),raw=rs?.[0]?.rawValue;if(raw){let now=Date.now();if(raw!==scanState.last||now-scanState.lastAt>2500){scanState.last=raw;scanState.lastAt=now;onCode(qrToken(raw))}}}catch(_e){}finally{scanState.busy=false}},130)}
+ async function decodeLoop(video,onCode){let decode;if('BarcodeDetector'in window){let det=new BarcodeDetector({formats:['qr_code']});decode=async()=>{let rs=await det.detect(video);return rs?.[0]?.rawValue||''}}else{let jq=typeof window.v143EnsureJsQR==='function'?await window.v143EnsureJsQR():null;if(!jq&&typeof v143EnsureJsQR==='function')jq=await v143EnsureJsQR();if(!jq)throw Error('QR decoder load नहीं हुआ. Camera चालू है, decoder support उपलब्ध नहीं है.');let c=document.createElement('canvas'),ctx=c.getContext('2d',{willReadFrequently:true});decode=async()=>{if(video.readyState<2)return '';let w=video.videoWidth,h=video.videoHeight;if(!w||!h)return '';c.width=w;c.height=h;ctx.drawImage(video,0,0,w,h);let im=ctx.getImageData(0,0,w,h),z=jq(im.data,w,h,{inversionAttempts:'attemptBoth'});return z?.data||''}}clearInterval(scanState.timer);scanState.timer=setInterval(async()=>{if(scanState.busy||video.readyState<2)return;scanState.busy=true;try{let raw=await decode();if(raw){let now=Date.now();if(raw!==scanState.last||now-scanState.lastAt>2500){scanState.last=raw;scanState.lastAt=now;await onCode(qrToken(raw))}}}catch(_e){}finally{scanState.busy=false}},180)}
  function scanShell(title,sub){return '<div class="v130Scan"><div class="panelHead"><div><h2>'+E(title)+'</h2><p>'+E(sub)+'</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>'}
  window.v130StopScanner=()=>{cameraStop();window.toast?.('Scanner stopped')};
  window.ldmTeacherQrCard=async function(id){if(!admin())return toast('Admin only');try{let r=await sb.rpc('ldm_get_teacher_qr',{p_teacher_id:id});if(r.error)throw r.error;let x=r.data||{};await ensureQR();document.getElementById('v131TeacherQrModal')?.remove();let m=document.createElement('div');m.id='v131TeacherQrModal';m.className='modal show';m.innerHTML='<div class="modalCard" style="max-width:420px"><button class="close" onclick="this.closest(\'.modal\').remove()">×</button><div id="v131TeacherCard" style="padding:24px;text-align:center;border:2px solid #123b6d;border-radius:18px;background:#fff"><b style="font-size:20px">L D MODERN EDUCATION ACADEMY</b><p style="margin:4px 0 14px">TEACHER ID CARD</p><div id="v131TeacherQr" style="width:150px;height:150px;margin:8px auto"></div><h2 style="margin:8px 0">'+E(x.teacher_name||'Teacher')+'</h2><p><b>Employee ID:</b> '+E(x.employee_id||'—')+'</p><p style="font-size:12px">Secure QR • Gate Attendance</p></div><p style="text-align:center"><button class="primary" onclick="window.print()">🖨 Print</button></p></div>';document.body.appendChild(m);new QRCode(document.getElementById('v131TeacherQr'),{text:baseUrl()+'?teacher_verify='+encodeURIComponent(x.token),width:150,height:150,correctLevel:QRCode.CorrectLevel.H})}catch(e){toast(e.message||String(e))}};
- window.v130SchoolScanner=async function(){if(!['admin','super_admin','principal'].includes(role()))return toast('Admin / Principal only');head?.('⚡ Fast QR Attendance','One camera • Student Present + Teacher Check-In');let host=document.getElementById('erpContent');host.innerHTML='<div class="v130Scan"><div class="panelHead"><div><h2>Gate / Class Attendance Scanner</h2><p>Student QR = Entry/Present or Exit • Teacher QR = Check-In/Check-Out</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Grid" style="margin-bottom:8px"><label>Scanner Mode<select id="v131GateMode"><option value="ARRIVAL">🟢 ENTRY • Student Present / Teacher Check-In</option><option value="STUDENT_EXIT">🔵 STUDENT EXIT • School Leave Time</option><option value="TEACHER_CHECKOUT">🔵 TEACHER CHECK-OUT</option></select></label></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>';scanState={...scanState,scanned:0,synced:0,pending:0,last:'',lastAt:0};let v=document.getElementById('v130Video');try{await cameraStart(v);document.getElementById('v130Result').textContent='Scanner ready • Mode चुनें और Student / Teacher ID QR दिखाएँ';await decodeLoop(v,async token=>{scanState.scanned++;scanState.pending++;v130Counts();let mode=document.getElementById('v131GateMode')?.value||'ARRIVAL',key='gate:'+mode+':'+new Date().toISOString().slice(0,10)+':'+token;try{let r=await sb.rpc('ldm_scan_gate_qr',{p_token:token,p_mode:mode,p_sync_key:key});if(r.error)throw r.error;let x=r.data||{},b=document.getElementById('v130Result');if(x.ok===false)throw Error(x.message||'Scan rejected');scanState.synced++;b.className='v130Result ok';b.innerHTML='<b class="v130Big">✓ '+E(x.name||'Verified')+'</b><br>'+E(x.person_type||'')+' • '+E(x.message||'Saved');beep(true)}catch(e){let b=document.getElementById('v130Result');b.className='v130Result bad';b.innerHTML='<b>✕ '+E(e.message||e)+'</b>';beep(false)}finally{scanState.pending=Math.max(0,scanState.pending-1);v130Counts()}})}catch(e){document.getElementById('v130Result').className='v130Result bad';document.getElementById('v130Result').textContent=e.message}};
+ window.v130SchoolScanner=async function(){if(!admin())return toast('Admin / Principal only');head?.('⚡ Fast QR Attendance','One camera • Student Present + Teacher Check-In');let host=document.getElementById('erpContent');host.innerHTML='<div class="v130Scan"><div class="panelHead"><div><h2>Gate / Class Attendance Scanner</h2><p>Student QR = Entry/Present or Exit • Teacher QR = Check-In/Check-Out</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Grid" style="margin-bottom:8px"><label>Scanner Mode<select id="v131GateMode"><option value="ARRIVAL">🟢 ENTRY • Student Present / Teacher Check-In</option><option value="STUDENT_EXIT">🔵 STUDENT EXIT • School Leave Time</option><option value="TEACHER_CHECKOUT">🔵 TEACHER CHECK-OUT</option></select></label></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>';scanState={...scanState,scanned:0,synced:0,pending:0,last:'',lastAt:0};let v=document.getElementById('v130Video');try{await cameraStart(v);document.getElementById('v130Result').textContent='Scanner ready • Mode चुनें और Student / Teacher ID QR दिखाएँ';await decodeLoop(v,async token=>{scanState.scanned++;scanState.pending++;v130Counts();let mode=document.getElementById('v131GateMode')?.value||'ARRIVAL',key='gate:'+mode+':'+new Date().toISOString().slice(0,10)+':'+token;try{let r=await sb.rpc('ldm_scan_gate_qr',{p_token:token,p_mode:mode,p_sync_key:key});if(r.error)throw r.error;let x=r.data||{},b=document.getElementById('v130Result');if(x.ok===false)throw Error(x.message||'Scan rejected');scanState.synced++;b.className='v130Result ok';b.innerHTML='<b class="v130Big">✓ '+E(x.name||'Verified')+'</b><br>'+E(x.person_type||'')+' • '+E(x.message||'Saved');beep(true)}catch(e){let b=document.getElementById('v130Result');b.className='v130Result bad';b.innerHTML='<b>✕ '+E(e.message||e)+'</b>';beep(false)}finally{scanState.pending=Math.max(0,scanState.pending-1);v130Counts()}})}catch(e){document.getElementById('v130Result').className='v130Result bad';document.getElementById('v130Result').textContent=e.message}};
 
  window.v130DriverSetup=async function(){if(!admin())return toast('Admin only');head?.('🚌 Driver Scanner Setup','Simple PIN • route scoped • no ERP access');let host=document.getElementById('erpContent');host.innerHTML='<div class="panel"><h3>Create Driver Scanner</h3><div class="v130Grid"><label>Driver Name<input id="v130Dn"></label><label>Route<input id="v130Dr"></label><label>Vehicle No.<input id="v130Dv"></label><label>4–6 Digit PIN<input id="v130Dp" inputmode="numeric" maxlength="6"></label></div><p><button class="primary" onclick="v130CreateDriver()">Create Scanner Link</button></p><div id="v130DriverLink" class="v130SecurityNote">Driver को पूरा ERP login नहीं मिलेगा.</div></div>'}
  window.v130CreateDriver=async function(){let r=await sb.rpc('ldm_admin_create_driver_scanner',{p_driver_name:v130Dn.value,p_route_name:v130Dr.value,p_vehicle_no:v130Dv.value,p_pin:v130Dp.value});if(r.error)return toast(r.error.message);let url=baseUrl()+'?driver_scanner='+encodeURIComponent(r.data.scanner_token);v130DriverLink.innerHTML='<b>Driver Home-Screen Link</b><br><input style="width:100%" value="'+E(url)+'" readonly><p>इस link को Driver mobile में खोलकर Add to Home Screen करें. PIN अलग से दें.</p>'}
@@ -11543,7 +11544,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
    try{window.showPublicPage?.('home');history.pushState({ldmV138Public:true,returnRoute:r},'',location.href)}catch(_e){}
    window.scrollTo(0,0);
  };
- window.addEventListener('ldm-v138-legacy-popstate-disabled',async function(e){
+ window.addEventListener('popstate',async function(e){
    if(v138PopBusy)return;v138PopBusy=true;
    try{
      if(window.user&&document.body.classList.contains('ldmSurfacePublic')){
@@ -11755,7 +11756,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
    let photo=st.photo_url||st.student_photo_url||'';
    v143Result('ok',`<div class="v143QrStudent">${photo?`<img src="${v143Esc(photo)}" alt="Student">`:''}<div><b>✓ Present Marked</b><br>${v143Esc(st.student_name)} • ${v143Esc(st.class_name)} ${v143Esc(st.section||'')}<br><small>${v143Esc(st.admission_no)}</small></div></div>`);v143Beep(true);
  }
- async function v143EnsureJsQR(){if(window.jsQR)return window.jsQR;await new Promise((ok,bad)=>{let x=document.getElementById('v152-jsqr');if(x){if(window.jsQR)return ok();x.addEventListener('load',ok,{once:true});x.addEventListener('error',bad,{once:true});return}x=document.createElement('script');x.id='v152-jsqr';x.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';x.onload=ok;x.onerror=()=>bad(new Error('QR decoder load नहीं हुआ'));document.head.appendChild(x)});return window.jsQR}
+ async function v143EnsureJsQR(){if(window.jsQR)return window.jsQR;await new Promise((ok,bad)=>{let x=document.getElementById('v152-jsqr');if(x){if(window.jsQR)return ok();x.addEventListener('load',ok,{once:true});x.addEventListener('error',bad,{once:true});return}x=document.createElement('script');x.id='v152-jsqr';x.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';x.onload=ok;x.onerror=()=>bad(new Error('QR decoder load नहीं हुआ'));document.head.appendChild(x)});return window.jsQR} window.v143EnsureJsQR=v143EnsureJsQR;
  async function v143StartLoop(video,allowed){
    let decode;if('BarcodeDetector' in window){let detector=new BarcodeDetector({formats:['qr_code']});decode=async()=>{let f=await detector.detect(video);return f?.[0]?.rawValue||''}}
    else{let jq=await v143EnsureJsQR();if(!jq)throw new Error('QR decoding capability उपलब्ध नहीं है');let c=document.createElement('canvas'),ctx=c.getContext('2d',{willReadFrequently:true});decode=async()=>{if(video.readyState<2)return '';let w=video.videoWidth,h=video.videoHeight;if(!w||!h)return '';c.width=w;c.height=h;ctx.drawImage(video,0,0,w,h);let im=ctx.getImageData(0,0,w,h),z=jq(im.data,w,h,{inversionAttempts:'dontInvert'});return z?.data||''}}
@@ -11931,7 +11932,6 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 })();
 </script>
 
-</body></html>
 <!-- ===== V154 FINAL LIVE CORRECTIONS: canonical photo metadata + one greeting + ID 1:1 + storage truth ===== -->
 <style id="v154-final-live-css">
 /* One visual contract for ID preview / print / PDF. School name owns the hierarchy. */
@@ -12172,127 +12172,53 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
     let p=Promise.resolve().then(fn).finally(()=>inflight.delete(key));inflight.set(key,p);return p;
   };
   window.LDM_FREE_TIER_GOVERNOR='V160-ROOT';
-  window.LDM_FINAL_BUILD='V160-ROOT-LOG-INGEST-GOVERNOR-2026-09-25';
+  window.LDM_FINAL_BUILD='V163-V160-SAFE-ROOT-FINAL-2026-09-25';
 })();
 </script>
 <!-- ===== END V159 FREE-TIER LOG/QUERY GOVERNOR (HARDENED BY V160) ===== -->
 <!-- V160 ROOT LOG FIX: passive focus/visibility DB refresh suppressed; notification reads throttled; native interval lifecycle restored. -->
-
-<!-- ===== V161 ROOT CANONICAL NAV/QR/ID FINAL ===== -->
-<style id="v161-root-final-css">
-/* ID formats 3/4 are true portrait cards; 1/2/5 remain landscape. */
-.idA4Page.v161Portrait{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;gap:4mm 8mm!important;justify-content:center!important;align-content:start!important;padding:10mm 8mm!important}
-.idA4Page.v161Portrait .idCard{width:54mm!important;height:85.6mm!important}
-.idA4Page.v161Portrait .v6422IdMain{flex-direction:column!important;align-items:center!important;text-align:center!important;padding-right:8px!important}
-.idA4Page.v161Portrait .v6422IdInfo{text-align:center!important;width:100%!important}
-.idA4Page.v161Portrait .v104Photo{width:24mm!important;height:29mm!important}
-.idA4Page.v161Portrait .v130IdQr{right:2.5mm!important;bottom:6mm!important;width:17mm!important;height:17mm!important}
-.idTemplatePick[data-orientation]::after{content:attr(data-orientation);display:block;font-size:9px;margin-top:3px;opacity:.7}
+<!-- ===== V164 ID CARD STUDIO: 5 LANDSCAPE + 5 PORTRAIT, PRINT-SAFE ===== -->
+<style id="v164-idcard-premium-css">
+#idTemplateGrid{grid-template-columns:repeat(5,minmax(0,1fr))!important}.idTemplatePick{min-height:54px}.idTemplatePick b{white-space:normal;line-height:1.15}.v164OrientTag{display:block;font-size:9px;font-weight:900;opacity:.72;margin-top:2px}
+.idA4Preview{overflow:auto!important}.idA4Page.v164LandscapePage{grid-template-columns:repeat(2,85.6mm)!important;grid-template-rows:repeat(5,54mm)!important;justify-content:center!important;gap:2mm 4mm!important}.idA4Page.v164PortraitPage{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;justify-content:center!important;gap:3mm 5mm!important;padding-top:12mm!important}
+.v164Id{position:relative;box-sizing:border-box;background:#fff;overflow:hidden;display:flex;flex-direction:column;color:#142033;font-family:Arial,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;page-break-inside:avoid;break-inside:avoid}.v164Id.landscape{width:85.6mm;height:54mm}.v164Id.portrait{width:54mm;height:85.6mm}.v164Id *{box-sizing:border-box}.v164Head{display:grid;grid-template-columns:10mm 1fr;align-items:center;gap:1.5mm;padding:2mm 2.4mm 1.6mm;min-height:14mm}.v164Logo{width:9.5mm;height:9.5mm;object-fit:contain;background:#fff;border-radius:50%;padding:.4mm}.v164School{min-width:0;text-align:center}.v164School strong{display:block;font:900 10.2px/1.05 Georgia,serif;letter-spacing:.08px}.v164School small{display:block;font:700 5.3px/1.12 Arial,sans-serif;margin-top:.45mm}.v164School em{display:block;font:900 5.6px/1 Arial,sans-serif;font-style:normal;margin-top:.5mm;letter-spacing:.2px}.v164Main{flex:1;min-height:0;display:grid;grid-template-columns:20mm 1fr;gap:2.2mm;padding:2mm 2.5mm 1mm;align-items:start}.v164Photo{width:19mm;height:23mm;object-fit:cover;object-position:center;border:1px solid #aebbd0;background:#eef2f7}.v164NoPhoto{display:grid;place-items:center;font-size:6px;font-weight:900}.v164Info{min-width:0}.v164Name{font:900 9.2px/1.08 Arial,sans-serif;margin:0 0 1.1mm;overflow-wrap:anywhere}.v164Line{font:700 6.35px/1.28 Arial,sans-serif;white-space:normal;overflow-wrap:anywhere;margin:.25mm 0}.v164Line b{font-weight:900}.v164Bottom{display:grid;grid-template-columns:1fr 24mm;align-items:end;gap:1mm;padding:0 2.5mm 1.2mm}.v164QrBox{font-size:5px;font-weight:800;min-width:0;overflow:hidden}.v164Sign{text-align:center;min-height:6mm;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.v164Sign img{max-width:20mm;max-height:4.8mm;object-fit:contain}.v164Sign span{display:block;width:22mm;border-top:.3mm solid #718096;padding-top:.4mm;font-size:5.2px;font-weight:900;white-space:nowrap}.v164Foot{text-align:center;font-size:5.3px;font-weight:900;padding:.8mm 2mm;line-height:1.05}
+.v164Id.portrait .v164Head{grid-template-columns:1fr;justify-items:center;gap:.8mm;padding:3mm 3mm 2mm;min-height:23mm}.v164Id.portrait .v164Logo{width:12mm;height:12mm}.v164Id.portrait .v164School strong{font-size:10px;line-height:1.08}.v164Id.portrait .v164School small{font-size:5.1px}.v164Id.portrait .v164Main{display:flex;flex-direction:column;align-items:center;padding:2mm 3mm 1mm;gap:1mm}.v164Id.portrait .v164Photo{width:23mm;height:28mm}.v164Id.portrait .v164Info{text-align:center;width:100%}.v164Id.portrait .v164Name{font-size:9.5px;margin:.4mm 0 1mm}.v164Id.portrait .v164Line{font-size:6.1px;line-height:1.25}.v164Id.portrait .v164Bottom{grid-template-columns:1fr;padding:0 3mm 1.5mm}.v164Id.portrait .v164QrBox{display:none}.v164Id.portrait .v164Sign span{width:24mm}.v164Id.portrait .v164Foot{font-size:5.4px;padding:1mm 2mm}
+/* Five genuinely different landscape families */
+.v164Id.t1{border:1.4px solid #174d87;border-radius:3mm}.v164Id.t1 .v164Head{background:linear-gradient(135deg,#0b315f,#187ad7);color:#fff}.v164Id.t1 .v164Photo{border-radius:50%;height:19mm}
+.v164Id.t2{border:1.5px solid #0b6e75;border-radius:1mm}.v164Id.t2 .v164Head{background:#eafafa;color:#075b61;border-bottom:2mm solid #14a3a8}.v164Id.t2 .v164Photo{border-radius:2mm;box-shadow:2mm 2mm 0 #d7f2f2}
+.v164Id.t3{border:1.5px solid #6d28d9;border-radius:5mm}.v164Id.t3:after{content:"";position:absolute;width:32mm;height:32mm;border-radius:50%;right:-18mm;bottom:-18mm;background:#8b5cf61c}.v164Id.t3 .v164Head{background:linear-gradient(120deg,#4c1d95,#8b5cf6);color:#fff}.v164Id.t3 .v164Photo{border-radius:50% 50% 15% 15%}
+.v164Id.t4{border:1.5px solid #26313f;border-radius:1.5mm}.v164Id.t4 .v164Head{background:#111827;color:#fff;border-bottom:2mm solid #d4a72c}.v164Id.t4 .v164Photo{border:1.5px solid #d4a72c}.v164Id.t4 .v164Foot{background:#111827;color:#fff}
+.v164Id.t5{border:1.5px solid #9f1239;border-radius:3mm}.v164Id.t5 .v164Head{background:linear-gradient(135deg,#fff1f2,#ffe4e6);color:#881337}.v164Id.t5 .v164Photo{border-radius:3mm}.v164Id.t5 .v164Foot{background:#9f1239;color:#fff}
+/* Five genuinely different portrait families */
+.v164Id.t6{border:1.5px solid #075985;border-radius:4mm}.v164Id.t6 .v164Head{background:linear-gradient(#075985,#0ea5e9);color:#fff}.v164Id.t6 .v164Photo{border-radius:50%;width:25mm;height:25mm}.v164Id.t6 .v164Foot{background:#e0f2fe;color:#075985}
+.v164Id.t7{border:1.5px solid #166534;border-radius:0}.v164Id.t7 .v164Head{background:#f0fdf4;color:#14532d;border-bottom:2mm solid #22c55e}.v164Id.t7 .v164Photo{border-radius:0;box-shadow:2mm 2mm 0 #dcfce7}.v164Id.t7 .v164Foot{background:#166534;color:#fff}
+.v164Id.t8{border:0;border-radius:6mm;box-shadow:inset 0 0 0 1.5px #7e22ce}.v164Id.t8 .v164Head{background:linear-gradient(145deg,#581c87,#c084fc);color:#fff;border-radius:5mm 5mm 45% 0}.v164Id.t8 .v164Photo{border-radius:50% 50% 18% 18%}.v164Id.t8 .v164Foot{background:#faf5ff;color:#6b21a8}
+.v164Id.t9{border:1.5px solid #92400e;border-radius:2mm}.v164Id.t9 .v164Head{background:#1f2937;color:#fff;border-bottom:2.2mm solid #f59e0b}.v164Id.t9 .v164Photo{border:1.5px solid #f59e0b;border-radius:2mm}.v164Id.t9 .v164Foot{background:#fef3c7;color:#78350f}
+.v164Id.t10{border:1.5px solid #334155;border-radius:4mm;background:linear-gradient(160deg,#fff 0 78%,#e2e8f0 78%)}.v164Id.t10 .v164Head{background:#f8fafc;color:#0f172a;border-bottom:1px solid #94a3b8}.v164Id.t10 .v164Logo{border:1px solid #cbd5e1}.v164Id.t10 .v164Photo{border-radius:50%;width:24mm;height:24mm}.v164Id.t10 .v164Foot{background:#334155;color:#fff}
+@media(max-width:700px){#idTemplateGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.idA4Preview{padding:0!important;background:#fff!important}.idA4Page{box-shadow:none!important;margin:0!important}.v164Id{box-shadow:none!important}}
 </style>
-<script id="v161-root-final-runtime">
-(function(){'use strict';
- const $=id=>document.getElementById(id);
- const role=()=>String(window.profile?.role||'').trim().toLowerCase();
- const logged=()=>!!window.user;
- const admin=()=>['admin','super_admin','principal'].includes(role());
- const teacher=()=>role()==='teacher';
- const parent=()=>['parent','student'].includes(role());
-
- /* ROOT 1 — QR runtime is one shared dependency. Older V130 had ensureQR only in local scope,
-    while Student QR Center called window.ensureQR?.(), producing "QRCode is not defined". */
- let qrPromise=null;
- window.ensureQR=async function(){
-   if(window.QRCode)return window.QRCode;
-   if(qrPromise)return qrPromise;
-   qrPromise=new Promise((resolve,reject)=>{
-     let old=document.getElementById('v161-qrcode-lib')||document.getElementById('v130-qrcode-lib');
-     const done=()=>window.QRCode?resolve(window.QRCode):reject(new Error('QR library loaded but QRCode is unavailable'));
-     if(old){if(window.QRCode)return done();old.addEventListener('load',done,{once:true});old.addEventListener('error',()=>reject(new Error('QR library load failed')),{once:true});return}
-     let s=document.createElement('script');s.id='v161-qrcode-lib';s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.async=true;s.onload=done;s.onerror=()=>reject(new Error('QR library load failed • internet/CDN check करें'));document.head.appendChild(s);
-   }).finally(()=>{if(!window.QRCode)qrPromise=null});
-   return qrPromise;
+<script id="v164-idcard-premium-runtime">
+(function(){
+ const N=['Royal Blue • Landscape','Aqua Academic • Landscape','Purple Curve • Landscape','Executive Gold • Landscape','Crimson Modern • Landscape','Sky Classic • Portrait','Green Academic • Portrait','Purple Crown • Portrait','Black Gold • Portrait','Slate Minimal • Portrait'];
+ window.ID_STUDIO_TEMPLATE_NAMES=N;
+ const safe=x=>typeof esc==='function'?esc(x==null?'':String(x)):String(x==null?'':x).replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+ window.idStudioTemplateButtons=function(active){return N.map((n,i)=>`<button type="button" class="idTemplatePick ${active===i+1?'active':''}" onclick="idStudioSetTemplate(${i+1})"><span class="idTemplateSwatch t${i+1}"></span><b>${i+1}. ${safe(n.split(' • ')[0])}</b><span class="v164OrientTag">${i<5?'LANDSCAPE':'PORTRAIT'}</span></button>`).join('')};
+ window.idStudioSetTemplate=function(n){n=Math.max(1,Math.min(10,Number(n)||1));localStorage.setItem('ld_docfmt_idcard',String(n));let g=$('idTemplateGrid');if(g)g.innerHTML=idStudioTemplateButtons(n);if($('idA4Preview'))idStudioPreview(true)};
+ window.renderIdCard=function(s,t){
+   t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));const portrait=t>5,set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=(typeof v107DocLogo==='function'?v107DocLogo():(school?.logo_url||'school-logo.png')),addr=school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar',sig=school?.principal_signature_url||school?.director_signature_url||'',parent=s.father_name||s.guardian_name||s.mother_name||'—';
+   const ph=photo?`<img class="v164Photo" src="${safe(photo)}" alt="Student Photo">`:`<div class="v164Photo v164NoPhoto">PHOTO</div>`;
+   const opt=[]; if(set.showRoll&&s.roll_no)opt.push(`<div class="v164Line"><b>Roll No.:</b> ${safe(s.roll_no)}</div>`); if(set.showDob&&s.dob)opt.push(`<div class="v164Line"><b>DOB:</b> ${safe(s.dob)}</div>`); if(set.showMother&&s.mother_name)opt.push(`<div class="v164Line"><b>Mother:</b> ${safe(s.mother_name)}</div>`); if(set.showAddress&&s.address)opt.push(`<div class="v164Line"><b>Address:</b> ${safe(s.address)}</div>`);
+   return `<article class="v164Id ${portrait?'portrait':'landscape'} t${t}"><header class="v164Head"><img class="v164Logo" src="${safe(logo)}" alt="School Logo"><div class="v164School"><strong>${safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</strong><small>${safe(addr)}</small><em>STUDENT ID CARD • ${safe(set.session)}</em></div></header><main class="v164Main">${ph}<div class="v164Info"><div class="v164Name">${safe(s.student_name||'Student')}</div><div class="v164Line"><b>Class:</b> ${safe(s.class_name||'—')}${s.section?` • <b>Sec:</b> ${safe(s.section)}`:''}</div>${set.showFather?`<div class="v164Line"><b>Father:</b> ${safe(parent)}</div>`:''}${set.showAdmission?`<div class="v164Line"><b>Admission No.:</b> ${safe(s.admission_no||'—')}</div>`:''}${set.showMobile?`<div class="v164Line"><b>Mobile:</b> ${safe(s.phone||'—')}</div>`:''}${opt.join('')}</div></main><div class="v164Bottom"><div class="v164QrBox">${safe(set.footer||'Student Identity Card')}</div><div class="v164Sign">${sig?`<img src="${safe(sig)}" alt="Authorized Signature">`:''}<span>Principal / Director</span></div></div><footer class="v164Foot">${safe(N[t-1])}</footer></article>`;
  };
- const qrPaintBase=window.v147PaintStudentQr;
- if(typeof qrPaintBase==='function')window.v147PaintStudentQr=async function(id,adm){try{await window.ensureQR();return await qrPaintBase.apply(this,arguments)}catch(e){window.toast?.(e?.message||String(e))}};
-
- /* ROOT 2 — one app-like internal history owner. Logged-in ERP root never falls through to public/external page.
-    One guard state is maintained, not a polling/history loop. Logout remains the explicit exit. */
- const saveNav=(route,stack)=>{try{sessionStorage.setItem('ldm_current_route',route);sessionStorage.setItem('ldm_nav_history',JSON.stringify(stack));sessionStorage.setItem('ldm_surface',parent()?'parent':'erp')}catch(_e){}};
- function seedRootGuard(){
-   if(!logged())return;
-   let r=String(window.__v90Route||'dashboard'),h=Array.isArray(window.__v90History)&&window.__v90History.length?window.__v90History:['dashboard'];
-   saveNav(r,h);
-   try{
-     let st=history.state||{};
-     if(!st.ldmV161Guard){history.replaceState({ldmInternal:true,ldmV161Guard:true,route:r,stack:h},'',location.href);history.pushState({ldmInternal:true,ldmV161Top:true,route:r,stack:h},'',location.href)}
-   }catch(_e){}
- }
- const homeBase=window.v90GoHome;
- window.v90GoHome=window.erpGoHome=async function(){
-   window.__v90History=['dashboard'];window.__v90Route='dashboard';saveNav('dashboard',['dashboard']);
-   try{history.replaceState({ldmInternal:true,ldmV161Top:true,route:'dashboard',stack:['dashboard']},'',location.href)}catch(_e){}
-   if(typeof window.surface==='function')window.surface('erp');
-   return typeof window.render==='function'?window.render('dashboard'):homeBase?.();
- };
- const backBase=window.v90Back;
- window.v90Back=async function(){
-   let h=Array.isArray(window.__v90History)?window.__v90History.slice():['dashboard'];
-   if(h.length<=1){if(String(window.__v90Route||'dashboard')!=='dashboard')return window.v90GoHome();seedRootGuard();return false}
-   return typeof backBase==='function'?backBase.apply(this,arguments):false;
- };
- window.addEventListener('popstate',function(e){
-   if(!logged())return;
-   let h=Array.isArray(window.__v90History)?window.__v90History:[];
-   if(h.length<=1){e.stopImmediatePropagation();window.__v90History=['dashboard'];window.__v90Route='dashboard';saveNav('dashboard',['dashboard']);try{history.pushState({ldmInternal:true,ldmV161Top:true,route:'dashboard',stack:['dashboard']},'',location.href)}catch(_e){};Promise.resolve(parent()?window.loadParentPortal?.():window.render?.('dashboard')).catch(()=>{});}
- },true);
- window.addEventListener('pageshow',()=>setTimeout(seedRootGuard,0),{passive:true});
-
- /* ROOT 3 — remove duplicate greeting nodes at the renderer boundary, not with display:none. */
- function dedupeGreeting(){
-   let root=$('erpContent');if(!root)return;
-   let a=[...root.querySelectorAll('.v90Greeting,.v158PremiumGreeting,.v114Greeting,.v103Greeting,[class*="Greeting"],[class*="greeting"]')].filter(x=>/Good Morning|Good Afternoon|Good Evening/i.test(x.textContent||''));
-   a.slice(1).forEach(x=>x.remove());
- }
- const renderBase=window.render;
- if(typeof renderBase==='function')window.render=async function(route='dashboard'){
-   let out=await renderBase.apply(this,arguments);dedupeGreeting();if(logged())seedRootGuard();return out;
- };
-
- /* ROOT 4 — Admin/Teacher scanner errors distinguish browser camera permission from database/RPC permission. */
- const scanBase=window.v130SchoolScanner;
- if(typeof scanBase==='function')window.v130SchoolScanner=async function(){
-   if(!admin())return window.toast?.('Admin / Principal only');
-   try{return await scanBase.apply(this,arguments)}catch(e){let m=String(e?.message||e);window.toast?.(/permission denied|42501/i.test(m)?'Admin database permission denied • Gate Scanner RPC/RLS check required':m)}
- };
- const tqBase=window.v143TeacherQrAttendance;
- if(typeof tqBase==='function')window.v143TeacherQrAttendance=async function(){
-   if(!teacher())return window.toast?.('Teacher only');
-   if(!window.isSecureContext)return window.toast?.('Camera requires HTTPS secure connection');
-   if(!navigator.mediaDevices?.getUserMedia)return window.toast?.('This browser does not support camera access');
-   return tqBase.apply(this,arguments);
- };
-
- /* ROOT 5 — five genuinely selectable ID formats: 1/2/5 landscape, 3/4 portrait.
-    Preview/Print/PDF share the same DOM and CSS. */
- window.ID_STUDIO_TEMPLATE_NAMES=['Royal Blue Left','Modern Right','Green Portrait Center','Purple Portrait','Executive Right'];
- if(typeof window.idStudioTemplateButtons==='function'){
-   const btnBase=window.idStudioTemplateButtons;
-   window.idStudioTemplateButtons=function(active){let h=btnBase(active);return h.replace(/class="idTemplatePick ([^"]*)" onclick="idStudioSetTemplate\((\d)\)"/g,(m,c,n)=>`class="idTemplatePick ${c}" data-orientation="${['3','4'].includes(n)?'PORTRAIT':'LANDSCAPE'}" onclick="idStudioSetTemplate(${n})"`)};
- }
- const pageBase=window.idStudioPageHtml;
- window.idStudioPageHtml=function(rows,fmt){let portrait=[3,4].includes(Number(fmt)),limit=portrait?9:10,cells=rows.slice(0,limit).map(s=>`<div class="idA4Cell">${window.renderIdCard(s,fmt)}</div>`);while(cells.length<limit)cells.push('<div class="idA4Cell"></div>');return `<section class="idA4Page ${portrait?'v161Portrait':'v161Landscape'}">${cells.join('')}</section>`};
- const previewBase=window.idStudioPreview;
- if(typeof previewBase==='function')window.idStudioPreview=async function(silent=false){
-   let fmt=Math.max(1,Math.min(5,Number(window.getDocFormat?.('idcard')||1))),portrait=[3,4].includes(fmt);
-   /* Existing closure owns selected rows; let it render first, then rebuild page grouping only when portrait. */
-   let r=await previewBase.apply(this,arguments);if(!portrait)return r;
-   let box=$('idA4Preview');if(!box)return r;let cards=[...box.querySelectorAll('.idCard')].map(x=>x.outerHTML),pages=[];for(let i=0;i<cards.length;i+=9){let chunk=cards.slice(i,i+9).map(x=>`<div class="idA4Cell">${x}</div>`);while(chunk.length<9)chunk.push('<div class="idA4Cell"></div>');pages.push(`<section class="idA4Page v161Portrait">${chunk.join('')}</section>`)}box.innerHTML=pages.join('');let info=box.previousElementSibling?.querySelector('b');if(info)info.textContent=info.textContent.replace(/\d+ A4 page\(s\)/,`${pages.length} A4 page(s) • Portrait`);return r;
- };
- const cssBase=window.idStudioPrintCss;
- if(typeof cssBase==='function')window.idStudioPrintCss=function(){return cssBase()+`.idA4Page.v161Portrait{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;gap:4mm 8mm!important;justify-content:center!important;align-content:start!important;padding:10mm 8mm!important}.idA4Page.v161Portrait .idCard{width:54mm!important;height:85.6mm!important}.idA4Page.v161Portrait .v6422IdMain{flex-direction:column!important;align-items:center!important;text-align:center!important;padding-right:8px!important}.idA4Page.v161Portrait .v6422IdInfo{text-align:center!important;width:100%!important}.idA4Page.v161Portrait .v104Photo{width:24mm!important;height:29mm!important}.idA4Page.v161Portrait .v130IdQr{width:17mm!important;height:17mm!important}`};
-
- window.LDM_FINAL_BUILD='V162-ROOT-DOUBLE-AUDITED-2026-09-25';
- setTimeout(()=>{dedupeGreeting();if(logged())seedRootGuard()},80);
+ window.idStudioPageHtml=function(rows,fmt){const portrait=Number(fmt)>5,cap=portrait?9:10;let cells=rows.map(s=>`<div class="idA4Cell">${renderIdCard(s,fmt)}</div>`);while(cells.length<cap)cells.push('<div class="idA4Cell"></div>');return `<section class="idA4Page ${portrait?'v164PortraitPage':'v164LandscapePage'}">${cells.join('')}</section>`};
+ window.idStudioPreview=async function(silent=false){let ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');let rows=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));await v14AttachSignedPhotos(rows);let fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),cap=fmt>5?9:10,pages=idStudioChunks(rows,cap).map(x=>idStudioPageHtml(x,fmt)).join(''),work=$('idWork');if(!work)return;work.innerHTML=`<div class="idStudioPreviewActions"><b>${rows.length} cards • ${Math.ceil(rows.length/cap)} A4 page(s) • Format ${fmt} • ${fmt>5?'Portrait':'Landscape'}</b><button class="primary" onclick="idStudioPrint()">🖨 Print</button><button class="primary" onclick="idStudioPdf()">PDF</button><button class="secondary" onclick="idStudioPreview()">↻ Refresh Preview</button></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;if(!silent)toast('Premium ID preview ready')};
+ window.idStudioPrint=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');let css=document.getElementById('v164-idcard-premium-css')?.textContent||'';w.document.write(`<html><head><title>ID Cards</title><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;background:#fff}.idA4Page{width:210mm;height:297mm;display:grid;align-content:start;page-break-after:always;overflow:hidden}.idA4Page:last-child{page-break-after:auto}.idA4Cell{display:flex;align-items:center;justify-content:center;overflow:hidden}.v164LandscapePage{grid-template-columns:repeat(2,85.6mm);grid-template-rows:repeat(5,54mm);justify-content:center;gap:2mm 4mm;padding:6mm 7mm}.v164PortraitPage{grid-template-columns:repeat(3,54mm);grid-template-rows:repeat(3,85.6mm);justify-content:center;gap:3mm 5mm;padding:12mm 7mm 6mm}${css}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},700)};
+ window.idStudioPdf=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class',fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1));html2pdf().set({margin:0,filename:`${c}-ID-Cards-${fmt>5?'Portrait':'Landscape'}-Format-${fmt}.pdf`,image:{type:'png',quality:1},html2canvas:{scale:3,useCORS:true,backgroundColor:'#ffffff',letterRendering:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:false},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()};
+ window.LDM_IDCARD_BUILD='V164-10-PREMIUM-ID-CARDS-2026-09-25';
 })();
 </script>
-<!-- ===== END V161 ROOT FINAL ===== -->
+<!-- ===== END V164 ID CARD STUDIO ===== -->
+
+</body>
+</html>
