@@ -12390,5 +12390,99 @@ if(typeof rbase==='function')window.render=async function(route='dashboard'){let
 </script>
 <!-- ===== END V171 TARGETED LIVE CORRECTIONS ===== -->
 
+
+<!-- ===== V172 FINAL ROOT CORRECTION • LIVE DEFECTS ONLY ===== -->
+<style id="v172-final-root-css">
+/* ID CARD: fixed physical card, fluid internals. Override legacy QR absolute sizing. */
+.v164Id{container-type:inline-size;position:relative!important;overflow:hidden!important}
+.v164Id *{min-width:0;max-width:100%;box-sizing:border-box}
+.v164Id .v164Photo img,.v164Id img.v164Photo,.v164Id .v104Photo img{width:100%!important;height:100%!important;object-fit:cover!important}
+.v164Id .v164Name,.v164Id .v164School,.v164Id .v164Info,.v164Id .v164Info *{overflow-wrap:anywhere!important}
+.v164Id .v164Name{font-size:clamp(7px,3.5cqw,13px)!important;line-height:1.05!important}
+.v164Id .v164Info,.v164Id .v164Info *{font-size:clamp(5px,2.6cqw,9px)!important;line-height:1.12!important}
+.v164Id .v164QrBox{position:relative!important;inset:auto!important;width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:1mm!important;overflow:hidden!important}
+.v164Id .v130IdQr{display:none!important} /* old injected QR must never overlap V171/V172 QR */
+.v164Id .v171IdQr{position:relative!important;inset:auto!important;width:13mm!important;height:13mm!important;min-width:13mm!important;max-width:13mm!important;flex:0 0 13mm!important;padding:.4mm!important;overflow:hidden!important;background:#fff!important}
+.v164Id .v171IdQr canvas,.v164Id .v171IdQr img{position:static!important;width:12mm!important;height:12mm!important;max-width:12mm!important;max-height:12mm!important;display:block!important}
+.v164Id.portrait .v171IdQr{width:12mm!important;height:12mm!important;min-width:12mm!important;max-width:12mm!important;flex-basis:12mm!important}
+.v164Id.portrait .v171IdQr canvas,.v164Id.portrait .v171IdQr img{width:11mm!important;height:11mm!important}
+.v164Id .v164Bottom{overflow:hidden!important;min-height:0!important}
+#idA4Preview .idA4Cell{overflow:hidden!important}
+#idA4Preview .v164Id{transform:none!important;overflow:hidden!important}
+@media print{
+ .v164Id{overflow:hidden!important}
+ .v164Id .v130IdQr{display:none!important}
+}
+/* Teacher photo cards: labels remain readable on mobile. */
+.v136PhotoInfo>small{display:block!important;white-space:normal!important}
+</style>
+<script id="v172-final-root-runtime">
+(function(){'use strict';
+ const $=id=>document.getElementById(id);
+ const role=()=>String(window.profile?.role||'').trim().toLowerCase();
+ const admin=()=>['admin','super_admin','principal'].includes(role());
+ const teacher=()=>role()==='teacher';
+
+ /* 1. Smart Van: effective render hook. Add button AFTER whichever historical vanCenter wins. */
+ function v172InstallDriverButton(){
+   if(!admin())return;
+   const host=$('erpContent'); if(!host)return;
+   const txt=(host.textContent||'').toLowerCase();
+   if(!txt.includes('van')&&!txt.includes('transport'))return;
+   if(host.querySelector('[data-v172-driver]'))return;
+   const panel=host.querySelector('.panel')||host;
+   const bar=document.createElement('div');
+   bar.className='tools';bar.dataset.v172Driver='1';bar.style.cssText='margin:0 0 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap';
+   bar.innerHTML="<button type=\"button\" class=\"primary\" onclick=\"render('v130_driver_setup')\">🚌 Driver Scanner Setup</button><small class=\"note\">Driver Name → Route → Vehicle → PIN → Scanner Link → PICK-UP / DROP</small>";
+   panel.insertBefore(bar,panel.firstChild);
+ }
+ const render0=window.render;
+ if(typeof render0==='function')window.render=async function(route){
+   const r=await render0.apply(this,arguments);
+   if(route==='van_center')setTimeout(v172InstallDriverButton,0);
+   return r;
+ };
+ const van0=window.vanCenter;
+ if(typeof van0==='function')window.vanCenter=async function(){
+   const r=await van0.apply(this,arguments);setTimeout(v172InstallDriverButton,0);return r;
+ };
+
+ /* 2. Homework: remove ONLY attendance gate. Keep role/assignment checks in original save/load. */
+ function v172UngateHomework(){
+   if(!teacher())return;
+   const host=$('erpContent');if(!host)return;
+   host.querySelectorAll('button[disabled],select[disabled],input[disabled],textarea[disabled]').forEach(el=>{
+     const area=(el.closest('.panel')?.textContent||'').toLowerCase();
+     if(area.includes('homework') && (area.includes('attendance')||area.includes('उपस्थिति')))el.disabled=false;
+   });
+ }
+ const hw0=window.homework;
+ if(typeof hw0==='function')window.homework=async function(){
+   const r=await hw0.apply(this,arguments);setTimeout(v172UngateHomework,0);return r;
+ };
+
+ /* 3. ID preview: repaint only the reserved QR slots, then auto-fit text if overflow remains. */
+ function fitText(card){
+   card.querySelectorAll('.v164Name,.v164Info,.v164Info b,.v164Info span').forEach(el=>{
+     let fs=parseFloat(getComputedStyle(el).fontSize)||8, guard=0;
+     while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1)&&fs>5&&guard++<12){
+       fs-=.35;el.style.fontSize=fs+'px';
+     }
+   });
+ }
+ async function v172FitCards(){
+   const root=$('idA4Preview');if(!root)return;
+   try{if(typeof window.v171PaintIdQrs==='function')await window.v171PaintIdQrs(root)}catch(e){window.toast?.('ID QR: '+(e?.message||String(e)))}
+   root.querySelectorAll('.v164Id').forEach(fitText);
+ }
+ const prev0=window.idStudioPreview;
+ if(typeof prev0==='function')window.idStudioPreview=async function(){
+   const r=await prev0.apply(this,arguments);await v172FitCards();return r;
+ };
+ window.LDM_V172_FINAL_ROOT='AUTO-FIT-DRIVER-HOMEWORK-TEACHER-2026-09-26';
+})();
+</script>
+<!-- ===== END V172 FINAL ROOT CORRECTION ===== -->
+
 </body>
 </html>
