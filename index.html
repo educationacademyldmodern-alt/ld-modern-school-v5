@@ -1775,7 +1775,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 .v136PhotoPage{max-width:1250px;margin:auto}.v136PhotoTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
 .v136PhotoTop h2{margin:0;color:#123d70}.v136PhotoTools{display:flex;gap:8px;flex-wrap:wrap}.v136PhotoTools select,.v136PhotoTools input{min-height:42px;border:1px solid #cfe0f2;border-radius:10px;padding:8px}
 .v136PhotoGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.v136PhotoCard{background:#fff;border-radius:18px;padding:14px;box-shadow:0 7px 0 #0b4c8620,0 14px 25px #0b4c8615;border:1px solid #dbeafa}
-.v136PhotoFace{height:170px;border-radius:14px;background:#edf5fc;display:grid;place-items:center;overflow:hidden;font-weight:900;color:#64809c}.v136PhotoFace img{width:100%;height:100%;object-fit:contain;background:#edf5fc}
+.v136PhotoFace{height:170px;border-radius:14px;background:#edf5fc;display:grid;place-items:center;overflow:hidden;font-weight:900;color:#64809c}.v136PhotoFace{overflow:hidden;background:#edf5fc}.v136PhotoFace img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%;background:#edf5fc}
 .v136PhotoInfo b,.v136PhotoInfo small{display:block}.v136PhotoInfo b{font-size:17px;color:#123d70;margin-top:10px}.v136PhotoInfo small{margin-top:3px;color:#60778e}
 .v136PhotoActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.v136PhotoActions button,.v136PhotoActions label{border:0;border-radius:10px;padding:9px 11px;font-weight:900;cursor:pointer;background:#087fe1;color:#fff}.v136PhotoActions label{background:#0a9b75}.v136PhotoActions .del{background:#b83b50}
 .v136CameraModal{position:fixed;inset:0;background:#06152bea;z-index:10000;display:grid;place-items:center;padding:12px}.v136CameraBox{width:min(640px,98vw);background:#fff;border-radius:18px;padding:12px}.v136CameraBox video{display:block;width:100%;max-height:68vh;object-fit:cover;background:#071421;border-radius:14px}.v136CameraTools{display:flex;justify-content:center;gap:8px;padding-top:10px;flex-wrap:wrap}
@@ -8592,9 +8592,7 @@ window.erpGoHome=v90GoHome;
 
 function v90Card(icon,title,sub,route,cls='') {return `<button class="v90Monitor ${cls}" onclick="render('${route}')"><span class="v90MonitorIcon">${icon}</span><span><b>${v90Safe(title)}</b><small>${v90Safe(sub)}</small></span><em>›</em></button>`}
 async function v90AdminDashboard(){
- const __v179Now=Date.now();
- if(window.__v179AdminDashAt&&(__v179Now-window.__v179AdminDashAt)<1200&&document.querySelector('#erpContent .v90Dash'))return;
- window.__v179AdminDashAt=__v179Now;
+ /* V183: duplicate Dashboard call source removed; no debounce mask. */
  window.__v90Route='dashboard';v90Head('Admin Dashboard','Full School Control • Live Monitoring');v90InstallShell('dashboard');
  const adminName=v90Safe(profile?.full_name||'Admin');if(!window.__ldmAdminStatsHTML){try{window.__ldmAdminStatsHTML=sessionStorage.getItem('ldm_admin_stats_html')||''}catch(_e){}}
  v90Set(`<div class="v90Dash v114AdminDash ldmRootAdminDash"><section class="ldmAdminIdentity"><div class="ldmAdminSchool"><span class="ldmAdminCrest">🏫</span><div><h1>L D MODERN EDUCATION ACADEMY</h1><p>Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar</p></div></div><div class="ldmAdminHello"><b>${adminName}</b><span>${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'short',year:'numeric'})}</span></div></section>
@@ -8615,6 +8613,7 @@ async function v90AdminDashboard(){
  try{v39LoadAdminPanels()}catch(_e){}
  try{window.v154OneGreeting?.()}catch(_e){}
 }
+window.v90AdminDashboard=v90AdminDashboard;
 let __v105FeeTimer=null;
 function v105DashboardFeeInput(){clearTimeout(__v105FeeTimer);__v105FeeTimer=setTimeout(v105DashboardFeeSearch,160)}
 async function v105DashboardFeeSearch(){
@@ -8791,9 +8790,11 @@ async function v106StudentApi(payload){let {data:{session}}=await sb.auth.getSes
 const v90PrevRender=window.render;
 async function v90Dispatch(route='dashboard',noPush=false){window.__v90Route=route;if(!noPush)v90Push(route);if(route==='dashboard')return v90Teacher()?(typeof window.ldmNewTeacherDashboard==='function'?window.ldmNewTeacherDashboard():v90TeacherDashboard()):v90Admin()?v90AdminDashboard():v90PrevRender(route);if(route==='v90_attendance_monitor')return v90AttendanceMonitor();if(route==='v90_due_fee_monitor')return v90DueFeeMonitor();if(route==='v90_exam_monitor')return v90ExamMonitor();if(route==='v90_marks_monitor')return v90MarksMonitor();if(route==='v90_transport_monitor')return v90TransportMonitor();if(route==='v90_presence_monitor')return v90PresenceMonitor();if(route==='v90_student_requests')return v90StudentRequests();if(route==='v90_teacher_requests')return v90TeacherRequests();if(route==='v90_teaching_monitor')return v90TeachingMonitor();if(route==='v90_teacher_daily')return v90TeacherDaily();if(route==='v90_teacher_marks')return v90TeacherMarks();if(route==='v90_my_requests')return v90MyRequests();if(route==='v93_teacher_password')return v93TeacherPasswordPage();if(route==='dashboard_search')return v90MasterSearchPage();if(route==='student_access'&&v90Admin())return v108AccessCenter('student');if(route==='parent_access'&&v90Admin())return v108AccessCenter('both');if(route==='timetable_master'&&typeof v763TimetableMaster==='function')return v763TimetableMaster();let r=v90PrevRender?await v90PrevRender.apply(this,[route]):null;[20,100,260].forEach(ms=>setTimeout(()=>v90InstallShell(route),ms));return r}
 window.render=v90Dispatch;
+window.__ldmCoreDispatch=v90Dispatch;
 
 const v90PrevOpenERP=window.openERP;
-window.openERP=async function(){let r=await v90PrevOpenERP.apply(this,arguments);if(!Array.isArray(window.__v90History)||!window.__v90History.length)window.__v90History=['dashboard'];return r};
+window.__ldmCoreOpenERP=v90PrevOpenERP;
+window.__ldmRemovedOpenERP1=async function(){let r=await v90PrevOpenERP.apply(this,arguments);if(!Array.isArray(window.__v90History)||!window.__v90History.length)window.__v90History=['dashboard'];return r};
 
 /* Re-assert final nav after older additive sidebar hooks. */
 ['v58AdminSidebar','v59AdminSidebar','v48AdminSidebar','v59TeacherSidebar'].forEach(n=>{try{let old=window[n];if(typeof old==='function'&&!old.__v90){let w=function(){let r=old.apply(this,arguments);setTimeout(()=>v90InstallShell(window.__v90Route),0);return r};w.__v90=true;window[n]=w}}catch(_e){}});
@@ -8916,7 +8917,7 @@ try{const ad=v90AdminDashboard;v90AdminDashboard=async function(){let r=await ad
 // ---------- Final route wrapper + back support ----------
 const v91PrevRender=window.render;
 async function v91Special(route,noPush=false){window.__v90Route=route;if(!noPush&&typeof v90Push==='function')v90Push(route);if(route==='v91_student_photos')return v91TeacherPhotos();if(route==='v91_parent_updates')return v91ParentUpdates();return null}
-window.render=async function(route='dashboard'){v91BusyStart();try{if(route==='v91_student_photos'||route==='v91_parent_updates')return await v91Special(route,false);let r=await v91PrevRender.apply(this,arguments);setTimeout(()=>{v91TeacherQuick();v91AdminQuick()},20);return r}finally{v91BusyEnd()}};
+window.__ldmRemovedRender1=async function(route='dashboard'){v91BusyStart();try{if(route==='v91_student_photos'||route==='v91_parent_updates')return await v91Special(route,false);let r=await v91PrevRender.apply(this,arguments);setTimeout(()=>{v91TeacherQuick();v91AdminQuick()},20);return r}finally{v91BusyEnd()}};
 window.v91Back=function(){let h=window.__v90History||['dashboard'];if(h.length>1)h.pop();let r=h[h.length-1]||'dashboard';window.__v90History=h;if(r==='v91_student_photos'||r==='v91_parent_updates')return v91Special(r,true);return typeof v90Dispatch==='function'?v90Dispatch(r,true):window.render(r)};
 try{const shell=v90InstallShell;v90InstallShell=function(active){let r=shell.apply(this,arguments);let b=q91('v90BackBtn');if(b)b.onclick=window.v91Back;return r}}catch(_e){}
 
@@ -8985,7 +8986,7 @@ try{const ad92=v90AdminDashboard;v90AdminDashboard=async function(){let r=await 
 
 // Final route wrapper / Back support.
 const v92PrevRender=window.render;
-window.render=async function(route='dashboard'){if(route==='v92_admit_publish'){if(typeof v90Push==='function')v90Push(route);return v92AdmitPublishCenter()}let r=await v92PrevRender.apply(this,arguments);setTimeout(v92AdminQuick,15);return r};
+window.__ldmRemovedRender2=async function(route='dashboard'){if(route==='v92_admit_publish'){if(typeof v90Push==='function')v90Push(route);return v92AdmitPublishCenter()}let r=await v92PrevRender.apply(this,arguments);setTimeout(v92AdminQuick,15);return r};
 const v92BackPrev=window.v91Back||window.v90Back;
 window.v92Back=function(){let h=window.__v90History||['dashboard'];if(h.length>1)h.pop();let r=h[h.length-1]||'dashboard';window.__v90History=h;if(r==='v92_admit_publish')return v92AdmitPublishCenter();if(typeof v91Special==='function'&&(r==='v91_student_photos'||r==='v91_parent_updates'))return v91Special(r,true);return typeof v90Dispatch==='function'?v90Dispatch(r,true):(v92BackPrev?v92BackPrev():window.render(r))};
 try{const sh92=v90InstallShell;v90InstallShell=function(active){let r=sh92.apply(this,arguments);let b=q92('v90BackBtn');if(b)b.onclick=window.v92Back;return r}}catch(_e){}
@@ -9040,7 +9041,7 @@ teacherLoginDialog=function(){v14Modal(`<h2>👩‍🏫 NEW Teacher Access</h2><
 teacherPasswordLogin=async function(){let m=ldmPhone($('tLoginId')?.value),p=String($('tLoginPassword')?.value||'');if(m.length!==10||!p)return toast('Mobile और Password डालें');let a=await sb.auth.signInWithPassword({email:`t${m}@teacher.ldmodern.local`,password:p});if(a.error)return toast('Registered Mobile या Password सही नहीं है.');try{user=a.data.user;await loadProfile();if(String(profile?.role||'').toLowerCase()!=='teacher')throw new Error('यह Teacher account नहीं है');await ldmTeacherMasterContext();$('v14Modal')?.remove();$('login')?.classList.add('hidden');$('publicSite')?.classList.add('hidden');$('erp')?.classList.remove('hidden');window.__v90History=['dashboard'];await ldmNewTeacherDashboard()}catch(e){try{await sb.auth.signOut()}catch(_e){}user=null;profile=null;toast(e.message||String(e))}};window.teacherPasswordLogin=teacherPasswordLogin;
 teacherApprovalCenter=ldmTeacherManager;
 try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('teacher'));if(g&&Array.isArray(g[2])){g[2]=g[2].filter(x=>!['teacher_approval','teacher_access'].includes(x[0]));g[2].splice(1,0,['teacher_access','👩‍🏫 Teacher Master'])}}}catch(_e){}
-const __ldmRender=window.render;window.render=async function(p){if(p==='teacher_access'||p==='teacher_approval')return ldmTeacherManager();return __ldmRender.apply(this,arguments)};
+const __ldmRender=window.render;window.__ldmRemovedRender3=async function(p){if(p==='teacher_access'||p==='teacher_approval')return ldmTeacherManager();return __ldmRender.apply(this,arguments)};
 </script>
 
 <!-- ===== V95 SINGLE ADMIN + PREMIUM LOGIN POLICY ===== -->
@@ -9216,7 +9217,7 @@ const v96RenderBase=render;
 render=async function(route){
   try{return await v96RenderBase.apply(this,arguments)}
   catch(e){console.error('V96 route error',route,e);await v96LogActionable('route',`Route failed: ${String(route||'unknown')}`,e);try{toast('यह option अभी नहीं खुला: '+v96CleanText(e?.message||e||'Unknown error').slice(0,180))}catch(_e){};return null}
-};window.render=render;
+};window.__ldmRemovedRenderPointer=render;
 const v96OpenERPBase=openERP;
 openERP=async function(){
   try{return await v96OpenERPBase.apply(this,arguments)}
@@ -9367,7 +9368,7 @@ try{if(Array.isArray(V90_TEACHER_NAV)&&!V90_TEACHER_NAV.some(x=>x[0]==='v97_prof
 /* Final router: new pages + block accidental programmatic Home jumps after updates.
    Explicit Home/Back/menu clicks still work normally. */
 const v97RenderBase=window.render;
-window.render=async function(route='dashboard'){
+window.__ldmRemovedRender4=async function(route='dashboard'){
  if(route==='v97_profile')return v97MyProfile();
  if(route==='v94_admin_password')return v97AdminSecurityPage();
  let current=String(window.__v90Route||'');
@@ -9538,7 +9539,7 @@ parentPasswordLogin=async function(){
 };window.parentPasswordLogin=parentPasswordLogin;
 
 function v99EnsureNavigation(){try{let erp=document.getElementById('erp');if(!erp||erp.classList.contains('hidden'))return;v90InstallShell?.(window.__v90Route||'dashboard');let back=document.getElementById('v90BackBtn'),home=document.getElementById('v90HomeBtn'),h=window.__v90History||['dashboard'],route=String(window.__v90Route||'dashboard'),title=String(document.getElementById('erpTitle')?.textContent||'').toLowerCase(),atRealHome=route==='dashboard'&&title.includes('dashboard')&&h.length<=1;if(back){back.style.display='inline-flex';back.disabled=atRealHome;back.classList.toggle('v99NavDisabled',atRealHome);back.onclick=()=>{let hh=window.__v90History||['dashboard'];if(hh.length>1){back.disabled=false;return typeof window.v90Back==='function'?window.v90Back():false}if(String(window.__v90Route||'dashboard')!=='dashboard'||!String(document.getElementById('erpTitle')?.textContent||'').toLowerCase().includes('dashboard')){back.disabled=false;return v90GoHome()}}}if(home){home.style.display='inline-flex';home.onclick=v90GoHome}}catch(_e){}}
-try{const v99RenderBase=window.render;window.render=async function(route='dashboard'){if(route==='master_requests'){v90Push?.('master_requests');return v99MasterRequests()}let r=await v99RenderBase.apply(this,arguments);setTimeout(()=>{v99EnsureNavigation();try{document.querySelector('#erp aside')?.classList.remove('open');document.querySelector('#erp main')?.scrollTo({top:0,left:0});window.scrollTo(0,0)}catch(_e){}},35);return r}}catch(_e){}
+try{const v99RenderBase=window.render;window.__ldmRemovedRender5=async function(route='dashboard'){if(route==='master_requests'){v90Push?.('master_requests');return v99MasterRequests()}let r=await v99RenderBase.apply(this,arguments);setTimeout(()=>{v99EnsureNavigation();try{document.querySelector('#erp aside')?.classList.remove('open');document.querySelector('#erp main')?.scrollTo({top:0,left:0});window.scrollTo(0,0)}catch(_e){}},35);return r}}catch(_e){}
 try{const v99ParentLoadBase=loadParentPortal;loadParentPortal=async function(){let r=await v99ParentLoadBase.apply(this,arguments);setTimeout(()=>{try{v75InstallTopControls?.();v97PolishParentPortal?.()}catch(_e){}},20);return r}}catch(_e){}
 document.addEventListener('click',e=>{let t=e.target?.closest?.('#erpNav button');if(t)setTimeout(()=>{document.querySelector('#erp aside')?.classList.remove('open');document.querySelector('#erp main')?.scrollTo({top:0,left:0});window.scrollTo(0,0)},0)},true);
 try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('communication'));if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='master_requests'))g[2].unshift(['master_requests','✅ Master Request Approval'])}}catch(_e){}
@@ -9685,7 +9686,7 @@ try{const v102ParentLoadBase=loadParentPortal;loadParentPortal=async function(){
 try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('students'));if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='master_gate_pass')){let i=Math.max(0,g[2].findIndex(x=>x[0]==='attendance')+1);g[2].splice(i,0,['master_gate_pass','🚪 Master Gate Pass'])}}}catch(_e){}
 try{if(Array.isArray(V90_TEACHER_NAV)&&!V90_TEACHER_NAV.some(x=>x[0]==='master_gate_pass')){let i=Math.max(0,V90_TEACHER_NAV.findIndex(x=>x[0]==='attendance')+1);V90_TEACHER_NAV.splice(i,0,['master_gate_pass','🚪 Gate Pass / Early Leave'])}}catch(_e){}
 try{const v102DispatchBase=v90Dispatch;v90Dispatch=async function(route='dashboard',noPush=false){if(route==='master_gate_pass'){window.__v90Route=route;if(!noPush)v90Push(route);return v102GatePassCenter()}return v102DispatchBase.apply(this,arguments)}}catch(_e){}
-try{const v102RenderBase=window.render;window.render=async function(route='dashboard'){if(route==='master_gate_pass'){v90Push?.(route);return v102GatePassCenter()}return v102RenderBase.apply(this,arguments)}}catch(_e){}
+try{const v102RenderBase=window.render;window.__ldmRemovedRender6=async function(route='dashboard'){if(route==='master_gate_pass'){v90Push?.(route);return v102GatePassCenter()}return v102RenderBase.apply(this,arguments)}}catch(_e){}
 
 /* Dashboard front data: important Gate Pass control visible immediately. */
 async function v102UpdateDashboardGateBadge(){try{
@@ -9816,7 +9817,7 @@ try{const v103GatePassBase=v102GatePassCenter;v102GatePassCenter=async function(
 try{const v103AdminDashBase=v90AdminDashboard;v90AdminDashboard=async function(){let r=await v103AdminDashBase.apply(this,arguments);setTimeout(v103DecorateAdminDashboard,70);return r}}catch(_e){}
 try{const v103TeacherDashBase=v90TeacherDashboard;v90TeacherDashboard=async function(){let r=await v103TeacherDashBase.apply(this,arguments);setTimeout(v103DecorateTeacherDashboard,70);return r}}catch(_e){}
 try{const v103BuildNavBase=v90BuildNav;v90BuildNav=function(){v103HideControl();let r=v103BuildNavBase.apply(this,arguments);setTimeout(v103HideControl,0);return r}}catch(_e){}
-try{const v103RenderBase=window.render;window.render=async function(){let r=await v103RenderBase.apply(this,arguments);setTimeout(v103HideControl,50);return r}}catch(_e){}
+try{const v103RenderBase=window.render;window.__ldmRemovedRender7=async function(){let r=await v103RenderBase.apply(this,arguments);setTimeout(v103HideControl,50);return r}}catch(_e){}
 setTimeout(v103HideControl,800);
 </script>
 <!-- ===== END V103 ===== -->
@@ -10300,7 +10301,7 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
   // ERP must never retain a fixed public Admission/About page over it.
   try{
     const baseOpen=window.openERP;
-    window.openERP=async function(){
+    window.__ldmRemovedOpenERP2=async function(){
       closePublicOverlay();
       document.body.classList.add('v1142-erp-active');
       const r=await baseOpen.apply(this,arguments);
@@ -10311,7 +10312,7 @@ window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','studen
 
   try{
     const baseRender=window.render;
-    window.render=async function(){
+    window.__ldmRemovedRender8=async function(){
       if(q('erp')&&!q('erp').classList.contains('hidden'))closePublicOverlay();
       const r=await baseRender.apply(this,arguments);
       [20,100,260].forEach(ms=>setTimeout(cleanAdminChrome,ms));
@@ -10413,7 +10414,7 @@ if(typeof window.teacherAssertStudent==='function'){
 
 /* Every ERP route opens at top and mobile sidebar closes after a selection. */
 function settle(){try{document.querySelector('#erp aside')?.classList.remove('open');document.querySelector('#erp main')?.scrollTo?.({top:0,left:0});document.getElementById('erpContent')?.scrollTo?.({top:0,left:0});window.scrollTo(0,0)}catch(_){}}
-if(typeof window.render==='function'){const base=window.render;window.render=async function(){const r=await base.apply(this,arguments);setTimeout(settle,0);return r}}
+if(typeof window.render==='function'){const base=window.render;window.__ldmRemovedRender9=async function(){const r=await base.apply(this,arguments);setTimeout(settle,0);return r}}
 document.addEventListener('click',e=>{if(e.target.closest('#erpNav button'))setTimeout(settle,0)},true);
 })();
 
@@ -10618,7 +10619,7 @@ window.V647_BUILD='V64.7-FINAL-ALL-MASTER-EXACT-2026-09-20';
  /* Expose a one-click exact-data audit without background polling. */
  window.v647MasterDataAudit=async function(){if(typeof v90Admin==='function'&&!v90Admin())return toast('Admin / Principal only');let x=await v647ExactMasterSnapshot();let html=`<div class="panel"><div class="panelHead"><div><h3>✓ Master Data Integrity</h3><p class="note">Central records से live calculated. कोई hard-coded/approximate total नहीं.</p></div><button onclick="v647MasterDataAudit()">↻ Recheck</button></div><div class="erpCards">${stat('Active Students',x.activeStudents,'Student Master')}${stat('Active Teachers',x.activeTeachers,'Teacher Master')}${stat('Total Due',money(x.totalDue),x.dueStudents+' due students')}${stat('Fee Collected',money(x.allCollection),'Payment Ledger')}${stat('Income',money(x.income),'Income Master')}${stat('Expenses',money(x.expenses),'Expense Master')}${stat('Transport',x.transportStudents,'Assigned students')}${stat('Not Marked',x.notMarked,'Today attendance')}</div></div>`;if(typeof v90Set==='function')v90Set(html);else $('erpContent').innerHTML=html};
  try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('control'))||V90_ADMIN_GROUPS[0];if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='v647_master_audit'))g[2].push(['v647_master_audit','✓ Master Data Integrity'])}}catch(_e){}
- try{const rb=window.render;window.render=async function(route){if(route==='v647_master_audit'){window.__v90Route=route;v90Head('✓ Master Data Integrity','Students • Teachers • Fee • Attendance • Income • Expense • Transport');v90InstallShell(route);return v647MasterDataAudit()}return rb.apply(this,arguments)}}catch(_e){}
+ try{const rb=window.render;window.__ldmRemovedRender10=async function(route){if(route==='v647_master_audit'){window.__v90Route=route;v90Head('✓ Master Data Integrity','Students • Teachers • Fee • Attendance • Income • Expense • Transport');v90InstallShell(route);return v647MasterDataAudit()}return rb.apply(this,arguments)}}catch(_e){}
 })();
 </script>
 <!-- ===== END V64.7 ALL MASTER EXACT DATA AUDIT PATCH ===== -->
@@ -10701,7 +10702,7 @@ window.V649_BUILD='V64.10-FINAL-BOUNDARY-FIX-2026-09-20';
 
  /* Route ID Card to restricted teacher studio; Admin keeps full studio. */
  const renderBase=window.render;
- if(typeof renderBase==='function')window.render=async function(route){if(route==='idcard_center'&&teacher())return v649TeacherIdCardCenter();return renderBase.apply(this,arguments)};
+ if(typeof renderBase==='function')window.__ldmRemovedRender11=async function(route){if(route==='idcard_center'&&teacher())return v649TeacherIdCardCenter();return renderBase.apply(this,arguments)};
 
  /* Add/remove Teacher ID menu from the final rendered teacher sidebar according to Admin setting. */
  function syncTeacherIdNav(){
@@ -10711,7 +10712,7 @@ window.V649_BUILD='V64.10-FINAL-BOUNDARY-FIX-2026-09-20';
    let anchor=[...nav.querySelectorAll('button')].find(x=>/My Class/i.test(x.textContent||''));anchor?anchor.insertAdjacentElement('afterend',b):nav.appendChild(b);
  }
  const openBase=window.openERP;
- if(typeof openBase==='function')window.openERP=async function(){let r=await openBase.apply(this,arguments);setTimeout(syncTeacherIdNav,80);return r};
+ if(typeof openBase==='function')window.__ldmRemovedOpenERP3=async function(){let r=await openBase.apply(this,arguments);setTimeout(syncTeacherIdNav,80);return r};
 
  /* Admin global permission control in existing Website/Settings screen. */
  const settingsBase=window.websiteSettingsCenter;
@@ -10771,8 +10772,8 @@ window.V6412_BUILD='V64.12-FINAL-UI-NAV-ID-PHOTO-2026-09-20';
    }
    const b=document.getElementById('v90BackBtn');if(b){let h=window.__v90History||['dashboard'];b.disabled=h.length<=1;b.onclick=function(){let hh=window.__v90History||['dashboard'];if(hh.length<=1)return;return typeof v90Back==='function'?v90Back():null}}
  }
- const openBase=window.openERP;if(typeof openBase==='function')window.openERP=async function(){let r=await openBase.apply(this,arguments);setTimeout(syncShell,80);return r};
- const renderBase=window.render;if(typeof renderBase==='function')window.render=async function(){let r=await renderBase.apply(this,arguments);setTimeout(syncShell,30);return r};
+ const openBase=window.openERP;if(typeof openBase==='function')window.__ldmRemovedOpenERP4=async function(){let r=await openBase.apply(this,arguments);setTimeout(syncShell,80);return r};
+ const renderBase=window.render;if(typeof renderBase==='function')window.__ldmRemovedRender12=async function(){let r=await renderBase.apply(this,arguments);setTimeout(syncShell,30);return r};
  const shellBase=window.v90InstallShell;if(typeof shellBase==='function')window.v90InstallShell=function(){let r=shellBase.apply(this,arguments);setTimeout(syncShell,0);return r};
  window.addEventListener('load',()=>setTimeout(syncShell,200),{once:true,passive:true});
 })();
@@ -10822,7 +10823,7 @@ window.V6413_BUILD='V64.13-CENTRAL-MASTER-RECONCILED-2026-09-20';
    }catch(e){$('erpContent').innerHTML=`<div class="panel"><div class="empty">${esc(e.message||String(e))}</div></div>`}
  };
  try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('control'))||V90_ADMIN_GROUPS[0];if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='v6413_master_recheck'))g[2].push(['v6413_master_recheck','✓ Central Master Check'])}}catch(_e){}
- const rb=window.render;if(typeof rb==='function')window.render=async function(route){if(route==='v6413_master_recheck'){window.__v90Route=route;v90InstallShell?.(route);return v6413MasterRecheck()}return rb.apply(this,arguments)};
+ const rb=window.render;if(typeof rb==='function')window.__ldmRemovedRender13=async function(route){if(route==='v6413_master_recheck'){window.__v90Route=route;v90InstallShell?.(route);return v6413MasterRecheck()}return rb.apply(this,arguments)};
 })();
 </script>
 <!-- ===== END V64.13 ===== -->
@@ -10878,8 +10879,8 @@ window.V6415_BUILD='V64.15-FINAL-14-POINT-OFFICIAL-WORK-2026-09-20';
   }
   const pp=q('parentDashboard');if(pp&&!pp.classList.contains('hidden'))pp.classList.add('v6415Parent');
  }
- const ob=window.openERP;if(typeof ob==='function')window.openERP=async function(){let r=await ob.apply(this,arguments);setTimeout(syncFinalShell,40);return r};
- const rb=window.render;if(typeof rb==='function')window.render=async function(route){if(route==='official_letter_center')return v6415OfficialLetterCenter();let r=await rb.apply(this,arguments);setTimeout(syncFinalShell,20);return r};
+ const ob=window.openERP;if(typeof ob==='function')window.__ldmRemovedOpenERP5=async function(){let r=await ob.apply(this,arguments);setTimeout(syncFinalShell,40);return r};
+ const rb=window.render;if(typeof rb==='function')window.__ldmRemovedRender14=async function(route){if(route==='official_letter_center')return v6415OfficialLetterCenter();let r=await rb.apply(this,arguments);setTimeout(syncFinalShell,20);return r};
  const pb=window.loadParentPortal;if(typeof pb==='function')window.loadParentPortal=async function(){let r=await pb.apply(this,arguments);setTimeout(syncFinalShell,20);return r};
  window.addEventListener('load',()=>setTimeout(syncFinalShell,180),{once:true,passive:true});
  try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('communication'));if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='official_letter_center'))g[2].unshift(['official_letter_center','🏛 Official Letter Center'])}}catch(_e){}
@@ -10992,8 +10993,8 @@ window.V6416_BUILD='V64.16-FINAL-CLEANUP-A4-2026-09-20';
    w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Print</title><style>'+css+'</style></head><body><div class="sheet">'+el.innerHTML+'</div></body></html>');w.document.close();setTimeout(function(){w.focus();w.print()},350);
  };
  /* No polling: sync shell only on meaningful navigation/resize. */
- const oldOpen=window.openERP;if(typeof oldOpen==='function')window.openERP=async function(){let r=await oldOpen.apply(this,arguments);requestAnimationFrame(sync);return r};
- const oldRender=window.render;if(typeof oldRender==='function')window.render=async function(){let r=await oldRender.apply(this,arguments);requestAnimationFrame(sync);return r};
+ const oldOpen=window.openERP;if(typeof oldOpen==='function')window.__ldmRemovedOpenERP6=async function(){let r=await oldOpen.apply(this,arguments);requestAnimationFrame(sync);return r};
+ const oldRender=window.render;if(typeof oldRender==='function')window.__ldmRemovedRender15=async function(){let r=await oldRender.apply(this,arguments);requestAnimationFrame(sync);return r};
  const oldParent=window.loadParentPortal;if(typeof oldParent==='function')window.loadParentPortal=async function(){let r=await oldParent.apply(this,arguments);requestAnimationFrame(sync);return r};
  window.addEventListener('resize',sync,{passive:true});window.addEventListener('load',()=>setTimeout(sync,150),{once:true,passive:true});
 })();
@@ -11026,7 +11027,7 @@ window.V6417_BUILD='V64.17-RESOURCE-CONNECTION-OPTIMIZED-2026-09-20';
   window.addEventListener('load',()=>setTimeout(scheduleCleanup,2100),{once:true,passive:true});
   try{
     const base=window.openERP;
-    if(typeof base==='function')window.openERP=async function(){const r=await base.apply(this,arguments);scheduleCleanup();return r}
+    if(typeof base==='function')window.__ldmRemovedOpenERP7=async function(){const r=await base.apply(this,arguments);scheduleCleanup();return r}
   }catch(_e){}
   try{
     const base=window.logout;
@@ -11074,8 +11075,8 @@ window.V6418_BUILD='V64.18-CLEAN-RUNTIME-COLLISION-FIX-2026-09-20';
  }
  function run(){scheduled=false;try{cleanGreetings();cleanHeader()}catch(_e){}}
  function schedule(){if(scheduled)return;scheduled=true;idle(run)}
- const oldRender=window.render;if(typeof oldRender==='function')window.render=async function(){const r=await oldRender.apply(this,arguments);schedule();return r};
- const oldOpen=window.openERP;if(typeof oldOpen==='function')window.openERP=async function(){const r=await oldOpen.apply(this,arguments);schedule();return r};
+ const oldRender=window.render;if(typeof oldRender==='function')window.__ldmRemovedRender16=async function(){const r=await oldRender.apply(this,arguments);schedule();return r};
+ const oldOpen=window.openERP;if(typeof oldOpen==='function')window.__ldmRemovedOpenERP8=async function(){const r=await oldOpen.apply(this,arguments);schedule();return r};
  /* Target only ERP content/header, debounced; prevents legacy patches from leaving duplicate UI without global rerender loops. */
  window.addEventListener('load',()=>setTimeout(schedule,250),{once:true,passive:true});
  document.addEventListener('click',e=>{if(e.target.closest('#erpNav,.erpTop,button,a'))schedule()},{passive:true});
@@ -11239,7 +11240,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    });
  }
  const baseRender=window.render;
- if(typeof baseRender==='function')window.render=async function(route='dashboard'){
+ if(typeof baseRender==='function')window.__ldmRemovedRender17=async function(route='dashboard'){
    if(!isTeacher())return baseRender.apply(this,arguments);
    route=norm(route||'dashboard');
    const a=await window.v1146TeacherAuthorize(route,false);if(!a.ok)return teacherHome();
@@ -11247,7 +11248,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    catch(e){console.error('V114.6 Teacher route failed',route,e);window.toast?.('Teacher module error: '+(e?.message||String(e)));return teacherHome()}
  };
  const baseOpen=window.openERP;
- if(typeof baseOpen==='function')window.openERP=async function(){const r=await baseOpen.apply(this,arguments);if(isTeacher()){try{await refresh(true)}catch(e){window.toast?.(e?.message||String(e))}try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){};setTimeout(()=>{applyPermissionUI();teacherHome()},40)}return r};
+ if(typeof baseOpen==='function')window.__ldmRemovedOpenERP9=async function(){const r=await baseOpen.apply(this,arguments);if(isTeacher()){try{await refresh(true)}catch(e){window.toast?.(e?.message||String(e))}try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){};setTimeout(()=>{applyPermissionUI();teacherHome()},40)}return r};
  /* Filter Teacher sidebar at construction time, not by a permanent DOM observer. */
  try{const baseBuild=window.v90BuildNav;if(typeof baseBuild==='function')window.v90BuildNav=function(active){const r=baseBuild.apply(this,arguments);if(isTeacher())setTimeout(applyPermissionUI,0);return r}}catch(_e){}
  window.addEventListener('load',()=>setTimeout(applyPermissionUI,400),{once:true,passive:true});
@@ -11314,7 +11315,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  };
  // Route integration without creating a duplicate auth/data system.
  const base=window.render;
- if(typeof base==='function')window.render=async function(route){if(route==='class_teacher_control')return ldmClassTeacherControl();return base.apply(this,arguments)};
+ if(typeof base==='function')window.__ldmRemovedRender18=async function(route){if(route==='class_teacher_control')return ldmClassTeacherControl();return base.apply(this,arguments)};
  try{if(Array.isArray(window.V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x?.[1]||'').toLowerCase().includes('teacher'));if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='class_teacher_control'))g[2].splice(2,0,['class_teacher_control','👨‍🏫 Class Teacher Control'])}}catch(_e){}
 })();
 </script>
@@ -11347,7 +11348,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    host.querySelectorAll('[data-new-teacher-route]').forEach(b=>b.onclick=async()=>{let r=b.dataset.newTeacherRoute;if(r==='__logout'){try{await sb.auth.signOut()}catch(_e){};location.reload();return}try{await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}if(typeof render==='function')return render(r)});try{scrollTo(0,0)}catch(_e){}
  };
  // Canonical dispatch: NEW teacher dashboard bypasses all legacy teacher dashboard/context entry paths.
- const prevRender=window.render;window.render=async function(route='dashboard'){
+ const prevRender=window.render;window.__ldmRemovedRender19=async function(route='dashboard'){
    route=String(route||'dashboard');if(isTeacher()&&route==='dashboard'){if(typeof v90Push==='function')v90Push('dashboard');return ldmNewTeacherDashboard()}
    if(isAdmin()&&route==='class_teacher_control'&&typeof ldmClassTeacherControl==='function'){if(typeof v90Push==='function')v90Push(route);return ldmClassTeacherControl()}
    return prevRender.apply(this,arguments)
@@ -11360,7 +11361,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
 
  window.ldmTeacherAttendanceSettings=async function(){if(!isAdmin())return toast('Admin / Principal only');v90Head?.('Teacher Attendance Settings','School location • radius • verified check-in');v90InstallShell?.('teacher_attendance_settings');let host=document.getElementById('erpContent');if(!host)return;let cur=null;try{let r=await sb.rpc('ldm_get_attendance_geo_settings');if(!r.error)cur=r.data}catch(_e){}host.innerHTML=`<div class="panel"><h3>📍 School Attendance Location</h3><p>Admin school campus में रहकर नीचे button दबाएँ. Latitude/Longitude manually भरने की जरूरत नहीं.</p><div class="tools"><label>Allowed Radius (meter)<input id="ldmGeoRadius" type="number" min="50" max="1000" value="${Number(cur?.radius_m||150)}"></label><button class="primary" onclick="ldmSetSchoolGeo()">📍 Set School Location</button></div><div class="note">${cur?.configured?'✓ School location configured • Radius '+Number(cur.radius_m||150)+' m':'School location अभी configured नहीं है.'}</div></div>`};
  window.ldmSetSchoolGeo=function(){if(!navigator.geolocation)return toast('इस device/browser में Location उपलब्ध नहीं है.');navigator.geolocation.getCurrentPosition(async p=>{try{let radius=Math.max(50,Math.min(1000,Number(document.getElementById('ldmGeoRadius')?.value||150))),r=await sb.rpc('ldm_set_attendance_geo_settings',{p_lat:p.coords.latitude,p_lng:p.coords.longitude,p_radius_m:radius});if(r.error)throw r.error;toast('✓ School location saved');ldmTeacherAttendanceSettings()}catch(e){toast(e.message||String(e))}},e=>toast(e.code===1?'Location permission Allow करें.':'Current location नहीं मिल सकी.'),{enableHighAccuracy:true,timeout:15000,maximumAge:0})};
- const ldmRenderGeoBase=window.render;window.render=async function(route='dashboard'){if(route==='teacher_attendance_settings')return ldmTeacherAttendanceSettings();return ldmRenderGeoBase.apply(this,arguments)};
+ const ldmRenderGeoBase=window.render;window.__ldmRemovedRender20=async function(route='dashboard'){if(route==='teacher_attendance_settings')return ldmTeacherAttendanceSettings();return ldmRenderGeoBase.apply(this,arguments)};
  try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x?.[1]||'').toLowerCase().includes('reports'));if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='teacher_attendance_settings'))g[2].splice(-1,0,['teacher_attendance_settings','📍 Teacher Attendance Location'])}}catch(_e){}
  window.LDM_FINAL_BUILD='V131-UNIFIED-GATE-QR-2026-09-25';
 })();
@@ -11394,7 +11395,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  window.v6415PreviewLetter=function(){let o=letterData127();if(!o.subject||!o.body)return toast('Subject और Letter Body जरूरी है');let p=document.getElementById('v6415Preview');p.innerHTML=letterHtml127(o);p.querySelector('.v127OfficeLetter')?.setAttribute('style',p.querySelector('.v127OfficeLetter')?.getAttribute('style')+';width:210mm;max-width:100%;min-height:297mm;padding-top:var(--v127T);padding-left:var(--v127L);padding-right:var(--v127R);margin:12px auto;background:#fff;box-sizing:border-box');p.scrollIntoView({behavior:'smooth',block:'start'})};
  window.v6415PrintLetter=function(){let o=letterData127();if(!o.subject||!o.body)return toast('पहले letter तैयार करें');let w=window.open('','_blank','width=900,height=900');if(!w)return toast('Popup blocked');let css=`@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}.v127OfficeLetter{width:210mm;min-height:297mm;padding-top:var(--v127T);padding-left:var(--v127L);padding-right:var(--v127R);padding-bottom:14mm;margin:0 auto}.v6415LetterHead{text-align:center;border-bottom:2px solid #173e72;padding-bottom:4mm;margin-bottom:5mm}.v6415LetterHead h1{font-size:19pt;margin:0;color:#103f78}.v6415LetterHead p{font-size:9pt;margin:2mm 0}.v6415LetterMeta{display:grid;grid-template-columns:1fr 1fr}.v6415LetterMeta>div:nth-child(even){text-align:right}.v6415LetterTo,.v6415LetterSubject,.v6415LetterBody{font-size:11pt;line-height:1.55;margin-top:5mm}.v6415LetterBody{white-space:pre-wrap;min-height:95mm}.v6415LetterSign{display:flex;justify-content:flex-end;text-align:center;margin-top:10mm}.v6415LetterSign img{display:block;max-width:36mm;max-height:15mm;object-fit:contain;margin:auto}.v6415LetterFoot{margin-top:8mm;padding-top:3mm;border-top:1px solid #bbb;font-size:9pt}`;w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Official Letter</title><style>'+css+'</style></head><body>'+letterHtml127(o,true)+'</body></html>');w.document.close();setTimeout(()=>w.print(),350)};
  // Route integration without disturbing existing render paths.
- const render127=window.render;window.render=async function(route='dashboard'){if(route==='portal_emergency_control')return ldmPortalEmergencyControl();let r=await render127.apply(this,arguments);if(route==='official_letter_center')setTimeout(installLetterAdjust127,20);return r};
+ const render127=window.render;window.__ldmRemovedRender21=async function(route='dashboard'){if(route==='portal_emergency_control')return ldmPortalEmergencyControl();let r=await render127.apply(this,arguments);if(route==='official_letter_center')setTimeout(installLetterAdjust127,20);return r};
  try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x?.[1]||'').toLowerCase().includes('settings'))||V90_ADMIN_GROUPS.find(x=>String(x?.[1]||'').toLowerCase().includes('control'));if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='portal_emergency_control'))g[2].push(['portal_emergency_control','🛡 Portal Emergency Control'])}}catch(_e){}
  window.LDM_FINAL_BUILD='V127-TRANSPORT-LETTER-PORTAL-CONTROL-2026-09-25';
 })();
@@ -11460,7 +11461,7 @@ window.ldmScanFeedback=beep;
 
  // Security guard: browser may use only Supabase anon/publishable key, never service_role.
  window.saveCloud=function(){let url=document.getElementById('cloudUrl')?.value.trim().replace(/\/+$/,'')||'',key=document.getElementById('cloudKey')?.value.trim()||'';if(!url||!key)return toast('URL and key required');try{if(key.split('.').length===3){let payload=JSON.parse(atob(key.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));if(String(payload.role||'').toLowerCase()==='service_role')return toast('SECURITY BLOCK: service_role key browser/index.html में कभी save नहीं करें. केवल anon/publishable key उपयोग करें.')}}catch(_e){}localStorage.setItem('ld_cloud_v1',JSON.stringify({url,key}));location.reload()};
- const renderBase=window.render;window.render=async function(route='dashboard'){if(route==='v130_qr_scanner')return v130SchoolScanner();if(route==='v130_driver_setup')return v130DriverSetup();if(route==='v130_storage')return v130StorageCenter();if(route==='v130_fee_reminder')return v130FeeReminder();return renderBase.apply(this,arguments)};
+ const renderBase=window.render;window.__ldmRemovedRender22=async function(route='dashboard'){if(route==='v130_qr_scanner')return v130SchoolScanner();if(route==='v130_driver_setup')return v130DriverSetup();if(route==='v130_storage')return v130StorageCenter();if(route==='v130_fee_reminder')return v130FeeReminder();return renderBase.apply(this,arguments)};
  /* V181: old V130 load-time nav injection removed; canonical V90 menu/route owns Driver/QR/Storage/Fee entries. */
 })();
 </script>
@@ -11703,9 +11704,13 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
    try{
      const classes=await classTeacherClasses();
      if(!classes.length){host.innerHTML='<div class="v136PhotoPage"><div class="panel"><h2>📷 Student Photos</h2><div class="empty">No Class Teacher Assignment.</div></div></div>';return}
-     let r=await sb.from('students').select('id,admission_no,student_name,father_name,class_name,section,roll_no,photo_path,photo_url,student_photo_url,status').in('class_name',classes).order('class_name').order('student_name').limit(5000);
+     let r=await sb.rpc('v182_teacher_assigned_students_for_photos');
+     if(r.error){
+       /* Backward-compatible fallback while SQL is not yet installed. */
+       r=await sb.from('students').select('id,admission_no,student_name,father_name,class_name,section,roll_no,photo_path,photo_url,student_photo_url,status').in('class_name',classes).order('class_name').order('student_name').limit(5000);
+     }
      if(r.error)throw r.error;
-     photoRows=(r.data||[]).filter(x=>!['inactive','deleted','left','withdrawn'].includes(String(x.status||'').toLowerCase()));
+     photoRows=(r.data||[]).filter(x=>x?.id&&x?.student_name&&!['inactive','deleted','left','withdrawn'].includes(String(x.status||'').toLowerCase()));
      if(typeof window.v91AttachStudentPhotos==='function')await window.v91AttachStudentPhotos(photoRows);else for(const x of photoRows)await signed(x);
      host.innerHTML=`<div class="v136PhotoPage"><div class="v136PhotoTop"><div><h2>📷 Student Photos</h2><div class="note">Class Teacher assignment: ${classes.map(window.esc||String).join(', ')}</div></div><div class="v136PhotoTools"><select id="v136PhotoClass"><option value="">All My Classes</option>${classes.map(c=>`<option>${window.esc?.(c)||c}</option>`).join('')}</select><input id="v136PhotoQ" placeholder="Student / Father / Admission"></div></div><div id="v136PhotoGrid" class="v136PhotoGrid"></div></div>`;
      $('v136PhotoClass').onchange=renderPhotos;$('v136PhotoQ').oninput=renderPhotos;renderPhotos();window.scrollTo(0,0);
@@ -11752,7 +11757,10 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
    catch(e){closeCam();window.toast?.(e?.name==='NotAllowedError'?'Camera permission Allow करें.':(e?.message||String(e)))}
  };
  function capture(v){
-   const c=document.createElement('canvas'),ratio=Math.min(1,900/Math.max(v.videoWidth||640,v.videoHeight||480));c.width=Math.round((v.videoWidth||640)*ratio);c.height=Math.round((v.videoHeight||480)*ratio);c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+   /* Portrait auto-fit source: crop camera frame to 3:4 before central 25KB compressor. */
+   const sw=v.videoWidth||640,sh=v.videoHeight||480,target=3/4;let sx=0,sy=0,cw=sw,ch=sh;
+   if(sw/sh>target){cw=Math.round(sh*target);sx=Math.round((sw-cw)/2)}else{ch=Math.round(sw/target);sy=Math.max(0,Math.round((sh-ch)*0.30))}
+   const c=document.createElement('canvas');c.width=480;c.height=640;c.getContext('2d').drawImage(v,sx,sy,cw,ch,0,0,c.width,c.height);
    c.toBlob(async b=>{if(!b)return;const f=new File([b],'camera.jpg',{type:'image/jpeg'});closeCam();try{const dt=new DataTransfer();dt.items.add(f);await v138UploadStudentPhoto(camId,{files:dt.files,value:''})}catch(e){window.toast?.(window.ldmCameraError?window.ldmCameraError(e):(e?.message||String(e)))}},'image/jpeg',.90);
  }
 
@@ -11807,7 +11815,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 
  /* One dispatch gate: Student Photos can never enter legacy v91Special/v90InstallShell. */
  const renderBase=window.render;
- window.render=async function(route='dashboard'){
+ window.__ldmRemovedRender23=async function(route='dashboard'){
    route=String(route||'dashboard');
    if(route!=='v143_teacher_qr_attendance')window.v143StopTeacherQr?.();
    if(teacher()&&route==='dashboard')return window.ldmNewTeacherDashboard?.();
@@ -11826,7 +11834,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
      window.user=session.user;await window.loadProfile?.();
      if(parent()){surface('parent');await window.loadParentPortal?.();surface('parent');return}
      if(teacher()){surface('erp');await window.ldmTeacherMasterContext?.();let r=sessionStorage.getItem('ldm_current_route')||'dashboard';await window.render(r);teacherShell();return}
-     if(admin()){surface('erp');if(typeof window.openERP==='function')window.openERP();return}
+     if(admin()){surface('erp');let r=sessionStorage.getItem('ldm_current_route')||'dashboard';await window.render(r);return}
      surface('public');
    }catch(e){console.error('V136 restore',e)}
  }
@@ -11909,7 +11917,7 @@ function v147AdminCards(){if(!admin147())return;let host=$147('erpContent');if(!
 
 /* Final route owner for V147 features. Existing canonical render handles everything else. */
 const render147Base=window.render;
-window.render=async function(route='dashboard'){
+window.__ldmRemovedRender24=async function(route='dashboard'){
  route=String(route||'dashboard');
  if(route==='v147_admin_presence'||route==='v147_teacher_presence')return window.v147PresenceCenter();
  if(route==='v147_admin_student_qr'||route==='v147_student_qr')return window.v147StudentQrCenter();
@@ -11947,7 +11955,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  window.v150SafeStudentDelete=async function(id){let x=rows.find(r=>String(r.id)===String(id));if(!x)return;if(!confirm('Delete Safety permanent data delete नहीं करेगा. Student को Inactive/Archived करना है?\n'+(x.student_name||'')))return;let u=await sb.from('students').update({status:'Inactive'}).eq('id',id);if(u.error)return window.toast?.(u.error.message);window.toast?.('✓ Student archived safely • history preserved');await v150StudentMaster()};
  // ID printing is owned by the canonical V164 engine below.
  // Final dispatch extension, preserving V149 owner for every other route.
- const base=window.render;window.render=async function(route='dashboard'){route=String(route||'dashboard');if(route==='v150_student_master')return v150StudentMaster();return base.apply(this,arguments)};
+ const base=window.render;window.__ldmRemovedRender25=async function(route='dashboard'){route=String(route||'dashboard');if(route==='v150_student_master')return v150StudentMaster();return base.apply(this,arguments)};
 })();
 </script>
 
@@ -12240,7 +12248,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  window.idStudioPreview=async function(silent=false){let ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');let rows=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));await v14AttachSignedPhotos(rows);let fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),cap=fmt>5?9:10,pages=idStudioChunks(rows,cap).map(x=>idStudioPageHtml(x,fmt)).join(''),work=$('idWork');if(!work)return;work.innerHTML=`<div class="idStudioPreviewActions"><b>${rows.length} cards • ${Math.ceil(rows.length/cap)} A4 page(s) • Format ${fmt} • ${fmt>5?'Portrait':'Landscape'}</b><button class="primary" onclick="idStudioPrint()">🖨 Print</button><button class="primary" onclick="idStudioPdf()">PDF</button><button class="secondary" onclick="idStudioPreview()">↻ Refresh Preview</button></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;await v164PaintQr($('idA4Preview'));v164AutoFit($('idA4Preview'));if(!silent)toast('Premium ID preview ready')};
  window.idStudioPrint=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');let css=document.getElementById('v164-idcard-premium-css')?.textContent||'';w.document.write(`<html><head><title>ID Cards</title><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;background:#fff}.idA4Page{width:210mm;height:297mm;display:grid;align-content:start;page-break-after:always;overflow:hidden}.idA4Page:last-child{page-break-after:auto}.idA4Cell{display:flex;align-items:center;justify-content:center;overflow:hidden}.v164LandscapePage{grid-template-columns:repeat(2,85.6mm);grid-template-rows:repeat(5,54mm);justify-content:center;gap:2mm 4mm;padding:6mm 7mm}.v164PortraitPage{grid-template-columns:repeat(3,54mm);grid-template-rows:repeat(3,85.6mm);justify-content:center;gap:3mm 5mm;padding:12mm 7mm 6mm}${css}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();let printed=false,fire=()=>{if(printed)return;printed=true;w.focus();w.print()};setTimeout(()=>{let pending=[...w.document.images].filter(x=>!x.complete);if(!pending.length)return fire();let left=pending.length,done=()=>{if(--left<=0)fire()};pending.forEach(x=>{x.addEventListener('load',done,{once:true});x.addEventListener('error',done,{once:true})});setTimeout(fire,1800)},250)};
  window.idStudioPdf=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class',fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1));html2pdf().set({margin:0,filename:`${c}-ID-Cards-${fmt>5?'Portrait':'Landscape'}-Format-${fmt}.pdf`,image:{type:'png',quality:1},html2canvas:{scale:3,useCORS:true,backgroundColor:'#ffffff',letterRendering:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:false},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()};
- window.LDM_IDCARD_BUILD='V181-VIDEO-ROOT-CONSOLIDATED-2026-09-26';
+ window.LDM_IDCARD_BUILD='V185-PHYSICAL-RENDER-CONSOLIDATED-ROOT-2026-09-26';
 })();
 </script>
 <!-- ===== END V164 ID CARD STUDIO ===== -->
@@ -12309,8 +12317,58 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  window.v169BooksItems=async()=>{if(!isAdmin())return toast('Admin only');shell();try{await loadBase();await v169Tab('register')}catch(e){q('v169Body').innerHTML=`<section class="v169Panel"><h3>Books & Items setup required</h3><p>${safe(e.message)}</p><p>V169 SQL migration एक बार Supabase SQL Editor में run करें.</p></section>`}}
  // Add admin navigation safely to the final V90 grouped navigation.
  try{if(Array.isArray(window.V90_ADMIN_GROUPS||V90_ADMIN_GROUPS)){let groups=window.V90_ADMIN_GROUPS||V90_ADMIN_GROUPS, g=groups.find(x=>x?.[1]==='Fee & Accounts')||groups.find(x=>x?.[1]==='Reports & Settings');if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='books_items'))g[2].push(['books_items','📦 Books & Items'])}}catch(_e){}
- const base=window.render||render;window.render=render=async function(route){if(route==='books_items')return v169BooksItems();return base.apply(this,arguments)};
- window.LDM_STORE_BUILD='V169.1-BOOKS-ITEMS-SAFE-INSTALL-2026-09-25';
+ const base=window.render||render;
+window.__ldmLegacyModuleRender=base;
+window.__ldmRenderFlight=null;window.__ldmRenderRoute='';window.__ldmRenderStamp=0;
+window.render=render=async function(route='dashboard'){
+ route=String(route||'dashboard');const now=Date.now();
+ /* V184 SINGLE CANONICAL DISPATCHER: historical render wrappers are bypassed. */
+ if(window.__ldmRenderFlight&&window.__ldmRenderRoute===route)return window.__ldmRenderFlight;
+ if(window.__ldmRenderRoute===route&&now-window.__ldmRenderStamp<180&&route===String(window.__v90Route||''))return;
+ const run=async()=>{
+  try{window.v91BusyStart?.()}catch(_e){}
+  window.__ldmRenderRoute=route;window.__ldmRenderStamp=Date.now();
+  try{sessionStorage.setItem('ldm_current_route',route)}catch(_e){}
+  if(route!=='v143_teacher_qr_attendance')try{window.v143StopTeacherQr?.()}catch(_e){}
+  if(typeof window.v90Teacher==='function'&&window.v90Teacher()&&typeof window.v1146TeacherAuthorize==='function'){
+   const a=await window.v1146TeacherAuthorize(route,false);if(a&&!a.ok){route='dashboard';try{sessionStorage.setItem('ldm_current_route','dashboard')}catch(_e){}}
+  }
+  window.__v90Route=route;if(typeof window.v90Push==='function')window.v90Push(route);
+  if(route==='dashboard'){
+   if(typeof window.v90Teacher==='function'&&window.v90Teacher())return typeof window.ldmNewTeacherDashboard==='function'?await window.ldmNewTeacherDashboard():await window.v90TeacherDashboard?.();
+   if(typeof window.v90Admin==='function'&&window.v90Admin()){const r=await window.v90AdminDashboard();try{window.v147AdminCards?.()}catch(_e){}return r}
+  }
+  const direct={
+   'v91_student_photos':()=>window.v136TeacherPhotos?.(),'v91_parent_updates':()=>window.v91ParentUpdates?.(),
+   'v92_admit_publish':()=>window.v92AdmitPublishCenter?.(),'idcard_center':()=>((typeof window.v90Teacher==='function'&&window.v90Teacher())?window.v649TeacherIdCardCenter?.():window.__ldmCoreDispatch?.('idcard_center')),'teacher_access':()=>window.ldmTeacherManager?.(),'teacher_approval':()=>window.ldmTeacherManager?.(),
+   'v97_profile':()=>window.v97MyProfile?.(),'v94_admin_password':()=>window.v97AdminSecurityPage?.(),'master_requests':()=>window.v99MasterRequests?.(),
+   'master_gate_pass':()=>window.v102GatePassCenter?.(),'v647_master_audit':()=>window.v647MasterDataAudit?.(),'v6413_master_recheck':()=>window.v6413MasterRecheck?.(),
+   'official_letter_center':()=>window.v6415OfficialLetterCenter?.(),'class_teacher_control':()=>window.ldmClassTeacherControl?.(),
+   'teacher_attendance_settings':()=>window.ldmTeacherAttendanceSettings?.(),'portal_emergency_control':()=>window.ldmPortalEmergencyControl?.(),
+   'v130_qr_scanner':()=>window.v130SchoolScanner?.(),'v130_driver_setup':()=>window.v130DriverSetup?.(),'v130_storage':()=>window.v130StorageCenter?.(),
+   'v130_fee_reminder':()=>window.v130FeeReminderCenter?.(),'v143_teacher_qr_attendance':()=>window.v143TeacherQrAttendance?.(),
+   'v147_admin_presence':()=>window.v147PresenceCenter?.(),'v147_teacher_presence':()=>window.v147PresenceCenter?.(),
+   'v147_admin_student_qr':()=>window.v147StudentQrCenter?.(),'v147_student_qr':()=>window.v147StudentQrCenter?.(),
+   'v150_student_master':()=>window.v150StudentMaster?.(),'books_items':()=>window.v169BooksItems?.()
+  };
+  if(direct[route]){const r=await direct[route]();try{window.v90InstallShell?.(route)}catch(_e){}return r}
+  const core=window.__ldmCoreDispatch;
+  if(typeof core==='function'){const r=await core(route);try{window.v90InstallShell?.(route)}catch(_e){}return r}
+  return base.apply(this,arguments);
+ };
+ const p=run();window.__ldmRenderFlight=p;
+ try{return await p}finally{
+ if(window.__ldmRenderFlight===p)window.__ldmRenderFlight=null;window.__ldmRenderStamp=Date.now();
+ try{window.v91BusyEnd?.()}catch(_e){}
+ try{document.querySelector('#erp aside')?.classList.remove('open');document.querySelector('#erp main')?.scrollTo?.({top:0,left:0});document.getElementById('erpContent')?.scrollTo?.({top:0,left:0});window.scrollTo(0,0)}catch(_e){}
+}
+};
+/* V184 ONE ERP OPENER: bypasses historical openERP wrappers and schedules no second Dashboard. */
+window.openERP=async function(){
+ const core=window.__ldmCoreOpenERP;let r;if(typeof core==='function')r=await core.apply(this,arguments);
+ if(!Array.isArray(window.__v90History)||!window.__v90History.length)window.__v90History=['dashboard'];return r;
+};
+window.LDM_STORE_BUILD='V185-PHYSICAL-RENDER-CONSOLIDATED-2026-09-26';
 })();
 </script>
 
