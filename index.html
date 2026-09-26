@@ -3101,8 +3101,11 @@ async function teacherMyProfile(){
 }
 
 async function teacherClassPortal(){
- await v14LoadTeacherContext();head('My Class Portal','Only Admin-approved class data');
- let classes=v14AllowedClassNames();if(!classes.length)return $('erpContent').innerHTML='<div class="panel">No approved class assigned.</div>';
+ let ctx;
+ try{ctx=await ldmTeacherMasterContext()}catch(e){head('My Class Portal','Teacher Master connection');return $('erpContent').innerHTML='<div class="panel dangerNote">'+esc(e?.message||String(e))+'</div>'}
+ head('My Class Portal','Only Admin-approved assigned class data');
+ let classes=[...new Set((ctx?.classes||[]).filter(x=>x.is_active!==false).map(x=>String(x.class_name||'').trim()).filter(Boolean))];
+ if(!classes.length)return $('erpContent').innerHTML='<div class="panel dangerNote">Teacher Master में कोई Active Class Assignment नहीं मिला. Admin → Teacher Master में class assign करें.</div>';
  let c=classes[0];let {data:students}=await sb.from('students').select('id,admission_no,student_name,father_name,roll_no,class_name,phone').eq('class_name',c).order('student_name');
  let adms=(students||[]).map(x=>x.admission_no).filter(Boolean);
  let [{data:fees},{data:att}]=await Promise.all([
@@ -4646,7 +4649,9 @@ document.addEventListener('focusin',()=>setTimeout(v48EnhanceForms,0));
 async function vanCenter(){
   if(!v14Admin?.())return toast('यह विकल्प आपके वर्तमान account role के लिए उपलब्ध नहीं है। Admin से आवश्यक permission/assignment जाँचें।');
   head('Van Details','Vehicle • Student • Attendance • Due Fee');
-  $('erpContent').innerHTML='<div class="panel"><div class="tools">'+
+  $('erpContent').innerHTML='<div class="panel"><div class="tools" style="margin-bottom:10px">'+
+    '<button class="primary" type="button" onclick="render(\'v130_driver_setup\')">🚌 Driver Scanner Setup</button>'+
+    '<small class="note">Driver Name → Route → Vehicle → PIN → Scanner Link → PICK-UP / DROP</small></div><div class="tools">'+
     '<input id="v48VanQ" placeholder="Student / Father / Admission / Vehicle / Route">'+
     '<select id="v48VanClass"><option value="">All Classes</option>'+cls.map(c=>'<option>'+esc(c)+'</option>').join('')+'</select>'+
     '<input id="v48VanDate" type="date" value="'+today()+'">'+
@@ -11653,11 +11658,11 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
  /* ACTUAL Class Teacher assignment only — never broad legacy Teaching Classes/Subjects permission. */
  async function classTeacherClasses(){
    let ctx=await ldmTeacherMasterContext();
-   return [...new Set((ctx?.classes||[]).filter(x=>x.is_active!==false&&x.is_class_teacher===true).map(x=>String(x.class_name||'').trim()).filter(Boolean))];
+   return [...new Set((ctx?.classes||[]).filter(x=>x.is_active!==false).map(x=>String(x.class_name||'').trim()).filter(Boolean))];
  }
  window.v103ClassTeacherClasses=function(){
    const c=window.ldmTeacherContext?.classes||[];
-   return [...new Set(c.filter(x=>x.is_active!==false&&x.is_class_teacher===true).map(x=>x.class_name).filter(Boolean))];
+   return [...new Set(c.filter(x=>x.is_active!==false).map(x=>x.class_name).filter(Boolean))];
  };
 
  /* Canonical Student Photos: NO v90InstallShell / legacy dashboard renderer. */
@@ -12182,7 +12187,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 #idTemplateGrid{grid-template-columns:repeat(5,minmax(0,1fr))!important}.idTemplatePick{min-height:54px}.idTemplatePick b{white-space:normal;line-height:1.15}.v164OrientTag{display:block;font-size:9px;font-weight:900;opacity:.72;margin-top:2px}
 .idA4Preview{overflow:auto!important}.idA4Page.v164LandscapePage{grid-template-columns:repeat(2,85.6mm)!important;grid-template-rows:repeat(5,54mm)!important;justify-content:center!important;gap:2mm 4mm!important}.idA4Page.v164PortraitPage{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;justify-content:center!important;gap:3mm 5mm!important;padding-top:12mm!important}
 .v164Id{position:relative;box-sizing:border-box;background:#fff;overflow:hidden;display:flex;flex-direction:column;color:#142033;font-family:Arial,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;page-break-inside:avoid;break-inside:avoid}.v164Id.landscape{width:85.6mm;height:54mm}.v164Id.portrait{width:54mm;height:85.6mm}.v164Id *{box-sizing:border-box}.v164Head{display:grid;grid-template-columns:10mm 1fr;align-items:center;gap:1.5mm;padding:2mm 2.4mm 1.6mm;min-height:14mm}.v164Logo{width:9.5mm;height:9.5mm;object-fit:contain;background:#fff;border-radius:50%;padding:.4mm}.v164School{min-width:0;text-align:center}.v164School strong{display:block;font:900 10.2px/1.05 Georgia,serif;letter-spacing:.08px}.v164School small{display:block;font:700 5.3px/1.12 Arial,sans-serif;margin-top:.45mm}.v164School em{display:block;font:900 5.6px/1 Arial,sans-serif;font-style:normal;margin-top:.5mm;letter-spacing:.2px}.v164Main{flex:1;min-height:0;display:grid;grid-template-columns:20mm 1fr;gap:2.2mm;padding:2mm 2.5mm 1mm;align-items:start}.v164Photo{width:19mm;height:23mm;object-fit:cover;object-position:center;border:1px solid #aebbd0;background:#eef2f7}.v164NoPhoto{display:grid;place-items:center;font-size:6px;font-weight:900}.v164Info{min-width:0}.v164Name{font:900 9.2px/1.08 Arial,sans-serif;margin:0 0 1.1mm;overflow-wrap:anywhere}.v164Line{font:700 6.35px/1.28 Arial,sans-serif;white-space:normal;overflow-wrap:anywhere;margin:.25mm 0}.v164Line b{font-weight:900}.v164Bottom{display:grid;grid-template-columns:1fr 24mm;align-items:end;gap:1mm;padding:0 2.5mm 1.2mm}.v164QrBox{font-size:5px;font-weight:800;min-width:0;overflow:hidden}.v164Sign{text-align:center;min-height:6mm;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.v164Sign img{max-width:20mm;max-height:4.8mm;object-fit:contain}.v164Sign span{display:block;width:22mm;border-top:.3mm solid #718096;padding-top:.4mm;font-size:5.2px;font-weight:900;white-space:nowrap}.v164Foot{text-align:center;font-size:5.3px;font-weight:900;padding:.8mm 2mm;line-height:1.05}
-.v164Id.portrait .v164Head{grid-template-columns:1fr;justify-items:center;gap:.8mm;padding:3mm 3mm 2mm;min-height:23mm}.v164Id.portrait .v164Logo{width:12mm;height:12mm}.v164Id.portrait .v164School strong{font-size:10px;line-height:1.08}.v164Id.portrait .v164School small{font-size:5.1px}.v164Id.portrait .v164Main{display:flex;flex-direction:column;align-items:center;padding:2mm 3mm 1mm;gap:1mm}.v164Id.portrait .v164Photo{width:23mm;height:28mm}.v164Id.portrait .v164Info{text-align:center;width:100%}.v164Id.portrait .v164Name{font-size:9.5px;margin:.4mm 0 1mm}.v164Id.portrait .v164Line{font-size:6.1px;line-height:1.25}.v164Id.portrait .v164Bottom{grid-template-columns:1fr;padding:0 3mm 1.5mm}.v164Id.portrait .v164QrBox{display:none}.v164Id.portrait .v164Sign span{width:24mm}.v164Id.portrait .v164Foot{font-size:5.4px;padding:1mm 2mm}
+.v164Id.portrait .v164Head{grid-template-columns:1fr;justify-items:center;gap:.8mm;padding:3mm 3mm 2mm;min-height:23mm}.v164Id.portrait .v164Logo{width:12mm;height:12mm}.v164Id.portrait .v164School strong{font-size:10px;line-height:1.08}.v164Id.portrait .v164School small{font-size:5.1px}.v164Id.portrait .v164Main{display:flex;flex-direction:column;align-items:center;padding:2mm 3mm 1mm;gap:1mm}.v164Id.portrait .v164Photo{width:23mm;height:28mm}.v164Id.portrait .v164Info{text-align:center;width:100%}.v164Id.portrait .v164Name{font-size:9.5px;margin:.4mm 0 1mm}.v164Id.portrait .v164Line{font-size:6.1px;line-height:1.25}.v164Id.portrait .v164Bottom{grid-template-columns:1fr;padding:0 3mm 1.5mm}.v164Id.portrait .v164QrBox{display:flex;justify-content:center;align-items:center;gap:1mm}.v164Id.portrait .v164Sign span{width:24mm}.v164Id.portrait .v164Foot{font-size:5.4px;padding:1mm 2mm}
 /* Five genuinely different landscape families */
 .v164Id.t1{border:1.4px solid #174d87;border-radius:3mm}.v164Id.t1 .v164Head{background:linear-gradient(135deg,#0b315f,#187ad7);color:#fff}.v164Id.t1 .v164Photo{border-radius:50%;height:19mm}
 .v164Id.t2{border:1.5px solid #0b6e75;border-radius:1mm}.v164Id.t2 .v164Head{background:#eafafa;color:#075b61;border-bottom:2mm solid #14a3a8}.v164Id.t2 .v164Photo{border-radius:2mm;box-shadow:2mm 2mm 0 #d7f2f2}
@@ -12209,7 +12214,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
    t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));const portrait=t>5,set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=(typeof v107DocLogo==='function'?v107DocLogo():(school?.logo_url||'school-logo.png')),addr=school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar',sig=school?.principal_signature_url||school?.director_signature_url||'',parent=s.father_name||s.guardian_name||s.mother_name||'—';
    const ph=photo?`<img class="v164Photo" src="${safe(photo)}" alt="Student Photo">`:`<div class="v164Photo v164NoPhoto">PHOTO</div>`;
    const opt=[]; if(set.showRoll&&s.roll_no)opt.push(`<div class="v164Line"><b>Roll No.:</b> ${safe(s.roll_no)}</div>`); if(set.showDob&&s.dob)opt.push(`<div class="v164Line"><b>DOB:</b> ${safe(s.dob)}</div>`); if(set.showMother&&s.mother_name)opt.push(`<div class="v164Line"><b>Mother:</b> ${safe(s.mother_name)}</div>`); if(set.showAddress&&s.address)opt.push(`<div class="v164Line"><b>Address:</b> ${safe(s.address)}</div>`);
-   return `<article class="v164Id ${portrait?'portrait':'landscape'} t${t}"><header class="v164Head"><img class="v164Logo" src="${safe(logo)}" alt="School Logo"><div class="v164School"><strong>${safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</strong><small>${safe(addr)}</small><em>STUDENT ID CARD • ${safe(set.session)}</em></div></header><main class="v164Main">${ph}<div class="v164Info"><div class="v164Name">${safe(s.student_name||'Student')}</div><div class="v164Line"><b>Class:</b> ${safe(s.class_name||'—')}${s.section?` • <b>Sec:</b> ${safe(s.section)}`:''}</div>${set.showFather?`<div class="v164Line"><b>Father:</b> ${safe(parent)}</div>`:''}${set.showAdmission?`<div class="v164Line"><b>Admission No.:</b> ${safe(s.admission_no||'—')}</div>`:''}${set.showMobile?`<div class="v164Line"><b>Mobile:</b> ${safe(s.phone||'—')}</div>`:''}${opt.join('')}</div></main><div class="v164Bottom"><div class="v164QrBox">${safe(set.footer||'Student Identity Card')}</div><div class="v164Sign">${sig?`<img src="${safe(sig)}" alt="Authorized Signature">`:''}<span>Principal / Director</span></div></div><footer class="v164Foot">${safe(N[t-1])}</footer></article>`;
+   return `<article data-v171-adm="${safe(s.admission_no||'')}" class="v164Id ${portrait?'portrait':'landscape'} t${t}"><header class="v164Head"><img class="v164Logo" src="${safe(logo)}" alt="School Logo"><div class="v164School"><strong>${safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</strong><small>${safe(addr)}</small><em>STUDENT ID CARD • ${safe(set.session)}</em></div></header><main class="v164Main">${ph}<div class="v164Info"><div class="v164Name">${safe(s.student_name||'Student')}</div><div class="v164Line"><b>Class:</b> ${safe(s.class_name||'—')}${s.section?` • <b>Sec:</b> ${safe(s.section)}`:''}</div>${set.showFather?`<div class="v164Line"><b>Father:</b> ${safe(parent)}</div>`:''}${set.showAdmission?`<div class="v164Line"><b>Admission No.:</b> ${safe(s.admission_no||'—')}</div>`:''}${set.showMobile?`<div class="v164Line"><b>Mobile:</b> ${safe(s.phone||'—')}</div>`:''}${opt.join('')}</div></main><div class="v164Bottom"><div class="v164QrBox"><div class="v171IdQr" aria-label="Student QR"></div><small>${safe(set.footer||'Student Identity Card')}</small></div><div class="v164Sign">${sig?`<img src="${safe(sig)}" alt="Authorized Signature">`:''}<span>Principal / Director</span></div></div><footer class="v164Foot">${safe(N[t-1])}</footer></article>`;
  };
  window.idStudioPageHtml=function(rows,fmt){const portrait=Number(fmt)>5,cap=portrait?9:10;let cells=rows.map(s=>`<div class="idA4Cell">${renderIdCard(s,fmt)}</div>`);while(cells.length<cap)cells.push('<div class="idA4Cell"></div>');return `<section class="idA4Page ${portrait?'v164PortraitPage':'v164LandscapePage'}">${cells.join('')}</section>`};
  window.idStudioPreview=async function(silent=false){let ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');let rows=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));await v14AttachSignedPhotos(rows);let fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),cap=fmt>5?9:10,pages=idStudioChunks(rows,cap).map(x=>idStudioPageHtml(x,fmt)).join(''),work=$('idWork');if(!work)return;work.innerHTML=`<div class="idStudioPreviewActions"><b>${rows.length} cards • ${Math.ceil(rows.length/cap)} A4 page(s) • Format ${fmt} • ${fmt>5?'Portrait':'Landscape'}</b><button class="primary" onclick="idStudioPrint()">🖨 Print</button><button class="primary" onclick="idStudioPdf()">PDF</button><button class="secondary" onclick="idStudioPreview()">↻ Refresh Preview</button></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;if(!silent)toast('Premium ID preview ready')};
@@ -12330,5 +12335,60 @@ const rbase=window.render;
 if(typeof rbase==='function')window.render=async function(route='dashboard'){let cur=routeNow();if((cur==='v130_qr_scanner'||cur==='v143_teacher_qr_attendance')&&route!==cur)try{window.v130StopScanner?.();window.v143StopTeacherQr?.()}catch(_e){}return rbase.apply(this,arguments)};
 })();
 </script>
+
+<!-- ===== V171 TARGETED LIVE CORRECTIONS: ID QR + PREVIEW PARITY ===== -->
+<style id="v171-targeted-live-fixes-css">
+#idA4Preview.idA4Preview{overflow:auto!important;padding:8px!important;background:#eef3f8!important}
+#idA4Preview .idA4Page{width:210mm!important;height:297mm!important;min-width:210mm!important;min-height:297mm!important;display:grid!important;align-content:start!important;overflow:hidden!important;background:#fff!important;margin:0 auto 12px!important;box-shadow:0 3px 18px #163b5f22!important}
+#idA4Preview .v164LandscapePage{grid-template-columns:repeat(2,85.6mm)!important;grid-template-rows:repeat(5,54mm)!important;justify-content:center!important;gap:2mm 4mm!important;padding:6mm 7mm!important}
+#idA4Preview .v164PortraitPage{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;justify-content:center!important;gap:3mm 5mm!important;padding:12mm 7mm 6mm!important}
+#idA4Preview .idA4Cell,#idA4Preview .v164Id{overflow:hidden!important;min-width:0!important;min-height:0!important}
+.v164QrBox{display:flex!important;align-items:center!important;gap:1mm!important;overflow:visible!important}
+.v164QrBox small{font-size:4.6px;line-height:1.05;max-width:10mm}
+.v171IdQr{width:15mm;height:15mm;flex:0 0 15mm;background:#fff;padding:.5mm;display:grid;place-items:center}
+.v171IdQr img,.v171IdQr canvas{width:14mm!important;height:14mm!important;display:block!important}
+.v164Id.portrait .v164Bottom{grid-template-columns:1fr!important;justify-items:center!important}
+.v164Id.portrait .v164QrBox{display:flex!important;justify-content:center!important}
+.v164Id.portrait .v171IdQr{width:14mm;height:14mm;flex-basis:14mm}
+.v164Id.portrait .v171IdQr img,.v164Id.portrait .v171IdQr canvas{width:13mm!important;height:13mm!important}
+@media(max-width:900px){#idA4Preview.idA4Preview{overflow:auto!important;-webkit-overflow-scrolling:touch}}
+@media print{#idA4Preview.idA4Preview{overflow:visible!important;padding:0!important;background:#fff!important}#idA4Preview .idA4Page{margin:0!important;box-shadow:none!important}}
+</style>
+<script id="v171-targeted-live-fixes-runtime">
+(function(){'use strict';
+ async function v171PaintIdQrs(root){
+   root=root||document;
+   const cards=[...root.querySelectorAll('.v164Id[data-v171-adm]')];
+   if(!cards.length)return;
+   if(typeof window.ensureQR!=='function')throw new Error('QR generator unavailable');
+   await window.ensureQR();
+   for(const card of cards){
+     const box=card.querySelector('.v171IdQr'),adm=String(card.dataset.v171Adm||'').trim();
+     if(!box||!adm||box.dataset.ready==='1')continue;
+     try{
+       const r=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});
+       if(r.error)throw r.error;
+       const token=r.data?.token;if(!token)throw new Error('Student QR token missing');
+       box.innerHTML='';
+       new QRCode(box,{text:location.origin+location.pathname+'?student_verify='+encodeURIComponent(token),width:160,height:160,correctLevel:QRCode.CorrectLevel.H});
+       box.dataset.ready='1';
+     }catch(e){
+       box.innerHTML='<span style="font-size:4px;color:#a00">QR unavailable</span>';
+       box.title=e?.message||String(e);
+     }
+   }
+ }
+ window.v171PaintIdQrs=v171PaintIdQrs;
+ const base=window.idStudioPreview;
+ if(typeof base==='function')window.idStudioPreview=async function(){
+   const r=await base.apply(this,arguments);
+   try{await v171PaintIdQrs(document.getElementById('idA4Preview')||document)}catch(e){window.toast?.('ID QR: '+(e?.message||String(e)))}
+   return r;
+ };
+ window.LDM_V171_TARGETED_FIX='ID-QR-PREVIEW-DRIVER-TEACHER-2026-09-26';
+})();
+</script>
+<!-- ===== END V171 TARGETED LIVE CORRECTIONS ===== -->
+
 </body>
 </html>
