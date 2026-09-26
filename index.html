@@ -11402,7 +11402,8 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  const teacherVerifyToken=new URLSearchParams(location.search).get('teacher_verify');if(teacherVerifyToken){window.addEventListener('DOMContentLoaded',()=>v131PublicTeacherVerify(teacherVerifyToken),{once:true})}
 
  let scanState={stream:null,timer:null,busy:false,last:'',lastAt:0,scanned:0,synced:0,pending:0,mode:'school'};
- async function cameraStart(video){if(!navigator.mediaDevices?.getUserMedia)throw Error('Camera इस browser में उपलब्ध नहीं है');scanState.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});video.srcObject=scanState.stream;await video.play()}
+ function ldmCameraError(e){let n=String(e?.name||''),m=String(e?.message||e||'');if(!window.isSecureContext)return 'Camera blocked: HTTPS/Secure Context required.';if(n==='NotAllowedError'||/permission denied|notallowed/i.test(m))return 'Camera permission blocked. Browser/App Site Settings → Camera → Allow करें, फिर scanner दोबारा खोलें.';if(n==='NotFoundError'||/device not found|requested device/i.test(m))return 'Camera नहीं मिला. Device camera उपलब्ध/connected है या नहीं जाँचें.';if(n==='NotReadableError'||/could not start|track start/i.test(m))return 'Camera किसी दूसरे app/tab में busy है. दूसरा camera app बंद करके फिर कोशिश करें.';if(n==='OverconstrainedError')return 'Requested camera mode उपलब्ध नहीं है. दूसरा camera/device आजमाएँ.';return 'Camera start failed: '+(m||n||'Unknown camera error')} window.ldmCameraError=ldmCameraError;
+ async function cameraStart(video){if(!navigator.mediaDevices?.getUserMedia)throw Error('Camera unavailable: इस browser/device में getUserMedia support नहीं है.');try{scanState.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});video.srcObject=scanState.stream;await video.play()}catch(e){throw Error(ldmCameraError(e))}}
  function cameraStop(){clearInterval(scanState.timer);scanState.stream?.getTracks().forEach(t=>t.stop());scanState.stream=null}
  function beep(ok=true){try{navigator.vibrate?.(ok?60:[90,50,90]);let a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.frequency.value=ok?900:260;g.gain.value=.04;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+.08)}catch(_e){}}
  function qrToken(raw){try{let u=new URL(raw,location.href);return u.searchParams.get('student_verify')||u.searchParams.get('teacher_verify')||raw}catch(_e){return raw}}
@@ -11722,7 +11723,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
  };
  function capture(v){
    const c=document.createElement('canvas'),ratio=Math.min(1,900/Math.max(v.videoWidth||640,v.videoHeight||480));c.width=Math.round((v.videoWidth||640)*ratio);c.height=Math.round((v.videoHeight||480)*ratio);c.getContext('2d').drawImage(v,0,0,c.width,c.height);
-   c.toBlob(async b=>{if(!b)return;const f=new File([b],'camera.jpg',{type:'image/jpeg'});closeCam();try{const dt=new DataTransfer();dt.items.add(f);await v138UploadStudentPhoto(camId,{files:dt.files,value:''})}catch(e){window.toast?.(e?.message||String(e))}},'image/jpeg',.90);
+   c.toBlob(async b=>{if(!b)return;const f=new File([b],'camera.jpg',{type:'image/jpeg'});closeCam();try{const dt=new DataTransfer();dt.items.add(f);await v138UploadStudentPhoto(camId,{files:dt.files,value:''})}catch(e){window.toast?.(window.ldmCameraError?window.ldmCameraError(e):(e?.message||String(e)))}},'image/jpeg',.90);
  }
 
 
@@ -11860,7 +11861,7 @@ window.v147SaveTeacherProfile=async function(btn){try{localBusy(btn,true);let ch
  mobile:$147('v147Mobile')?.value?.trim()||'',alternate_mobile:$147('v147AltMobile')?.value?.trim()||'',personal_email:$147('v147Email')?.value?.trim()||'',
  qualification:$147('v147Qualification')?.value?.trim()||'',experience_years:$147('v147Experience')?.value===''?null:Number($147('v147Experience')?.value||0),address:$147('v147Address')?.value?.trim()||''};
  let r=await sb.rpc('ldm_teacher_update_personal_profile',{p_changes:changes});if(r.error)throw r.error;window.ldmTeacherContext=null;window.toast?.('✓ Personal profile updated');await window.v138TeacherProfile();
- }catch(e){window.toast?.(e?.message||String(e))}finally{localBusy(btn,false)}};
+ }catch(e){window.toast?.(window.ldmCameraError?window.ldmCameraError(e):(e?.message||String(e)))}finally{localBusy(btn,false)}};
 window.v138TeacherProfile=async function(){if(!teacher147())return window.toast?.('Teacher only');window.surface?.('erp');window.teacherShell?.();window.__v90Route='v138_teacher_profile';window.v90Push?.('v138_teacher_profile');let h=$147('erpContent');if(!h)return;h.innerHTML='<div class="panel"><div class="empty">Loading profile…</div></div>';try{let c=await ldmTeacherMasterContext(),p=c?.profile||c?.teacher||window.ldmTeacherContext?.profile||{};let v=(...k)=>{for(let x of k)if(p?.[x]!=null&&String(p[x]).trim()!=='')return String(p[x]);return ''};h.innerHTML=`<div class="panel"><h2>👤 My Profile</h2><p class="note">Personal details आप update कर सकते हैं • Official assignment Admin controlled</p><div class="v147ProfileForm"><div class="v147ProfileLocked"><small>Employee ID</small><b>${esc147(v('employee_id','teacher_id')||'—')}</b></div><div class="v147ProfileLocked"><small>Teacher Name</small><b>${esc147(v('teacher_name','full_name')||'—')}</b></div><label>DOB<input id="v147Dob" type="date" value="${esc147(v('dob','date_of_birth'))}"></label><label>Gender<select id="v147Gender"><option value="">Select</option>${['Male','Female','Other'].map(x=>`<option ${v('gender')===x?'selected':''}>${x}</option>`).join('')}</select></label><label>Father / Husband<input id="v147Relation" value="${esc147(v('father_husband_name','father_name','husband_name'))}"></label><label>Mobile<input id="v147Mobile" value="${esc147(v('mobile','phone'))}"></label><label>Alternate Mobile<input id="v147AltMobile" value="${esc147(v('alternate_mobile','alt_mobile'))}"></label><label>Personal Email<input id="v147Email" type="email" value="${esc147(v('personal_email'))}"></label><label>Qualification<input id="v147Qualification" value="${esc147(v('qualification'))}"></label><label>Experience (Years)<input id="v147Experience" type="number" min="0" step="0.5" value="${esc147(v('experience_years','experience'))}"></label><label class="full">Address<textarea id="v147Address">${esc147(v('address','full_address'))}</textarea></label><div class="v147ProfileLocked"><small>Joining Date</small><b>${esc147(v('joining_date','date_of_joining')||'—')}</b></div><div class="v147ProfileLocked"><small>Designation / Status</small><b>${esc147((v('designation')||'—')+' • '+(v('status','employment_status')||'—'))}</b></div></div><p><button class="primary" onclick="v147SaveTeacherProfile(this)">💾 Save Personal Details</button></p></div>`;window.scrollTo(0,0)}catch(e){h.innerHTML='<div class="dangerNote">'+esc147(e?.message||e)+'</div>'}};
 
 /* One Central Student QR Center. */
@@ -12291,5 +12292,43 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 <!-- V169 BOOKS & ITEMS MODULE -->
 <!-- V168 ERP ROOT HARDENED: V160/V163/V164 corrections preserved; parser-safe root. -->
 <!-- V166-ROOT-PARSER-LOGIN-RECOVERY-2026-09-25 -->
+
+<style id="v170-root-mobile-fix">
+@media(max-width:760px){
+  #erp .topbar,#erp .v90Top,#erp .v104Header,#erp .v114Header{max-width:100vw!important;overflow:hidden!important}
+  #erp .topbar .tools,#erp .v90Top .tools,#erp .v104Header .tools{min-width:0!important;max-width:100%!important;flex-wrap:wrap!important}
+  #erpContent{max-width:100%!important;overflow-x:hidden!important}
+  #v90BackBtn,#v90HomeBtn{flex:0 0 auto!important}
+}
+</style>
+<script id="v170-root-final-corrections">
+(()=>{
+'use strict';
+window.__LD_BUILD='V170-ROOT-CORRECTION-3PASS-2026-09-26';
+function loggedIn(){return !!window.user}
+function routeNow(){try{return String(sessionStorage.getItem('ldm_current_route')||window.__v90Route||'dashboard')}catch(_e){return String(window.__v90Route||'dashboard')}}
+function stackNow(){let h=Array.isArray(window.__v90History)?window.__v90History.slice():[];if(!h.length)h=['dashboard'];return h}
+function sealState(replace=false){if(!loggedIn())return;let r=routeNow(),h=stackNow(),st={ldmInternal:true,ldmGuard:true,route:r,stack:h};try{(replace?history.replaceState:history.pushState).call(history,st,'',location.href)}catch(_e){}}
+// Keep an authenticated internal history guard so Android/browser Back is consumed by ERP navigation.
+window.addEventListener('load',()=>{if(loggedIn())sealState(true)},false);
+window.addEventListener('popstate',async e=>{
+  if(!loggedIn())return;
+  // Existing canonical handler owns valid ERP states. Null/external state means browser reached ERP boundary: keep ERP open.
+  if(!e.state?.ldmInternal){
+    try{let moved=await window.v90Back?.();if(moved===false){await (window.render?.('dashboard'));try{sessionStorage.setItem('ldm_current_route','dashboard')}catch(_e){}}}catch(_e){}
+    sealState(false);
+  }
+},false);
+// Homework is intentionally independent of teacher attendance. Preserve assigned class/subject authorization only.
+const oldTH=window.teacherHomework;
+if(typeof oldTH==='function')window.teacherHomework=async function(){let r=await oldTH.apply(this,arguments);try{let host=document.getElementById('erpContent');let p=host?.querySelector('.panel');if(p&&!p.querySelector('.v170HomeworkRule')){let n=document.createElement('div');n.className='note v170HomeworkRule';n.textContent='Homework घर/विद्यालय कहीं से भी publish किया जा सकता है • Teacher Attendance required नहीं • Assigned Class/Subject permission लागू रहेगी.';p.prepend(n)}}catch(_e){}return r};
+// Driver scanner: preserve existing secure RPC flow, but show exact camera/RPC category instead of bare Permission denied.
+const oldDriver=window.v130StartDriver;
+if(typeof oldDriver==='function')window.v130StartDriver=async function(){try{return await oldDriver.apply(this,arguments)}catch(e){let b=document.getElementById('v130Result');let m=window.ldmCameraError?window.ldmCameraError(e):(e?.message||String(e));if(b){b.className='v130Result bad';b.textContent=m}return null}};
+// Stop camera whenever user leaves scanner routes.
+const rbase=window.render;
+if(typeof rbase==='function')window.render=async function(route='dashboard'){let cur=routeNow();if((cur==='v130_qr_scanner'||cur==='v143_teacher_qr_attendance')&&route!==cur)try{window.v130StopScanner?.();window.v143StopTeacherQr?.()}catch(_e){}return rbase.apply(this,arguments)};
+})();
+</script>
 </body>
 </html>
