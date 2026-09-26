@@ -7008,7 +7008,7 @@ const v65RenderBase=render;
 render=async function(p){
   v64CloseMobileSidebar?.();
   if(!V65_BASE_OK&&String(p).startsWith('v65_'))return toast('V65 Compatibility Blocked: exact V64 final base not detected. No V65 change executed.');
-  if(v65Teacher()&&['attendance','teaching_diary','exams','homework','v65_smart_marks'].includes(p)){
+  if(v65Teacher()&&['attendance','teaching_diary','exams','v65_smart_marks'].includes(p)){
     const ok=await v65HasTeacherAttendance();if(!ok){await v65TeacherAttendancePage(true);return}
   }
   if(p==='v65_control')return v65ControlCenter();
@@ -11398,8 +11398,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  async function ensureQR(){if(window.QRCode)return window.QRCode;let old=document.getElementById('v130-qrcode-lib');if(old&&!window.QRCode)old.remove();await addScript('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js','v130-qrcode-lib');if(!window.QRCode)throw Error('QR generator load नहीं हुआ. Internet/CDN connection जाँचें.');return window.QRCode} window.ensureQR=ensureQR;
  async function tokenFor(adm){let r=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(r.error)throw r.error;return r.data?.token}
  async function paintQR(root=document){await ensureQR();let cards=[...root.querySelectorAll('.idCard[data-v130-adm]')];for(let c of cards){if(c.querySelector('.v130IdQr'))continue;try{let t=await tokenFor(c.dataset.v130Adm),q=document.createElement('div');q.className='v130IdQr';q.title='Student Verification QR';c.appendChild(q);new QRCode(q,{text:baseUrl()+'?student_verify='+encodeURIComponent(t),width:110,height:110,correctLevel:QRCode.CorrectLevel.H})}catch(_e){}}}
- if(typeof window.renderIdCard==='function'){const b=window.renderIdCard;window.renderIdCard=function(s,t){let h=b.apply(this,arguments),adm=E(s?.admission_no||'');return h.replace(/<div class="idCard /,'<div data-v130-adm="'+adm+'" class="idCard ')}}
- if(typeof window.idStudioPreview==='function'){const b=window.idStudioPreview;window.idStudioPreview=async function(){let r=await b.apply(this,arguments);setTimeout(()=>paintQR(document),80);return r}}
+ /* ID Card rendering is owned by the canonical V164 engine below. */
 
  window.v130PublicVerify=async function(token){document.body.innerHTML='<div class="v130PublicVerify"><div class="v130VerifyCard" id="v130Verify"><h1>L D MODERN EDUCATION ACADEMY</h1><p>Verifying Student ID…</p></div></div>';try{let r=await sb.rpc('ldm_public_student_verify',{p_token:token});if(r.error)throw r.error;let x=r.data||{},box=document.getElementById('v130Verify');if(!x.ok){box.innerHTML='<h1>L D MODERN EDUCATION ACADEMY</h1><p>⚠ '+E(x.message||'Verification unavailable')+'</p>';return}let locality=String(x.locality||'').split(',').slice(-3).join(', ');box.innerHTML='<h1>L D MODERN EDUCATION ACADEMY</h1><span class="verified">✓ VERIFIED STUDENT</span><div style="margin:15px">'+(x.photo_url?'<img src="'+E(x.photo_url)+'" alt="Student Photo">':'')+'</div><h2>'+E(x.student_name)+'</h2><p><b>Class:</b> '+E(x.class_name||'—')+'<br><b>Parent / Guardian:</b> '+E(x.father_name||'—')+'<br><b>Locality:</b> '+E(locality||'—')+'</p><p>If this student needs assistance, please contact the school.</p><p><a class="primary" style="display:inline-block;text-decoration:none" href="tel:'+E(x.school_phone||'')+'">📞 Call School</a></p>'}catch(e){document.getElementById('v130Verify').innerHTML='<h1>L D MODERN EDUCATION ACADEMY</h1><p>Verification temporarily unavailable.</p>'}}
  const verifyToken=new URLSearchParams(location.search).get('student_verify');if(verifyToken){window.addEventListener('DOMContentLoaded',()=>v130PublicVerify(verifyToken),{once:true})}
@@ -11408,11 +11407,11 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
 
  let scanState={stream:null,timer:null,busy:false,last:'',lastAt:0,scanned:0,synced:0,pending:0,mode:'school'};
  function ldmCameraError(e){let n=String(e?.name||''),m=String(e?.message||e||'');if(!window.isSecureContext)return 'Camera blocked: HTTPS/Secure Context required.';if(n==='NotAllowedError'||/permission denied|notallowed/i.test(m))return 'Camera permission blocked. Browser/App Site Settings → Camera → Allow करें, फिर scanner दोबारा खोलें.';if(n==='NotFoundError'||/device not found|requested device/i.test(m))return 'Camera नहीं मिला. Device camera उपलब्ध/connected है या नहीं जाँचें.';if(n==='NotReadableError'||/could not start|track start/i.test(m))return 'Camera किसी दूसरे app/tab में busy है. दूसरा camera app बंद करके फिर कोशिश करें.';if(n==='OverconstrainedError')return 'Requested camera mode उपलब्ध नहीं है. दूसरा camera/device आजमाएँ.';return 'Camera start failed: '+(m||n||'Unknown camera error')} window.ldmCameraError=ldmCameraError;
- async function cameraStart(video){if(!navigator.mediaDevices?.getUserMedia)throw Error('Camera unavailable: इस browser/device में getUserMedia support नहीं है.');try{scanState.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});video.srcObject=scanState.stream;await video.play()}catch(e){throw Error(ldmCameraError(e))}}
+ async function cameraStart(video){if(!navigator.mediaDevices?.getUserMedia)throw Error('Camera unavailable: इस browser/device में getUserMedia support नहीं है.');try{scanState.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920,min:1280},height:{ideal:1080,min:720},frameRate:{ideal:30,min:15}},audio:false});video.srcObject=scanState.stream;await video.play();try{let tr=scanState.stream.getVideoTracks?.()[0],cap=tr?.getCapabilities?.()||{},adv={};if(Array.isArray(cap.focusMode)&&cap.focusMode.includes('continuous'))adv.focusMode='continuous';if(Array.isArray(cap.exposureMode)&&cap.exposureMode.includes('continuous'))adv.exposureMode='continuous';if(Object.keys(adv).length)await tr.applyConstraints({advanced:[adv]})}catch(_e){}}catch(e){throw Error(ldmCameraError(e))}}
  function cameraStop(){clearInterval(scanState.timer);scanState.stream?.getTracks().forEach(t=>t.stop());scanState.stream=null}
  function beep(ok=true){try{navigator.vibrate?.(ok?60:[90,50,90]);let a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.frequency.value=ok?900:260;g.gain.value=.04;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+.08)}catch(_e){}}
  function qrToken(raw){try{let u=new URL(raw,location.href);return u.searchParams.get('student_verify')||u.searchParams.get('teacher_verify')||raw}catch(_e){return raw}}
- async function decodeLoop(video,onCode){let decode;if('BarcodeDetector'in window){let det=new BarcodeDetector({formats:['qr_code']});decode=async()=>{let rs=await det.detect(video);return rs?.[0]?.rawValue||''}}else{let jq=typeof window.v143EnsureJsQR==='function'?await window.v143EnsureJsQR():null;if(!jq&&typeof v143EnsureJsQR==='function')jq=await v143EnsureJsQR();if(!jq)throw Error('QR decoder load नहीं हुआ. Camera चालू है, decoder support उपलब्ध नहीं है.');let c=document.createElement('canvas'),ctx=c.getContext('2d',{willReadFrequently:true});decode=async()=>{if(video.readyState<2)return '';let w=video.videoWidth,h=video.videoHeight;if(!w||!h)return '';c.width=w;c.height=h;ctx.drawImage(video,0,0,w,h);let im=ctx.getImageData(0,0,w,h),z=jq(im.data,w,h,{inversionAttempts:'attemptBoth'});return z?.data||''}}clearInterval(scanState.timer);scanState.timer=setInterval(async()=>{if(scanState.busy||video.readyState<2)return;scanState.busy=true;try{let raw=await decode();if(raw){let now=Date.now();if(raw!==scanState.last||now-scanState.lastAt>2500){scanState.last=raw;scanState.lastAt=now;await onCode(qrToken(raw))}}}catch(_e){}finally{scanState.busy=false}},180)}
+ async function decodeLoop(video,onCode){let decode;if('BarcodeDetector'in window){let det=new BarcodeDetector({formats:['qr_code']});decode=async()=>{let rs=await det.detect(video);return rs?.[0]?.rawValue||''}}else{let jq=typeof window.v143EnsureJsQR==='function'?await window.v143EnsureJsQR():null;if(!jq&&typeof v143EnsureJsQR==='function')jq=await v143EnsureJsQR();if(!jq)throw Error('QR decoder load नहीं हुआ. Camera चालू है, decoder support उपलब्ध नहीं है.');let c=document.createElement('canvas'),ctx=c.getContext('2d',{willReadFrequently:true});decode=async()=>{if(video.readyState<2)return '';let w=video.videoWidth,h=video.videoHeight;if(!w||!h)return '';c.width=w;c.height=h;ctx.drawImage(video,0,0,w,h);let im=ctx.getImageData(0,0,w,h),z=jq(im.data,w,h,{inversionAttempts:'attemptBoth'});if(z?.data)return z.data;let side=Math.floor(Math.min(w,h)*.72),sx=Math.floor((w-side)/2),sy=Math.floor((h-side)/2),cw=Math.min(1280,Math.max(720,side));c.width=cw;c.height=cw;ctx.drawImage(video,sx,sy,side,side,0,0,cw,cw);im=ctx.getImageData(0,0,cw,cw);z=jq(im.data,cw,cw,{inversionAttempts:'attemptBoth'});return z?.data||''}}clearInterval(scanState.timer);scanState.timer=setInterval(async()=>{if(scanState.busy||video.readyState<2)return;scanState.busy=true;try{let raw=await decode();if(raw){let now=Date.now();if(raw!==scanState.last||now-scanState.lastAt>2500){scanState.last=raw;scanState.lastAt=now;await onCode(qrToken(raw))}}}catch(_e){}finally{scanState.busy=false}},120)}
  function scanShell(title,sub){return '<div class="v130Scan"><div class="panelHead"><div><h2>'+E(title)+'</h2><p>'+E(sub)+'</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>'}
  window.v130StopScanner=()=>{cameraStop();window.toast?.('Scanner stopped')};
  window.ldmTeacherQrCard=async function(id){if(!admin())return toast('Admin only');try{let r=await sb.rpc('ldm_get_teacher_qr',{p_teacher_id:id});if(r.error)throw r.error;let x=r.data||{};await ensureQR();document.getElementById('v131TeacherQrModal')?.remove();let m=document.createElement('div');m.id='v131TeacherQrModal';m.className='modal show';m.innerHTML='<div class="modalCard" style="max-width:420px"><button class="close" onclick="this.closest(\'.modal\').remove()">×</button><div id="v131TeacherCard" style="padding:24px;text-align:center;border:2px solid #123b6d;border-radius:18px;background:#fff"><b style="font-size:20px">L D MODERN EDUCATION ACADEMY</b><p style="margin:4px 0 14px">TEACHER ID CARD</p><div id="v131TeacherQr" style="width:150px;height:150px;margin:8px auto"></div><h2 style="margin:8px 0">'+E(x.teacher_name||'Teacher')+'</h2><p><b>Employee ID:</b> '+E(x.employee_id||'—')+'</p><p style="font-size:12px">Secure QR • Gate Attendance</p></div><p style="text-align:center"><button class="primary" onclick="window.print()">🖨 Print</button></p></div>';document.body.appendChild(m);new QRCode(document.getElementById('v131TeacherQr'),{text:baseUrl()+'?teacher_verify='+encodeURIComponent(x.token),width:150,height:150,correctLevel:QRCode.CorrectLevel.H})}catch(e){toast(e.message||String(e))}};
@@ -11655,7 +11654,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
      window.scrollTo(0,0);
    }catch(e){host.innerHTML=`<div class="dangerNote">${window.esc?.(e?.message||String(e))||String(e)}</div>`}
  };
- /* ACTUAL Class Teacher assignment only — never broad legacy Teaching Classes/Subjects permission. */
+ /* CANONICAL Teacher assignment resolver — all active Admin-assigned classes. */
  async function classTeacherClasses(){
    let ctx=await ldmTeacherMasterContext();
    return [...new Set((ctx?.classes||[]).filter(x=>x.is_active!==false).map(x=>String(x.class_name||'').trim()).filter(Boolean))];
@@ -11764,8 +11763,8 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
  async function v143EnsureJsQR(){if(window.jsQR)return window.jsQR;await new Promise((ok,bad)=>{let x=document.getElementById('v152-jsqr');if(x){if(window.jsQR)return ok();x.addEventListener('load',ok,{once:true});x.addEventListener('error',bad,{once:true});return}x=document.createElement('script');x.id='v152-jsqr';x.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';x.onload=ok;x.onerror=()=>bad(new Error('QR decoder load नहीं हुआ'));document.head.appendChild(x)});return window.jsQR} window.v143EnsureJsQR=v143EnsureJsQR;
  async function v143StartLoop(video,allowed){
    let decode;if('BarcodeDetector' in window){let detector=new BarcodeDetector({formats:['qr_code']});decode=async()=>{let f=await detector.detect(video);return f?.[0]?.rawValue||''}}
-   else{let jq=await v143EnsureJsQR();if(!jq)throw new Error('QR decoding capability उपलब्ध नहीं है');let c=document.createElement('canvas'),ctx=c.getContext('2d',{willReadFrequently:true});decode=async()=>{if(video.readyState<2)return '';let w=video.videoWidth,h=video.videoHeight;if(!w||!h)return '';c.width=w;c.height=h;ctx.drawImage(video,0,0,w,h);let im=ctx.getImageData(0,0,w,h),z=jq(im.data,w,h,{inversionAttempts:'dontInvert'});return z?.data||''}}
-   clearInterval(v143QrTimer);v143QrTimer=setInterval(async()=>{if(v143QrBusy||video.readyState<2)return;v143QrBusy=true;try{let raw=await decode();if(!raw)return;let token=v143Token(raw);if(!token){v143Result('bad','✕ यह Student Verification QR नहीं है');v143Beep(false);return}let now=Date.now();if(token===v143QrLast&&now-v143QrLastAt<2500)return;v143QrLast=token;v143QrLastAt=now;try{await v143MarkQr(token,allowed)}catch(e){v143Result('bad','✕ '+v143Esc(e?.message||String(e)));v143Beep(false)}}catch(e){console.warn('Teacher QR decode',e)}finally{v143QrBusy=false}},180)
+   else{let jq=await v143EnsureJsQR();if(!jq)throw new Error('QR decoding capability उपलब्ध नहीं है');let c=document.createElement('canvas'),ctx=c.getContext('2d',{willReadFrequently:true});decode=async()=>{if(video.readyState<2)return '';let w=video.videoWidth,h=video.videoHeight;if(!w||!h)return '';c.width=w;c.height=h;ctx.drawImage(video,0,0,w,h);let im=ctx.getImageData(0,0,w,h),z=jq(im.data,w,h,{inversionAttempts:'attemptBoth'});if(z?.data)return z.data;let side=Math.floor(Math.min(w,h)*.72),sx=Math.floor((w-side)/2),sy=Math.floor((h-side)/2),cw=Math.min(1280,Math.max(720,side));c.width=cw;c.height=cw;ctx.drawImage(video,sx,sy,side,side,0,0,cw,cw);im=ctx.getImageData(0,0,cw,cw);z=jq(im.data,cw,cw,{inversionAttempts:'attemptBoth'});return z?.data||''}}
+   clearInterval(v143QrTimer);v143QrTimer=setInterval(async()=>{if(v143QrBusy||video.readyState<2)return;v143QrBusy=true;try{let raw=await decode();if(!raw)return;let token=v143Token(raw);if(!token){v143Result('bad','✕ यह Student Verification QR नहीं है');v143Beep(false);return}let now=Date.now();if(token===v143QrLast&&now-v143QrLastAt<2500)return;v143QrLast=token;v143QrLastAt=now;try{await v143MarkQr(token,allowed)}catch(e){v143Result('bad','✕ '+v143Esc(e?.message||String(e)));v143Beep(false)}}catch(e){console.warn('Teacher QR decode',e)}finally{v143QrBusy=false}},120)
  }
  window.v143TeacherQrAttendance=async function(){
    if(!teacher())return window.toast?.('Teacher only');surface('erp');teacherShell();window.__v90Route='v143_teacher_qr_attendance';window.v90Push?.('v143_teacher_qr_attendance');
@@ -11819,9 +11818,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
  async function qrLib(){if(window.QRCode)return;await new Promise((res,rej)=>{let s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
  async function sharpQR(root=document){await qrLib();for(const c of root.querySelectorAll('.idCard[data-v130-adm]')){let adm=String(c.dataset.v130Adm||'').trim();if(!adm)continue;try{let rr=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(rr.error||!rr.data?.token)continue;let box=c.querySelector('.v130IdQr')||c.appendChild(Object.assign(document.createElement('div'),{className:'v130IdQr'}));box.innerHTML='';new QRCode(box,{text:location.origin+location.pathname+'?student_verify='+encodeURIComponent(rr.data.token),width:240,height:240,correctLevel:QRCode.CorrectLevel.H});await new Promise(r=>setTimeout(r,20));let cv=box.querySelector('canvas');if(cv){let im=new Image();im.alt='Student Verification QR';im.src=cv.toDataURL('image/png');box.innerHTML='';box.appendChild(im)}}catch(e){console.error('QR',adm,e)}}}
  window.v136SharpQR=sharpQR;
- const pr0=window.idStudioPreview;if(typeof pr0==='function')window.idStudioPreview=async function(){let r=await pr0.apply(this,arguments);await sharpQR($('idA4Preview')||document);return r};
- const pt0=window.idStudioPrint;if(typeof pt0==='function')window.idStudioPrint=async function(){await sharpQR($('idA4Preview')||document);return pt0.apply(this,arguments)};
- const pd0=window.idStudioPdf;if(typeof pd0==='function')window.idStudioPdf=async function(){await sharpQR($('idA4Preview')||document);return pd0.apply(this,arguments)};
+ /* Legacy ID preview/print/PDF interceptors removed; V164 owns these paths. */
 
  setTimeout(teacherShell,0);
 })();
@@ -11930,8 +11927,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  };
  window.v150RenderStudents=function(){let q=String(document.getElementById('v150SMQ')?.value||'').toLowerCase().trim(),cl=document.getElementById('v150SMClass')?.value||'',a=rows.filter(x=>(!cl||x.class_name===cl)&&(!q||[x.student_name,x.father_name,x.roll_no,x.admission_no,x.student_id,x.phone].some(v=>String(v||'').toLowerCase().includes(q))));let b=document.getElementById('v150SMBody');if(!b)return;b.innerHTML=`<div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Class</th><th>Roll</th><th>Admission / Student ID</th><th>Mobile</th><th>Status</th><th>Master Actions</th></tr>${a.map(x=>`<tr><td><b>${E(x.student_name||'')}</b></td><td>${E(x.father_name||'—')}</td><td>${E(x.class_name||'—')}</td><td>${E(x.roll_no||'—')}</td><td>${E(x.admission_no||'—')}<small class="cellSub">${E(x.student_id||'')}</small></td><td>${E(x.phone||'—')}</td><td>${E(x.status||'Active')}</td><td><div class="v150MasterActions"><button onclick="dashboardStudentFull('${E(x.id)}')">Full Details</button><button class="edit" onclick='openEdit("students",${JSON.stringify(x).replace(/'/g,"&#39;")})'>Edit / Correct</button><button onclick="openStudentFeeAccount?.('${E(x.id)}')">Fee Link</button><button class="del" onclick="v150SafeStudentDelete('${E(x.id)}')">Delete Safety</button></div></td></tr>`).join('')||'<tr><td colspan="8">No matching students</td></tr>'}</table></div>`};
  window.v150SafeStudentDelete=async function(id){let x=rows.find(r=>String(r.id)===String(id));if(!x)return;if(!confirm('Delete Safety permanent data delete नहीं करेगा. Student को Inactive/Archived करना है?\n'+(x.student_name||'')))return;let u=await sb.from('students').update({status:'Inactive'}).eq('id',id);if(u.error)return window.toast?.(u.error.message);window.toast?.('✓ Student archived safely • history preserved');await v150StudentMaster()};
- // Same-page iframe print avoids popup permission for ID cards.
- window.idStudioPrint=function(){let el=document.getElementById('idA4Preview');if(!el)return window.toast?.('Preview first');let old=document.getElementById('v150PrintFrame');old?.remove();let f=document.createElement('iframe');f.id='v150PrintFrame';f.style='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:.01;pointer-events:none';document.body.appendChild(f);let d=f.contentDocument;d.open();d.write(`<html><head><title>ID Cards</title><style>${idStudioPrintCss()}</style></head><body>${el.innerHTML}</body></html>`);d.close();setTimeout(()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){window.toast?.(e.message||String(e))}},250)};
+ // ID printing is owned by the canonical V164 engine below.
  // Final dispatch extension, preserving V149 owner for every other route.
  const base=window.render;window.render=async function(route='dashboard'){route=String(route||'dashboard');if(route==='v150_student_master')return v150StudentMaster();return base.apply(this,arguments)};
 })();
@@ -11994,11 +11990,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  window.v136Gallery=upload154;
  window.v138RemoveStudentPhoto=async function(id){let row=rows154.find(x=>String(x.id)===String(id));if(!row||!row.photo_path)return;if(!confirm('इस student की current photo remove करनी है?'))return;try{let old=row.photo_path,rr=await sb.rpc('ldm_teacher_remove_student_photo',{p_student_id:row.id});if(rr.error)throw rr.error;try{await sb.storage.from('student-media').remove([old])}catch(_e){}row.photo_path='';row.photo_url='';row.student_photo_url='';row._signed_photo='';window.toast?.('Student photo removed • Central Student Master synced');await window.v136TeacherPhotos()}catch(e){window.toast?.(e?.message||e)}};
 
- /* ID: preview is source of truth; print receives the same exact card CSS; PDF already captures preview DOM. */
- const oldPrintCss=window.idStudioPrintCss;
- const exactIdCss=`.idCard.v646PremiumId .v104Band{min-height:13mm!important;padding:2.2mm 2.4mm!important;gap:1.5mm!important}.idCard.v646PremiumId .v104Logo{width:9.5mm!important;height:9.5mm!important;flex:0 0 9.5mm!important}.idCard.v646PremiumId .v104HeadText b{font-size:10.5px!important;line-height:1.05!important;font-weight:950!important;letter-spacing:.12px!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}.idCard.v646PremiumId .v104HeadText small{font-size:5.25px!important;line-height:1.05!important;font-weight:750!important;margin-top:.45mm!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}.idCard.v646PremiumId .v104HeadText em{font-size:5.5px!important;line-height:1!important;margin-top:.35mm!important}.idCard.v646PremiumId .v6422IdMain{flex:1!important;min-height:0!important;padding:2mm 2.5mm 1mm!important;gap:2mm!important;overflow:hidden!important}.idCard.v646PremiumId .v104Name{font-size:9px!important;font-weight:950!important;color:#10233e!important}.idCard.v646PremiumId .v646IdLine{font-size:6.4px!important;line-height:1.18!important;color:#17263a!important}.idCard.v646PremiumId .v646Sign{min-height:5.5mm!important}.idCard.v646PremiumId .v104Foot{font-size:5.5px!important;padding:.7mm 2mm!important}@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.idCard{break-inside:avoid!important;page-break-inside:avoid!important}}`;
- if(typeof oldPrintCss==='function')window.idStudioPrintCss=function(){return oldPrintCss()+exactIdCss};
- const print154=window.idStudioPrint;window.idStudioPrint=async function(){let el=$('idA4Preview');if(!el)return window.toast?.('Preview first');try{if(typeof window.sharpQR==='function')await window.sharpQR(el)}catch(_e){}let old=$('v154PrintFrame');old?.remove();let f=document.createElement('iframe');f.id='v154PrintFrame';f.style='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:.01;pointer-events:none';document.body.appendChild(f);let d=f.contentDocument;d.open();d.write(`<html><head><title>ID Cards</title><style>${idStudioPrintCss()}</style></head><body>${el.innerHTML}</body></html>`);d.close();setTimeout(()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){window.toast?.(e.message||e)}},400)};
+ /* ID printing is owned by the canonical V164 ID Studio below. */
 
  /* STORAGE: never fabricate quota. Used is exact inventory; total/free are shown only when a real configured/API limit exists. */
  const storageBase=window.v147StorageCenter;
@@ -12186,8 +12178,8 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 <style id="v164-idcard-premium-css">
 #idTemplateGrid{grid-template-columns:repeat(5,minmax(0,1fr))!important}.idTemplatePick{min-height:54px}.idTemplatePick b{white-space:normal;line-height:1.15}.v164OrientTag{display:block;font-size:9px;font-weight:900;opacity:.72;margin-top:2px}
 .idA4Preview{overflow:auto!important}.idA4Page.v164LandscapePage{grid-template-columns:repeat(2,85.6mm)!important;grid-template-rows:repeat(5,54mm)!important;justify-content:center!important;gap:2mm 4mm!important}.idA4Page.v164PortraitPage{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;justify-content:center!important;gap:3mm 5mm!important;padding-top:12mm!important}
-.v164Id{position:relative;box-sizing:border-box;background:#fff;overflow:hidden;display:flex;flex-direction:column;color:#142033;font-family:Arial,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;page-break-inside:avoid;break-inside:avoid}.v164Id.landscape{width:85.6mm;height:54mm}.v164Id.portrait{width:54mm;height:85.6mm}.v164Id *{box-sizing:border-box}.v164Head{display:grid;grid-template-columns:10mm 1fr;align-items:center;gap:1.5mm;padding:2mm 2.4mm 1.6mm;min-height:14mm}.v164Logo{width:9.5mm;height:9.5mm;object-fit:contain;background:#fff;border-radius:50%;padding:.4mm}.v164School{min-width:0;text-align:center}.v164School strong{display:block;font:900 10.2px/1.05 Georgia,serif;letter-spacing:.08px}.v164School small{display:block;font:700 5.3px/1.12 Arial,sans-serif;margin-top:.45mm}.v164School em{display:block;font:900 5.6px/1 Arial,sans-serif;font-style:normal;margin-top:.5mm;letter-spacing:.2px}.v164Main{flex:1;min-height:0;display:grid;grid-template-columns:20mm 1fr;gap:2.2mm;padding:2mm 2.5mm 1mm;align-items:start}.v164Photo{width:19mm;height:23mm;object-fit:cover;object-position:center;border:1px solid #aebbd0;background:#eef2f7}.v164NoPhoto{display:grid;place-items:center;font-size:6px;font-weight:900}.v164Info{min-width:0}.v164Name{font:900 9.2px/1.08 Arial,sans-serif;margin:0 0 1.1mm;overflow-wrap:anywhere}.v164Line{font:700 6.35px/1.28 Arial,sans-serif;white-space:normal;overflow-wrap:anywhere;margin:.25mm 0}.v164Line b{font-weight:900}.v164Bottom{display:grid;grid-template-columns:1fr 24mm;align-items:end;gap:1mm;padding:0 2.5mm 1.2mm}.v164QrBox{font-size:5px;font-weight:800;min-width:0;overflow:hidden}.v164Sign{text-align:center;min-height:6mm;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.v164Sign img{max-width:20mm;max-height:4.8mm;object-fit:contain}.v164Sign span{display:block;width:22mm;border-top:.3mm solid #718096;padding-top:.4mm;font-size:5.2px;font-weight:900;white-space:nowrap}.v164Foot{text-align:center;font-size:5.3px;font-weight:900;padding:.8mm 2mm;line-height:1.05}
-.v164Id.portrait .v164Head{grid-template-columns:1fr;justify-items:center;gap:.8mm;padding:3mm 3mm 2mm;min-height:23mm}.v164Id.portrait .v164Logo{width:12mm;height:12mm}.v164Id.portrait .v164School strong{font-size:10px;line-height:1.08}.v164Id.portrait .v164School small{font-size:5.1px}.v164Id.portrait .v164Main{display:flex;flex-direction:column;align-items:center;padding:2mm 3mm 1mm;gap:1mm}.v164Id.portrait .v164Photo{width:23mm;height:28mm}.v164Id.portrait .v164Info{text-align:center;width:100%}.v164Id.portrait .v164Name{font-size:9.5px;margin:.4mm 0 1mm}.v164Id.portrait .v164Line{font-size:6.1px;line-height:1.25}.v164Id.portrait .v164Bottom{grid-template-columns:1fr;padding:0 3mm 1.5mm}.v164Id.portrait .v164QrBox{display:flex;justify-content:center;align-items:center;gap:1mm}.v164Id.portrait .v164Sign span{width:24mm}.v164Id.portrait .v164Foot{font-size:5.4px;padding:1mm 2mm}
+.v164Id{position:relative;box-sizing:border-box;background:#fff;overflow:hidden;display:flex;flex-direction:column;color:#142033;font-family:Arial,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;page-break-inside:avoid;break-inside:avoid}.v164Id.landscape{width:85.6mm;height:54mm}.v164Id.portrait{width:54mm;height:85.6mm}.v164Id *{box-sizing:border-box}.v164Head{display:grid;grid-template-columns:10mm 1fr;align-items:center;gap:1.5mm;padding:2mm 2.4mm 1.6mm;min-height:14mm}.v164Logo{width:9.5mm;height:9.5mm;object-fit:contain;background:#fff;border-radius:50%;padding:.4mm}.v164School{min-width:0;text-align:center}.v164School strong{display:block;font:900 10.2px/1.05 Georgia,serif;letter-spacing:.08px}.v164School small{display:block;font:700 5.3px/1.12 Arial,sans-serif;margin-top:.45mm}.v164School em{display:block;font:900 5.6px/1 Arial,sans-serif;font-style:normal;margin-top:.5mm;letter-spacing:.2px}.v164Main{flex:1;min-height:0;display:grid;grid-template-columns:20mm 1fr;gap:2.2mm;padding:2mm 2.5mm 1mm;align-items:start}.v164Photo{width:19mm;height:23mm;object-fit:cover;object-position:center;border:1px solid #aebbd0;background:#eef2f7}.v164NoPhoto{display:grid;place-items:center;font-size:6px;font-weight:900}.v164Info{min-width:0}.v164Name{font:900 9.2px/1.08 Arial,sans-serif;margin:0 0 1.1mm;overflow-wrap:anywhere}.v164Line{font:700 6.35px/1.28 Arial,sans-serif;white-space:normal;overflow-wrap:anywhere;margin:.25mm 0}.v164Line b{font-weight:900}.v164Bottom{display:grid;grid-template-columns:1fr 24mm;align-items:end;gap:1mm;padding:0 2.5mm 1.2mm}.v164QrBox{font-size:5px;font-weight:800;min-width:0;overflow:hidden}.v164Sign{text-align:center;min-height:6mm;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.v164Sign img{max-width:20mm;max-height:4.8mm;object-fit:contain}.v164Sign span{display:block;width:22mm;border-top:.3mm solid #718096;padding-top:.4mm;font-size:5.2px;font-weight:900;white-space:nowrap}.v164Foot{text-align:center;font-size:5.3px;font-weight:900;padding:.8mm 2mm;line-height:1.05}.v164QrBox{display:flex;align-items:center;gap:1mm;overflow:hidden!important}.v164QrBox small{font-size:4.6px;line-height:1.05;max-width:12mm}.v164IdQr{position:relative!important;inset:auto!important;width:13mm!important;height:13mm!important;min-width:13mm!important;max-width:13mm!important;flex:0 0 13mm!important;background:#fff;padding:.4mm;display:grid;place-items:center;overflow:hidden!important}.v164IdQr img,.v164IdQr canvas{position:static!important;width:12mm!important;height:12mm!important;max-width:12mm!important;max-height:12mm!important;display:block!important}.v164Id .v130IdQr{display:none!important}.v164Id{container-type:inline-size}.v164Id .v164Name{font-size:clamp(7px,3.5cqw,9.2px)}.v164Id .v164Line{font-size:clamp(5px,2.5cqw,6.35px)}
+.v164Id.portrait .v164Head{grid-template-columns:1fr;justify-items:center;gap:.8mm;padding:3mm 3mm 2mm;min-height:23mm}.v164Id.portrait .v164Logo{width:12mm;height:12mm}.v164Id.portrait .v164School strong{font-size:10px;line-height:1.08}.v164Id.portrait .v164School small{font-size:5.1px}.v164Id.portrait .v164Main{display:flex;flex-direction:column;align-items:center;padding:2mm 3mm 1mm;gap:1mm}.v164Id.portrait .v164Photo{width:23mm;height:28mm}.v164Id.portrait .v164Info{text-align:center;width:100%}.v164Id.portrait .v164Name{font-size:9.5px;margin:.4mm 0 1mm}.v164Id.portrait .v164Line{font-size:6.1px;line-height:1.25}.v164Id.portrait .v164Bottom{grid-template-columns:1fr;padding:0 3mm 1.5mm}.v164Id.portrait .v164QrBox{display:flex;justify-content:center;align-items:center;gap:1mm}.v164Id.portrait .v164IdQr{width:12mm!important;height:12mm!important;min-width:12mm!important;max-width:12mm!important;flex-basis:12mm!important}.v164Id.portrait .v164IdQr img,.v164Id.portrait .v164IdQr canvas{width:11mm!important;height:11mm!important;max-width:11mm!important;max-height:11mm!important}.v164Id.portrait .v164Sign span{width:24mm}.v164Id.portrait .v164Foot{font-size:5.4px;padding:1mm 2mm}
 /* Five genuinely different landscape families */
 .v164Id.t1{border:1.4px solid #174d87;border-radius:3mm}.v164Id.t1 .v164Head{background:linear-gradient(135deg,#0b315f,#187ad7);color:#fff}.v164Id.t1 .v164Photo{border-radius:50%;height:19mm}
 .v164Id.t2{border:1.5px solid #0b6e75;border-radius:1mm}.v164Id.t2 .v164Head{background:#eafafa;color:#075b61;border-bottom:2mm solid #14a3a8}.v164Id.t2 .v164Photo{border-radius:2mm;box-shadow:2mm 2mm 0 #d7f2f2}
@@ -12214,10 +12206,19 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
    t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));const portrait=t>5,set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=(typeof v107DocLogo==='function'?v107DocLogo():(school?.logo_url||'school-logo.png')),addr=school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar',sig=school?.principal_signature_url||school?.director_signature_url||'',parent=s.father_name||s.guardian_name||s.mother_name||'—';
    const ph=photo?`<img class="v164Photo" src="${safe(photo)}" alt="Student Photo">`:`<div class="v164Photo v164NoPhoto">PHOTO</div>`;
    const opt=[]; if(set.showRoll&&s.roll_no)opt.push(`<div class="v164Line"><b>Roll No.:</b> ${safe(s.roll_no)}</div>`); if(set.showDob&&s.dob)opt.push(`<div class="v164Line"><b>DOB:</b> ${safe(s.dob)}</div>`); if(set.showMother&&s.mother_name)opt.push(`<div class="v164Line"><b>Mother:</b> ${safe(s.mother_name)}</div>`); if(set.showAddress&&s.address)opt.push(`<div class="v164Line"><b>Address:</b> ${safe(s.address)}</div>`);
-   return `<article data-v171-adm="${safe(s.admission_no||'')}" class="v164Id ${portrait?'portrait':'landscape'} t${t}"><header class="v164Head"><img class="v164Logo" src="${safe(logo)}" alt="School Logo"><div class="v164School"><strong>${safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</strong><small>${safe(addr)}</small><em>STUDENT ID CARD • ${safe(set.session)}</em></div></header><main class="v164Main">${ph}<div class="v164Info"><div class="v164Name">${safe(s.student_name||'Student')}</div><div class="v164Line"><b>Class:</b> ${safe(s.class_name||'—')}${s.section?` • <b>Sec:</b> ${safe(s.section)}`:''}</div>${set.showFather?`<div class="v164Line"><b>Father:</b> ${safe(parent)}</div>`:''}${set.showAdmission?`<div class="v164Line"><b>Admission No.:</b> ${safe(s.admission_no||'—')}</div>`:''}${set.showMobile?`<div class="v164Line"><b>Mobile:</b> ${safe(s.phone||'—')}</div>`:''}${opt.join('')}</div></main><div class="v164Bottom"><div class="v164QrBox"><div class="v171IdQr" aria-label="Student QR"></div><small>${safe(set.footer||'Student Identity Card')}</small></div><div class="v164Sign">${sig?`<img src="${safe(sig)}" alt="Authorized Signature">`:''}<span>Principal / Director</span></div></div><footer class="v164Foot">${safe(N[t-1])}</footer></article>`;
+   return `<article data-id-adm="${safe(s.admission_no||'')}" class="v164Id ${portrait?'portrait':'landscape'} t${t}"><header class="v164Head"><img class="v164Logo" src="${safe(logo)}" alt="School Logo"><div class="v164School"><strong>${safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</strong><small>${safe(addr)}</small><em>STUDENT ID CARD • ${safe(set.session)}</em></div></header><main class="v164Main">${ph}<div class="v164Info"><div class="v164Name">${safe(s.student_name||'Student')}</div><div class="v164Line"><b>Class:</b> ${safe(s.class_name||'—')}${s.section?` • <b>Sec:</b> ${safe(s.section)}`:''}</div>${set.showFather?`<div class="v164Line"><b>Father:</b> ${safe(parent)}</div>`:''}${set.showAdmission?`<div class="v164Line"><b>Admission No.:</b> ${safe(s.admission_no||'—')}</div>`:''}${set.showMobile?`<div class="v164Line"><b>Mobile:</b> ${safe(s.phone||'—')}</div>`:''}${opt.join('')}</div></main><div class="v164Bottom"><div class="v164QrBox"><div class="v164IdQr" aria-label="Student QR"></div><small>${safe(set.footer||'Student Identity Card')}</small></div><div class="v164Sign">${sig?`<img src="${safe(sig)}" alt="Authorized Signature">`:''}<span>Principal / Director</span></div></div><footer class="v164Foot">${safe(N[t-1])}</footer></article>`;
  };
  window.idStudioPageHtml=function(rows,fmt){const portrait=Number(fmt)>5,cap=portrait?9:10;let cells=rows.map(s=>`<div class="idA4Cell">${renderIdCard(s,fmt)}</div>`);while(cells.length<cap)cells.push('<div class="idA4Cell"></div>');return `<section class="idA4Page ${portrait?'v164PortraitPage':'v164LandscapePage'}">${cells.join('')}</section>`};
- window.idStudioPreview=async function(silent=false){let ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');let rows=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));await v14AttachSignedPhotos(rows);let fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),cap=fmt>5?9:10,pages=idStudioChunks(rows,cap).map(x=>idStudioPageHtml(x,fmt)).join(''),work=$('idWork');if(!work)return;work.innerHTML=`<div class="idStudioPreviewActions"><b>${rows.length} cards • ${Math.ceil(rows.length/cap)} A4 page(s) • Format ${fmt} • ${fmt>5?'Portrait':'Landscape'}</b><button class="primary" onclick="idStudioPrint()">🖨 Print</button><button class="primary" onclick="idStudioPdf()">PDF</button><button class="secondary" onclick="idStudioPreview()">↻ Refresh Preview</button></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;if(!silent)toast('Premium ID preview ready')};
+ async function v164PaintQr(root){
+   root=root||document;const cards=[...root.querySelectorAll('.v164Id[data-id-adm]')];if(!cards.length)return;
+   if(typeof window.ensureQR!=='function')throw new Error('QR generator unavailable');await window.ensureQR();
+   for(const card of cards){const box=card.querySelector('.v164IdQr'),adm=String(card.dataset.idAdm||'').trim();if(!box||!adm)continue;
+     try{let r=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(r.error)throw r.error;let token=r.data?.token;if(!token)throw new Error('Student QR token missing');box.innerHTML='';new QRCode(box,{text:location.origin+location.pathname+'?student_verify='+encodeURIComponent(token),width:144,height:144,correctLevel:QRCode.CorrectLevel.H});}
+     catch(e){box.innerHTML='<span style="font-size:4px;color:#a00">QR unavailable</span>';box.title=e?.message||String(e)}
+   }
+ }
+ function v164AutoFit(root){(root||document).querySelectorAll('.v164Id').forEach(card=>card.querySelectorAll('.v164Name,.v164Line').forEach(el=>{let fs=parseFloat(getComputedStyle(el).fontSize)||8,g=0;while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1)&&fs>5&&g++<12){fs-=.3;el.style.fontSize=fs+'px'}}))}
+ window.idStudioPreview=async function(silent=false){let ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');let rows=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));await v14AttachSignedPhotos(rows);let fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),cap=fmt>5?9:10,pages=idStudioChunks(rows,cap).map(x=>idStudioPageHtml(x,fmt)).join(''),work=$('idWork');if(!work)return;work.innerHTML=`<div class="idStudioPreviewActions"><b>${rows.length} cards • ${Math.ceil(rows.length/cap)} A4 page(s) • Format ${fmt} • ${fmt>5?'Portrait':'Landscape'}</b><button class="primary" onclick="idStudioPrint()">🖨 Print</button><button class="primary" onclick="idStudioPdf()">PDF</button><button class="secondary" onclick="idStudioPreview()">↻ Refresh Preview</button></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;await v164PaintQr($('idA4Preview'));v164AutoFit($('idA4Preview'));if(!silent)toast('Premium ID preview ready')};
  window.idStudioPrint=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');let css=document.getElementById('v164-idcard-premium-css')?.textContent||'';w.document.write(`<html><head><title>ID Cards</title><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;background:#fff}.idA4Page{width:210mm;height:297mm;display:grid;align-content:start;page-break-after:always;overflow:hidden}.idA4Page:last-child{page-break-after:auto}.idA4Cell{display:flex;align-items:center;justify-content:center;overflow:hidden}.v164LandscapePage{grid-template-columns:repeat(2,85.6mm);grid-template-rows:repeat(5,54mm);justify-content:center;gap:2mm 4mm;padding:6mm 7mm}.v164PortraitPage{grid-template-columns:repeat(3,54mm);grid-template-rows:repeat(3,85.6mm);justify-content:center;gap:3mm 5mm;padding:12mm 7mm 6mm}${css}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},700)};
  window.idStudioPdf=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class',fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1));html2pdf().set({margin:0,filename:`${c}-ID-Cards-${fmt>5?'Portrait':'Landscape'}-Format-${fmt}.pdf`,image:{type:'png',quality:1},html2canvas:{scale:3,useCORS:true,backgroundColor:'#ffffff',letterRendering:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:false},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()};
  window.LDM_IDCARD_BUILD='V164-10-PREMIUM-ID-CARDS-2026-09-25';
@@ -12324,9 +12325,7 @@ window.addEventListener('popstate',async e=>{
     sealState(false);
   }
 },false);
-// Homework is intentionally independent of teacher attendance. Preserve assigned class/subject authorization only.
-const oldTH=window.teacherHomework;
-if(typeof oldTH==='function')window.teacherHomework=async function(){let r=await oldTH.apply(this,arguments);try{let host=document.getElementById('erpContent');let p=host?.querySelector('.panel');if(p&&!p.querySelector('.v170HomeworkRule')){let n=document.createElement('div');n.className='note v170HomeworkRule';n.textContent='Homework घर/विद्यालय कहीं से भी publish किया जा सकता है • Teacher Attendance required नहीं • Assigned Class/Subject permission लागू रहेगी.';p.prepend(n)}}catch(_e){}return r};
+// Homework attendance dependency is fixed in the original V65 route gate above.
 // Driver scanner: preserve existing secure RPC flow, but show exact camera/RPC category instead of bare Permission denied.
 const oldDriver=window.v130StartDriver;
 if(typeof oldDriver==='function')window.v130StartDriver=async function(){try{return await oldDriver.apply(this,arguments)}catch(e){let b=document.getElementById('v130Result');let m=window.ldmCameraError?window.ldmCameraError(e):(e?.message||String(e));if(b){b.className='v130Result bad';b.textContent=m}return null}};
@@ -12336,153 +12335,6 @@ if(typeof rbase==='function')window.render=async function(route='dashboard'){let
 })();
 </script>
 
-<!-- ===== V171 TARGETED LIVE CORRECTIONS: ID QR + PREVIEW PARITY ===== -->
-<style id="v171-targeted-live-fixes-css">
-#idA4Preview.idA4Preview{overflow:auto!important;padding:8px!important;background:#eef3f8!important}
-#idA4Preview .idA4Page{width:210mm!important;height:297mm!important;min-width:210mm!important;min-height:297mm!important;display:grid!important;align-content:start!important;overflow:hidden!important;background:#fff!important;margin:0 auto 12px!important;box-shadow:0 3px 18px #163b5f22!important}
-#idA4Preview .v164LandscapePage{grid-template-columns:repeat(2,85.6mm)!important;grid-template-rows:repeat(5,54mm)!important;justify-content:center!important;gap:2mm 4mm!important;padding:6mm 7mm!important}
-#idA4Preview .v164PortraitPage{grid-template-columns:repeat(3,54mm)!important;grid-template-rows:repeat(3,85.6mm)!important;justify-content:center!important;gap:3mm 5mm!important;padding:12mm 7mm 6mm!important}
-#idA4Preview .idA4Cell,#idA4Preview .v164Id{overflow:hidden!important;min-width:0!important;min-height:0!important}
-.v164QrBox{display:flex!important;align-items:center!important;gap:1mm!important;overflow:visible!important}
-.v164QrBox small{font-size:4.6px;line-height:1.05;max-width:10mm}
-.v171IdQr{width:15mm;height:15mm;flex:0 0 15mm;background:#fff;padding:.5mm;display:grid;place-items:center}
-.v171IdQr img,.v171IdQr canvas{width:14mm!important;height:14mm!important;display:block!important}
-.v164Id.portrait .v164Bottom{grid-template-columns:1fr!important;justify-items:center!important}
-.v164Id.portrait .v164QrBox{display:flex!important;justify-content:center!important}
-.v164Id.portrait .v171IdQr{width:14mm;height:14mm;flex-basis:14mm}
-.v164Id.portrait .v171IdQr img,.v164Id.portrait .v171IdQr canvas{width:13mm!important;height:13mm!important}
-@media(max-width:900px){#idA4Preview.idA4Preview{overflow:auto!important;-webkit-overflow-scrolling:touch}}
-@media print{#idA4Preview.idA4Preview{overflow:visible!important;padding:0!important;background:#fff!important}#idA4Preview .idA4Page{margin:0!important;box-shadow:none!important}}
-</style>
-<script id="v171-targeted-live-fixes-runtime">
-(function(){'use strict';
- async function v171PaintIdQrs(root){
-   root=root||document;
-   const cards=[...root.querySelectorAll('.v164Id[data-v171-adm]')];
-   if(!cards.length)return;
-   if(typeof window.ensureQR!=='function')throw new Error('QR generator unavailable');
-   await window.ensureQR();
-   for(const card of cards){
-     const box=card.querySelector('.v171IdQr'),adm=String(card.dataset.v171Adm||'').trim();
-     if(!box||!adm||box.dataset.ready==='1')continue;
-     try{
-       const r=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});
-       if(r.error)throw r.error;
-       const token=r.data?.token;if(!token)throw new Error('Student QR token missing');
-       box.innerHTML='';
-       new QRCode(box,{text:location.origin+location.pathname+'?student_verify='+encodeURIComponent(token),width:160,height:160,correctLevel:QRCode.CorrectLevel.H});
-       box.dataset.ready='1';
-     }catch(e){
-       box.innerHTML='<span style="font-size:4px;color:#a00">QR unavailable</span>';
-       box.title=e?.message||String(e);
-     }
-   }
- }
- window.v171PaintIdQrs=v171PaintIdQrs;
- const base=window.idStudioPreview;
- if(typeof base==='function')window.idStudioPreview=async function(){
-   const r=await base.apply(this,arguments);
-   try{await v171PaintIdQrs(document.getElementById('idA4Preview')||document)}catch(e){window.toast?.('ID QR: '+(e?.message||String(e)))}
-   return r;
- };
- window.LDM_V171_TARGETED_FIX='ID-QR-PREVIEW-DRIVER-TEACHER-2026-09-26';
-})();
-</script>
-<!-- ===== END V171 TARGETED LIVE CORRECTIONS ===== -->
-
-
-<!-- ===== V172 FINAL ROOT CORRECTION • LIVE DEFECTS ONLY ===== -->
-<style id="v172-final-root-css">
-/* ID CARD: fixed physical card, fluid internals. Override legacy QR absolute sizing. */
-.v164Id{container-type:inline-size;position:relative!important;overflow:hidden!important}
-.v164Id *{min-width:0;max-width:100%;box-sizing:border-box}
-.v164Id .v164Photo img,.v164Id img.v164Photo,.v164Id .v104Photo img{width:100%!important;height:100%!important;object-fit:cover!important}
-.v164Id .v164Name,.v164Id .v164School,.v164Id .v164Info,.v164Id .v164Info *{overflow-wrap:anywhere!important}
-.v164Id .v164Name{font-size:clamp(7px,3.5cqw,13px)!important;line-height:1.05!important}
-.v164Id .v164Info,.v164Id .v164Info *{font-size:clamp(5px,2.6cqw,9px)!important;line-height:1.12!important}
-.v164Id .v164QrBox{position:relative!important;inset:auto!important;width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:1mm!important;overflow:hidden!important}
-.v164Id .v130IdQr{display:none!important} /* old injected QR must never overlap V171/V172 QR */
-.v164Id .v171IdQr{position:relative!important;inset:auto!important;width:13mm!important;height:13mm!important;min-width:13mm!important;max-width:13mm!important;flex:0 0 13mm!important;padding:.4mm!important;overflow:hidden!important;background:#fff!important}
-.v164Id .v171IdQr canvas,.v164Id .v171IdQr img{position:static!important;width:12mm!important;height:12mm!important;max-width:12mm!important;max-height:12mm!important;display:block!important}
-.v164Id.portrait .v171IdQr{width:12mm!important;height:12mm!important;min-width:12mm!important;max-width:12mm!important;flex-basis:12mm!important}
-.v164Id.portrait .v171IdQr canvas,.v164Id.portrait .v171IdQr img{width:11mm!important;height:11mm!important}
-.v164Id .v164Bottom{overflow:hidden!important;min-height:0!important}
-#idA4Preview .idA4Cell{overflow:hidden!important}
-#idA4Preview .v164Id{transform:none!important;overflow:hidden!important}
-@media print{
- .v164Id{overflow:hidden!important}
- .v164Id .v130IdQr{display:none!important}
-}
-/* Teacher photo cards: labels remain readable on mobile. */
-.v136PhotoInfo>small{display:block!important;white-space:normal!important}
-</style>
-<script id="v172-final-root-runtime">
-(function(){'use strict';
- const $=id=>document.getElementById(id);
- const role=()=>String(window.profile?.role||'').trim().toLowerCase();
- const admin=()=>['admin','super_admin','principal'].includes(role());
- const teacher=()=>role()==='teacher';
-
- /* 1. Smart Van: effective render hook. Add button AFTER whichever historical vanCenter wins. */
- function v172InstallDriverButton(){
-   if(!admin())return;
-   const host=$('erpContent'); if(!host)return;
-   const txt=(host.textContent||'').toLowerCase();
-   if(!txt.includes('van')&&!txt.includes('transport'))return;
-   if(host.querySelector('[data-v172-driver]'))return;
-   const panel=host.querySelector('.panel')||host;
-   const bar=document.createElement('div');
-   bar.className='tools';bar.dataset.v172Driver='1';bar.style.cssText='margin:0 0 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap';
-   bar.innerHTML="<button type=\"button\" class=\"primary\" onclick=\"render('v130_driver_setup')\">🚌 Driver Scanner Setup</button><small class=\"note\">Driver Name → Route → Vehicle → PIN → Scanner Link → PICK-UP / DROP</small>";
-   panel.insertBefore(bar,panel.firstChild);
- }
- const render0=window.render;
- if(typeof render0==='function')window.render=async function(route){
-   const r=await render0.apply(this,arguments);
-   if(route==='van_center')setTimeout(v172InstallDriverButton,0);
-   return r;
- };
- const van0=window.vanCenter;
- if(typeof van0==='function')window.vanCenter=async function(){
-   const r=await van0.apply(this,arguments);setTimeout(v172InstallDriverButton,0);return r;
- };
-
- /* 2. Homework: remove ONLY attendance gate. Keep role/assignment checks in original save/load. */
- function v172UngateHomework(){
-   if(!teacher())return;
-   const host=$('erpContent');if(!host)return;
-   host.querySelectorAll('button[disabled],select[disabled],input[disabled],textarea[disabled]').forEach(el=>{
-     const area=(el.closest('.panel')?.textContent||'').toLowerCase();
-     if(area.includes('homework') && (area.includes('attendance')||area.includes('उपस्थिति')))el.disabled=false;
-   });
- }
- const hw0=window.homework;
- if(typeof hw0==='function')window.homework=async function(){
-   const r=await hw0.apply(this,arguments);setTimeout(v172UngateHomework,0);return r;
- };
-
- /* 3. ID preview: repaint only the reserved QR slots, then auto-fit text if overflow remains. */
- function fitText(card){
-   card.querySelectorAll('.v164Name,.v164Info,.v164Info b,.v164Info span').forEach(el=>{
-     let fs=parseFloat(getComputedStyle(el).fontSize)||8, guard=0;
-     while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1)&&fs>5&&guard++<12){
-       fs-=.35;el.style.fontSize=fs+'px';
-     }
-   });
- }
- async function v172FitCards(){
-   const root=$('idA4Preview');if(!root)return;
-   try{if(typeof window.v171PaintIdQrs==='function')await window.v171PaintIdQrs(root)}catch(e){window.toast?.('ID QR: '+(e?.message||String(e)))}
-   root.querySelectorAll('.v164Id').forEach(fitText);
- }
- const prev0=window.idStudioPreview;
- if(typeof prev0==='function')window.idStudioPreview=async function(){
-   const r=await prev0.apply(this,arguments);await v172FitCards();return r;
- };
- window.LDM_V172_FINAL_ROOT='AUTO-FIT-DRIVER-HOMEWORK-TEACHER-2026-09-26';
-})();
-</script>
-<!-- ===== END V172 FINAL ROOT CORRECTION ===== -->
 
 </body>
 </html>
