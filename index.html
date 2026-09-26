@@ -1881,6 +1881,19 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @media(max-width:900px){.v26Home{padding-left:0!important}#v26Nav{top:0!important;transform:translateX(-105%);transition:.2s}#v26Nav.show{transform:translateX(0)}.v26Menu{display:block!important;position:absolute!important;left:10px!important;top:15px!important;z-index:160!important}.v26Top{min-height:120px!important;padding-left:55px!important}.v26Brand b{font-size:18px!important}.v26Brand img{width:66px!important;height:66px!important}.v26Motto{display:none!important}.erpTop{grid-template-columns:auto auto 1fr auto!important;min-height:88px!important}.v63SchoolHead{display:none}.v63AdminBox small{display:none}.v63TopLogout{display:none!important}#erpContent:before{height:110px}#erpContent .dashHero{margin-top:-124px!important;min-height:110px!important}}
 @media(max-width:620px){.v26Hero{min-height:280px!important}.v26Hero h1{font-size:25px!important}.v26Quote{display:none!important}.v26LoginCards{grid-template-columns:1fr!important}.erpTop #erpTitle{font-size:17px!important}.v63AdminBox{padding:3px}.v63Avatar{width:34px;height:34px;font-size:19px}}
 </style>
+<style id="v177-id-physical-guard">
+.v164Id.portrait .v164IdQr{width:11mm!important;height:11mm!important;min-width:11mm!important;max-width:11mm!important;flex-basis:11mm!important;padding:.3mm!important}
+.v164Id.portrait .v164IdQr img,.v164Id.portrait .v164IdQr canvas{width:10.4mm!important;height:10.4mm!important;max-width:10.4mm!important;max-height:10.4mm!important}
+.v164Id.portrait .v164Bottom{min-height:6mm!important;max-height:7mm!important;padding:0 3mm .6mm!important}
+.v164Id.portrait .v164Sign img{max-height:4mm!important}
+.v164Id.portrait .v164Sign span{font-size:4.7px!important;padding-top:.25mm!important}
+.v164Id.portrait .v164Foot{font-size:4.7px!important;padding:.55mm 2mm!important;line-height:1!important}
+</style>
+<style id="v180-scan-feedback-root">
+.v130Result.ok .v130Big,.v143QrResult.ok b{font-weight:950!important}
+.v130Result.ok,.v143QrResult.ok{animation:v180ScanOk .18s ease-out}
+@keyframes v180ScanOk{from{transform:scale(.985);opacity:.72}to{transform:scale(1);opacity:1}}
+</style>
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -8538,7 +8551,7 @@ const V90_ADMIN_GROUPS=[
   ['academics','📘 Academics'],['timetable_master','🗓 Timetable Master'],['v74_bell_center','🔔 Bell Timetable'],['teaching_monitor','📖 Teaching / Syllabus'],['v90_teaching_monitor','📚 Daily Teaching Monitor'],['homework','✏ Homework'],['v65_teaching','📚 Bell Teaching Control'],['v65_achievements','🏆 Achievements'],['v66_programs','🚌 Program / Tour Register'],['class_review_center','💬 Class Review / Reports']
  ]],
  ['🚌','Transport',[
-  ['van_center','🚐 Smart Van Center'],['transport','🚌 Transport Register'],['v90_transport_monitor','🚌 Trip Attendance Monitor']
+  ['van_center','🚐 Smart Van Center'],['v130_driver_setup','🚌 Driver Scanner Setup'],['transport','🚌 Transport Register'],['v90_transport_monitor','🚌 Trip Attendance Monitor']
  ]],
  ['📢','Communication',[
   ['notice_order_center','📣 Notice / Order'],['notices','🔔 Notices'],['events','📅 Events / PTM / Holidays'],['gallery','🖼 Gallery'],['home_highlights','🌟 Home Highlights'],['enquiries','☎ Enquiries']
@@ -8566,7 +8579,7 @@ function v90InstallShell(active=window.__v90Route||'dashboard'){
  if(window.innerWidth>900)erp.classList.remove('v58SideHidden');
  const top=erp.querySelector('.erpTop');if(top){
    let hb=top.querySelector('#v90HomeBtn');if(!hb){hb=document.createElement('button');hb.id='v90HomeBtn';hb.className='v90TopBtn';hb.textContent='🏠 Home';hb.onclick=v90GoHome;const title=top.querySelector('div');top.insertBefore(hb,title||top.firstChild?.nextSibling||null)}
-   let bb=top.querySelector('#v90BackBtn');if(!bb){bb=document.createElement('button');bb.id='v90BackBtn';bb.className='v90TopBtn';bb.textContent='← Back';bb.onclick=v90Back;top.insertBefore(bb,hb)}
+   let bb=top.querySelector('#v90BackBtn');if(!bb){bb=document.createElement('button');bb.id='v90BackBtn';bb.className='v90TopBtn';bb.textContent='← Back';bb.onclick=()=>window.v90Back?.();top.insertBefore(bb,hb)}
    let web=top.querySelector('.websiteBtn');if(web){web.style.display='inline-flex';web.textContent='🌐 View Website';web.onclick=()=>backWebsite()}
  }
  v90BuildNav(active);
@@ -8574,11 +8587,14 @@ function v90InstallShell(active=window.__v90Route||'dashboard'){
 }
 function v90Push(route){route=String(route||'dashboard');let h=Array.isArray(window.__v90History)?window.__v90History.slice():[];if(!h.length)h=['dashboard'];if(h[h.length-1]!==route)h.push(route);if(h.length>40)h=h.slice(-40);window.__v90History=h;window.__v90Route=route;try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route',route);let st={ldmInternal:true,route,stack:h};if(!history.state?.ldmInternal)history.replaceState(st,'',location.href);else if(history.state.route!==route)history.pushState(st,'',location.href)}catch(_e){}}
 function v90GoHome(){let h=['dashboard'];window.__v90History=h;window.__v90Route='dashboard';try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route','dashboard');history.pushState({ldmInternal:true,route:'dashboard',stack:h},'',location.href)}catch(_e){}return v90Dispatch('dashboard',true)}
-function v90Back(){let h=Array.isArray(window.__v90History)?window.__v90History.slice():['dashboard'];if(h.length<=1)return false;try{if(history.state?.ldmInternal){history.back();return true}}catch(_e){}h.pop();let r=h[h.length-1]||'dashboard';window.__v90History=h;window.__v90Route=r;try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route',r)}catch(_e){}return v90Dispatch(r,true)}
+function v90BackLegacyRemoved(){return window.v90Back?.()}
 window.erpGoHome=v90GoHome;
 
 function v90Card(icon,title,sub,route,cls='') {return `<button class="v90Monitor ${cls}" onclick="render('${route}')"><span class="v90MonitorIcon">${icon}</span><span><b>${v90Safe(title)}</b><small>${v90Safe(sub)}</small></span><em>›</em></button>`}
 async function v90AdminDashboard(){
+ const __v179Now=Date.now();
+ if(window.__v179AdminDashAt&&(__v179Now-window.__v179AdminDashAt)<1200&&document.querySelector('#erpContent .v90Dash'))return;
+ window.__v179AdminDashAt=__v179Now;
  window.__v90Route='dashboard';v90Head('Admin Dashboard','Full School Control • Live Monitoring');v90InstallShell('dashboard');
  const adminName=v90Safe(profile?.full_name||'Admin');if(!window.__ldmAdminStatsHTML){try{window.__ldmAdminStatsHTML=sessionStorage.getItem('ldm_admin_stats_html')||''}catch(_e){}}
  v90Set(`<div class="v90Dash v114AdminDash ldmRootAdminDash"><section class="ldmAdminIdentity"><div class="ldmAdminSchool"><span class="ldmAdminCrest">🏫</span><div><h1>L D MODERN EDUCATION ACADEMY</h1><p>Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar</p></div></div><div class="ldmAdminHello"><b>${adminName}</b><span>${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'short',year:'numeric'})}</span></div></section>
@@ -8597,6 +8613,7 @@ async function v90AdminDashboard(){
 </div>`);
  await v90LoadDashboardStats();
  try{v39LoadAdminPanels()}catch(_e){}
+ try{window.v154OneGreeting?.()}catch(_e){}
 }
 let __v105FeeTimer=null;
 function v105DashboardFeeInput(){clearTimeout(__v105FeeTimer);__v105FeeTimer=setTimeout(v105DashboardFeeSearch,160)}
@@ -8776,7 +8793,7 @@ async function v90Dispatch(route='dashboard',noPush=false){window.__v90Route=rou
 window.render=v90Dispatch;
 
 const v90PrevOpenERP=window.openERP;
-window.openERP=async function(){let r=await v90PrevOpenERP.apply(this,arguments);window.__v90History=['dashboard'];setTimeout(()=>v90Dispatch('dashboard',true),80);return r};
+window.openERP=async function(){let r=await v90PrevOpenERP.apply(this,arguments);if(!Array.isArray(window.__v90History)||!window.__v90History.length)window.__v90History=['dashboard'];return r};
 
 /* Re-assert final nav after older additive sidebar hooks. */
 ['v58AdminSidebar','v59AdminSidebar','v48AdminSidebar','v59TeacherSidebar'].forEach(n=>{try{let old=window[n];if(typeof old==='function'&&!old.__v90){let w=function(){let r=old.apply(this,arguments);setTimeout(()=>v90InstallShell(window.__v90Route),0);return r};w.__v90=true;window[n]=w}}catch(_e){}});
@@ -11062,8 +11079,7 @@ window.V6418_BUILD='V64.18-CLEAN-RUNTIME-COLLISION-FIX-2026-09-20';
  /* Target only ERP content/header, debounced; prevents legacy patches from leaving duplicate UI without global rerender loops. */
  window.addEventListener('load',()=>setTimeout(schedule,250),{once:true,passive:true});
  document.addEventListener('click',e=>{if(e.target.closest('#erpNav,.erpTop,button,a'))schedule()},{passive:true});
- const startObserver=()=>{let root=q('erpContent');if(!root||root.__v6418Observed)return;root.__v6418Observed=true;new MutationObserver(schedule).observe(root,{childList:true,subtree:false})};
- window.addEventListener('load',()=>setTimeout(startObserver,500),{once:true,passive:true});
+ /* V181: permanent #erpContent MutationObserver removed; navigation/load hooks already schedule shell cleanup. */
 
  /* Do not mislabel PostgreSQL recursion as ordinary save failure. */
  if(typeof window.saveRecord==='function'){
@@ -11409,7 +11425,17 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  function ldmCameraError(e){let n=String(e?.name||''),m=String(e?.message||e||'');if(!window.isSecureContext)return 'Camera blocked: HTTPS/Secure Context required.';if(n==='NotAllowedError'||/permission denied|notallowed/i.test(m))return 'Camera permission blocked. Browser/App Site Settings → Camera → Allow करें, फिर scanner दोबारा खोलें.';if(n==='NotFoundError'||/device not found|requested device/i.test(m))return 'Camera नहीं मिला. Device camera उपलब्ध/connected है या नहीं जाँचें.';if(n==='NotReadableError'||/could not start|track start/i.test(m))return 'Camera किसी दूसरे app/tab में busy है. दूसरा camera app बंद करके फिर कोशिश करें.';if(n==='OverconstrainedError')return 'Requested camera mode उपलब्ध नहीं है. दूसरा camera/device आजमाएँ.';return 'Camera start failed: '+(m||n||'Unknown camera error')} window.ldmCameraError=ldmCameraError;
  async function cameraStart(video){if(!navigator.mediaDevices?.getUserMedia)throw Error('Camera unavailable: इस browser/device में getUserMedia support नहीं है.');try{scanState.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920,min:1280},height:{ideal:1080,min:720},frameRate:{ideal:30,min:15}},audio:false});video.srcObject=scanState.stream;await video.play();try{let tr=scanState.stream.getVideoTracks?.()[0],cap=tr?.getCapabilities?.()||{},adv={};if(Array.isArray(cap.focusMode)&&cap.focusMode.includes('continuous'))adv.focusMode='continuous';if(Array.isArray(cap.exposureMode)&&cap.exposureMode.includes('continuous'))adv.exposureMode='continuous';if(Object.keys(adv).length)await tr.applyConstraints({advanced:[adv]})}catch(_e){}}catch(e){throw Error(ldmCameraError(e))}}
  function cameraStop(){clearInterval(scanState.timer);scanState.stream?.getTracks().forEach(t=>t.stop());scanState.stream=null}
- function beep(ok=true){try{navigator.vibrate?.(ok?60:[90,50,90]);let a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.frequency.value=ok?900:260;g.gain.value=.04;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+.08)}catch(_e){}}
+ function beep(ok=true){
+ try{
+  navigator.vibrate?.(ok?70:[90,50,90]);
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  const a=window.__ldmScanAudio||(window.__ldmScanAudio=new AC());
+  if(a.state==='suspended')a.resume?.();
+  const tone=(freq,at,dur,gain)=>{let o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.setValueAtTime(freq,at);g.gain.setValueAtTime(gain,at);g.gain.exponentialRampToValueAtTime(.0001,at+dur);o.connect(g);g.connect(a.destination);o.start(at);o.stop(at+dur)};
+  let t=a.currentTime+.01;if(ok){tone(880,t,.075,.07);tone(1175,t+.085,.11,.065)}else{tone(260,t,.16,.055)}
+ }catch(_e){}
+}
+window.ldmScanFeedback=beep;
  function qrToken(raw){try{let u=new URL(raw,location.href);return u.searchParams.get('student_verify')||u.searchParams.get('teacher_verify')||raw}catch(_e){return raw}}
  async function decodeLoop(video,onCode){let decode;if('BarcodeDetector'in window){let det=new BarcodeDetector({formats:['qr_code']});decode=async()=>{let rs=await det.detect(video);return rs?.[0]?.rawValue||''}}else{let jq=typeof window.v143EnsureJsQR==='function'?await window.v143EnsureJsQR():null;if(!jq&&typeof v143EnsureJsQR==='function')jq=await v143EnsureJsQR();if(!jq)throw Error('QR decoder load नहीं हुआ. Camera चालू है, decoder support उपलब्ध नहीं है.');let c=document.createElement('canvas'),ctx=c.getContext('2d',{willReadFrequently:true});decode=async()=>{if(video.readyState<2)return '';let w=video.videoWidth,h=video.videoHeight;if(!w||!h)return '';c.width=w;c.height=h;ctx.drawImage(video,0,0,w,h);let im=ctx.getImageData(0,0,w,h),z=jq(im.data,w,h,{inversionAttempts:'attemptBoth'});if(z?.data)return z.data;let side=Math.floor(Math.min(w,h)*.72),sx=Math.floor((w-side)/2),sy=Math.floor((h-side)/2),cw=Math.min(1280,Math.max(720,side));c.width=cw;c.height=cw;ctx.drawImage(video,sx,sy,side,side,0,0,cw,cw);im=ctx.getImageData(0,0,cw,cw);z=jq(im.data,cw,cw,{inversionAttempts:'attemptBoth'});return z?.data||''}}clearInterval(scanState.timer);scanState.timer=setInterval(async()=>{if(scanState.busy||video.readyState<2)return;scanState.busy=true;try{let raw=await decode();if(raw){let now=Date.now();if(raw!==scanState.last||now-scanState.lastAt>2500){scanState.last=raw;scanState.lastAt=now;await onCode(qrToken(raw))}}}catch(_e){}finally{scanState.busy=false}},120)}
  function scanShell(title,sub){return '<div class="v130Scan"><div class="panelHead"><div><h2>'+E(title)+'</h2><p>'+E(sub)+'</p></div><button onclick="v130StopScanner()">■ Stop</button></div><div class="v130Count"><b id="v130Scanned">Scanned 0</b><b id="v130Synced">Synced 0</b><b id="v130Pending">Pending 0</b></div><div class="v130Camera"><video id="v130Video" playsinline muted></video><div class="v130Aim"></div></div><div id="v130Result" class="v130Result">Camera शुरू हो रहा है…</div></div>'}
@@ -11435,7 +11461,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  // Security guard: browser may use only Supabase anon/publishable key, never service_role.
  window.saveCloud=function(){let url=document.getElementById('cloudUrl')?.value.trim().replace(/\/+$/,'')||'',key=document.getElementById('cloudKey')?.value.trim()||'';if(!url||!key)return toast('URL and key required');try{if(key.split('.').length===3){let payload=JSON.parse(atob(key.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));if(String(payload.role||'').toLowerCase()==='service_role')return toast('SECURITY BLOCK: service_role key browser/index.html में कभी save नहीं करें. केवल anon/publishable key उपयोग करें.')}}catch(_e){}localStorage.setItem('ld_cloud_v1',JSON.stringify({url,key}));location.reload()};
  const renderBase=window.render;window.render=async function(route='dashboard'){if(route==='v130_qr_scanner')return v130SchoolScanner();if(route==='v130_driver_setup')return v130DriverSetup();if(route==='v130_storage')return v130StorageCenter();if(route==='v130_fee_reminder')return v130FeeReminder();return renderBase.apply(this,arguments)};
- window.addEventListener('load',()=>setTimeout(()=>{if(!admin())return;let nav=document.getElementById('erpNav');if(nav&&!nav.querySelector('[data-v130]'))nav.insertAdjacentHTML('beforeend','<button data-v130="scan" onclick="render(\'v130_qr_scanner\')">⚡ QR Gate Scanner</button><button data-v130="driver" onclick="render(\'v130_driver_setup\')">🚌 Driver Scanner Setup</button><button data-v130="fee" onclick="render(\'v130_fee_reminder\')">📲 FREE Fee Reminder</button><button data-v130="storage" onclick="render(\'v130_storage\')">🗄 Storage Center</button>')},1000),{once:true});
+ /* V181: old V130 load-time nav injection removed; canonical V90 menu/route owns Driver/QR/Storage/Fee entries. */
 })();
 </script>
 
@@ -11698,7 +11724,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
      if(f.size>35*1024)throw new Error('Photo 35KB से बड़ी रह गई. दूसरा photo चुनें.');
      let path=`teacher-student-photo/${window.user.id}/${row.id}.jpg`;
      let up=await sb.storage.from('student-media').upload(path,f,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'});if(up.error)throw up.error;
-     let rr=await sb.rpc('v91_teacher_set_student_photo',{p_student_id:row.id,p_photo_path:path});if(rr.error)throw rr.error;
+     let rr=await sb.rpc('v179_teacher_set_student_photo_safe',{p_student_id:row.id,p_photo_path:path});if(rr.error)throw rr.error;
      row.photo_path=path;row.photo_url='';row.student_photo_url='';row._signed_photo='';
      try{await signed(row)}catch(_e){}
      window.toast?.(`Photo updated • ${Math.round(f.size/1024)} KB`);
@@ -11738,7 +11764,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
  function v143Token(raw){try{let u=new URL(String(raw||''),location.href);return u.searchParams.get('student_verify')||''}catch(_e){return ''}}
  function v143Counts(){let a=$('v143Scanned'),b=$('v143Marked');if(a)a.textContent='Scanned '+v143QrScanned;if(b)b.textContent='Present '+v143QrMarked}
  function v143Result(kind,html){let b=$('v143QrResult');if(!b)return;b.className='v143QrResult '+kind;b.innerHTML=html}
- function v143Beep(ok=true){try{navigator.vibrate?.(ok?60:[90,50,90])}catch(_e){}}
+ function v143Beep(ok=true){return window.ldmScanFeedback?.(ok)}
  window.v143StopTeacherQr=function(){if(v143QrTimer){clearInterval(v143QrTimer);v143QrTimer=null}try{v143QrStream?.getTracks?.().forEach(t=>t.stop())}catch(_e){}v143QrStream=null;v143QrBusy=false};
  async function v143ResolveStudent(token,allowed){
    let vr=await sb.rpc('ldm_public_student_verify',{p_token:token});if(vr.error)throw vr.error;let x=vr.data||{};
@@ -11790,15 +11816,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
    if(teacher()&&route==='v143_teacher_qr_attendance')return window.v143TeacherQrAttendance();
    return renderBase.apply(this,arguments);
  };
-
- /* TRUE Back: one stack pop; no Home fallback and no legacy permission toast. */
- window.v90Back=async function(){
-   let h=Array.isArray(window.__v90History)?window.__v90History.slice():[];
-   if(h.length<=1)return false;h.pop();let r=String(h[h.length-1]||'dashboard');window.__v90History=h;window.__v90Route=r;
-   try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route',r);history.replaceState({ldmInternal:true,route:r,stack:h},'',location.href)}catch(_e){}
-   return window.render(r);
- };
- document.addEventListener('click',function(e){let b=e.target.closest?.('#v90BackBtn,#v90HomeBtn');if(!b)return;e.preventDefault();e.stopImmediatePropagation();return b.id==='v90BackBtn'?window.v90Back():window.v90GoHome?.()},true);
+ /* V181: duplicate V143 Back/click owner removed; canonical V155 Back owns internal history. */
 
  /* Restore authenticated role after refresh; never leak greeting into Public. */
  async function restore(){
@@ -11964,15 +11982,14 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  }
  function oneGreeting(){let root=$('erpContent');let a=greetingCandidates(root);a.slice(1).forEach(el=>el.remove())}
  let greetQueued=false;function queueGreeting(){if(greetQueued)return;greetQueued=true;queueMicrotask(()=>{greetQueued=false;oneGreeting()})}
- const installGreetingObserver=()=>{let root=$('erpContent');if(!root||root.__v154GreetingObserver)return;let mo=new MutationObserver(queueGreeting);mo.observe(root,{childList:true,subtree:true});root.__v154GreetingObserver=mo;queueGreeting()};
- window.addEventListener('load',installGreetingObserver,{once:true});document.addEventListener('click',()=>setTimeout(installGreetingObserver,0),{passive:true});
+ window.v154OneGreeting=oneGreeting;
 
  /* Teacher Student Photos: canonical V136 root module is sole owner. */
  /* STORAGE: never fabricate quota. Used is exact inventory; total/free are shown only when a real configured/API limit exists. */
  const storageBase=window.v147StorageCenter;
  if(typeof storageBase==='function')window.v147StorageCenter=async function(){await storageBase.apply(this,arguments);try{let panel=$('erpContent')?.querySelector('.panel');if(!panel||panel.querySelector('.v154StorageTruth'))return;let usedText=[...panel.querySelectorAll('.v147Kpi')].find(x=>/Used Storage/i.test(x.textContent||''))?.querySelector('b')?.textContent||'—';let limit=Number(window.school?.storage_limit_bytes||0),usedMatch=String(usedText).match(/[\d.]+/),usedMB=usedMatch?Number(usedMatch[0]):0,limitMB=limit/1048576,freeMB=limit?Math.max(limitMB-usedMB,0):0,pct=limit?Math.min(100,(usedMB/limitMB)*100):null;panel.insertAdjacentHTML('beforeend',`<div class="v154StorageTruth"><div><small>Used Storage</small><b>${esc(usedText)}</b></div><div class="${limit?'':'unknown'}"><small>Total / Plan Limit</small><b>${limit?limitMB.toFixed(2)+' MB':'Not exposed to browser'}</b></div><div class="${limit?'':'unknown'}"><small>Available</small><b>${limit?freeMB.toFixed(2)+' MB':'Not safely calculable'}</b></div><div class="${limit?'':'unknown'}"><small>Usage</small><b>${pct===null?'—':pct.toFixed(1)+'%'}</b></div></div>${limit?'':`<div class="v154StorageTruthNote">Used storage is measured from real bucket objects. Supabase plan quota is not exposed by the normal browser client, so Total/Available is intentionally not guessed. If a verified project limit is configured centrally later, these cards calculate remaining storage automatically.</div>`}`)}catch(_e){}};
 
- setTimeout(()=>{installGreetingObserver();oneGreeting()},50);
+ setTimeout(oneGreeting,50);
 })();
 </script>
 <!-- ===== END V154 FINAL LIVE CORRECTIONS ===== -->
@@ -12223,7 +12240,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  window.idStudioPreview=async function(silent=false){let ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');let rows=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));await v14AttachSignedPhotos(rows);let fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),cap=fmt>5?9:10,pages=idStudioChunks(rows,cap).map(x=>idStudioPageHtml(x,fmt)).join(''),work=$('idWork');if(!work)return;work.innerHTML=`<div class="idStudioPreviewActions"><b>${rows.length} cards • ${Math.ceil(rows.length/cap)} A4 page(s) • Format ${fmt} • ${fmt>5?'Portrait':'Landscape'}</b><button class="primary" onclick="idStudioPrint()">🖨 Print</button><button class="primary" onclick="idStudioPdf()">PDF</button><button class="secondary" onclick="idStudioPreview()">↻ Refresh Preview</button></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;await v164PaintQr($('idA4Preview'));v164AutoFit($('idA4Preview'));if(!silent)toast('Premium ID preview ready')};
  window.idStudioPrint=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');let css=document.getElementById('v164-idcard-premium-css')?.textContent||'';w.document.write(`<html><head><title>ID Cards</title><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;background:#fff}.idA4Page{width:210mm;height:297mm;display:grid;align-content:start;page-break-after:always;overflow:hidden}.idA4Page:last-child{page-break-after:auto}.idA4Cell{display:flex;align-items:center;justify-content:center;overflow:hidden}.v164LandscapePage{grid-template-columns:repeat(2,85.6mm);grid-template-rows:repeat(5,54mm);justify-content:center;gap:2mm 4mm;padding:6mm 7mm}.v164PortraitPage{grid-template-columns:repeat(3,54mm);grid-template-rows:repeat(3,85.6mm);justify-content:center;gap:3mm 5mm;padding:12mm 7mm 6mm}${css}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();let printed=false,fire=()=>{if(printed)return;printed=true;w.focus();w.print()};setTimeout(()=>{let pending=[...w.document.images].filter(x=>!x.complete);if(!pending.length)return fire();let left=pending.length,done=()=>{if(--left<=0)fire()};pending.forEach(x=>{x.addEventListener('load',done,{once:true});x.addEventListener('error',done,{once:true})});setTimeout(fire,1800)},250)};
  window.idStudioPdf=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class',fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1));html2pdf().set({margin:0,filename:`${c}-ID-Cards-${fmt>5?'Portrait':'Landscape'}-Format-${fmt}.pdf`,image:{type:'png',quality:1},html2canvas:{scale:3,useCORS:true,backgroundColor:'#ffffff',letterRendering:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:false},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()};
- window.LDM_IDCARD_BUILD='V177-DEEP-ROOT-VERIFIED-2026-09-26';
+ window.LDM_IDCARD_BUILD='V181-VIDEO-ROOT-CONSOLIDATED-2026-09-26';
 })();
 </script>
 <!-- ===== END V164 ID CARD STUDIO ===== -->
@@ -12309,43 +12326,9 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
   #v90BackBtn,#v90HomeBtn{flex:0 0 auto!important}
 }
 </style>
-<script id="v170-root-final-corrections">
-(()=>{
-'use strict';
-window.__LD_BUILD='V170-ROOT-CORRECTION-3PASS-2026-09-26';
-function loggedIn(){return !!window.user}
-function routeNow(){try{return String(sessionStorage.getItem('ldm_current_route')||window.__v90Route||'dashboard')}catch(_e){return String(window.__v90Route||'dashboard')}}
-function stackNow(){let h=Array.isArray(window.__v90History)?window.__v90History.slice():[];if(!h.length)h=['dashboard'];return h}
-function sealState(replace=false){if(!loggedIn())return;let r=routeNow(),h=stackNow(),st={ldmInternal:true,ldmGuard:true,route:r,stack:h};try{(replace?history.replaceState:history.pushState).call(history,st,'',location.href)}catch(_e){}}
-// Keep an authenticated internal history guard so Android/browser Back is consumed by ERP navigation.
-window.addEventListener('load',()=>{if(loggedIn())sealState(true)},false);
-window.addEventListener('popstate',async e=>{
-  if(!loggedIn())return;
-  // Existing canonical handler owns valid ERP states. Null/external state means browser reached ERP boundary: keep ERP open.
-  if(!e.state?.ldmInternal){
-    try{let moved=await window.v90Back?.();if(moved===false){await (window.render?.('dashboard'));try{sessionStorage.setItem('ldm_current_route','dashboard')}catch(_e){}}}catch(_e){}
-    sealState(false);
-  }
-},false);
-// Homework attendance dependency is fixed in the original V65 route gate above.
-// Driver scanner: preserve existing secure RPC flow, but show exact camera/RPC category instead of bare Permission denied.
-const oldDriver=window.v130StartDriver;
-if(typeof oldDriver==='function')window.v130StartDriver=async function(){try{return await oldDriver.apply(this,arguments)}catch(e){let b=document.getElementById('v130Result');let m=window.ldmCameraError?window.ldmCameraError(e):(e?.message||String(e));if(b){b.className='v130Result bad';b.textContent=m}return null}};
-// Stop camera whenever user leaves scanner routes.
-const rbase=window.render;
-if(typeof rbase==='function')window.render=async function(route='dashboard'){let cur=routeNow();if((cur==='v130_qr_scanner'||cur==='v143_teacher_qr_attendance')&&route!==cur)try{window.v130StopScanner?.();window.v143StopTeacherQr?.()}catch(_e){}return rbase.apply(this,arguments)};
-})();
-</script>
+<!-- V179: obsolete V170 duplicate popstate/render wrapper removed.
+Canonical V138 popstate + V155 v90Back own navigation. -->
 
 
 </body>
 </html>
-
-<style id="v177-id-physical-guard">
-.v164Id.portrait .v164IdQr{width:11mm!important;height:11mm!important;min-width:11mm!important;max-width:11mm!important;flex-basis:11mm!important;padding:.3mm!important}
-.v164Id.portrait .v164IdQr img,.v164Id.portrait .v164IdQr canvas{width:10.4mm!important;height:10.4mm!important;max-width:10.4mm!important;max-height:10.4mm!important}
-.v164Id.portrait .v164Bottom{min-height:6mm!important;max-height:7mm!important;padding:0 3mm .6mm!important}
-.v164Id.portrait .v164Sign img{max-height:4mm!important}
-.v164Id.portrait .v164Sign span{font-size:4.7px!important;padding-top:.25mm!important}
-.v164Id.portrait .v164Foot{font-size:4.7px!important;padding:.55mm 2mm!important;line-height:1!important}
-</style>
