@@ -12403,8 +12403,8 @@ const base=window.render;window.render=async function(route='dashboard'){route=S
    const top=erp.querySelector('.erpTop');if(!top)return;
    let b=top.querySelector('#v90BackBtn');
    if(!b){b=document.createElement('button');b.id='v90BackBtn';b.className='v90TopBtn';top.insertBefore(b,top.firstChild)}
-   b.textContent='← Back';b.onclick=window.ldmCentralBack;b.hidden=false;
-   let h=top.querySelector('#v90HomeBtn');if(h)h.onclick=window.ldmCentralHome;
+   if(b.textContent!=='← Back')b.textContent='← Back';if(b.onclick!==window.ldmCentralBack)b.onclick=window.ldmCentralBack;if(b.hidden)b.hidden=false;
+   let h=top.querySelector('#v90HomeBtn');if(h&&h.onclick!==window.ldmCentralHome)h.onclick=window.ldmCentralHome;
  }
  const oldInstall=window.v90InstallShell;
  if(typeof oldInstall==='function')window.v90InstallShell=function(){let r=oldInstall.apply(this,arguments);clean();return r};
@@ -12425,7 +12425,7 @@ const base=window.render;window.render=async function(route='dashboard'){route=S
  },true);
 
  // Remove feature-local top-level Back controls without touching modal/detail close buttons.
- const obs=new MutationObserver(()=>clean());obs.observe(document.documentElement,{childList:true,subtree:true});
+ /* MutationObserver removed: it could retrigger clean() continuously on mobile and starve dashboard rendering. */
  document.addEventListener('DOMContentLoaded',()=>{save(get());clean()});
  window.addEventListener('load',clean);
 })();
