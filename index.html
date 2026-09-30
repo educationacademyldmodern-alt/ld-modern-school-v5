@@ -7692,6 +7692,1896 @@ excelCenter=function(){
 $('excelFile').onchange=async e=>{let f=e.target.files?.[0],k=$('xm')?.value;if(!f||!k)return;try{let wb=XLSX.read(await f.arrayBuffer()),rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});if(k==='students'){if(!confirm('Students: Same Admission No. की changed non-blank fields update करें?'))return;let r=await v70ImportStudentsUpdate(f,true);toast(`Students • New ${r.added} • Updated ${r.updated} • Same ${r.unchanged} • Fee ${r.feeUpdated} • Conflict ${r.conflicts}`);return}if(k==='staff'){if(!confirm('Staff/Teacher: Existing ID/Email/Mobile मिलने पर changed non-blank fields update करें?'))return;let r=await v70ImportStaffUpdateRows(rows);toast(`Staff/Teacher • New ${r.added} • Updated ${r.updated} • Same ${r.unchanged} • Conflict ${r.conflicts}`);return}rows=rows.map(r=>{delete r.id;delete r.created_at;normalize(k,r);return r});if(!confirm(rows.length+' rows import?'))return;let{error}=await sb.from(k).insert(rows);toast(error?error.message:rows.length+' imported')}catch(err){toast(err.message||'Excel import failed')}finally{e.target.value=''}};
 </script>
 <!-- ===== END V70 SMART DIFFERENTIAL EXCEL UPDATE ===== -->
+
+ <!-- ===== V180 CENTRAL STUDENT + FEE MASTER EXCEL SYNC ===== -->
+<script>
+(function(){
+  'use strict';
+
+  window.V180_STUDENT_FEE_SYNC =
+    'V180-STUDENT-FEE-MASTER-SYNC-2026-09-30';
+
+  const has = v =>
+    v !== undefined &&
+    v !== null &&
+    String(v).trim() !== '';
+
+  const txt = v =>
+    String(v ?? '').trim().replace(/\s+/g,' ');
+
+  const norm = v =>
+    txt(v).toLowerCase();
+
+  const idnorm = v =>
+    txt(v)
+      .replace(/\.0$/,'')
+      .replace(/\s+/g,'')
+      .toLowerCase();
+
+  const phone = v =>
+    String(v ?? '')
+      .replace(/\D/g,'')
+      .slice(-10);
+
+  const dateKey = v => {
+    const s = txt(v);
+
+    if(!s) return '';
+
+    if(/^\d{4}-\d{2}-\d{2}/.test(s)){
+      return s.slice(0,10);
+    }
+
+    return s.toLowerCase();
+  };
+
+  const same = (a,b) =>
+    txt(a) === txt(b);
+
+
+  /* ======================================================
+     EXCEL ROW CLEANER
+     ====================================================== */
+
+  function cleanRow(raw){
+
+    const aliases = {
+
+      'Student ID':'student_id',
+      'Student Id':'student_id',
+      'student id':'student_id',
+
+      'Admission No':'admission_no',
+      'Admission No.':'admission_no',
+      'admission no':'admission_no',
+
+      'Student Name':'student_name',
+      'Father Name':'father_name',
+      'Mother Name':'mother_name',
+
+      'Mobile':'phone',
+      'Phone':'phone',
+
+      'Class':'class_name',
+      'Section':'section',
+      'Roll No':'roll_no',
+
+      'DOB':'dob',
+      'Gender':'gender',
+      'Address':'address',
+      'Status':'status',
+      'Remarks':'remarks',
+
+      'Fee Category':'fee_category',
+      'Fee Waiver Percent':'fee_waiver_percent',
+
+      'Due Till September 2026':
+        'due_upto_sep_2026',
+
+      'Opening Due':
+        'due_upto_sep_2026',
+
+      'Monthly Fee From October 2026':
+        'monthly_fee_from_oct_2026',
+
+      'Monthly Fee':
+        'monthly_fee_from_oct_2026',
+
+      'Auto Fee Start Month':
+        'auto_fee_start_month'
+    };
+
+
+    const row = {};
+
+
+    Object.entries(raw || {})
+      .forEach(([k,v]) => {
+
+        const key =
+          aliases[String(k).trim()] ||
+          String(k).trim();
+
+        row[key] = v;
+
+      });
+
+
+    [
+      'student_id',
+      'admission_no',
+      'phone',
+      'roll_no'
+    ].forEach(k => {
+
+      if(row[k] !== undefined){
+
+        row[k] =
+          txt(row[k]).replace(/\.0$/,'');
+
+      }
+
+    });
+
+
+    if(typeof v53Title === 'function'){
+
+      [
+        'student_name',
+        'father_name',
+        'mother_name',
+        'class_name',
+        'address'
+      ].forEach(k => {
+
+        if(
+          row[k] !== undefined &&
+          has(row[k])
+        ){
+
+          row[k] =
+            v53Title(String(row[k]));
+
+        }
+
+      });
+
+    }
+
+
+    return row;
+  }
+
+
+  /* ======================================================
+     DUPLICATE / SAME STUDENT SAFE MATCH
+     ====================================================== */
+
+  function naturalKeys(x){
+
+    const n =
+      norm(x?.student_name);
+
+    const f =
+      norm(x?.father_name);
+
+    const d =
+      dateKey(x?.dob);
+
+    const p =
+      phone(
+        x?.phone ||
+        x?.primary_phone
+      );
+
+
+    const out = [];
+
+
+    if(n && f && d){
+
+      out.push(
+        'NFD|' +
+        n + '|' +
+        f + '|' +
+        d
+      );
+
+    }
+
+
+    if(n && f && p){
+
+      out.push(
+        'NFP|' +
+        n + '|' +
+        f + '|' +
+        p
+      );
+
+    }
+
+
+    if(n && d && p){
+
+      out.push(
+        'NDP|' +
+        n + '|' +
+        d + '|' +
+        p
+      );
+
+    }
+
+
+    return out;
+  }
+
+
+  function addNatural(map,row){
+
+    naturalKeys(row)
+      .forEach(key => {
+
+        if(!map.has(key)){
+          map.set(key,new Map());
+        }
+
+        map
+          .get(key)
+          .set(
+            String(row.id),
+            row
+          );
+
+      });
+
+  }
+
+
+  /* ======================================================
+     LOAD ALL STUDENTS
+     ====================================================== */
+
+  async function allStudents(){
+
+    const {data,error} =
+      await sb
+        .from('students')
+        .select('*')
+        .order('class_name')
+        .order('student_name');
+
+
+    if(error){
+      throw error;
+    }
+
+
+    return data || [];
+  }
+
+
+  /* ======================================================
+     LOAD CURRENT FEE
+     ====================================================== */
+
+  async function feeMaps(students){
+
+    const session =
+      school?.academic_session ||
+      '2026-27';
+
+
+    const adms = [
+      ...new Set(
+
+        (students || [])
+          .map(
+            s =>
+              String(
+                s.admission_no || ''
+              ).trim()
+          )
+          .filter(Boolean)
+
+      )
+    ];
+
+
+    const settings =
+      new Map();
+
+    const opening =
+      new Map();
+
+
+    for(
+      let i = 0;
+      i < adms.length;
+      i += 150
+    ){
+
+      const part =
+        adms.slice(i,i + 150);
+
+
+      const [a,b] =
+        await Promise.all([
+
+          sb
+            .from(
+              'student_fee_settings'
+            )
+            .select(
+              'admission_no,monthly_fee,auto_start_month'
+            )
+            .eq(
+              'academic_session',
+              session
+            )
+            .in(
+              'admission_no',
+              part
+            ),
+
+          sb
+            .from(
+              'student_fee_schedules'
+            )
+            .select(
+              'admission_no,amount,paid_amount'
+            )
+            .eq(
+              'academic_session',
+              session
+            )
+            .eq(
+              'schedule_label',
+              'Opening Due up to September 2026'
+            )
+            .in(
+              'admission_no',
+              part
+            )
+
+        ]);
+
+
+      if(a.error){
+        throw a.error;
+      }
+
+      if(b.error){
+        throw b.error;
+      }
+
+
+      (a.data || [])
+        .forEach(x => {
+
+          settings.set(
+            idnorm(x.admission_no),
+            x
+          );
+
+        });
+
+
+      (b.data || [])
+        .forEach(x => {
+
+          const key =
+            idnorm(x.admission_no);
+
+          const due =
+            Math.max(
+
+              Number(
+                x.amount || 0
+              ) -
+
+              Number(
+                x.paid_amount || 0
+              ),
+
+              0
+
+            );
+
+
+          opening.set(
+            key,
+            (
+              opening.get(key) ||
+              0
+            ) + due
+          );
+
+        });
+
+    }
+
+
+    return {
+      settings,
+      opening
+    };
+  }
+
+
+  /* ======================================================
+     SAFE FEE UPDATE
+     PAID RECEIPT HISTORY IS NOT OVERWRITTEN
+     ====================================================== */
+
+  async function saveFee(
+    student,
+    row,
+    maps
+  ){
+
+    if(!student?.admission_no){
+      return false;
+    }
+
+
+    const hasMonthly =
+      has(
+        row.monthly_fee_from_oct_2026
+      );
+
+    const hasDue =
+      has(
+        row.due_upto_sep_2026
+      );
+
+    const hasStart =
+      has(
+        row.auto_fee_start_month
+      );
+
+
+    if(
+      !hasMonthly &&
+      !hasDue &&
+      !hasStart
+    ){
+      return false;
+    }
+
+
+    const key =
+      idnorm(
+        student.admission_no
+      );
+
+
+    const old =
+      maps.settings.get(key) ||
+      {};
+
+
+    const oldMonthly =
+      Number(
+        old.monthly_fee || 0
+      );
+
+
+    const oldStart =
+      String(
+        old.auto_start_month ||
+        '2026-10'
+      );
+
+
+    const oldDue =
+      Number(
+        maps.opening.get(key) ||
+        0
+      );
+
+
+    const monthly =
+      hasMonthly
+        ? Number(
+            row.monthly_fee_from_oct_2026 ||
+            0
+          )
+        : oldMonthly;
+
+
+    const start =
+      hasStart
+        ? txt(
+            row.auto_fee_start_month
+          )
+        : oldStart;
+
+
+    const due =
+      hasDue
+        ? Math.max(
+            Number(
+              row.due_upto_sep_2026 ||
+              0
+            ),
+            0
+          )
+        : null;
+
+
+    const changed =
+
+      (
+        hasMonthly &&
+        monthly !== oldMonthly
+      )
+
+      ||
+
+      (
+        hasStart &&
+        start !== oldStart
+      )
+
+      ||
+
+      (
+        hasDue &&
+        due !== oldDue
+      );
+
+
+    if(!changed){
+      return false;
+    }
+
+
+    if(
+      typeof v53SaveFeeSetting !==
+      'function'
+    ){
+
+      throw new Error(
+        'Central fee function unavailable'
+      );
+
+    }
+
+
+    await v53SaveFeeSetting(
+
+      student,
+
+      monthly,
+
+      start,
+
+      hasDue
+        ? due
+        : null
+
+    );
+
+
+    maps.settings.set(
+
+      key,
+
+      {
+        admission_no:
+          student.admission_no,
+
+        monthly_fee:
+          monthly,
+
+        auto_start_month:
+          start
+      }
+
+    );
+
+
+    if(hasDue){
+
+      maps.opening.set(
+        key,
+        due
+      );
+
+    }
+
+
+    return true;
+  }
+
+
+  /* ======================================================
+     CENTRAL STUDENT + FEE IMPORT
+     ====================================================== */
+
+  async function importMaster(
+    file,
+    withFee = true
+  ){
+
+    const wb =
+      XLSX.read(
+        await file.arrayBuffer(),
+        {
+          cellDates:false
+        }
+      );
+
+
+    const sheet =
+      wb.Sheets[
+        wb.SheetNames[0]
+      ];
+
+
+    const raw =
+      XLSX.utils.sheet_to_json(
+        sheet,
+        {
+          defval:'',
+          raw:false
+        }
+      );
+
+
+    const rows =
+      raw
+        .map(cleanRow)
+        .filter(
+          row =>
+            Object
+              .values(row)
+              .some(has)
+        );
+
+
+    if(!rows.length){
+
+      throw new Error(
+        'Excel में कोई data row नहीं मिली.'
+      );
+
+    }
+
+
+    const existing =
+      await allStudents();
+
+
+    const byStudentId =
+      new Map();
+
+    const byAdmission =
+      new Map();
+
+    const natural =
+      new Map();
+
+
+    const indexStudent =
+      student => {
+
+
+        if(
+          idnorm(
+            student.student_id
+          )
+        ){
+
+          byStudentId.set(
+
+            idnorm(
+              student.student_id
+            ),
+
+            student
+
+          );
+
+        }
+
+
+        if(
+          idnorm(
+            student.admission_no
+          )
+        ){
+
+          byAdmission.set(
+
+            idnorm(
+              student.admission_no
+            ),
+
+            student
+
+          );
+
+        }
+
+
+        addNatural(
+          natural,
+          student
+        );
+
+      };
+
+
+    existing.forEach(
+      indexStudent
+    );
+
+
+    const maps =
+      withFee
+
+        ? await feeMaps(
+            existing
+          )
+
+        : {
+            settings:new Map(),
+            opening:new Map()
+          };
+
+
+    const allowed = [
+
+      'student_name',
+      'father_name',
+      'mother_name',
+
+      'phone',
+
+      'class_name',
+      'section',
+      'roll_no',
+
+      'dob',
+      'gender',
+
+      'address',
+      'status',
+
+      'fee_category',
+      'fee_waiver_percent',
+
+      'remarks'
+
+    ];
+
+
+    let added = 0;
+    let updated = 0;
+    let unchanged = 0;
+    let feeUpdated = 0;
+
+    let skipped = 0;
+    let conflicts = 0;
+    let errors = 0;
+
+
+    const details = [];
+
+
+    for(
+      let i = 0;
+      i < rows.length;
+      i++
+    ){
+
+      const row =
+        rows[i];
+
+
+      const excelRow =
+        i + 2;
+
+
+      try{
+
+
+        const sid =
+          idnorm(
+            row.student_id
+          );
+
+
+        const adm =
+          idnorm(
+            row.admission_no
+          );
+
+
+        const studentById =
+          sid
+            ? byStudentId.get(sid) ||
+              null
+            : null;
+
+
+        const studentByAdmission =
+          adm
+            ? byAdmission.get(adm) ||
+              null
+            : null;
+
+
+        /* -------------------------------
+           ID CONFLICT PROTECTION
+           ------------------------------- */
+
+        if(
+          studentById &&
+          studentByAdmission &&
+          String(studentById.id) !==
+          String(studentByAdmission.id)
+        ){
+
+          conflicts++;
+
+          details.push(
+            'Row ' +
+            excelRow +
+            ': Student ID और Admission No. अलग-अलग students से match करते हैं.'
+          );
+
+          continue;
+        }
+
+
+        let old =
+          studentById ||
+          studentByAdmission ||
+          null;
+
+
+        /* -------------------------------
+           BLANK ID MATCH
+           Same Excel repeat upload safety
+           ------------------------------- */
+
+        if(
+          !old &&
+          !sid &&
+          !adm
+        ){
+
+          const candidates =
+            new Map();
+
+
+          naturalKeys(row)
+            .forEach(key => {
+
+              (
+                natural.get(key) ||
+                new Map()
+              )
+                .forEach(
+                  (student,id) => {
+
+                    candidates.set(
+                      id,
+                      student
+                    );
+
+                  }
+                );
+
+            });
+
+
+          if(
+            candidates.size === 1
+          ){
+
+            old =
+              [
+                ...candidates.values()
+              ][0];
+
+          }
+
+          else if(
+            candidates.size > 1
+          ){
+
+            conflicts++;
+
+            details.push(
+              'Row ' +
+              excelRow +
+              ': blank-ID row एक से अधिक students से match हो रही है.'
+            );
+
+            continue;
+          }
+
+        }
+
+
+        /* If Excel has wrong ID but person already exists,
+           do NOT create silent duplicate */
+
+        else if(
+          !old &&
+          (
+            sid ||
+            adm
+          )
+        ){
+
+          const candidates =
+            new Map();
+
+
+          naturalKeys(row)
+            .forEach(key => {
+
+              (
+                natural.get(key) ||
+                new Map()
+              )
+                .forEach(
+                  (student,id) => {
+
+                    candidates.set(
+                      id,
+                      student
+                    );
+
+                  }
+                );
+
+            });
+
+
+          if(
+            candidates.size
+          ){
+
+            conflicts++;
+
+            details.push(
+              'Row ' +
+              excelRow +
+              ': दिया गया ID नहीं मिला, लेकिन यही student existing data से match हो रहा है. ID जांचें.'
+            );
+
+            continue;
+          }
+
+        }
+
+
+        let student = null;
+
+        let studentChanged =
+          false;
+
+
+        /* ==================================================
+           EXISTING STUDENT UPDATE
+           ================================================== */
+
+        if(old){
+
+
+          const changed = {};
+
+
+          allowed.forEach(
+            field => {
+
+              if(
+                has(row[field]) &&
+                !same(
+                  row[field],
+                  old[field]
+                )
+              ){
+
+                changed[field] =
+                  row[field];
+
+              }
+
+            }
+          );
+
+
+          if(
+            Object.keys(changed).length
+          ){
+
+            normalize(
+              'students',
+              changed
+            );
+
+
+            const {
+              data,
+              error
+            } =
+              await sb
+                .from('students')
+                .update(changed)
+                .eq(
+                  'id',
+                  old.id
+                )
+                .select('*')
+                .single();
+
+
+            if(error){
+              throw error;
+            }
+
+
+            student =
+              data;
+
+
+            updated++;
+
+            studentChanged =
+              true;
+
+
+            indexStudent(
+              student
+            );
+
+          }
+
+          else{
+
+            student =
+              old;
+
+          }
+
+        }
+
+
+        /* ==================================================
+           NEW STUDENT
+           Blank IDs allowed
+           Database creates Student ID + Admission No.
+           ================================================== */
+
+        else{
+
+
+          if(
+            !has(
+              row.student_name
+            )
+          ){
+
+            skipped++;
+
+            details.push(
+              'Row ' +
+              excelRow +
+              ': नए student का Student Name खाली है.'
+            );
+
+            continue;
+          }
+
+
+          const payload = {};
+
+
+          if(
+            has(
+              row.student_id
+            )
+          ){
+
+            payload.student_id =
+              txt(
+                row.student_id
+              );
+
+          }
+
+
+          if(
+            has(
+              row.admission_no
+            )
+          ){
+
+            payload.admission_no =
+              txt(
+                row.admission_no
+              );
+
+          }
+
+
+          allowed.forEach(
+            field => {
+
+              if(
+                has(
+                  row[field]
+                )
+              ){
+
+                payload[field] =
+                  row[field];
+
+              }
+
+            }
+          );
+
+
+          normalize(
+            'students',
+            payload
+          );
+
+
+          const {
+            data,
+            error
+          } =
+            await sb
+              .from('students')
+              .insert(payload)
+              .select('*')
+              .single();
+
+
+          if(error){
+            throw error;
+          }
+
+
+          student =
+            data;
+
+
+          added++;
+
+          studentChanged =
+            true;
+
+
+          indexStudent(
+            student
+          );
+
+        }
+
+
+        /* ==================================================
+           FEE UPDATE
+           ================================================== */
+
+        const feeChanged =
+          withFee
+
+            ? await saveFee(
+                student,
+                row,
+                maps
+              )
+
+            : false;
+
+
+        if(feeChanged){
+
+          feeUpdated++;
+
+        }
+
+
+        if(
+          !studentChanged &&
+          !feeChanged
+        ){
+
+          unchanged++;
+
+        }
+
+      }
+
+      catch(err){
+
+
+        console.error(
+          'V180 student+fee sync row',
+          excelRow,
+          err
+        );
+
+
+        errors++;
+
+
+        details.push(
+
+          'Row ' +
+          excelRow +
+          ': ' +
+          (
+            err?.message ||
+            String(err)
+          )
+
+        );
+
+      }
+
+    }
+
+
+    return {
+
+      rows:
+        rows.length,
+
+      added,
+
+      updated,
+
+      unchanged,
+
+      feeUpdated,
+
+      skipped,
+
+      conflicts,
+
+      errors,
+
+      details
+
+    };
+  }
+
+
+  /* ======================================================
+     RESULT
+     ====================================================== */
+
+  function showSummary(
+    result,
+    target = 'v53ImportSummary'
+  ){
+
+    const box =
+      $(target);
+
+
+    if(!box){
+      return;
+    }
+
+
+    const review =
+      (
+        result.details ||
+        []
+      ).slice(0,25);
+
+
+    box.innerHTML = `
+
+      <div class="v70ImportResult">
+
+        <b>
+          ✓ STUDENT + FEE SYNC COMPLETE
+        </b>
+
+        <span>
+          Total ${result.rows}
+        </span>
+
+        <span>
+          Added ${result.added}
+        </span>
+
+        <span>
+          Updated ${result.updated}
+        </span>
+
+        <span>
+          Fee Updated ${result.feeUpdated}
+        </span>
+
+        <span>
+          Unchanged ${result.unchanged}
+        </span>
+
+        <span>
+          Skipped ${result.skipped}
+        </span>
+
+        <span>
+          Conflict ${result.conflicts}
+        </span>
+
+        <span>
+          Error ${result.errors}
+        </span>
+
+      </div>
+
+      ${
+        review.length
+
+          ? `
+            <div class="v70Conflict">
+
+              <b>
+                Review:
+              </b>
+
+              <br>
+
+              ${
+                review
+                  .map(
+                    x => esc(x)
+                  )
+                  .join('<br>')
+              }
+
+            </div>
+          `
+
+          : ''
+      }
+
+    `;
+  }
+
+
+  /* ======================================================
+     IMPORT BUTTON
+     ====================================================== */
+
+  async function importEvent(
+    event,
+    target = 'v53ImportSummary'
+  ){
+
+    const file =
+      event.target.files?.[0];
+
+
+    if(!file){
+      return;
+    }
+
+
+    try{
+
+
+      if(
+        !confirm(
+
+          'Student + Fee Master Sync चलाएँ?\n\n' +
+
+          'Existing student update होगा.\n' +
+
+          'Blank ID वाले नए student की ID अपने-आप बनेगी.\n' +
+
+          'Blank cells पुराने data को नहीं मिटाएँगी.\n' +
+
+          'Excel से कोई student auto-delete नहीं होगा.'
+
+        )
+      ){
+
+        return;
+      }
+
+
+      const result =
+        await importMaster(
+          file,
+          true
+        );
+
+
+      showSummary(
+        result,
+        target
+      );
+
+
+      toast(
+
+        'Sync • Added ' +
+        result.added +
+
+        ' • Updated ' +
+        result.updated +
+
+        ' • Fee ' +
+        result.feeUpdated +
+
+        ' • Error ' +
+        result.errors
+
+      );
+
+
+      if(
+        typeof v49BroadcastChange ===
+        'function'
+      ){
+
+        v49BroadcastChange(
+          'student-fee-master-sync'
+        );
+
+      }
+
+    }
+
+    catch(err){
+
+      console.error(err);
+
+      toast(
+        err?.message ||
+        'Excel sync failed'
+      );
+
+    }
+
+    finally{
+
+      event.target.value = '';
+
+    }
+
+  }
+
+
+  /* ======================================================
+     MASTER EXCEL EXPORT
+     ====================================================== */
+
+  async function exportMaster(){
+
+    try{
+
+
+      const students =
+        await allStudents();
+
+
+      if(!students.length){
+
+        return toast(
+          'No students found'
+        );
+
+      }
+
+
+      const maps =
+        await feeMaps(
+          students
+        );
+
+
+      const columns = [
+
+        'student_id',
+        'admission_no',
+
+        'student_name',
+        'father_name',
+        'mother_name',
+
+        'phone',
+
+        'class_name',
+        'section',
+        'roll_no',
+
+        'dob',
+        'gender',
+
+        'address',
+        'status',
+
+        'fee_category',
+        'fee_waiver_percent',
+
+        'due_upto_sep_2026',
+
+        'monthly_fee_from_oct_2026',
+
+        'auto_fee_start_month',
+
+        'remarks'
+      ];
+
+
+      const output =
+        students.map(
+          student => {
+
+
+            const fee =
+              maps.settings.get(
+                idnorm(
+                  student.admission_no
+                )
+              ) || {};
+
+
+            const row = {};
+
+
+            columns.forEach(
+              column => {
+
+                row[column] =
+                  student[column] ??
+                  '';
+
+              }
+            );
+
+
+            row.due_upto_sep_2026 =
+              Number(
+
+                maps.opening.get(
+                  idnorm(
+                    student.admission_no
+                  )
+                ) || 0
+
+              );
+
+
+            row.monthly_fee_from_oct_2026 =
+              Number(
+                fee.monthly_fee ||
+                0
+              );
+
+
+            row.auto_fee_start_month =
+              fee.auto_start_month ||
+              '2026-10';
+
+
+            return row;
+          }
+        );
+
+
+      const wb =
+        XLSX.utils.book_new();
+
+
+      const ws =
+        XLSX.utils.json_to_sheet(
+          output,
+          {
+            header:columns
+          }
+        );
+
+
+      ws['!cols'] =
+        columns.map(
+          column => ({
+            wch:
+              Math.min(
+                Math.max(
+                  column.length + 2,
+                  14
+                ),
+                30
+              )
+          })
+        );
+
+
+      XLSX.utils.book_append_sheet(
+        wb,
+        ws,
+        'Student Fee Master'
+      );
+
+
+      const instructions =
+        XLSX.utils.aoa_to_sheet([
+
+          [
+            'L D MODERN EDUCATION ACADEMY - STUDENT + FEE MASTER EXCEL SYNC'
+          ],
+
+          [
+            'Use',
+            'इसी Master Excel को edit करके बार-बार Upload / Sync करें.'
+          ],
+
+          [
+            'Existing Student',
+            'student_id / admission_no से update होगा. Blank cells पुराना data नहीं मिटाएँगी.'
+          ],
+
+          [
+            'New Student',
+            'नई row में student_id और admission_no खाली छोड़ सकते हैं; ERP दोनों ID स्वतः बनाएगा.'
+          ],
+
+          [
+            'Fee',
+            'due_upto_sep_2026, monthly_fee_from_oct_2026 और auto_fee_start_month इसी upload से update होंगे.'
+          ],
+
+          [
+            'Payment Safety',
+            'Paid receipt/payment history Excel से overwrite नहीं होगी.'
+          ],
+
+          [
+            'Delete Safety',
+            'Excel से row हटाने पर ERP student delete नहीं करेगा.'
+          ],
+
+          [
+            'Repeat Upload',
+            'Blank-ID नई row पहली बार add होने के बाद वही Excel फिर upload करने पर safe matching duplicate बनने से रोकेगी.'
+          ]
+
+        ]);
+
+
+      instructions['!cols'] = [
+        {
+          wch:22
+        },
+        {
+          wch:110
+        }
+      ];
+
+
+      XLSX.utils.book_append_sheet(
+        wb,
+        instructions,
+        'Instructions'
+      );
+
+
+      XLSX.writeFile(
+        wb,
+        'LD-Modern-Student-Fee-Master.xlsx'
+      );
+
+    }
+
+    catch(err){
+
+      console.error(err);
+
+      toast(
+        err?.message ||
+        'Master Excel export failed'
+      );
+
+    }
+
+  }
+
+
+  /* ======================================================
+     ONE CENTRAL STUDENT EXCEL CENTER
+     ====================================================== */
+
+  async function center(){
+
+
+    head(
+
+      'Student + Fee Master Excel Sync',
+
+      'एक Master Excel • Add + Update + Fee Sync • No Auto Delete'
+
+    );
+
+
+    $('erpContent').innerHTML = `
+
+      <div class="panel">
+
+        <div class="v70Banner">
+
+          <b>
+            ONE MASTER EXCEL:
+          </b>
+
+          एक बार Master Excel download करें.
+          उसी file में student/fee बदलें
+          या नई rows जोड़ें
+          और एक बार Upload / Sync करें.
+
+        </div>
+
+
+        <div class="tools">
+
+          <button
+            id="v180ExportBtn"
+            class="secondary"
+          >
+            ⬇ Download Master Student + Fee Excel
+          </button>
+
+
+          <button
+            id="v180ImportBtn"
+            class="primary"
+          >
+            ⬆ Upload / Sync Same Excel
+          </button>
+
+        </div>
+
+
+        <input
+          id="studentExcelImport"
+          class="hidden"
+          type="file"
+          accept=".xlsx,.xls,.csv"
+        >
+
+
+        <div class="v70Rule">
+
+          <b>
+            ✓ Existing Student = Update
+          </b>
+
+          <span>
+            ✓ Blank IDs new row =
+            Auto Student ID + Admission No.
+          </span>
+
+          <span>
+            ✓ Fee columns =
+            Fee Update
+          </span>
+
+          <span>
+            ✓ Blank cells =
+            Old data safe
+          </span>
+
+          <span>
+            ✓ Missing Excel row =
+            No Delete
+          </span>
+
+          <span>
+            ✓ Paid Receipt / Payment History =
+            Never overwritten
+          </span>
+
+        </div>
+
+
+        <div id="v53ImportSummary"></div>
+
+      </div>
+
+    `;
+
+
+    $('v180ExportBtn').onclick =
+      exportMaster;
+
+
+    $('v180ImportBtn').onclick =
+      () =>
+        $('studentExcelImport')
+          .click();
+
+
+    $('studentExcelImport').onchange =
+      event =>
+        importEvent(
+          event,
+          'v53ImportSummary'
+        );
+
+  }
+
+
+  /* ======================================================
+     ALL OLD STUDENT EXCEL PATHS -> ONE CENTRAL ENGINE
+     ====================================================== */
+
+  window.v180ImportStudentsAndFee =
+    importMaster;
+
+  window.v180ImportStudentFeeEvent =
+    importEvent;
+
+  window.v180ExportStudentFeeMaster =
+    exportMaster;
+
+
+  window.v70ImportStudentsUpdate =
+    importMaster;
+
+  window.v70ImportStudentEvent =
+    importEvent;
+
+  window.v70ImportSummary =
+    showSummary;
+
+  window.v70ExportStudentsWithFee =
+    exportMaster;
+
+
+  window.studentExcelTools =
+    center;
+
+  window.studentExcelCenter =
+    center;
+
+  window.studentDataHub =
+    center;
+
+
+  window.v53ImportStudentUpdate =
+    event =>
+      importEvent(
+        event,
+        'v53ImportSummary'
+      );
+
+
+  window.importStudentUpdate =
+    event =>
+      importEvent(
+        event,
+        'v53ImportSummary'
+      );
+
+
+  window.v32ImportStudents =
+    event =>
+      importEvent(
+        event,
+        'hubStatus'
+      );
+
+})();
+</script>
+<!-- ===== END V180 CENTRAL STUDENT + FEE MASTER EXCEL SYNC ===== -->
 <!-- ===== V71 SMART HOMEPAGE TOP-3 HIGHLIGHTS / IMPORTANT PERSONS ===== -->
 <style id="v71HighlightStyle">
 .v71PublicHighlights{padding:24px clamp(16px,3vw,42px) 28px;background:linear-gradient(180deg,#f3f9ff,#ffffff)}
