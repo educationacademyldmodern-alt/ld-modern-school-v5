@@ -13570,83 +13570,637 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
      window.scrollTo(0,0);
    }catch(e){host.innerHTML=`<div class="dangerNote">${window.esc?.(e?.message||String(e))||String(e)}</div>`}
  };
- /* CANONICAL Teacher assignment resolver — all active Admin-assigned classes. */
- async function classTeacherClasses(){
-   let ctx=await ldmTeacherMasterContext();
-   return [...new Set((ctx?.classes||[]).filter(x=>x.is_active!==false).map(x=>String(x.class_name||'').trim()).filter(Boolean))];
- }
- window.v103ClassTeacherClasses=function(){
-   const c=window.ldmTeacherContext?.classes||[];
-   return [...new Set(c.filter(x=>x.is_active!==false).map(x=>x.class_name).filter(Boolean))];
- };
+/* CANONICAL Class Teacher resolver — only active Class Teacher assignments. */
+async function classTeacherClasses(){
+  const ctx=await ldmTeacherMasterContext();
+  return [...new Set(
+    (ctx?.classes||[])
+      .filter(x=>x.is_active!==false && x.is_class_teacher===true)
+      .map(x=>String(x.class_name||'').trim())
+      .filter(Boolean)
+  )];
+}
 
- /* Canonical Student Photos: NO v90InstallShell / legacy dashboard renderer. */
- let photoRows=[];
- async function signed(row){
-   try{if(typeof window.v91AttachStudentPhoto==='function'){await window.v91AttachStudentPhoto(row);return}}catch(_e){}
- }
- window.v136TeacherPhotos=async function(){
-   if(!teacher())return window.toast?.('Teacher only');
-   surface('erp');teacherShell();window.__v90Route='v91_student_photos';if(typeof window.v90Push==='function')window.v90Push('v91_student_photos');
-   const host=$('erpContent');if(!host)return;
-   host.innerHTML='<div class="v136PhotoPage"><div class="empty">Loading assigned students…</div></div>';
-   try{
-     const classes=await classTeacherClasses();
-     if(!classes.length){host.innerHTML='<div class="v136PhotoPage"><div class="panel"><h2>📷 Student Photos</h2><div class="empty">No Class Teacher Assignment.</div></div></div>';return}
-     let r=await sb.from('students').select('id,admission_no,student_name,father_name,class_name,section,roll_no,photo_path,photo_url,student_photo_url,status').in('class_name',classes).order('class_name').order('student_name').limit(5000);
-     if(r.error)throw r.error;
-     photoRows=(r.data||[]).filter(x=>!['inactive','deleted','left','withdrawn'].includes(String(x.status||'').toLowerCase()));
-     if(typeof window.v91AttachStudentPhotos==='function')await window.v91AttachStudentPhotos(photoRows);else for(const x of photoRows)await signed(x);
-     host.innerHTML=`<div class="v136PhotoPage"><div class="v136PhotoTop"><div><h2>📷 Student Photos</h2><div class="note">Class Teacher assignment: ${classes.map(window.esc||String).join(', ')}</div></div><div class="v136PhotoTools"><select id="v136PhotoClass"><option value="">All My Classes</option>${classes.map(c=>`<option>${window.esc?.(c)||c}</option>`).join('')}</select><input id="v136PhotoQ" placeholder="Student / Father / Admission"></div></div><div id="v136PhotoGrid" class="v136PhotoGrid"></div></div>`;
-     $('v136PhotoClass').onchange=renderPhotos;$('v136PhotoQ').oninput=renderPhotos;renderPhotos();window.scrollTo(0,0);
-   }catch(e){host.innerHTML=`<div class="v136PhotoPage"><div class="dangerNote">${window.esc?.(e?.message||String(e))||String(e)}</div></div>`}
- };
- function renderPhotos(){
-   const cl=$('v136PhotoClass')?.value||'',q=String($('v136PhotoQ')?.value||'').trim().toLowerCase();let rows=photoRows;
-   if(cl)rows=rows.filter(x=>x.class_name===cl);if(q)rows=rows.filter(x=>[x.student_name,x.father_name,x.admission_no].some(v=>String(v||'').toLowerCase().includes(q)));
-   const h=$('v136PhotoGrid');if(!h)return;
-   h.innerHTML=rows.map(x=>`<article class="v136PhotoCard"><div class="v136PhotoFace">${x._signed_photo?`<img src="${window.esc?.(x._signed_photo)||x._signed_photo}" alt="Student">`:'NO PHOTO'}</div><div class="v136PhotoInfo"><b>${window.esc?.(x.student_name||'—')||'—'}</b><small><strong>Class:</strong> ${window.esc?.(x.class_name||'—')||'—'}</small><small><strong>Roll No.:</strong> ${window.esc?.(x.roll_no||'—')||'—'}</small><small><strong>Father Name:</strong> ${window.esc?.(x.father_name||'—')||'—'}</small><small><strong>Admission No.:</strong> ${window.esc?.(x.admission_no||'—')||'—'}</small><div class="v136PhotoActions"><button type="button" onclick="v136OpenCamera('${x.id}')">📷 Camera</button><label>🖼 Gallery<input type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="v136Gallery('${x.id}',this)"></label>${x.photo_path?`<button class="del" onclick="v138RemoveStudentPhoto('${x.id}')">Remove</button>`:''}</div></div></article>`).join('')||'<div class="empty">No students.</div>';
- }
- async function v138UploadStudentPhoto(id,input){
-   let f=input?.files?.[0];if(!f)return;let row=photoRows.find(x=>String(x.id)===String(id));if(!row)return window.toast?.('Student current Class Teacher list में नहीं मिला');
-   try{
-     if(typeof compressImageFile==='function')f=await compressImageFile(f,10,25,640,'student');
-     if(f.size>35*1024)throw new Error('Photo 35KB से बड़ी रह गई. दूसरा photo चुनें.');
-     let path=`teacher-student-photo/${window.user.id}/${row.id}.jpg`;
-     let up=await sb.storage.from('student-media').upload(path,f,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'});if(up.error)throw up.error;
-     let rr=await sb.rpc('v179_teacher_set_student_photo_safe',{p_student_id:row.id,p_photo_path:path});if(rr.error)throw rr.error;
-     row.photo_path=path;row.photo_url='';row.student_photo_url='';row._signed_photo='';
-     try{await signed(row)}catch(_e){}
-     window.toast?.(`Photo updated • ${Math.round(f.size/1024)} KB`);
-     await window.v136TeacherPhotos();
-   }catch(e){window.toast?.(e?.message||String(e))}finally{if(input)input.value=''}
- }
- window.v136Gallery=v138UploadStudentPhoto;
- window.v138RemoveStudentPhoto=async function(id){
-   let row=photoRows.find(x=>String(x.id)===String(id));if(!row||!row.photo_path)return;
-   if(!confirm('इस student की current photo remove करनी है?'))return;
-   try{
-     let oldPath=row.photo_path,rr=await sb.rpc('ldm_teacher_remove_student_photo',{p_student_id:row.id});if(rr.error)throw rr.error;
-     try{await sb.storage.from('student-media').remove([oldPath])}catch(_e){}
-     row.photo_path='';row.photo_url='';row.student_photo_url='';row._signed_photo='';
-     window.toast?.('Student photo removed • Central Student Master synced');await window.v136TeacherPhotos();
-   }catch(e){window.toast?.(e?.message||String(e))}
- };
- let cam=null,camId='';
- function closeCam(){try{cam?.getTracks?.().forEach(t=>t.stop())}catch(_e){}cam=null;$('v136CameraModal')?.remove()}
- window.v136CloseCamera=closeCam;
- window.v136OpenCamera=async function(id){
-   camId=id;closeCam();if(!navigator.mediaDevices?.getUserMedia)return window.toast?.('Direct camera इस browser में उपलब्ध नहीं है.');
-   const m=document.createElement('div');m.id='v136CameraModal';m.className='v136CameraModal';m.innerHTML='<div class="v136CameraBox"><video id="v136Video" autoplay muted playsinline></video><div class="v136CameraTools"><button class="primary" id="v136Snap">📷 Capture</button><button onclick="v136CloseCamera()">Cancel</button></div></div>';document.body.appendChild(m);
-   try{cam=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:960}},audio:false});let v=$('v136Video');v.srcObject=cam;await v.play();$('v136Snap').onclick=()=>capture(v)}
-   catch(e){closeCam();window.toast?.(e?.name==='NotAllowedError'?'Camera permission Allow करें.':(e?.message||String(e)))}
- };
- function capture(v){
-   const c=document.createElement('canvas'),ratio=Math.min(1,900/Math.max(v.videoWidth||640,v.videoHeight||480));c.width=Math.round((v.videoWidth||640)*ratio);c.height=Math.round((v.videoHeight||480)*ratio);c.getContext('2d').drawImage(v,0,0,c.width,c.height);
-   c.toBlob(async b=>{if(!b)return;const f=new File([b],'camera.jpg',{type:'image/jpeg'});closeCam();try{const dt=new DataTransfer();dt.items.add(f);await v138UploadStudentPhoto(camId,{files:dt.files,value:''})}catch(e){window.toast?.(window.ldmCameraError?window.ldmCameraError(e):(e?.message||String(e)))}},'image/jpeg',.90);
- }
+window.v103ClassTeacherClasses=function(){
+  const c=window.ldmTeacherContext?.classes||[];
+  return [...new Set(
+    c
+      .filter(x=>x.is_active!==false && x.is_class_teacher===true)
+      .map(x=>String(x.class_name||'').trim())
+      .filter(Boolean)
+  )];
+};
 
+/* CANONICAL STUDENT PHOTO CENTER — assigned class only, ID view, Camera + Gallery + Preview + Update */
+let photoRows=[];
+let photoDrafts=new Map();
+let cam=null,camId='';
 
+const v136Esc=(v)=>typeof window.esc==='function'
+  ?window.esc(String(v??''))
+  :String(v??'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+
+async function signed(row){
+  try{
+    if(typeof window.v91AttachStudentPhoto==='function'){
+      await window.v91AttachStudentPhoto(row);
+    }
+  }catch(_e){}
+}
+
+function clearPhotoDraft(id){
+  const k=String(id);
+  const d=photoDrafts.get(k);
+
+  try{
+    if(d?.url)URL.revokeObjectURL(d.url);
+  }catch(_e){}
+
+  photoDrafts.delete(k);
+}
+
+function setPhotoDraft(id,file){
+  if(!file)return;
+
+  if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||'')){
+    return window.toast?.('केवल JPG, PNG या WEBP photo चुनें');
+  }
+
+  if(file.size>12*1024*1024){
+    return window.toast?.('Photo बहुत बड़ा है');
+  }
+
+  clearPhotoDraft(id);
+
+  photoDrafts.set(String(id),{
+    file,
+    url:URL.createObjectURL(file)
+  });
+
+  renderPhotos();
+}
+
+window.v136TeacherPhotos=async function(){
+  if(!teacher())return window.toast?.('Teacher only');
+
+  surface('erp');
+  teacherShell();
+
+  window.__v90Route='v91_student_photos';
+
+  if(typeof window.v90Push==='function'){
+    window.v90Push('v91_student_photos');
+  }
+
+  const host=$('erpContent');
+  if(!host)return;
+
+  host.innerHTML=
+    '<div class="v136PhotoPage"><div class="empty">Loading assigned students...</div></div>';
+
+  try{
+    const classes=(await classTeacherClasses())
+      .map(x=>String(x||'').trim())
+      .filter(Boolean);
+
+    if(!classes.length){
+      host.innerHTML=`
+        <div class="v136PhotoPage">
+          <div class="panel">
+            <h2>📷 Student Photos</h2>
+            <div class="empty">No Class Teacher Assignment.</div>
+          </div>
+        </div>`;
+      return;
+    }
+
+    const r=await sb.from('students')
+      .select('id,student_id,admission_no,student_name,father_name,class_name,section,roll_no,photo_path,photo_url,student_photo_url,status')
+      .in('class_name',classes)
+      .order('class_name')
+      .order('student_name')
+      .limit(2000);
+
+    if(r.error)throw r.error;
+
+    photoRows=(r.data||[]).filter(x=>
+      !['inactive','deleted','left','withdrawn'].includes(
+        String(x.status||'').trim().toLowerCase()
+      )
+    );
+
+    if(typeof window.v91AttachStudentPhotos==='function'){
+      await window.v91AttachStudentPhotos(photoRows);
+    }else{
+      for(const x of photoRows){
+        await signed(x);
+      }
+    }
+
+    host.innerHTML=`
+      <div class="v136PhotoPage">
+
+        <div class="v136PhotoTop">
+          <div>
+            <h2>📷 Student Photo & ID Center</h2>
+            <div class="note">
+              Class Teacher: ${classes.map(v136Esc).join(', ')}
+              • Assigned class only
+            </div>
+          </div>
+
+          <div class="v136PhotoTools">
+            <select id="v136PhotoClass">
+              <option value="">All My Classes</option>
+              ${classes.map(c=>
+                `<option value="${v136Esc(c)}">${v136Esc(c)}</option>`
+              ).join('')}
+            </select>
+
+            <input
+              id="v136PhotoQ"
+              placeholder="Student / Father / Admission">
+          </div>
+        </div>
+
+        <div id="v136PhotoGrid" class="v136PhotoGrid"></div>
+
+      </div>`;
+
+    $('v136PhotoClass').onchange=renderPhotos;
+    $('v136PhotoQ').oninput=renderPhotos;
+
+    renderPhotos();
+    window.scrollTo(0,0);
+
+  }catch(e){
+    host.innerHTML=`
+      <div class="v136PhotoPage">
+        <div class="dangerNote">
+          ${v136Esc(e?.message||String(e))}
+        </div>
+      </div>`;
+  }
+};
+
+function renderPhotos(){
+  const cl=$('v136PhotoClass')?.value||'';
+  const q=String($('v136PhotoQ')?.value||'')
+    .trim()
+    .toLowerCase();
+
+  let rows=photoRows;
+
+  if(cl){
+    rows=rows.filter(x=>
+      String(x.class_name||'').trim().toLowerCase()===
+      String(cl).trim().toLowerCase()
+    );
+  }
+
+  if(q){
+    rows=rows.filter(x=>
+      [
+        x.student_name,
+        x.father_name,
+        x.admission_no,
+        x.student_id,
+        x.roll_no
+      ].some(v=>
+        String(v||'').toLowerCase().includes(q)
+      )
+    );
+  }
+
+  const h=$('v136PhotoGrid');
+  if(!h)return;
+
+  h.innerHTML=rows.map(x=>{
+    const d=photoDrafts.get(String(x.id));
+
+    const photo=
+      d?.url ||
+      x._signed_photo ||
+      x.photo_url ||
+      x.student_photo_url ||
+      '';
+
+    return `
+      <article class="v136PhotoCard">
+
+        <div style="
+          background:linear-gradient(135deg,#0759ad,#148ee8);
+          color:#fff;
+          border-radius:12px;
+          padding:8px 10px;
+          text-align:center;
+          margin-bottom:10px">
+
+          <b style="color:#fff">
+            L D MODERN EDUCATION ACADEMY
+          </b>
+
+          <small style="color:#fff">
+            STUDENT PHOTO / ID
+          </small>
+
+        </div>
+
+        <div class="v136PhotoFace">
+          ${
+            photo
+              ? `<img src="${v136Esc(photo)}" alt="Student Photo">`
+              : '<span>NO PHOTO</span>'
+          }
+        </div>
+
+        <div class="v136PhotoInfo">
+
+          <b>${v136Esc(x.student_name||'—')}</b>
+
+          <small>
+            <strong>Student ID:</strong>
+            ${v136Esc(x.student_id||'—')}
+          </small>
+
+          <small>
+            <strong>Class:</strong>
+            ${v136Esc(x.class_name||'—')}
+            ${x.section ? ` - ${v136Esc(x.section)}` : ''}
+          </small>
+
+          <small>
+            <strong>Roll No.:</strong>
+            ${v136Esc(x.roll_no||'—')}
+          </small>
+
+          <small>
+            <strong>Father:</strong>
+            ${v136Esc(x.father_name||'—')}
+          </small>
+
+          <small>
+            <strong>Admission:</strong>
+            ${v136Esc(x.admission_no||'—')}
+          </small>
+
+          ${
+            d
+              ? '<small style="color:#087c5b;font-weight:900">✓ New photo preview ready</small>'
+              : ''
+          }
+
+          <div class="v136PhotoActions">
+
+            <button
+              type="button"
+              onclick="v136OpenCamera('${x.id}')">
+              📷 Camera
+            </button>
+
+            <label>
+              🖼 Gallery
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+                onchange="v136Gallery('${x.id}',this)">
+            </label>
+
+            <button
+              type="button"
+              class="primary"
+              ${d?'':'disabled'}
+              onclick="v138UploadStudentPhoto('${x.id}')">
+              ✅ Update Photo
+            </button>
+
+            ${
+              d
+                ? `<button
+                     type="button"
+                     onclick="v136CancelPhoto('${x.id}')">
+                     ✕ Cancel
+                   </button>`
+                : ''
+            }
+
+            ${
+              x.photo_path
+                ? `<button
+                     type="button"
+                     class="del"
+                     onclick="v138RemoveStudentPhoto('${x.id}')">
+                     Remove
+                   </button>`
+                : ''
+            }
+
+          </div>
+        </div>
+      </article>`;
+  }).join('') || '<div class="empty">No students found.</div>';
+}
+
+window.v136Gallery=function(id,input){
+  const f=input?.files?.[0];
+
+  if(f)setPhotoDraft(id,f);
+
+  if(input)input.value='';
+};
+
+window.v136CancelPhoto=function(id){
+  clearPhotoDraft(id);
+  renderPhotos();
+};
+
+window.v138UploadStudentPhoto=async function(id){
+  const row=photoRows.find(
+    x=>String(x.id)===String(id)
+  );
+
+  const draft=photoDrafts.get(String(id));
+
+  if(!row){
+    return window.toast?.(
+      'Student assigned class list में नहीं मिला'
+    );
+  }
+
+  if(!draft?.file){
+    return window.toast?.(
+      'पहले Camera या Gallery से photo चुनें'
+    );
+  }
+
+  let f=draft.file;
+  let path='';
+
+  try{
+    if(typeof compressImageFile==='function'){
+      f=await compressImageFile(
+        f,
+        10,
+        25,
+        640,
+        'student'
+      );
+    }
+
+    if(f.size>35*1024){
+      throw new Error(
+        'Photo 35 KB से बड़ी रह गई. दूसरा photo चुनें.'
+      );
+    }
+
+    path=
+      `teacher-student-photo/${window.user.id}/${row.id}.jpg`;
+
+    const up=await sb.storage
+      .from('student-media')
+      .upload(
+        path,
+        f,
+        {
+          upsert:true,
+          contentType:'image/jpeg',
+          cacheControl:'3600'
+        }
+      );
+
+    if(up.error)throw up.error;
+
+    const rr=await sb.rpc(
+      'v179_teacher_set_student_photo_safe',
+      {
+        p_student_id:row.id,
+        p_photo_path:path
+      }
+    );
+
+    if(rr.error){
+      try{
+        await sb.storage
+          .from('student-media')
+          .remove([path]);
+      }catch(_e){}
+
+      throw rr.error;
+    }
+
+    row.photo_path=path;
+    row.photo_url='';
+    row.student_photo_url='';
+    row._signed_photo='';
+
+    clearPhotoDraft(id);
+
+    try{
+      await signed(row);
+    }catch(_e){}
+
+    renderPhotos();
+
+    window.toast?.(
+      `Photo updated • ${Math.round(f.size/1024)} KB`
+    );
+
+  }catch(e){
+    window.toast?.(
+      e?.message||String(e)
+    );
+  }
+};
+
+window.v138RemoveStudentPhoto=async function(id){
+  const row=photoRows.find(
+    x=>String(x.id)===String(id)
+  );
+
+  if(!row||!row.photo_path)return;
+
+  if(!confirm(
+    'इस student की current photo remove करनी है?'
+  ))return;
+
+  try{
+    const oldPath=row.photo_path;
+
+    const rr=await sb.rpc(
+      'ldm_teacher_remove_student_photo',
+      {
+        p_student_id:row.id
+      }
+    );
+
+    if(rr.error)throw rr.error;
+
+    try{
+      await sb.storage
+        .from('student-media')
+        .remove([oldPath]);
+    }catch(_e){}
+
+    row.photo_path='';
+    row.photo_url='';
+    row.student_photo_url='';
+    row._signed_photo='';
+
+    clearPhotoDraft(id);
+    renderPhotos();
+
+    window.toast?.(
+      'Student photo removed • Central Student Master synced'
+    );
+
+  }catch(e){
+    window.toast?.(
+      e?.message||String(e)
+    );
+  }
+};
+
+function closeCam(){
+  try{
+    cam?.getTracks?.().forEach(
+      t=>t.stop()
+    );
+  }catch(_e){}
+
+  cam=null;
+  $('v136CameraModal')?.remove();
+}
+
+window.v136CloseCamera=closeCam;
+
+window.v136OpenCamera=async function(id){
+  closeCam();
+  camId=id;
+
+  if(!window.isSecureContext){
+    return window.toast?.(
+      'Camera के लिए HTTPS secure page जरूरी है.'
+    );
+  }
+
+  if(!navigator.mediaDevices?.getUserMedia){
+    return window.toast?.(
+      'Direct camera इस browser में उपलब्ध नहीं है.'
+    );
+  }
+
+  const m=document.createElement('div');
+
+  m.id='v136CameraModal';
+  m.className='v136CameraModal';
+
+  m.innerHTML=`
+    <div class="v136CameraBox">
+
+      <video
+        id="v136Video"
+        autoplay
+        muted
+        playsinline>
+      </video>
+
+      <div class="v136CameraTools">
+
+        <button
+          class="primary"
+          id="v136Snap">
+          📷 Capture
+        </button>
+
+        <button
+          type="button"
+          onclick="v136CloseCamera()">
+          Cancel
+        </button>
+
+      </div>
+    </div>`;
+
+  document.body.appendChild(m);
+
+  try{
+    cam=await navigator.mediaDevices.getUserMedia({
+      video:{
+        facingMode:{ideal:'environment'},
+        width:{ideal:1280},
+        height:{ideal:960}
+      },
+      audio:false
+    });
+
+    const v=$('v136Video');
+    v.srcObject=cam;
+
+    await v.play();
+
+    $('v136Snap').onclick=()=>capture(v);
+
+  }catch(e){
+    closeCam();
+
+    window.toast?.(
+      e?.name==='NotAllowedError'
+        ? 'Camera permission Allow करें.'
+        : (e?.message||String(e))
+    );
+  }
+};
+
+function capture(v){
+  const c=document.createElement('canvas');
+
+  const vw=v.videoWidth||640;
+  const vh=v.videoHeight||480;
+
+  const ratio=
+    Math.min(1,900/Math.max(vw,vh));
+
+  c.width=Math.round(vw*ratio);
+  c.height=Math.round(vh*ratio);
+
+  c.getContext('2d').drawImage(
+    v,
+    0,
+    0,
+    c.width,
+    c.height
+  );
+
+  c.toBlob(b=>{
+    if(!b)return;
+
+    const id=camId;
+
+    const f=new File(
+      [b],
+      'camera.jpg',
+      {
+        type:'image/jpeg'
+      }
+    );
+
+    closeCam();
+
+    setPhotoDraft(id,f);
+
+    window.toast?.(
+      'Photo preview ready • Update Photo दबाएँ'
+    );
+
+  },'image/jpeg',0.84);
+}
  /* Teacher QR Attendance Scanner — same Student QR, same central attendance table. */
  let v143QrStream=null,v143QrTimer=null,v143QrBusy=false,v143QrLast='',v143QrLastAt=0,v143QrScanned=0,v143QrMarked=0;
  function v143Esc(v){return typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -13708,20 +14262,117 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
  };
  /* V181: duplicate V143 Back/click owner removed; canonical V155 Back owns internal history. */
 
- /* Restore authenticated role after refresh; never leak greeting into Public. */
- async function restore(){
-   try{
-     if(!window.sb&&typeof window.init==='function')window.init();
-     let ss=await window.sb?.auth?.getSession?.(),session=ss?.data?.session;if(!session){surface('public');return}
-     window.user=session.user;await window.loadProfile?.();
-     if(parent()){surface('parent');await window.loadParentPortal?.();surface('parent');return}
-     if(teacher()){surface('erp');await window.ldmTeacherMasterContext?.();let r=sessionStorage.getItem('ldm_current_route')||'dashboard';await window.render(r);teacherShell();return}
-     if(admin()){surface('erp');if(typeof window.openERP==='function')window.openERP();return}
-     surface('public');
-   }catch(e){console.error('V136 restore',e)}
- }
- window.addEventListener('load',()=>setTimeout(restore,250),{once:true});
+/* FINAL REFRESH RESTORE — same authenticated role + same internal module */
+async function restore(){
+  try{
+    if(!window.sb && typeof window.init==='function'){
+      await window.init();
+    }
 
+    const ss=await window.sb?.auth?.getSession?.();
+    const session=ss?.data?.session;
+
+    if(!session){
+      surface('public');
+      return;
+    }
+
+    window.user=session.user;
+
+    if(typeof window.loadProfile==='function'){
+      await window.loadProfile();
+    }
+
+    /* Parent keeps its own portal */
+    if(parent()){
+      surface('parent');
+
+      if(typeof window.loadParentPortal==='function'){
+        await window.loadParentPortal();
+      }
+
+      return;
+    }
+
+    /* Admin / Teacher remain inside ERP */
+    if(teacher() || admin()){
+      surface('erp');
+
+      if(
+        teacher() &&
+        typeof window.ldmTeacherMasterContext==='function'
+      ){
+        await window.ldmTeacherMasterContext();
+      }
+
+      let route='dashboard';
+
+      try{
+        route=String(
+          sessionStorage.getItem('ldm_current_route') ||
+          window.__v90Route ||
+          'dashboard'
+        );
+      }catch(_e){}
+
+      if(
+        !route ||
+        route==='public' ||
+        route==='login'
+      ){
+        route='dashboard';
+      }
+
+      window.__v90Route=route;
+
+      try{
+        sessionStorage.setItem('ldm_surface','erp');
+        sessionStorage.setItem('ldm_current_route',route);
+      }catch(_e){}
+
+      if(typeof window.render==='function'){
+        try{
+          await window.render(route);
+        }catch(routeError){
+          console.error('LDM restore route',routeError);
+
+          route='dashboard';
+          window.__v90Route=route;
+
+          try{
+            sessionStorage.setItem(
+              'ldm_current_route',
+              'dashboard'
+            );
+          }catch(_e){}
+
+          await window.render('dashboard');
+        }
+      }else if(typeof window.openERP==='function'){
+        await window.openERP();
+      }
+
+      return;
+    }
+
+    surface('public');
+
+  }catch(e){
+    console.error('LDM refresh restore',e);
+
+    if(window.user){
+      surface('erp');
+    }else{
+      surface('public');
+    }
+  }
+}
+
+window.addEventListener(
+  'load',
+  ()=>setTimeout(restore,250),
+  {once:true}
+);
  /* QR print: preserve a real raster image in copied Print/PDF HTML. */
  async function qrLib(){if(window.QRCode)return;await new Promise((res,rej)=>{let s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
  async function sharpQR(root=document){await qrLib();for(const c of root.querySelectorAll('.idCard[data-v130-adm]')){let adm=String(c.dataset.v130Adm||'').trim();if(!adm)continue;try{let rr=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(rr.error||!rr.data?.token)continue;let box=c.querySelector('.v130IdQr')||c.appendChild(Object.assign(document.createElement('div'),{className:'v130IdQr'}));box.innerHTML='';new QRCode(box,{text:location.origin+location.pathname+'?student_verify='+encodeURIComponent(rr.data.token),width:240,height:240,correctLevel:QRCode.CorrectLevel.H});await new Promise(r=>setTimeout(r,20));let cv=box.querySelector('canvas');if(cv){let im=new Image();im.alt='Student Verification QR';im.src=cv.toDataURL('image/png');box.innerHTML='';box.appendChild(im)}}catch(e){console.error('QR',adm,e)}}}
@@ -13906,14 +14557,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
    window.v90Push=v90Push=function(route){if(window.__v155NoPush){window.__v90Route=String(route||'dashboard');return}return pushBase.apply(this,arguments)};
  }
  async function renderWithoutPush(route){window.__v155NoPush=true;try{return await window.render(route)}finally{window.__v155NoPush=false}}
- window.v90Back=async function(){
-   let h=Array.isArray(window.__v90History)?window.__v90History.slice():[];
-   if(h.length<=1){let r=String(window.__v90Route||'dashboard');if(r!=='dashboard'){h=['dashboard'];window.__v90History=h;window.__v90Route='dashboard';try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route','dashboard');history.replaceState({ldmInternal:true,route:'dashboard',stack:h},'',location.href)}catch(_e){}return renderWithoutPush('dashboard')}return false}
-   h.pop();let r=String(h[h.length-1]||'dashboard');window.__v90History=h;window.__v90Route=r;
-   try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route',r);history.replaceState({ldmInternal:true,route:r,stack:h},'',location.href)}catch(_e){}
-   return renderWithoutPush(r);
- };
-
+ 
  /* Student Full Details: Student Master owns a real detail host, so the button cannot target an old hidden search result. */
  if(typeof window.v105DetailHost==='function'){
    window.v105DetailHost=v105DetailHost=function(){
@@ -13992,11 +14636,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
    const top=erp.querySelector('.erpTop');if(top){let ids=[...top.querySelectorAll('.ldmTeacherSchoolIdentity')];ids.slice(1).forEach(x=>x.remove())}
  };
  // Home must pass through the final renderer chain, so canonical dashboard additions cannot disappear.
- window.v90GoHome=async function(){
-   let h=['dashboard'];window.__v90History=h;window.__v90Route='dashboard';
-   try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route','dashboard');history.pushState({ldmInternal:true,route:'dashboard',stack:h},'',location.href)}catch(_e){}
-   ownSurface('erp');return window.render?.('dashboard');
- };window.erpGoHome=window.v90GoHome;
+ 
  // Rebind existing top buttons without creating another navigation controller.
  document.addEventListener('click',function(e){const b=e.target.closest?.('#v90HomeBtn,.erpHomeBtn');if(!b||!document.getElementById('erp')?.contains(b))return;e.preventDefault();e.stopImmediatePropagation();window.v90GoHome()},true);
  // Teacher photo authorization is enforced inside canonical V136; no late wrapper.
@@ -14435,109 +15075,249 @@ Canonical V138 popstate + V155 v90Back own navigation. -->
     }
   }
 
-  async function finalBack(){
-    let h=readStack();
-    let r=currentRoute();
+async function finalBack(){
+  let h=readStack();
+  let here=String(currentRoute()||'dashboard');
 
-    if(r==='dashboard'||h.length<=1){
-      saveStack(['dashboard'],'dashboard');
-      armRootGuard();
-      return requestExit(true);
-    }
+  if(!Array.isArray(h))h=[];
 
-    let out=false;
+  while(
+    h.length>1 &&
+    String(h[h.length-1])===here
+  ){
+    h.pop();
+  }
 
-    if(oldBack){
-      try{
-        out=await oldBack.apply(this,arguments);
-      }catch(e){
-        console.error('V181 internal back',e);
-      }
+  /* Dashboard/root से Public पर नहीं जाना */
+  if(here==='dashboard' || h.length<=1){
+    saveStack(['dashboard'],'dashboard');
+    return requestExit(true);
+  }
+
+  if(String(h[h.length-1])===here){
+    h.pop();
+  }
+
+  const prev=String(
+    h[h.length-1]||'dashboard'
+  );
+
+  saveStack(
+    h.length?h:['dashboard'],
+    prev
+  );
+
+  try{
+    sessionStorage.setItem(
+      'ldm_current_route',
+      prev
+    );
+
+    sessionStorage.setItem(
+      'ldm_nav_history',
+      JSON.stringify(
+        h.length?h:['dashboard']
+      )
+    );
+
+    sessionStorage.setItem(
+      'ldm_surface',
+      'erp'
+    );
+  }catch(_e){}
+
+  try{
+    history.replaceState(
+      {
+        ldmInternal:true,
+        route:prev,
+        stack:(h.length?h:['dashboard']).slice()
+      },
+      '',
+      location.href
+    );
+  }catch(_e){}
+
+  let out=false;
+
+  try{
+    if(typeof window.render==='function'){
+      out=await window.render(prev);
     }else{
-      h.pop();
-
-      let prev=h[h.length-1]||'dashboard';
-      saveStack(h,prev);
-
-      try{
-        history.replaceState({
-          ldmInternal:true,
-          route:prev,
-          stack:h.slice()
-        },'',location.href);
-      }catch(_e){}
-
-      if(typeof window.render==='function'){
-        out=await window.render(prev);
-      }
+      window.toast?.(
+        'Internal Back renderer उपलब्ध नहीं है.'
+      );
+      return false;
     }
+  }catch(e){
+    console.error(
+      'LDM central Back',
+      e
+    );
 
-    setTimeout(()=>{
-      cleanHeader();
-      if(currentRoute()==='dashboard')armRootGuard();
-    },20);
+    window.toast?.(
+      e?.message||String(e)
+    );
 
-    return out;
+    return false;
   }
 
-  async function finalHome(){
-    saveStack(['dashboard'],'dashboard');
+  setTimeout(()=>{
+    cleanHeader();
 
-    let out;
-
-    try{
-      out=oldHome
-        ?await oldHome.apply(this,arguments)
-        :(typeof window.render==='function'
-          ?await window.render('dashboard')
-          :undefined);
-    }catch(e){
-      console.error('V181 home',e);
+    if(currentRoute()==='dashboard'){
+      arrRootGuard();
     }
+  },20);
 
-    saveStack(['dashboard'],'dashboard');
+  return out;
+}
 
-    setTimeout(()=>{
-      cleanHeader();
-      armRootGuard();
-      fixAttendanceDom();
-    },20);
+async function finalHome(){
+  const dash='dashboard';
 
-    return out;
+  saveStack(
+    [dash],
+    dash
+  );
+
+  try{
+    sessionStorage.setItem(
+      'ldm_current_route',
+      dash
+    );
+
+    sessionStorage.setItem(
+      'ldm_nav_history',
+      JSON.stringify([dash])
+    );
+
+    sessionStorage.setItem(
+      'ldm_surface',
+      'erp'
+    );
+  }catch(_e){}
+
+  try{
+    history.replaceState(
+      {
+        ldmInternal:true,
+        route:dash,
+        stack:[dash]
+      },
+      '',
+      location.href
+    );
+  }catch(_e){}
+
+  let out=false;
+
+  try{
+    if(typeof window.render==='function'){
+      out=await window.render(dash);
+    }else{
+      window.toast?.(
+        'Role Dashboard renderer उपलब्ध नहीं है.'
+      );
+      return false;
+    }
+  }catch(e){
+    console.error(
+      'LDM central Home',
+      e
+    );
+
+    window.toast?.(
+      e?.message||String(e)
+    );
+
+    return false;
   }
+
+  setTimeout(()=>{
+    cleanHeader();
+    arrRootGuard();
+    fixAttendanceDom();
+  },20);
+
+  return out;
+}
 
   window.v90Back=finalBack;
   window.v90GoHome=finalHome;
   window.erpGoHome=finalHome;
 
-  try{v90Back=finalBack}catch(_e){}
-  try{v90GoHome=finalHome}catch(_e){}
 
-  window.addEventListener('popstate',function(e){
-    if(exitApproved)return;
+  window.addEventListener('popstate',async function(e){
+  if(exitApproved)return;
 
-    const st=e.state||{};
+  const st=e.state||{};
 
-    if(st.ldm181Root&&erpVisible()){
-      saveStack(['dashboard'],'dashboard');
-      setTimeout(()=>requestExit(false),0);
+  if(st.ldmInternal && st.route){
+    const route=String(st.route||'dashboard');
 
-    }else if(st.ldmInternal&&st.route){
+    const stack=
+      Array.isArray(st.stack) && st.stack.length
+        ? st.stack.map(String)
+        : [route];
 
-      const a=Array.isArray(st.stack)&&st.stack.length
-        ?st.stack
-        :[String(st.route||'dashboard')];
+    saveStack(stack,route);
 
-      saveStack(a,String(st.route||'dashboard'));
+    try{
+      sessionStorage.setItem('ldm_current_route',route);
+      sessionStorage.setItem(
+        'ldm_nav_history',
+        JSON.stringify(stack)
+      );
+      sessionStorage.setItem('ldm_surface','erp');
+    }catch(_e){}
 
-      setTimeout(()=>{
-        cleanHeader();
-        if(currentRoute()==='dashboard')armRootGuard();
-      },20);
+    try{
+      if(typeof window.render==='function'){
+        await window.render(route);
+      }
+    }catch(err){
+      console.error('LDM browser back',err);
+      window.toast?.(
+        err?.message||String(err)
+      );
     }
 
-  },true);
+    setTimeout(()=>{
+      cleanHeader();
 
+      if(route==='dashboard'){
+        arrRootGuard();
+      }
+    },20);
+
+    return;
+  }
+
+  if(erpVisible()){
+    saveStack(
+      ['dashboard'],
+      'dashboard'
+    );
+
+    try{
+      history.pushState(
+        {
+          ldmInternal:true,
+          route:'dashboard',
+          stack:['dashboard']
+        },
+        '',
+        location.href
+      );
+    }catch(_e){}
+
+    setTimeout(
+      ()=>requestExit(false),
+      0
+    );
+  }
+},true);
   window.addEventListener('beforeunload',()=>{
     saveStack(readStack(),currentRoute());
   },{capture:true});
@@ -15005,74 +15785,316 @@ Canonical V138 popstate + V155 v90Back own navigation. -->
 <!-- ===== END V181 FINAL ROOT NAV + MOBILE HEADER + ATTENDANCE + DEVICE LOCK ===== -->
   <!-- ===== V182 FINAL BACK PERSISTENCE + PREMIUM COMPACT HEADER ===== -->
 <style id="ldm-v182-final-style">
+/* ===== V182 CLEAN CANONICAL RESPONSIVE ERP HEADER ===== */
+
+#erp,
+#erpContent,
+#erp .erpTop,
+#erp .erpTop > *{
+  box-sizing:border-box!important;
+  max-width:100%!important;
+}
+
+#erp{
+  width:100%!important;
+  overflow-x:hidden!important;
+}
+
+#erpContent{
+  width:100%!important;
+  min-width:0!important;
+  overflow-x:hidden!important;
+}
+
+/* ===== MAIN HEADER ===== */
+#erp .erpTop{
+  width:100%!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:7px!important;
+  padding:7px!important;
+  margin:0!important;
+  overflow:visible!important;
+}
+
+/* ===== SCHOOL / ROLE IDENTITY ===== */
+#erp .ldmSchoolIdentity,
+#erp .ldmTeacherSchoolIdentity,
+#erp .v6412SchoolIdentity,
+#erp .v6415School,
+#erp .v635SchoolHead,
+#erp .v97TopIdentity{
+  flex:1 1 260px!important;
+  min-width:180px!important;
+  width:auto!important;
+  margin:0!important;
+  padding:3px 5px!important;
+  overflow:visible!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-overflow:clip!important;
+  line-height:1.1!important;
+}
+
+#erp .ldmSchoolIdentity *,
+#erp .ldmTeacherSchoolIdentity *,
+#erp .v6412SchoolIdentity *,
+#erp .v6415School *,
+#erp .v635SchoolHead *,
+#erp .v97TopIdentity *{
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-overflow:clip!important;
+}
+
+/* ===== HEADER BUTTONS ===== */
+#erp #ldmDeviceLockBtn,
+#erp [data-v58-order],
+#erp .websiteBtn,
+#erp #v90BackBtn,
+#erp #v90HomeBtn,
+#erp .erpTop .hamb{
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+
+  flex:0 0 auto!important;
+
+  width:auto!important;
+  min-width:52px!important;
+  max-width:none!important;
+  min-height:40px!important;
+  height:40px!important;
+
+  margin:0!important;
+  padding:5px 8px!important;
+
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  font-size:11.5px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+/* ===== MASTER SEARCH ===== */
+#erp #v75TopSearch,
+#erp .v75TopSearch,
+#erp .v764MasterSearch{
+  flex:1 1 300px!important;
+  min-width:220px!important;
+  width:auto!important;
+  max-width:100%!important;
+
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:6px!important;
+
+  position:static!important;
+  inset:auto!important;
+
+  margin:0!important;
+  padding:0!important;
+}
+
+#erp #v75TopSearch input,
+#erp .v75TopSearch input,
+#erp .v764MasterSearch input{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  height:40px!important;
+
+  margin:0!important;
+  padding:0 10px!important;
+
+  box-sizing:border-box!important;
+  font-size:12px!important;
+}
+
+#erp #v75TopSearch button,
+#erp .v75TopSearch button,
+#erp .v764MasterSearch button{
+  width:auto!important;
+  min-width:72px!important;
+  max-width:90px!important;
+  height:40px!important;
+
+  margin:0!important;
+  padding:0 7px!important;
+
+  font-size:11px!important;
+  white-space:nowrap!important;
+  box-sizing:border-box!important;
+}
+
+
+/* =====================================================
+   TABLET + MOBILE
+   ===================================================== */
 @media(max-width:760px){
+
   #erp .erpTop{
     display:grid!important;
-    grid-template-columns:38px 68px 38px 62px 54px 38px!important;
-    grid-template-rows:auto auto!important;
-    gap:5px!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
     align-items:center!important;
-    justify-content:center!important;
-    width:100%!important;
-    max-width:100%!important;
+    gap:5px!important;
     padding:6px!important;
-    box-sizing:border-box!important;
-    overflow:visible!important;
+    width:100%!important;
   }
-  #erp .erpTop>*{min-width:0!important;box-sizing:border-box!important}
 
-  #erp #ldmDeviceLockBtn{
-    grid-column:1!important;grid-row:1!important;
-    width:38px!important;min-width:38px!important;max-width:38px!important;height:40px!important;
-    padding:0 7px!important;margin:0!important;overflow:hidden!important;white-space:nowrap!important;text-align:left!important;
+  /* identity always gets complete first row */
+  #erp .ldmSchoolIdentity,
+  #erp .ldmTeacherSchoolIdentity,
+  #erp .v6412SchoolIdentity,
+  #erp .v6415School,
+  #erp .v635SchoolHead,
+  #erp .v97TopIdentity{
+    grid-column:1/-1!important;
+
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+
+    flex:none!important;
+    order:-20!important;
+
+    text-align:center!important;
+    margin:0!important;
+    padding:3px 4px!important;
   }
-  #erp [data-v58-order]{
-    grid-column:2!important;grid-row:1!important;
-    width:68px!important;min-width:68px!important;max-width:68px!important;height:40px!important;
-    padding:0 4px!important;margin:0!important;font-size:11px!important;overflow:hidden!important;white-space:nowrap!important;
-  }
-  #erp .websiteBtn{
-    grid-column:3!important;grid-row:1!important;
-    width:38px!important;min-width:38px!important;max-width:38px!important;height:40px!important;
-    padding:0 7px!important;margin:0!important;overflow:hidden!important;white-space:nowrap!important;text-align:left!important;
-  }
-  #erp #v90BackBtn{
-    grid-column:4!important;grid-row:1!important;
-    width:62px!important;min-width:62px!important;max-width:62px!important;height:40px!important;
-    padding:0 4px!important;margin:0!important;font-size:11px!important;overflow:hidden!important;white-space:nowrap!important;
-  }
-  #erp #v90HomeBtn{
-    grid-column:5!important;grid-row:1!important;
-    width:54px!important;min-width:54px!important;max-width:54px!important;height:40px!important;
-    padding:0 3px!important;margin:0!important;font-size:11px!important;overflow:hidden!important;white-space:nowrap!important;
-  }
+
+  #erp #ldmDeviceLockBtn,
+  #erp [data-v58-order],
+  #erp .websiteBtn,
+  #erp #v90BackBtn,
+  #erp #v90HomeBtn,
   #erp .erpTop .hamb{
-    grid-column:6!important;grid-row:1!important;
-    width:38px!important;min-width:38px!important;max-width:38px!important;height:40px!important;
-    padding:0 7px!important;margin:0!important;font-size:12px!important;overflow:hidden!important;white-space:nowrap!important;text-align:left!important;
-    position:relative!important;inset:auto!important;transform:none!important;
+    grid-column:auto!important;
+
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+
+    height:38px!important;
+    min-height:38px!important;
+
+    margin:0!important;
+    padding:3px 2px!important;
+
+    font-size:10.5px!important;
+    line-height:1!important;
+  }
+
+  /* search gets its own complete row */
+  #erp #v75TopSearch,
+  #erp .v75TopSearch,
+  #erp .v764MasterSearch{
+    grid-column:1/-1!important;
+
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+
+    grid-template-columns:minmax(0,1fr) 72px!important;
+    gap:5px!important;
+  }
+
+  #erp #v75TopSearch input,
+  #erp .v75TopSearch input,
+  #erp .v764MasterSearch input{
+    height:38px!important;
+    font-size:12px!important;
+  }
+
+  #erp #v75TopSearch button,
+  #erp .v75TopSearch button,
+  #erp .v764MasterSearch button{
+    width:72px!important;
+    min-width:72px!important;
+    max-width:72px!important;
+    height:38px!important;
+    padding:0 3px!important;
+    font-size:10.5px!important;
+  }
+}
+
+
+/* =====================================================
+   NORMAL MOBILE
+   3 controls per row — nothing gets cut
+   ===================================================== */
+@media(max-width:430px){
+
+  #erp .erpTop{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:5px!important;
+    padding:5px!important;
+  }
+
+  #erp #ldmDeviceLockBtn,
+  #erp [data-v58-order],
+  #erp .websiteBtn,
+  #erp #v90BackBtn,
+  #erp #v90HomeBtn,
+  #erp .erpTop .hamb{
+    min-width:0!important;
+    width:100%!important;
+    height:38px!important;
+    padding:3px!important;
+    font-size:10.5px!important;
+  }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONE
+   ===================================================== */
+@media(max-width:350px){
+
+  #erp .erpTop{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:4px!important;
+    padding:4px!important;
+  }
+
+  #erp #ldmDeviceLockBtn,
+  #erp [data-v58-order],
+  #erp .websiteBtn,
+  #erp #v90BackBtn,
+  #erp #v90HomeBtn,
+  #erp .erpTop .hamb{
+    min-width:0!important;
+    width:100%!important;
+    height:36px!important;
+    font-size:10px!important;
   }
 
   #erp #v75TopSearch,
   #erp .v75TopSearch,
   #erp .v764MasterSearch{
-    grid-column:1 / -1!important;grid-row:2!important;
-    width:100%!important;max-width:100%!important;
-    display:grid!important;grid-template-columns:minmax(0,1fr) 86px!important;
-    gap:5px!important;margin:0!important;padding:0!important;
-    position:static!important;inset:auto!important;
-  }
-  #erp #v75TopSearch input{
-    width:100%!important;min-width:0!important;height:40px!important;
-    margin:0!important;padding:0 10px!important;box-sizing:border-box!important;font-size:12px!important;
-  }
-  #erp #v75TopSearch button{
-    width:86px!important;min-width:86px!important;max-width:86px!important;height:40px!important;
-    margin:0!important;padding:0 4px!important;font-size:11px!important;white-space:nowrap!important;overflow:hidden!important;
+    grid-template-columns:minmax(0,1fr) 68px!important;
   }
 
-  #erpContent{max-width:100%!important;overflow-x:hidden!important}
+  #erp #v75TopSearch button,
+  #erp .v75TopSearch button,
+  #erp .v764MasterSearch button{
+    width:68px!important;
+    min-width:68px!important;
+    max-width:68px!important;
+  }
 }
+
+/* ===== END V182 CLEAN CANONICAL RESPONSIVE ERP HEADER ===== */
+  
 </style>
 
 <script id="ldm-v182-final-runtime">
