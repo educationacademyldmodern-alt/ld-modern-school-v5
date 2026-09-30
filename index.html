@@ -12026,7 +12026,11 @@ window.addEventListener('load',()=>setTimeout(()=>v111InstallParentFeeButtons(),
 .v111QuoteCards>div{box-shadow:0 5px 14px rgba(13,58,105,.045)}
 .v111FeeNotice{box-shadow:0 5px 14px rgba(0,0,0,.06)}
 /* Dynamic uploaded public wallpaper still works; no built-in image is shipped. */
-#publicSite.websiteWallpaper .v26Hero{background-image:linear-gradient(90deg,rgba(2,34,67,.48),rgba(3,45,84,.12)),var(--site-wallpaper)!important;background-size:cover!important;background-position:center!important}
+#publicSite.websiteWallpaper .v26Hero{
+  background-size:contain!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+ }
 #publicSite:not(.websiteWallpaper) .v26Hero{background-image:radial-gradient(circle at 85% 25%,rgba(10,104,190,.12),transparent 28%),linear-gradient(115deg,#f4faff 0%,#fff 50%,#e9f5ff 100%)!important}
 @media(min-width:901px){.v111FeePage{padding:2px 2px 22px}.v111BulkGrid{gap:12px}.v111StudentRow,.v111StudentHead{column-gap:10px}}
 @media(max-width:900px){.v111FeePage{padding:0 2px 16px}.v111Hero{padding:15px!important}.v111Toolbar,.v111NoticeTools,.v111PlannerTools{padding:9px}.v111BulkCard{padding:13px!important}.v111BulkActions{width:100%}.v111BulkActions button{flex:1 1 145px}.v111Toolbar label,.v111NoticeTools label,.v111PlannerTools label{min-width:0}}
@@ -12124,7 +12128,7 @@ try{
 try{const v113OpenERPBase=openERP;openERP=async function(){let r=await v113OpenERPBase.apply(this,arguments);setTimeout(()=>{v113StartFallback()},260);return r}}catch(_e){}
 try{const v113ParentLoadBase=loadParentPortal;loadParentPortal=async function(){let r=await v113ParentLoadBase.apply(this,arguments);setTimeout(()=>{v113StartParentRealtime();v113StartFallback()},180);return r}}catch(_e){}
 try{const v113LogoutBase=logout;logout=async function(){await v113StopChannel(v113LiveChannel);await v113StopChannel(v113ParentChannel);v113LiveChannel=null;v113LiveKey='';v113ParentChannel=null;v113ParentKey='';clearInterval(v113FallbackTimer);return await v113LogoutBase.apply(this,arguments)}}catch(_e){}
-window.addEventListener('load',()=>setTimeout(()=>{if(user){if(['parent','student'].includes(v113Role()))v113StartParentRealtime();else v113StartRealtime();v113StartFallback()}},1700));
+ 
 </script>
 <!-- ===== END V113 LONG-TERM FREE-TIER SMART SYNC + APPROVAL HARDENING ===== -->
 
@@ -12906,7 +12910,7 @@ window.V6417_BUILD='V64.17-RESOURCE-CONNECTION-OPTIMIZED-2026-09-20';
         try{const ch=window[name];if(ch&&ch!==window.v113LiveChannel&&ch!==window.v113ParentChannel){await sb.removeChannel(ch);window[name]=null}}catch(_e){}
       }
       /* Start exactly the role-scoped V113 channel; its own key guard prevents duplicates. */
-      try{if(['parent','student'].includes(role()))await v113StartParentRealtime();else await v113StartRealtime()}catch(_e){}
+    
     }finally{cleanupBusy=false}
   }
   function scheduleCleanup(){clearTimeout(cleanupTimer);cleanupTimer=setTimeout(cleanupLegacyChannels,250)}
