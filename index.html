@@ -15003,5 +15003,367 @@ Canonical V138 popstate + V155 v90Back own navigation. -->
 })();
 </script>
 <!-- ===== END V181 FINAL ROOT NAV + MOBILE HEADER + ATTENDANCE + DEVICE LOCK ===== -->
+  <!-- ===== V182 FINAL BACK PERSISTENCE + PREMIUM COMPACT HEADER ===== -->
+<style id="ldm-v182-final-style">
+@media(max-width:760px){
+  #erp .erpTop{
+    display:grid!important;
+    grid-template-columns:38px 68px 38px 62px 54px 38px!important;
+    grid-template-rows:auto auto!important;
+    gap:5px!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    max-width:100%!important;
+    padding:6px!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+  }
+  #erp .erpTop>*{min-width:0!important;box-sizing:border-box!important}
+
+  #erp #ldmDeviceLockBtn{
+    grid-column:1!important;grid-row:1!important;
+    width:38px!important;min-width:38px!important;max-width:38px!important;height:40px!important;
+    padding:0 7px!important;margin:0!important;overflow:hidden!important;white-space:nowrap!important;text-align:left!important;
+  }
+  #erp [data-v58-order]{
+    grid-column:2!important;grid-row:1!important;
+    width:68px!important;min-width:68px!important;max-width:68px!important;height:40px!important;
+    padding:0 4px!important;margin:0!important;font-size:11px!important;overflow:hidden!important;white-space:nowrap!important;
+  }
+  #erp .websiteBtn{
+    grid-column:3!important;grid-row:1!important;
+    width:38px!important;min-width:38px!important;max-width:38px!important;height:40px!important;
+    padding:0 7px!important;margin:0!important;overflow:hidden!important;white-space:nowrap!important;text-align:left!important;
+  }
+  #erp #v90BackBtn{
+    grid-column:4!important;grid-row:1!important;
+    width:62px!important;min-width:62px!important;max-width:62px!important;height:40px!important;
+    padding:0 4px!important;margin:0!important;font-size:11px!important;overflow:hidden!important;white-space:nowrap!important;
+  }
+  #erp #v90HomeBtn{
+    grid-column:5!important;grid-row:1!important;
+    width:54px!important;min-width:54px!important;max-width:54px!important;height:40px!important;
+    padding:0 3px!important;margin:0!important;font-size:11px!important;overflow:hidden!important;white-space:nowrap!important;
+  }
+  #erp .erpTop .hamb{
+    grid-column:6!important;grid-row:1!important;
+    width:38px!important;min-width:38px!important;max-width:38px!important;height:40px!important;
+    padding:0 7px!important;margin:0!important;font-size:12px!important;overflow:hidden!important;white-space:nowrap!important;text-align:left!important;
+    position:relative!important;inset:auto!important;transform:none!important;
+  }
+
+  #erp #v75TopSearch,
+  #erp .v75TopSearch,
+  #erp .v764MasterSearch{
+    grid-column:1 / -1!important;grid-row:2!important;
+    width:100%!important;max-width:100%!important;
+    display:grid!important;grid-template-columns:minmax(0,1fr) 86px!important;
+    gap:5px!important;margin:0!important;padding:0!important;
+    position:static!important;inset:auto!important;
+  }
+  #erp #v75TopSearch input{
+    width:100%!important;min-width:0!important;height:40px!important;
+    margin:0!important;padding:0 10px!important;box-sizing:border-box!important;font-size:12px!important;
+  }
+  #erp #v75TopSearch button{
+    width:86px!important;min-width:86px!important;max-width:86px!important;height:40px!important;
+    margin:0!important;padding:0 4px!important;font-size:11px!important;white-space:nowrap!important;overflow:hidden!important;
+  }
+
+  #erpContent{max-width:100%!important;overflow-x:hidden!important}
+}
+</style>
+
+<script id="ldm-v182-final-runtime">
+(function(){
+'use strict';
+if(window.__LDM_V182_FINAL_VIEW__)return;
+window.__LDM_V182_FINAL_VIEW__=true;
+
+const DASH_KEY='ldm_v182_dash_state';
+const SCROLL_KEY='ldm_v182_scroll_map';
+let pending=null;
+
+const routeNow=()=>{
+  try{return String(sessionStorage.getItem('ldm_current_route')||window.__v90Route||'dashboard')}
+  catch(_e){return String(window.__v90Route||'dashboard')}
+};
+const host=()=>document.getElementById('erpContent');
+const userTag=()=>String(window.user?.id||window.profile?.id||window.profile?.email||'erp');
+
+function getScrollMap(){
+  try{
+    const x=JSON.parse(sessionStorage.getItem(SCROLL_KEY)||'{}');
+    return x&&typeof x==='object'?x:{};
+  }catch(_e){return {}}
+}
+function saveScroll(r=routeNow()){
+  try{
+    const m=getScrollMap();
+    m[String(r||'dashboard')]=Math.max(0,Math.round(window.scrollY||0));
+    sessionStorage.setItem(SCROLL_KEY,JSON.stringify(m));
+  }catch(_e){}
+}
+function scrollFor(r){return Number(getScrollMap()[String(r||'dashboard')]||0)}
+
+function captureDash(){
+  if(routeNow()!=='dashboard')return;
+  const h=host();
+  if(!h)return;
+
+  const root=h.querySelector('.ldmRootAdminDash,.v114AdminDash,.v114TeacherDash,[class*="Dashboard"]');
+  if(!root)return;
+
+  const state={
+    user:userTag(),
+    scroll:Math.max(0,Math.round(window.scrollY||0)),
+    stats:'',
+    items:{}
+  };
+
+  const stats=document.getElementById('v90Stats');
+  if(stats&&!/Loading/i.test(stats.textContent||''))state.stats=stats.innerHTML;
+
+  h.querySelectorAll('[id]').forEach(el=>{
+    if(!el.id||el.id==='v90Stats')return;
+
+    if(el.matches('input,textarea,select')){
+      state.items[el.id]={k:'f',v:el.value,c:!!el.checked};
+      return;
+    }
+
+    const style=el.getAttribute('style')||'';
+
+    if(el.childElementCount===0){
+      const t=String(el.textContent||'').trim();
+      if(t&&!/^(—|-|Loading|\.\.\.|…)$/.test(t)){
+        state.items[el.id]={k:'t',t,style};
+      }
+    }else if(style){
+      state.items[el.id]={k:'s',style};
+    }
+  });
+
+  try{sessionStorage.setItem(DASH_KEY,JSON.stringify(state))}catch(_e){}
+  saveScroll('dashboard');
+}
+
+function readDash(){
+  try{
+    const s=JSON.parse(sessionStorage.getItem(DASH_KEY)||'null');
+    if(!s||s.user!==userTag())return null;
+    return s;
+  }catch(_e){return null}
+}
+
+function blankish(v){
+  return /^(|—|-|Loading|\.\.\.|…)$/.test(String(v||'').trim());
+}
+
+function restoreDash(mode='back'){
+  if(routeNow()!=='dashboard')return false;
+
+  const h=host(),s=readDash();
+  if(!h||!s)return false;
+
+  const root=h.querySelector('.ldmRootAdminDash,.v114AdminDash,.v114TeacherDash,[class*="Dashboard"]');
+  if(!root)return false;
+
+  const stats=document.getElementById('v90Stats');
+
+  if(stats&&s.stats&&(/Loading/i.test(stats.textContent||'')||String(stats.textContent||'').includes('—'))){
+    stats.innerHTML=s.stats;
+    try{
+      window.__ldmAdminStatsHTML=s.stats;
+      sessionStorage.setItem('ldm_admin_stats_html',s.stats);
+    }catch(_e){}
+  }
+
+  Object.entries(s.items||{}).forEach(([id,o])=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+
+    if(o.k==='f'){
+      if('value' in el)el.value=o.v??'';
+      if('checked' in el)el.checked=!!o.c;
+      return;
+    }
+
+    if(o.k==='t'){
+      if(blankish(el.textContent))el.textContent=o.t;
+      if(o.style&&!el.getAttribute('style'))el.setAttribute('style',o.style);
+      return;
+    }
+
+    if(o.k==='s'&&o.style){
+      el.setAttribute('style',o.style);
+    }
+  });
+
+  const y=mode==='home'?0:Number(s.scroll||scrollFor('dashboard')||0);
+
+  [0,40,120,260].forEach(ms=>setTimeout(()=>{
+    if(routeNow()==='dashboard')window.scrollTo(0,y);
+  },ms));
+
+  return true;
+}
+
+function restoreRouteScroll(r,mode='back'){
+  const y=mode==='home'?0:scrollFor(r);
+
+  [20,90,220].forEach(ms=>setTimeout(()=>{
+    if(routeNow()===String(r))window.scrollTo(0,y);
+  },ms));
+
+  return true;
+}
+
+function stackNow(){
+  try{
+    const a=JSON.parse(sessionStorage.getItem('ldm_nav_history')||'[]');
+    if(Array.isArray(a)&&a.length)return a;
+  }catch(_e){}
+
+  return Array.isArray(window.__v90History)&&window.__v90History.length
+    ?window.__v90History.slice()
+    :['dashboard'];
+}
+
+function tryPending(){
+  if(!pending)return false;
+  if(routeNow()!==pending.route)return false;
+
+  const ok=pending.route==='dashboard'
+    ?restoreDash(pending.mode)
+    :restoreRouteScroll(pending.route,pending.mode);
+
+  if(ok)pending=null;
+  return ok;
+}
+
+function schedulePending(){
+  [0,30,80,160,320].forEach(ms=>setTimeout(tryPending,ms));
+}
+
+/* Save state before opening another ERP route */
+const pushBase=window.v90Push;
+
+if(typeof pushBase==='function'){
+  window.v90Push=function(next){
+    const from=routeNow();
+
+    saveScroll(from);
+
+    if(from==='dashboard'&&String(next||'dashboard')!=='dashboard'){
+      captureDash();
+    }
+
+    return pushBase.apply(this,arguments);
+  };
+
+  try{v90Push=window.v90Push}catch(_e){}
+}
+
+/* Existing Back remains owner; only restore data/position */
+const backBase=window.v90Back;
+
+if(typeof backBase==='function'){
+  window.v90Back=function(){
+    const h=stackNow();
+    const dest=String(h.length>1?h[h.length-2]:'dashboard');
+
+    saveScroll(routeNow());
+
+    pending={
+      route:dest,
+      mode:'back'
+    };
+
+    const out=backBase.apply(this,arguments);
+
+    schedulePending();
+
+    return out;
+  };
+
+  try{v90Back=window.v90Back}catch(_e){}
+}
+
+/* Home */
+const homeBase=window.v90GoHome||window.erpGoHome;
+
+if(typeof homeBase==='function'){
+  const homeFinal=function(){
+    saveScroll(routeNow());
+
+    pending={
+      route:'dashboard',
+      mode:'home'
+    };
+
+    const out=homeBase.apply(this,arguments);
+
+    schedulePending();
+
+    return out;
+  };
+
+  window.v90GoHome=homeFinal;
+  window.erpGoHome=homeFinal;
+
+  try{v90GoHome=homeFinal}catch(_e){}
+}
+
+/* Save latest successfully loaded dashboard values */
+const statsBase=window.v90LoadDashboardStats;
+
+if(typeof statsBase==='function'){
+  window.v90LoadDashboardStats=async function(){
+    const out=await statsBase.apply(this,arguments);
+
+    setTimeout(captureDash,0);
+    setTimeout(captureDash,250);
+
+    return out;
+  };
+
+  try{v90LoadDashboardStats=window.v90LoadDashboardStats}catch(_e){}
+}
+
+/* Phone/browser Back */
+window.addEventListener('popstate',function(e){
+  const dest=String(e.state?.route||'');
+
+  if(!dest)return;
+
+  pending={
+    route:dest,
+    mode:'back'
+  };
+
+  schedulePending();
+},false);
+
+window.addEventListener('pageshow',()=>{
+  setTimeout(()=>{
+    if(routeNow()==='dashboard'){
+      restoreDash('back');
+    }else{
+      restoreRouteScroll(routeNow(),'back');
+    }
+  },80);
+},{passive:true});
+
+setTimeout(()=>{
+  if(routeNow()==='dashboard'){
+    captureDash();
+  }
+},600);
+
+})();
+</script>
+<!-- ===== END V182 FINAL BACK PERSISTENCE + PREMIUM COMPACT HEADER ===== -->      
 </body>
 </html>
