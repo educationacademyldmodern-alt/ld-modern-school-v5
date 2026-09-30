@@ -29,6 +29,669 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
  // V160: native setInterval retained; module timers/scanners own their lifecycle.
 })();
 </script>
+ <script id="ldm-final-silent-controller-v2">
+/* ============================================================
+   LDM FINAL SILENT CONTROLLER V2
+   Admin + Teacher + Parent + Driver
+   ONE ACTIVE MODULE ONLY
+   Safe: Auth / Session / Supabase globals untouched
+   ============================================================ */
+(function () {
+  'use strict';
+
+  if (window.__LDM_FINAL_SILENT_V2__) return;
+  window.__LDM_FINAL_SILENT_V2__ = true;
+
+  const modules = new Map();
+
+  const state = {
+    active: null,
+    scope: null
+  };
+
+  /* ---------- BASIC SAFE HELPERS ---------- */
+
+  function safe(fn) {
+    try {
+      return typeof fn === 'function' ? fn() : undefined;
+    } catch (err) {
+      console.error('[LDM]', err);
+    }
+  }
+
+  function normalize(value) {
+    return String(value || '')
+      .trim()
+      .toLowerCase()
+      .replace(/^#+/, '')
+      .replace(/[^a-z0-9_-]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80);
+  }
+
+  /* ==========================================================
+     ACTION BUTTONS
+     इनको नया MODULE नहीं माना जाएगा
+     ========================================================== */
+
+  const ACTION_WORDS = [
+    'save',
+    'update',
+    'edit',
+    'delete',
+    'remove',
+    'submit',
+    'cancel',
+    'close',
+    'print',
+    'download',
+    'preview',
+    'upload',
+    'camera',
+    'capture',
+    'search',
+    'filter',
+    'refresh',
+    'reset',
+    'approve',
+    'reject',
+    'repair',
+    'assign',
+    'handover',
+    'change',
+    'collect',
+    'pay',
+    'whatsapp',
+    'call',
+    'export',
+    'import',
+    'next',
+    'previous'
+  ];
+
+  function isActionButton(el) {
+    if (!el) return false;
+
+    if (
+      el.matches(
+        'input,textarea,select,option,label,' +
+        'button[type="submit"],input[type="submit"]'
+      )
+    ) return true;
+
+    if (
+      el.closest(
+        'form,.modal,[role="dialog"],' +
+        '.dialog,.popup,.cameraModal,.resultBox'
+      )
+    ) return true;
+
+    const action =
+      el.getAttribute('data-action') ||
+      el.getAttribute('name') ||
+      el.id ||
+      el.textContent ||
+      '';
+
+    const value = normalize(action);
+
+    return ACTION_WORDS.some(function (word) {
+      return value === word ||
+             value.startsWith(word + '-') ||
+             value.endsWith('-' + word);
+    });
+  }
+
+  /* ==========================================================
+     MODULE TRIGGER
+     Explicit module attributes सबसे भरोसेमंद
+     ========================================================== */
+
+  function isExplicitModule(el) {
+    return !!(
+      el &&
+      (
+        el.hasAttribute('data-ldm-module') ||
+        el.hasAttribute('data-module') ||
+        el.hasAttribute('data-view') ||
+        el.hasAttribute('data-section') ||
+        el.hasAttribute('data-page') ||
+        el.hasAttribute('data-route')
+      )
+    );
+  }
+
+  function insideNavigation(el) {
+    if (!el) return false;
+
+    return !!el.closest(
+      [
+        'aside',
+        'nav',
+        '.sidebar',
+        '[class*="sidebar"]',
+        '.dashboardCards',
+        '.dashboard-grid',
+        '.dashboardGrid',
+        '.quickLinks',
+        '.quick-links',
+        '.managementCenter',
+        '.management-center',
+        '.featureTiles',
+        '.moduleCards',
+        '.module-grid'
+      ].join(',')
+    );
+  }
+
+  function detectModule(el) {
+    if (!el) return '';
+
+    const explicit =
+      el.getAttribute('data-ldm-module') ||
+      el.getAttribute('data-module') ||
+      el.getAttribute('data-view') ||
+      el.getAttribute('data-section') ||
+      el.getAttribute('data-page') ||
+      el.getAttribute('data-route');
+
+    if (explicit) return normalize(explicit);
+
+    const href = el.getAttribute('href');
+
+    if (
+      href &&
+      href.startsWith('#') &&
+      href.length > 1
+    ) {
+      return normalize(href);
+    }
+
+    const id = el.id;
+
+    if (id) return normalize(id);
+
+    return normalize(el.textContent);
+  }
+
+  /* ==========================================================
+     MODULE SCOPE
+     Module बंद होते ही registered resources cleanup
+     ========================================================== */
+
+  function createScope(name) {
+    const cleanups = new Set();
+    const intervals = new Set();
+    const timeouts = new Set();
+    const controllers = new Set();
+    const streams = new Set();
+    const geoWatches = new Set();
+    const subscriptions = new Set();
+
+    return {
+
+      name: name,
+
+      isActive: function () {
+        return state.active === name;
+      },
+
+      cleanup: function (fn) {
+        if (typeof fn === 'function') {
+          cleanups.add(fn);
+        }
+        return fn;
+      },
+
+      interval: function (fn, ms) {
+        const id = window.setInterval(function () {
+          if (state.active === name) {
+            safe(fn);
+          }
+        }, ms);
+
+        intervals.add(id);
+        return id;
+      },
+
+      timeout: function (fn, ms) {
+        const id = window.setTimeout(function () {
+
+          timeouts.delete(id);
+
+          if (state.active === name) {
+            safe(fn);
+          }
+
+        }, ms);
+
+        timeouts.add(id);
+        return id;
+      },
+
+      fetch: async function (url, options) {
+        const controller = new AbortController();
+
+        controllers.add(controller);
+
+        const opts = Object.assign({}, options || {});
+
+        if (!opts.signal) {
+          opts.signal = controller.signal;
+        }
+
+        try {
+          return await window.fetch(url, opts);
+        } finally {
+          controllers.delete(controller);
+        }
+      },
+
+      camera: async function (constraints) {
+        if (
+          !navigator.mediaDevices ||
+          !navigator.mediaDevices.getUserMedia
+        ) {
+          throw new Error('Camera API unavailable');
+        }
+
+        const stream =
+          await navigator.mediaDevices.getUserMedia(
+            constraints || { video: true }
+          );
+
+        if (state.active !== name) {
+          stream.getTracks().forEach(function (track) {
+            track.stop();
+          });
+
+          throw new Error('Module changed');
+        }
+
+        streams.add(stream);
+        return stream;
+      },
+
+      registerStream: function (stream) {
+        if (stream) streams.add(stream);
+        return stream;
+      },
+
+      watchLocation: function (
+        success,
+        error,
+        options
+      ) {
+        if (!navigator.geolocation) return null;
+
+        const id =
+          navigator.geolocation.watchPosition(
+            function (position) {
+              if (state.active === name) {
+                success(position);
+              }
+            },
+            error,
+            options
+          );
+
+        geoWatches.add(id);
+        return id;
+      },
+
+      subscription: function (subscription) {
+        if (subscription) {
+          subscriptions.add(subscription);
+        }
+
+        return subscription;
+      },
+
+      destroy: function () {
+
+        intervals.forEach(function (id) {
+          clearInterval(id);
+        });
+
+        timeouts.forEach(function (id) {
+          clearTimeout(id);
+        });
+
+        controllers.forEach(function (controller) {
+          safe(function () {
+            controller.abort();
+          });
+        });
+
+        streams.forEach(function (stream) {
+          safe(function () {
+            stream.getTracks().forEach(function (track) {
+              track.stop();
+            });
+          });
+        });
+
+        geoWatches.forEach(function (id) {
+          safe(function () {
+            navigator.geolocation.clearWatch(id);
+          });
+        });
+
+        subscriptions.forEach(function (sub) {
+
+          safe(function () {
+            if (typeof sub.unsubscribe === 'function') {
+              sub.unsubscribe();
+            } else if (typeof sub.remove === 'function') {
+              sub.remove();
+            } else if (typeof sub.close === 'function') {
+              sub.close();
+            }
+          });
+
+        });
+
+        cleanups.forEach(function (fn) {
+          safe(fn);
+        });
+
+        intervals.clear();
+        timeouts.clear();
+        controllers.clear();
+        streams.clear();
+        geoWatches.clear();
+        subscriptions.clear();
+        cleanups.clear();
+      }
+    };
+  }
+
+  /* ==========================================================
+     REGISTER MODULE
+     ========================================================== */
+
+  function register(name, config) {
+    name = normalize(name);
+
+    if (!name) return;
+
+    if (typeof config === 'function') {
+      config = {
+        start: config
+      };
+    }
+
+    modules.set(name, config || {});
+  }
+
+  /* ==========================================================
+     STOP OLD MODULE
+     ========================================================== */
+
+  async function stopActive() {
+
+    const oldName = state.active;
+    const oldScope = state.scope;
+
+    if (!oldName) return;
+
+    const oldModule = modules.get(oldName);
+
+    state.active = null;
+    state.scope = null;
+
+    if (oldScope) {
+      oldScope.destroy();
+    }
+
+    if (
+      oldModule &&
+      typeof oldModule.stop === 'function'
+    ) {
+      try {
+        await oldModule.stop();
+      } catch (err) {
+        console.error(
+          '[LDM STOP ERROR]',
+          oldName,
+          err
+        );
+      }
+    }
+
+    document.documentElement.removeAttribute(
+      'data-ldm-active-module'
+    );
+
+    document.dispatchEvent(
+      new CustomEvent('ldm:module-stop', {
+        detail: {
+          module: oldName
+        }
+      })
+    );
+
+    console.log('[LDM STOP]', oldName);
+  }
+
+  /* ==========================================================
+     OPEN ONE MODULE ONLY
+     ========================================================== */
+
+  async function open(name, context) {
+
+    name = normalize(name);
+
+    if (!name) return;
+
+    if (state.active === name) {
+      return;
+    }
+
+    await stopActive();
+
+    state.active = name;
+    state.scope = createScope(name);
+
+    document.documentElement.setAttribute(
+      'data-ldm-active-module',
+      name
+    );
+
+    document.dispatchEvent(
+      new CustomEvent('ldm:module-start', {
+        detail: {
+          module: name,
+          context: context || {}
+        }
+      })
+    );
+
+    const config = modules.get(name);
+
+    if (
+      config &&
+      typeof config.start === 'function'
+    ) {
+      try {
+
+        await config.start(
+          context || {},
+          state.scope
+        );
+
+      } catch (err) {
+
+        console.error(
+          '[LDM START ERROR]',
+          name,
+          err
+        );
+
+      }
+    }
+
+    console.log('[LDM ACTIVE]', name);
+  }
+
+  /* ==========================================================
+     CLICK DETECTION
+     केवल actual navigation/card click
+     ========================================================== */
+
+  document.addEventListener(
+    'click',
+    function (event) {
+
+      const el = event.target.closest(
+        [
+          '[data-ldm-module]',
+          '[data-module]',
+          '[data-view]',
+          '[data-section]',
+          '[data-page]',
+          '[data-route]',
+          'nav a',
+          'nav button',
+          'aside a',
+          'aside button'
+        ].join(',')
+      );
+
+      if (!el) return;
+
+      if (isActionButton(el)) return;
+
+      if (
+        !isExplicitModule(el) &&
+        !insideNavigation(el)
+      ) {
+        return;
+      }
+
+      const name = detectModule(el);
+
+      if (!name) return;
+
+      open(name, {
+        element: el,
+        event: event
+      });
+
+    },
+    true
+  );
+
+  /* ==========================================================
+     PUBLIC CENTRAL API
+     ========================================================== */
+
+  window.LDM = {
+
+    register: register,
+
+    open: open,
+
+    stop: stopActive,
+
+    current: function () {
+      return state.active;
+    },
+
+    isActive: function (name) {
+      return state.active === normalize(name);
+    },
+
+    scope: function () {
+      return state.scope;
+    },
+
+    cleanup: function (fn) {
+      if (state.scope) {
+        return state.scope.cleanup(fn);
+      }
+    },
+
+    interval: function (fn, ms) {
+      if (!state.scope) return null;
+      return state.scope.interval(fn, ms);
+    },
+
+    timeout: function (fn, ms) {
+      if (!state.scope) return null;
+      return state.scope.timeout(fn, ms);
+    },
+
+    fetch: function (url, options) {
+      if (!state.scope) {
+        return Promise.reject(
+          new Error(
+            'LDM: No active module'
+          )
+        );
+      }
+
+      return state.scope.fetch(
+        url,
+        options
+      );
+    },
+
+    camera: function (constraints) {
+      if (!state.scope) {
+        return Promise.reject(
+          new Error(
+            'LDM: No active module'
+          )
+        );
+      }
+
+      return state.scope.camera(
+        constraints
+      );
+    },
+
+    watchLocation: function (
+      success,
+      error,
+      options
+    ) {
+      if (!state.scope) return null;
+
+      return state.scope.watchLocation(
+        success,
+        error,
+        options
+      );
+    },
+
+    subscription: function (sub) {
+      if (!state.scope) return sub;
+
+      return state.scope.subscription(sub);
+    },
+
+    registerStream: function (stream) {
+      if (!state.scope) return stream;
+
+      return state.scope.registerStream(stream);
+    }
+
+  };
+
+  /* Dashboard shell शांत अवस्था */
+
+  document.documentElement.setAttribute(
+    'data-ldm-silent-controller',
+    'v2-ready'
+  );
+
+  console.log(
+    '[LDM V2 READY] One Active Module Only'
+  );
+
+})();
+</script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
 <meta charset="utf-8"><meta name="ld-modern-build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
