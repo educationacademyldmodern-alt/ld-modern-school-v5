@@ -1796,7 +1796,12 @@ async function v14LoadTeacherContext(){
  if(!v14Teacher()){
   v14TeacherContextError={code:'TEACHER_ROLE_REQUIRED',message:'This login is not mapped to an active Teacher role'};return null;
  }
- let {data:tp,error:tpe}=await sb.from('teacher_profiles').select('*').eq('auth_user_id',user.id).maybeSingle();
+ let {data:master,error:masterError}=await sb.from('teacher_v2_master').select('*').eq('auth_user_id',user.id).maybeSingle();
+ if(masterError){v14TeacherContextError={code:'V2_MASTER_LOAD_FAILED',message:'Teacher V2 master could not be read. Check the live migration/RLS policy.'};return null}
+ if(!master){v14TeacherContextError={code:'V2_AUTH_MAPPING_MISSING',message:'Supabase Auth is valid, but it is not linked to a Teacher V2 master record.'};return null}
+ if(master.mapping_status==='NEEDS_MAPPING'||!master.auth_user_id){v14TeacherContextError={code:'V2_NEEDS_MAPPING',message:'This teacher is marked NEEDS_MAPPING. Ask Admin to repair the Auth link.'};return null}
+ if(master.login_enabled===false||master.is_active===false||['Relieved','Inactive'].includes(String(master.status||''))){v14TeacherContextError={code:'V2_LOGIN_DISABLED',message:`Teacher login is disabled because this account is ${master.status||'inactive'}.`};return null}
+ let {data:tp,error:tpe}=await sb.from('teacher_profiles').select('*').eq('id',master.teacher_profile_id).maybeSingle();
  if(tpe){v14TeacherContextError={code:'TEACHER_PROFILE_LOAD_FAILED',message:tpe.message||'Teacher profile could not be loaded'};return null}
  if(!tp){v14TeacherContextError={code:'TEACHER_PROFILE_NOT_LINKED',message:'Teacher profile is not linked to this login'};return null}
  if(String(tp.approval_status||'').toLowerCase()!=='approved'||tp.is_active===false){v14TeacherContextError={code:'TEACHER_INACTIVE',message:'Teacher profile is inactive or not approved'};return null}
