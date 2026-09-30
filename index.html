@@ -14219,6 +14219,789 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 <!-- V179: obsolete V170 duplicate popstate/render wrapper removed.
 Canonical V138 popstate + V155 v90Back own navigation. -->
 
+<!-- ===== V181 FINAL ROOT NAV + MOBILE HEADER + ATTENDANCE + DEVICE LOCK ===== -->
+<style id="ldm-v181-final-root-style">
+#erp #v90BackBtn::before,#erp #v90BackBtn::after,
+#erp #v90HomeBtn::before,#erp #v90HomeBtn::after{content:none!important;display:none!important}
+#erp #v90BackBtn,#erp #v90HomeBtn{white-space:nowrap!important;line-height:1.1!important}
 
+#erp #v75TopSearch{position:static!important;inset:auto!important;z-index:auto!important;box-sizing:border-box!important}
+#erp #v75TopSearch input{box-sizing:border-box!important;min-width:0!important}
+
+@media(max-width:760px){
+  #erp .erpTop,#erp .topbar,#erp .v90Top,#erp .v104Header,#erp .v114Header{
+    position:relative!important;top:auto!important;left:auto!important;right:auto!important;
+    width:100%!important;max-width:100%!important;box-sizing:border-box!important;
+    overflow:visible!important;display:flex!important;flex-wrap:wrap!important;
+    align-items:center!important;gap:6px!important;padding-left:7px!important;padding-right:7px!important;
+  }
+  #erp .erpTop>*{min-width:0!important;max-width:100%!important}
+  #erp .erpTop .tools,#erp .topbar .tools,#erp .v90Top .tools{
+    min-width:0!important;max-width:100%!important;display:flex!important;flex-wrap:wrap!important;gap:6px!important
+  }
+  #erp #v90BackBtn{flex:1 1 110px!important;min-width:92px!important;padding:9px 10px!important;font-size:14px!important}
+  #erp #v90HomeBtn{flex:0 0 auto!important;min-width:78px!important;padding:9px 10px!important;font-size:14px!important}
+  #erp #ldmDeviceLockBtn{flex:0 0 auto!important;min-width:42px!important;padding:9px!important}
+  #erp #v75TopSearch{
+    order:99!important;flex:1 0 100%!important;width:100%!important;max-width:100%!important;
+    margin:2px 0 0!important;display:flex!important;align-items:center!important;gap:6px!important
+  }
+  #erp #v75TopSearch input{flex:1 1 auto!important;width:auto!important;max-width:none!important}
+  #erp #v75TopSearch button{flex:0 0 auto!important;white-space:nowrap!important}
+  #erpContent{max-width:100%!important;overflow-x:hidden!important}
+}
+
+#ldmDeviceLockOverlay{position:fixed;inset:0;z-index:2147483000;background:rgba(5,18,38,.94);display:none;align-items:center;justify-content:center;padding:20px}
+#ldmDeviceLockOverlay.show{display:flex!important}
+#ldmDeviceLockCard{width:min(92vw,420px);background:#fff;border-radius:22px;padding:22px;box-shadow:0 24px 80px #0008;text-align:center;font-family:inherit}
+#ldmDeviceLockCard .ldmLockIcon{font-size:48px;line-height:1;margin-bottom:8px}
+#ldmDeviceLockCard h2{margin:5px 0;color:#123e70}
+#ldmDeviceLockCard p{margin:7px 0 15px;color:#60758d;line-height:1.5}
+#ldmDeviceLockCard button{width:100%;margin-top:8px;padding:12px;border-radius:12px;border:1px solid #cbd9e8;background:#fff;font-weight:800;cursor:pointer}
+#ldmDeviceLockCard button.primary{background:#0d73cc;color:#fff;border-color:#0d73cc}
+#ldmDeviceLockStatus{min-height:20px;margin-top:10px;font-size:12px;font-weight:800;color:#45627f}
+</style>
+
+<script id="ldm-v181-final-root-runtime">
+(function(){
+  'use strict';
+  if(window.__LDM_V181_FINAL_ROOT__)return;
+  window.__LDM_V181_FINAL_ROOT__=true;
+  window.LDM_V181_BUILD='V181-NAV-HEADER-ATTENDANCE-DEVICE-LOCK-2026-09-30';
+
+  const $=id=>document.getElementById(id);
+  const role=()=>String(window.profile?.role||'').trim().toLowerCase();
+  const isRoleERP=()=>['admin','super_admin','principal','teacher'].includes(role());
+  const isParent=()=>role()==='parent';
+
+  const currentRoute=()=>{
+    try{return sessionStorage.getItem('ldm_current_route')||window.__v90Route||'dashboard'}
+    catch(_e){return window.__v90Route||'dashboard'}
+  };
+
+  const readStack=()=>{
+    try{
+      let a=window.__v90History;
+      if(Array.isArray(a)&&a.length)return a.slice();
+      a=JSON.parse(sessionStorage.getItem('ldm_nav_history')||'[]');
+      if(Array.isArray(a)&&a.length)return a
+    }catch(_e){}
+    return ['dashboard']
+  };
+
+  const saveStack=(a,route)=>{
+    a=Array.isArray(a)&&a.length?a:['dashboard'];
+    route=String(route||a[a.length-1]||'dashboard');
+    window.__v90History=a.slice();
+    window.__v90Route=route;
+
+    try{
+      sessionStorage.setItem('ldm_nav_history',JSON.stringify(a));
+      sessionStorage.setItem('ldm_current_route',route);
+      if(isParent())sessionStorage.setItem('ldm_surface','parent');
+      else if(isRoleERP())sessionStorage.setItem('ldm_surface','erp');
+    }catch(_e){}
+  };
+
+  const erpVisible=()=>!!(
+    document.body?.classList.contains('ldmSurfaceERP')||
+    document.body?.classList.contains('ldmSurfaceParent')||
+    ($('erp')&&!$('erp').classList.contains('hidden'))||
+    ($('parentDashboard')&&!$('parentDashboard').classList.contains('hidden'))
+  );
+
+  function cleanHeader(){
+    const erp=$('erp');
+    if(!erp||erp.classList.contains('hidden'))return;
+
+    const top=erp.querySelector('.erpTop,.topbar,.v90Top,.v104Header,.v114Header');
+    if(!top)return;
+
+    let back=$('v90BackBtn');
+    if(back){
+      back.textContent='← Back';
+      back.setAttribute('aria-label','Back');
+    }
+
+    let home=$('v90HomeBtn');
+    if(home){
+      home.textContent='🏠 Home';
+      home.setAttribute('aria-label','Home');
+    }
+
+    const seen={back:back?1:0,home:home?1:0};
+
+    [...top.querySelectorAll('button')].forEach(b=>{
+      if(b===back||b===home||b.id==='ldmDeviceLockBtn')return;
+
+      const t=String(b.textContent||'')
+        .replace(/\s+/g,' ')
+        .trim()
+        .toLowerCase();
+
+      if((/^←?\s*back$/.test(t)||t==='back')&&seen.back)b.style.display='none';
+      if((/^🏠?\s*home$/.test(t)||t==='home')&&seen.home)b.style.display='none';
+    });
+
+    installLockButton(top,home);
+  }
+
+  const oldInstall=typeof window.v90InstallShell==='function'
+    ?window.v90InstallShell
+    :null;
+
+  if(oldInstall){
+    const wrapped=function(){
+      const r=oldInstall.apply(this,arguments);
+      setTimeout(cleanHeader,0);
+      return r;
+    };
+
+    window.v90InstallShell=wrapped;
+    try{v90InstallShell=wrapped}catch(_e){}
+  }
+
+  const oldBack=typeof window.v90Back==='function'
+    ?window.v90Back
+    :null;
+
+  const oldHome=typeof window.v90GoHome==='function'
+    ?window.v90GoHome
+    :(typeof window.erpGoHome==='function'?window.erpGoHome:null);
+
+  let exitApproved=false;
+  let exitPromptBusy=false;
+
+  function armRootGuard(){
+    if(!erpVisible()||currentRoute()!=='dashboard'||exitApproved)return;
+
+    try{
+      if(history.state?.ldm181Guard)return;
+
+      const base={
+        ...(history.state||{}),
+        ldmInternal:true,
+        ldm181Root:true,
+        route:'dashboard',
+        stack:['dashboard']
+      };
+
+      history.replaceState(base,'',location.href);
+
+      history.pushState({
+        ldmInternal:true,
+        ldm181Guard:true,
+        route:'dashboard',
+        stack:['dashboard']
+      },'',location.href);
+
+    }catch(_e){}
+  }
+
+  async function requestExit(fromGuard){
+    if(exitPromptBusy)return false;
+
+    exitPromptBusy=true;
+
+    try{
+      const ok=window.confirm(
+        'ERP से बाहर निकलना है?\n\nCancel दबाने पर आप Dashboard पर ही रहेंगे।'
+      );
+
+      if(!ok){
+        saveStack(['dashboard'],'dashboard');
+        setTimeout(armRootGuard,0);
+        return false;
+      }
+
+      exitApproved=true;
+
+      try{
+        if(fromGuard&&history.state?.ldm181Guard)history.go(-2);
+        else history.back();
+      }catch(_e){}
+
+      setTimeout(()=>{
+        if(document.visibilityState==='visible'&&erpVisible()){
+          exitApproved=false;
+          armRootGuard();
+        }
+      },1500);
+
+      return true;
+
+    }finally{
+      setTimeout(()=>{exitPromptBusy=false},250);
+    }
+  }
+
+  async function finalBack(){
+    let h=readStack();
+    let r=currentRoute();
+
+    if(r==='dashboard'||h.length<=1){
+      saveStack(['dashboard'],'dashboard');
+      armRootGuard();
+      return requestExit(true);
+    }
+
+    let out=false;
+
+    if(oldBack){
+      try{
+        out=await oldBack.apply(this,arguments);
+      }catch(e){
+        console.error('V181 internal back',e);
+      }
+    }else{
+      h.pop();
+
+      let prev=h[h.length-1]||'dashboard';
+      saveStack(h,prev);
+
+      try{
+        history.replaceState({
+          ldmInternal:true,
+          route:prev,
+          stack:h.slice()
+        },'',location.href);
+      }catch(_e){}
+
+      if(typeof window.render==='function'){
+        out=await window.render(prev);
+      }
+    }
+
+    setTimeout(()=>{
+      cleanHeader();
+      if(currentRoute()==='dashboard')armRootGuard();
+    },20);
+
+    return out;
+  }
+
+  async function finalHome(){
+    saveStack(['dashboard'],'dashboard');
+
+    let out;
+
+    try{
+      out=oldHome
+        ?await oldHome.apply(this,arguments)
+        :(typeof window.render==='function'
+          ?await window.render('dashboard')
+          :undefined);
+    }catch(e){
+      console.error('V181 home',e);
+    }
+
+    saveStack(['dashboard'],'dashboard');
+
+    setTimeout(()=>{
+      cleanHeader();
+      armRootGuard();
+      fixAttendanceDom();
+    },20);
+
+    return out;
+  }
+
+  window.v90Back=finalBack;
+  window.v90GoHome=finalHome;
+  window.erpGoHome=finalHome;
+
+  try{v90Back=finalBack}catch(_e){}
+  try{v90GoHome=finalHome}catch(_e){}
+
+  window.addEventListener('popstate',function(e){
+    if(exitApproved)return;
+
+    const st=e.state||{};
+
+    if(st.ldm181Root&&erpVisible()){
+      saveStack(['dashboard'],'dashboard');
+      setTimeout(()=>requestExit(false),0);
+
+    }else if(st.ldmInternal&&st.route){
+
+      const a=Array.isArray(st.stack)&&st.stack.length
+        ?st.stack
+        :[String(st.route||'dashboard')];
+
+      saveStack(a,String(st.route||'dashboard'));
+
+      setTimeout(()=>{
+        cleanHeader();
+        if(currentRoute()==='dashboard')armRootGuard();
+      },20);
+    }
+
+  },true);
+
+  window.addEventListener('beforeunload',()=>{
+    saveStack(readStack(),currentRoute());
+  },{capture:true});
+
+  function numText(id){
+    const e=$(id);
+    if(!e)return 0;
+
+    const n=Number(
+      String(e.textContent||'0')
+      .replace(/[^0-9.-]/g,'')
+    );
+
+    return Number.isFinite(n)?n:0;
+  }
+
+  function totalStudentsFromStats(){
+    const host=$('v90Stats');
+    if(!host)return 0;
+
+    for(const c of host.querySelectorAll('.v90Stat')){
+      const s=c.querySelector('small');
+
+      if(/total\s*students/i.test(String(s?.textContent||''))){
+        const b=c.querySelector('b');
+        const n=Number(
+          String(b?.textContent||'0')
+          .replace(/[^0-9.-]/g,'')
+        );
+
+        if(Number.isFinite(n))return n;
+      }
+    }
+
+    return 0;
+  }
+
+  function fixAttendanceDom(){
+    const p=numText('v114AttPresent');
+    const m=numText('v114AttMarked');
+
+    if(!$('v114AttPct')&&!$('v114AttDonut'))return;
+
+    const pct=m?Math.round((p*100)/m):0;
+
+    if($('v114AttPct')){
+      $('v114AttPct').textContent=m?pct+'%':'—';
+    }
+
+    if($('v114AttDonut')){
+      $('v114AttDonut').style.setProperty('--p',String(pct));
+    }
+
+    const host=$('v90Stats');
+
+    if(host){
+      for(const c of host.querySelectorAll('.v90Stat')){
+        if(/^attendance$/i.test(
+          String(c.querySelector('small')?.textContent||'').trim()
+        )){
+          const b=c.querySelector('b');
+          if(b)b.textContent=m?pct+'%':'—';
+        }
+      }
+    }
+
+    const total=totalStudentsFromStats();
+    const notMarked=Math.max(0,total-m);
+
+    const marked=$('v114AttMarked');
+    const legend=marked?.closest('.v114Legend');
+
+    if(legend&&total){
+      let row=$('v181AttNotMarked');
+
+      if(!row){
+        row=document.createElement('span');
+        row.id='v181AttNotMarked';
+        row.innerHTML='<i class="n"></i>Not Marked <b>0</b>';
+        legend.appendChild(row);
+      }
+
+      const b=row.querySelector('b');
+      if(b)b.textContent=String(notMarked);
+    }
+  }
+
+  const stats0=typeof window.v90LoadDashboardStats==='function'
+    ?window.v90LoadDashboardStats
+    :null;
+
+  if(stats0){
+    const statsWrap=async function(){
+      const r=await stats0.apply(this,arguments);
+      fixAttendanceDom();
+      return r;
+    };
+
+    window.v90LoadDashboardStats=statsWrap;
+    try{v90LoadDashboardStats=statsWrap}catch(_e){}
+  }
+
+  const LOCK_KEY='ldm_device_lock_credential_v1';
+  const LOCK_ON='ldm_device_lock_enabled_v1';
+  const HIDDEN_AT='ldm_device_lock_hidden_at_v1';
+
+  const bytes=n=>crypto.getRandomValues(new Uint8Array(n));
+
+  const b64u=a=>
+    btoa(String.fromCharCode(...new Uint8Array(a)))
+    .replace(/\+/g,'-')
+    .replace(/\//g,'_')
+    .replace(/=+$/,'');
+
+  const unb64u=s=>{
+    s=String(s||'')
+      .replace(/-/g,'+')
+      .replace(/_/g,'/');
+
+    while(s.length%4)s+='=';
+
+    const x=atob(s);
+    return Uint8Array.from(x,c=>c.charCodeAt(0));
+  };
+
+  const lockEnabled=()=>
+    localStorage.getItem(LOCK_ON)==='1'&&
+    !!localStorage.getItem(LOCK_KEY);
+
+  let unlockBusy=false;
+
+  function ensureLockOverlay(){
+    let o=$('ldmDeviceLockOverlay');
+    if(o)return o;
+
+    o=document.createElement('div');
+    o.id='ldmDeviceLockOverlay';
+
+    o.innerHTML=
+      '<div id="ldmDeviceLockCard">'+
+      '<div class="ldmLockIcon">🔐</div>'+
+      '<h2>ERP Device Lock</h2>'+
+      '<p>Fingerprint / Face / Device PIN से ERP खोलें। आपका biometric data ERP में save नहीं होता।</p>'+
+      '<button class="primary" type="button" id="ldmUnlockBtn">🔓 Unlock</button>'+
+      '<button type="button" id="ldmLockOffBtn">Turn Off Device Lock</button>'+
+      '<div id="ldmDeviceLockStatus"></div>'+
+      '</div>';
+
+    document.body.appendChild(o);
+
+    $('ldmUnlockBtn').onclick=()=>unlockDevice(false);
+    $('ldmLockOffBtn').onclick=()=>unlockDevice(true);
+
+    return o;
+  }
+
+  function lockStatus(t){
+    const e=$('ldmDeviceLockStatus');
+    if(e)e.textContent=String(t||'');
+  }
+
+  function showLock(){
+    if(!lockEnabled()||!erpVisible())return;
+
+    ensureLockOverlay().classList.add('show');
+    lockStatus('Device verification required');
+  }
+
+  function hideLock(){
+    const o=$('ldmDeviceLockOverlay');
+
+    if(o)o.classList.remove('show');
+
+    lockStatus('');
+  }
+
+  async function verifyDevice(){
+    const id=localStorage.getItem(LOCK_KEY);
+
+    if(!id){
+      throw new Error('Device Lock configured नहीं है');
+    }
+
+    if(
+      !window.isSecureContext||
+      !window.PublicKeyCredential||
+      !navigator.credentials
+    ){
+      throw new Error(
+        'इस browser/device में secure biometric lock उपलब्ध नहीं है'
+      );
+    }
+
+    return navigator.credentials.get({
+      publicKey:{
+        challenge:bytes(32),
+        allowCredentials:[
+          {
+            type:'public-key',
+            id:unb64u(id)
+          }
+        ],
+        userVerification:'required',
+        timeout:60000
+      }
+    });
+  }
+
+  async function unlockDevice(turnOff){
+    if(unlockBusy)return;
+
+    unlockBusy=true;
+    lockStatus('Fingerprint / Face / PIN verify करें…');
+
+    try{
+      const r=await verifyDevice();
+
+      if(!r){
+        throw new Error('Verification cancelled');
+      }
+
+      if(turnOff){
+        localStorage.removeItem(LOCK_ON);
+        localStorage.removeItem(LOCK_KEY);
+
+        hideLock();
+        cleanHeader();
+
+        window.toast?.('Device Lock OFF');
+
+      }else{
+        hideLock();
+        lockStatus('');
+
+        window.toast?.('ERP unlocked');
+      }
+
+    }catch(e){
+
+      lockStatus(
+        e?.name==='NotAllowedError'
+          ?'Verification cancelled / failed'
+          :(e?.message||String(e))
+      );
+
+    }finally{
+      unlockBusy=false;
+    }
+  }
+
+  async function enrollDeviceLock(){
+    if(
+      !window.isSecureContext||
+      !window.PublicKeyCredential||
+      !navigator.credentials?.create
+    ){
+      return window.toast?.(
+        'इस device/browser में Finger/Face Lock उपलब्ध नहीं है'
+      );
+    }
+
+    try{
+      let uid=localStorage.getItem('ldm_device_lock_user_v1');
+
+      if(!uid){
+        uid=b64u(bytes(24));
+        localStorage.setItem('ldm_device_lock_user_v1',uid);
+      }
+
+      const name=String(
+        window.profile?.full_name||
+        window.user?.email||
+        'LDM User'
+      ).slice(0,60);
+
+      const c=await navigator.credentials.create({
+        publicKey:{
+          challenge:bytes(32),
+
+          rp:{
+            name:'L D Modern Education Academy ERP'
+          },
+
+          user:{
+            id:unb64u(uid),
+            name:'ldm-'+uid.slice(0,18),
+            displayName:name
+          },
+
+          pubKeyCredParams:[
+            {
+              type:'public-key',
+              alg:-7
+            },
+            {
+              type:'public-key',
+              alg:-257
+            }
+          ],
+
+          authenticatorSelection:{
+            authenticatorAttachment:'platform',
+            residentKey:'discouraged',
+            requireResidentKey:false,
+            userVerification:'required'
+          },
+
+          timeout:60000,
+          attestation:'none'
+        }
+      });
+
+      if(!c){
+        throw new Error('Device registration cancelled');
+      }
+
+      localStorage.setItem(
+        LOCK_KEY,
+        b64u(c.rawId)
+      );
+
+      localStorage.setItem(
+        LOCK_ON,
+        '1'
+      );
+
+      cleanHeader();
+
+      window.toast?.(
+        '✓ Device Lock enabled'
+      );
+
+      showLock();
+
+    }catch(e){
+
+      window.toast?.(
+        e?.name==='NotAllowedError'
+          ?'Device Lock setup cancelled'
+          :(e?.message||String(e))
+      );
+    }
+  }
+
+  function installLockButton(top,home){
+    if(!top||!window.PublicKeyCredential)return;
+
+    let b=$('ldmDeviceLockBtn');
+
+    if(!b){
+      b=document.createElement('button');
+
+      b.id='ldmDeviceLockBtn';
+      b.type='button';
+      b.className='v90TopBtn';
+
+      if(home?.nextSibling){
+        top.insertBefore(b,home.nextSibling);
+      }else{
+        top.appendChild(b);
+      }
+
+      b.onclick=()=>{
+        if(lockEnabled()){
+          showLock();
+        }else if(
+          window.confirm(
+            'इस device पर Fingerprint / Face / Device PIN Lock enable करें?'
+          )
+        ){
+          enrollDeviceLock();
+        }
+      };
+    }
+
+    b.textContent=
+      lockEnabled()
+        ?'🔐 Lock'
+        :'🔒 Lock';
+
+    b.title=
+      lockEnabled()
+        ?'Lock ERP now'
+        :'Enable Fingerprint / Face / Device PIN Lock';
+  }
+
+  window.ldmDeviceLockNow=showLock;
+  window.ldmEnableDeviceLock=enrollDeviceLock;
+
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+
+      try{
+        sessionStorage.setItem(
+          HIDDEN_AT,
+          String(Date.now())
+        );
+      }catch(_e){}
+
+      return;
+    }
+
+    let t=0;
+
+    try{
+      t=Number(
+        sessionStorage.getItem(HIDDEN_AT)||0
+      );
+    }catch(_e){}
+
+    if(
+      lockEnabled()&&
+      t&&
+      Date.now()-t>30000
+    ){
+      setTimeout(showLock,100);
+    }
+
+  },{passive:true});
+
+  window.addEventListener('pageshow',()=>{
+    setTimeout(()=>{
+      cleanHeader();
+      fixAttendanceDom();
+
+      if(currentRoute()==='dashboard'){
+        armRootGuard();
+      }
+
+      if(lockEnabled()){
+        showLock();
+      }
+
+    },700);
+  },{passive:true});
+
+  document.addEventListener('click',()=>{
+    setTimeout(()=>{
+      cleanHeader();
+      fixAttendanceDom();
+
+      if(currentRoute()==='dashboard'){
+        armRootGuard();
+      }
+
+    },0);
+  },{passive:true});
+
+  setTimeout(()=>{
+    cleanHeader();
+    fixAttendanceDom();
+
+    if(currentRoute()==='dashboard'){
+      armRootGuard();
+    }
+
+    if(lockEnabled()){
+      showLock();
+    }
+
+  },900);
+
+})();
+</script>
+<!-- ===== END V181 FINAL ROOT NAV + MOBILE HEADER + ATTENDANCE + DEVICE LOCK ===== -->
 </body>
 </html>
