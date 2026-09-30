@@ -13120,7 +13120,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  window.v40ClassTeacherNames=function(){return state().classTeacher};
  function teacherHome(){
    try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){}
-   try{window.__v90Route='dashboard';window.__v90History=['dashboard'];if(typeof window.v90TeacherDashboard==='function')return window.v90TeacherDashboard();if(typeof window.teacherHomeDashboard==='function')return window.teacherHomeDashboard()}catch(e){console.error('Teacher home',e)}
+   try{window.__v90Route='dashboard';window.__v90History=['dashboard'];if(typeof window.ldmNewTeacherDashboard==='function')return window.ldmNewTeacherDashboard();if(typeof window.teacherHomeDashboard==='function')return window.teacherHomeDashboard()}catch(e){console.error('Teacher home',e)}
  }
  function applyPermissionUI(){
    if(!isTeacher())return;document.body.classList.add('v1146-teacher');const st=state();
@@ -13137,7 +13137,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    catch(e){console.error('V114.6 Teacher route failed',route,e);window.toast?.('Teacher module error: '+(e?.message||String(e)));return teacherHome()}
  };
  const baseOpen=window.openERP;
- if(typeof baseOpen==='function')window.openERP=async function(){const r=await baseOpen.apply(this,arguments);if(isTeacher()){try{await refresh(true)}catch(e){window.toast?.(e?.message||String(e))}try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){};setTimeout(()=>{applyPermissionUI();teacherHome()},40)}return r};
+ if(typeof baseOpen==='function')window.openERP=async function(){const t=isTeacher(),host=$id('erpContent');if(t&&host)host.style.visibility='hidden';try{const r=await baseOpen.apply(this,arguments);if(t){try{await refresh(true)}catch(e){window.toast?.(e?.message||String(e))}try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){}applyPermissionUI();await teacherHome()}return r}finally{if(t&&host)host.style.visibility=''}};
  /* Filter Teacher sidebar at construction time, not by a permanent DOM observer. */
  try{const baseBuild=window.v90BuildNav;if(typeof baseBuild==='function')window.v90BuildNav=function(active){const r=baseBuild.apply(this,arguments);if(isTeacher())setTimeout(applyPermissionUI,0);return r}}catch(_e){}
  window.addEventListener('load',()=>setTimeout(applyPermissionUI,400),{once:true,passive:true});
