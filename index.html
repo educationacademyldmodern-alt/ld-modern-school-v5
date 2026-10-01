@@ -16568,10 +16568,15 @@ setTimeout(()=>{
 
   'use strict';
 
-  function isAdmin(){
-    const r=String(window.profile?.role||'').toLowerCase();
+function isAdmin(){
+    const p=(typeof profile!=='undefined' && profile)
+      ? profile
+      : window.profile;
+
+    const r=String(p?.role||'').trim().toLowerCase();
+
     return ['admin','super_admin','principal'].includes(r);
-  }
+}
 
   function adminHeader(){
 
