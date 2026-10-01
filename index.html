@@ -16316,45 +16316,7 @@ if(typeof backBase==='function'){
 
   try{v90Back=window.v90Back}catch(_e){}
 }
-/* Admin Back button — single canonical button */
-function ensureAdminBackButton(){
-    const r=String(window.profile?.role||'').toLowerCase();
-    if(!['admin','super_admin','principal'].includes(r))return;
 
-    const top=document.querySelector('#erp .erpTop');
-    if(!top)return;
-
-    let back=document.getElementById('v90BackBtn');
-
-    if(!back){
-        back=document.createElement('button');
-        back.id='v90BackBtn';
-        back.type='button';
-        back.textContent='← Back';
-
-        const home=document.getElementById('v90HomeBtn');
-
-        if(home && home.parentNode===top){
-            top.insertBefore(back,home);
-        }else{
-            top.appendChild(back);
-        }
-    }
-
-    back.style.display='inline-flex';
-
-    back.onclick=function(e){
-        e.preventDefault();
-        e.stopPropagation();
-
-        if(typeof window.v90Back==='function'){
-            return window.v90Back();
-        }
-    };
-}
-
-ensureAdminBackButton();
-setTimeout(ensureAdminBackButton,150);
 /* Home */
 const homeBase=window.v90GoHome||window.erpGoHome;
 
@@ -16421,7 +16383,7 @@ window.addEventListener('popstate',function(e){
 
 window.addEventListener('pageshow',()=>{
   setTimeout(()=>{
-   ensureAdminBackButton();
+  
     if(routeNow()==='dashboard'){
       restoreDash('back');
     }else{
@@ -16439,5 +16401,309 @@ setTimeout(()=>{
 })();
 </script>
 <!-- ===== END V182 FINAL BACK PERSISTENCE + PREMIUM COMPACT HEADER ===== -->      
-</body>
+<!-- ===== V183 ADMIN PREMIUM RESPONSIVE HEADER ===== -->
+<style id="ldm-v183-admin-header-css">
+
+#erp.ldmV183AdminHeader .erpTop{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+  width:100%!important;
+  max-width:100%!important;
+  padding:12px 15px!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  align-items:stretch!important;
+  background:linear-gradient(180deg,#087ac1 0%,#075da2 100%)!important;
+  overflow:visible!important;
+}
+
+/* SCHOOL NAME — teacher dashboard style */
+#erp.ldmV183AdminHeader .ldmV183AdminSchool{
+  grid-column:1/-1!important;
+  width:100%!important;
+  text-align:center!important;
+  color:#fff!important;
+  padding:3px 8px 10px!important;
+  box-sizing:border-box!important;
+}
+
+#erp.ldmV183AdminHeader .ldmV183AdminSchool b{
+  display:block!important;
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-size:clamp(18px,5vw,28px)!important;
+  font-weight:900!important;
+  line-height:1.05!important;
+  letter-spacing:.2px!important;
+  overflow-wrap:anywhere!important;
+}
+
+#erp.ldmV183AdminHeader .ldmV183AdminSchool small{
+  display:block!important;
+  margin-top:5px!important;
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-size:clamp(12px,3.7vw,17px)!important;
+  font-weight:700!important;
+  line-height:1.12!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* All main controls exactly like Teacher header */
+#erp.ldmV183AdminHeader #ldmDeviceLockBtn,
+#erp.ldmV183AdminHeader [data-v58-order],
+#erp.ldmV183AdminHeader .websiteBtn,
+#erp.ldmV183AdminHeader #v6418WebsiteBtn,
+#erp.ldmV183AdminHeader #v90BackBtn,
+#erp.ldmV183AdminHeader #v90HomeBtn,
+#erp.ldmV183AdminHeader .erpTop>.hamb,
+#erp.ldmV183AdminHeader .ldmV183AdminSearchBtn{
+  position:relative!important;
+  inset:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:58px!important;
+  min-height:58px!important;
+  margin:0!important;
+  padding:8px 6px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  border:0!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  color:#123d61!important;
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-size:15px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+/* Master Search full row */
+#erp.ldmV183AdminHeader #v75TopSearch{
+  grid-column:1/-1!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  margin:0!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 90px!important;
+  gap:7px!important;
+  box-sizing:border-box!important;
+}
+
+#erp.ldmV183AdminHeader #v75TopSearch input{
+  width:100%!important;
+  min-width:0!important;
+  height:46px!important;
+  box-sizing:border-box!important;
+  border-radius:14px!important;
+  padding:8px 12px!important;
+  font-size:14px!important;
+}
+
+#erp.ldmV183AdminHeader #v75TopSearch button{
+  width:90px!important;
+  min-width:90px!important;
+  height:46px!important;
+  padding:5px!important;
+  border-radius:14px!important;
+  white-space:nowrap!important;
+}
+
+/* Remove old/duplicate school identity only in ADMIN */
+#erp.ldmV183AdminHeader .ldmSchoolIdentity,
+#erp.ldmV183AdminHeader .ldmAdminIdentity,
+#erp.ldmV183AdminHeader .v6412SchoolIdentity,
+#erp.ldmV183AdminHeader .v6415School,
+#erp.ldmV183AdminHeader .v635SchoolHead,
+#erp.ldmV183AdminHeader .v97TopIdentity{
+  display:none!important;
+}
+
+/* New identity remains visible */
+#erp.ldmV183AdminHeader .ldmV183AdminSchool{
+  display:block!important;
+}
+
+/* Phone */
+@media(max-width:430px){
+  #erp.ldmV183AdminHeader .erpTop{
+    gap:7px!important;
+    padding:10px 9px!important;
+  }
+
+  #erp.ldmV183AdminHeader #ldmDeviceLockBtn,
+  #erp.ldmV183AdminHeader [data-v58-order],
+  #erp.ldmV183AdminHeader .websiteBtn,
+  #erp.ldmV183AdminHeader #v6418WebsiteBtn,
+  #erp.ldmV183AdminHeader #v90BackBtn,
+  #erp.ldmV183AdminHeader #v90HomeBtn,
+  #erp.ldmV183AdminHeader .erpTop>.hamb,
+  #erp.ldmV183AdminHeader .ldmV183AdminSearchBtn{
+    height:54px!important;
+    min-height:54px!important;
+    font-size:13px!important;
+    padding:6px 3px!important;
+  }
+}
+
+@media(max-width:350px){
+  #erp.ldmV183AdminHeader .erpTop{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  #erp.ldmV183AdminHeader #v75TopSearch{
+    grid-column:1/-1!important;
+  }
+}
+</style>
+
+<script id="ldm-v183-admin-header-js">
+(function(){
+
+  'use strict';
+
+  function isAdmin(){
+    const r=String(window.profile?.role||'').toLowerCase();
+    return ['admin','super_admin','principal'].includes(r);
+  }
+
+  function adminHeader(){
+
+    if(!isAdmin()) return;
+
+    const erp=document.getElementById('erp');
+    if(!erp || erp.classList.contains('hidden')) return;
+
+    const top=erp.querySelector('.erpTop');
+    if(!top) return;
+
+    erp.classList.add('ldmV183AdminHeader');
+
+    /* ---------- SCHOOL IDENTITY ---------- */
+    let school=top.querySelector('.ldmV183AdminSchool');
+
+    if(!school){
+      school=document.createElement('div');
+      school.className='ldmV183AdminSchool';
+
+      const schoolName=
+        window.school?.school_name ||
+        'L D MODERN EDUCATION ACADEMY';
+
+      const address=
+        window.school?.address ||
+        'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar';
+
+      school.innerHTML=
+        '<b>'+String(schoolName)+'</b>'+
+        '<small>'+String(address)+'</small>';
+
+      top.insertBefore(school,top.firstChild);
+    }
+
+    /* ---------- BACK ---------- */
+    let back=document.getElementById('v90BackBtn');
+
+    if(!back){
+      back=document.createElement('button');
+      back.id='v90BackBtn';
+      back.type='button';
+      back.textContent='← Back';
+
+      back.onclick=function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        if(typeof window.v90Back==='function'){
+          return window.v90Back();
+        }
+
+        return false;
+      };
+
+      top.appendChild(back);
+    }
+
+    /* ---------- HOME ---------- */
+    let home=document.getElementById('v90HomeBtn');
+
+    if(!home){
+      home=document.createElement('button');
+      home.id='v90HomeBtn';
+      home.type='button';
+      home.textContent='🏠 Home';
+
+      home.onclick=function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        if(typeof window.v90GoHome==='function'){
+          return window.v90GoHome();
+        }
+
+        if(typeof window.erpGoHome==='function'){
+          return window.erpGoHome();
+        }
+
+        return false;
+      };
+
+      top.appendChild(home);
+    }
+
+    /* ---------- FIX LABELS ---------- */
+    const lock=document.getElementById('ldmDeviceLockBtn');
+    if(lock) lock.textContent='🔒 Lock';
+
+    const website=
+      document.getElementById('v6418WebsiteBtn') ||
+      top.querySelector('.websiteBtn');
+
+    if(website) website.textContent='🌐 Website';
+
+    const menu=top.querySelector('.hamb');
+    if(menu) menu.innerHTML='☰ Menu';
+
+    back.textContent='← Back';
+    home.textContent='🏠 Home';
+
+    /* ---------- ORDER ---------- */
+    school.style.order='-100';
+
+    if(lock) lock.style.order='10';
+    if(menu) menu.style.order='20';
+    if(website) website.style.order='30';
+
+    back.style.order='40';
+    home.style.order='50';
+
+    const search=document.getElementById('v75TopSearch');
+
+    if(search){
+      search.style.order='70';
+    }
+  }
+
+  adminHeader();
+
+  setTimeout(adminHeader,100);
+  setTimeout(adminHeader,350);
+  setTimeout(adminHeader,900);
+
+  window.addEventListener('pageshow',adminHeader,{passive:true});
+
+  document.addEventListener('click',function(){
+    setTimeout(adminHeader,80);
+  },{passive:true});
+
+})();
+</script>
+<!-- ===== END V183 ADMIN PREMIUM RESPONSIVE HEADER ===== -->
+ </body>
 </html>
