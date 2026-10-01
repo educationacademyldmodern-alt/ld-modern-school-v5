@@ -13377,13 +13377,13 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 body.ldmSurfaceParent #publicHome,body.ldmSurfaceParent .publicTicker,body.ldmSurfaceParent .publicTop,body.ldmSurfaceParent .publicHero,body.ldmSurfaceParent .v26PortalRow,body.ldmSurfaceParent .v114HomeStats{display:none!important}
 
 /* Responsive shell rules retained without the removed legacy controller. */
-#erp.ldmTeacherCanonical .erpTop{display:flex!important;align-items:center!important;gap:8px!important;min-height:62px!important;flex-wrap:nowrap!important}
+#erp.ldmTeacherCanonical .erpTop{display:grid!important;align-items:center!important;gap:8px!important;min-height:62px!important;flex-wrap:nowrap!important}
 #erp.ldmTeacherCanonical #erpTitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #erp.ldmTeacherCanonical .v90DashGrid,#erp.ldmTeacherCanonical .v90TeacherGrid,#erp.ldmTeacherCanonical .teacherDashGrid{grid-template-columns:minmax(280px,.9fr) minmax(440px,1.6fr)!important;gap:16px!important;align-items:start!important}
 #erp.ldmTeacherCanonical [class*="TeachingSchedule"],#erp.ldmTeacherCanonical [class*="teachingSchedule"]{min-width:0!important;overflow-x:auto!important}
 body.ldmSurfaceParent #parentDashboard>.portalHead{display:none!important}
 body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!important;display:flex!important;min-height:58px!important;padding:8px 12px!important}
-@media(max-width:900px){#erp.ldmTeacherCanonical .v90DashGrid,#erp.ldmTeacherCanonical .v90TeacherGrid,#erp.ldmTeacherCanonical .teacherDashGrid{grid-template-columns:1fr!important}#erp.ldmTeacherCanonical .erpTop{flex-wrap:wrap!important}}
+@media(max-width:900px){#erp.ldmTeacherCanonical .v90DashGrid,#erp.ldmTeacherCanonical .v90TeacherGrid,#erp.ldmTeacherCanonical .teacherDashGrid{grid-template-columns:1fr!important}#erp.ldmTeacherCanonical .erpTop{grid-template-columns:repeat(auto-fit,minmax(90px,1fr))!important}}
 
 /* Current/new Teacher shell only. */
 #erp.ldmTeacherCanonical .ldmTeacherModules{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important}
