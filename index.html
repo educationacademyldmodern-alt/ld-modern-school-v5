@@ -12871,7 +12871,7 @@ window.V6416_BUILD='V64.16-FINAL-CLEANUP-A4-2026-09-20';
        top.querySelectorAll('.v6412SchoolIdentity,.v6415School').forEach(x=>x.remove());
        let s=top.querySelector('.v6416School');if(!s){s=document.createElement('div');s.className='v6416School';let search=top.querySelector('#v75TopSearch');top.insertBefore(s,search||null)}
        s.innerHTML='<b>'+safe(schoolName())+'</b><small>'+safe(schoolAddr())+'</small>';
-       const back=q('v90BackBtn'),home=q('v90HomeBtn');
+       let back=q('v90BackBtn'),home=q('v90HomeBtn');if(!back&&top){back=document.createElement('button');back.id='v90BackBtn';back.type='button';back.className='v90TopBtn';top.insertBefore(back,home||top.firstChild);}
        if(back){back.textContent='← Back';back.disabled=false;back.onclick=function(){let h=window.__v90History||[];if(h.length>1){if(typeof window.v90Back==='function')return v90Back()}return false}}
        if(home){home.textContent='🏠 Home';home.onclick=function(){if(typeof window.v90GoHome==='function')return v90GoHome();if(typeof window.render==='function')return render('dashboard')}}
      }
