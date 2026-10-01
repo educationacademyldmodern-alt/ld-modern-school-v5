@@ -16316,17 +16316,62 @@ if(typeof backBase==='function'){
 
   try{v90Back=window.v90Back}catch(_e){}
 }
+/* Admin Back button — single canonical button */
+function ensureAdminBackButton(){
+    const r=String(window.profile?.role||'').toLowerCase();
+    if(!['admin','super_admin','principal'].includes(r))return;
 
+    const top=document.querySelector('#erp .erpTop');
+    if(!top)return;
+
+    let back=document.getElementById('v90BackBtn');
+
+    if(!back){
+        back=document.createElement('button');
+        back.id='v90BackBtn';
+        back.type='button';
+        back.textContent='← Back';
+
+        const home=document.getElementById('v90HomeBtn');
+
+        if(home && home.parentNode===top){
+            top.insertBefore(back,home);
+        }else{
+            top.appendChild(back);
+        }
+    }
+
+    back.style.display='inline-flex';
+
+    back.onclick=function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        if(typeof window.v90Back==='function'){
+            return window.v90Back();
+        }
+    };
+}
+
+ensureAdminBackButton();
+setTimeout(ensureAdminBackButton,150);
 /* Home */
 const homeBase=window.v90GoHome||window.erpGoHome;
 
-if(typeof homeBase==='function'){
-  const homeFinal=function(){
+const homeFinal=function(){
+    if(routeNow()==='dashboard' &&
+       document.querySelector('.ldmRootAdminDash,.v114AdminDash')){
+        restoreDash('home');
+        cleanHeader?.();
+        armRootGuard?.();
+        return true;
+    }
+
     saveScroll(routeNow());
 
     pending={
-      route:'dashboard',
-      mode:'home'
+        route:'dashboard',
+        mode:'home'
     };
 
     const out=homeBase.apply(this,arguments);
@@ -16334,7 +16379,8 @@ if(typeof homeBase==='function'){
     schedulePending();
 
     return out;
-  };
+};
+ 
 
   window.v90GoHome=homeFinal;
   window.erpGoHome=homeFinal;
