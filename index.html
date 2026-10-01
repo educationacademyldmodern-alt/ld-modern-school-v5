@@ -16279,7 +16279,7 @@ const pushBase=window.v90Push;
 if(typeof pushBase==='function'){
   window.v90Push=function(next){
     const from=routeNow();
-
+const from=routeNow();
     saveScroll(from);
 
     if(from==='dashboard'&&String(next||'dashboard')!=='dashboard'){
@@ -16393,6 +16393,7 @@ const statsBase=window.v90LoadDashboardStats;
 
 if(typeof statsBase==='function'){
   window.v90LoadDashboardStats=async function(){
+   if(routeNow()!=='dashboard') return true;
     const out=await statsBase.apply(this,arguments);
 
     setTimeout(captureDash,0);
@@ -16420,6 +16421,7 @@ window.addEventListener('popstate',function(e){
 
 window.addEventListener('pageshow',()=>{
   setTimeout(()=>{
+   ensureAdminBackButton();
     if(routeNow()==='dashboard'){
       restoreDash('back');
     }else{
