@@ -16110,7 +16110,7 @@ if(typeof statsBase==='function'){
  window.v90DueFeeMonitor=window.v6422DueMaster;try{v6422DueMaster=window.v6422DueMaster;v6422LoadDueRows=window.v6422LoadDueRows;v6422SaveDue=window.v6422SaveDue;v90DueFeeMonitor=window.v6422DueMaster}catch(_e){}
  /* 19: Reports → Due Fee Report uses central current due only. */
  window.v200DueFeeReport=async function(){if(!admin())return window.toast?.('Admin / Principal only');try{window.head?.('💰 Due Fee Report','Central Current Due • Class-wise • Excel • Print')}catch(_e){};let host=q('erpContent');if(!host)return;host.innerHTML=`<div class="panel"><div class="panelHead"><div><h3>Current Due Fee Report</h3><p class="note">Dashboard, Master Due, Ledger, Notice और Report का same central balance.</p></div></div><div class="v200FeeToolbar"><label>Class<select id="v200ReportClass"><option value="">All Classes</option></select></label><label>Search<input id="v200ReportQ" placeholder="Student / Father / Admission"></label><button class="primary" onclick="v200LoadDueReport()">Load Current Due</button><button onclick="v200ExportDueReport()">⬇ Excel</button><button onclick="v200PrintDueReport()">🖨 Print</button></div><div id="v200DueReportBody"><div class="empty">Loading…</div></div></div>`;try{let r=await sb.from('students').select('class_name').limit(10000);let cs=[...new Set((r.data||[]).map(x=>x.class_name).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));q('v200ReportClass').insertAdjacentHTML('beforeend',cs.map(c=>`<option>${E(c)}</option>`).join(''))}catch(_e){};await window.v200LoadDueReport()};
- window.v200LoadDueReport=async function(){let host=q('v200DueReportBody');if(!host)return;host.innerHTML='<div class="empty">Loading…</div>';try{let cl=q('v200ReportClass')?.value||'',z=String(q('v200ReportQ')?.value||'').trim().toLowerCase(),sq=sb.from('students').select('admission_no,student_name,father_name,class_name,roll_no,status').order('class_name').order('roll_no').limit(10000);if(cl)sq=sq.eq('class_name',cl);let sr=await sq;if(sr.error)throw sr.error;let students=(sr.data||[]).filter(x=>activeStatus(x.status)).filter(x=>!z||[x.student_name,x.father_name,x.admission_no,x.roll_no].some(v=>String(v||'').toLowerCase().includes(z))),adms=students.map(x=>x.admission_no).filter(Boolean);await ensureCurrent(adms);let [snap,set,adj]=await Promise.all([dueSnapshot(adms,monthNow()),(async()=>{let out=[];for(let i=0;i<adms.length;i+=150){let r=await sb.from('student_fee_settings').select('admission_no,monthly_fee,auto_start_month,ldm_plan_mode').eq('academic_session',session()).in('admission_no',adms.slice(i,i+150));if(!r.error)out.push(...(r.data||[]))}return out})(),(async()=>{let out=[];for(let i=0;i<adms.length;i+=150){let r=await sb.from('ldm_fee_balance_adjustments').select('admission_no,till_month,target_due').eq('academic_session',session()).in('admission_no',adms.slice(i,i+150));if(!r.error)out.push(...(r.data||[]))}return out})()]);let dm=new Map(snap.map(x=>[String(x.admission_no),x])),sm=new Map(set.map(x=>[String(x.admission_no),x])),am=new Map(adj.map(x=>[String(x.admission_no),x])),rows=[],total=0,dueCount=0;students.forEach((s,i)=>{let d=dm.get(String(s.admission_no))||{},cfg=sm.get(String(s.admission_no))||{},a=am.get(String(s.admission_no))||{},due=N(d.current_due);total+=due;if(due>0)dueCount++;rows.push({sn:i+1,admission_no:s.admission_no,student_name:s.student_name,father_name:s.father_name,class_name:s.class_name,roll_no:s.roll_no,due_till_month:a.till_month||'',fixed_monthly_fee:N(cfg.monthly_fee),fixed_fee_start_month:cfg.auto_start_month||'',fee_plan:(window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')),current_due:due,status:due>0?'DUE':'CLEAR'})});window.__v200DueReportRows=rows;host.innerHTML=`<div class="v200DueSummary"><div><small>Total Students</small><b>${rows.length}</b></div><div><small>Due Students</small><b>${dueCount}</b></div><div><small>Clear Students</small><b>${Math.max(rows.length-dueCount,0)}</b></div><div><small>Total Current Due</small><b>${money(total)}</b></div></div><div class="tableWrap" id="v200DueReportPrint"><table><tr><th>S.N.</th><th>Student / Admission</th><th>Father</th><th>Class / Roll</th><th>Due Till</th><th>Fixed / Month</th><th>Start Month</th><th>Plan</th><th>Current Due</th><th>Status</th></tr>${rows.map(r=>`<tr><td>${r.sn}</td><td><b>${E(r.student_name)}</b><small class="cellSub">${E(r.admission_no)}</small></td><td>${E(r.father_name||'')}</td><td>${E(r.class_name||'')} / ${E(r.roll_no||'—')}</td><td>${E(r.due_till_month||'—')}</td><td>${money(r.fixed_monthly_fee)}</td><td>${E(r.fixed_fee_start_month||'—')}</td><td>${E(r.fee_plan)}</td><td><b>${money(r.current_due)}</b></td><td><span class="v200Status ${r.current_due>0?'due':'clear'}">${r.status}</span></td></tr>`).join('')||'<tr><td colspan="10">No students.</td></tr>'}</table></div>`}catch(e){host.innerHTML=`<div class="dangerNote">${E(e?.message||e)}</div>`}};
+ window.v200LoadDueReport=async function(){let host=q('v200DueReportBody');if(!host)return;host.innerHTML='<div class="empty">Loading…</div>';try{let cl=q('v200ReportClass')?.value||'',z=String(q('v200ReportQ')?.value||'').trim().toLowerCase(),sq=sb.from('students').select('admission_no,student_name,father_name,class_name,roll_no,status').order('class_name').order('roll_no').limit(10000);if(cl)sq=sq.eq('class_name',cl);let sr=await sq;if(sr.error)throw sr.error;let students=(sr.data||[]).filter(x=>activeStatus(x.status)).filter(x=>!z||[x.student_name,x.father_name,x.admission_no,x.roll_no].some(v=>String(v||'').toLowerCase().includes(z))),adms=students.map(x=>x.admission_no).filter(Boolean);await ensureCurrent(adms);let [snap,set,adj]=await Promise.all([dueSnapshot(adms,monthNow()),(async()=>{let out=[];for(let i=0;i<adms.length;i+=150){let r=await sb.from('student_fee_settings').select('admission_no,monthly_fee,auto_start_month,ldm_plan_mode').eq('academic_session',session()).in('admission_no',adms.slice(i,i+150));if(!r.error)out.push(...(r.data||[]))}return out})(),(async()=>{let out=[];for(let i=0;i<adms.length;i+=150){let r=await sb.from('ldm_fee_balance_adjustments').select('admission_no,till_month,target_due').eq('academic_session',session()).in('admission_no',adms.slice(i,i+150));if(!r.error)out.push(...(r.data||[]))}return out})()]);let dm=new Map(snap.map(x=>[String(x.admission_no),x])),sm=new Map(set.map(x=>[String(x.admission_no),x])),am=new Map(adj.map(x=>[String(x.admission_no),x])),rows=[],total=0,dueCount=0;students.forEach((s,i)=>{let d=dm.get(String(s.admission_no))||{},cfg=sm.get(String(s.admission_no))||{},a=am.get(String(s.admission_no))||{},due=N(d.current_due);total+=due;if(due>0)dueCount++;rows.push({sn:i+1,admission_no:s.admission_no,student_name:s.student_name,father_name:s.father_name,class_name:s.class_name,roll_no:s.roll_no,due_till_month:(window.ldmV241GetClassCutoffSync?.(s.class_name)||a.till_month||''),fixed_monthly_fee:N(cfg.monthly_fee),fixed_fee_start_month:cfg.auto_start_month||'',fee_plan:(window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')),current_due:due,status:due>0?'DUE':'CLEAR'})});window.__v200DueReportRows=rows;host.innerHTML=`<div class="v200DueSummary"><div><small>Total Students</small><b>${rows.length}</b></div><div><small>Due Students</small><b>${dueCount}</b></div><div><small>Clear Students</small><b>${Math.max(rows.length-dueCount,0)}</b></div><div><small>Total Current Due</small><b>${money(total)}</b></div></div><div class="tableWrap" id="v200DueReportPrint"><table><tr><th>S.N.</th><th>Student / Admission</th><th>Father</th><th>Class / Roll</th><th>Due Till</th><th>Fixed / Month</th><th>Start Month</th><th>Plan</th><th>Current Due</th><th>Status</th></tr>${rows.map(r=>`<tr><td>${r.sn}</td><td><b>${E(r.student_name)}</b><small class="cellSub">${E(r.admission_no)}</small></td><td>${E(r.father_name||'')}</td><td>${E(r.class_name||'')} / ${E(r.roll_no||'—')}</td><td>${E(r.due_till_month||'—')}</td><td>${money(r.fixed_monthly_fee)}</td><td>${E(r.fixed_fee_start_month||'—')}</td><td>${E(r.fee_plan)}</td><td><b>${money(r.current_due)}</b></td><td><span class="v200Status ${r.current_due>0?'due':'clear'}">${r.status}</span></td></tr>`).join('')||'<tr><td colspan="10">No students.</td></tr>'}</table></div>`}catch(e){host.innerHTML=`<div class="dangerNote">${E(e?.message||e)}</div>`}};
  window.v200ExportDueReport=function(){let rows=window.__v200DueReportRows||[];if(!rows.length)return window.toast?.('पहले report Load करें');if(!window.XLSX)return window.toast?.('Excel library unavailable');let out=rows.map(r=>({'Admission No':r.admission_no,'Student Name':r.student_name,'Father Name':r.father_name,'Class':r.class_name,'Roll No':r.roll_no,'Due Till Month':r.due_till_month,'Fixed Monthly Fee':r.fixed_monthly_fee,'Fixed Fee Start Month':r.fixed_fee_start_month,'Fee Plan':r.fee_plan,'Current Due':r.current_due,'Status':r.status})),wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(out);XLSX.utils.book_append_sheet(wb,ws,'Current Due Report');XLSX.writeFile(wb,'Current-Due-Fee-Report.xlsx')};
  window.v200PrintDueReport=function(){let src=q('v200DueReportPrint');if(!src)return window.toast?.('पहले report Load करें');let w=window.open('','_blank');if(!w)return window.toast?.('Popup allow करें');w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Current Due Fee Report</title><style>@page{size:A4 landscape;margin:8mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;color:#111}h2,p{text-align:center;margin:4px}table{width:100%;border-collapse:collapse;font-size:9px}th,td{border:1px solid #999;padding:5px;vertical-align:top}th{background:#eef4fb}.cellSub{display:block;font-size:8px}.v200Status{font-weight:700}</style></head><body><h2>${E(window.school?.school_name||'L D MODERN EDUCATION ACADEMY')}</h2><p>Current Due Fee Report • ${E(new Date().toLocaleDateString('en-IN'))}</p>${src.innerHTML}</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)};
 
@@ -16121,12 +16121,12 @@ if(typeof statsBase==='function'){
  const baseImportStudents=window.v70ImportStudentsUpdate||((typeof v70ImportStudentsUpdate==='function')?v70ImportStudentsUpdate:null);
  function nonBlank(v){return v!==undefined&&v!==null&&String(v).trim()!==''}
  async function v200FeeMaps(adms){let sess=session(),settings=[],adj=[];for(let i=0;i<adms.length;i+=150){let part=adms.slice(i,i+150),[a,b]=await Promise.all([sb.from('student_fee_settings').select('admission_no,monthly_fee,auto_start_month,ldm_plan_mode').eq('academic_session',sess).in('admission_no',part),sb.from('ldm_fee_balance_adjustments').select('admission_no,till_month,target_due').eq('academic_session',sess).in('admission_no',part)]);if(!a.error)settings.push(...(a.data||[]));if(!b.error)adj.push(...(b.data||[]))}return{sm:new Map(settings.map(x=>[String(x.admission_no),x])),am:new Map(adj.map(x=>[String(x.admission_no),x]))}}
- window.v70ExportStudentsWithFee=async function(){try{let c=q('studentExcelClass')?.value||'',sq=sb.from('students').select('admission_no,student_name,father_name,mother_name,phone,class_name,section,roll_no,dob,gender,address,status,fee_category,fee_waiver_percent,remarks').order('student_name').limit(10000);if(c)sq=sq.eq('class_name',c);let sr=await sq;if(sr.error)throw sr.error;let students=(sr.data||[]).filter(x=>activeStatus(x.status)),adms=students.map(x=>x.admission_no).filter(Boolean);await ensureCurrent(adms);let [maps,snap]=await Promise.all([v200FeeMaps(adms),dueSnapshot(adms,monthNow())]),dm=new Map(snap.map(x=>[String(x.admission_no),x]));let out=students.map(s=>{let cfg=maps.sm.get(String(s.admission_no))||{},a=maps.am.get(String(s.admission_no))||{},d=dm.get(String(s.admission_no))||{};return {'Admission No':s.admission_no||'','Student Name':s.student_name||'','Father Name':s.father_name||'','Mother Name':s.mother_name||'','Mobile':s.phone||'','Class':s.class_name||'','Section':s.section||'','Roll No':s.roll_no||'','DOB':s.dob||'','Gender':s.gender||'','Address':s.address||'','Status':s.status||'','Fee Category':s.fee_category||'','Fee Waiver Percent':s.fee_waiver_percent??'','Due Till Month':a.till_month||monthNow(),'Due Till Amount':a.target_due??N(d.current_due),'Fixed Monthly Fee':cfg.monthly_fee??'','Fixed Fee Start Month':cfg.auto_start_month||'','Fee Plan':(window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')),'Current Due (Read Only)':N(d.current_due),'Remarks':s.remarks||''}});let wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(out);ws['!cols']=Object.keys(out[0]||{}).map(k=>({wch:Math.min(Math.max(k.length+3,14),30)}));XLSX.utils.book_append_sheet(wb,ws,'Students + Central Fee');let ins=XLSX.utils.aoa_to_sheet([['V210 SMART UPDATE RULE'],['Admission No','Existing student पहचानने का canonical key.'],['Due Till Month + Due Till Amount','दोनों central due target को update करते हैं.'],['Fixed Monthly Fee + Fixed Fee Start Month','Monthly fee केवल selected start month से auto add होगी.'],['Current Due (Read Only)','Reference only; import इसे direct edit नहीं करता.'],['Blank Cells','Existing saved value सुरक्षित; blank से zero/delete नहीं होगा.'],['Safety','No duplicate monthly charge on refresh/reload.']]);ins['!cols']=[{wch:30},{wch:95}];XLSX.utils.book_append_sheet(wb,ins,'Instructions');XLSX.writeFile(wb,`${c||'All'}-Students-Central-Fee-V210.xlsx`)}catch(e){window.toast?.(e?.message||'Export failed')}};
+ window.v70ExportStudentsWithFee=async function(){try{let c=q('studentExcelClass')?.value||'',sq=sb.from('students').select('admission_no,student_name,father_name,mother_name,phone,class_name,section,roll_no,dob,gender,address,status,fee_category,fee_waiver_percent,remarks').order('student_name').limit(10000);if(c)sq=sq.eq('class_name',c);let sr=await sq;if(sr.error)throw sr.error;let students=(sr.data||[]).filter(x=>activeStatus(x.status)),adms=students.map(x=>x.admission_no).filter(Boolean);await ensureCurrent(adms);let [maps,snap]=await Promise.all([v200FeeMaps(adms),dueSnapshot(adms,monthNow())]),dm=new Map(snap.map(x=>[String(x.admission_no),x]));let out=students.map(s=>{let cfg=maps.sm.get(String(s.admission_no))||{},a=maps.am.get(String(s.admission_no))||{},d=dm.get(String(s.admission_no))||{};return {'Admission No':s.admission_no||'','Student Name':s.student_name||'','Father Name':s.father_name||'','Mother Name':s.mother_name||'','Mobile':s.phone||'','Class':s.class_name||'','Section':s.section||'','Roll No':s.roll_no||'','DOB':s.dob||'','Gender':s.gender||'','Address':s.address||'','Status':s.status||'','Fee Category':s.fee_category||'','Fee Waiver Percent':s.fee_waiver_percent??'','Due Till Month':(window.ldmV241GetClassCutoffSync?.(s.class_name)||a.till_month||monthNow()),'Due Till Amount':N(d.current_due),'Fixed Monthly Fee':cfg.monthly_fee??'','Fixed Fee Start Month':cfg.auto_start_month||'','Fee Plan':(window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')),'Current Due (Read Only)':N(d.current_due),'Remarks':s.remarks||''}});let wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(out);ws['!cols']=Object.keys(out[0]||{}).map(k=>({wch:Math.min(Math.max(k.length+3,14),30)}));XLSX.utils.book_append_sheet(wb,ws,'Students + Central Fee');let ins=XLSX.utils.aoa_to_sheet([['V210 SMART UPDATE RULE'],['Admission No','Existing student पहचानने का canonical key.'],['Due Till Month + Due Till Amount','दोनों central due target को update करते हैं.'],['Fixed Monthly Fee + Fixed Fee Start Month','Monthly fee केवल selected start month से auto add होगी.'],['Current Due (Read Only)','Reference only; import इसे direct edit नहीं करता.'],['Blank Cells','Existing saved value सुरक्षित; blank से zero/delete नहीं होगा.'],['Safety','No duplicate monthly charge on refresh/reload.']]);ins['!cols']=[{wch:30},{wch:95}];XLSX.utils.book_append_sheet(wb,ins,'Instructions');XLSX.writeFile(wb,`${c||'All'}-Students-Central-Fee-V210.xlsx`)}catch(e){window.toast?.(e?.message||'Export failed')}};
  window.v70ImportStudentsUpdate=async function(file,withFee=true){let base={rows:0,added:0,updated:0,unchanged:0,feeUpdated:0,conflicts:0,errors:0,conflictRows:[]};if(baseImportStudents){try{base=await baseImportStudents(file,false)}catch(e){throw e}}if(!withFee)return base;let wb=XLSX.read(await file.arrayBuffer(),{cellDates:false}),raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''}),adms=[...new Set(raw.map(r=>String(r['Admission No']??r.admission_no??'').trim()).filter(Boolean))];if(!adms.length)return base;let [maps,snap]=await Promise.all([v200FeeMaps(adms),dueSnapshot(adms,monthNow())]),dm=new Map(snap.map(x=>[String(x.admission_no),x])),feeUpdated=0,feeSkipped=0,feeErrors=0;for(let r of raw){let adm=String(r['Admission No']??r.admission_no??'').trim();if(!adm)continue;let dueMonth=r['Due Till Month']??r.due_till_month,dueAmt=r['Due Till Amount']??r.due_till_amount,monthly=r['Fixed Monthly Fee']??r.fixed_monthly_fee,start=r['Fixed Fee Start Month']??r.fixed_fee_start_month,plan=r['Fee Plan']??r.fee_plan;if(![dueMonth,dueAmt,monthly,start,plan].some(nonBlank)){feeSkipped++;continue}let cfg=maps.sm.get(adm)||{},a=maps.am.get(adm)||{},cur=dm.get(adm)||{};let dmth=nonBlank(dueMonth)?String(dueMonth).trim():(a.till_month||monthNow()),target=nonBlank(dueAmt)?Math.max(0,N(dueAmt)):(a.target_due!=null?N(a.target_due):N(cur.current_due)),mf=nonBlank(monthly)?Math.max(0,N(monthly)):(cfg.monthly_fee==null?null:N(cfg.monthly_fee)),st=nonBlank(start)?String(start).trim():(cfg.auto_start_month||null),pl=nonBlank(plan)?String(plan).trim():((window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')));try{let z=await sb.rpc('ldm_fee_set_due_target_v3',{p_admission_no:adm,p_session:session(),p_till_month:dmth,p_target_due:target,p_monthly_fee:mf,p_auto_start_month:st,p_plan_mode:pl,p_reason:'Excel Import V210'});if(z.error)throw z.error;feeUpdated++}catch(e){console.error('V210 fee import',adm,e);feeErrors++}}return{...base,feeUpdated:(base.feeUpdated||0)+feeUpdated,feeSkipped,errors:(base.errors||0)+feeErrors}}
  window.v70ImportStudentEvent=async function(e,target='v53ImportSummary'){let f=e.target.files?.[0];if(!f)return;try{if(!confirm('SMART UPDATE: Same Admission No. पर changed non-blank Student + Central Fee fields update होंगे. Blank cells पुराना data नहीं मिटाएँगे. Continue?'))return;let r=await window.v70ImportStudentsUpdate(f,true);if(typeof window.v70ImportSummary==='function')window.v70ImportSummary(r,target);else if(typeof v70ImportSummary==='function')v70ImportSummary(r,target);window.toast?.(`Import • New ${r.added||0} • Updated ${r.updated||0} • Same ${r.unchanged||0} • Fee ${r.feeUpdated||0} • Error ${r.errors||0}`);window.ldmMarkDataDirty?.('fees')}catch(err){window.toast?.(err?.message||'Excel import failed')}finally{e.target.value=''}};try{v70ExportStudentsWithFee=window.v70ExportStudentsWithFee;v70ImportStudentsUpdate=window.v70ImportStudentsUpdate;v70ImportStudentEvent=window.v70ImportStudentEvent;v53ImportStudentUpdate=window.v70ImportStudentEvent;importStudentUpdate=window.v70ImportStudentEvent;v32ImportStudents=window.v70ImportStudentEvent}catch(_e){}
 
  /* Class Fee Excel is the same central timeline, not legacy Opening Sep-only data. */
- window.v76DownloadClassFeeExcel=async function(){let c=q('v75MFClass')?.value||'';if(!c)return window.toast?.('पहले Class चुनें');try{let sr=await sb.from('students').select('admission_no,student_name,father_name,class_name,status').eq('class_name',c).order('student_name');if(sr.error)throw sr.error;let students=(sr.data||[]).filter(x=>activeStatus(x.status)),adms=students.map(x=>x.admission_no).filter(Boolean);await ensureCurrent(adms);let [maps,snap]=await Promise.all([v200FeeMaps(adms),dueSnapshot(adms,monthNow())]),dm=new Map(snap.map(x=>[String(x.admission_no),x]));let out=students.map(s=>{let cfg=maps.sm.get(String(s.admission_no))||{},a=maps.am.get(String(s.admission_no))||{},d=dm.get(String(s.admission_no))||{};return {'Student Name':s.student_name||'','Father Name':s.father_name||'','Due Till Month':a.till_month||monthNow(),'Due Till Amount':a.target_due??N(d.current_due),'Fixed Monthly Fee':cfg.monthly_fee??'','Fixed Fee Start Month':cfg.auto_start_month||'','Fee Plan':(window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')),'Current Due (Read Only)':N(d.current_due),'__Admission No':s.admission_no||''}}),wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(out);ws['!cols']=[{wch:28},{wch:28},{wch:16},{wch:16},{wch:18},{wch:20},{wch:18},{wch:20},{hidden:true,wch:18}];XLSX.utils.book_append_sheet(wb,ws,'Central Fee Update');XLSX.writeFile(wb,`${String(c).replace(/[^a-z0-9_-]/gi,'_')}-Central-Fee-V210.xlsx`);window.toast?.('Central Fee Excel downloaded')}catch(e){window.toast?.(e?.message||'Excel download failed')}};
+ window.v76DownloadClassFeeExcel=async function(){let c=q('v75MFClass')?.value||'';if(!c)return window.toast?.('पहले Class चुनें');try{let sr=await sb.from('students').select('admission_no,student_name,father_name,class_name,status').eq('class_name',c).order('student_name');if(sr.error)throw sr.error;let students=(sr.data||[]).filter(x=>activeStatus(x.status)),adms=students.map(x=>x.admission_no).filter(Boolean);await ensureCurrent(adms);let [maps,snap]=await Promise.all([v200FeeMaps(adms),dueSnapshot(adms,monthNow())]),dm=new Map(snap.map(x=>[String(x.admission_no),x]));let out=students.map(s=>{let cfg=maps.sm.get(String(s.admission_no))||{},a=maps.am.get(String(s.admission_no))||{},d=dm.get(String(s.admission_no))||{};return {'Student Name':s.student_name||'','Father Name':s.father_name||'','Due Till Month':(window.ldmV241GetClassCutoffSync?.(s.class_name)||a.till_month||monthNow()),'Due Till Amount':N(d.current_due),'Fixed Monthly Fee':cfg.monthly_fee??'','Fixed Fee Start Month':cfg.auto_start_month||'','Fee Plan':(window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')),'Current Due (Read Only)':N(d.current_due),'__Admission No':s.admission_no||''}}),wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(out);ws['!cols']=[{wch:28},{wch:28},{wch:16},{wch:16},{wch:18},{wch:20},{wch:18},{wch:20},{hidden:true,wch:18}];XLSX.utils.book_append_sheet(wb,ws,'Central Fee Update');XLSX.writeFile(wb,`${String(c).replace(/[^a-z0-9_-]/gi,'_')}-Central-Fee-V210.xlsx`);window.toast?.('Central Fee Excel downloaded')}catch(e){window.toast?.(e?.message||'Excel download failed')}};
  window.v76ImportClassFeeExcel=async function(e){let f=e.target.files?.[0],c=q('v75MFClass')?.value||'';if(!f)return;e.target.value='';if(!c)return window.toast?.('Upload से पहले वही Class चुनें');try{let wb=XLSX.read(await f.arrayBuffer()),raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''}),adms=[...new Set(raw.map(r=>String(r['__Admission No']??r['Admission No']??'').trim()).filter(Boolean))],maps=await v200FeeMaps(adms),snap=await dueSnapshot(adms,monthNow()),dm=new Map(snap.map(x=>[String(x.admission_no),x])),changed=0,same=0,skip=0,errors=0;for(let r of raw){let adm=String(r['__Admission No']??r['Admission No']??'').trim();if(!adm){skip++;continue}let fields=[r['Due Till Month'],r['Due Till Amount'],r['Fixed Monthly Fee'],r['Fixed Fee Start Month'],r['Fee Plan']];if(!fields.some(nonBlank)){skip++;continue}let cfg=maps.sm.get(adm)||{},a=maps.am.get(adm)||{},cur=dm.get(adm)||{},dmth=nonBlank(r['Due Till Month'])?String(r['Due Till Month']).trim():(a.till_month||monthNow()),target=nonBlank(r['Due Till Amount'])?Math.max(0,N(r['Due Till Amount'])):(a.target_due!=null?N(a.target_due):N(cur.current_due)),mf=nonBlank(r['Fixed Monthly Fee'])?Math.max(0,N(r['Fixed Monthly Fee'])):(cfg.monthly_fee==null?null:N(cfg.monthly_fee)),st=nonBlank(r['Fixed Fee Start Month'])?String(r['Fixed Fee Start Month']).trim():(cfg.auto_start_month||null),pl=nonBlank(r['Fee Plan'])?String(r['Fee Plan']).trim():((window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')));let sameRow=String(dmth)==String(a.till_month||monthNow())&&Math.abs(target-N(a.target_due??cur.current_due))<.001&&Math.abs(N(mf)-N(cfg.monthly_fee))<.001&&String(st||'')===String(cfg.auto_start_month||'')&&String(pl)===String((window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')));if(sameRow){same++;continue}try{let z=await sb.rpc('ldm_fee_set_due_target_v3',{p_admission_no:adm,p_session:session(),p_till_month:dmth,p_target_due:target,p_monthly_fee:mf,p_auto_start_month:st,p_plan_mode:pl,p_reason:'Class Fee Excel V210'});if(z.error)throw z.error;changed++}catch(err){console.error(err);errors++}}let st=q('v76FeeExcelStatus');if(st)st.innerHTML=`<div class="v70ImportResult"><b>✓ CENTRAL FEE UPDATE COMPLETE</b><span>Updated ${changed}</span><span>Same ${same}</span><span>Skipped ${skip}</span><span>Error ${errors}</span></div>`;window.toast?.(`Fee Excel • Updated ${changed} • Same ${same} • Skipped ${skip} • Error ${errors}`);window.ldmMarkDataDirty?.('fees');await window.v75MFSearch?.(true)}catch(err){window.toast?.(err?.message||'Fee Excel import failed')}};try{v76DownloadClassFeeExcel=window.v76DownloadClassFeeExcel;v76ImportClassFeeExcel=window.v76ImportClassFeeExcel}catch(_e){}
 
  /* Master Fee account is read from central due; old direct schedule mutation is retired. */
@@ -16858,8 +16858,8 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   async function saveCentralFee(student,row,state,reason){
     const cfg=state.cfg||{},adj=state.adj||{},due=state.due||{};
     const old={
-      dueMonth:adj.till_month||monthNow(),
-      dueAmount:adj.target_due!=null?Math.max(0,num(adj.target_due)):Math.max(0,num(due.current_due)),
+      dueMonth:(window.ldmV241GetClassCutoffSync?.(student.class_name)||adj.till_month||monthNow()),
+      dueAmount:(due.current_due!=null?Math.max(0,num(due.current_due)):(adj.target_due!=null?Math.max(0,num(adj.target_due)):0)),
       monthly:cfg.monthly_fee==null?null:Math.max(0,num(cfg.monthly_fee)),
       start:txt(cfg.auto_start_month)||null,
       plan:planUI((window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto')))
@@ -16951,7 +16951,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
       const adms=students.map(s=>s.admission_no).filter(Boolean),state=await loadFeeState(adms);
       const out=students.map(s=>{const k=admKey(s.admission_no),cfg=state.sm.get(k)||{},adj=state.am.get(k)||{},d=state.dm.get(k)||{},current=Math.max(0,num(d.current_due));return {
         'Student ID':s.student_id||'', 'Admission No':s.admission_no||'', 'Student Name':s.student_name||'', 'Father Name':s.father_name||'', 'Mother Name':s.mother_name||'', 'Mobile':s.phone||'', 'Class':s.class_name||'', 'Section':s.section||'', 'Roll No':s.roll_no||'', 'DOB':s.dob||'', 'Gender':s.gender||'', 'Address':s.address||'', 'Status':s.status||'', 'Fee Category':s.fee_category||'', 'Fee Waiver Percent':s.fee_waiver_percent??'',
-        'Due Till Month':adj.till_month||monthNow(), 'Due Till Amount':adj.target_due??current, 'Fixed Monthly Fee':cfg.monthly_fee??'', 'Fixed Fee Start Month':cfg.auto_start_month||'', 'Fee Plan':planUI((window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto'))), 'Current Due (Read Only)':current, 'Remarks':s.remarks||''
+        'Due Till Month':(window.ldmV241GetClassCutoffSync?.(s.class_name)||adj.till_month||monthNow()), 'Due Till Amount':current, 'Fixed Monthly Fee':cfg.monthly_fee??'', 'Fixed Fee Start Month':cfg.auto_start_month||'', 'Fee Plan':planUI((window.ldmV240PlanUI?window.ldmV240PlanUI(cfg.ldm_plan_mode):(cfg.ldm_plan_mode||'Monthly Auto'))), 'Current Due (Read Only)':current, 'Remarks':s.remarks||''
       }});
       const wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(out);ws['!cols']=Object.keys(out[0]||{}).map(k=>({wch:Math.min(Math.max(k.length+3,14),30)}));XLSX.utils.book_append_sheet(wb,ws,'Students + Central Due');
       const ins=XLSX.utils.aoa_to_sheet([
@@ -17001,7 +17001,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 
   window.v75MFSaveDue=async function(){
     const s=window.v75MFStudent;if(!s?.admission_no)return window.toast?.('Student not loaded');
-    try{const state=await loadOneFeeState(s.admission_no),row={due_till_month:monthNow(),due_till_amount:$id('v75MFDue')?.value??''},changed=await saveCentralFee(s,row,state,$id('v75MFReason')?.value||'Master Fee current due V240');window.toast?.(changed?'Central due updated':'No change');window.ldmMarkDataDirty?.('fees');await window.v75MFOpen?.(s.id)}catch(e){window.toast?.(e?.message||String(e))}
+    try{const state=await loadOneFeeState(s.admission_no),row={due_till_month:(window.ldmV241GetClassCutoffSync?.(s.class_name)||monthNow()),due_till_amount:$id('v75MFDue')?.value??''},changed=await saveCentralFee(s,row,state,$id('v75MFReason')?.value||'Master Fee current due V240');window.toast?.(changed?'Central due updated':'No change');window.ldmMarkDataDirty?.('fees');await window.v75MFOpen?.(s.id)}catch(e){window.toast?.(e?.message||String(e))}
   };
 
   window.v76ImportClassFeeExcel=async function(e){
@@ -17039,5 +17039,240 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 </script>
 <!-- ===== END V240 CENTRAL STUDENT + DUE FEE ROOT FIX ===== -->
 
+<!-- ===== V241 CENTRAL CLASS TILL MONTH + PAYMENT-SAFE DUE ROOT ===== -->
+<style id="v241-central-due-style">
+.v241CutoffBadge{display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border:1px solid #c8d8ea;border-radius:10px;background:#f7fbff;font-size:12px;font-weight:800;color:#234b70}
+.v241CutoffBadge.saved{background:#edf9f0;border-color:#b8dec1;color:#1f6a35}
+.v241CutoffNote{grid-column:1/-1;font-size:11px;color:#536b80;margin-top:2px}
+.v241Unsaved{background:#fff8e7;border-color:#ecd59b;color:#7c5b08}
+</style>
+<script id="v241-central-class-due-root">
+(function(){
+  'use strict';
+  if(window.__LDM_V241_CENTRAL_DUE__)return;
+  window.__LDM_V241_CENTRAL_DUE__=true;
+
+  const q=id=>document.getElementById(id);
+  const n=v=>Number.isFinite(Number(v))?Number(v):0;
+  const tx=v=>String(v??'').trim();
+  const sess=()=>String(window.school?.academic_session||window.school?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
+  const nowMonth=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
+  const active=s=>!['inactive','deleted','trashed','recycled','archived','left','withdrawn'].includes(String(s||'active').toLowerCase());
+  const monthOK=m=>/^\d{4}-(0[1-9]|1[0-2])$/.test(String(m||''));
+  const monthLess=(a,b)=>String(a||'')<String(b||'');
+  const classKey=c=>tx(c).toLowerCase();
+  const admKey=a=>tx(a).replace(/\.0$/,'').replace(/\s+/g,'').toLowerCase();
+
+  let cutoffCache={session:'',at:0,map:new Map()};
+  const classCache=new Map();
+  const allStudentCache={at:0,session:'',rows:[]};
+  let rpcBusy=0;
+
+  async function cutoffMap(force=false){
+    const s=sess(),fresh=!force&&cutoffCache.session===s&&(Date.now()-cutoffCache.at)<60000;
+    if(fresh)return cutoffCache.map;
+    const r=await sb.from('ldm_fee_class_cutoffs').select('class_name,till_month,updated_at').eq('academic_session',s).limit(300);
+    if(r.error){
+      if(/does not exist|relation .* does not exist|PGRST/i.test(String(r.error.message||'')))return new Map();
+      throw r.error;
+    }
+    const m=new Map((r.data||[]).filter(x=>monthOK(x.till_month)).map(x=>[classKey(x.class_name),String(x.till_month)]));
+    cutoffCache={session:s,at:Date.now(),map:m};
+    return m;
+  }
+  window.ldmV241WarmClassCutoffs=()=>cutoffMap(false);
+  window.ldmV241GetClassCutoffSync=function(cls){return cutoffCache.session===sess()?cutoffCache.map.get(classKey(cls))||'':''};
+
+  async function studentRowsAll(){
+    const s=sess();
+    if(allStudentCache.session===s&&(Date.now()-allStudentCache.at)<60000&&allStudentCache.rows.length)return allStudentCache.rows;
+    const out=[];let from=0;const step=1000;
+    for(let guard=0;guard<6;guard++){
+      const r=await sb.from('students').select('admission_no,class_name,status').order('id').range(from,from+step-1);
+      if(r.error)throw r.error;
+      const rows=(r.data||[]).filter(x=>x.admission_no&&active(x.status));out.push(...rows);
+      if((r.data||[]).length<step)break;from+=step;
+    }
+    out.forEach(x=>classCache.set(admKey(x.admission_no),tx(x.class_name)));
+    allStudentCache={session:s,at:Date.now(),rows:out};return out;
+  }
+
+  async function classMapFor(adms){
+    const list=[...new Set((adms||[]).map(tx).filter(Boolean))],missing=list.filter(a=>!classCache.has(admKey(a)));
+    for(let i=0;i<missing.length;i+=200){
+      const r=await sb.from('students').select('admission_no,class_name,status').in('admission_no',missing.slice(i,i+200)).limit(1000);
+      if(r.error)throw r.error;
+      (r.data||[]).forEach(x=>classCache.set(admKey(x.admission_no),tx(x.class_name)));
+    }
+    return classCache;
+  }
+
+  async function adjustmentMap(adms,session){
+    const map=new Map(),list=[...new Set((adms||[]).map(tx).filter(Boolean))];
+    for(let i=0;i<list.length;i+=200){
+      const r=await sb.from('ldm_fee_balance_adjustments').select('admission_no,till_month,target_due,updated_at').eq('academic_session',session).in('admission_no',list.slice(i,i+200));
+      if(r.error){
+        if(/does not exist|relation .* does not exist/i.test(String(r.error.message||'')))return map;
+        throw r.error;
+      }
+      for(const x of (r.data||[])){
+        const k=admKey(x.admission_no),old=map.get(k);
+        if(!old||String(x.updated_at||'')>String(old.updated_at||''))map.set(k,x);
+      }
+    }
+    return map;
+  }
+
+  const rpcBase=(window.sb&&typeof sb.rpc==='function')?sb.rpc.bind(sb):null;
+  if(rpcBase){
+    async function rawDue(args,options){return await rpcBase('ldm_fee_due_snapshot_v2',args,options)}
+    async function smartDue(args={},options){
+      const session=String(args.p_session||sess()),requested=monthOK(args.p_until_month)?String(args.p_until_month):nowMonth();
+      let admissions=Array.isArray(args.p_admission_nos)?[...new Set(args.p_admission_nos.map(tx).filter(Boolean))]:null;
+      if(admissions===null){admissions=(await studentRowsAll()).map(x=>tx(x.admission_no)).filter(Boolean)}
+      if(!admissions.length)return {data:[],error:null,status:200,statusText:'OK'};
+
+      const [cuts,classes]=await Promise.all([cutoffMap(false),classMapFor(admissions)]);
+      const groups=new Map(),effective=new Map();
+      for(const adm of admissions){
+        const cls=classes.get(admKey(adm))||'',cut=cuts.get(classKey(cls))||requested,ym=monthOK(cut)?cut:requested;
+        effective.set(admKey(adm),ym);if(!groups.has(ym))groups.set(ym,[]);groups.get(ym).push(adm);
+      }
+
+      const newMap=new Map();
+      for(const [ym,list] of groups){
+        for(let i=0;i<list.length;i+=300){
+          const r=await rawDue({...args,p_admission_nos:list.slice(i,i+300),p_until_month:ym},options);
+          if(r.error)return r;
+          (r.data||[]).forEach(x=>newMap.set(admKey(x.admission_no),{...x,_v241_till:ym}));
+        }
+      }
+
+      /* Payment-safe carry-forward:
+         A historical manual target remains the balance truth at its own till_month.
+         When the class cutoff moves forward, only the net new scheduled amount after
+         that old month is added. Payments already reflected in the old snapshot stay
+         deducted, so paid/partial students never get locked at a stale zero/old due. */
+      let adjustments=new Map();
+      try{adjustments=await adjustmentMap(admissions,session)}catch(e){console.warn('V241 adjustment read',e?.message||e)}
+      const oldGroups=new Map();
+      for(const adm of admissions){
+        const a=adjustments.get(admKey(adm)),u=effective.get(admKey(adm));
+        if(a&&monthOK(a.till_month)&&monthLess(a.till_month,u)){
+          const t=String(a.till_month);if(!oldGroups.has(t))oldGroups.set(t,[]);oldGroups.get(t).push(adm);
+        }
+      }
+      const oldMap=new Map();
+      for(const [ym,list] of oldGroups){
+        for(let i=0;i<list.length;i+=300){
+          const r=await rawDue({...args,p_admission_nos:list.slice(i,i+300),p_until_month:ym},options);
+          if(r.error)continue;
+          (r.data||[]).forEach(x=>oldMap.set(admKey(x.admission_no),x));
+        }
+      }
+
+      const data=[];
+      for(const adm of admissions){
+        const k=admKey(adm),cur=newMap.get(k);if(!cur)continue;
+        const a=adjustments.get(k),old=oldMap.get(k);
+        if(a&&old&&monthOK(a.till_month)&&monthLess(a.till_month,cur._v241_till)){
+          const deltaScheduled=n(cur.scheduled_due)-n(old.scheduled_due);
+          cur.current_due=Math.max(0,n(old.current_due)+deltaScheduled);
+          cur.v241_payment_safe=true;
+          cur.v241_baseline_till=String(a.till_month);
+        }
+        cur.v241_class_till=cur._v241_till;delete cur._v241_till;data.push(cur);
+      }
+      return {data,error:null,status:200,statusText:'OK'};
+    }
+
+    sb.rpc=async function(fn,args,options){
+      if(fn!=='ldm_fee_due_snapshot_v2'||rpcBusy)return await rpcBase(fn,args,options);
+      rpcBusy++;
+      try{return await smartDue(args||{},options)}catch(e){
+        console.warn('V241 central snapshot fallback',e?.message||e);
+        return await rpcBase(fn,args,options);
+      }finally{rpcBusy--}
+    };
+  }
+
+  async function getSavedCutoff(cls){const m=await cutoffMap(false);return m.get(classKey(cls))||''}
+  async function saveCutoff(cls,ym){
+    cls=tx(cls);ym=tx(ym);if(!cls)throw new Error('पहले Class चुनें');if(!monthOK(ym))throw new Error('Valid Due Till Month चुनें');
+    const row={academic_session:sess(),class_name:cls,till_month:ym,updated_by:window.user?.id||window.profile?.id||null,updated_at:new Date().toISOString()};
+    const r=await sb.from('ldm_fee_class_cutoffs').upsert(row,{onConflict:'academic_session,class_name'}).select('class_name,till_month').single();
+    if(r.error)throw r.error;await cutoffMap(true);return r.data;
+  }
+  window.ldmV241SaveClassCutoff=saveCutoff;
+
+  const dueMasterBase=window.v6422DueMaster;
+  const dueLoadBase=window.v6422LoadDueRows;
+
+  function paintCutoffStatus(cls,ym,saved){
+    const b=q('v241CutoffStatus');if(!b)return;
+    if(!cls){b.className='v241CutoffBadge';b.textContent='All Classes: each class uses its own saved Till Month';return}
+    b.className='v241CutoffBadge '+(saved?'saved':'v241Unsaved');
+    b.textContent=saved?`Central Till Saved: ${ym}`:`Not saved yet • select month and Save Till Month`;
+  }
+
+  async function applySavedCutoff(load=true){
+    const cls=tx(q('v6422DueClass')?.value),inp=q('v6422DueMonth');if(!inp)return;
+    if(!cls){paintCutoffStatus('',inp.value,false);if(load&&typeof dueLoadBase==='function')await dueLoadBase();return}
+    let saved='';try{saved=await getSavedCutoff(cls)}catch(e){console.warn(e)}
+    if(saved)inp.value=saved;paintCutoffStatus(cls,inp.value,!!saved);
+    if(load&&typeof dueLoadBase==='function')await dueLoadBase();
+    setTimeout(()=>{
+      document.querySelectorAll('#v6422DueRows .v200DueSaved').forEach(el=>{
+        const m=String(el.textContent||'').match(/till\s+(\d{4}-\d{2})/i);
+        if(m&&saved&&m[1]!==saved)el.textContent=String(el.textContent||'').replace(/^Saved/i,'Previous baseline')+' • Central Till '+saved;
+      });
+    },0);
+  }
+
+  if(typeof dueMasterBase==='function'){
+    window.v6422DueMaster=async function(){
+      const r=await dueMasterBase.apply(this,arguments);
+      const tool=q('v6422DueLoad')?.parentElement,cls=q('v6422DueClass'),inp=q('v6422DueMonth');
+      if(tool&&!q('v241SaveTill')){
+        const btn=document.createElement('button');btn.id='v241SaveTill';btn.className='primary';btn.textContent='💾 Save Till Month';
+        btn.onclick=async()=>{try{const c=tx(cls?.value),ym=tx(inp?.value);await saveCutoff(c,ym);window.toast?.(`Class ${c} • Central Due Till ${ym} saved`);await applySavedCutoff(true);window.ldmMarkDataDirty?.('fees')}catch(e){window.toast?.(e?.message||String(e))}};
+        const badge=document.createElement('span');badge.id='v241CutoffStatus';badge.className='v241CutoffBadge';
+        tool.append(btn,badge);
+        const note=document.createElement('div');note.className='v241CutoffNote';note.textContent='Month बदलने के बाद Save Till Month दबाएँ. Payment होने पर central due अपने-आप घटेगा; receipt/history सुरक्षित रहेगी.';tool.append(note);
+      }
+      if(cls){cls.onchange=()=>applySavedCutoff(true)}
+      if(inp){inp.onchange=()=>{const c=tx(cls?.value);paintCutoffStatus(c,inp.value,false)}}
+      await applySavedCutoff(true);return r;
+    };
+    try{v6422DueMaster=window.v6422DueMaster;v90DueFeeMonitor=window.v6422DueMaster}catch(_e){}
+  }
+
+  if(typeof dueLoadBase==='function'){
+    window.v6422LoadDueRows=async function(){
+      const cls=tx(q('v6422DueClass')?.value),inp=q('v6422DueMonth');
+      if(cls&&inp){try{const saved=await getSavedCutoff(cls);if(saved)inp.value=saved;paintCutoffStatus(cls,inp.value,!!saved)}catch(_e){}}
+      const r=await dueLoadBase.apply(this,arguments);
+      const saved=cls?await getSavedCutoff(cls).catch(()=> ''):'';
+      setTimeout(()=>document.querySelectorAll('#v6422DueRows .v200DueSaved').forEach(el=>{const m=String(el.textContent||'').match(/till\s+(\d{4}-\d{2})/i);if(m&&saved&&m[1]!==saved)el.textContent=String(el.textContent||'').replace(/^Saved/i,'Previous baseline')+' • Central Till '+saved}),0);
+      return r;
+    };
+    try{v6422LoadDueRows=window.v6422LoadDueRows}catch(_e){}
+  }
+
+  /* Warm class cutoffs before Excel center opens, so exported Due Till Month is the class central month. */
+  for(const name of ['studentExcelTools','studentExcelCenter','studentDataHub']){
+    const base=window[name];if(typeof base==='function'&&!base.__v241){const f=async function(){try{await cutoffMap(false)}catch(_e){}return await base.apply(this,arguments)};f.__v241=true;window[name]=f;try{globalThis[name]=f}catch(_e){}}
+  }
+  const classExcelBase=window.v76DownloadClassFeeExcel;
+  if(typeof classExcelBase==='function')window.v76DownloadClassFeeExcel=async function(){try{await cutoffMap(false)}catch(_e){}return await classExcelBase.apply(this,arguments)};
+
+  /* Refresh data caches only after meaningful writes, never by background polling. */
+  const payBase=window.v105RecordStudentPayment;
+  if(typeof payBase==='function')window.v105RecordStudentPayment=async function(){const r=await payBase.apply(this,arguments);allStudentCache.at=0;try{window.ldmMarkDataDirty?.('fees')}catch(_e){}return r};
+
+  window.LDM_CENTRAL_FEE_BUILD='V241-CLASS-TILL-PAYMENT-SAFE-2026-10-04';
+})();
+</script>
+<!-- ===== END V241 CENTRAL CLASS TILL MONTH + PAYMENT-SAFE DUE ROOT ===== -->
 </body>
 </html>
