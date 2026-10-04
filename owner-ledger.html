@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="build" content="V236-OWNER-LEDGER-2026-10-04">
+<title>Owner Money Ledger • L D Modern Education Academy</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#eef4f8;--card:#fff;--ink:#17334f;--muted:#64748b;--line:#d8e5ee;--blue:#1768df;--green:#087a5c;--red:#b42318}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Nirmala UI","Segoe UI",Arial,sans-serif}
+button,input,select,textarea{font:inherit}.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:10px 12px;background:linear-gradient(135deg,#0f2944,#0f766e);color:#fff}.top b{font-size:15px}.top small{display:block;color:#dcecf5}.sp{flex:1}
+.btn{border:1px solid #cad9e4;background:#fff;color:#193d5a;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.btn.green{background:var(--green);color:#fff;border-color:var(--green)}
+.wrap{max-width:1180px;margin:auto;padding:12px}.hero{background:linear-gradient(135deg,#123d64,#1768df 55%,#0b8568);color:#fff;border-radius:18px;padding:16px;box-shadow:0 12px 28px #123d6418}.hero h1{font-size:22px;margin:2px 0 6px}.hero p{margin:0;color:#eaf5ff}
+.note{margin:10px 0;padding:10px 12px;background:#f7fbff;border:1px solid #d8e7f2;border-radius:11px;color:#4c667e;font-size:11px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0}.stat,.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px;box-shadow:0 7px 18px #123d6408}.stat small{display:block;color:var(--muted);font-weight:800}.stat b{display:block;font-size:22px;margin-top:4px}.recv b{color:var(--green)}.pay b{color:var(--red)}
+.grid{display:grid;grid-template-columns:1fr 1.3fr;gap:10px}.form{display:grid;grid-template-columns:1fr 1fr;gap:8px}.form label{display:grid;gap:4px;font-size:11px;font-weight:800;color:#415e78}.form input,.form select,.form textarea,.search{width:100%;padding:10px;border:1px solid #cad9e4;border-radius:9px;background:#fff}.form textarea{min-height:74px;resize:vertical}.full{grid-column:1/-1}.actions{display:flex;gap:7px;flex-wrap:wrap}
+.tableWrap{overflow:auto;border:1px solid #e1eaf1;border-radius:11px}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{padding:9px 8px;border-bottom:1px solid #e9eff4;text-align:left;font-size:11px;vertical-align:top}.table th{background:#f5f9fc;color:#52697d}.pill{display:inline-flex;padding:4px 7px;border-radius:999px;background:#eef4fa;font-size:10px;font-weight:850}
+.partyPos.recv{color:var(--green);font-weight:900}.partyPos.pay{color:var(--red);font-weight:900}.empty{text-align:center;padding:24px;color:var(--muted)}
+#printRoot{display:none}.a4{width:210mm;min-height:297mm;margin:auto;background:#fff;color:#111;padding:12mm 13mm;font-family:"Nirmala UI",Arial,sans-serif}.a4 h1{text-align:center;margin:0}.a4 h2{text-align:center;margin:3mm 0 6mm}.a4 table{width:100%;border-collapse:collapse;font-size:9pt}.a4 th,.a4 td{border:1px solid #aaa;padding:2mm}.a4 .meta{display:grid;grid-template-columns:1fr 1fr;gap:2mm 8mm;margin:5mm 0;font-size:10pt}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.grid,.form{grid-template-columns:1fr}.full{grid-column:auto}.top{flex-wrap:wrap}.top .sp{display:none}}
+@media print{body>*{display:none!important}#printRoot{display:block!important}.a4{width:210mm!important;min-height:297mm!important;margin:0!important}@page{size:A4 portrait;margin:0}}
+</style>
+</head>
+<body>
+<header class="top">
+<button class="btn" onclick="backERP()">← ERP</button>
+<div><b>💰 Owner Money Ledger</b><small>लेना • देना • Party-wise balance • Owner only</small></div>
+<div class="sp"></div><button class="btn" onclick="loadAll()">↻ Refresh</button>
+</header>
+<main class="wrap">
+<section class="hero"><small>LOW LOAD • NO POLLING • NO REALTIME</small><h1>मालिक लेन-देन केंद्र</h1><p>School Fees से अलग निजी/व्यावसायिक लेन-देन। Print/PDF browser में बनेगा, Supabase Storage में नहीं।</p></section>
+<div id="status" class="note">Owner verification…</div>
+<section class="stats">
+<div class="stat recv"><small>कुल लेना है</small><b id="recv">₹0</b></div>
+<div class="stat pay"><small>कुल देना है</small><b id="pay">₹0</b></div>
+<div class="stat"><small>Parties</small><b id="parties">0</b></div>
+<div class="stat"><small>Recent Entries</small><b id="entries">0</b></div>
+</section>
+<section class="grid">
+<div class="card">
+<h3>+ नया लेन-देन</h3>
+<div class="form">
+<label>Party Name<input id="party" maxlength="120" autocomplete="off"></label>
+<label>Mobile<input id="mobile" inputmode="tel" maxlength="20" autocomplete="off"></label>
+<label>Type<select id="type"><option value="gave">मैंने दिया</option><option value="took">मैंने लिया</option><option value="received_back">पैसा वापस मिला</option><option value="paid_back">पैसा वापस दिया</option></select></label>
+<label>Amount<input id="amount" type="number" min="0.01" step="0.01"></label>
+<label>Date<input id="date" type="date"></label>
+<label>Due Date<input id="due" type="date"></label>
+<label>Mode<select id="mode"><option>Cash</option><option>UPI</option><option>Bank</option><option>Cheque</option><option>Other</option></select></label>
+<label>Category<select id="category"><option>Personal</option><option>School-related</option><option>Business</option><option>Advocate</option><option>Developer</option><option>Other</option></select></label>
+<label class="full">Purpose<input id="purpose" maxlength="200"></label>
+<label class="full">Note<textarea id="note" maxlength="500"></textarea></label>
+<div class="full actions"><button class="btn primary" onclick="saveEntry()">Save Entry</button><button class="btn" onclick="printAll()">Preview / Print / PDF</button></div>
+</div>
+<p class="note">गलत entry को delete न करें। Correction के लिए बराबर compensating entry बनाएँ—जैसे गलत “मैंने दिया” को neutral करने के लिए “पैसा वापस मिला” entry।</p>
+</div>
+<div class="card">
+<h3>Party-wise Balance</h3>
+<input id="search" class="search" placeholder="Name / Mobile search" oninput="render()">
+<div id="partyTable"></div>
+</div>
+</section>
+<section class="card" style="margin-top:10px"><h3>Recent Transactions</h3><div id="txnTable"></div><p class="note">Latest 200 entries only. Page खोलने/Refresh पर ही read होता है; background fetch नहीं।</p></section>
+</main>
+<div id="printRoot"></div>
+<script>
+'use strict';
+const DEFAULT_CFG={url:'https://xleagfmdueyalkdnicyr.supabase.co',key:'sb_publishable_tUcd7gPfNiTzZlZ44VM6UQ_zr045LR5'};
+let cfg=DEFAULT_CFG;try{const x=JSON.parse(localStorage.getItem('ld_v5_cloud')||'null');if(x?.url&&x?.key)cfg=x}catch(_e){}
+let sb=null,rows=[],profile=null;
+const $=id=>document.getElementById(id), E=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2}), today=()=>new Date().toISOString().slice(0,10);
+function backERP(){if(history.length>1)history.back();else location.href='./'}
+function label(t){return({gave:'मैंने दिया',took:'मैंने लिया',received_back:'वापस मिला',paid_back:'वापस दिया'})[t]||t}
+function keyOf(x){return String(x.party_name||'').trim().toLowerCase()+'|'+String(x.party_mobile||'').trim()}
+function delta(x){const a=Number(x.amount||0);if(x.entry_type==='gave')return a;if(x.entry_type==='received_back')return -a;if(x.entry_type==='took')return -a;if(x.entry_type==='paid_back')return a;return 0}
+async function authBoot(){
+ sb=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ const s=await sb.auth.getSession();if(!s.data.session)throw new Error('Login Required — पहले main ERP में login करें.');
+ const uid=s.data.session.user.id;
+ const p=await sb.from('profiles').select('id,full_name,role').eq('id',uid).maybeSingle();if(p.error)throw p.error;profile=p.data||{};
+ if(!['admin','super_admin'].includes(String(profile.role||'').toLowerCase()))throw new Error('Permission Denied — Owner/Admin only.');
+ const own=await sb.rpc('ldm_v231_is_owner');if(own.error||own.data!==true)throw new Error('Permission Denied — Primary Admin/Owner verification failed.');
+ $('status').textContent='✓ Owner verified • No background polling • No realtime';
+}
+async function loadAll(){
+ const r=await sb.from('ldm_owner_money_ledger').select('id,party_name,party_mobile,entry_type,amount,entry_date,due_date,mode,category,purpose,note,status,created_at').order('entry_date',{ascending:false}).order('created_at',{ascending:false}).limit(200);
+ if(r.error)throw r.error;rows=r.data||[];render();
+}
+function summary(){
+ const m=new Map();for(const x of rows){const k=keyOf(x),o=m.get(k)||{name:x.party_name||'—',mobile:x.party_mobile||'',bal:0};o.bal+=delta(x);m.set(k,o)}
+ let recv=0,pay=0;for(const o of m.values()){if(o.bal>0)recv+=o.bal;else if(o.bal<0)pay+=-o.bal}
+ return {m,recv,pay};
+}
+function render(){
+ const s=summary(),q=String($('search').value||'').trim().toLowerCase();
+ $('recv').textContent=money(s.recv);$('pay').textContent=money(s.pay);$('parties').textContent=s.m.size.toLocaleString('en-IN');$('entries').textContent=rows.length.toLocaleString('en-IN');
+ let parties=[...s.m.values()].filter(o=>!q||(`${o.name} ${o.mobile}`).toLowerCase().includes(q)).sort((a,b)=>Math.abs(b.bal)-Math.abs(a.bal));
+ $('partyTable').innerHTML=parties.length?`<div class="tableWrap"><table class="table"><thead><tr><th>Party</th><th>Balance</th><th>Position</th></tr></thead><tbody>${parties.map(o=>`<tr><td><b>${E(o.name)}</b><br><small>${E(o.mobile)}</small></td><td>${money(Math.abs(o.bal))}</td><td class="partyPos ${o.bal>0?'recv':'pay'}">${o.bal>0?'लेना है':o.bal<0?'देना है':'Settled'}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No party found.</div>';
+ $('txnTable').innerHTML=rows.length?`<div class="tableWrap"><table class="table"><thead><tr><th>Date</th><th>Party</th><th>Type</th><th>Amount</th><th>Due</th><th>Mode</th><th>Purpose</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${E(x.entry_date)}</td><td><b>${E(x.party_name)}</b><br><small>${E(x.party_mobile||'')}</small></td><td>${E(label(x.entry_type))}</td><td><b>${money(x.amount)}</b></td><td>${E(x.due_date||'—')}</td><td>${E(x.mode||'—')}</td><td>${E(x.purpose||'—')}<br><small>${E(x.category||'')}</small></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">अभी कोई entry नहीं है।</div>';
+}
+async function saveEntry(){
+ const v=id=>String($(id).value||'').trim(),amount=Number(v('amount'));if(!v('party')||!(amount>0))return alert('Party Name और सही Amount भरें.');
+ const rec={party_name:v('party'),party_mobile:v('mobile')||null,entry_type:v('type'),amount,entry_date:v('date')||today(),due_date:v('due')||null,mode:v('mode'),category:v('category'),purpose:v('purpose')||null,note:v('note')||null,status:'open'};
+ const r=await sb.from('ldm_owner_money_ledger').insert(rec);if(r.error)return alert(r.error.message);
+ ['party','mobile','amount','due','purpose','note'].forEach(id=>$(id).value='');$('date').value=today();await loadAll();alert('लेन-देन सुरक्षित हुआ.');
+}
+function printAll(){
+ const s=summary(),trs=rows.map(x=>`<tr><td>${E(x.entry_date)}</td><td>${E(x.party_name)}</td><td>${E(label(x.entry_type))}</td><td>${money(x.amount)}</td><td>${E(x.purpose||'')}</td></tr>`).join('');
+ $('printRoot').innerHTML=`<article class="a4"><h1>L D MODERN EDUCATION ACADEMY</h1><h2>Owner Money Ledger Statement</h2><div class="meta"><div><b>Total Receivable:</b> ${money(s.recv)}</div><div><b>Total Payable:</b> ${money(s.pay)}</div><div><b>Entries:</b> ${rows.length}</div><div><b>Generated:</b> ${E(new Date().toLocaleString('en-IN'))}</div></div><table><thead><tr><th>Date</th><th>Party</th><th>Type</th><th>Amount</th><th>Purpose</th></tr></thead><tbody>${trs||'<tr><td colspan="5">No entries</td></tr>'}</tbody></table><p style="margin-top:8mm;font-size:9pt">Browser Print → Save as PDF. PDF is not stored in Supabase.</p></article>`;
+ window.print();
+}
+(async()=>{try{$('date').value=today();await authBoot();await loadAll()}catch(e){$('status').textContent='⚠ '+String(e?.message||e);$('status').style.background='#fff1f2';$('status').style.borderColor='#fecdd3';$('status').style.color='#9f1239'}})();
+</script>
+</body>
+</html>
