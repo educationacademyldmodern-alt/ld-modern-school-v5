@@ -31,7 +31,7 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
 <meta charset="utf-8"><meta name="ld-modern-build" content="V210-PREMIUM-ROOT-FINAL-2026-10-03"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V236-LOGIN-FIX-ADMISSION-OWNER-2026-10-04"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V237-ADMIN-BACK-ROOT-FIX-2026-10-04"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -14324,6 +14324,9 @@ Canonical V138 popstate + V155 v90Back own navigation. -->
   let exitPromptBusy=false;
 
   function armRootGuard(){
+    /* V238: Admin navigation is exclusively owned by the V237/V238 canonical root.
+       Keep this legacy V181 guard only for Teacher/Parent/older role surfaces. */
+    if(window.__LDM_V237_NAV_ROOT && ['admin','super_admin','principal'].includes(role()))return;
     if(!erpVisible()||currentRoute()!=='dashboard'||exitApproved)return;
 
     try{
@@ -14483,6 +14486,9 @@ async function finalHome(){
 
 
   window.addEventListener('popstate',async function(e){
+  /* V238: avoid two competing popstate owners for Admin/Principal.
+     The final root listener at the end of the file owns Admin browser/mobile Back. */
+  if(window.__LDM_V237_NAV_ROOT && ['admin','super_admin','principal'].includes(role()))return;
   if(exitApproved)return;
 
   const st=e.state||{};
@@ -16477,5 +16483,239 @@ window.v234SaveAdmissionPrefs=function(){let title=String(q('v234AdmTitle')?.val
 window.v234RefreshAdmissionForm=function(){render()};
 })();
 </script>
+<!-- ===== V239 FINAL ROOT NAVIGATION • ADMIN BACK + MOBILE BACK GUARD • RECHECKED ===== -->
+<style id="v237-final-navigation-style">
+/* Canonical Admin Back/Home must remain visible on every internal Admin route. */
+body.ldmSurfaceERP #erp:not(.hidden) #v90BackBtn,
+body.ldmSurfaceERP #erp:not(.hidden) #v90HomeBtn{
+  display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+}
+body.ldmSurfaceERP #erp.ldmAdminCanonical #v90BackBtn,
+body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
+  position:static!important;inset:auto!important;
+}
+</style>
+<script id="v237-final-navigation-script">
+(function(){'use strict';
+  if(window.__LDM_V237_NAV_ROOT)return;
+  window.__LDM_V237_NAV_ROOT=true;
+
+  const ADMIN_ROLES=new Set(['admin','super_admin','principal']);
+  const role=()=>String(window.profile?.role||((typeof profile!=='undefined'&&profile)?profile.role:'')||'').trim().toLowerCase();
+  const isAdmin=()=>ADMIN_ROLES.has(role());
+  const erpVisible=()=>{const e=document.getElementById('erp');return !!(e&&!e.classList.contains('hidden')&&document.body?.classList.contains('ldmSurfaceERP'))};
+  const routeNow=()=>String(window.__v90Route||sessionStorage.getItem('ldm_current_route')||'dashboard');
+  const normStack=a=>{let h=Array.isArray(a)?a.map(x=>String(x||'dashboard')).filter(Boolean):[];if(!h.length)h=['dashboard'];if(h[0]!=='dashboard')h.unshift('dashboard');if(h.length>40)h=h.slice(-40);return h};
+  const readStack=()=>{try{const x=JSON.parse(sessionStorage.getItem('ldm_nav_history')||'null');if(Array.isArray(x)&&x.length)return normStack(x)}catch(_e){}return normStack(window.__v90History)};
+  function saveStack(h,route){
+    h=normStack(h);route=String(route||h[h.length-1]||'dashboard');
+    window.__v90History=h.slice();window.__v90Route=route;
+    try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(h));sessionStorage.setItem('ldm_current_route',route);sessionStorage.setItem('ldm_surface','erp')}catch(_e){}
+    return h;
+  }
+  function stackSame(a,b){a=normStack(a);b=normStack(b);return a.length===b.length&&a.every((x,i)=>x===b[i])}
+
+  /*
+     Browser history is only a guard. ERP navigation itself is owned by one internal stack.
+     The history entry below the current route always represents the exact previous ERP route,
+     therefore Android/Browser Back can never fall through to the public website between modules.
+  */
+  function installBrowserPair(route,h,force=false){
+    if(!isAdmin()||!erpVisible())return;
+    h=normStack(h);route=String(route||h[h.length-1]||'dashboard');
+    if(h[h.length-1]!==route){const i=h.lastIndexOf(route);h=i>=0?h.slice(0,i+1):h.concat(route)}
+    const prevStack=h.length>1?h.slice(0,-1):['dashboard'];
+    const prevRoute=String(prevStack[prevStack.length-1]||'dashboard');
+    const st=history.state||{};
+    if(!force&&st.ldmV237Trap&&String(st.route||'')===route&&stackSame(st.stack,h))return;
+    try{
+      history.replaceState({ldmInternal:true,ldmV237Base:true,route:prevRoute,stack:prevStack.slice(),ldmV237From:route},'',location.href);
+      history.pushState({ldmInternal:true,ldmV237Trap:true,route,stack:h.slice()},'',location.href);
+    }catch(_e){}
+  }
+
+  function ensureAdminControls(){
+    if(!isAdmin()||!erpVisible())return false;
+    try{window.ldmCanonicalAdminHeader?.()}catch(_e){}
+    const top=document.querySelector('#erp .erpTop');if(!top)return false;
+    let back=document.getElementById('v90BackBtn');
+    if(!back){back=document.createElement('button');back.id='v90BackBtn';back.type='button';back.className='v90TopBtn';top.appendChild(back)}
+    let home=document.getElementById('v90HomeBtn');
+    if(!home){home=document.createElement('button');home.id='v90HomeBtn';home.type='button';home.className='v90TopBtn';top.appendChild(home)}
+    back.textContent='← Back';home.textContent='🏠 Home';
+    back.hidden=false;home.hidden=false;back.disabled=false;home.disabled=false;
+    back.style.display='flex';home.style.display='flex';
+    back.onclick=function(e){e?.preventDefault?.();e?.stopPropagation?.();return window.v90Back?.()};
+    home.onclick=function(e){e?.preventDefault?.();e?.stopPropagation?.();return window.v90GoHome?.()};
+    return true;
+  }
+
+  let headerBusy=false,headerObserver=null;
+  function watchHeader(){
+    if(headerObserver||!window.MutationObserver)return;
+    const top=document.querySelector('#erp .erpTop');if(!top)return;
+    headerObserver=new MutationObserver(()=>{
+      if(headerBusy)return;headerBusy=true;
+      queueMicrotask(()=>{try{ensureAdminControls()}finally{headerBusy=false}});
+    });
+    headerObserver.observe(top,{childList:true,subtree:false,attributes:true,attributeFilter:['style','class','hidden']});
+  }
+
+  let guardBusy=false,exitPromptBusy=false;
+  function rootExitPrompt(){
+    if(exitPromptBusy)return false;exitPromptBusy=true;
+    try{
+      const ok=window.confirm('ERP Dashboard से बाहर निकलना है?\n\nCancel दबाने पर ERP में ही रहेंगे।');
+      if(!ok)return false;
+      /* Never send Back to the public website. Try to close only when the browser permits it. */
+      try{window.close()}catch(_e){}
+      setTimeout(()=>{
+        if(document.visibilityState==='visible'&&erpVisible()){
+          try{window.toast?.('ERP सुरक्षित है। Browser tab बंद करें या Logout / Website button का उपयोग करें।')}catch(_e){}
+          const h=['dashboard'];saveStack(h,'dashboard');installBrowserPair('dashboard',h,true);ensureAdminControls();
+        }
+      },180);
+      return true;
+    }finally{setTimeout(()=>{exitPromptBusy=false},220)}
+  }
+
+  function centralPush(route){
+    route=String(route||'dashboard');
+    if(window.__v237NoPush||window.__v155NoPush){window.__v90Route=route;return route}
+    let h=readStack();
+    if(route==='dashboard')h=['dashboard'];
+    else if(h[h.length-1]!==route){h.push(route);if(h.length>40)h=h.slice(-40)}
+    saveStack(h,route);installBrowserPair(route,h);return route;
+  }
+  window.v90Push=centralPush;
+  try{if(typeof v90Push!=='undefined')v90Push=centralPush}catch(_e){}
+
+  const renderBase=window.render;
+  if(typeof renderBase==='function'){
+    const wrappedRender=async function(route='dashboard'){
+      const next=String(route||'dashboard');
+      if(isAdmin())centralPush(next);
+      const out=await renderBase.apply(this,arguments);
+      setTimeout(()=>{ensureAdminControls();watchHeader();if(isAdmin()&&erpVisible())installBrowserPair(routeNow(),readStack())},0);
+      return out;
+    };
+    wrappedRender.__v237Root=true;window.render=wrappedRender;
+    try{render=wrappedRender}catch(_e){}
+  }
+
+  async function renderNoPush(route){
+    const a=window.__v237NoPush,b=window.__v155NoPush;window.__v237NoPush=true;window.__v155NoPush=true;
+    try{return await window.render?.(route)}finally{window.__v237NoPush=a;window.__v155NoPush=b}
+  }
+
+  async function centralBack(){
+    if(!isAdmin())return false;
+    let h=readStack(),here=routeNow();
+    if(here==='dashboard'||h.length<=1){saveStack(['dashboard'],'dashboard');installBrowserPair('dashboard',['dashboard'],true);return rootExitPrompt()}
+    if(h[h.length-1]===here)h.pop();else{const i=h.lastIndexOf(here);h=i>0?h.slice(0,i):h.slice(0,-1)}
+    if(!h.length)h=['dashboard'];const prev=String(h[h.length-1]||'dashboard');saveStack(h,prev);
+    try{window.ldmDeactivateActiveModule?.(prev)}catch(_e){}
+    const out=await renderNoPush(prev);
+    installBrowserPair(prev,h,true);ensureAdminControls();
+    try{window.scrollTo(0,0)}catch(_e){}
+    return out;
+  }
+
+  async function centralHome(){
+    if(!isAdmin())return typeof window.erpGoHome==='function'&&window.erpGoHome!==centralHome?window.erpGoHome():false;
+    const h=['dashboard'];saveStack(h,'dashboard');
+    try{window.ldmDeactivateActiveModule?.('dashboard')}catch(_e){}
+    const out=await renderNoPush('dashboard');installBrowserPair('dashboard',h,true);ensureAdminControls();
+    try{window.scrollTo(0,0)}catch(_e){}
+    return out;
+  }
+  window.v90Back=centralBack;window.v90GoHome=centralHome;window.erpGoHome=centralHome;
+  try{v90GoHome=centralHome}catch(_e){}
+
+  /* Keep Back/Home visible AND checkpoint direct legacy modules that bypass render().
+     Several older Admin centers set __v90Route and call head()/v90Head()/v90InstallShell directly.
+     Capture those routes into the same canonical stack so exact Back works everywhere. */
+  function checkpointDirectRoute(route){
+    if(!isAdmin()||!erpVisible())return;
+    const r=String(route||routeNow()||'dashboard');
+    if(!r)return;
+    const h=readStack();
+    if(h[h.length-1]!==r)centralPush(r);
+    else{saveStack(h,r);installBrowserPair(r,h)}
+    ensureAdminControls();watchHeader();
+  }
+
+  const headBase=window.head;
+  if(typeof headBase==='function'&&!headBase.__v237Root){
+    const h=function(){const r=headBase.apply(this,arguments);queueMicrotask(()=>checkpointDirectRoute(routeNow()));return r};
+    h.__v237Root=true;window.head=h;try{head=h}catch(_e){}
+  }
+
+  const v90HeadBase=window.v90Head;
+  if(typeof v90HeadBase==='function'&&!v90HeadBase.__v239Root){
+    const h90=function(){const r=v90HeadBase.apply(this,arguments);queueMicrotask(()=>checkpointDirectRoute(routeNow()));return r};
+    h90.__v239Root=true;window.v90Head=h90;try{v90Head=h90}catch(_e){}
+  }
+
+  const shellBase=window.v90InstallShell;
+  if(typeof shellBase==='function'&&!shellBase.__v239Root){
+    const sh=function(route){const r=shellBase.apply(this,arguments);queueMicrotask(()=>checkpointDirectRoute(route||routeNow()));return r};
+    sh.__v239Root=true;window.v90InstallShell=sh;try{v90InstallShell=sh}catch(_e){}
+  }
+
+  const openBase=window.openERP;
+  if(typeof openBase==='function'&&!openBase.__v237Root){
+    const o=async function(){const r=await openBase.apply(this,arguments);setTimeout(()=>{if(isAdmin()&&erpVisible()){let h=readStack(),rt=routeNow();if(rt==='dashboard')h=['dashboard'];saveStack(h,rt);ensureAdminControls();watchHeader();installBrowserPair(rt,h,true)}},35);return r};o.__v237Root=true;window.openERP=o;try{openERP=o}catch(_e){}
+  }
+
+  /*
+     Existing legacy popstate runs first. Our V237 base state gives it the correct previous ERP route,
+     then this listener re-arms the guard. No intermediate public-page state is reachable.
+  */
+  window.addEventListener('popstate',function(e){
+    if(guardBusy||!isAdmin()||!erpVisible())return;
+    const st=e.state||{};
+    /* Expected path: Back lands on the V237 base state. If a legacy/external history
+       entry is encountered, never expose the public website: restore the current
+       internal ERP route and re-arm the browser guard instead. */
+    if(!st.ldmV237Base){
+      const safeRoute=routeNow()||'dashboard',safeStack=readStack();
+      saveStack(safeStack,safeRoute);
+      installBrowserPair(safeRoute,safeStack,true);
+      ensureAdminControls();
+      return;
+    }
+    guardBusy=true;
+    const target=String(st.route||'dashboard'),h=normStack(st.stack),from=String(st.ldmV237From||'');
+    saveStack(h,target);
+    setTimeout(async()=>{
+      try{
+        if(routeNow()!==target)await renderNoPush(target);
+        ensureAdminControls();
+        if(target==='dashboard'&&from==='dashboard'){
+          installBrowserPair('dashboard',['dashboard'],true);
+          setTimeout(()=>installBrowserPair('dashboard',['dashboard'],true),70);
+          rootExitPrompt();
+        }else{
+          installBrowserPair(target,h,true);
+          if(target==='dashboard')setTimeout(()=>installBrowserPair('dashboard',['dashboard'],true),70);
+        }
+      }catch(err){console.error('V237 mobile back',err);try{window.toast?.(err?.message||String(err))}catch(_e){}
+      }finally{setTimeout(()=>{guardBusy=false},100)}
+    },0);
+  },true);
+
+  function boot(){
+    if(!isAdmin()||!erpVisible())return;
+    let h=readStack(),r=routeNow();if(r==='dashboard')h=['dashboard'];else if(h[h.length-1]!==r)h.push(r);
+    saveStack(h,r);ensureAdminControls();watchHeader();installBrowserPair(r,h,true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,90),{once:true});else setTimeout(boot,90);
+  window.addEventListener('pageshow',()=>setTimeout(boot,20),{passive:true});
+  window.LDM_FINAL_BUILD='V239-ADMIN-BACK-DEEP-RECHECKED-2026-10-04';
+})();
+</script>
+<!-- ===== END V239 FINAL ROOT NAVIGATION ===== -->
+
 </body>
 </html>
