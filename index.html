@@ -31,7 +31,7 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
 <meta charset="utf-8"><meta name="ld-modern-build" content="V210-PREMIUM-ROOT-FINAL-2026-10-03"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V232-FINAL-LAZY-ASSEMBLY-2026-10-03"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V233-FINAL-ROOT-CORRECTED-2026-10-04"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -16311,10 +16311,11 @@ if(typeof statsBase==='function'){
 (function(){'use strict';
  if(window.__LDM_V230_WORKSPACE)return;window.__LDM_V230_WORKSPACE=true;
  function role(){return String(window.profile?.role||'').trim().toLowerCase()}
- function allowed(){return ['admin','super_admin','principal'].includes(role())}
+ function schoolAllowed(){return ['admin','super_admin','principal'].includes(role())}
+ function ownerRole(){return ['admin','super_admin'].includes(role())}
  function openApp(file){window.open('./'+file,'_blank','noopener')}
  function card(id,icon,title,sub,file){let b=document.createElement('button');b.id=id;b.type='button';b.innerHTML=`<i>${icon}</i><b>${title}</b><small>${sub}</small><em>OPEN →</em>`;b.onclick=()=>openApp(file);return b}
- function install(){if(!allowed())return;let grid=document.querySelector('.ldmMasterGrid');if(!grid)return;if(!document.getElementById('v230UdiseCard'))grid.appendChild(card('v230UdiseCard','🏫','UDISE+ Control Center','Profile • Facilities • Students • Teachers • Readiness','udise.html'));if(!document.getElementById('v230AdvocateCard'))grid.appendChild(card('v230AdvocateCard','⚖️','Advocate Control Center','FIR/CNR • Cases • Hearings • Drafting • Legal Books','advocate.html'));if(!document.getElementById('v230DeveloperCard'))grid.appendChild(card('v230DeveloperCard','💻','ERP Builder & Developer Studio','Sector ERP • Requirements • Security Gate • Version • Delivery','developer.html'))}
+ function install(){if(!schoolAllowed())return;let grid=document.querySelector('.ldmMasterGrid');if(!grid)return;if(!document.getElementById('v230UdiseCard'))grid.appendChild(card('v230UdiseCard','🏫','UDISE+ Control Center','Profile • Facilities • Students • Teachers • Readiness','udise.html'));if(ownerRole()&&!document.getElementById('v230AdvocateCard'))grid.appendChild(card('v230AdvocateCard','⚖️','Advocate Control Center','FIR/CNR • Cases • Hearings • Drafting • Legal Books','advocate.html'));if(ownerRole()&&!document.getElementById('v230DeveloperCard'))grid.appendChild(card('v230DeveloperCard','💻','ERP Builder & Developer Studio','Sector ERP • Requirements • Security Gate • Version • Delivery','developer.html'))}
  window.ldmV230InstallWorkspace=install;
  const prev=window.render;if(typeof prev==='function')window.render=async function(){let r=await prev.apply(this,arguments);requestAnimationFrame(install);return r};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,120),{once:true});else setTimeout(install,120);
@@ -16333,15 +16334,95 @@ if(typeof statsBase==='function'){
  if(window.__LDM_V232_LAZY_LOADER)return;window.__LDM_V232_LAZY_LOADER=true;
  const ROUTE='principal_assembly',role=()=>String(window.profile?.role||'').trim().toLowerCase(),allowed=()=>['admin','super_admin','principal'].includes(role());let loadPromise=null;
  function installCard(){if(!allowed()||String(window.__v90Route||'dashboard')!=='dashboard')return;let grid=document.querySelector('.ldmMasterGrid');if(!grid||document.getElementById('v232AssemblyCard'))return;let b=document.createElement('button');b.id='v232AssemblyCard';b.type='button';b.innerHTML='<i>🌞</i><b>Morning Assembly</b><small>आज का 5 मिनट का Principal Assembly Pack</small><em>OPEN TODAY →</em>';b.onclick=()=>window.render?.(ROUTE);grid.appendChild(b)}
- function ensureModule(){if(typeof window.ldmPrincipalAssemblyDesk==='function')return Promise.resolve();if(loadPromise)return loadPromise;loadPromise=new Promise((resolve,reject)=>{let s=document.createElement('script');s.src='./assembly.js?v=V232';s.async=true;s.onload=()=>typeof window.ldmPrincipalAssemblyDesk==='function'?resolve():reject(new Error('Assembly module initialize नहीं हुआ'));s.onerror=()=>reject(new Error('assembly.js load नहीं हुआ'));document.head.appendChild(s)}).catch(e=>{loadPromise=null;throw e});return loadPromise}
+ function ensureModule(){if(typeof window.ldmPrincipalAssemblyDesk==='function')return Promise.resolve();if(loadPromise)return loadPromise;loadPromise=new Promise((resolve,reject)=>{let s=document.createElement('script');s.src='./assembly.js?v=V233';s.async=true;s.onload=()=>typeof window.ldmPrincipalAssemblyDesk==='function'?resolve():reject(new Error('Assembly module initialize नहीं हुआ'));s.onerror=()=>reject(new Error('assembly.js load नहीं हुआ'));document.head.appendChild(s)}).catch(e=>{loadPromise=null;throw e});return loadPromise}
  async function openAssembly(){if(!allowed())return window.toast?.('Admin / Principal only');try{await ensureModule();return window.ldmPrincipalAssemblyDesk?.(!!window.__v155NoPush)}catch(e){console.error('Assembly module load',e);window.toast?.('Morning Assembly module load नहीं हुआ: '+(e?.message||e))}}
  const oldDeactivate=window.ldmDeactivateActiveModule;window.ldmDeactivateActiveModule=function(nextRoute=''){if(String(window.__v90Route||'')===ROUTE&&String(nextRoute)!==ROUTE)try{window.v232Cleanup?.()}catch(_e){};return typeof oldDeactivate==='function'?oldDeactivate.apply(this,arguments):true};
  const oldRender=window.render;if(typeof oldRender==='function')window.render=async function(route){let r=String(route||'dashboard');if(r===ROUTE)return openAssembly();if(String(window.__v90Route||'')===ROUTE)try{window.v232Cleanup?.()}catch(_e){};let out=await oldRender.apply(this,arguments);requestAnimationFrame(installCard);return out};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>requestAnimationFrame(installCard),{once:true});else requestAnimationFrame(installCard);
- window.LDM_FINAL_BUILD='V232-FINAL-LAZY-ASSEMBLY-2026-10-03';
+ window.LDM_FINAL_BUILD='V233-FINAL-ROOT-CORRECTED-2026-10-04';
 })();
 </script>
 <!-- ===== END V232 LAZY PRINCIPAL ASSEMBLY LOADER ===== -->
+
+
+<!-- ===== V233 FINAL ROOT CORRECTION • CANONICAL DASHBOARD + LOW LOG ===== -->
+<style id="v233-final-root-style">
+#v233Greeting{display:flex;align-items:center;gap:11px;margin:0 0 12px;padding:12px 14px;border:1px solid #dce8f4;border-radius:15px;background:linear-gradient(110deg,#fff,#f3f9ff);box-shadow:0 7px 20px #0b4c8610;color:#173f70}
+#v233Greeting .sun{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:linear-gradient(145deg,#f59e0b,#f97316);color:#fff;font-size:21px;box-shadow:0 7px 15px #f9731630}
+#v233Greeting b{font-size:15px;line-height:1.1}#v233Greeting small{display:block;margin-top:2px;color:#6b7f94;font-size:10px;font-weight:750}
+@media(max-width:520px){#v233Greeting{padding:10px 11px;border-radius:13px}#v233Greeting .sun{width:38px;height:38px;flex-basis:38px}}
+</style>
+<script id="v233-final-root-script">
+(function(){'use strict';
+ if(window.__LDM_V233_FINAL_ROOT)return;window.__LDM_V233_FINAL_ROOT=true;
+ const role=()=>String(window.profile?.role||((typeof profile!=='undefined'&&profile)?profile.role:'')||'').trim().toLowerCase();
+ const admin=()=>['admin','super_admin','principal'].includes(role());
+ const q=id=>document.getElementById(id);
+ const routeNow=()=>String(window.__v90Route||sessionStorage.getItem('ldm_current_route')||'dashboard');
+ function greetingText(){let h=new Date().getHours();try{let p=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',hour12:false}).formatToParts(new Date()).find(x=>x.type==='hour');h=Number(p?.value??h)}catch(_e){}return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
+ function cleanLegacyGreetings(){
+   if(!admin())return;let root=q('erpContent');if(!root)return;const re=/Good Morning|Good Afternoon|Good Evening/i;
+   const known='.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting,.v6418GreetingSingleton,[data-v97-clock],#ldmAdminGreeting';
+   [...root.querySelectorAll(known)].forEach(el=>{if(el.id!=='v233Greeting'&&re.test(String(el.textContent||'')))el.remove()});
+   const dash=root.querySelector('.ldmRootAdminDash,.v114AdminDash,.v90Dash');if(dash){[...dash.children].forEach(el=>{if(el.id==='v233Greeting')return;let t=String(el.textContent||'').trim();if(re.test(t)&&!el.querySelector('button,a,input,select,textarea,table'))el.remove()})}
+ }
+ function installCanonicalGreeting(){
+   if(!admin()||routeNow()!=='dashboard')return;let root=q('erpContent'),dash=root?.querySelector('.ldmRootAdminDash,.v114AdminDash,.v90Dash');if(!dash)return;
+   cleanLegacyGreetings();let g=q('v233Greeting');if(!g){g=document.createElement('section');g.id='v233Greeting';let front=q('v185FrontDesk');if(front)front.insertAdjacentElement('beforebegin',g);else dash.prepend(g)}
+   let date='';try{date=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(new Date())}catch(_e){date=new Date().toLocaleDateString('en-IN')}
+   g.innerHTML=`<span class="sun">☀️</span><span><b>${greetingText()}${profile?.full_name?' • '+String(profile.full_name).replace(/[&<>]/g,''):''}</b><small>${date} • Admin Dashboard</small></span>`;
+ }
+ function installAssemblyCard(){
+   if(!admin()||routeNow()!=='dashboard')return;let grid=document.querySelector('.ldmMasterGrid');if(!grid||q('v232AssemblyCard'))return;let b=document.createElement('button');b.id='v232AssemblyCard';b.type='button';b.innerHTML='<i>🌞</i><b>Morning Assembly</b><small>आज का 5 मिनट का Principal Assembly Pack</small><em>OPEN TODAY →</em>';b.onclick=()=>window.render?.('principal_assembly');grid.appendChild(b)
+ }
+ function installDashboardAddons(){
+   if(!admin()||routeNow()!=='dashboard')return;
+   try{window.ldmCanonicalAdminHeader?.()}catch(_e){}try{window.v223InstallSchoolDocuments?.()}catch(_e){}try{window.v227InstallEntry?.()}catch(_e){}try{window.ldmV230InstallWorkspace?.()}catch(_e){}installAssemblyCard();installCanonicalGreeting();
+ }
+ function stopPassiveUiTimers(){
+   try{clearInterval(window.__ldmAdminGreetingTimer);window.__ldmAdminGreetingTimer=null}catch(_e){}try{clearInterval(window.__v97ClockTimer);window.__v97ClockTimer=null}catch(_e){}
+   try{if(typeof window.v62StartNotificationTimer==='function')window.v62StartNotificationTimer=function(){return false}}catch(_e){}
+ }
+ stopPassiveUiTimers();
+ /* Data changes mark dashboard dirty only. No immediate dashboard fetch/write loop. */
+ window.ldmMarkDataDirty=function(kind){try{sessionStorage.setItem('ldm_dashboard_dirty',String(Date.now()));sessionStorage.setItem('ldm_dashboard_dirty_kind',String(kind||'data'))}catch(_e){}return true};
+ /* One canonical Admin dashboard renderer. All stacked legacy dashboard wrappers are bypassed only for Admin dashboard. */
+ const previousRender=window.render;let dashPromise=null;
+ async function canonicalAdminDashboard(){
+   if(dashPromise)return dashPromise;
+   dashPromise=(async()=>{
+     try{
+       window.__v90Route='dashboard';try{sessionStorage.setItem('ldm_current_route','dashboard');sessionStorage.setItem('ldm_surface','erp')}catch(_e){}
+       cleanLegacyGreetings();
+       const fn=window.v90AdminDashboard||((typeof v90AdminDashboard==='function')?v90AdminDashboard:null);if(!fn)throw new Error('Canonical Admin Dashboard renderer unavailable');
+       await fn();installDashboardAddons();return true;
+     }finally{dashPromise=null}
+   })();return dashPromise;
+ }
+ window.render=async function(route='dashboard'){
+   const r=String(route||'dashboard');
+   if(r==='dashboard'&&admin())return canonicalAdminDashboard();
+   let out=await previousRender.apply(this,arguments);if(r==='dashboard')requestAnimationFrame(installDashboardAddons);return out;
+ };
+ try{render=window.render}catch(_e){}
+ const legacyDashboard=window.dashboard;window.dashboard=async function(){if(admin())return canonicalAdminDashboard();return typeof legacyDashboard==='function'?legacyDashboard.apply(this,arguments):undefined};try{dashboard=window.dashboard}catch(_e){}
+ /* Home never forces an extra refresh. It renders the canonical cached dashboard; dirty/first-load refresh is handled once inside dashboard logic. */
+ window.v90GoHome=async function(){
+   try{window.ldmDeactivateActiveModule?.('dashboard')}catch(_e){}window.__v90History=['dashboard'];window.__v90Route='dashboard';
+   try{sessionStorage.setItem('ldm_nav_history',JSON.stringify(['dashboard']));sessionStorage.setItem('ldm_current_route','dashboard');sessionStorage.setItem('ldm_surface','erp');history.replaceState({ldmInternal:true,route:'dashboard',stack:['dashboard']},'',location.href)}catch(_e){}
+   let out=await window.render('dashboard');installDashboardAddons();window.scrollTo(0,0);return out;
+ };
+ window.erpGoHome=window.v90GoHome;
+ /* Manual Refresh remains the only explicit dashboard refresh button. */
+ if(typeof window.v185RefreshDashboardData==='function'){
+   const manual=window.v185RefreshDashboardData;window.v185RefreshDashboardData=async function(btn){return manual.apply(this,arguments)};
+ }
+ window.ldmV233InstallDashboard=installDashboardAddons;
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{stopPassiveUiTimers();installDashboardAddons()},60),{once:true});else setTimeout(()=>{stopPassiveUiTimers();installDashboardAddons()},60);
+ window.LDM_FINAL_BUILD='V233-FINAL-ROOT-CORRECTED-2026-10-04';
+})();
+</script>
+<!-- ===== END V233 FINAL ROOT CORRECTION ===== -->
 
 </body>
 </html>
