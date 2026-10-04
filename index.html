@@ -17071,7 +17071,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   async function cutoffMap(force=false){
     const s=sess(),fresh=!force&&cutoffCache.session===s&&(Date.now()-cutoffCache.at)<60000;
     if(fresh)return cutoffCache.map;
-    const r=await sb.from('ldm_fee_class_cutoffs').select('class_name,till_month,updated_at').eq('academic_session',s).limit(300);
+    const r=await sb.from('ldm_fee_class_cutoffs_v2').select('class_name,till_month,updated_at').eq('academic_session',s).limit(300);
     if(r.error){
       if(/does not exist|relation .* does not exist|PGRST/i.test(String(r.error.message||'')))return new Map();
       throw r.error;
@@ -17200,7 +17200,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   async function saveCutoff(cls,ym){
     cls=tx(cls);ym=tx(ym);if(!cls)throw new Error('पहले Class चुनें');if(!monthOK(ym))throw new Error('Valid Due Till Month चुनें');
     const row={academic_session:sess(),class_name:cls,till_month:ym,updated_by:window.user?.id||window.profile?.id||null,updated_at:new Date().toISOString()};
-    const r=await sb.from('ldm_fee_class_cutoffs').upsert(row,{onConflict:'academic_session,class_name'}).select('class_name,till_month').single();
+    const r=await sb.from('ldm_fee_class_cutoffs_v2').upsert(row,{onConflict:'academic_session,class_name'}).select('class_name,till_month').single();
     if(r.error)throw r.error;await cutoffMap(true);return r.data;
   }
   window.ldmV241SaveClassCutoff=saveCutoff;
