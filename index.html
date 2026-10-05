@@ -16931,7 +16931,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 
   async function exportMaster(){
     try{
-      const all=await loadAllStudents(),c=$id('studentExcelClass')?.value||'',students=all.filter(s=>!c||String(s.class_name||'')===String(c));
+      const all=await loadAllStudents(),c=$id('studentExcelClass')?.value||'',students=all.filter(s=>!c||(window.ldmClassSame?window.ldmClassSame(s.class_name,c):String(s.class_name||'')===String(c)));
       if(!students.length)return window.toast?.('No students found');
       const adms=students.map(s=>s.admission_no).filter(Boolean),state=await loadFeeState(adms);
       const out=students.map(s=>{const k=admKey(s.admission_no),cfg=state.sm.get(k)||{},adj=state.am.get(k)||{},d=state.dm.get(k)||{},current=Math.max(0,num(d.current_due));return {
@@ -17274,5 +17274,8 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 <!-- ===== V246 CENTRAL CLASS IDENTITY ROOT FIX ===== -->
 <script>window.LDM_CENTRAL_CLASS_BUILD="V246-2026-10-05";</script>
 <!-- ===== END V246 CENTRAL CLASS IDENTITY ROOT FIX ===== -->
+<!-- ===== V248 EXCEL CLASS IDENTITY ROOT FIX ===== -->
+<script>window.LDM_EXCEL_CLASS_BUILD="V248-2026-10-05";</script>
+<!-- ===== END V248 EXCEL CLASS IDENTITY ROOT FIX ===== -->
 </body>
 </html>
