@@ -31,7 +31,7 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
 <meta charset="utf-8"><meta name="ld-modern-build" content="V256-MENU-ADMIT-CLASS-ROOT-2026-10-06"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V256-MENU-ADMIT-CLASS-ROOT-2026-10-06"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V259.2-GATE-PASS-DELEGATION-MINIMAL-2026-10-06"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -12670,7 +12670,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    if(!isTeacher())return;let ctx=window.ldmTeacherContext;try{if(!ctx)ctx=await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}
    window.__v90Route='dashboard';if(typeof v90Head==='function')v90Head('Teacher Dashboard','Teacher Access • Teacher Master controlled');
    const t=ctx.teacher||{},allClasses=(ctx.classes||[]).map(x=>x.class_name).filter(Boolean),classes=(typeof v103ClassTeacherClasses==='function'?v103ClassTeacherClasses():[]),subjects=(ctx.subjects||[]).map(x=>x.subject_name||x.subject).filter(Boolean),host=document.getElementById('erpContent');if(!host)return;
-   host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero"><small>NEW TEACHER ACCESS</small><h1>${typeof v90Safe==='function'?v90Safe(t.teacher_name||profile?.full_name||'Teacher'):(t.teacher_name||'Teacher')}</h1><p>Teacher Master से verified Active account</p></section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📷','QR Attendance Scanner','Scan My Class QR → Present','v143_teacher_qr_attendance'],['📋','Master Attendance','Own class status','master_attendance'],['📷','Student Photo','Camera / upload','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','Assigned subject','exams'],['💰','Fee Status','Permitted read-only','teacher_fee'],['📋','Admin Assigned Work','Responsibilities / Assistant work','assigned_work'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
+   host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero"><small>NEW TEACHER ACCESS</small><h1>${typeof v90Safe==='function'?v90Safe(t.teacher_name||profile?.full_name||'Teacher'):(t.teacher_name||'Teacher')}</h1><p>Teacher Master से verified Active account</p></section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📷','QR Attendance Scanner','Scan My Class QR → Present','v143_teacher_qr_attendance'],['📋','Master Attendance','Own class status','master_attendance'],['📷','Student Photo','Camera / upload','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','Assigned subject','exams'],['💰','Fee Status','My assigned class • Read only','fees'],['📋','Admin Assigned Work','Responsibilities / Assistant work','assigned_work'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
    host.querySelectorAll('[data-new-teacher-route]').forEach(b=>b.onclick=async()=>{let r=b.dataset.newTeacherRoute;if(r==='__logout'){try{await sb.auth.signOut()}catch(_e){};location.reload();return}try{await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}if(typeof render==='function')return render(r)});try{scrollTo(0,0)}catch(_e){}
  };
  // Canonical dispatch: NEW teacher dashboard bypasses all legacy teacher dashboard/context entry paths.
@@ -15793,7 +15793,33 @@ if(typeof statsBase==='function'){
   const admin=()=>['admin','super_admin','principal'].includes(role()), teacher=()=>role()==='teacher';
   const E=v=>typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const fmt=d=>{if(!d)return '—';try{return new Date(String(d).slice(0,10)+'T00:00:00').toLocaleDateString('en-IN')}catch(_e){return String(d)}};
-  const delegableRoutes=[['','General Responsibility / No ERP Function'],['attendance','Attendance'],['exams','Exam / Marks'],['timetable','Timetable'],['homework','Homework'],['events','Events / Holidays'],['notices','Notices / Orders']];
+  /* V257 ROOT: Assistant/Work Delegation uses the SAME canonical Admin route catalog.
+     No second hand-maintained 7-item list: when Admin navigation grows, delegation grows with it. */
+  const v257DelegationExtras=[
+    ['class_teacher_control','👨‍🏫 Class Teacher Control'],
+    ['v150_student_master','🎓 Student Master Control'],
+    ['v6422_due_master','⚡ Quick Due Fee Update'],
+    ['master_gate_pass','🚪 Master Gate Pass'],
+    ['attendance_conflict_center','⚠ Attendance Conflicts'],
+    ['v92_admit_publish','🎫 Admit Publish Control'],
+    ['teacher_access','👩‍🏫 Teacher Master / Login'],
+    ['v185_admin_activities','🧾 Recent Activities'],
+    ['v130_storage','🗄 Storage Center'],
+    ['school_documents_center','📂 School Documents & Certificates'],
+    ['principal_assembly','🌞 Principal Daily Assembly'],
+    ['up_board_center','🏛 UP Board Control']
+  ];
+  function v257CanonicalDelegableRoutes(){
+    const out=[['','General Responsibility / No ERP Function']],seen=new Set(['']);
+    try{
+      if(typeof V90_ADMIN_GROUPS!=='undefined'&&Array.isArray(V90_ADMIN_GROUPS)){
+        V90_ADMIN_GROUPS.forEach(g=>(g?.[2]||[]).forEach(x=>{let r=String(x?.[0]||'').trim();if(r&&!seen.has(r)){seen.add(r);out.push([r,String(x?.[1]||r)])}}));
+      }
+    }catch(_e){}
+    v257DelegationExtras.forEach(x=>{let r=String(x[0]||'').trim();if(r&&!seen.has(r)){seen.add(r);out.push(x)}});
+    return out;
+  }
+  const delegableRoutes=v257CanonicalDelegableRoutes();
   window.__v187Teachers=[];window.__v187Tasks=[];window.__v187Assignees=[];window.__v187MyAssignments=[];window.__v187CertPeople=[];window.__v187Sectors=[];window.__v187Issued=[];window.__v187CertHistory=[];
 
   function modal(html){q('v187Modal')?.remove();let m=document.createElement('div');m.id='v187Modal';m.className='v187Modal';m.innerHTML='<div class="v187ModalCard"><div class="v187ModalHead"><h3>School ERP</h3><button class="v187ModalClose" onclick="document.getElementById(\'v187Modal\')?.remove()">✕</button></div>'+html+'</div>';document.body.appendChild(m);return m}
@@ -15814,12 +15840,26 @@ if(typeof statsBase==='function'){
     const existing=new Map(window.__v187Assignees.filter(a=>String(a.task_id)===String(taskId)&&a.is_active!==false).map(a=>[String(a.teacher_auth_user_id),a]));
     return `<div class="v187TeacherPick">${window.__v187Teachers.map((t,i)=>{let uid=String(t.auth_user_id||''),a=existing.get(uid),disabled=!uid;return `<label><input class="${prefix}Teacher" type="checkbox" data-i="${i}" ${a?'checked':''} ${disabled?'disabled':''}><span><b>${E(t.teacher_name||'Teacher')}</b><small>${E(t.employee_id||'')}${disabled?' • Login mapping required':''}</small></span><input class="${prefix}Primary" type="radio" name="${prefix}Primary" value="${i}" ${a?.responsibility==='primary'?'checked':''} ${disabled?'disabled':''} title="Primary Responsible"><em class="v187Primary">Primary</em></label>`}).join('')||'<div class="empty">Approved mapped teacher नहीं मिला.</div>'}</div>`;
   }
-  function routeOptions(val=''){return delegableRoutes.map(x=>`<option value="${E(x[0])}" ${String(val||'')===x[0]?'selected':''}>${E(x[1])}</option>`).join('')}
+  function routeOptions(val=''){
+    const selected=String(val||'');
+    const labelMap=new Map(delegableRoutes.map(x=>[String(x[0]),String(x[1])]));
+    let html=`<option value="" ${selected===''?'selected':''}>General Responsibility / No ERP Function</option>`;
+    try{
+      if(typeof V90_ADMIN_GROUPS!=='undefined'&&Array.isArray(V90_ADMIN_GROUPS)){
+        html+=V90_ADMIN_GROUPS.map(g=>`<optgroup label="${E(g[0]+' '+g[1])}">${(g[2]||[]).map(x=>`<option value="${E(x[0])}" ${selected===String(x[0])?'selected':''}>${E(x[1])}</option>`).join('')}</optgroup>`).join('');
+      }
+    }catch(_e){}
+    const canonical=new Set((typeof V90_ADMIN_GROUPS!=='undefined'&&Array.isArray(V90_ADMIN_GROUPS)?V90_ADMIN_GROUPS.flatMap(g=>(g?.[2]||[]).map(x=>String(x[0]))):[]));
+    const extra=v257DelegationExtras.filter(x=>!canonical.has(String(x[0])));
+    if(extra.length)html+=`<optgroup label="⭐ Admin Master / Extra Controls">${extra.map(x=>`<option value="${E(x[0])}" ${selected===String(x[0])?'selected':''}>${E(x[1])}</option>`).join('')}</optgroup>`;
+    if(selected&&!labelMap.has(selected))html+=`<option value="${E(selected)}" selected>${E(selected)} (existing task)</option>`;
+    return html;
+  }
   function renderTasks(){let host=q('v187TaskList');if(!host)return;const tasks=window.__v187Tasks;host.innerHTML=tasks.length?tasks.map(t=>{let a=window.__v187Assignees.filter(x=>String(x.task_id)===String(t.id)&&x.is_active!==false);return `<article class="v187TaskCard ${t.status==='cancelled'?'cancelled':''}"><div class="v187TaskTop"><div><h3>${E(t.title)}</h3><div class="v187Badges"><span class="v187Badge ${tstatus(t.priority)}">${E(t.priority)}</span><span class="v187Badge ${tstatus(t.status)}">${E(t.status)}</span>${t.module_route?`<span class="v187Badge">ERP: ${E(t.module_route)}</span>`:''}${t.due_date?`<span class="v187Badge">Due ${E(fmt(t.due_date))}</span>`:''}</div></div><small>${E(fmt(t.created_at))}</small></div><p>${E(t.details||'').replace(/\n/g,'<br>')}</p><div class="v187Assignees">${a.map(x=>`<div class="v187Assignee"><b>${x.responsibility==='primary'?'⭐ ':''}${E(x.teacher_name)}</b><span>${E(x.status)}${x.teacher_note?' • '+E(x.teacher_note):''}</span></div>`).join('')||'<div class="empty">No active team</div>'}</div><div class="v187TaskActions"><button onclick="v187EditTask('${t.id}')">✏ Edit</button><button onclick="v187EditTeam('${t.id}')">👥 Team</button>${t.status!=='completed'?`<button class="primary" onclick="v187SetTaskStatus('${t.id}','completed')">✓ Complete</button>`:''}${t.status!=='cancelled'?`<button class="danger" onclick="v187SetTaskStatus('${t.id}','cancelled')">⛔ Off / Cancel</button>`:`<button onclick="v187SetTaskStatus('${t.id}','assigned')">↻ Reactivate</button>`}</div></article>`}).join(''):'<div class="empty">अभी कोई delegated task नहीं है.</div>'}
   window.ldmDelegationCenter=async function(){
     if(!admin())return window.toast?.('Admin / Principal only');window.__v90Route='work_delegation';window.v90Head?.('🧩 Admin Assistant / Work Delegation','One or many teachers • responsibility • temporary work shortcut');window.v90InstallShell?.('work_delegation');
     window.v90Set?.(`<div class="v187Page"><section class="v187Hero"><small>ADMIN ASSISTANT CENTER</small><h2>काम बाँटिए, जिम्मेदारी स्पष्ट रखिए</h2><p>एक काम एक या कई teachers को दें. Teacher Dashboard पर Assigned Work दिखेगा. कोई polling/realtime नहीं.</p></section><section class="panel"><div class="panelHead"><div><h3>➕ Assign New Work</h3><p class="note">Mapped Active Teachers ही selectable हैं.</p></div></div><div id="v187CreateArea"><div class="empty">Loading teachers…</div></div></section><section class="panel"><div class="panelHead"><div><h3>📋 Assigned Work</h3><p class="note">Edit • Add/Remove Team • Complete • Off/Cancel</p></div><button class="secondary" onclick="ldmDelegationCenter()">↻ Refresh</button></div><div id="v187TaskList"><div class="empty">Loading…</div></div></section></div>`);
-    try{await loadDelegationData();let c=q('v187CreateArea');if(c)c.innerHTML=`<div class="v187FormGrid"><label>Work / Responsibility<input id="v187TaskTitle" placeholder="e.g. Annual Program Photo & Notice Update"></label><label>Priority<select id="v187TaskPriority"><option>Normal</option><option>High</option><option>Urgent</option><option>Low</option></select></label><label>Due Date<input id="v187TaskDue" type="date"></label><label>Linked ERP Function<select id="v187TaskRoute">${routeOptions()}</select></label><label class="full">Instructions<textarea id="v187TaskDetails" placeholder="काम क्या करना है, क्या submit करना है…"></textarea></label></div><h4>Select Teacher(s) • Primary के लिए radio चुनें</h4>${teacherPickHTML('v187New')}<p><button id="v187AssignBtn" class="primary" onclick="v187CreateTask()">✓ Assign Responsibility</button></p>`;renderTasks()}catch(e){q('v187CreateArea').innerHTML=`<div class="dangerNote">${E(e.message||e)}</div>`;q('v187TaskList').innerHTML='<div class="empty">V187 SQL run करने के बाद यह center काम करेगा.</div>'}
+    try{await loadDelegationData();let c=q('v187CreateArea');if(c)c.innerHTML=`<div class="v187FormGrid"><label>Work / Responsibility<input id="v187TaskTitle" placeholder="e.g. Annual Program Photo & Notice Update"></label><label>Priority<select id="v187TaskPriority"><option>Normal</option><option>High</option><option>Urgent</option><option>Low</option></select></label><label>Due Date<input id="v187TaskDue" type="date"></label><label>Linked ERP Function<select id="v187TaskRoute">${routeOptions()}</select><small>Central Admin Menu • सभी Admin modules/centers</small></label><label class="full">Instructions<textarea id="v187TaskDetails" placeholder="काम क्या करना है, क्या submit करना है…"></textarea></label></div><h4>Select Teacher(s) • Primary के लिए radio चुनें</h4>${teacherPickHTML('v187New')}<p><button id="v187AssignBtn" class="primary" onclick="v187CreateTask()">✓ Assign Responsibility</button></p>`;renderTasks()}catch(e){q('v187CreateArea').innerHTML=`<div class="dangerNote">${E(e.message||e)}</div>`;q('v187TaskList').innerHTML='<div class="empty">V187 SQL run करने के बाद यह center काम करेगा.</div>'}
   };
   function selectedTeam(prefix){let picks=[...document.querySelectorAll('.'+prefix+'Teacher:checked')],primary=document.querySelector('.'+prefix+'Primary:checked')?.value,chosen=new Set(picks.map(x=>String(x.dataset.i)));if(!chosen.has(String(primary)))primary=picks[0]?.dataset.i;return picks.map(x=>{let i=Number(x.dataset.i),t=window.__v187Teachers[i];return {teacher_auth_user_id:t.auth_user_id,teacher_profile_id:String(t.id||''),teacher_name:t.teacher_name||'Teacher',responsibility:String(i)===String(primary)?'primary':'assistant'}})}
   window.v187CreateTask=async function(){let title=String(q('v187TaskTitle')?.value||'').trim(),team=selectedTeam('v187New');if(!title)return window.toast?.('Work / Responsibility लिखें');if(!team.length)return window.toast?.('कम से कम एक mapped teacher चुनें');let btn=q('v187AssignBtn');if(btn)btn.disabled=true;try{let r=await sb.rpc('ldm_create_work_task',{p_title:title,p_details:q('v187TaskDetails')?.value||'',p_module_route:q('v187TaskRoute')?.value||null,p_priority:q('v187TaskPriority')?.value||'Normal',p_due_date:q('v187TaskDue')?.value||null,p_assignees:team});if(r.error)throw r.error;window.toast?.('✓ Work assigned to '+team.length+' teacher(s)');await ldmDelegationCenter()}catch(e){window.toast?.(e.message||String(e))}finally{if(btn)btn.disabled=false}};
@@ -17565,16 +17605,16 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
  /* ---------- A) Class Teacher Fee Status: secure read-only RPC ---------- */
  let feeRows=[];
  function phone10(v){let d=String(v||'').replace(/\D/g,'');return d.length>=10?d.slice(-10):''}
- function teacherContextClasses(){let a=[];try{if(typeof window.v103ClassTeacherClasses==='function')a.push(...(window.v103ClassTeacherClasses()||[]))}catch(_e){}try{a.push(...((window.v14TeacherClasses||[]).filter(x=>x&&x.is_active!==false&&x.is_class_teacher===true).map(x=>x.class_name)))}catch(_e){}return [...new Map(a.filter(Boolean).map(x=>[classKey(x),displayClass(x)])).values()]}
+ function teacherContextClasses(){let a=[];try{if(typeof window.v14AllowedClassNames==='function')a.push(...(window.v14AllowedClassNames()||[]))}catch(_e){}try{a.push(...((window.v14TeacherClasses||[]).filter(x=>x&&x.is_active!==false).map(x=>x.class_name)))}catch(_e){}return [...new Map(a.filter(Boolean).map(x=>[classKey(x),displayClass(x)])).values()]}
  function feeClasses(){let all=[...teacherContextClasses(),...feeRows.map(x=>displayClass(x.class_name))].filter(Boolean),m=new Map();all.forEach(x=>{let k=classKey(x);if(k&&!m.has(k))m.set(k,displayClass(x))});return [...m.values()]}
  function reminderText(s){let school=String(window.school?.school_name||'L D MODERN EDUCATION ACADEMY');return `नमस्कार। ${s.student_name||'Student'} की विद्यालय फीस ${money(s.current_due)} बकाया है। कृपया सुविधानुसार शुल्क जमा कर दें। धन्यवाद — ${school}`}
  function renderTeacherFee(selected){let host=q('v254TeacherFeeBody');if(!host)return;let classes=feeClasses();let key=classKey(selected||classes[0]||''),rows=feeRows.filter(x=>!key||classKey(x.class_name)===key).sort((a,b)=>N(b.current_due)-N(a.current_due)||String(a.student_name||'').localeCompare(String(b.student_name||''),undefined,{numeric:true,sensitivity:'base'}));let dueRows=rows.filter(x=>N(x.current_due)>0),sum=dueRows.reduce((a,x)=>a+N(x.current_due),0);let sel=q('v254TeacherFeeClass');if(sel){let old=selected||sel.value||classes[0]||'';sel.innerHTML=classes.map(c=>`<option value="${E(c)}" ${classKey(c)===classKey(old)?'selected':''}>${E(c)}</option>`).join('');if(!sel.value&&classes[0])sel.value=classes[0]}
    let body=rows.map((s,i)=>{let due=N(s.current_due),ph=phone10(s.phone),wa=ph?`https://wa.me/91${ph}?text=${encodeURIComponent(reminderText(s))}`:'';return `<tr><td>${i+1}</td><td><b>${E(s.student_name||'')}</b><small class="cellSub">${E(s.admission_no||'')} • ${E(displayClass(s.class_name)||'')}</small></td><td>${E(s.father_name||'—')}</td><td>${E(s.roll_no||'—')}</td><td class="${due>0?'v254FeeDue':'v254FeeClear'}">${money(due)}</td><td>${due>0?'DUE':'CLEAR'}</td><td>${due>0?(ph?`<div class="v254Contact"><a class="wa" href="${E(wa)}" target="_blank" rel="noopener">WhatsApp Reminder</a><a class="call" href="tel:+91${ph}">☎ Call</a></div>`:'<span class="v254NoPhone">Mobile not saved</span>'):'—'}</td></tr>`}).join('');
    host.innerHTML=`<div class="v254FeeStats"><div><small>Total Students</small><b>${rows.length}</b></div><div><small>Due Students</small><b>${dueRows.length}</b></div><div><small>Clear Students</small><b>${Math.max(rows.length-dueRows.length,0)}</b></div><div><small>Class Current Due</small><b>${money(sum)}</b></div></div><div class="tableWrap"><table><tr><th>S.N.</th><th>Student</th><th>Father</th><th>Roll</th><th>Current Due</th><th>Status</th><th>Reminder / Call</th></tr>${body||'<tr><td colspan="7">इस Class में active student नहीं मिला.</td></tr>'}</table></div>`;
  }
- window.v254LoadTeacherFee=async function(keepClass=''){let host=q('v254TeacherFeeBody');if(host)host.innerHTML='<div class="empty">Central current due loading…</div>';try{let r=await sb.rpc('ldm_teacher_class_fee_due_v254',{p_class:null,p_session:sess(),p_until_month:monthNow()});if(r.error)throw r.error;feeRows=r.data||[];let classes=feeClasses(),sel=keepClass||q('v254TeacherFeeClass')?.value||classes[0]||'';renderTeacherFee(sel);if(!feeRows.length&&host)host.innerHTML='<div class="empty">Class Teacher assignment मिला, लेकिन active student record नहीं मिला.</div>'}catch(e){if(host)host.innerHTML=`<div class="dangerNote"><b>Fee Status नहीं खुला:</b> ${E(e?.message||e)}<br><small>V254_SAFE_ADDITIVE.sql run होना जरूरी है.</small></div>`}};
+ window.v254LoadTeacherFee=async function(keepClass=''){let host=q('v254TeacherFeeBody');if(host)host.innerHTML='<div class="empty">Central current due loading…</div>';try{let r=await sb.rpc('ldm_teacher_class_fee_due_v254',{p_class:null,p_session:sess(),p_until_month:monthNow()});if(r.error)throw r.error;feeRows=r.data||[];let classes=feeClasses(),sel=keepClass||q('v254TeacherFeeClass')?.value||classes[0]||'';renderTeacherFee(sel);if(!feeRows.length&&host)host.innerHTML='<div class="empty">Assigned class मिला, लेकिन active student record नहीं मिला.</div>'}catch(e){if(host)host.innerHTML=`<div class="dangerNote"><b>Fee Status नहीं खुला:</b> ${E(e?.message||e)}<br><small>V254_SAFE_ADDITIVE.sql run होना जरूरी है.</small></div>`}};
  window.v254RenderTeacherFee=()=>renderTeacherFee(q('v254TeacherFeeClass')?.value||'');
- window.teacherFeeView=async function(){if(!teacher())return window.toast?.('Teacher only / केवल शिक्षक');try{window.__v90Route='fees';window.v90InstallShell?.('fees')}catch(_e){};try{window.head?.('₹ Class Fee Status','Class Teacher only • Read Only • Due Reminder + Direct Call')}catch(_e){}let host=q('erpContent');if(!host)return;host.innerHTML=`<section class="v254FeeHero"><div><h2>₹ Class Fee Status</h2><p>केवल आपकी Class Teacher class • Central current due • कोई fee edit/delete permission नहीं</p></div><div class="lock">🔒</div></section><section class="panel"><div class="v254FeeTools"><label>Class<select id="v254TeacherFeeClass" onchange="v254RenderTeacherFee()"></select></label><button class="primary" onclick="v254LoadTeacherFee(document.getElementById('v254TeacherFeeClass')?.value||'')">↻ Refresh Due</button></div><div id="v254TeacherFeeBody"><div class="empty">Loading…</div></div></section>`;await window.v254LoadTeacherFee()};
+ window.teacherFeeView=async function(){if(!teacher())return window.toast?.('Teacher only / केवल शिक्षक');try{window.__v90Route='fees';window.v90InstallShell?.('fees')}catch(_e){};try{window.head?.('₹ Class Fee Status','Assigned class only • Read Only • Due Reminder + Direct Call')}catch(_e){}let host=q('erpContent');if(!host)return;host.innerHTML=`<section class="v254FeeHero"><div><h2>₹ Class Fee Status</h2><p>केवल आपकी assigned class/classes • Central current due • कोई fee edit/delete permission नहीं</p></div><div class="lock">🔒</div></section><section class="panel"><div class="v254FeeTools"><label>Class<select id="v254TeacherFeeClass" onchange="v254RenderTeacherFee()"></select></label><button class="primary" onclick="v254LoadTeacherFee(document.getElementById('v254TeacherFeeClass')?.value||'')">↻ Refresh Due</button></div><div id="v254TeacherFeeBody"><div class="empty">Loading…</div></div></section>`;await window.v254LoadTeacherFee()};
  try{teacherFeeView=window.teacherFeeView}catch(_e){}
  function installTeacherFeeNav(){try{if(typeof V90_TEACHER_NAV!=='undefined'&&Array.isArray(V90_TEACHER_NAV)&&!V90_TEACHER_NAV.some(x=>x[0]==='fees')){let i=V90_TEACHER_NAV.findIndex(x=>x[0]==='attendance');V90_TEACHER_NAV.splice(i<0?4:i+1,0,['fees','₹ Fee Status'])}}catch(_e){}}
  function decorateTeacherDashboard(){if(!teacher())return;let box=document.querySelector('#erpContent .v114TeacherQuick .v90Quick,#erpContent .v90Quick');if(!box||box.querySelector('[data-v254-teacher-fee]'))return;let b=document.createElement('button');b.type='button';b.dataset.v254TeacherFee='1';b.className='v254TeacherFeeShortcut';b.innerHTML='<b>₹</b><span>Class Fee Due</span>';b.onclick=()=>window.render?.('fees');box.appendChild(b)}
@@ -17590,7 +17630,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 
  /* ---------- C) Final route owner: fee permission bypass + canonical settle ---------- */
  const renderBase=window.render;
- if(typeof renderBase==='function'&&!renderBase.__v254Root){let wrapped=async function(route='dashboard'){let r=String(route||'dashboard');if(teacher()&&r==='fees')return window.teacherFeeView();let out=await renderBase.apply(this,arguments);if(admin())requestAnimationFrame(ensureAdminNav);if(teacher()&&r==='dashboard')requestAnimationFrame(()=>{installTeacherFeeNav();try{window.v90BuildNav?.('dashboard')}catch(_e){}decorateTeacherDashboard()});return out};wrapped.__v254Root=true;window.render=wrapped;try{render=wrapped}catch(_e){}}
+ if(typeof renderBase==='function'&&!renderBase.__v254Root){let wrapped=async function(route='dashboard'){let r=String(route||'dashboard');if(teacher()&&(r==='fees'||r==='teacher_fee'))return window.teacherFeeView();let out=await renderBase.apply(this,arguments);if(admin())requestAnimationFrame(ensureAdminNav);if(teacher()&&r==='dashboard')requestAnimationFrame(()=>{installTeacherFeeNav();try{window.v90BuildNav?.('dashboard')}catch(_e){}decorateTeacherDashboard()});return out};wrapped.__v254Root=true;window.render=wrapped;try{render=wrapped}catch(_e){}}
  const openBase=window.openERP;if(typeof openBase==='function'&&!openBase.__v254Root){let opened=async function(){let out=await openBase.apply(this,arguments);installTeacherFeeNav();if(admin())ensureAdminNav();if(teacher())setTimeout(decorateTeacherDashboard,0);return out};opened.__v254Root=true;window.openERP=opened;try{openERP=opened}catch(_e){}}
  /* V256 ROOT: do not rebuild #erpNav after summary/menu-item click.
    Native <details> now keeps its open/close state; route renders already rebuild nav safely. */
@@ -17624,5 +17664,148 @@ window.LDM_V256_FIXES=Object.freeze({
 });
 </script>
 <!-- ===== END V256 ROOT FIX ===== -->
+<!-- ===== V258 ALL ASSIGNED TEACHERS — READ-ONLY CLASS FEE STATUS ===== -->
+<script id="ldm-v258-teacher-fee-assignment">
+window.LDM_FINAL_BUILD='V258-ALL-ASSIGNED-TEACHER-FEE-2026-10-06';
+window.LDM_V258_TEACHER_FEE=Object.freeze({
+  scope:'all active teacher class assignments',
+  access:'read-only fee status',
+  mutation:'admin/accounts only',
+  route:'fees',
+  backend:'ldm_teacher_class_fee_due_v254 updated by V258 SQL'
+});
+</script>
+<!-- ===== END V258 TEACHER FEE ===== -->
+<!-- ===== V257 ASSISTANT CENTRAL ADMIN FUNCTION CATALOG ===== -->
+<script id="ldm-v257-assistant-admin-catalog">
+window.LDM_FINAL_BUILD='V257-ASSISTANT-CENTRAL-ADMIN-FUNCTIONS-2026-10-06';
+window.LDM_V257_ASSISTANT=Object.freeze({source:'V90_ADMIN_GROUPS + master-control extras',mode:'task-linked-only',parallelRouteList:false});
+</script>
+<!-- ===== END V257 ASSISTANT CATALOG ===== -->
+
+<!-- ===== V259.2 GATE PASS DELEGATION — MINIMAL SAFE ADDITIVE ===== -->
+<script id="ldm-v2592-gate-pass-delegation">
+(function(){
+'use strict';
+if(window.__LDM_V2592_GATE_DELEGATION)return;
+window.__LDM_V2592_GATE_DELEGATION=true;
+window.LDM_FINAL_BUILD='V259.2-GATE-PASS-DELEGATION-MINIMAL-2026-10-06';
+window.__v259GateDelegated=false;
+window.__v259GateDutyCheckedAt=0;
+
+async function v259RefreshGateDuty(force=false){
+  try{
+    if(typeof v102IsAdmin==='function' && v102IsAdmin()){
+      window.__v259GateDelegated=true;
+      window.__v259GateDutyCheckedAt=Date.now();
+      return true;
+    }
+    if(!(typeof v102IsTeacher==='function' && v102IsTeacher())){
+      window.__v259GateDelegated=false;
+      return false;
+    }
+    if(!force && window.__v259GateDutyCheckedAt && Date.now()-window.__v259GateDutyCheckedAt<5000){
+      return !!window.__v259GateDelegated;
+    }
+    if(!window.sb?.rpc){window.__v259GateDelegated=false;return false}
+    const r=await sb.rpc('ldm_v259_gate_pass_assigned');
+    window.__v259GateDutyCheckedAt=Date.now();
+    if(r.error){
+      console.warn('V259.2 gate delegation check deferred:',r.error.message);
+      window.__v259GateDelegated=false;
+      return false;
+    }
+    window.__v259GateDelegated=!!r.data;
+    return window.__v259GateDelegated;
+  }catch(e){
+    console.warn('V259.2 gate delegation check:',e?.message||e);
+    window.__v259GateDelegated=false;
+    return false;
+  }
+}
+window.v259RefreshGateDuty=v259RefreshGateDuty;
+
+function v259DelegatedClassOptions(){
+  const order=['Nursery','LKG','UKG','1','2','3','4','5','6','7','8','9','10'];
+  const canon=v=>typeof window.ldmClassCanonical==='function'?window.ldmClassCanonical(v):String(v||'').trim();
+  const present=new Set((window.__v102Students||[]).map(x=>canon(x.class_name)).filter(Boolean));
+  return order.filter(c=>present.has(c));
+}
+function v259InstallDelegatedClassFilters(){
+  if(!(typeof v102IsTeacher==='function'&&v102IsTeacher()&&window.__v259GateDelegated))return;
+  const classes=v259DelegatedClassOptions();
+  for(const id of ['v102StudentClass','v102GateClass']){
+    const el=document.getElementById(id);if(!el)continue;
+    const old=typeof window.ldmClassCanonical==='function'?window.ldmClassCanonical(el.value):String(el.value||'');
+    el.innerHTML='<option value="">All Classes</option>'+classes.map(c=>`<option value="${typeof v102Safe==='function'?v102Safe(c):c}">${typeof v102Safe==='function'?v102Safe(c):c}</option>`).join('');
+    if(classes.includes(old))el.value=old;
+  }
+}
+
+try{
+  const baseLoadStudents=window.v102LoadStudents;
+  if(typeof baseLoadStudents==='function'){
+    window.v102LoadStudents=async function(){
+      try{
+        if(!(window.sb?.rpc))return baseLoadStudents.apply(this,arguments);
+        await v259RefreshGateDuty();
+        const r=await sb.rpc('ldm_v259_gate_students');
+        if(r.error){
+          console.warn('V259.2 gate student RPC fallback:',r.error.message);
+          return baseLoadStudents.apply(this,arguments);
+        }
+        const selected=new Set((window.__v102Students||[]).filter(x=>x._selected).map(x=>String(x.id)));
+        window.__v102Students=(r.data||[]).map(x=>({...x,_selected:selected.has(String(x.id))}));
+        if(typeof v102RenderStudents==='function')v102RenderStudents();
+      }catch(e){
+        console.warn('V259.2 gate students fallback:',e?.message||e);
+        return baseLoadStudents.apply(this,arguments);
+      }
+    };
+    try{v102LoadStudents=window.v102LoadStudents}catch(_e){}
+  }
+}catch(_e){}
+
+try{
+  const baseCenter=window.v102GatePassCenter;
+  if(typeof baseCenter==='function'){
+    window.v102GatePassCenter=async function(){
+      await v259RefreshGateDuty(true);
+      const r=await baseCenter.apply(this,arguments);
+      try{
+        if(typeof v102IsTeacher==='function'&&v102IsTeacher()&&window.__v259GateDelegated){
+          v259InstallDelegatedClassFilters();
+          if(typeof v102RenderStudents==='function')v102RenderStudents();
+          if(typeof v102RenderGateRows==='function')v102RenderGateRows();
+          const hero=document.querySelector('#erpContent .v102Hero');
+          if(hero&&!hero.querySelector('[data-v259-gate-duty]')){
+            const b=document.createElement('div');
+            b.dataset.v259GateDuty='1';
+            b.style.cssText='margin-top:8px;padding:7px 10px;border-radius:12px;background:#e9fff1;color:#116b3a;font-weight:800;display:inline-block';
+            b.textContent='✓ Admin Assigned Gate Duty • School-wide student scope • Approval remains Admin-only';
+            hero.querySelector('div')?.appendChild(b);
+          }
+        }
+      }catch(_e){}
+      return r;
+    };
+    try{v102GatePassCenter=window.v102GatePassCenter}catch(_e){}
+  }
+}catch(_e){}
+
+/* Silent Until Click: no dashboard polling/RPC. Assignment is checked only when Gate Pass opens. */
+window.LDM_V259_GATE_PASS=Object.freeze({
+  delegationRoute:'master_gate_pass',
+  normalTeacherScope:'assigned class/classes preserved',
+  delegatedTeacherScope:'school-wide Gate Pass operations',
+  approval:'Admin only',
+  create:'Teacher request remains Pending',
+  exitReturn:'Active delegated teacher may mark Approved passes Left/Returned',
+  silentUntilClick:true
+});
+})();
+</script>
+<!-- ===== END V259.2 GATE PASS DELEGATION ===== -->
+
 </body>
 </html>
