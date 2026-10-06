@@ -17807,5 +17807,122 @@ window.LDM_V259_GATE_PASS=Object.freeze({
 </script>
 <!-- ===== END V259.2 GATE PASS DELEGATION ===== -->
 
+
+<!-- ===== V260 ASSISTANT DELEGATION PERMISSION BRIDGE — TARGETED ===== -->
+<script id="ldm-v260-assistant-permission-bridge">
+(function(){
+'use strict';
+if(window.__LDM_V260_ASSISTANT_PERMISSION_BRIDGE)return;
+window.__LDM_V260_ASSISTANT_PERMISSION_BRIDGE=true;
+window.LDM_FINAL_BUILD='V260-ASSISTANT-DELEGATION-PERMISSION-BRIDGE-2026-10-06';
+
+const norm=v=>String(v??'').trim();
+const low=v=>norm(v).toLowerCase();
+const teacher=()=>low(window.profile?.role)==='teacher';
+
+function v260AssignmentActive(a, route){
+  const t=a?.ldm_work_tasks||{};
+  const ar=low(a?.status||'assigned');
+  const tr=low(t?.status||'assigned');
+  return a?.is_active!==false
+    && !['removed','cancelled','completed'].includes(ar)
+    && !['cancelled','completed'].includes(tr)
+    && norm(t?.module_route)===norm(route);
+}
+
+async function v260HasDelegatedRoute(route){
+  route=norm(route);
+  if(!teacher()||!route)return false;
+
+  // Assigned Work itself must always be reachable by an approved Teacher.
+  if(route==='assigned_work')return true;
+
+  // First use the list already loaded by "Admin Assigned Work" (zero extra call).
+  try{
+    const cached=Array.isArray(window.__v187MyAssignments)?window.__v187MyAssignments:null;
+    if(cached && cached.some(a=>v260AssignmentActive(a,route)))return true;
+  }catch(_e){}
+
+  // Silent Until Click: DB lookup occurs only after a normally-blocked route is explicitly opened.
+  try{
+    const uid=window.user?.id;
+    if(!uid||!window.sb?.from)return false;
+    const r=await sb.from('ldm_work_task_assignees')
+      .select('id,is_active,status,ldm_work_tasks(id,module_route,status)')
+      .eq('teacher_auth_user_id',uid)
+      .eq('is_active',true)
+      .limit(200);
+    if(r.error){
+      console.warn('V260 delegated route check:',r.error.message);
+      return false;
+    }
+    const rows=r.data||[];
+    window.__v260DelegatedAssignments=rows;
+    return rows.some(a=>v260AssignmentActive(a,route));
+  }catch(e){
+    console.warn('V260 delegated route check:',e?.message||e);
+    return false;
+  }
+}
+window.v260HasDelegatedRoute=v260HasDelegatedRoute;
+
+const oldAuthorize=window.v1146TeacherAuthorize;
+if(typeof oldAuthorize==='function'){
+  window.v1146TeacherAuthorize=async function(route,quiet=false){
+    route=norm(route||'dashboard');
+
+    // Preserve every existing Teacher permission exactly as-is.
+    const normal=await oldAuthorize.call(this,route,true);
+    if(normal?.ok)return normal;
+
+    // Assigned Work is a self-service Teacher page; validate account using dashboard auth.
+    if(route==='assigned_work'){
+      const acct=await oldAuthorize.call(this,'dashboard',true);
+      if(acct?.ok)return {...acct,ok:true,delegated:true,delegated_route:'assigned_work'};
+      if(!quiet)window.toast?.(acct?.msg||normal?.msg||'Teacher permission unavailable');
+      return acct?.ok===false?acct:normal;
+    }
+
+    // If Admin has actively delegated this exact ERP route, old Teacher allow-list must not block it.
+    if(await v260HasDelegatedRoute(route)){
+      const acct=await oldAuthorize.call(this,'dashboard',true);
+      if(acct?.ok){
+        window.__ldmActiveDelegatedRoute=route;
+        return {...acct,ok:true,delegated:true,delegated_route:route};
+      }
+    }
+
+    if(!quiet)window.toast?.(normal?.msg||'Admin assignment / permission required');
+    return normal;
+  };
+}
+
+/* The OPEN button already verifies the selected assignment.
+   Mark the route as explicitly delegated before render; render still performs the secure check above. */
+try{
+  const oldOpen=window.v187OpenAssignedFunction;
+  if(typeof oldOpen==='function'){
+    window.v187OpenAssignedFunction=async function(id){
+      try{
+        const a=(window.__v187MyAssignments||[]).find(x=>String(x.id)===String(id));
+        const route=norm(a?.ldm_work_tasks?.module_route||'');
+        if(route && v260AssignmentActive(a,route))window.__ldmActiveDelegatedRoute=route;
+      }catch(_e){}
+      return oldOpen.apply(this,arguments);
+    };
+  }
+}catch(_e){}
+
+window.LDM_V260_ASSISTANT_PERMISSION=Object.freeze({
+  assignedWorkPage:'teacher self-access after normal account validation',
+  delegatedRoute:'exact active Admin-assigned module_route only',
+  unassignedRoute:'still denied',
+  normalTeacherPermissions:'preserved',
+  silentUntilClick:true
+});
+})();
+</script>
+<!-- ===== END V260 ASSISTANT DELEGATION PERMISSION BRIDGE ===== -->
+
 </body>
 </html>
