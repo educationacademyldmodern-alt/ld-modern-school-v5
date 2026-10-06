@@ -31,7 +31,7 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
 <meta charset="utf-8"><meta name="ld-modern-build" content="V210-PREMIUM-ROOT-FINAL-2026-10-03"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V249-GENDER-RELATION-ROOT-2026-10-06"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V250-RECYCLE-EXPORT-IMPORT-ROOT-2026-10-06"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -974,7 +974,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @media print{body{background:#fff!important;padding:0!important;margin:0!important}.v234AdmissionPrintArea{padding:0!important;background:#fff!important}.v234AdmissionPage{margin:0!important;box-shadow:none!important;page-break-after:always}.v234AdmissionPage:last-child{page-break-after:auto}}
 @page{size:A4 portrait;margin:0}
 </style>
-<meta name="ldm-fix" content="V249 global gender-aware S/O D/O relation root fix">
+<meta name="ldm-fix" content="V250 recycle-safe export + conflict-safe student Excel import root fix">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -1094,6 +1094,54 @@ function ldmStudentRelationOf(gender){return ldmStudentRelationLabel(gender)+' o
 window.ldmGenderCanonical=ldmGenderCanonical;
 window.ldmStudentRelationLabel=ldmStudentRelationLabel;
 window.ldmStudentRelationOf=ldmStudentRelationOf;
+/* V250 RECYCLE / PERMANENT-DELETE VISIBILITY ROOT
+   Operational ERP + normal Excel must never surface rows belonging to a
+   deleted/trashed/recycled student. Linked historical DB rows are preserved
+   for safety, but are hidden from ordinary operational views/exports when
+   their Admission No. no longer belongs to a live student. No background polling. */
+function ldmStudentOperationalStatus(status){
+  return !['inactive','deleted','trashed','recycled','archived','left','withdrawn']
+    .includes(String(status??'active').trim().toLowerCase());
+}
+function ldmOperationalStudents(rows){
+  const seen=new Set(),out=[];
+  for(const x of (rows||[])){
+    if(!ldmStudentOperationalStatus(x?.status))continue;
+    const k=String(x?.admission_no||'').trim()||('id:'+String(x?.id||''));
+    if(!k||seen.has(k))continue;
+    seen.add(k);out.push(x);
+  }
+  return out;
+}
+window.ldmStudentOperationalStatus=ldmStudentOperationalStatus;
+window.ldmOperationalStudents=ldmOperationalStudents;
+window.ldmV250InvalidateStudentVisibility=function(){window.__ldmV250LiveAdmissionCache=null};
+async function ldmV250LiveAdmissionSet(){
+  const now=Date.now(),c=window.__ldmV250LiveAdmissionCache;
+  if(c&&c.set&&(now-c.at)<60000)return c.set;
+  const out=[],pageSize=1000;
+  for(let from=0,guard=0;guard<20;guard++,from+=pageSize){
+    const r=await sb.from('students').select('id,admission_no,status').order('id').range(from,from+pageSize-1);
+    if(r.error)throw r.error;
+    const rows=r.data||[];out.push(...rows);
+    if(rows.length<pageSize)break;
+  }
+  const set=new Set(ldmOperationalStudents(out).map(x=>String(x.admission_no||'').trim()).filter(Boolean));
+  window.__ldmV250LiveAdmissionCache={at:now,set};
+  return set;
+}
+async function ldmV250FilterOperationalRows(moduleName,rows){
+  const k=String(moduleName||'');
+  if(k==='students')return ldmOperationalStudents(rows);
+  if(!['attendance','fees','exams','fee_dashboard'].includes(k))return rows||[];
+  const live=await ldmV250LiveAdmissionSet();
+  return (rows||[]).filter(r=>{
+    const adm=String(r?.admission_no||'').trim();
+    return !adm||live.has(adm);
+  });
+}
+window.ldmV250LiveAdmissionSet=ldmV250LiveAdmissionSet;
+window.ldmV250FilterOperationalRows=ldmV250FilterOperationalRows;
 /* V248 GLOBAL CLASS ROOT RULE:
    All class filters must use ldmClassAliases/ldmClassSame.
    Do not use exact class_name equality for LKG/UKG/Nursery or numbered classes.
@@ -1299,7 +1347,7 @@ async function uploadGalleryMedia(form,o){let input=form.querySelector('[name="g
 async function uploadAadhaar(form,o){let input=form.querySelector('[name="aadhaar_file"]'),file=input?.files?.[0];if(!file){delete o.aadhaar_file;return}validateUploadFile(file);let ext=(file.name.split('.').pop()||'bin').toLowerCase(),path=`admissions/${user?.id||'admin'}/aadhaar-${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;let{error}=await sb.storage.from('student-media').upload(path,file,{upsert:false,contentType:file.type});if(error)throw error;o.aadhaar_url=path;delete o.aadhaar_file}
 async function uploadNoticeAttachment(form,o){let input=form.querySelector('[name="document_upload_file"]'),file=input?.files?.[0];if(!file){delete o.document_upload_file;return}let a=await uploadPublicAsset(file,'notices');o.download_url=a.url;delete o.document_upload_file}
 async function processUploads(k,form,o){if(k==='admissions'||k==='students')await uploadStudentPhoto(form,k,o);if(k==='admissions')await uploadAadhaar(form,o);if(k==='gallery')await uploadGalleryMedia(form,o);if(k==='notices')await uploadNoticeAttachment(form,o)}
-async function getRows(k){let q=sb.from(k).select("*").order("created_at",{ascending:false});if(["student","parent"].includes(profile.role)&&profile.linked_admission_no&&["students","attendance","fees","fee_dashboard","fee_structure","exams"].includes(k))q=q.eq("admission_no",profile.linked_admission_no);return await q}
+async function getRows(k){let q=sb.from(k).select("*").order("created_at",{ascending:false});if(["student","parent"].includes(profile.role)&&profile.linked_admission_no&&["students","attendance","fees","fee_dashboard","fee_structure","exams"].includes(k))q=q.eq("admission_no",profile.linked_admission_no);let r=await q;if(!r.error&&window.ldmV250FilterOperationalRows)r.data=await window.ldmV250FilterOperationalRows(k,r.data||[]);return r}
 const nameKeys={admissions:["student_name","father_name","mother_name","guardian_name"],students:["student_name","father_name","mother_name","guardian_name"],attendance:["student_name"],staff_attendance:["staff_name"],fees:["student_name"],exams:["student_name"],staff:["staff_name"],leave:["staff_name"],payroll:["staff_name"],timetable:["teacher_name"],homework:["teacher_name"],events:["title"],notices:["title"],gallery:["title"],enquiries:["name","assigned_to"],transport:["student_name","driver_name"],library:["student_name","book_title"],income:["source"],expenses:["vendor","category"]};
 async function list(k,q="",nq=""){
  page=k;
@@ -1404,6 +1452,7 @@ async function saveRecord(k,form,id=null){
     Object.keys(o).forEach(key=>{if(o[key]===''&&['admission_date','dob','due_date','exam_date','joining_date','from_date','to_date','payment_date','event_date','date','issue_date','follow_up_date','effective_from','effective_to','start_time','end_time','fee_structure_id','installment_id'].includes(key))o[key]=null});
     let q=id?sb.from(k).update(o).eq('id',id):sb.from(k).insert(o);let{error}=await q;if(error)throw error;if(id)await cleanupReplacedAssets(k,oldRow,o);
     if(k==='students'){
+      window.ldmV250InvalidateStudentVisibility?.();
       const adm=String(o.admission_no||oldRow?.admission_no||'').trim();
       if(adm){try{let p=await sb.rpc('v64_propagate_student_master',{p_admission_no:adm});if(p.error)console.warn('Student propagation warning:',p.error.message)}catch(_e){}}
     }
@@ -1421,6 +1470,7 @@ async function delRow(k,id){
   if(!confirm('Student को Recycle Bin में भेजना है? Restore possible रहेगा.'))return;
   let rr=await sb.rpc('v65_move_to_recycle',{p_table:'students',p_id:String(id)});
   if(rr.error)return toast(rr.error.message+' • Recycle Bin SQL check करें');
+  window.ldmV250InvalidateStudentVisibility?.();
   try{window.ldmMarkDataDirty?.('students')}catch(_e){}
   toast('Student Recycle Bin में भेजा गया • permanent delete नहीं हुआ');
   return afterSave(k);
@@ -1547,7 +1597,7 @@ async function studentExcelTools(){
  $("erpContent").innerHTML=`<div class="panel"><h3>Student Admission Excel Tools</h3><p class="note">पहले Export Template/Full Details लें, Excel में data update करें और फिर Import करें. Admission No. existing student को पहचानने के लिए रखें.</p><div class="tools"><select id="studentExcelClass"><option value="">All Classes</option>${cls.map(x=>`<option>${x}</option>`).join('')}</select><button class="secondary" onclick="exportStudentFullDetails()">⬇ Full Details Excel</button><button class="secondary" onclick="exportStudentTemplate()">⬇ Update Template</button><button class="primary" onclick="$('studentExcelImport').click()">⬆ Import / Update Students</button></div><input id="studentExcelImport" class="hidden" type="file" accept=".xlsx,.xls,.csv"><div class="excelHelp"><b>Useful columns:</b> admission_no, student_name, father_name, mother_name, phone, class_name, section, roll_no, dob, gender, address, status, fee_category, fee_waiver_percent</div></div>`;
  $("studentExcelImport").onchange=importStudentUpdate;
 }
-async function getStudentExcelRows(){let c=$("studentExcelClass")?.value||"";let q=sb.from("students").select("*").order("class_name").order("student_name");if(c)q=ldmApplyClassFilter(q,"class_name",c);let{data,error}=await q;if(error)throw error;return data||[]}
+async function getStudentExcelRows(){let c=$("studentExcelClass")?.value||"";let q=sb.from("students").select("*").order("class_name").order("student_name");if(c)q=ldmApplyClassFilter(q,"class_name",c);let{data,error}=await q;if(error)throw error;return window.ldmOperationalStudents?window.ldmOperationalStudents(data||[]):(data||[]).filter(x=>window.ldmStudentOperationalStatus?window.ldmStudentOperationalStatus(x.status):true)}
 async function exportStudentFullDetails(){try{let rows=await getStudentExcelRows(),clean=rows.map(({id,created_at,...r})=>r);let wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(clean);XLSX.utils.book_append_sheet(wb,ws,"Students Full Details");XLSX.writeFile(wb,($("studentExcelClass").value||"All")+"-Students-Full-Details.xlsx")}catch(e){toast(e.message)}}
 async function exportStudentTemplate(){try{let rows=await getStudentExcelRows();let keys=["admission_no","student_name","father_name","mother_name","phone","class_name","section","roll_no","dob","gender","address","status","fee_category","fee_waiver_percent","remarks"];let out=rows.length?rows.map(r=>Object.fromEntries(keys.map(k=>[k,r[k]??""]))):[Object.fromEntries(keys.map(k=>[k,"" ]))];let wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(out);XLSX.utils.book_append_sheet(wb,ws,"Student Update");XLSX.writeFile(wb,($("studentExcelClass").value||"All")+"-Student-Update-Template.xlsx")}catch(e){toast(e.message)}}
 async function importStudentUpdate(e){let f=e.target.files?.[0];if(!f)return;try{let wb=XLSX.read(await f.arrayBuffer()),rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""}).map(r=>{delete r.id;delete r.created_at;normalize("students",r);Object.keys(r).forEach(k=>{if(r[k]==="")delete r[k]});return r}).filter(r=>r.admission_no&&r.student_name);if(!rows.length)return toast("Valid rows not found");if(!confirm(rows.length+" students import/update?"))return;let{error}=await sb.from("students").upsert(rows,{onConflict:"admission_no"});if(!error)try{window.ldmMarkDataDirty?.('students')}catch(_e){}toast(error?error.message:rows.length+" students updated")}catch(err){toast(err.message||"Excel import failed")}finally{e.target.value=""}}
@@ -6239,15 +6289,15 @@ v64ParentViewMarksheet=async function(adm,exam){let{data,error}=await sb.rpc('v6
 
 /* ---------- Central Recycle Bin ---------- */
 const v65RecycleTables=new Set(['students','admissions','attendance','fees','homework','notices','events','gallery','transport','library','income','expenses','student_marks','teaching_diary','student_fee_schedules','timetable','v65_student_achievements','v65_fee_adjustments']);
-async function v65MoveToRecycle(table,id,label='record'){if(!v65Admin())return toast('Admin only');if(!confirm(`${label} को Recycle Bin में भेजना है? Restore possible रहेगा.`))return;let{error}=await sb.rpc('v65_move_to_recycle',{p_table:table,p_id:String(id)});if(error)return toast(error.message+' • V65 SQL check करें');toast('Moved to Recycle Bin • permanent delete नहीं हुआ');if(table==='v65_student_achievements')return v65LoadAchievements();if(table==='teaching_diary')return v65LoadTeachingControl();try{if(M?.[table])render(table);else render('v65_recycle')}catch(_e){render('v65_recycle')}}
+async function v65MoveToRecycle(table,id,label='record'){if(!v65Admin())return toast('Admin only');if(!confirm(`${label} को Recycle Bin में भेजना है? Restore possible रहेगा.`))return;let{error}=await sb.rpc('v65_move_to_recycle',{p_table:table,p_id:String(id)});if(error)return toast(error.message+' • V65 SQL check करें');if(table==='students')window.ldmV250InvalidateStudentVisibility?.();toast('Moved to Recycle Bin • permanent delete नहीं हुआ');if(table==='v65_student_achievements')return v65LoadAchievements();if(table==='teaching_diary')return v65LoadTeachingControl();try{if(M?.[table])render(table);else render('v65_recycle')}catch(_e){render('v65_recycle')}}
 const v65DelRowBase=delRow;
 delRow=async function(k,id){if(v65Admin()&&v65RecycleTables.has(k))return v65MoveToRecycle(k,id,(M?.[k]?.title||k));return v65DelRowBase(k,id)};
 async function v65RecycleCenter(){if(!v65Admin())return toast('Admin only');head('♻ Central Recycle Bin','Delete → Trash • Restore • Permanent Clean');let{data,error}=await sb.from('v65_recycle_bin').select('*').eq('status','Trashed').order('deleted_at',{ascending:false}).limit(500);if(error){$('erpContent').innerHTML=`<div class="panel v64Danger">${esc(error.message)}<br>V65 SQL run करें.</div>`;return}v65TrashRows=data||[];$('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div><h3>Trash (${v65TrashRows.length})</h3><p class="v65Muted">Permanent Delete करने पर archived database copy भी हट जाएगी और restore संभव नहीं होगा.</p></div><div class="tools"><button onclick="v65SelectTrash(true)">Select All</button><button onclick="v65SelectTrash(false)">Unselect All</button><button class="del" onclick="v65PurgeSelectedTrash()">Permanent Delete Selected</button></div></div><div class="tableWrap"><table><tr><th>✓</th><th>Module</th><th>Record</th><th>Deleted</th><th>Auto Review</th><th>Action</th></tr>${v65TrashRows.map((r,i)=>`<tr><td><input class="v65TrashCheck" data-i="${i}" type="checkbox"></td><td><span class="v65TrashTag">${esc(r.entity_type)}</span></td><td><b>${esc(r.display_name||r.entity_id||'')}</b><small class="cellSub">${esc(r.entity_id||'')}</small></td><td>${esc(String(r.deleted_at||'').replace('T',' ').slice(0,16))}</td><td>${esc(r.purge_after||'')}</td><td><div class="v65Actions"><button class="primary" onclick="v65RestoreTrash('${r.id}')">Restore</button><button class="del" onclick="v65PurgeTrash('${r.id}')">Permanent</button></div></td></tr>`).join('')||'<tr><td colspan="6">Recycle Bin empty.</td></tr>'}</table></div></div>`}
 function v65SelectTrash(v){document.querySelectorAll('.v65TrashCheck').forEach(x=>x.checked=v)}
-async function v65RestoreTrash(id){if(!confirm('Restore this record to original module?'))return;let{error}=await sb.rpc('v65_restore_recycle',{p_trash_id:id});if(error)return toast(error.message);toast('Restored');v65RecycleCenter()}
+async function v65RestoreTrash(id){if(!confirm('Restore this record to original module?'))return;let r0=v65TrashRows.find(x=>x.id===id),{error}=await sb.rpc('v65_restore_recycle',{p_trash_id:id});if(error)return toast(error.message);if(r0?.entity_type==='students')window.ldmV250InvalidateStudentVisibility?.();toast('Restored');v65RecycleCenter()}
 async function v65CleanupTrashStorage(r){try{let p=r?.payload||{},linked=r?.linked_payload||{};if(p.photo_path)await safeStorageRemove('student-media',p.photo_path);if(r?.entity_type==='admissions'&&p.aadhaar_url)await safeStorageRemove('student-media',p.aadhaar_url);if(r?.entity_type==='gallery'&&p.storage_path)await safeStorageRemove('gallery-media',p.storage_path);if(r?.entity_type==='v65_student_achievements'&&p.photo_storage_path)await safeStorageRemove('school-media',p.photo_storage_path);for(const a of (linked.admissions||[])){if(a.photo_path)await safeStorageRemove('student-media',a.photo_path);if(a.aadhaar_url)await safeStorageRemove('student-media',a.aadhaar_url)}return true}catch(e){toast('Storage clean failed: '+(e.message||e));return false}}
-async function v65PurgeTrash(id){if(!confirm('PERMANENT DELETE? Restore नहीं होगा.'))return;if(!confirm('Final confirmation: database archive + linked uploaded files permanently clean करें?'))return;let r=v65TrashRows.find(x=>x.id===id);let{error}=await sb.rpc('v65_purge_recycle',{p_trash_id:id});if(error)return toast(error.message);let cleanOk=r?await v65CleanupTrashStorage(r):true;if(!cleanOk){try{await v64LogAlert?.('warning','storage','Permanent delete storage cleanup pending','Database archive removed but one or more storage files could not be removed','v65-storage-purge-'+id)}catch(_e){}toast('Database permanently deleted • storage cleanup warning logged')}else toast('Permanently cleaned from website/archive');v65RecycleCenter()}
-async function v65PurgeSelectedTrash(){let ids=[...document.querySelectorAll('.v65TrashCheck:checked')].map(x=>v65TrashRows[Number(x.dataset.i)]?.id).filter(Boolean);if(!ids.length)return toast('Select records');if(!confirm(`${ids.length} records permanently delete?`))return;if(!confirm('FINAL: selected trash restore नहीं होगा. Continue?'))return;let warn=0;for(let id of ids){let r=v65TrashRows.find(x=>x.id===id);let{error}=await sb.rpc('v65_purge_recycle',{p_trash_id:id});if(error)return toast(error.message);if(r&&!(await v65CleanupTrashStorage(r)))warn++}toast(warn?`Database deleted • ${warn} storage cleanup warning(s)`:'Selected trash permanently cleaned');if(warn){try{await v64LogAlert?.('warning','storage','Bulk permanent delete storage cleanup pending',`${warn} storage cleanup warning(s)`,'v65-storage-bulk-purge')}catch(_e){}}v65RecycleCenter()}
+async function v65PurgeTrash(id){if(!confirm('PERMANENT DELETE? Restore नहीं होगा.'))return;if(!confirm('Final confirmation: database archive + linked uploaded files permanently clean करें?'))return;let r=v65TrashRows.find(x=>x.id===id);let{error}=await sb.rpc('v65_purge_recycle',{p_trash_id:id});if(error)return toast(error.message);if(r?.entity_type==='students')window.ldmV250InvalidateStudentVisibility?.();let cleanOk=r?await v65CleanupTrashStorage(r):true;if(!cleanOk){try{await v64LogAlert?.('warning','storage','Permanent delete storage cleanup pending','Database archive removed but one or more storage files could not be removed','v65-storage-purge-'+id)}catch(_e){}toast('Database permanently deleted • storage cleanup warning logged')}else toast('Permanently cleaned from website/archive');v65RecycleCenter()}
+async function v65PurgeSelectedTrash(){let ids=[...document.querySelectorAll('.v65TrashCheck:checked')].map(x=>v65TrashRows[Number(x.dataset.i)]?.id).filter(Boolean);if(!ids.length)return toast('Select records');if(!confirm(`${ids.length} records permanently delete?`))return;if(!confirm('FINAL: selected trash restore नहीं होगा. Continue?'))return;let warn=0;for(let id of ids){let r=v65TrashRows.find(x=>x.id===id);let{error}=await sb.rpc('v65_purge_recycle',{p_trash_id:id});if(error)return toast(error.message);if(r&&!(await v65CleanupTrashStorage(r)))warn++}toast(warn?`Database deleted • ${warn} storage cleanup warning(s)`:'Selected trash permanently cleaned');if(warn){try{await v64LogAlert?.('warning','storage','Bulk permanent delete storage cleanup pending',`${warn} storage cleanup warning(s)`,'v65-storage-bulk-purge')}catch(_e){}}window.ldmV250InvalidateStudentVisibility?.();v65RecycleCenter()}
 
 /* ---------- Extended website health indicator ---------- */
 if(typeof v64RefreshHealthBadge==='function'){
@@ -13927,7 +13977,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
    window.v150RenderStudents();window.scrollTo(0,0);
  };
  window.v150RenderStudents=function(){let q=String(document.getElementById('v150SMQ')?.value||'').toLowerCase().trim(),cl=document.getElementById('v150SMClass')?.value||'',a=masterRows.filter(x=>(!cl||ldmClassSame(x.class_name,cl))&&(!q||[x.student_name,x.father_name,x.roll_no,x.admission_no,x.student_id,x.phone].some(v=>String(v||'').toLowerCase().includes(q))));let b=document.getElementById('v150SMBody');if(!b)return;b.innerHTML=`<div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Class</th><th>Roll</th><th>Admission / Student ID</th><th>Mobile</th><th>Status</th><th>Master Actions</th></tr>${a.map(x=>`<tr><td><b>${E(x.student_name||'')}</b></td><td>${E(x.father_name||'—')}</td><td>${E(x.class_name||'—')}</td><td>${E(x.roll_no||'—')}</td><td>${E(x.admission_no||'—')}<small class="cellSub">${E(x.student_id||'')}</small></td><td>${E(x.phone||'—')}</td><td>${E(x.status||'Active')}</td><td><div class="v150MasterActions"><button onclick="dashboardStudentFull('${E(x.id)}');setTimeout(()=>document.getElementById('v150SMDetail')?.scrollIntoView({behavior:'smooth',block:'start'}),50)">Full Details</button><button class="edit" onclick='openEdit("students",${JSON.stringify(x).replace(/'/g,"&#39;")})'>Edit / Correct</button><button onclick="openStudentFeeAccount?.('${E(x.id)}')">Fee Link</button><button class="del" onclick="v150SafeStudentDelete('${E(x.id)}')">Delete Safety</button></div></td></tr>`).join('')||'<tr><td colspan="8">No matching active students</td></tr>'}</table></div>`};
- window.v150SafeStudentDelete=async function(id){let x=masterRows.find(r=>String(r.id)===String(id));if(!x)return;if(!confirm(`Student को Recycle Bin में भेजना है?\n${x.student_name||''}\nRestore possible रहेगा.`))return;let rr=await sb.rpc('v65_move_to_recycle',{p_table:'students',p_id:String(id)});if(rr.error)return window.toast?.(rr.error.message+' • Recycle Bin SQL check करें');masterRows=masterRows.filter(r=>String(r.id)!==String(id));window.v150RenderStudents();window.toast?.('✓ Student Recycle Bin में भेजा गया • main list से हट गया')};
+ window.v150SafeStudentDelete=async function(id){let x=masterRows.find(r=>String(r.id)===String(id));if(!x)return;if(!confirm(`Student को Recycle Bin में भेजना है?\n${x.student_name||''}\nRestore possible रहेगा.`))return;let rr=await sb.rpc('v65_move_to_recycle',{p_table:'students',p_id:String(id)});if(rr.error)return window.toast?.(rr.error.message+' • Recycle Bin SQL check करें');window.ldmV250InvalidateStudentVisibility?.();masterRows=masterRows.filter(r=>String(r.id)!==String(id));window.v150RenderStudents();window.toast?.('✓ Student Recycle Bin में भेजा गया • main list से हट गया')};
 
 
  /* V156 Admin Dashboard canonical order + summary drill-down. Existing module renderers remain the single owners. */
@@ -16809,7 +16859,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     return out;
   }
 
-  async function loadAllStudents(){
+  async function loadAllStudents(mode='operational'){
     const fields='id,student_id,admission_no,student_name,father_name,mother_name,phone,class_name,section,roll_no,dob,gender,address,status,fee_category,fee_waiver_percent,remarks';
     const out=[];const page=1000;let from=0;
     for(let guard=0;guard<20;guard++){
@@ -16819,7 +16869,22 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
       if(rows.length<page)break;
       from+=page;
     }
-    return out;
+    if(mode==='all')return out;
+    if(mode==='match')return out.filter(x=>!['deleted','trashed','recycled'].includes(String(x.status||'active').trim().toLowerCase()));
+    return window.ldmOperationalStudents?window.ldmOperationalStudents(out):out.filter(x=>window.ldmStudentOperationalStatus?window.ldmStudentOperationalStatus(x.status):true);
+  }
+
+  async function loadTrashedStudentKeys(){
+    const ids=new Set(),adms=new Set();
+    try{
+      const r=await sb.from('v65_recycle_bin').select('payload').eq('entity_type','students').eq('status','Trashed').limit(1000);
+      if(r.error)return {ids,adms};
+      for(const z of (r.data||[])){
+        const p=z?.payload||{},sid=idKey(p.student_id),adm=admKey(p.admission_no);
+        if(sid)ids.add(sid);if(adm)adms.add(adm);
+      }
+    }catch(_e){}
+    return {ids,adms};
   }
 
   async function loadFeeState(adms){
@@ -16907,7 +16972,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     const rows=raw.map(cleanRow).filter(r=>Object.values(r).some(has));
     if(!rows.length)throw new Error('Excel में कोई data row नहीं मिली.');
 
-    const existing=await loadAllStudents(),byId=new Map(),byAdm=new Map(),natural=new Map();
+    const [existing,trashKeys]=await Promise.all([loadAllStudents('match'),loadTrashedStudentKeys()]),byId=new Map(),byAdm=new Map(),natural=new Map();
     const addIndex=s=>{
       const sid=idKey(s.student_id),adm=admKey(s.admission_no);if(sid)byId.set(sid,s);if(adm)byAdm.set(adm,s);
       naturalKeys(s).forEach(k=>{if(!natural.has(k))natural.set(k,new Map());natural.get(k).set(String(s.id),s)});
@@ -16923,6 +16988,9 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
         const sid=idKey(row.student_id),adm=admKey(row.admission_no),a=sid?byId.get(sid)||null:null,b=adm?byAdm.get(adm)||null:null;
         if(a&&b&&String(a.id)!==String(b.id)){conflicts++;details.push(`Row ${excelRow}: Student ID और Admission No. अलग students से match करते हैं.`);continue}
         let old=a||b||null;
+        if(!old&&((sid&&trashKeys.ids.has(sid))||(adm&&trashKeys.adms.has(adm)))){
+          conflicts++;details.push(`Row ${excelRow}: यह Student अभी Recycle Bin में है. पहले Restore करें या Permanent Delete करें; Excel import इसे duplicate/re-create नहीं करेगा.`);continue
+        }
         const candidates=new Map();naturalKeys(row).forEach(k=>(natural.get(k)||new Map()).forEach((s,id)=>candidates.set(id,s)));
         if(!old&&!sid&&!adm){if(candidates.size===1)old=[...candidates.values()][0];else if(candidates.size>1){conflicts++;details.push(`Row ${excelRow}: blank-ID row multiple students से match हो रही है.`);continue}}
         else if(!old&&(sid||adm)&&candidates.size){conflicts++;details.push(`Row ${excelRow}: ID नहीं मिला लेकिन यही student existing data से match हो रहा है; ID जाँचें.`);continue}
@@ -16990,14 +17058,14 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     const f=e.target.files?.[0];if(!f)return;
     try{
       if(!confirm('CENTRAL SYNC: केवल वास्तव में बदली Student fields और Central Due/Fee fields update होंगी. Blank cells पुराना data नहीं मिटाएँगी. Continue?'))return;
-      const r=await importMaster(f,true);showSummary(r,target);window.toast?.(`Sync • Student ${r.updated||0} • Fee ${r.feeUpdated||0} • Same ${r.unchanged||0} • Error ${r.errors||0}`);window.ldmMarkDataDirty?.('students');window.ldmMarkDataDirty?.('fees');
+      const r=await importMaster(f,true);showSummary(r,target);window.toast?.(`Sync • Student ${r.updated||0} • Fee ${r.feeUpdated||0} • Same ${r.unchanged||0} • Error ${r.errors||0}`);window.ldmV250InvalidateStudentVisibility?.();window.ldmMarkDataDirty?.('students');window.ldmMarkDataDirty?.('fees');
     }catch(err){console.error(err);window.toast?.(err?.message||'Excel sync failed')}finally{e.target.value=''}
   }
 
   async function center(){
     if(typeof window.head==='function')window.head('Student + Central Due Master Excel','One Student Source • One Due Source • Changed Fields Only');
     const root=$id('erpContent');if(!root)return;
-    root.innerHTML=`<div class="panel"><div class="v70Banner"><b>ONE CENTRAL MASTER:</b> Student master और Due Fee एक ही Excel से exact sync. केवल बदली हुई value पर write होगा; unchanged row no-op रहेगी.</div><div class="tools"><select id="studentExcelClass"><option value="">All Classes</option>${(window.cls||[]).map(c=>`<option>${esc2(c)}</option>`).join('')}</select><button id="v240Export" class="secondary">⬇ Download Master Student + Due Excel</button><button id="v240Import" class="primary">⬆ Upload / Sync Same Excel</button></div><input id="studentExcelImport" class="hidden" type="file" accept=".xlsx,.xls,.csv"><div class="v70Rule"><b>✓ Same Student ID / Admission No. = exact central student</b><span>✓ Only truly changed student fields update</span><span>✓ Due Till Month + Amount = one central due</span><span>✓ Same row = zero write</span><span>✓ Blank cells = old value safe</span><span>✓ Missing row = no delete</span><span>✓ Paid receipts/history = untouched</span></div><div id="v53ImportSummary"></div></div>`;
+    root.innerHTML=`<div class="panel"><div class="v70Banner"><b>ONE CENTRAL MASTER:</b> Student master और Due Fee एक ही Excel से exact sync. केवल बदली हुई value पर write होगा; unchanged row no-op रहेगी.</div><div class="tools"><select id="studentExcelClass"><option value="">All Classes</option>${(window.cls||[]).map(c=>`<option>${esc2(c)}</option>`).join('')}</select><button id="v240Export" class="secondary">⬇ Download Master Student + Due Excel</button><button id="v240Import" class="primary">⬆ Upload / Sync Same Excel</button></div><input id="studentExcelImport" class="hidden" type="file" accept=".xlsx,.xls,.csv"><div class="v70Rule"><b>✓ Same Student ID / Admission No. = exact central student</b><span>✓ Only truly changed student fields update</span><span>✓ Due Till Month + Amount = one central due</span><span>✓ Same row = zero write</span><span>✓ Blank cells = old value safe</span><span>✓ Missing row = no delete</span><span>✓ Recycle/Deleted student = normal export से excluded</span><span>✓ Recycle Bin student = import re-create blocked</span><span>✓ Paid receipts/history = untouched</span></div><div id="v53ImportSummary"></div></div>`;
     $id('v240Export').onclick=exportMaster;$id('v240Import').onclick=()=>$id('studentExcelImport').click();$id('studentExcelImport').onchange=e=>importEvent(e,'v53ImportSummary');
   }
 
