@@ -3,7 +3,9 @@ const C=window.LDM_FACTORY_CATALOG,M=window.LDM_FACTORY_MANIFEST,$=id=>document.
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const money=n=>'₹'+Math.round(Number(n||0)).toLocaleString('en-IN');
 const P=new URLSearchParams(location.search),token=P.get('token');
-const pc=window.LDM_FACTORY_PUBLIC_CONFIG||{},url=String(pc.supabaseUrl||'').replace(/\/$/,''),key=String(pc.anonKey||'');
+const pc=window.LDM_FACTORY_PUBLIC_CONFIG||{};let url=String(pc.supabaseUrl||'').replace(/\/$/,''),key=String(pc.anonKey||'');
+function linkCfg(){try{let h=new URLSearchParams(location.hash.replace(/^#/,'')),b=h.get('ldmcfg')||sessionStorage.getItem('ldm_factory_link_cfg_v1')||'';if(!b)return null;b=decodeURIComponent(b).replace(/-/g,'+').replace(/_/g,'/');while(b.length%4)b+='=';let x=JSON.parse(atob(b));let u=String(x.u||'').replace(/\/$/,''),k=String(x.k||'');return /^https:\/\//.test(u)&&k.length>20?{u,k}:null}catch(e){return null}}
+if(!/^https:\/\//.test(url)||key.length<20){let x=linkCfg();if(x){url=x.u;key=x.k;try{sessionStorage.setItem('ldm_factory_link_cfg_v1',location.hash.replace(/^#ldmcfg=/,''))}catch(e){}}}
 let sb=null,data=null,sel={theme_id:'modern3d',plan_id:'standard',features:[]};
 function toast(m){let e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),2400)}
 function model(){return C.models.find(x=>x.id===data?.model_id)}

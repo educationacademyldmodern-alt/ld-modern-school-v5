@@ -1,6 +1,8 @@
 (()=>{'use strict';
 const p=new URLSearchParams(location.search),slug=(p.get('site')||'').trim().toLowerCase();
-const cfg=window.LDM_FACTORY_PUBLIC_CONFIG||{},url=String(cfg.supabaseUrl||'').replace(/\/$/,''),key=String(cfg.anonKey||'');
+const cfg=window.LDM_FACTORY_PUBLIC_CONFIG||{};let url=String(cfg.supabaseUrl||'').replace(/\/$/,''),key=String(cfg.anonKey||'');
+function linkCfg(){try{let h=new URLSearchParams(location.hash.replace(/^#/,'')),b=h.get('ldmcfg')||localStorage.getItem('ldm_factory_public_link_cfg_v1')||'';if(!b)return null;let raw=b.replace(/-/g,'+').replace(/_/g,'/');while(raw.length%4)raw+='=';let x=JSON.parse(atob(raw));let u=String(x.u||'').replace(/\/$/,''),k=String(x.k||'');if(!/^https:\/\//.test(u)||k.length<20)return null;try{localStorage.setItem('ldm_factory_public_link_cfg_v1',b)}catch(e){}return {u,k}}catch(e){return null}}
+if(!/^https:\/\//.test(url)||key.length<20){let x=linkCfg();if(x){url=x.u;key=x.k}}
 const root=document.getElementById('erpApp');
 if(!/^[a-z0-9][a-z0-9-]{1,62}$/.test(slug)||!/^https:\/\//.test(url)||key.length<20||!window.supabase){root.innerHTML='<div class="empty" style="margin:20px">Customer ERP configuration invalid or unavailable.</div>';return}
 const sb=supabase.createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
