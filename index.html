@@ -16319,9 +16319,9 @@ if(typeof statsBase==='function'){
  function role(){return String(window.profile?.role||'').trim().toLowerCase()}
  function schoolAllowed(){return ['admin','super_admin','principal'].includes(role())}
  function ownerRole(){return ['admin','super_admin'].includes(role())}
- function openApp(file){window.open('./'+file,'_blank','noopener')}
+ function openApp(file){const u=/^https?:\/\//i.test(String(file||''))?String(file):'./'+file;window.open(u,'_blank','noopener')}
  function card(id,icon,title,sub,file){let b=document.createElement('button');b.id=id;b.type='button';b.innerHTML=`<i>${icon}</i><b>${title}</b><small>${sub}</small><em>OPEN →</em>`;b.onclick=()=>openApp(file);return b}
- function install(){if(!schoolAllowed())return;let grid=document.querySelector('.ldmMasterGrid');if(!grid)return;if(!document.getElementById('v230UdiseCard'))grid.appendChild(card('v230UdiseCard','🏫','UDISE+ Control Center','Profile • Facilities • Students • Teachers • Readiness','udise.html'));if(ownerRole()&&!document.getElementById('v230AdvocateCard'))grid.appendChild(card('v230AdvocateCard','⚖️','Advocate Control Center','FIR/CNR • Cases • Hearings • Drafting • Legal Books','advocate.html'));if(ownerRole()&&!document.getElementById('v230DeveloperCard'))grid.appendChild(card('v230DeveloperCard','💻','ERP Builder & Developer Studio','Sector ERP • Requirements • Security Gate • Version • Delivery','developer.html'))}
+ function install(){if(!schoolAllowed())return;let grid=document.querySelector('.ldmMasterGrid');if(!grid)return;if(!document.getElementById('v230UdiseCard'))grid.appendChild(card('v230UdiseCard','🏫','UDISE+ Control Center','Profile • Facilities • Students • Teachers • Readiness','udise.html'));if(ownerRole()&&!document.getElementById('v230AdvocateCard'))grid.appendChild(card('v230AdvocateCard','⚖️','Advocate Control Center','FIR/CNR • Cases • Hearings • Drafting • Legal Books','advocate.html'));if(ownerRole()&&!document.getElementById('v230DeveloperCard'))grid.appendChild(card('v230DeveloperCard','💻','ERP Builder & Developer Studio','Sector ERP • Requirements • Security Gate • Version • Delivery','https://ldm-erp-factory-pro.vercel.app/'))}
  window.ldmV230InstallWorkspace=install;
  /* V245: workspace cards are installed by V233 dashboard owner; no all-route wrapper. */
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,120),{once:true});else setTimeout(install,120);
@@ -17277,5 +17277,149 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 <!-- ===== V248 EXCEL CLASS IDENTITY ROOT FIX ===== -->
 <script>window.LDM_EXCEL_CLASS_BUILD="V248-2026-10-05";</script>
 <!-- ===== END V248 EXCEL CLASS IDENTITY ROOT FIX ===== -->
+
+<!-- ===== V249 OFFICIAL TYPOGRAPHY + HINDI/ENGLISH TYPING ===== -->
+<style id="v249-official-typography">
+:root{
+  --ldm-ui-font:"Noto Sans Devanagari","Nirmala UI",Mangal,"Segoe UI",Roboto,Arial,sans-serif;
+  --ldm-ui-text:clamp(15px,calc(14.6px + .12vw),16px);
+  --ldm-ui-small:clamp(13.5px,calc(13.2px + .10vw),14.5px);
+  --ldm-ui-control:16px;
+  --ldm-ui-line:1.48;
+}
+@media screen{
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{font-family:var(--ldm-ui-font)!important;font-size:var(--ldm-ui-text);line-height:var(--ldm-ui-line)}
+  input,textarea,select,button,[contenteditable="true"]{font-family:var(--ldm-ui-font)!important}
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),textarea,select{
+    font-size:var(--ldm-ui-control)!important;line-height:1.38!important
+  }
+  button,.btn,.button,[role="button"],a.btn,a.button{
+    font-size:clamp(15px,calc(14.7px + .10vw),16px)!important;line-height:1.28!important
+  }
+  label,.label,.form-label,.field-label,p,li,dd,dt{font-size:var(--ldm-ui-text);line-height:var(--ldm-ui-line)}
+  small,.small,.text-small,.text-xs,.hint,.help,.helper,.muted,.subtext,.note,.caption{
+    font-size:var(--ldm-ui-small)!important;line-height:1.42!important
+  }
+  table{font-size:15px!important}
+  th,td{font-size:15px!important;line-height:1.42!important}
+  h1{font-size:clamp(24px,3.3vw,34px)!important;line-height:1.18!important}
+  h2{font-size:clamp(21px,2.7vw,29px)!important;line-height:1.22!important}
+  h3{font-size:clamp(18px,2.15vw,24px)!important;line-height:1.26!important}
+  h4{font-size:clamp(16px,1.75vw,20px)!important;line-height:1.30!important}
+  /* Lift only legacy tiny screen text. Print/ID-card/certificate engines keep their own print CSS. */
+  [style*="font-size:8px"],[style*="font-size:9px"],[style*="font-size:10px"],
+  [style*="font-size:11px"],[style*="font-size:12px"],[style*="font-size:13px"]{font-size:var(--ldm-ui-small)!important;line-height:1.4!important}
+  /* Controls should not trigger accidental blue text selection; editable content remains selectable. */
+  :where(button,.btn,.button,[role="button"],nav a,.erpCard,.card[onclick],[onclick]:not(input):not(textarea):not([contenteditable="true"])){
+    -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation
+  }
+  input,textarea,[contenteditable="true"]{-webkit-user-select:text!important;user-select:text!important}
+  #ldmV249LangToggle{
+    position:fixed;left:max(10px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:2147482500;
+    min-width:58px;min-height:38px;padding:8px 11px;border:1px solid rgba(15,76,129,.22);border-radius:999px;
+    background:#fff;color:#103f6e;box-shadow:0 5px 18px rgba(20,55,90,.18);font-weight:800!important;
+    font-size:14px!important;line-height:1!important;display:flex;align-items:center;justify-content:center;gap:5px
+  }
+  #ldmV249LangToggle[data-mode="hi"]{background:#0b73d9;color:#fff;border-color:#0b73d9}
+  #ldmV249LangToggle:focus-visible{outline:3px solid rgba(11,115,217,.28);outline-offset:2px}
+}
+@media screen and (max-width:520px){
+  :root{--ldm-ui-text:15.5px;--ldm-ui-small:14px;--ldm-ui-control:16px}
+  table{font-size:14.5px!important} th,td{font-size:14.5px!important}
+}
+@media print{#ldmV249LangToggle{display:none!important}}
+</style>
+<script id="v249-hindi-english-typing">
+(function(){'use strict';
+  if(window.__LDM_V249_TYPOGRAPHY__)return;window.__LDM_V249_TYPOGRAPHY__=true;
+  const MODE_KEY='ldm_typing_mode_v249';
+  const techType=new Set(['password','email','tel','number','date','datetime-local','time','month','week','file','checkbox','radio','range','color','url']);
+  const techHint=/(?:password|pass|email|mail|mobile|phone|contact|admission|adm[_-]?no|roll|student[_-]?id|employee[_-]?id|teacher[_-]?id|aadhaar|aadhar|apaar|ifsc|upi|account|amount|fee|price|rate|date|time|session|class[_-]?id|pin|otp|captcha|username|user[_-]?id)/i;
+  const dict=Object.freeze({
+    main:'मैं',mai:'मैं',mein:'में',hain:'हैं',hai:'है',hun:'हूँ',hu:'हूँ',ho:'हो',nahi:'नहीं',nahin:'नहीं',
+    aap:'आप',aapka:'आपका',aapki:'आपकी',aapke:'आपके',apna:'अपना',apni:'अपनी',apne:'अपने',
+    mera:'मेरा',meri:'मेरी',mere:'मेरे',ham:'हम',hum:'हम',hamara:'हमारा',hamari:'हमारी',hamare:'हमारे',
+    ka:'का',ki:'की',ke:'के',ko:'को',se:'से',aur:'और',ya:'या',yah:'यह',yeh:'यह',vah:'वह',woh:'वह',ek:'एक',
+    aaj:'आज',kal:'कल',ab:'अब',kab:'कब',kya:'क्या',kyu:'क्यों',kyon:'क्यों',kaise:'कैसे',liye:'लिए',
+    naam:'नाम',pata:'पता',gaon:'गाँव',jila:'जिला',dinank:'दिनांक',samay:'समय',kripya:'कृपया',dhanyavad:'धन्यवाद',
+    vidyalaya:'विद्यालय',school:'स्कूल',shiksha:'शिक्षा',shikshak:'शिक्षक',shikshika:'शिक्षिका',adhyapak:'अध्यापक',adhyapika:'अध्यापिका',
+    pradhanacharya:'प्रधानाचार्य',chhatra:'छात्र',chhatri:'छात्री',bachcha:'बच्चा',bachche:'बच्चे',baccha:'बच्चा',
+    mata:'माता',pita:'पिता',kaksha:'कक्षा',upasthiti:'उपस्थिति',shulk:'शुल्क',fees:'फीस',pariksha:'परीक्षा',parinam:'परिणाम',
+    suchna:'सूचना',aavedan:'आवेदन',avedan:'आवेदन',mahoday:'महोदय',mahodaya:'महोदया',shri:'श्री',shriman:'श्रीमान',
+    janakari:'जानकारी',jaankari:'जानकारी',mobile:'मोबाइल',student:'स्टूडेंट',teacher:'टीचर',parent:'पैरेंट',homework:'होमवर्क',
+    notice:'नोटिस',class:'क्लास',fee:'फीस',admission:'एडमिशन',attendance:'अटेंडेंस',result:'रिजल्ट',cyber:'साइबर',safety:'सेफ्टी',online:'ऑनलाइन',internet:'इंटरनेट',computer:'कंप्यूटर',library:'लाइब्रेरी',office:'ऑफिस',message:'मैसेज'
+  });
+  const vowels=['aa','ai','au','ee','ii','oo','uu','ri','a','i','u','e','o'];
+  const independent={aa:'आ',ai:'ऐ',au:'औ',ee:'ई',ii:'ई',oo:'ऊ',uu:'ऊ',ri:'ऋ',a:'अ',i:'इ',u:'उ',e:'ए',o:'ओ'};
+  const matra={aa:'ा',ai:'ै',au:'ौ',ee:'ी',ii:'ी',oo:'ू',uu:'ू',ri:'ृ',a:'',i:'ि',u:'ु',e:'े',o:'ो'};
+  const consMap={
+    ksh:'क्ष',jny:'ज्ञ',shr:'श्र',gy:'ज्ञ',tr:'त्र',chh:'छ',kh:'ख',gh:'घ',jh:'झ',th:'थ',dh:'ध',ph:'फ',bh:'भ',
+    sh:'श',ch:'च',ng:'ङ',ny:'ञ',tt:'ट',dd:'ड',rr:'ड़',k:'क',g:'ग',j:'ज',t:'त',d:'द',n:'न',p:'प',f:'फ',b:'ब',m:'म',
+    y:'य',r:'र',l:'ल',v:'व',w:'व',s:'स',h:'ह',q:'क',x:'क्स',z:'ज़',c:'क'
+  };
+  const cons=Object.keys(consMap).sort((a,b)=>b.length-a.length);
+  function matchAt(word,i,list){for(const t of list)if(word.startsWith(t,i))return t;return ''}
+  function transliterateWord(raw){
+    if(!raw||!/^[A-Za-z]+$/.test(raw))return raw;
+    const lower=raw.toLowerCase();if(dict[lower])return dict[lower];
+    let out='',i=0;
+    while(i<lower.length){
+      const v=matchAt(lower,i,vowels);
+      if(v){out+=independent[v];i+=v.length;continue}
+      const c=matchAt(lower,i,cons);
+      if(!c){out+=raw[i];i++;continue}
+      out+=consMap[c];i+=c.length;
+      const nv=matchAt(lower,i,vowels);
+      if(nv){out+=matra[nv];i+=nv.length;continue}
+      const nc=matchAt(lower,i,cons);
+      if(nc)out+='्';
+    }
+    return out;
+  }
+  function currentMode(){try{return localStorage.getItem(MODE_KEY)==='hi'?'hi':'en'}catch(_e){return 'en'}}
+  function setMode(mode,quiet){
+    mode=mode==='hi'?'hi':'en';try{localStorage.setItem(MODE_KEY,mode)}catch(_e){}
+    const b=document.getElementById('ldmV249LangToggle');if(b){b.dataset.mode=mode;b.setAttribute('aria-pressed',mode==='hi'?'true':'false');b.textContent=mode==='hi'?'अ हिंदी':'EN';b.title=mode==='hi'?'Hindi typing ON • Roman शब्द space पर हिंदी में बदलेंगे • English के लिए tap करें':'English typing ON • हिंदी typing के लिए tap करें'}
+    if(!quiet)try{window.toast?.(mode==='hi'?'हिंदी Typing ON • Roman लिखें, Space दबाएँ':'English Typing ON')}catch(_e){}
+  }
+  function eligible(el){
+    if(!el||!(el instanceof HTMLElement))return false;
+    if(el.matches?.('[data-ldm-no-transliterate="true"]'))return false;
+    if(el.matches?.('[data-ldm-transliterate="true"]'))return true;
+    if(!(el instanceof HTMLInputElement||el instanceof HTMLTextAreaElement))return false;
+    if(el instanceof HTMLInputElement&&techType.has(String(el.type||'text').toLowerCase()))return false;
+    const hint=[el.id,el.name,el.autocomplete,el.placeholder,el.getAttribute('aria-label')].filter(Boolean).join(' ');
+    if(techHint.test(hint))return false;
+    return !el.readOnly&&!el.disabled;
+  }
+  function replacePreviousWord(el){
+    if(!eligible(el)||currentMode()!=='hi')return false;
+    const start=Number(el.selectionStart),end=Number(el.selectionEnd);if(!Number.isFinite(start)||start!==end)return false;
+    const before=el.value.slice(0,start),m=before.match(/([A-Za-z]{1,48})$/);if(!m)return false;
+    const word=m[1],hi=transliterateWord(word);if(!hi||hi===word)return false;
+    const from=start-word.length;el.value=el.value.slice(0,from)+hi+el.value.slice(start);
+    const pos=from+hi.length;try{el.setSelectionRange(pos,pos)}catch(_e){}
+    try{el.dispatchEvent(new InputEvent('input',{bubbles:true,inputType:'insertText',data:null}))}catch(_e){el.dispatchEvent(new Event('input',{bubbles:true}))}
+    return true;
+  }
+  function ensureToggle(){
+    if(document.getElementById('ldmV249LangToggle')||!document.body)return;
+    const b=document.createElement('button');b.id='ldmV249LangToggle';b.type='button';b.setAttribute('aria-label','Hindi English typing mode');
+    b.addEventListener('click',()=>setMode(currentMode()==='hi'?'en':'hi'));
+    document.body.appendChild(b);setMode(currentMode(),true);
+  }
+  document.addEventListener('keydown',function(e){
+    if(currentMode()!=='hi'||e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey)return;
+    if(e.key===' '||e.key==='Enter'||e.key==='Tab'||e.key===','||e.key==='.'||e.key==='!'||e.key==='?'||e.key===';'||e.key===':')replacePreviousWord(e.target);
+  },true);
+  document.addEventListener('focusout',function(e){if(currentMode()==='hi')replacePreviousWord(e.target)},true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensureToggle,{once:true});else ensureToggle();
+  window.ldmV249Transliterate=transliterateWord;
+  window.ldmV249SetTypingMode=setMode;
+  window.LDM_TYPOGRAPHY_BUILD='V249-OFFICIAL-TYPOGRAPHY-HINDI-TYPING-2026-10-05';
+})();
+</script>
+<!-- ===== END V249 OFFICIAL TYPOGRAPHY + HINDI/ENGLISH TYPING ===== -->
 </body>
 </html>
