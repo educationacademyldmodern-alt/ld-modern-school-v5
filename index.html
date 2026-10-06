@@ -31,7 +31,7 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
 <meta charset="utf-8"><meta name="ld-modern-build" content="V210-PREMIUM-ROOT-FINAL-2026-10-03"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V251-WALL-TEACHING-TIMETABLE-2026-10-06"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V253-RECHECKED-COMPLETE-ROOT-2026-10-06"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -974,7 +974,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @media print{body{background:#fff!important;padding:0!important;margin:0!important}.v234AdmissionPrintArea{padding:0!important;background:#fff!important}.v234AdmissionPage{margin:0!important;box-shadow:none!important;page-break-after:always}.v234AdmissionPage:last-child{page-break-after:auto}}
 @page{size:A4 portrait;margin:0}
 </style>
-<meta name="ldm-fix" content="V251 A4 wall teaching timetable from canonical teacher bells">
+<meta name="ldm-fix" content="V253 rechecked wall timetable + scoped delegation + central fee document gate + render lifecycle root">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -1150,7 +1150,7 @@ window.ldmV250FilterOperationalRows=ldmV250FilterOperationalRows;
 const roles=["super_admin","admin","principal","admission","accountant","teacher","librarian","transport","student","parent","viewer"];
 const permissions={super_admin:["*"],admin:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","exam_admit_center","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","users","excel","settings"],principal:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","exam_admit_center","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","excel","settings"],admission:["dashboard","admissions","students","enquiries","excel"],accountant:["dashboard","students","fees","fee_dashboard","fee_structure","payroll","income","expenses","balance","excel"],teacher:["dashboard","students","attendance","exams","timetable","homework","events","notices"],librarian:["dashboard","students","library"],transport:["dashboard","students","transport"],student:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],parent:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],viewer:["dashboard","notices"]};
 const write={admissions:["super_admin","admin","principal","admission"],students:["super_admin","admin","principal","admission"],academics:["super_admin","admin","principal"],attendance:["super_admin","admin","principal","teacher"],staff_attendance:["super_admin","admin","principal"],fees:["super_admin","admin","principal","accountant"],exams:["super_admin","admin","principal","teacher"],staff:["super_admin","admin","principal"],leave:["super_admin","admin","principal"],payroll:["super_admin","admin","principal","accountant"],timetable:["super_admin","admin","principal","teacher"],homework:["super_admin","admin","principal","teacher"],events:["super_admin","admin","principal","teacher"],notices:["super_admin","admin","principal","teacher"],gallery:["super_admin","admin","principal"],enquiries:["super_admin","admin","principal","admission"],transport:["super_admin","admin","principal","transport"],library:["super_admin","admin","principal","librarian"],income:["super_admin","admin","principal","accountant"],expenses:["super_admin","admin","principal","accountant"],fee_structures:["super_admin","admin","principal","accountant"],fee_installments:["super_admin","admin","principal","accountant"],fee_heads:["super_admin","admin","principal","accountant"],classes:["super_admin","admin","principal"],sections:["super_admin","admin","principal"],subjects:["super_admin","admin","principal"]};
-const can=k=>profile&&(["super_admin","admin","principal"].includes(String(profile.role||"").toLowerCase())||permissions[profile.role]?.includes("*")||permissions[profile.role]?.includes(k)),canEdit=k=>profile&&(["super_admin","admin","principal"].includes(String(profile.role||"").toLowerCase())||write[k]?.includes(profile?.role));
+const can=k=>profile&&(["super_admin","admin","principal"].includes(String(profile.role||"").toLowerCase())||window.ldmDelegationCan?.(k)||permissions[profile.role]?.includes("*")||permissions[profile.role]?.includes(k)),canEdit=k=>profile&&(["super_admin","admin","principal"].includes(String(profile.role||"").toLowerCase())||window.ldmDelegationCanEdit?.(k)||write[k]?.includes(profile?.role));
 const M={
 admissions:{title:"Modern Admission Management",fields:[["#","Application & Admission"],F("application_no","Application No."),F("admission_no","Admission No."),F("admission_date","Admission Date","date"),F("academic_session","Academic Session"),F("admission_type","Admission Type"),F("admission_source","Admission Source"),F("admission_status","Admission Status"),["#","Student Profile"],F("student_name","Student Name","text",1),F("class_name","Class","class",1),F("section","Section"),F("roll_no","Roll No."),F("dob","DOB","date"),F("gender","Gender","gender"),F("pen_no","PEN"),F("apaar_id","APAAR ID"),F("udise_student_id","UDISE Student ID"),F("student_id","Student ID"),["#","Parent / Guardian"],F("father_name","Father Name"),F("father_occupation","Father Occupation"),F("mother_name","Mother Name"),F("mother_occupation","Mother Occupation"),F("guardian_name","Guardian"),F("relation_with_guardian","Guardian Relation"),F("primary_phone","Primary Mobile","text",1),F("alternate_phone","Alternate Mobile"),F("email","Student Email","email"),F("parent_email","Parent Email","email"),["#","Address"],F("address","Full Address","textarea",0,"full"),F("village_city","Village / City"),F("district","District"),F("state","State"),F("pincode","PIN"),["#","Previous School / Academic"],F("previous_school","Previous School"),F("previous_class","Previous Class"),F("tc_no","TC No."),F("document_status","Document Status"),F("transport_required","Transport Required","yesno"),F("transport_route","Transport Route"),F("fee_structure_id","Fee Plan","planselect"),["#","Student Photo & Documents"],F("photo_path","Student Photo","student_photo",0,"full"),F("aadhaar_url","Aadhaar Card","aadhaar_file",0,"full"),F("remarks","Remarks","textarea",0,"full")],cols:[["admission_no","Adm No"],["student_name","Student"],["class_name","Class"],["father_name","Father"],["primary_phone","Mobile"],["admission_status","Status"]]},
 students:{title:"Student Management",fields:[F("student_name","Student Name","text",1),F("admission_no","Admission No.",0,1),F("student_id","Student ID"),F("roll_no","Roll"),F("class_name","Class","class"),F("section","Section"),F("father_name","Father"),F("mother_name","Mother"),F("phone","Phone"),F("student_email","Student Login Email","email"),F("parent_email","Parent Login Email","email"),F("address","Address","textarea",0,"full"),F("status","Student Status"),F("dob","DOB","date"),F("gender","Gender","gender"),F("guardian_name","Guardian"),F("emergency_phone","Emergency Phone"),["#","Student Photo"],F("photo_path","Photo / Camera","student_photo",0,"full"),F("fee_category","Fee Category"),F("fee_waiver_percent","Fee Waiver %","number"),F("remarks","Remarks","textarea",0,"full")],cols:[["student_id","Student ID"],["student_name","Student"],["admission_no","Adm No"],["class_name","Class"],["section","Sec"],["phone","Mobile"],["status","Status"]]},
@@ -1606,8 +1606,8 @@ async function importStudentUpdate(e){let f=e.target.files?.[0];if(!f)return;try
 let v14TeacherProfile=null, v14TeacherClasses=[], v14TeacherSubjects=[], v14MarkStudent=null, v14IdStudent=null;
 
 function v14Phone(x){let p=String(x||'').replace(/\D/g,'');if(p.length===10)p='+91'+p;else if(p && !p.startsWith('+'))p='+'+p;return p}
-function v14Admin(){return ['super_admin','admin','principal'].includes(profile?.role)}
-function v14Accounting(){return ['super_admin','admin','principal','accountant'].includes(profile?.role)}
+function v14Admin(){return ['super_admin','admin','principal'].includes(profile?.role)||!!window.ldmDelegationAdminScope?.()}
+function v14Accounting(){return ['super_admin','admin','principal','accountant'].includes(profile?.role)||!!window.ldmDelegationAdminScope?.()}
 function v14Teacher(){return profile?.role==='teacher'}
 function v14FmtDate(d){if(!d)return '';try{return new Date(d+'T00:00:00').toLocaleDateString('en-IN')}catch{return d}}
 function v14Pct(a,b){return b?Math.round((Number(a||0)/Number(b))*10000)/100:0}
@@ -1619,6 +1619,8 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 <!-- V107-CLEAN-PREMIUM-DOCS-2026-09-15 -->
 
 \n\n
+
+
 
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
 </script>
@@ -8745,7 +8747,7 @@ $('excelFile').onchange=async e=>{let f=e.target.files?.[0],k=$('xm')?.value;if(
 const V71_BUILD='V71-SMART-PUBLIC-HIGHLIGHTS';
 let v71HighlightRows=[];
 let v71StudentSearchRows=[];
-function v71Admin(){return ['super_admin','admin','principal'].includes(profile?.role)}
+function v71Admin(){return ['super_admin','admin','principal'].includes(profile?.role)||!!window.ldmDelegationAdminScope?.()}
 function v71BySlot(n){return (v71HighlightRows||[]).find(x=>Number(x.slot_no)===Number(n))||null}
 function v71InstallAdminNav(){
   if(!v71Admin())return;const host=$('erpNav');if(!host)return;
@@ -8906,7 +8908,7 @@ openERP=async function(){const r=await v72OpenERPBase.apply(this,arguments);v72P
 window.V74_BUILD='V74-SMART-TEACHING-BELL-2026-09-13';
 let v74Teachers=[],v74CurrentTeacher=null,v74ScheduleRows=[],v74Subjects=[];
 let v74SelectedTeacherId='',v74SelectedDay='',v74SelectedReportDate=today(),v74ParentLearningChannel=null,v74ParentLearningTimer=null;
-const v74Admin=()=>['super_admin','admin','principal'].includes(profile?.role);
+const v74Admin=()=>['super_admin','admin','principal'].includes(profile?.role)||!!window.ldmDelegationAdminScope?.();
 const v74Teacher=()=>profile?.role==='teacher';
 function v74DayName(d=new Date()){return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()]}
 function v74DayFromDate(ds){try{return v74DayName(new Date(String(ds||today())+'T12:00:00'))}catch(_e){return v74DayName()}}
@@ -8996,12 +8998,13 @@ function v251Logo(){return document.querySelector('.v26Brand img')?.src||$('pubL
 function v251TeachingStaffRow(x){let st=String(x?.status||'Active').trim().toLowerCase();if(['inactive','relieved','deleted','left'].includes(st))return false;let t=(String(x?.staff_type||'')+' '+String(x?.designation||'')).toLowerCase();return /teach|teacher|principal|head|academic/.test(t)}
 async function v251LoadWallData(day,force=false){
   if(!force&&window.__v251WallCache?.day===day)return window.__v251WallCache;
-  let [tt,tp,st]=await Promise.all([
-    sb.from('timetable').select('id,teacher_name,day_name,period_no,start_time,end_time,class_name,section,subject').eq('day_name',day).order('period_no').limit(6000),
+  let tt=await sb.from('timetable').select('id,teacher_name,day_name,period_no,start_time,end_time,class_name,section,subject').eq('day_name',day).order('period_no').limit(6000);
+  if(tt.error)throw tt.error;
+  let [tp,st]=await Promise.all([
     sb.from('teacher_profiles').select('id,teacher_name,approval_status,is_active').eq('approval_status','Approved').order('teacher_name').limit(1500),
     sb.from('staff').select('id,staff_name,staff_type,designation,status').order('staff_name').limit(2000)
   ]);
-  let er=tt.error||tp.error||st.error;if(er)throw er;
+  if(tp?.error)tp={data:[]};if(st?.error)st={data:[]};
   let rows=tt.data||[],names=[],seen=new Set();
   const add=n=>{n=String(n||'').trim();let k=v251Key(n);if(n&&k&&!seen.has(k)){seen.add(k);names.push(n)}};
   (st.data||[]).filter(v251TeachingStaffRow).forEach(x=>add(x.staff_name));
@@ -9077,7 +9080,7 @@ body.v75Dark{background:#111827;color:#e5e7eb}body.v75Dark #erp,body.v75Dark #er
 </style>
 <script id="v75-final-gap-patch">
 window.V75_FINAL_GAP_BUILD='V75-FINAL-GAP-FILL-2026-09-14';
-function v75Admin(){return ['super_admin','admin','principal'].includes(String(profile?.role||''))}
+function v75Admin(){return ['super_admin','admin','principal'].includes(String(profile?.role||''))||!!window.ldmDelegationAdminScope?.()}
 function v75Teacher(){return String(profile?.role||'')==='teacher'}
 function v75Money(n){return typeof money==='function'?money(n):'₹'+Number(n||0).toLocaleString('en-IN')}
 function v75Esc(v){return typeof esc==='function'?esc(v):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -9605,7 +9608,7 @@ setTimeout(()=>{v762RenameAdminRoute();try{if(v64IsAdmin())v58AdminSidebar?.()}c
 window.V763_BUILD='V76.3-ADMIN-MASTER-TIMETABLE-2026-09-14';
 const v763Days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 let v763Teachers=[],v763Subjects=[],v763SelectedTeacherId='',v763Teacher=null,v763WeekRows=[],v763TimeMaster=[],v763BellCount=8;
-const v763Admin=()=>['super_admin','admin','principal'].includes(String(profile?.role||''));
+const v763Admin=()=>['super_admin','admin','principal'].includes(String(profile?.role||''))||!!window.ldmDelegationAdminScope?.();
 const v763Session=()=>school?.academic_session||'2026-27';
 function v763Esc(v){return typeof esc==='function'?esc(v):String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
 async function v763LoadRefs(){let[tr,ac,tm]=await Promise.all([sb.from('teacher_profiles').select('id,auth_user_id,teacher_name,approval_status').eq('approval_status','Approved').order('teacher_name'),sb.from('academics').select('subject').limit(1500),sb.from('v763_bell_time_master').select('*').eq('academic_session',v763Session()).order('bell_no')]);if(tr.error)throw tr.error;if(ac.error)throw ac.error;if(tm.error)throw new Error(tm.error.message+' • V76.3 SQL run करें');v763Teachers=tr.data||[];v763Subjects=[...new Set((ac.data||[]).map(x=>String(x.subject||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));v763TimeMaster=tm.data||[]}
@@ -9620,7 +9623,7 @@ function v763TimeMap(){let m={};(v763TimeMaster||[]).forEach(x=>m[Number(x.bell_
 function v763RenderTimeMaster(){let host=document.getElementById('v763TimeGrid');if(!host)return;let m=v763TimeMap();host.innerHTML=Array.from({length:v763BellCount},(_,i)=>{let n=i+1,r=m[n]||{};return `<div class="v763TimeRow" data-bell="${n}"><input class="v763BellPick" type="checkbox" value="${n}"><b>Bell ${n}</b><input class="v763MasterStart" type="time" value="${v763Esc(r.start_time||'')}"><input class="v763MasterEnd" type="time" value="${v763Esc(r.end_time||'')}"></div>`}).join('');document.getElementById('v763BellPickTools').innerHTML=`<button onclick="v763SelectBells(true)">Select All Bells</button><button onclick="v763SelectBells(false)">Unselect</button><span class="note">1 या कई Bell चुनकर fast update करें</span>`}
 function v763WeekMap(){let m={};(v763WeekRows||[]).forEach(r=>m[`${r.day_name}|${Number(r.period_no)}`]=r);return m}
 function v763RenderWeek(){let host=document.getElementById('v763Week');if(!host)return;let wm=v763WeekMap(),tm=v763TimeMap();host.innerHTML=v763Days.map(day=>`<section class="v763DayCard" data-daycard="${day}"><div class="v763DayHead"><h3>${day}</h3><button onclick="v763CopyDay('${day}')">Copy this day</button></div>${Array.from({length:v763BellCount},(_,i)=>{let n=i+1,r=wm[`${day}|${n}`]||{},t=tm[n]||{};return `<div class="v763BellLine" data-day="${day}" data-bell="${n}" data-id="${v763Esc(r.id||'')}"><b>Bell ${n}</b><input class="v763Start" type="time" value="${v763Esc(r.start_time||t.start_time||'')}"><input class="v763End" type="time" value="${v763Esc(r.end_time||t.end_time||'')}"><select class="v763Class">${v763ClassOpts(r.class_name||'')}</select><input class="v763Section" placeholder="Section" value="${v763Esc(r.section||'')}"><input class="v763Subject" list="v763Subjects" placeholder="Subject" value="${v763Esc(r.subject||'')}"></div>`}).join('')}</section>`).join('')}
-async function v763TimetableMaster(){if(!v763Admin())return toast('Admin / Principal only');page='timetable_master';head('🗓️ Timetable Master','एक Teacher → पूरा Week → Timing one-time master → 1 या कई Bell fast update');document.getElementById('erpContent').innerHTML='<div class="panel"><div class="empty">Loading Timetable Master...</div></div>';try{await v763LoadRefs()}catch(e){document.getElementById('erpContent').innerHTML=`<div class="panel v64Danger"><h3>Timetable Master setup required</h3><p>${v763Esc(e.message||e)}</p></div>`;return}document.getElementById('erpContent').innerHTML=`<div class="v763Hero"><h2>🗓️ Admin Master Timetable</h2><p>Teacher select करके Monday–Saturday/Sunday का पूरा Bell timetable एक जगह बनाएं। Bell timing एक बार save करें और selected days/bells पर fast apply करें.</p></div><div class="panel"><div class="v763Top"><label>Teacher<select id="v763TeacherSel"><option value="">Select Teacher</option>${v763Teachers.map(t=>`<option value="${v763Esc(t.id)}">${v763Esc(t.teacher_name||'')}</option>`).join('')}</select></label><label>Total Bells<input id="v763BellCount" type="number" min="1" max="12" value="${v763BellCount}" onchange="v763ChangeBellCount()"></label><button class="primary" onclick="v763LoadTeacherWeek()">Open Full Week</button><button onclick="render('v74_bell_center')">Open Day Bell Editor</button></div></div><div class="panel"><div class="panelHead"><div><h3>⏰ Bell Time Master</h3><p class="note">हर Bell की timing एक बार set/save करें। बाद में किसी भी Teacher/Week में वही timing auto आएगी.</p></div><button class="primary" onclick="v763SaveTimeMaster()">Save Bell Times</button></div><div id="v763BellPickTools" class="v763BellBar"></div><div id="v763TimeGrid" class="v763TimeGrid"></div><hr><div class="v763DayBar"><b>Apply to days:</b>${v763DayChecks()}<button onclick="v763SelectDays(true)">All Days</button><button onclick="v763SelectDays(false)">None</button><button class="primary" onclick="v763ApplyMasterTimes()">Apply Selected Bell Times</button></div></div><div class="panel"><h3>⚡ Fast Update 1 / Multiple Bells</h3><p class="note">ऊपर Bell और Days select करें। नीचे सिर्फ जो fields भरेंगे वही selected rows में apply होंगे.</p><div class="v763Fast"><label>Start Time<input id="v763FastStart" type="time"></label><label>End Time<input id="v763FastEnd" type="time"></label><label>Class<select id="v763FastClass">${v763ClassOpts('')}</select></label><label>Section<input id="v763FastSection" placeholder="A / B"></label><label>Subject<input id="v763FastSubject" list="v763Subjects" placeholder="Subject"></label><button class="primary" onclick="v763FastApply()">Apply Fast</button></div></div><datalist id="v763Subjects">${v763SubjectData()}</datalist><div class="panel"><div class="panelHead"><div><h3 id="v763WeekTitle">Weekly Bell Grid</h3><p class="note">Teacher select करके Open Full Week दबाएं.</p></div></div><div id="v763Week" class="v763Week"><div class="empty">Teacher select करें.</div></div><div class="v763StickyActions"><button onclick="v763CopyMondayToSelected()">Copy Monday → Selected Days</button><button class="primary" onclick="v763SaveSelected()">Save Selected Bells</button><button class="primary" onclick="v763SaveWholeWeek()">✓ Save Whole Week</button></div></div>`;if(v763SelectedTeacherId&&v763Teachers.some(t=>String(t.id)===String(v763SelectedTeacherId))){document.getElementById('v763TeacherSel').value=v763SelectedTeacherId;await v763LoadTeacherWeek()}else{v763RenderTimeMaster()}}
+async function v763TimetableMaster(){if(!v763Admin())return toast('Admin / Principal only');page='timetable_master';head('🗓️ Timetable Master','एक Teacher → पूरा Week → Timing one-time master → 1 या कई Bell fast update');document.getElementById('erpContent').innerHTML='<div class="panel"><div class="empty">Loading Timetable Master...</div></div>';try{await v763LoadRefs()}catch(e){document.getElementById('erpContent').innerHTML=`<div class="panel v64Danger"><h3>Timetable Master setup required</h3><p>${v763Esc(e.message||e)}</p></div>`;return}document.getElementById('erpContent').innerHTML=`<div class="v763Hero"><h2>🗓️ Admin Master Timetable</h2><p>Teacher select करके Monday–Saturday/Sunday का पूरा Bell timetable एक जगह बनाएं। Bell timing एक बार save करें और selected days/bells पर fast apply करें.</p></div><div class="panel"><div class="v763Top"><label>Teacher<select id="v763TeacherSel"><option value="">Select Teacher</option>${v763Teachers.map(t=>`<option value="${v763Esc(t.id)}">${v763Esc(t.teacher_name||'')}</option>`).join('')}</select></label><label>Total Bells<input id="v763BellCount" type="number" min="1" max="12" value="${v763BellCount}" onchange="v763ChangeBellCount()"></label><button class="primary" onclick="v763LoadTeacherWeek()">Open Full Week</button><button onclick="render('v74_bell_center')">Open Day Bell Editor</button><button class="primary" onclick="render('v252_wall_timetable')">🖨️ Wall A4 Teaching Timetable</button></div></div><div class="panel"><div class="panelHead"><div><h3>⏰ Bell Time Master</h3><p class="note">हर Bell की timing एक बार set/save करें। बाद में किसी भी Teacher/Week में वही timing auto आएगी.</p></div><button class="primary" onclick="v763SaveTimeMaster()">Save Bell Times</button></div><div id="v763BellPickTools" class="v763BellBar"></div><div id="v763TimeGrid" class="v763TimeGrid"></div><hr><div class="v763DayBar"><b>Apply to days:</b>${v763DayChecks()}<button onclick="v763SelectDays(true)">All Days</button><button onclick="v763SelectDays(false)">None</button><button class="primary" onclick="v763ApplyMasterTimes()">Apply Selected Bell Times</button></div></div><div class="panel"><h3>⚡ Fast Update 1 / Multiple Bells</h3><p class="note">ऊपर Bell और Days select करें। नीचे सिर्फ जो fields भरेंगे वही selected rows में apply होंगे.</p><div class="v763Fast"><label>Start Time<input id="v763FastStart" type="time"></label><label>End Time<input id="v763FastEnd" type="time"></label><label>Class<select id="v763FastClass">${v763ClassOpts('')}</select></label><label>Section<input id="v763FastSection" placeholder="A / B"></label><label>Subject<input id="v763FastSubject" list="v763Subjects" placeholder="Subject"></label><button class="primary" onclick="v763FastApply()">Apply Fast</button></div></div><datalist id="v763Subjects">${v763SubjectData()}</datalist><div class="panel"><div class="panelHead"><div><h3 id="v763WeekTitle">Weekly Bell Grid</h3><p class="note">Teacher select करके Open Full Week दबाएं.</p></div></div><div id="v763Week" class="v763Week"><div class="empty">Teacher select करें.</div></div><div class="v763StickyActions"><button onclick="v763CopyMondayToSelected()">Copy Monday → Selected Days</button><button class="primary" onclick="v763SaveSelected()">Save Selected Bells</button><button class="primary" onclick="v763SaveWholeWeek()">✓ Save Whole Week</button></div></div>`;if(v763SelectedTeacherId&&v763Teachers.some(t=>String(t.id)===String(v763SelectedTeacherId))){document.getElementById('v763TeacherSel').value=v763SelectedTeacherId;await v763LoadTeacherWeek()}else{v763RenderTimeMaster()}}
 function v763ChangeBellCount(){let n=Math.max(1,Math.min(12,Number(document.getElementById('v763BellCount')?.value||8)));v763BellCount=n;v763RenderTimeMaster();if(v763Teacher)v763RenderWeek()}
 async function v763LoadTeacherWeek(){let id=document.getElementById('v763TeacherSel')?.value;if(!id)return toast('Teacher select करें');v763SelectedTeacherId=id;v763Teacher=v763Teachers.find(t=>String(t.id)===String(id));if(!v763Teacher)return toast('Teacher not found');let{data,error}=await sb.from('timetable').select('*').eq('teacher_name',v763Teacher.teacher_name).order('day_name').order('period_no');if(error)return toast(error.message);v763WeekRows=data||[];let max=Math.max(8,...v763WeekRows.map(r=>Number(r.period_no)||0),...(v763TimeMaster||[]).map(r=>Number(r.bell_no)||0));v763BellCount=Math.min(12,max);document.getElementById('v763BellCount').value=v763BellCount;document.getElementById('v763WeekTitle').textContent=`${v763Teacher.teacher_name} • Full Week`;v763RenderTimeMaster();v763RenderWeek()}
 async function v763SaveTimeMaster(){let rows=[...document.querySelectorAll('.v763TimeRow')].map(row=>({academic_session:v763Session(),bell_no:Number(row.dataset.bell),start_time:row.querySelector('.v763MasterStart').value||null,end_time:row.querySelector('.v763MasterEnd').value||null,updated_by:user?.id||null,updated_at:new Date().toISOString()})).filter(x=>x.start_time||x.end_time);if(!rows.length)return toast('Bell timing भरें');let{error}=await sb.from('v763_bell_time_master').upsert(rows,{onConflict:'academic_session,bell_no'});if(error)return toast(error.message+' • V76.3 SQL run करें');toast(`${rows.length} Bell timing saved`);let r=await sb.from('v763_bell_time_master').select('*').eq('academic_session',v763Session()).order('bell_no');if(!r.error)v763TimeMaster=r.data||[];if(v763Teacher)v763RenderWeek()}
@@ -9851,7 +9854,7 @@ body.v75Dark #erp.v90Shell main,body.v75Dark #erp.v90Shell #erpContent{backgroun
 window.V90_BUILD='FINAL-UNIFIED-DASHBOARD-MONITORS-2026-09-14';
 const v90Q=id=>document.getElementById(id);
 const v90Role=()=>String((typeof profile!=='undefined'&&profile?.role)||window.profile?.role||'viewer').toLowerCase();
-const v90Admin=()=>['super_admin','admin','principal'].includes(v90Role());
+const v90Admin=()=>['super_admin','admin','principal'].includes(v90Role())||!!window.ldmDelegationAdminScope?.();
 const v90Teacher=()=>v90Role()==='teacher';
 const v90Safe=v=>typeof esc==='function'?esc(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const v90Money=v=>'₹'+Number(v||0).toLocaleString('en-IN');
@@ -9892,7 +9895,7 @@ const V90_ADMIN_GROUPS=[
   ['exam_admit_center','🎫 Exam & Admit Card'],['exams','📝 Marks Entry'],['v65_smart_marks','📊 Smart Marks'],['result_control','📢 Publish Result'],['marksheet_center','📄 Marksheet'],['result_receipt_center','📥 Marksheet / TC Received'],['v90_exam_monitor','📝 Exam Participation'],['v90_marks_monitor','📊 Marks Progress']
  ]],
  ['📚','Academics',[
-  ['academics','📘 Academics'],['certificate_center','🏆 Premium Certificate Center'],['timetable_master','🗓 Timetable Master'],['v74_bell_center','🔔 Bell Timetable'],['teaching_monitor','📖 Teaching / Syllabus'],['v90_teaching_monitor','📚 Daily Teaching Monitor'],['homework','✏ Homework'],['v65_teaching','📚 Bell Teaching Control'],['v65_achievements','🏆 Achievements'],['v66_programs','🚌 Program / Tour Register'],['class_review_center','💬 Class Review / Reports']
+  ['academics','📘 Academics'],['certificate_center','🏆 Premium Certificate Center'],['timetable_master','🗓 Timetable Master'],['v252_wall_timetable','🖨️ Wall Teaching Timetable'],['v74_bell_center','🔔 Bell Timetable'],['teaching_monitor','📖 Teaching / Syllabus'],['v90_teaching_monitor','📚 Daily Teaching Monitor'],['homework','✏ Homework'],['v65_teaching','📚 Bell Teaching Control'],['v65_achievements','🏆 Achievements'],['v66_programs','🚌 Program / Tour Register'],['class_review_center','💬 Class Review / Reports']
  ]],
  ['🚌','Transport',[
   ['van_center','🚐 Smart Van Center'],['v130_driver_setup','🚌 Driver Scanner Setup'],['transport','🚌 Transport Register'],['v90_transport_monitor','🚌 Trip Attendance Monitor']
@@ -9909,7 +9912,7 @@ const V90_TEACHER_NAV=[
 ];
 function v90BuildNav(active=window.__v90Route||'dashboard'){
  const host=v90Q('erpNav');if(!host||!profile)return;
- if(v90Admin()){
+ if(['super_admin','admin','principal'].includes(v90Role())){
    host.className='v90Nav';
    host.innerHTML=`<button class="v90Home ${active==='dashboard'?'active':''}" onclick="render('dashboard')">🏠 <span>Dashboard</span></button>`+V90_ADMIN_GROUPS.map((g,i)=>`<details class="v90NavGroup" ${g[2].some(x=>x[0]===active)?'open':''}><summary><span>${g[0]} ${g[1]}</span><b>⌄</b></summary><div>${g[2].map(x=>`<button class="${active===x[0]?'active':''}" onclick="render('${x[0]}')">${x[1]}</button>`).join('')}</div></details>`).join('');
  } else if(v90Teacher()){
@@ -10336,7 +10339,7 @@ async function v92PrepareCards(cards){let ss=(cards||[]).map(x=>x.student).filte
 // ---------------- ADMIN PUBLISH CONTROL ----------------
 async function v92AdmitPublishCenter(){
  if(!(typeof v90Admin==='function'&&v90Admin()))return toast('Admin / Principal only');window.__v90Route='v92_admit_publish';v90Head('🎫 Admit Card Publish Control','Fee Clear → Select All/Selected → Publish to Parent • A4 3 cards/page');v90InstallShell(window.__v90Route);
- v90Set(`<div class="v90Page"><div class="v92Note"><b>Free-tier safe:</b> यहाँ केवल Publish/Allow status save होगा. Admit Card PDF Supabase/website storage में upload नहीं होगा; Preview/PDF/Print browser/device पर बनेगा.</div><div class="v90Toolbar" style="margin-top:10px"><label>Exam<select id="v92Exam" onchange="v92LoadPublishStudents()"><option value="">Loading...</option></select></label><label>Class<select id="v92Class" onchange="v92RenderPublishStudents()"><option value="">All Classes</option></select></label><label>Search<input id="v92Q" placeholder="Student / Father / Admission" oninput="v92RenderPublishStudents()"></label><label>Status<select id="v92Status" onchange="v92RenderPublishStudents()"><option value="">All</option><option value="published">Published</option><option value="not">Not Published</option><option value="due">Due Fee</option></select></label><button onclick="v92SelectPublish('clear')">☑ Select Fee-Clear</button><button onclick="v92SelectPublish('all')">☑ Select All Visible</button><button onclick="v92SelectPublish('none')">☐ Unselect</button><button class="primary" onclick="v92SetPublish(true,false)">✓ Publish Selected</button><button onclick="v92SetPublish(false,false)">Unpublish Selected</button><button onclick="v92SetPublish(true,true)">⚠ Admin Override Due + Publish</button><button onclick="render('exam_admit_center')">🖨 Open A4 Print Center</button></div><div id="v92Stats" class="v90Stats mini"></div><div id="v92Body" class="v90Panel"><div class="empty">Loading...</div></div></div>`);await v92LoadExams();
+ v90Set(`<div class="v90Page"><div class="v92Note"><b>Free-tier safe:</b> यहाँ केवल Publish/Allow status save होगा. Admit Card PDF Supabase/website storage में upload नहीं होगा; Preview/PDF/Print browser/device पर बनेगा.</div><div class="v90Toolbar" style="margin-top:10px"><label>Exam<select id="v92Exam" onchange="v92LoadPublishStudents()"><option value="">Loading...</option></select></label><label>Class<select id="v92Class" onchange="v92RenderPublishStudents()"><option value="">All Classes</option></select></label><label>Search<input id="v92Q" placeholder="Student / Father / Admission" oninput="v92RenderPublishStudents()"></label><label>Status<select id="v92Status" onchange="v92RenderPublishStudents()"><option value="">All</option><option value="published">Published</option><option value="not">Not Published</option><option value="due">Due Fee</option></select></label><button onclick="v92SelectPublish('clear')">☑ Select Fee-Clear</button><button onclick="v92SelectPublish('all')">☑ Select All Visible</button><button onclick="v92SelectPublish('none')">☐ Unselect</button><button class="primary" onclick="v92SetPublish(true,false)">✓ Publish Selected</button><button onclick="v92SetPublish(false,false)">Unpublish Selected</button><button onclick="render('exam_admit_center')">🖨 Open A4 Print Center</button></div><div id="v92Stats" class="v90Stats mini"></div><div id="v92Body" class="v90Panel"><div class="empty">Loading...</div></div></div>`);await v92LoadExams();
 }
 window.v92AdmitPublishCenter=v92AdmitPublishCenter;
 async function v92LoadExams(){let r=await sb.from('v69_exam_master').select('id,exam_name,academic_session,is_active,created_at').eq('is_active',true).order('created_at',{ascending:false}).limit(100);if(r.error)return q92('v92Body').innerHTML=`<div class="empty">${s92(r.error.message)}</div>`;v92Exams=r.data||[];let sel=q92('v92Exam');sel.innerHTML='<option value="">Select Exam</option>'+v92Exams.map(x=>`<option value="${s92(x.id)}">${s92(x.exam_name)} • ${s92(x.academic_session||'')}</option>`).join('');if(v92Exams.length){sel.value=v92Exams[0].id;await v92LoadPublishStudents()}}
@@ -12623,7 +12626,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
 </style>
 <script>
 (function(){
- const admin=()=>['admin','super_admin','principal'].includes(String(window.profile?.role||'').toLowerCase());
+ const admin=()=>['admin','super_admin','principal'].includes(String(window.profile?.role||'').toLowerCase())||!!window.ldmDelegationAdminScope?.();
  const safe=x=>typeof window.esc==='function'?window.esc(x):String(x??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
  window.ldmClassTeacherControl=async function(){
    if(!admin())return window.toast?.('Admin only');
@@ -15822,10 +15825,35 @@ if(typeof statsBase==='function'){
 <script id="v187-delegation-cert-runtime">
 (function(){'use strict';
   const q=id=>document.getElementById(id), role=()=>String(window.profile?.role||'').trim().toLowerCase();
-  const admin=()=>['admin','super_admin','principal'].includes(role()), teacher=()=>role()==='teacher';
+  const admin=()=>['admin','super_admin','principal'].includes(role())||!!window.ldmDelegationAdminScope?.(), teacher=()=>role()==='teacher';
   const E=v=>typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const fmt=d=>{if(!d)return '—';try{return new Date(String(d).slice(0,10)+'T00:00:00').toLocaleDateString('en-IN')}catch(_e){return String(d)}};
-  const delegableRoutes=[['','General Responsibility / No ERP Function'],['attendance','Attendance'],['exams','Exam / Marks'],['timetable','Timetable'],['homework','Homework'],['events','Events / Holidays'],['notices','Notices / Orders']];
+  const delegableRoutes=(()=>{
+    const excluded=new Set(['dashboard','work_delegation','teacher_approval','parent_access','system_health','v65_recycle','users','settings','v65_control','activity_log','master_requests','teacher_access']);
+    const out=[['','General Responsibility / No ERP Function']],seen=new Set(['']);
+    try{
+      for(const g of (typeof V90_ADMIN_GROUPS!=='undefined'?V90_ADMIN_GROUPS:[])){
+        for(const x of (g?.[2]||[])){
+          const route=String(x?.[0]||''),label=String(x?.[1]||route);
+          if(!route||excluded.has(route)||seen.has(route))continue;
+          seen.add(route);out.push([route,label]);
+        }
+      }
+    }catch(_e){}
+    const must=[
+      ['students','👥 Students'],['admissions','📝 Admissions'],['attendance','✅ Attendance'],
+      ['staff','👩‍🏫 Teachers / Staff'],['staff_attendance','🟢 Staff Attendance'],['leave','🗓 Staff Leave'],['payroll','💰 Payroll'],
+      ['smart_fee_center','₹ Pay Fee'],['master_fee','💼 Master Fee'],['fee_dashboard','📊 Fee Dashboard'],['fee_structure','⚙ Fee Structure'],['due_reminders','📲 Due Fee Reminder'],
+      ['exams','📝 Marks Entry'],['exam_admit_center','🎫 Exam & Admit Card'],['v92_admit_publish','🎫 Admit Publish'],['result_control','📢 Result Publish / Hold'],['marksheet_center','📄 Marksheet'],
+      ['academics','📘 Academics'],['timetable_master','🗓 Timetable Master'],['v74_bell_center','🔔 Bell Timetable'],['v252_wall_timetable','🖨️ Wall Teaching Timetable'],['homework','✏ Homework'],
+      ['transport','🚌 Transport Register'],['van_center','🚐 Smart Van Center'],['v130_driver_setup','🚌 Driver Scanner Setup'],['v90_transport_monitor','🚌 Trip Attendance Monitor'],
+      ['events','📅 Events'],['notices','🔔 Notices'],['notice_order_center','📣 Notice / Order'],['gallery','🖼 Gallery'],['enquiries','☎ Enquiries'],
+      ['library','📚 Library'],['income','📥 Income'],['expenses','📤 Expenses'],['balance','📚 Balance Sheet'],['reports','📈 Reports'],['excel','📊 Excel / Export'],
+      ['certificate_center','🏆 Premium Certificate'],['school_documents_center','📂 School Documents'],['v65_achievements','🏆 Achievements'],['v66_programs','🚌 Program / Tour']
+    ];
+    for(const x of must){if(!seen.has(x[0])){seen.add(x[0]);out.push(x)}}
+    return out;
+  })();
   window.__v187Teachers=[];window.__v187Tasks=[];window.__v187Assignees=[];window.__v187MyAssignments=[];window.__v187CertPeople=[];window.__v187Sectors=[];window.__v187Issued=[];window.__v187CertHistory=[];
 
   function modal(html){q('v187Modal')?.remove();let m=document.createElement('div');m.id='v187Modal';m.className='v187Modal';m.innerHTML='<div class="v187ModalCard"><div class="v187ModalHead"><h3>School ERP</h3><button class="v187ModalClose" onclick="document.getElementById(\'v187Modal\')?.remove()">✕</button></div>'+html+'</div>';document.body.appendChild(m);return m}
@@ -15849,9 +15877,9 @@ if(typeof statsBase==='function'){
   function routeOptions(val=''){return delegableRoutes.map(x=>`<option value="${E(x[0])}" ${String(val||'')===x[0]?'selected':''}>${E(x[1])}</option>`).join('')}
   function renderTasks(){let host=q('v187TaskList');if(!host)return;const tasks=window.__v187Tasks;host.innerHTML=tasks.length?tasks.map(t=>{let a=window.__v187Assignees.filter(x=>String(x.task_id)===String(t.id)&&x.is_active!==false);return `<article class="v187TaskCard ${t.status==='cancelled'?'cancelled':''}"><div class="v187TaskTop"><div><h3>${E(t.title)}</h3><div class="v187Badges"><span class="v187Badge ${tstatus(t.priority)}">${E(t.priority)}</span><span class="v187Badge ${tstatus(t.status)}">${E(t.status)}</span>${t.module_route?`<span class="v187Badge">ERP: ${E(t.module_route)}</span>`:''}${t.due_date?`<span class="v187Badge">Due ${E(fmt(t.due_date))}</span>`:''}</div></div><small>${E(fmt(t.created_at))}</small></div><p>${E(t.details||'').replace(/\n/g,'<br>')}</p><div class="v187Assignees">${a.map(x=>`<div class="v187Assignee"><b>${x.responsibility==='primary'?'⭐ ':''}${E(x.teacher_name)}</b><span>${E(x.status)}${x.teacher_note?' • '+E(x.teacher_note):''}</span></div>`).join('')||'<div class="empty">No active team</div>'}</div><div class="v187TaskActions"><button onclick="v187EditTask('${t.id}')">✏ Edit</button><button onclick="v187EditTeam('${t.id}')">👥 Team</button>${t.status!=='completed'?`<button class="primary" onclick="v187SetTaskStatus('${t.id}','completed')">✓ Complete</button>`:''}${t.status!=='cancelled'?`<button class="danger" onclick="v187SetTaskStatus('${t.id}','cancelled')">⛔ Off / Cancel</button>`:`<button onclick="v187SetTaskStatus('${t.id}','assigned')">↻ Reactivate</button>`}</div></article>`}).join(''):'<div class="empty">अभी कोई delegated task नहीं है.</div>'}
   window.ldmDelegationCenter=async function(){
-    if(!admin())return window.toast?.('Admin / Principal only');window.__v90Route='work_delegation';window.v90Head?.('🧩 Admin Assistant / Work Delegation','One or many teachers • responsibility • temporary work shortcut');window.v90InstallShell?.('work_delegation');
-    window.v90Set?.(`<div class="v187Page"><section class="v187Hero"><small>ADMIN ASSISTANT CENTER</small><h2>काम बाँटिए, जिम्मेदारी स्पष्ट रखिए</h2><p>एक काम एक या कई teachers को दें. Teacher Dashboard पर Assigned Work दिखेगा. कोई polling/realtime नहीं.</p></section><section class="panel"><div class="panelHead"><div><h3>➕ Assign New Work</h3><p class="note">Mapped Active Teachers ही selectable हैं.</p></div></div><div id="v187CreateArea"><div class="empty">Loading teachers…</div></div></section><section class="panel"><div class="panelHead"><div><h3>📋 Assigned Work</h3><p class="note">Edit • Add/Remove Team • Complete • Off/Cancel</p></div><button class="secondary" onclick="ldmDelegationCenter()">↻ Refresh</button></div><div id="v187TaskList"><div class="empty">Loading…</div></div></section></div>`);
-    try{await loadDelegationData();let c=q('v187CreateArea');if(c)c.innerHTML=`<div class="v187FormGrid"><label>Work / Responsibility<input id="v187TaskTitle" placeholder="e.g. Annual Program Photo & Notice Update"></label><label>Priority<select id="v187TaskPriority"><option>Normal</option><option>High</option><option>Urgent</option><option>Low</option></select></label><label>Due Date<input id="v187TaskDue" type="date"></label><label>Linked ERP Function<select id="v187TaskRoute">${routeOptions()}</select></label><label class="full">Instructions<textarea id="v187TaskDetails" placeholder="काम क्या करना है, क्या submit करना है…"></textarea></label></div><h4>Select Teacher(s) • Primary के लिए radio चुनें</h4>${teacherPickHTML('v187New')}<p><button id="v187AssignBtn" class="primary" onclick="v187CreateTask()">✓ Assign Responsibility</button></p>`;renderTasks()}catch(e){q('v187CreateArea').innerHTML=`<div class="dangerNote">${E(e.message||e)}</div>`;q('v187TaskList').innerHTML='<div class="empty">V187 SQL run करने के बाद यह center काम करेगा.</div>'}
+    if(!admin())return window.toast?.('Admin / Principal only');window.__v90Route='work_delegation';window.v90Head?.('🧩 Admin Assistant / Work Delegation','One or many teachers • full assigned module operations • Admin can stop anytime');window.v90InstallShell?.('work_delegation');
+    window.v90Set?.(`<div class="v187Page"><section class="v187Hero"><small>ADMIN ASSISTANT CENTER</small><h2>काम बाँटिए, जिम्मेदारी स्पष्ट रखिए</h2><p>एक काम एक या कई teachers को दें. Assigned ERP module में Add / Edit / Remove / Manage अधिकार मिलेंगे; बाकी Admin modules बंद रहेंगे. Security, Users, Settings, Recycle Bin और Assistant Control owner-only रहेंगे. कोई polling/realtime नहीं.</p></section><section class="panel"><div class="panelHead"><div><h3>➕ Assign New Work</h3><p class="note">Mapped Active Teachers ही selectable हैं.</p></div></div><div id="v187CreateArea"><div class="empty">Loading teachers…</div></div></section><section class="panel"><div class="panelHead"><div><h3>📋 Assigned Work</h3><p class="note">Edit • Add/Remove Team • Complete • Off/Cancel</p></div><button class="secondary" onclick="ldmDelegationCenter()">↻ Refresh</button></div><div id="v187TaskList"><div class="empty">Loading…</div></div></section></div>`);
+    try{await loadDelegationData();let c=q('v187CreateArea');if(c)c.innerHTML=`<div class="v187FormGrid"><label>Work / Responsibility<input id="v187TaskTitle" placeholder="e.g. Annual Program Photo & Notice Update"></label><label>Priority<select id="v187TaskPriority"><option>Normal</option><option>High</option><option>Urgent</option><option>Low</option></select></label><label>Due Date<input id="v187TaskDue" type="date"></label><label>Assigned Admin Module<select id="v187TaskRoute">${routeOptions()}</select></label><label class="full">Instructions<textarea id="v187TaskDetails" placeholder="काम क्या करना है, क्या submit करना है…"></textarea></label></div><h4>Select Teacher(s) • Primary के लिए radio चुनें</h4>${teacherPickHTML('v187New')}<p><button id="v187AssignBtn" class="primary" onclick="v187CreateTask()">✓ Assign Responsibility</button></p>`;renderTasks()}catch(e){q('v187CreateArea').innerHTML=`<div class="dangerNote">${E(e.message||e)}</div>`;q('v187TaskList').innerHTML='<div class="empty">V187 SQL run करने के बाद यह center काम करेगा.</div>'}
   };
   function selectedTeam(prefix){let picks=[...document.querySelectorAll('.'+prefix+'Teacher:checked')],primary=document.querySelector('.'+prefix+'Primary:checked')?.value,chosen=new Set(picks.map(x=>String(x.dataset.i)));if(!chosen.has(String(primary)))primary=picks[0]?.dataset.i;return picks.map(x=>{let i=Number(x.dataset.i),t=window.__v187Teachers[i];return {teacher_auth_user_id:t.auth_user_id,teacher_profile_id:String(t.id||''),teacher_name:t.teacher_name||'Teacher',responsibility:String(i)===String(primary)?'primary':'assistant'}})}
   window.v187CreateTask=async function(){let title=String(q('v187TaskTitle')?.value||'').trim(),team=selectedTeam('v187New');if(!title)return window.toast?.('Work / Responsibility लिखें');if(!team.length)return window.toast?.('कम से कम एक mapped teacher चुनें');let btn=q('v187AssignBtn');if(btn)btn.disabled=true;try{let r=await sb.rpc('ldm_create_work_task',{p_title:title,p_details:q('v187TaskDetails')?.value||'',p_module_route:q('v187TaskRoute')?.value||null,p_priority:q('v187TaskPriority')?.value||'Normal',p_due_date:q('v187TaskDue')?.value||null,p_assignees:team});if(r.error)throw r.error;window.toast?.('✓ Work assigned to '+team.length+' teacher(s)');await ldmDelegationCenter()}catch(e){window.toast?.(e.message||String(e))}finally{if(btn)btn.disabled=false}};
@@ -15867,7 +15895,7 @@ if(typeof statsBase==='function'){
     try{let r=await sb.from('ldm_work_task_assignees').select('*,ldm_work_tasks(*)').eq('teacher_auth_user_id',user.id).order('assigned_at',{ascending:false}).limit(150);if(r.error)throw r.error;window.__v187MyAssignments=r.data||[];let host=q('v187MyTaskList');host.innerHTML=window.__v187MyAssignments.length?window.__v187MyAssignments.map(a=>{let t=a.ldm_work_tasks||{};let active=a.is_active!==false&&!['cancelled'].includes(t.status);return `<article class="v187TaskCard v187AssignedCard ${active?'':'cancelled'}"><div class="v187TaskTop"><div><h3>${E(t.title||'Assigned Work')}</h3><div class="v187Badges"><span class="v187Badge">${E(a.responsibility||'assistant')}</span><span class="v187Badge ${tstatus(a.status)}">${E(a.status)}</span><span class="v187Badge ${tstatus(t.priority)}">${E(t.priority||'Normal')}</span>${t.due_date?`<span class="v187Badge">Due ${E(fmt(t.due_date))}</span>`:''}</div></div></div><p>${E(t.details||'').replace(/\n/g,'<br>')}</p>${a.teacher_note?`<div class="v187NoteBox"><b>My Note:</b> ${E(a.teacher_note)}</div>`:''}<div class="v187TaskActions">${active&&a.status==='assigned'?`<button class="primary" onclick="v187TeacherTaskStatus('${a.id}','in_progress')">▶ Start</button>`:''}${active&&a.status!=='completed'?`<button onclick="v187TeacherTaskStatus('${a.id}','submitted')">📤 Submit</button><button onclick="v187TeacherTaskStatus('${a.id}','completed')">✓ Complete</button>`:''}${active&&t.module_route?`<button class="primary" onclick="v187OpenAssignedFunction('${a.id}')">OPEN ${E(t.module_route)} →</button>`:''}</div></article>`}).join(''):'<div class="empty">अभी कोई active/recent responsibility नहीं है.</div>'}catch(e){q('v187MyTaskList').innerHTML=`<div class="dangerNote">${E(e.message||e)}<br>Admin से V187 SQL apply करवाएँ.</div>`}
   };
   window.v187TeacherTaskStatus=async function(id,status){let a=window.__v187MyAssignments.find(x=>String(x.id)===String(id));if(!a)return;let raw=prompt(status==='in_progress'?'Optional start note':'Work note / completion details',a.teacher_note||'');if(raw===null)return;let note=raw;let r=await sb.rpc('ldm_teacher_update_task_assignment',{p_assignment_id:id,p_status:status,p_note:note});if(r.error)return window.toast?.(r.error.message);window.toast?.('Work status updated');await ldmTeacherAssignedWork()};
-  window.v187OpenAssignedFunction=async function(id){let a=window.__v187MyAssignments.find(x=>String(x.id)===String(id)),t=a?.ldm_work_tasks||{};let route=String(t.module_route||'');if(!route||!delegableRoutes.some(x=>x[0]===route))return window.toast?.('Linked function unavailable');if(a.status==='assigned'){let r=await sb.rpc('ldm_teacher_update_task_assignment',{p_assignment_id:id,p_status:'in_progress',p_note:a.teacher_note||''});if(r.error)return window.toast?.(r.error.message)}return window.render?.(route)};
+  window.v187OpenAssignedFunction=async function(id){let a=window.__v187MyAssignments.find(x=>String(x.id)===String(id)),t=a?.ldm_work_tasks||{};let route=String(t.module_route||'');if(!route||!delegableRoutes.some(x=>x[0]===route))return window.toast?.('Assigned module unavailable');if(a.status==='assigned'){let r=await sb.rpc('ldm_teacher_update_task_assignment',{p_assignment_id:id,p_status:'in_progress',p_note:a.teacher_note||''});if(r.error)return window.toast?.(r.error.message);a.status='in_progress'}window.ldmEnterDelegatedRoute?.(route,id);return window.render?.(route)};
 
   // -------------------- CERTIFICATE CENTER --------------------
   const certThemes=['Royal Gold','Academic Blue','Emerald Excellence','Purple Prestige','Ruby Honour','Teal Modern','Amber Classic','Sky Premium','Slate Executive','Black Gold Elite'];
@@ -15929,7 +15957,7 @@ if(typeof statsBase==='function'){
   character:{icon:'⭐',title:'Character Certificate',hi:'चरित्र प्रमाण-पत्र',sub:'Conduct • School record'}
  };
  window.__v188CertType='tc';window.__v188Student=null;window.__v188Admission=null;window.__v188LastCert=null;window.__v188StudentRows=[];
- function admin(){try{return ['super_admin','admin','principal'].includes(String(profile?.role||'').toLowerCase())}catch(_e){return false}}
+ function admin(){try{return ['super_admin','admin','principal'].includes(String(profile?.role||'').toLowerCase())||!!window.ldmDelegationAdminScope?.()}catch(_e){return false}}
  function schoolObj(){try{return typeof school!=='undefined'?(school||{}):(window.school||{})}catch(_e){return window.school||{}}}
  function fmt(d){if(!d)return '—';let x=new Date(String(d).length===10?d+'T00:00:00':d);return isNaN(x)?E(d):x.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'})}
  function nowDate(){try{return typeof today==='function'?today():new Date().toISOString().slice(0,10)}catch(_e){return new Date().toISOString().slice(0,10)}}
@@ -16364,7 +16392,7 @@ window.__v188LastCert=r.data;await renderPreview(r.data,false);window.toast?.('�
 (function(){'use strict';
  if(window.__LDM_V223_DOC_HUB)return;window.__LDM_V223_DOC_HUB=true;
  const q=id=>document.getElementById(id);
- function admin(){try{return ['super_admin','admin','principal'].includes(String(window.profile?.role||profile?.role||'').toLowerCase())}catch(_e){return false}}
+ function admin(){try{return ['super_admin','admin','principal'].includes(String(window.profile?.role||profile?.role||'').toLowerCase())||!!window.ldmDelegationAdminScope?.()}catch(_e){return false}}
  function card(icon,title,sub,onclick,kind='official'){return `<button type="button" class="v223DocCard ${kind}" onclick="${onclick}"><i>${icon}</i><b>${title}</b><span>${sub}</span></button>`}
  function installHubEntry(){if(!admin())return;let old=q('v188MasterCard'),grid=document.querySelector('.ldmMasterGrid');if(old){old.innerHTML='<i>📂</i><b>School Documents & Certificates</b><small>TC • Birthday • Bonafide • Character • ID • Admit • Letters</small><em>OPEN →</em>';old.onclick=()=>window.render?.('school_documents_center');old.dataset.v223Docs='1'}else if(grid&&!q('v223DocsMasterCard')){let b=document.createElement('button');b.id='v223DocsMasterCard';b.dataset.v223Docs='1';b.innerHTML='<i>📂</i><b>School Documents & Certificates</b><small>TC • Birthday • Bonafide • Character • ID • Admit • Letters</small><em>OPEN →</em>';b.onclick=()=>window.render?.('school_documents_center');grid.appendChild(b)}let side=q('v188SideBtn')||q('v223DocsSideBtn'),nav=document.querySelector('#erp aside nav,#erpNav');if(side){side.textContent='📂 School Documents';side.onclick=()=>window.render?.('school_documents_center');side.id='v223DocsSideBtn'}else if(nav){let b=document.createElement('button');b.id='v223DocsSideBtn';b.textContent='📂 School Documents';b.onclick=()=>window.render?.('school_documents_center');nav.appendChild(b)}}
  window.v223OpenSchoolRecord=async function(type){await window.render?.('school_certificate_center');setTimeout(()=>{let el=document.querySelector(`[data-v188-type="${type}"]`);if(el&&typeof window.v188ChooseType==='function')window.v188ChooseType(type,el)},60)};
@@ -17581,5 +17609,336 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 })();
 </script>
 <!-- ===== END V249 OFFICIAL TYPOGRAPHY + HINDI/ENGLISH TYPING ===== -->
+
+<style id="v252-central-final-style">
+html,body{max-width:100%;overflow-x:hidden}
+#erp,#erp main,#erpContent{max-width:100%;min-width:0}
+#erpContent>*{min-width:0;max-width:100%}
+.panel,.v90Panel,.v90Page,.v187Page{min-width:0;max-width:100%}
+.tableWrap{max-width:100%;overflow:auto}
+.v252WallCenter{display:grid;gap:12px}.v252WallToolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.v252WallToolbar label{display:grid;gap:4px;font-size:11px;font-weight:900;color:#465d75}.v252WallToolbar select{min-width:150px;padding:9px;border:1px solid #d4dfeb;border-radius:9px;background:#fff}
+.v252WallHint{padding:11px 13px;border:1px solid #cfe1f1;border-radius:12px;background:#f5faff;color:#385873;font-size:11px;line-height:1.5}
+.v252DelegatedBar{margin:10px 0;padding:10px;border:1px solid #cfe1f1;border-radius:12px;background:#f7fbff}
+.v252DelegatedBar b{display:block;color:#164f82}.v252DelegatedModules{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.v252DelegatedModules button{border:1px solid #cddceb;background:#fff;border-radius:9px;padding:8px 10px;font-weight:850;color:#174e7f}
+.v252CentralDue{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900}.v252CentralDue.clear{background:#e8f8ef;color:#126b38}.v252CentralDue.due{background:#fff0ef;color:#a1261d}
+.v252RouteBusy{cursor:progress}
+@media(max-width:700px){.v252WallToolbar>*{width:100%}.v252WallToolbar select,.v252WallToolbar button{width:100%}}
+</style>
+<script id="v252-central-final-runtime">
+(function(){'use strict';
+  const E=v=>typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const role=()=>String(window.profile?.role||'').trim().toLowerCase();
+  const teacher=()=>role()==='teacher';
+  const owner=()=>['admin','super_admin','principal'].includes(role());
+  const session=()=>window.school?.academic_session||'2026-27';
+  const admKey=v=>String(v??'').trim();
+
+  // -------- Delegated Admin Module Scope --------
+  window.__ldmDelegatedRoutes=window.__ldmDelegatedRoutes instanceof Set?window.__ldmDelegatedRoutes:new Set();
+  window.__ldmDelegationActiveRoute=String(window.__ldmDelegationActiveRoute||'');
+  window.__ldmDelegationAssignmentId=String(window.__ldmDelegationAssignmentId||'');
+  window.ldmDelegationCan=function(route){
+    if(owner())return true;
+    if(!teacher())return false;
+    return window.__ldmDelegatedRoutes.has(String(route||''));
+  };
+  window.ldmDelegationCanEdit=function(key){
+    if(owner())return true;
+    if(!teacher())return false;
+    const active=String(window.__ldmDelegationActiveRoute||'');
+    if(!active||!window.__ldmDelegatedRoutes.has(active))return false;
+    const aliases={
+      smart_fee_center:['fees','fee_dashboard','fee_structure'],master_fee:['fees','fee_dashboard','fee_structure'],fee_dashboard:['fees'],fee_structure:['fee_structures','fee_installments','fee_heads'],
+      exam_admit_center:['exams'],v92_admit_publish:['exams'],result_control:['exams'],marksheet_center:['exams'],
+      timetable_master:['timetable'],v74_bell_center:['timetable'],v252_wall_timetable:['timetable'],
+      van_center:['transport'],v130_driver_setup:['transport'],v90_transport_monitor:['transport']
+    };
+    if(active===String(key||''))return true;
+    return (aliases[active]||[]).includes(String(key||''));
+  };
+  window.ldmDelegationAdminScope=function(){
+    if(owner())return true;
+    const active=String(window.__ldmDelegationActiveRoute||''),current=String(window.__v90Route||window.page||''),pending=String(window.__ldmDelegationPendingRoute||'');
+    const ownerOnly=new Set(['dashboard','work_delegation','teacher_approval','parent_access','system_health','v65_recycle','users','settings','v65_control','activity_log','master_requests','teacher_access']);
+    const effective=(active===pending&&pending)?pending:current;
+    return teacher()&&!!active&&active===effective&&!ownerOnly.has(effective)&&window.__ldmDelegatedRoutes.has(active);
+  };
+  window.ldmEnterDelegatedRoute=function(route,id=''){
+    route=String(route||'');
+    if(teacher()&&window.__ldmDelegatedRoutes.has(route)){
+      window.__ldmDelegationActiveRoute=route;
+      window.__ldmDelegationAssignmentId=String(id||'');
+      return true;
+    }
+    return false;
+  };
+  window.ldmLeaveDelegatedRoute=function(){
+    window.__ldmDelegationActiveRoute='';window.__ldmDelegationAssignmentId='';
+  };
+  window.ldmLoadDelegatedRoutes=async function(){
+    if(!teacher()||!window.user?.id){window.__ldmDelegatedRoutes.clear();return []}
+    const r=await sb.from('ldm_work_task_assignees').select('id,status,is_active,ldm_work_tasks(id,title,module_route,status)').eq('teacher_auth_user_id',user.id).limit(250);
+    if(r.error)throw r.error;
+    const active=(r.data||[]).filter(a=>{
+      const t=a.ldm_work_tasks||{},as=String(a.status||'assigned').toLowerCase(),ts=String(t.status||'assigned').toLowerCase();
+      return a.is_active!==false&&['assigned','in_progress','submitted'].includes(as)&&['assigned','in_progress','submitted'].includes(ts)&&t.module_route;
+    });
+    window.__ldmDelegatedRoutes=new Set(active.map(a=>String(a.ldm_work_tasks.module_route||'')).filter(Boolean));
+    return active;
+  };
+  function paintDelegatedModules(){
+    if(!teacher())return;
+    const host=document.getElementById('v187MyTaskList')?.parentElement;if(!host||document.getElementById('v252DelegatedBar'))return;
+    const routes=[...window.__ldmDelegatedRoutes];
+    if(!routes.length)return;
+    const names={transport:'🚌 Transport',van_center:'🚐 Smart Van',students:'👥 Students',attendance:'✅ Attendance',homework:'✏ Homework',timetable_master:'🗓 Timetable',v74_bell_center:'🔔 Bell Timetable',v252_wall_timetable:'🖨 Wall Timetable',exam_admit_center:'🎫 Admit Card',v92_admit_publish:'🎫 Admit Publish',result_control:'📢 Result Publish',marksheet_center:'📄 Marksheet',smart_fee_center:'₹ Pay Fee',master_fee:'💼 Master Fee',events:'📅 Events',notices:'🔔 Notices',gallery:'🖼 Gallery',library:'📚 Library',excel:'📊 Excel'};
+    const bar=document.createElement('div');bar.id='v252DelegatedBar';bar.className='v252DelegatedBar';
+    bar.innerHTML=`<b>🔐 My Assigned Admin Modules</b><small>केवल Admin द्वारा active assignment वाले module खुलेंगे.</small><div class="v252DelegatedModules">${routes.map(r=>`<button type="button" data-v252-delegated="${E(r)}">${E(names[r]||r)}</button>`).join('')}</div>`;
+    bar.addEventListener('click',e=>{const b=e.target.closest('[data-v252-delegated]');if(!b)return;const r=b.dataset.v252Delegated;window.ldmEnterDelegatedRoute(r);window.render?.(r)});
+    host.insertBefore(bar,host.firstChild);
+  }
+  try{
+    const baseAssigned=window.ldmTeacherAssignedWork;
+    if(typeof baseAssigned==='function'){
+      window.ldmTeacherAssignedWork=async function(){const r=await baseAssigned.apply(this,arguments);try{await window.ldmLoadDelegatedRoutes();paintDelegatedModules()}catch(e){console.warn('Delegation routes',e)}return r};
+    }
+  }catch(_e){}
+
+  // -------- Central Fee Due: ONE source for Admit + Result --------
+  window.__ldmV252DueCache=window.__ldmV252DueCache||new Map();
+  window.ldmV252InvalidateDue=function(adm){if(adm)window.__ldmV252DueCache.delete(admKey(adm));else window.__ldmV252DueCache.clear()};
+  window.ldmV252CentralDueMap=async function(admissions,force=false){
+    const list=[...new Set((admissions||[]).map(admKey).filter(Boolean))],out=new Map(),missing=[];
+    const now=Date.now();
+    for(const a of list){
+      const c=window.__ldmV252DueCache.get(a);
+      if(!force&&c&&now-c.at<20000)out.set(a,c.row);else missing.push(a);
+    }
+    for(let i=0;i<missing.length;i+=250){
+      const part=missing.slice(i,i+250);
+      const r=await sb.rpc('ldm_fee_due_snapshot_v2',{p_session:session(),p_admission_nos:part,p_until_month:new Date().toISOString().slice(0,7)});
+      if(r.error)throw r.error;
+      for(const x of (r.data||[])){
+        const a=admKey(x.admission_no),due=Math.max(0,Number(x.current_due??x.total_due??x.due_amount??x.fee_due??0));
+        const row={...x,current_due:due,fee_due:due};window.__ldmV252DueCache.set(a,{at:now,row});out.set(a,row);
+      }
+      for(const a of part)if(!out.has(a)){const row={admission_no:a,current_due:0,fee_due:0};window.__ldmV252DueCache.set(a,{at:now,row});out.set(a,row)}
+    }
+    return out;
+  };
+  async function overlayCentralDue(rows,force=true){
+    const map=await window.ldmV252CentralDueMap((rows||[]).map(x=>x.admission_no),force);
+    return (rows||[]).map(x=>{const d=Number(map.get(admKey(x.admission_no))?.current_due||0);return {...x,fee_due:d,_central_fee_due:d}});
+  }
+
+  // Admit Center candidates: central due automatically HOLDs.
+  if(typeof window.v69LoadCandidates==='function'||typeof v69LoadCandidates==='function'){
+    const base=window.v69LoadCandidates||v69LoadCandidates;
+    const patched=async function(autoPreview=false){
+      if(!window.v69CurrentExam&&typeof v69CurrentExam!=='undefined'&&!v69CurrentExam)return base.apply(this,arguments);
+      let r=await base.call(this,false);
+      try{
+        if(typeof v69Candidates!=='undefined'&&Array.isArray(v69Candidates)){
+          v69Candidates=await overlayCentralDue(v69Candidates,true);
+          v69Candidates=v69Candidates.map(x=>Number(x.fee_due||0)>0?{...x,is_withheld:true,hold_reason:`Central Fee Due ${typeof money==='function'?money(x.fee_due):x.fee_due}`} : x);
+          try{window.v69Candidates=v69Candidates}catch(_e){}
+          v69RenderCandidates?.();
+          if(autoPreview){v69SelectCandidates?.(true);v69GenerateCards?.()}
+        }
+      }catch(e){window.toast?.('Central Fee Due load failed: '+(e.message||e))}
+      return r;
+    };
+    window.v69LoadCandidates=patched;try{v69LoadCandidates=patched}catch(_e){}
+  }
+  if(typeof window.v69ToggleHold==='function'||typeof v69ToggleHold==='function'){
+    const base=window.v69ToggleHold||v69ToggleHold;
+    const patched=async function(i,hold){const x=(typeof v69Candidates!=='undefined'?v69Candidates:window.v69Candidates||[])[i];if(!hold&&Number(x?.fee_due||0)>0)return window.toast?.('Central Fee Due बाकी है; Admit Card release नहीं होगा. Fee clear होते ही status अपने-आप Clear होगा.');return base.apply(this,arguments)};
+    window.v69ToggleHold=patched;try{v69ToggleHold=patched}catch(_e){}
+  }
+
+  // Admit Publish: re-read same central due, no stale "Clear", no due override.
+  if(typeof window.v92LoadPublishStudents==='function'){
+    const base=window.v92LoadPublishStudents;
+    window.v92LoadPublishStudents=async function(){let r=await base.apply(this,arguments);try{v92Candidates=await overlayCentralDue(v92Candidates||[],true);v92Candidates=v92Candidates.map(x=>Number(x.fee_due||0)>0?{...x,is_withheld:true,hold_reason:'Central Fee Due'}:x);window.v92RenderPublishStudents?.()}catch(e){window.toast?.('Central Fee Due load failed: '+(e.message||e))}return r};
+    try{v92LoadPublishStudents=window.v92LoadPublishStudents}catch(_e){}
+  }
+  if(typeof window.v92SetPublish==='function'){
+    window.v92SetPublish=async function(pub){
+      let selected=[...document.querySelectorAll('.v92Check:checked')].map(x=>x.dataset.adm).filter(Boolean);
+      if(!selected.length)return window.toast?.('Student select करें');
+      const by=new Map((v92Candidates||[]).map(x=>[admKey(x.admission_no),x]));
+      let blocked=[];
+      if(pub){blocked=selected.filter(a=>Number(by.get(admKey(a))?.fee_due||0)>0||by.get(admKey(a))?.is_withheld);selected=selected.filter(a=>!blocked.includes(a))}
+      if(pub&&!selected.length)return window.toast?.('Selected students पर Central Fee Due / Hold है. Fee clear होने के बाद Publish करें.');
+      if(!pub&&!confirm(`${selected.length} selected Admit Cards Parent से hide/unpublish करना है?`))return;
+      v91BusyStart?.();
+      let r=await sb.rpc('v92_set_admit_publication',{p_exam_id:document.getElementById('v92Exam')?.value,p_admission_nos:selected,p_publish:!!pub,p_allow_due_override:false});
+      v91BusyEnd?.();
+      if(r.error)return window.toast?.(r.error.message+' • V92 SQL check करें');
+      window.toast?.(`${pub?'Publish':'Unpublish'} updated: ${r.data?.updated||selected.length}${blocked.length?' • '+blocked.length+' due/held blocked':''}`);
+      await window.v92LoadPublishStudents?.();
+    };
+    try{v92SetPublish=window.v92SetPublish}catch(_e){}
+  }
+  if(typeof window.v92AdmitPublishCenter==='function'){
+    const base=window.v92AdmitPublishCenter;
+    window.v92AdmitPublishCenter=async function(){let r=await base.apply(this,arguments);setTimeout(()=>{document.querySelectorAll('button').forEach(b=>{if((b.textContent||'').includes('Admin Override Due'))b.remove()});let n=document.querySelector('.v92PrintRule');if(n)n.textContent='Central Fee Due ही final status है: Due = HOLD, ₹0 = CLEAR. Due override disabled है.'},0);return r};
+    try{v92AdmitPublishCenter=window.v92AdmitPublishCenter}catch(_e){}
+  }
+  if(typeof window.v75EnhanceParentAdmit==='function'){
+    const base=window.v75EnhanceParentAdmit;
+    window.v75EnhanceParentAdmit=async function(){
+      let r=await base.apply(this,arguments);
+      try{
+        const cards=window.v92ParentAdmits||[],map=await window.ldmV252CentralDueMap(cards.map(x=>x?.student?.admission_no),true);
+        const allowed=cards.filter(x=>Number(map.get(admKey(x?.student?.admission_no))?.current_due||0)<=0);
+        if(allowed.length===cards.length)return r;
+        window.v92ParentAdmits=allowed;window.v75ParentAdmits=allowed;
+        const sec=document.getElementById('v75ParentAdmit');if(!sec)return r;
+        const groups={};
+        allowed.forEach((x,i)=>{const k=x.exam?.id||x.exam?.exam_name||'exam';(groups[k]??={exam:x.exam,items:[]}).items.push({x,i})});
+        sec.innerHTML=`<h3>🎫 Published Exam Admit Card</h3><div class="v92Note"><b>Central Fee Rule:</b> Fee Due वाले Admit Card automatic HOLD हैं. Fee clear + Admin Published होने पर ही यहाँ दिखाई देंगे. PDF device पर ही बनेगा.</div>${Object.entries(groups).map(([k,g])=>`<div class="v92ParentGroup"><div class="v92ParentGroupHead"><div><b>${E(g.exam?.exam_name||'Exam')}</b><small>${E(g.exam?.academic_session||'')} • ${g.items.length} Available Student(s)</small></div><button class="primary" onclick="v92OpenParentExam('${E(k)}')">Preview / PDF / Print</button></div><div class="v92ParentRows">${g.items.map(({x,i})=>{const st=x.student||{};return `<div class="v92ParentRow"><div><b>${E(st.student_name||'Student')}</b><small>Class ${E(st.class_name||'')} • ${E(st.admission_no||'')} • Father: ${E(st.father_name||'')}</small></div><span class="v92Published">Fee Clear • Published</span><button onclick="v92OpenParentOne(${i})">Preview One</button></div>`}).join('')}</div></div>`).join('')||'<div class="empty">No Admit Card available. Published card with Central Fee Due remains on HOLD until fee is cleared.</div>'}`;
+      }catch(e){console.warn('Parent admit central gate',e)}
+      return r;
+    };
+  }
+
+  // Result Control: central fee due is final. Publish intent may remain ON while Due => automatic HOLD.
+  const resultBase=window.loadResultControlStudents||((typeof loadResultControlStudents==='function')?loadResultControlStudents:null);
+  window.v252LoadResultControlStudents=async function(){
+    let c=document.getElementById('rcClass')?.value,exam=document.getElementById('rcExam')?.value?.trim(),box=document.getElementById('rcBody');if(!c||!exam)return window.toast?.('Class और Exam Name चुनें');
+    box.innerHTML='<div class="empty">Loading Central Fee Due + result publication...</div>';
+    let sr=await sb.from('students').select('id,admission_no,student_name,father_name,roll_no,class_name,fee_category,fee_waiver_percent,status').in('class_name',window.ldmClassAliases?window.ldmClassAliases(c):[c]).order('roll_no').order('student_name');
+    if(sr.error){box.innerHTML=E(sr.error.message);return}
+    let rows=window.ldmOperationalStudents?window.ldmOperationalStudents(sr.data||[]):(sr.data||[]),adms=rows.map(x=>x.admission_no).filter(Boolean);
+    let [dueMap,cr,mr,xr]=await Promise.all([
+      window.ldmV252CentralDueMap(adms,true),
+      adms.length?sb.from('result_publication_controls').select('*').in('class_name',window.ldmClassAliases?window.ldmClassAliases(c):[c]).eq('exam_name',exam).in('admission_no',adms):Promise.resolve({data:[],error:null}),
+      adms.length?sb.from('student_marks').select('admission_no,id').in('class_name',window.ldmClassAliases?window.ldmClassAliases(c):[c]).eq('exam_name',exam).in('admission_no',adms):Promise.resolve({data:[],error:null}),
+      adms.length?sb.from('v67_result_access_controls').select('*').eq('academic_session',session()).eq('exam_name',exam).in('admission_no',adms):Promise.resolve({data:[],error:null})
+    ]);
+    let er=cr.error||mr.error||xr.error;if(er){box.innerHTML=`<div class="enquiryStatus err">${E(er.message)}</div>`;return}
+    let cm={},xm={},markCount={},fm={};
+    (cr.data||[]).forEach(x=>cm[x.admission_no]=x);(xr.data||[]).forEach(x=>xm[x.admission_no]=x);(mr.data||[]).forEach(x=>markCount[x.admission_no]=(markCount[x.admission_no]||0)+1);
+    for(const x of rows){let due=Number(dueMap.get(admKey(x.admission_no))?.current_due||0),free=String(x.fee_category||'').toLowerCase()==='free'||Number(x.fee_waiver_percent||0)>=100;fm[x.admission_no]={due:free?0:due,free}}
+    window.v17ResultRows=rows;window.v17ResultFeeMap=fm;window.v17ResultControlMap=cm;window.v67ResultAccessMap=xm;
+    try{v17ResultRows=rows;v17ResultFeeMap=fm;v17ResultControlMap=cm}catch(_e){}
+    box.innerHTML=`<div class="tools"><button class="secondary" onclick="rcSelectPaidOnly()">Publish Clear/Free</button><button class="secondary" onclick="rcCheckAll(false)">Unpublish All</button><button class="primary" onclick="saveResultVisibility()">Save Controls</button></div>
+      <div class="v252WallHint"><b>Central Rule:</b> Publish checkbox = Admin की publish permission. Central Fee Due ₹0 होने पर ही Parent में PUBLIC होगा. Due > 0 होने पर automatic HOLD रहेगा. Fee clear होते ही published result अपने-आप available होगा. Manual HOLD भी रखा जा सकता है.</div>
+      <div class="tableWrap"><table class="resultControlTable"><tr><th>Publish</th><th>Student</th><th>Father</th><th>Roll</th><th>Central Due</th><th>Manual Control</th><th>Effective Parent Status</th><th>Marks</th></tr>
+      ${rows.map((st,i)=>{let f=fm[st.admission_no]||{due:0},pub=!!cm[st.admission_no]?.is_visible,raw=String(xm[st.admission_no]?.access_mode||'auto').toLowerCase(),mode=raw==='hide'?'hide':'auto',due=Number(f.due||0),effective=pub&&mode!=='hide'&&due<=0;return `<tr><td><input class="rcCheck" id="rc${i}" type="checkbox" ${pub?'checked':''}></td><td><b>${E(st.student_name||'')}</b><small class="cellSub">${E(st.admission_no||'')}</small></td><td>${E(st.father_name||'')}</td><td>${E(st.roll_no||'')}</td><td><span class="v252CentralDue ${due>0?'due':'clear'}">${due>0?(typeof money==='function'?money(due):due):'₹0 CLEAR'}</span></td><td><select class="rcAccessMode" id="rcMode${i}"><option value="auto" ${mode==='auto'?'selected':''}>AUTO • Central Fee Rule</option><option value="hide" ${mode==='hide'?'selected':''}>MANUAL HOLD</option></select></td><td id="rcPreview${i}">${effective?'<span class="v67AccessState show">✅ PUBLIC</span>':due>0?'<span class="v67AccessState lock">🔒 FEE DUE HOLD</span>':mode==='hide'?'<span class="v67AccessState hide">⛔ MANUAL HOLD</span>':'<span class="v67AccessState hide">○ UNPUBLISHED</span>'}</td><td><b>${markCount[st.admission_no]||0}</b> subjects <div class="markActionRow"><button class="mini edit" onclick="openResultMarksEditor('${st.id}')">Add/Edit</button><button class="mini" onclick="previewResultStudentMarksheet('${st.id}')">Preview</button></div></td></tr>`}).join('')}</table></div>`;
+    rows.forEach((st,i)=>{const refresh=()=>{let f=fm[st.admission_no]||{},pub=!!document.getElementById('rc'+i)?.checked,mode=document.getElementById('rcMode'+i)?.value||'auto',due=Number(f.due||0),p=document.getElementById('rcPreview'+i);if(p)p.innerHTML=pub&&mode!=='hide'&&due<=0?'<span class="v67AccessState show">✅ PUBLIC</span>':due>0?'<span class="v67AccessState lock">🔒 FEE DUE HOLD</span>':mode==='hide'?'<span class="v67AccessState hide">⛔ MANUAL HOLD</span>':'<span class="v67AccessState hide">○ UNPUBLISHED</span>'};document.getElementById('rc'+i)?.addEventListener('change',refresh);document.getElementById('rcMode'+i)?.addEventListener('change',refresh)});
+  };
+  try{loadResultControlStudents=window.v252LoadResultControlStudents;window.loadResultControlStudents=window.v252LoadResultControlStudents}catch(_e){}
+  if(typeof window.saveResultVisibility==='function'||typeof saveResultVisibility==='function'){
+    const patched=async function(){
+      let c=document.getElementById('rcClass')?.value,exam=document.getElementById('rcExam')?.value?.trim();if(!c||!exam)return;
+      const rows=window.v17ResultRows||((typeof v17ResultRows!=='undefined')?v17ResultRows:[]),ss=session();
+      let pub=rows.map((x,i)=>({academic_session:ss,exam_name:exam,admission_no:x.admission_no,class_name:c,is_visible:!!document.getElementById('rc'+i)?.checked,updated_by:window.user?.id||null,updated_at:new Date().toISOString()}));
+      let acc=rows.map((x,i)=>({academic_session:ss,exam_name:exam,admission_no:x.admission_no,access_mode:(document.getElementById('rcMode'+i)?.value==='hide'?'hide':'auto'),updated_by:window.user?.id||null,updated_at:new Date().toISOString()}));
+      let [a,b]=await Promise.all([sb.from('result_publication_controls').upsert(pub,{onConflict:'academic_session,exam_name,admission_no'}),sb.from('v67_result_access_controls').upsert(acc,{onConflict:'academic_session,exam_name,admission_no'})]);
+      let er=a.error||b.error;if(er)return window.toast?.(er.message);window.toast?.('✓ Result Publish/Hold saved • Central Fee Due remains final gate');return window.v252LoadResultControlStudents();
+    };
+    window.saveResultVisibility=patched;try{saveResultVisibility=patched}catch(_e){}
+  }
+  // Prevent Parent marksheet opening when central due is currently positive.
+  if(typeof window.v64ParentViewMarksheet==='function'){
+    const base=window.v64ParentViewMarksheet;
+    window.v64ParentViewMarksheet=async function(adm,exam){try{const m=await window.ldmV252CentralDueMap([adm],true),due=Number(m.get(admKey(adm))?.current_due||0);if(due>0)return window.toast?.(`Marksheet HOLD • Central Fee Due ${typeof money==='function'?money(due):due}`)}catch(e){return window.toast?.('Central Fee status load failed: '+(e.message||e))}return base.apply(this,arguments)};
+  }
+
+
+  // V253 Parent Result visual gate: published intent never bypasses current central fee due.
+  try{
+    const parentEnhanceBase=window.v64EnhanceParentPortal;
+    if(typeof parentEnhanceBase==='function'&&!parentEnhanceBase.__v253CentralDue){
+      const wrapped=async function(){
+        const r=await parentEnhanceBase.apply(this,arguments);
+        try{
+          const services=Array.isArray(window.v64ParentServices)?window.v64ParentServices:[];
+          if(!services.length)return r;
+          const dueMap=await window.ldmV252CentralDueMap(services.map(x=>x?.admission_no),true);
+          const cards=[...document.querySelectorAll('#v64ParentServices .v64ServicePanel')];
+          cards.forEach((card,i)=>{
+            const st=services[i],pub=card.querySelector('.v64Published');if(!st||!pub)return;
+            const due=Number(dueMap.get(admKey(st.admission_no))?.current_due||0);
+            if(due>0){
+              pub.innerHTML=`<b>📄 Marksheet / Result</b><div class="v67LockedResult"><b>🔒 CENTRAL FEE DUE HOLD</b><small>Current Due: ${typeof money==='function'?money(due):due}. Fee clear होने के बाद Admin-published result अपने-आप available होगा.</small></div>`;
+            }
+          });
+        }catch(e){console.warn('V253 parent result central due gate',e)}
+        return r;
+      };
+      wrapped.__v253CentralDue=true;window.v64EnhanceParentPortal=wrapped;
+      try{v64EnhanceParentPortal=wrapped}catch(_e){}
+    }
+  }catch(_e){}
+
+  // -------- First-class Wall Teaching Timetable Center --------
+  window.v252WallTimetableCenter=async function(){
+    if(!(owner()||window.ldmDelegationCan('v252_wall_timetable')||window.ldmDelegationCan('timetable_master')||window.ldmDelegationCan('v74_bell_center')))return window.toast?.('Admin / assigned Assistant only');
+    if(teacher())window.ldmEnterDelegatedRoute(window.ldmDelegationCan('v252_wall_timetable')?'v252_wall_timetable':window.ldmDelegationCan('timetable_master')?'timetable_master':'v74_bell_center');
+    window.__v90Route='v252_wall_timetable';
+    try{window.v90Head?.('🖨️ Wall Teaching Timetable','All Teachers × Bell • One-page A4 Landscape • Central saved timetable')}catch(_e){try{window.head?.('🖨️ Wall Teaching Timetable','One-page A4 Landscape')}catch(_x){}}
+    try{window.v90InstallShell?.('v252_wall_timetable')}catch(_e){}
+    const h=document.getElementById('erpContent');if(!h)return;
+    let day=(typeof v74DayName==='function'?v74DayName():'Monday');if(day==='Sunday')day='Monday';
+    h.innerHTML=`<div class="v252WallCenter"><section class="panel"><div class="panelHead"><div><h2>🖨️ Wall Teaching Timetable</h2><p class="note">Teacher Bell / Timetable Master के saved data से automatic A4 chart.</p></div></div><div class="v252WallToolbar"><label>Day<select id="v252WallDay">${typeof v251DayOpts==='function'?v251DayOpts(day):['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].map(x=>`<option>${x}</option>`).join('')}</select></label><label>Empty Bell<select id="v252WallBlank"><option value="Revision">Revision</option><option value="Free">Free / खाली</option><option value="Blank">Blank</option></select></label><button class="primary" onclick="v252WallLoad(true)">↻ Load / Refresh</button><button onclick="v252WallPrint()">🖨 Print A4</button><button onclick="v252WallPdf()">⬇ PDF</button><button onclick="render('timetable_master')">🗓 Timetable Master</button><button onclick="render('v74_bell_center')">🔔 Bell Editor</button></div><div class="v252WallHint"><b>Rule:</b> जिस Bell में Class/Subject assignment नहीं है, चुने गए mode के अनुसार Revision / Free / Blank दिखेगा. PDF database में store नहीं होगा.</div></section><section class="panel"><div class="v251WallShell"><div id="v252WallPrintArea"><div class="v251WallLoading">Loading saved timetable…</div></div></div></section></div>`;
+    document.getElementById('v252WallDay')?.addEventListener('change',()=>window.v252WallLoad(true));document.getElementById('v252WallBlank')?.addEventListener('change',()=>window.v252WallLoad(false));
+    await window.v252WallLoad(true);
+  };
+  window.v252WallLoad=async function(force=false){
+    const area=document.getElementById('v252WallPrintArea');if(!area)return;
+    const day=document.getElementById('v252WallDay')?.value||'Monday',blank=document.getElementById('v252WallBlank')?.value||'Revision';
+    area.innerHTML='<div class="v251WallLoading">Loading timetable…</div>';
+    try{const data=await v251LoadWallData(day,force);area.innerHTML=v251BuildWallHtml(data,blank)}catch(e){area.innerHTML=`<div class="v251WallLoading">${E(e.message||e)}</div>`}
+  };
+  function wallPrintCss(){return (document.getElementById('v251-wall-teaching-timetable-style')?.textContent||'')+'@page{size:A4 landscape;margin:0}html,body{margin:0;padding:0;background:#fff}.v251WallPage{width:297mm!important;height:210mm!important;margin:0!important;box-shadow:none!important;zoom:1!important}'}
+  window.v252WallPrint=function(){const p=document.querySelector('#v252WallPrintArea .v251WallPage');if(!p)return window.toast?.('Timetable load होने दें');const w=window.open('','_blank','width=1200,height=800');if(!w)return window.toast?.('Print popup allow करें');w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Wall Teaching Timetable</title><style>${wallPrintCss()}</style></head><body>${p.outerHTML}<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>`);w.document.close()};
+  window.v252WallPdf=async function(){const p=document.querySelector('#v252WallPrintArea .v251WallPage');if(!p)return window.toast?.('Timetable load होने दें');if(!window.html2pdf)return window.v252WallPrint();const clone=p.cloneNode(true),host=document.createElement('div');host.style.cssText='position:fixed;left:-12000px;top:0;width:297mm;height:210mm;background:#fff;overflow:hidden';clone.style.cssText+=';width:297mm!important;height:210mm!important;margin:0!important;box-shadow:none!important;zoom:1!important';host.appendChild(clone);document.body.appendChild(host);try{await html2pdf().set({margin:0,filename:`Wall-Teaching-Timetable-${document.getElementById('v252WallDay')?.value||'Day'}-${session()}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff',windowWidth:1600},jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true},pagebreak:{mode:['css','legacy']}}).from(clone).save()}finally{host.remove()}};
+
+  // -------- Strong final render lifecycle / duplicate-click guard --------
+  window.__ldmV252RenderState=window.__ldmV252RenderState||{route:'',promise:null,token:0};
+  const renderBase=window.render;
+  if(typeof renderBase==='function'&&!renderBase.__v252Final){
+    const wrapped=async function(route='dashboard'){
+      const next=String(route||'dashboard'),st=window.__ldmV252RenderState;
+      if(st.promise&&st.route===next)return st.promise; // same click = same render, no duplicate work
+      if(teacher()){
+        if(window.__ldmDelegatedRoutes.has(next)){window.ldmEnterDelegatedRoute(next);window.__ldmDelegationPendingRoute=next}
+        else {window.__ldmDelegationPendingRoute='';if(next!=='assigned_work')window.ldmLeaveDelegatedRoute()}
+      }
+      const token=++st.token;st.route=next;
+      if(String(window.__v90Route||window.page||'')!==next){try{window.ldmDeactivateActiveModule?.(next)}catch(_e){}}
+      try{document.querySelectorAll('.v187Modal,.v14Modal').forEach(x=>{if(!x.contains(document.activeElement))x.remove()})}catch(_e){}
+      const p=Promise.resolve(renderBase.apply(this,arguments)).finally(()=>{if(st.token===token){st.promise=null;document.documentElement.classList.remove('v252RouteBusy')}});
+      st.promise=p;document.documentElement.classList.add('v252RouteBusy');
+      try{const r=await p;if(token!==st.token)return r;if(teacher()&&window.__ldmDelegatedRoutes.has(next)){window.__v90Route=next;window.__ldmDelegationPendingRoute=''}try{window.ldmCanonicalAdminHeader?.()}catch(_e){};try{document.querySelector('#erp aside')?.classList.remove('open')}catch(_e){};if(teacher()){try{document.getElementById('v65Dock')?.remove()}catch(_e){}}return r}catch(e){if(teacher())window.__ldmDelegationPendingRoute='';if(token===st.token)st.promise=null;throw e}
+    };
+    wrapped.__v252Final=true;window.render=wrapped;try{render=wrapped}catch(_e){}
+  }
+
+  // Route handler: always visible, regardless of which old Timetable page user opens.
+  const routeBase=window.render;
+  if(typeof routeBase==='function'&&!routeBase.__v252WallRoute){
+    const routed=async function(route='dashboard'){if(String(route)==='v252_wall_timetable')return window.v252WallTimetableCenter();return routeBase.apply(this,arguments)};
+    routed.__v252Final=true;routed.__v252WallRoute=true;window.render=routed;try{render=routed}catch(_e){}
+  }
+
+  // Add discoverable Wall Timetable button to current sidebar even if old shell was already built.
+  window.ldmV252InstallWallNav=function(){
+    if(!owner())return;
+    try{
+      const g=(typeof V90_ADMIN_GROUPS!=='undefined'?V90_ADMIN_GROUPS:[]).find(x=>String(x?.[1]||'').toLowerCase().includes('academic'));
+      if(g&&Array.isArray(g[2])&&!g[2].some(x=>x[0]==='v252_wall_timetable')){const i=g[2].findIndex(x=>x[0]==='timetable_master');g[2].splice(i<0?0:i+1,0,['v252_wall_timetable','🖨️ Wall Teaching Timetable'])}
+      window.v90BuildNav?.(window.__v90Route||'dashboard');
+    }catch(_e){}
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(window.ldmV252InstallWallNav,250),{once:true});else setTimeout(window.ldmV252InstallWallNav,80);
+  window.LDM_V253_BUILD='V253-RECHECKED-COMPLETE-ROOT-2026-10-06';
+})();
+</script>
+
 </body>
 </html>
