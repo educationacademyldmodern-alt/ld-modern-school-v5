@@ -30,8 +30,8 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 })();
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
-<meta charset="utf-8"><meta name="ld-modern-build" content="V255-CENTRAL-DATA-SORT-ATTENDANCE-ROOT-2026-10-06"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V255-CENTRAL-DATA-SORT-ATTENDANCE-ROOT-2026-10-06"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<meta charset="utf-8"><meta name="ld-modern-build" content="V256-MENU-ADMIT-CLASS-ROOT-2026-10-06"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V256-MENU-ADMIT-CLASS-ROOT-2026-10-06"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -6607,7 +6607,7 @@ async function v69ExamAdmitCenter(){
 
 async function v69RefreshExamList(selectId){let{data,error}=await sb.from('v69_exam_master').select('*').order('created_at',{ascending:false});if(error)return toast(error.message+' • V69 SQL run करें');v69Exams=data||[];let s=$('v69ExamSelect');if(s){s.innerHTML='<option value="">New Exam</option>'+v69Exams.map(x=>`<option value="${x.id}">${esc(x.exam_name)} • ${esc(x.academic_session)}</option>`).join('');if(selectId)s.value=selectId}if(selectId)await v69LoadExam(selectId)}
 function v69NewExam(){v69CurrentExam=null;v69ExamClasses=[];v69Timetable=[];if($('v69ExamSelect'))$('v69ExamSelect').value='';$('v69ExamName').value='';$('v69ExamSession').value=v69Session();$('v69ExamInstructions').value='';$('v69ExamClassBox').innerHTML=v69ClassChecksHtml('v69ExamClass',[]);$('v69AdmitClassBox').innerHTML=v69ClassChecksHtml('v69AdmitClass',[]);$('v69TimetableBody').innerHTML='<div class="empty">पहले Exam Save करें.</div>';$('v69CandidateBody').innerHTML='<div class="empty">Exam और Class चुनें.</div>';$('v69Preview').innerHTML=''}
-async function v69LoadExam(id){if(!id)return v69NewExam();let ex=v69Exams.find(x=>String(x.id)===String(id));if(!ex){let{data}=await sb.from('v69_exam_master').select('*').eq('id',id).maybeSingle();ex=data}if(!ex)return toast('Exam not found');v69CurrentExam=ex;let [cr,tr]=await Promise.all([sb.from('v69_exam_classes').select('class_name').eq('exam_id',id).order('class_name'),sb.from('v69_exam_timetable').select('*').eq('exam_id',id).order('class_name').order('exam_date').order('start_time')]);if(cr.error||tr.error)return toast((cr.error||tr.error).message);v69ExamClasses=(cr.data||[]).map(x=>x.class_name);v69Timetable=tr.data||[];$('v69ExamName').value=ex.exam_name||'';$('v69ExamSession').value=ex.academic_session||v69Session();$('v69ExamInstructions').value=ex.instructions||'';$('v69ExamClassBox').innerHTML=v69ClassChecksHtml('v69ExamClass',v69ExamClasses);$('v69AdmitClassBox').innerHTML=v69ClassChecksHtml('v69AdmitClass',v69ExamClasses);v69RenderTimetable();$('v69CandidateBody').innerHTML='<div class="empty">Classes load करने पर students आएँगे.</div>';$('v69Preview').innerHTML=''}
+async function v69LoadExam(id){if(!id)return v69NewExam();let ex=v69Exams.find(x=>String(x.id)===String(id));if(!ex){let{data}=await sb.from('v69_exam_master').select('*').eq('id',id).maybeSingle();ex=data}if(!ex)return toast('Exam not found');v69CurrentExam=ex;let [cr,tr]=await Promise.all([sb.from('v69_exam_classes').select('class_name').eq('exam_id',id).order('class_name'),sb.from('v69_exam_timetable').select('*').eq('exam_id',id).order('class_name').order('exam_date').order('start_time')]);if(cr.error||tr.error)return toast((cr.error||tr.error).message);v69ExamClasses=[...new Set((cr.data||[]).map(x=>window.ldmClassCanonical?.(x.class_name)||x.class_name).filter(Boolean))];v69Timetable=(tr.data||[]).map(x=>({...x,class_name:window.ldmClassCanonical?.(x.class_name)||x.class_name}));$('v69ExamName').value=ex.exam_name||'';$('v69ExamSession').value=ex.academic_session||v69Session();$('v69ExamInstructions').value=ex.instructions||'';$('v69ExamClassBox').innerHTML=v69ClassChecksHtml('v69ExamClass',v69ExamClasses);$('v69AdmitClassBox').innerHTML=v69ClassChecksHtml('v69AdmitClass',v69ExamClasses);v69RenderTimetable();$('v69CandidateBody').innerHTML='<div class="empty">Classes load करने पर students आएँगे.</div>';$('v69Preview').innerHTML=''}
 async function v69SaveExam(){let name=$('v69ExamName').value.trim(),session=$('v69ExamSession').value.trim()||v69Session(),instructions=$('v69ExamInstructions').value.trim(),classes=v69Checked('v69ExamClass');if(!name||!classes.length)return toast('Exam Name और कम से कम एक Class चुनें');let{data,error}=await sb.rpc('v69_exam_save',{p_exam_id:v69CurrentExam?.id||null,p_exam_name:name,p_session:session,p_classes:classes,p_instructions:instructions});if(error)return toast(error.message+' • V69 SQL run करें');$('v69ExamStatus').innerHTML='<div class="saveStatus saveOk">✓ Exam saved / updated safely</div>';toast('Exam saved');await v69RefreshExamList(data)}
 
 function v69RenderTimetable(){let b=$('v69TimetableBody');if(!b)return;if(!v69CurrentExam){b.innerHTML='<div class="empty">पहले Exam Save/Select करें.</div>';return}b.innerHTML=`<div class="tableWrap"><table><tr><th>Class</th><th>Date</th><th>Subject</th><th>Time</th><th>Action</th></tr>${v69Timetable.map(r=>`<tr><td><b>${esc(r.class_name)}</b></td><td>${esc(v69FmtDate(r.exam_date))}</td><td>${esc(r.subject_name)}</td><td>${esc(v69FmtTime(r.start_time))} - ${esc(v69FmtTime(r.end_time))}</td><td><div class="v69RowTools"><button class="mini edit" onclick="v69EditTimetable('${r.id}')">Edit</button><button class="mini del" onclick="v69DeleteTimetable('${r.id}')">Delete</button></div></td></tr>`).join('')||'<tr><td colspan="5">No timetable set yet.</td></tr>'}</table></div>`}
@@ -10222,9 +10222,94 @@ async function v92AdmitPublishCenter(){
 window.v92AdmitPublishCenter=v92AdmitPublishCenter;
 async function v92LoadExams(){let r=await sb.from('v69_exam_master').select('id,exam_name,academic_session,is_active,created_at').eq('is_active',true).order('created_at',{ascending:false}).limit(100);if(r.error)return q92('v92Body').innerHTML=`<div class="empty">${s92(r.error.message)}</div>`;v92Exams=r.data||[];let sel=q92('v92Exam');sel.innerHTML='<option value="">Select Exam</option>'+v92Exams.map(x=>`<option value="${s92(x.id)}">${s92(x.exam_name)} • ${s92(x.academic_session||'')}</option>`).join('');if(v92Exams.length){sel.value=v92Exams[0].id;await v92LoadPublishStudents()}}
 window.v92LoadExams=v92LoadExams;
-async function v92LoadPublishStudents(){let exam=q92('v92Exam')?.value;if(!exam)return;let [cr,pr]=await Promise.all([sb.from('v69_exam_classes').select('class_name').eq('exam_id',exam).order('class_name'),sb.from('v92_admit_publication_controls').select('*').eq('exam_id',exam)]);let err=cr.error||pr.error;if(err)return q92('v92Body').innerHTML=`<div class="empty">${s92(err.message)} • V92 SQL run करें.</div>`;let rawClasses=[...new Set((cr.data||[]).map(x=>x.class_name).filter(Boolean))],classes=[...new Set(rawClasses.map(c=>window.ldmClassCanonical?.(c)||c))],order=(typeof cls!=='undefined'&&Array.isArray(cls)?cls:[]);classes.sort((a,b)=>{let ai=order.indexOf(a),bi=order.indexOf(b);return (ai<0?999:ai)-(bi<0?999:bi)||String(a).localeCompare(String(b),undefined,{numeric:true})});let csel=q92('v92Class'),old=csel.value;csel.innerHTML='<option value="">All Classes</option>'+classes.map(c=>`<option>${s92(c)}</option>`).join('');if(classes.includes(old))csel.value=old;if(!classes.length){v92Candidates=[];return v92RenderPublishStudents()}let rpcClasses=[...new Set(classes.flatMap(c=>window.ldmClassAliases?.(c)||[c]))],ar=await sb.rpc('v69_admit_candidates',{p_exam_id:exam,p_classes:rpcClasses});if(ar.error)return q92('v92Body').innerHTML=`<div class="empty">${s92(ar.error.message)}</div>`;v92PubMap={};(pr.data||[]).forEach(x=>v92PubMap[x.admission_no]=x);v92Candidates=(ar.data?.students||[]).filter(x=>classes.some(c=>window.ldmClassSame?.(x.class_name,c)??String(x.class_name||'')===String(c))).map(x=>({...x,_pub:v92PubMap[x.admission_no]||null}));v92RenderPublishStudents()}
+async function v92LoadPublishStudents(){
+ let exam=q92('v92Exam')?.value;if(!exam)return;
+ let body=q92('v92Body');if(body)body.innerHTML='<div class="empty">Central Student Master + Admit status loading...</div>';
+ try{
+   const centralQ=sb.from('students').select('id,admission_no,student_id,student_name,father_name,class_name,roll_no,status').limit(10000);
+   const [cr,pr,sr,hr]=await Promise.all([
+     sb.from('v69_exam_classes').select('class_name').eq('exam_id',exam).order('class_name'),
+     sb.from('v92_admit_publication_controls').select('*').eq('exam_id',exam),
+     centralQ,
+     sb.from('v69_admit_card_controls').select('admission_no,is_withheld,hold_reason').eq('exam_id',exam)
+   ]);
+   let err=cr.error||pr.error||sr.error;
+   if(err)throw err;
+
+   const standard=(typeof cls!=='undefined'&&Array.isArray(cls)?cls:['Nursery','LKG','UKG','1','2','3','4','5','6','7','8','9','10']).map(String);
+   const isActive=x=>!['inactive','deleted','trashed','recycled','archived','left','withdrawn'].includes(String(x?.status||'active').trim().toLowerCase());
+   const canon=x=>window.ldmClassCanonical?.(x)||String(x||'').trim();
+   const same=(a,b)=>window.ldmClassSame?.(a,b)??canon(a)===canon(b);
+
+   let central=(sr.data||[]).filter(isActive).map(x=>({...x,class_name:canon(x.class_name)}));
+   let standardSet=new Set(standard);
+   central=central.filter(x=>standardSet.has(canon(x.class_name)));
+
+   /* Class selector is always canonical school order from ONE Central Student Master.
+      This prevents an old/incomplete exam-class row (e.g. only "8") from hiding LKG/UKG/other classes. */
+   let present=new Set(central.map(x=>canon(x.class_name)));
+   let examSaved=new Set((cr.data||[]).map(x=>canon(x.class_name)).filter(Boolean));
+   let classes=standard.filter(c=>present.has(c)||examSaved.has(c));
+
+   let csel=q92('v92Class'),old=canon(csel?.value||'');
+   if(csel){
+     csel.innerHTML='<option value="">All Classes</option>'+classes.map(c=>`<option value="${s92(c)}">${s92(c)}</option>`).join('');
+     if(classes.includes(old))csel.value=old;
+   }
+
+   v92PubMap={};(pr.data||[]).forEach(x=>v92PubMap[String(x.admission_no)]=x);
+   const holdMap={};if(!hr.error)(hr.data||[]).forEach(x=>holdMap[String(x.admission_no)]=x);
+
+   let rpcRows=[];
+   if(classes.length){
+     const rpcClasses=[...new Set(classes.flatMap(c=>window.ldmClassAliases?.(c)||[c]))];
+     const ar=await sb.rpc('v69_admit_candidates',{p_exam_id:exam,p_classes:rpcClasses});
+     if(!ar.error)rpcRows=(ar.data?.students||[]);
+   }
+   const byAdm=new Map();
+   rpcRows.forEach(x=>{
+     let adm=String(x.admission_no||'').trim();if(!adm)return;
+     byAdm.set(adm,{...x,class_name:canon(x.class_name)});
+   });
+
+   /* Fill missing candidates from central students, while keeping existing V69 RPC data/hold data.
+      Due is loaded from the canonical central due snapshot only for rows the old RPC did not return. */
+   const missing=central.filter(x=>x.admission_no&&!byAdm.has(String(x.admission_no)));
+   let dueMap=new Map();
+   if(missing.length){
+     const adms=[...new Set(missing.map(x=>String(x.admission_no)).filter(Boolean))];
+     const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit'}).formatToParts(new Date());
+     const z=Object.fromEntries(parts.map(x=>[x.type,x.value])),until=z.year+'-'+z.month;
+     const session=school?.academic_session||school?.current_session||'2026-27';
+     let dueRows=[];
+     for(let i=0;i<adms.length;i+=300){
+       let dr=await sb.rpc('ldm_fee_due_snapshot_v2',{p_session:session,p_admission_nos:adms.slice(i,i+300),p_until_month:until});
+       if(!dr.error)dueRows.push(...(dr.data||[]));
+     }
+     dueMap=new Map(dueRows.map(x=>[String(x.admission_no),Number(x.current_due||0)]));
+   }
+   missing.forEach(x=>{
+     const adm=String(x.admission_no||''),h=holdMap[adm]||{};
+     byAdm.set(adm,{...x,fee_due:Number(dueMap.get(adm)||0),is_withheld:!!h.is_withheld,hold_reason:h.hold_reason||''});
+   });
+
+   v92Candidates=[...byAdm.values()]
+     .filter(x=>classes.some(c=>same(x.class_name,c)))
+     .map(x=>({...x,class_name:canon(x.class_name),_pub:v92PubMap[String(x.admission_no)]||null}))
+     .sort((a,b)=>{
+       let ai=standard.indexOf(canon(a.class_name)),bi=standard.indexOf(canon(b.class_name));
+       if(ai!==bi)return (ai<0?999:ai)-(bi<0?999:bi);
+       let ar=Number(a.roll_no),br=Number(b.roll_no);
+       if(Number.isFinite(ar)&&Number.isFinite(br)&&ar!==br)return ar-br;
+       return String(a.student_name||'').localeCompare(String(b.student_name||''),undefined,{numeric:true,sensitivity:'base'});
+     });
+   v92RenderPublishStudents();
+ }catch(e){
+   if(body)body.innerHTML=`<div class="empty">${s92(e?.message||e)} • Central Admit load failed.</div>`;
+ }
+}
 window.v92LoadPublishStudents=v92LoadPublishStudents;
-function v92Filtered(){let rows=v92Candidates||[],cl=q92('v92Class')?.value||'',q=n92(q92('v92Q')?.value),st=q92('v92Status')?.value||'';if(cl)rows=rows.filter(x=>x.class_name===cl);if(q)rows=rows.filter(x=>[x.student_name,x.father_name,x.admission_no,x.class_name].some(v=>n92(v).includes(q)));if(st==='published')rows=rows.filter(x=>!!x._pub?.is_published);if(st==='not')rows=rows.filter(x=>!x._pub?.is_published);if(st==='due')rows=rows.filter(x=>Number(x.fee_due||0)>0);return rows}
+function v92Filtered(){let rows=v92Candidates||[],cl=q92('v92Class')?.value||'',q=n92(q92('v92Q')?.value),st=q92('v92Status')?.value||'';if(cl)rows=rows.filter(x=>window.ldmClassSame?.(x.class_name,cl)??String(x.class_name||'')===String(cl));if(q)rows=rows.filter(x=>[x.student_name,x.father_name,x.admission_no,x.class_name].some(v=>n92(v).includes(q)));if(st==='published')rows=rows.filter(x=>!!x._pub?.is_published);if(st==='not')rows=rows.filter(x=>!x._pub?.is_published);if(st==='due')rows=rows.filter(x=>Number(x.fee_due||0)>0);return rows}
 function v92RenderPublishStudents(){let rows=v92Filtered(),published=rows.filter(x=>x._pub?.is_published).length,due=rows.filter(x=>Number(x.fee_due||0)>0).length,clear=rows.length-due,held=rows.filter(x=>x.is_withheld).length;q92('v92Stats').innerHTML=[['Students',rows.length],['Fee Clear',clear],['Due',due],['Published',published],['Held',held]].map(x=>`<div class="v90Stat"><div><small>${x[0]}</small><b>${x[1]}</b></div></div>`).join('');q92('v92Body').innerHTML=`<div class="tableWrap"><table class="v90Table"><tr><th>✓</th><th>Student</th><th>Class</th><th>Father</th><th>Fee</th><th>Admit Hold</th><th>Parent Publish</th></tr>${rows.map(x=>{let due=Number(x.fee_due||0),pub=!!x._pub?.is_published,over=!!x._pub?.allow_due_override;return `<tr><td><input class="v92Check" type="checkbox" data-adm="${s92(x.admission_no||'')}"></td><td><b>${s92(x.student_name||'')}</b><small class="cellSub">${s92(x.admission_no||'')}</small></td><td>${s92(x.class_name||'')}</td><td>${s92(x.father_name||'')}</td><td>${due>0?`<span class="v92Bad">${typeof money==='function'?money(due):due}</span>`:'<span class="v92Good">CLEAR</span>'}</td><td>${x.is_withheld?'<span class="v92Bad">HELD</span>':'<span class="v92Good">Open</span>'}</td><td>${pub?`<span class="v92Published">Published</span>${over?' <span class="v92DueOverride">Due Override</span>':''}`:'<span class="v92Warn">Not Published</span>'}</td></tr>`}).join('')||'<tr><td colspan="7">No students.</td></tr>'}</table></div><p class="v92PrintRule">Normal Publish केवल Fee Clear + Not Held students पर होगा. Due student के लिए Admin Override button जानबूझकर अलग रखा गया है. Parent को केवल Published/Allowed card दिखेगा.</p>`}
 window.v92RenderPublishStudents=v92RenderPublishStudents;
 window.v92SelectPublish=function(mode){let visible=new Set(v92Filtered().filter(x=>mode==='all'||(mode==='clear'&&Number(x.fee_due||0)<=0&&!x.is_withheld)).map(x=>String(x.admission_no)));document.querySelectorAll('.v92Check').forEach(c=>c.checked=mode!=='none'&&visible.has(c.dataset.adm))};
@@ -17507,7 +17592,8 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
  const renderBase=window.render;
  if(typeof renderBase==='function'&&!renderBase.__v254Root){let wrapped=async function(route='dashboard'){let r=String(route||'dashboard');if(teacher()&&r==='fees')return window.teacherFeeView();let out=await renderBase.apply(this,arguments);if(admin())requestAnimationFrame(ensureAdminNav);if(teacher()&&r==='dashboard')requestAnimationFrame(()=>{installTeacherFeeNav();try{window.v90BuildNav?.('dashboard')}catch(_e){}decorateTeacherDashboard()});return out};wrapped.__v254Root=true;window.render=wrapped;try{render=wrapped}catch(_e){}}
  const openBase=window.openERP;if(typeof openBase==='function'&&!openBase.__v254Root){let opened=async function(){let out=await openBase.apply(this,arguments);installTeacherFeeNav();if(admin())ensureAdminNav();if(teacher())setTimeout(decorateTeacherDashboard,0);return out};opened.__v254Root=true;window.openERP=opened;try{openERP=opened}catch(_e){}}
- document.addEventListener('click',e=>{if(!admin())return;let t=e.target.closest('#erpNav button,#erpNav summary,#erp .erpTop .hamb');if(t)setTimeout(ensureAdminNav,0)},true);
+ /* V256 ROOT: do not rebuild #erpNav after summary/menu-item click.
+   Native <details> now keeps its open/close state; route renders already rebuild nav safely. */
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{installTeacherFeeNav();if(admin())ensureAdminNav()},{once:true});else{installTeacherFeeNav();if(admin())ensureAdminNav()}
 })();
 </script>
@@ -17521,11 +17607,22 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 </style>
 <script id="ldm-v255-central-root-final">
 (function(){'use strict';
- window.LDM_FINAL_BUILD='V255-CENTRAL-DATA-SORT-ATTENDANCE-ROOT-2026-10-06';
+ window.LDM_FINAL_BUILD='V256-MENU-ADMIT-CLASS-ROOT-2026-10-06';
  window.LDM_V255_RULES=Object.freeze({studentSource:'students',classOrder:['Nursery','LKG','UKG','1','2','3','4','5','6','7','8','9','10'],excel:'central',teacherStudentEdit:'assigned-class-safe-fields-via-secure-rpc',sorting:'all-rendered-tables'});
  window.ldmV255Audit=function(){return {build:window.LDM_FINAL_BUILD,studentSource:window.LDM_V255_RULES.studentSource,classOrder:window.LDM_V255_RULES.classOrder.slice(),sortInstalled:!!window.__ldmUniversalColumnSortInstalled,attendanceTruth:typeof window.ldmLoadAttendanceTruth==='function',teacherSecureUpdate:typeof window.v98TeacherBasicSave==='function'||typeof window.teacherSaveStudent==='function',excelCenter:typeof window.studentExcelTools==='function'}};
 })();
 </script>
 <!-- ===== END V255 CENTRAL ROOT FINAL ===== -->
+<!-- ===== V256 MENU + ADMIT CLASS ROOT FIX ===== -->
+<script id="ldm-v256-menu-admit-root">
+window.LDM_FINAL_BUILD='V256-MENU-ADMIT-CLASS-ROOT-2026-10-06';
+window.LDM_V256_FIXES=Object.freeze({
+  menu:'native-details-preserved-no-post-click-sidebar-rebuild',
+  admitClassSource:'central-students-canonical-school-order',
+  admitClassFilter:'canonical-alias-safe',
+  savedExamClasses:'canonicalized-on-load'
+});
+</script>
+<!-- ===== END V256 ROOT FIX ===== -->
 </body>
 </html>
