@@ -1,0 +1,59 @@
+L D MODERN EDUCATION ACADEMY — V262 SECURITY ROOT AUDIT
+Date: 2026-10-08
+Base: V261.1 ROOT AUDITED
+
+WHAT THE SCREENSHOT MEANS
+Chrome is warning after a real password was entered on a URL it considers deceptive/suspicious.
+The screenshot shows a unique/random Vercel deployment hostname, not a stable official production hostname.
+
+ROOT CORRECTIONS IN V262
+1. Random *.vercel.app deployment URLs are classified as PREVIEW unless they are the stable project host.
+2. Real password fields are locked on preview URLs.
+3. Supabase signInWithPassword is centrally blocked on preview URLs even if an old/dynamic login UI bypasses the visible lock.
+4. Stable official hosts allowed for real login:
+   - myldm.com
+   - www.myldm.com
+   - ld-modern-school-v5.vercel.app
+   - localhost / 127.0.0.1 for local development
+5. Main login now uses proper username/current-password autocomplete semantics and visible origin trust messaging.
+6. Dynamic password/email fields receive safe autocomplete semantics without changing their business logic.
+7. vercel.json adds HTTPS/browser hardening:
+   - HSTS
+   - X-Content-Type-Options: nosniff
+   - X-Frame-Options: DENY
+   - Referrer-Policy
+   - Permissions-Policy (camera/geolocation self only; microphone/payment/USB denied)
+   - Content-Security-Policy with object-src none, frame-ancestors none, form-action self,
+     and only the current required CDN/Supabase origins.
+8. No ERP database tables, RLS policies, fee/attendance/exam/menu/navigation logic, or SQL were changed.
+
+SOURCE AUDIT
+- eval(): absent
+- http:// insecure resource references: absent
+- iframe markup: absent
+- Supabase Auth goes to the configured HTTPS Supabase project.
+- Executable inline JavaScript blocks checked: 123
+- JavaScript syntax failures: 0
+- assembly.js syntax: PASS
+- New SQL required: NO
+
+IMPORTANT EXTERNAL STEP
+Browser/Safe Browsing reputation cannot be overridden by ERP JavaScript.
+If the stable production domain is already listed as deceptive, verify the production domain in Google Search Console,
+check Security Issues, fix any listed issue, then request a review. Google states browser warnings can take time to clear
+after approval/database propagation.
+
+DEPLOYMENT RULE
+- Do NOT use unique/random Vercel deployment URLs for real school passwords.
+- Promote the deployment to Production.
+- Login only on the stable official production domain.
+- Deploy index.html + assembly.js + vercel.json from this package.
+
+SHA256 index.html:
+1be38d87ce8f14d6162b00db8ae58f07987f9b1b3e73b4d27e32b4d35d0cc66b
+
+SHA256 assembly.js:
+645a2dfdbc3204bd2ab5c9c6311a70ba901cbbee5cc0f329c34cb2d0735fc193
+
+SHA256 vercel.json:
+4d9bd3446e2e5a9a1c9a4e696815aa11ec4f12a4782699b8aac673c68248e79d

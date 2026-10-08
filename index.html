@@ -30,8 +30,8 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 })();
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
-<meta charset="utf-8"><meta name="ld-modern-build" content="V261.1-ROOT-AUDITED-2026-10-08"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V261.1-ROOT-AUDITED-2026-10-08"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<meta charset="utf-8"><meta name="ld-modern-build" content="V262-SECURITY-ROOT-HARDENED-2026-10-08"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V262-SECURITY-ROOT-HARDENED-2026-10-08"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -1036,7 +1036,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 <footer class="premiumFooter"><div class="footBrand"><img src="school-logo.png" alt="School Logo"><div><b id="footSchool">L D MODERN EDUCATION ACADEMY</b><span>Knowledge • Discipline • Character</span></div></div><div class="footMotto">A Better Education • A Brighter Tomorrow</div><span>Public Website + Smart Cloud ERP<br><small>© 2026 L D MODERN EDUCATION ACADEMY. All Rights Reserved.</small></span></footer>
 </div>
 
-<section id="login" class="auth hidden"><div class="loginGrid"><div class="loginHero"><img src="school-logo.png" alt="School Logo" style="width:104px;height:104px;object-fit:contain"><h1>L D MODERN EDUCATION ACADEMY</h1><p>Premium Secure School ERP</p><button class="ghost" onclick="backWebsite()">← Public Website</button></div><div class="authCard"><span class="pill">SECURE CLOUD LOGIN</span><h2>Welcome Back</h2><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password"><button onclick="login()">Login</button><div class="loginLinks"><small>Accounts are created by School Admin only.</small></div><small>Admin • Principal • Admission • Accountant • Teacher • Student • Parent</small></div></div></section>
+<section id="login" class="auth hidden"><div class="loginGrid"><div class="loginHero"><img src="school-logo.png" alt="School Logo" style="width:104px;height:104px;object-fit:contain"><h1>L D MODERN EDUCATION ACADEMY</h1><p>Premium Secure School ERP</p><button class="ghost" onclick="backWebsite()">← Public Website</button></div><div class="authCard"><span class="pill">OFFICIAL SCHOOL ERP LOGIN</span><h2>Welcome Back</h2><div id="ldmSecurityOrigin" class="ldmSecurityOrigin" aria-live="polite"></div><label class="ldmLoginLabel" for="email">Email / Login ID</label><input id="email" name="username" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Email"><label class="ldmLoginLabel" for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password"><button id="ldmPrimaryLoginBtn" onclick="login()">Login</button><div class="loginLinks"><small>Accounts are created by School Admin only.</small></div><small>Admin • Principal • Admission • Accountant • Teacher • Student • Parent</small></div></div></section>
 
 <div id="erp" class="erp hidden"><aside><div class="sideBrand"><div class="logoText small">LD</div><div><b id="sideName">L D MODERN EDUCATION ACADEMY</b><small id="roleText"></small></div></div><nav id="erpNav"></nav><button class="logout" onclick="logout()">⇥ Logout</button></aside><main><header class="erpTop"><button class="hamb" onclick="document.querySelector('#erp aside').classList.toggle('open')">☰</button><button class="erpHomeBtn" onclick="erpGoHome()" title="Home">🏠 Home</button><div><h2 id="erpTitle">Dashboard</h2><p id="erpSub"></p></div><button class="websiteBtn" onclick="backWebsite()">View Website</button></header><section id="erpContent"></section></main></div>
 <div id="modal" class="modal hidden"><div class="modalCard"><div class="modalHead"><h3 id="modalTitle"></h3><button onclick="closeModal()">✕</button></div><form id="dataForm"></form></div></div>
@@ -18065,6 +18065,127 @@ window.LDM_V2611_AUDIT=Object.freeze({
 });
 </script>
 <!-- ===== END V261.1 FINAL ROOT AUDIT MARKER ===== -->
+
+
+<!-- ===== V262 SECURITY ROOT HARDENING ===== -->
+<style id="ldm-v262-security-style">
+.ldmSecurityOrigin{margin:10px 0 8px;padding:9px 11px;border:1px solid #cfe0f3;border-radius:10px;background:#f4f9ff;color:#244765;font-size:11px;line-height:1.45}
+.ldmSecurityOrigin.ok{background:#eefaf3;border-color:#bfe5ce;color:#17643d}
+.ldmSecurityOrigin.warn{background:#fff6e8;border-color:#ffd391;color:#8a5200}
+.ldmLoginLabel{display:block;margin-top:7px;font-size:11px;font-weight:800;color:#40566d}
+.ldmPreviewLock{margin:10px 0;padding:10px 12px;border-radius:10px;background:#fff2f0;border:1px solid #ffc7c2;color:#9b241c;font-size:11px;font-weight:750;line-height:1.5}
+</style>
+<script id="ldm-v262-security-runtime">
+(function(){
+'use strict';
+if(window.__LDM_V262_SECURITY)return;
+window.__LDM_V262_SECURITY=true;
+window.LDM_FINAL_BUILD='V262-SECURITY-ROOT-HARDENED-2026-10-08';
+
+const OFFICIAL_HOSTS=new Set([
+  'myldm.com',
+  'www.myldm.com',
+  'ld-modern-school-v5.vercel.app',
+  'localhost',
+  '127.0.0.1'
+]);
+const host=String(location.hostname||'').toLowerCase();
+const isVercelPreview=host.endsWith('.vercel.app')&&!OFFICIAL_HOSTS.has(host);
+const isOfficial=OFFICIAL_HOSTS.has(host);
+
+window.LDM_SECURITY=Object.freeze({
+  officialHosts:[...OFFICIAL_HOSTS],
+  currentHost:host,
+  isOfficial,
+  isVercelPreview,
+  realPasswordAllowed:!isVercelPreview
+});
+
+function hardenCredentialFields(root=document){
+  try{
+    root.querySelectorAll('input[type="password"]').forEach(el=>{
+      const key=(String(el.id||'')+' '+String(el.name||'')+' '+String(el.placeholder||'')).toLowerCase();
+      if(!el.autocomplete){
+        el.autocomplete=/(new|create|confirm|reset|change)/.test(key)?'new-password':'current-password';
+      }
+      el.spellcheck=false;
+    });
+    root.querySelectorAll('input[type="email"]').forEach(el=>{
+      if(!el.autocomplete)el.autocomplete='username';
+      el.autocapitalize='none';el.spellcheck=false;
+    });
+  }catch(_e){}
+}
+window.ldmHardenCredentialFields=hardenCredentialFields;
+
+function applyOriginTrust(){
+  const box=document.getElementById('ldmSecurityOrigin');
+  if(box){
+    if(isVercelPreview){
+      box.className='ldmSecurityOrigin warn';
+      box.innerHTML='⚠ Preview deployment: <b>'+host+'</b><br>Real school passwords are disabled here. Use the official Production domain.';
+    }else{
+      box.className='ldmSecurityOrigin ok';
+      box.innerHTML='✓ Official login origin: <b>'+host+'</b><br>Your password is sent only to the configured Supabase Auth service over HTTPS.';
+    }
+  }
+  if(isVercelPreview){
+    document.querySelectorAll('#login input[type="password"],#parentGate input[type="password"],#v14Modal input[type="password"],#v32Modal input[type="password"]').forEach(el=>{
+      el.value='';el.readOnly=true;el.setAttribute('aria-disabled','true');
+      el.placeholder='Preview URL पर real password disabled';
+    });
+    const btn=document.getElementById('ldmPrimaryLoginBtn');
+    if(btn){btn.disabled=true;btn.title='Use official Production domain for real login';}
+    if(!document.getElementById('ldmPreviewSecurityNotice')){
+      const card=document.querySelector('#login .authCard');
+      if(card){
+        const n=document.createElement('div');n.id='ldmPreviewSecurityNotice';n.className='ldmPreviewLock';
+        n.textContent='Security lock: Vercel preview/unique deployment URLs are for UI testing only. Promote this deployment to Production and sign in on the stable official domain.';
+        card.prepend(n);
+      }
+    }
+  }
+}
+
+hardenCredentialFields();
+applyOriginTrust();
+
+const mo=new MutationObserver(muts=>{
+  let touched=false;
+  for(const m of muts){if(m.addedNodes&&m.addedNodes.length){touched=true;break}}
+  if(touched){hardenCredentialFields();if(isVercelPreview)applyOriginTrust();}
+});
+mo.observe(document.documentElement,{childList:true,subtree:true});
+
+window.ldmSecurityAssertPasswordOrigin=function(){
+  if(isVercelPreview){
+    try{window.toast?.('Security: Preview URL पर real password login बंद है. Official Production domain खोलें.')}catch(_e){}
+    return false;
+  }
+  return true;
+};
+
+/* Central Auth guard: even if an old/dynamic login button bypasses UI locking,
+   real password authentication is never sent from a random Vercel preview URL. */
+function wrapSupabasePasswordAuth(){
+  try{
+    if(!window.sb?.auth?.signInWithPassword||window.sb.auth.__ldmV262Wrapped)return;
+    const original=window.sb.auth.signInWithPassword.bind(window.sb.auth);
+    window.sb.auth.signInWithPassword=async function(credentials){
+      if(isVercelPreview){
+        return {data:{user:null,session:null},error:new Error('Security lock: real password login is disabled on Vercel preview URLs. Use the official Production domain.')};
+      }
+      return original(credentials);
+    };
+    window.sb.auth.__ldmV262Wrapped=true;
+  }catch(_e){}
+}
+wrapSupabasePasswordAuth();
+let tries=0,authTimer=setInterval(()=>{wrapSupabasePasswordAuth();if(++tries>=20)clearInterval(authTimer)},250);
+
+})();
+</script>
+<!-- ===== END V262 SECURITY ROOT HARDENING ===== -->
 
 </body>
 </html>
