@@ -1,0 +1,106 @@
+L D MODERN EDUCATION ACADEMY — V272
+FUNCTIONAL ADMIN -> TEACHER DELEGATION
+Base: V271 Premium Admin Clean
+Date: 2026-10-08
+
+CONFIRMED ROOT PROBLEM
+Earlier Assigned Work could show the task and route, but only the outer Teacher route guard was bridged.
+Many Admin modules then performed their own "Admin only" check or database RLS check, so Teacher could
+see "Open Function" yet still fail to actually operate the linked function.
+
+V272 ROOT FIX
+1. Open Function validates the exact assignment + exact route on Supabase first.
+2. It creates a short-lived exact-route delegated context only after server validation.
+3. Existing Admin helper layers v14Admin/v90Admin and selected later helper checks accept that context
+   ONLY while the exact linked route is opening/current.
+4. profile.role is NEVER changed to Admin.
+5. High-risk Admin controls are no longer offered in the delegation dropdown.
+6. Old unsupported tasks remain visible but must be edited by Admin to a delegation-ready function.
+7. Work Date added:
+   - today = usable today
+   - tomorrow = shown as Upcoming and cannot Start/Open today
+   - tomorrow it becomes available automatically by date
+8. Teacher status RPC also enforces Work Date server-side.
+9. Program/Tour Register gets exact active-assignment RLS policies plus limited roster RPCs,
+   so the delegated coordinator can actually manage the program without broad Student/Staff table access.
+10. Master Gate Pass keeps its existing dedicated delegation security path.
+
+DELEGATION-READY ROUTES
+attendance, master_attendance, teacher_bells, v90_teacher_daily, homework,
+academic_monitor, exams, v90_teacher_marks, teacher_notices, gallery, my_notes,
+class_opinions, v91_student_photos, v143_teacher_qr_attendance,
+master_gate_pass, v66_programs
+
+SECURITY
+- No global Admin role.
+- Exact active assignment required.
+- Exact module_route required.
+- Work Date must have started.
+- Completed/cancelled/removed assignment is denied.
+- Student Master / Fee Master / Settings / Teacher Access / Storage / Certificates etc.
+  are intentionally not directly delegable.
+- Program roster RPC returns only the fields required by Program Register.
+
+PERFORMANCE
+{
+  "V272 bridge no setInterval": true,
+  "V272 bridge no MutationObserver": true,
+  "V272 bridge no realtime": true,
+  "runtime guard unchanged": true,
+  "academic unchanged": true,
+  "alarm unchanged": true,
+  "assembly unchanged": true
+}
+
+STATIC FEATURES
+{
+  "exact server validator": true,
+  "work date input": true,
+  "future task blocked": true,
+  "no global role mutation": true,
+  "delegated admin helpers": true,
+  "high risk routes blocked": true,
+  "program RLS adapter": true,
+  "program roster limited RPC": true,
+  "old V260 bridge removed": true,
+  "V272 bridge single": true
+}
+
+SQL SAFETY
+{
+  "drop_table": false,
+  "truncate": false,
+  "delete_business_data": false,
+  "drop_column": false
+}
+No DROP TABLE / TRUNCATE / DELETE / DROP COLUMN.
+
+JAVASCRIPT
+- Inline executable blocks: 124 PASS
+- runtime_guard.js PASS
+- academic_monitor.js PASS
+- alarm.js PASS
+- assembly.js PASS
+
+DEPLOY
+1. Run V272_SAFE_ADDITIVE.sql once in Supabase.
+2. Deploy V272 index.html.
+3. Keep runtime_guard.js, academic_monitor.js, alarm.js, assembly.js, vercel.json.
+4. Admin -> Assign Work:
+   choose Work Date + one delegation-ready function + Teacher.
+5. Teacher -> Admin Assigned Work -> Open Function.
+6. For a tomorrow task, it is Upcoming today and becomes operable tomorrow.
+
+OLD TASKS
+If an old task uses Student Master / Quick Due / Settings / other Admin-only route,
+Admin must Edit it and choose a delegation-ready function. V272 will not silently grant
+sensitive Admin authority to a Teacher.
+
+LIVE STATUS
+Static/root verification is PASS.
+Real production Supabase RLS execution and authenticated Teacher operation are NOT falsely marked PASS
+until deployed and tested with the real accounts.
+
+SHA256
+index.html: 0e915a3b106580c4df0bef26cb0b1d4701d50c98ab1957f411e30fd69bde6e00
+V272_SAFE_ADDITIVE.sql: cb871ed8ab28de2da852f4c64742b65438ebbe053b457cb2ae561117d345babb
