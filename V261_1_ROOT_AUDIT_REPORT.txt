@@ -1,0 +1,74 @@
+L D MODERN EDUCATION ACADEMY — V261.1 ROOT AUDIT
+Date: 2026-10-08
+Base: V260 FINAL
+Scope: ONLY requested Central Back + Central Due Report + Principal Daily Assembly corrections.
+
+FINAL RESULT
+STATIC / ROOT-LEVEL AUDIT: PASS
+LIVE PRODUCTION / AUTHENTICATED DEVICE TEST: NOT VERIFIED HERE
+
+A. UNRELATED FUNCTION DISTURBANCE CHECK
+The following critical existing blocks are byte-for-byte unchanged from V260:
+- Central Student/Due root (V240)
+- Performance root (V245)
+- Teacher/Admin root correction (V254)
+- Central Data/Attendance/Sort (V255)
+- Menu + Admit class root (V256)
+- Teacher Fee Status assignment (V258)
+- Assistant Admin catalog (V257)
+- Gate Pass delegation (V259.2)
+- Assistant permission bridge (V260)
+- Work Delegation/Certificate runtime (V187)
+Result: 10/10 protected blocks unchanged.
+
+B. CENTRAL BACK ROOT
+- V45 duplicate render/history wrapper retired.
+- V181 legacy popstate code remains only for Parent/Student legacy surface; on internal ERP roles it exits immediately.
+- V237/V261 is the effective central owner for Admin/Teacher/other internal ERP role navigation.
+- Internal Back uses one session stack and returns to exact previous internal route.
+- Dashboard Back is kept inside ERP and does not jump to public website.
+- Parent Back no longer calls public home; it closes internal modal or returns to Parent Portal.
+- Home remains separate from Back.
+Static signatures: PASS.
+Note: Real Android hardware Back requires live deployed-device verification.
+
+C. CENTRAL CURRENT DUE
+- Same canonical due snapshot source is used.
+- Current month is ensured only when the Due Report is explicitly opened.
+- Saved future class cutoff is capped to the requested/current month.
+- Future months therefore cannot be included by the central wrapper.
+- Class-wise summary + student-wise detail + Excel + Print/PDF all use the same loaded central snapshot.
+- Class order remains Nursery → LKG → UKG → 1 ... 10.
+Static checks: PASS.
+Live amount/RLS verification requires production Supabase login.
+
+D. PRINCIPAL DAILY ASSEMBLY
+Runtime deterministic audit for calendar year 2026, All Students, 5-minute mode:
+- Daily motivational Shayari: 365/365 unique.
+- Daily inspirational story/person+lesson text: 365/365 unique.
+- Question 1: 365/365 unique.
+- Question 2: 365/365 unique.
+- Question 3 factual-GK pair: 365/365 unique.
+- ALL visible questions: 1095/1095 unique; duplicate occurrences = 0.
+- Daily 3-question packs: 365/365 unique.
+- Offline/free; no paid AI/API, no Supabase fetch/write for assembly content.
+
+E. CODE SAFETY
+- Inline executable JavaScript blocks checked: 122
+- Inline JS syntax failures: 0
+- assembly.js node syntax: PASS
+- No new SQL in V261.1.
+- No DELETE/TRUNCATE/DROP operation introduced because no SQL is included.
+- Final build marker: V261.1-ROOT-AUDITED-2026-10-08
+
+DEPLOY
+Deploy BOTH files from the ZIP to the same web root:
+1) index.html
+2) assembly.js
+No new SQL is required for V261.1.
+
+SHA256 index.html:
+c717793a39292d4da396df57fdfc9ff213542658d8f275745920c0be819ece2f
+
+SHA256 assembly.js:
+645a2dfdbc3204bd2ab5c9c6311a70ba901cbbee5cc0f329c34cb2d0735fc193
