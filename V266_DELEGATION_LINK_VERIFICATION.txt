@@ -1,0 +1,80 @@
+L D MODERN EDUCATION ACADEMY — V266
+ASSIGNED WORK LINK ROOT FIX
+Date: 2026-10-08
+Base: V265.2 Complete SQL Fix
+
+ROOT CAUSE CONFIRMED
+The old V187 database functions allowed only six routes:
+attendance, exams, timetable, homework, events, notices.
+Any newer route selected in the Admin UI was silently changed to NULL in SQL.
+Therefore the task reached Teacher, but the ERP link disappeared.
+
+V266 FIX
+- Database no longer silently NULLs a selected route.
+- Valid current operational routes are preserved.
+- Invalid/protected routes raise a visible error.
+- Owner/security/financial-control routes are not offered.
+- New ERP Work requires a Linked ERP Function.
+- General Work is an explicit checkbox and requires Instructions.
+- After Create/Edit, frontend re-reads the saved task and verifies module_route.
+- Existing blank tasks show "Link Missing" / "Link Pending".
+- Admin gets direct "Link Now" on broken tasks.
+- Existing tasks/assignees are not deleted or auto-guessed.
+
+OLD TASK REPAIR
+For old Management / Van Detail / other blank tasks:
+Admin -> Assistant / Work Delegation -> Link Now -> choose intended ERP Function -> Save.
+The same task and same teacher assignment remain.
+
+STATIC CHECK
+Inline executable JavaScript: 124 PASS, 0 failure.
+academic_monitor.js / alarm.js / assembly.js: PASS.
+
+UNCHANGED EXTERNAL MODULES
+{
+  "academic_monitor.js": true,
+  "alarm.js": true,
+  "assembly.js": true,
+  "vercel.json": true
+}
+
+SQL NON-DESTRUCTIVE AUDIT
+{
+  "DROP TABLE": false,
+  "TRUNCATE": false,
+  "DELETE FROM": false,
+  "DROP COLUMN": false,
+  "WRITE students": false,
+  "WRITE timetable": false,
+  "WRITE teaching_diary": false,
+  "WRITE attendance": false
+}
+
+FEATURE CHECKS
+{
+  "Explicit General Work checkbox": true,
+  "Link Now repair": true,
+  "Teacher Link Pending": true,
+  "Post-save verification": true,
+  "Owner routes blocked UI": true,
+  "SQL validator": true,
+  "Old 6-route silent whitelist absent in V266 patch": true,
+  "Van route allowed": true,
+  "Academic monitor allowed": true,
+  "Settings protected": true
+}
+
+DEPLOY
+1. Supabase SQL Editor -> RUN_ONLY_THIS_V266_COMPLETE_MASTER.sql
+2. Deploy index.html from this ZIP.
+3. Keep academic_monitor.js, alarm.js, assembly.js, vercel.json beside it.
+4. Admin -> Assistant / Work Delegation.
+5. Old blank task -> Link Now -> select intended function -> Save.
+6. Teacher refresh -> Admin Assigned Work -> Open Function should appear.
+
+LIVE NOT VERIFIED HERE
+Production SQL execution, real RLS and real account behavior require the live environment.
+
+SHA256
+index.html: fcc3b4a9fd3dcb6b7834f6e1d451a0f46bbb9dae9bcb6e264d8868cf3ac8bb8b
+SQL: 6fc2a1d4251611312b276dd925a6f461c4b8f29cf91434ca3f48f4d0203c527b
