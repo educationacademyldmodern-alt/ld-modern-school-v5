@@ -1,6 +1,6 @@
 /* ==========================================================
 L D MODERN EDUCATION ACADEMY
-V265 — ACADEMIC MONITORING CENTER
+V267 — TEACHER-CENTRIC ACADEMIC MONITORING CENTER
 Central sources: timetable + teaching_diary + syllabus_master.
 New state only: copy checking + bell tests + principal audit.
 No polling / realtime / cron.
@@ -9,7 +9,7 @@ No polling / realtime / cron.
 'use strict';
 if(window.__LDM_V265_ACADEMIC)return;
 window.__LDM_V265_ACADEMIC=true;
-window.LDM_FINAL_BUILD='V265-ACADEMIC-MONITOR-2026-10-08';
+window.LDM_FINAL_BUILD='V267-TEACHER-CENTRIC-ACADEMIC-2026-10-08';
 
 const $=id=>document.getElementById(id);
 const E=v=>typeof window.v90Safe==='function'?window.v90Safe(v):typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -20,7 +20,7 @@ const uid=()=>String(window.user?.id||'');
 const db=()=>typeof sb!=='undefined'?sb:window.sb;
 const session=()=>String(window.school?.academic_session||window.school?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
 const CLASS_ORDER=['Nursery','LKG','UKG','1','2','3','4','5','6','7','8','9','10'];
-const state={days:30,className:'',subject:'',teacher:'',date:'',view:'progress',diary:[],copy:[],tests:[],syllabus:[],timetable:[],teachers:[],students:[],attendance:null,loaded:false};
+const state={days:30,className:'',subject:'',teacher:'',date:'',view:'progress',diary:[],copy:[],tests:[],syllabus:[],timetable:[],teachers:[],students:[],attendance:null,adminSummary:[],adminSummaryError:'',detailLoaded:false,loaded:false};
 window.__v265Academic=state;
 
 function indiaYMD(d=new Date()){
@@ -61,6 +61,9 @@ function injectStyle(){
  .v265Lesson{border:1px solid #dce5ed;border-radius:14px;padding:10px;margin:8px 0;background:#fff}.v265LessonTop{display:flex;justify-content:space-between;gap:8px;align-items:start}.v265Lesson h4{margin:0;color:#173f6e}.v265Lesson small{color:#65788b}.v265Gap{font-weight:900}.v265Gap.bad{color:#b72e20}.v265Gap.warn{color:#955900}.v265Gap.ok{color:#08754c}
  .v265ModalBack{position:fixed;inset:0;background:#061727a8;z-index:9999998;display:grid;place-items:center;padding:16px}.v265Modal{width:min(720px,97vw);max-height:90vh;overflow:auto;background:#fff;border-radius:22px;padding:18px;box-shadow:0 25px 70px #0007}.v265Modal h2{margin:0 0 10px;color:#153f6d}.v265Form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.v265Form label{display:grid;gap:4px;font-size:11px;font-weight:850;color:#40566d}.v265Form input,.v265Form select,.v265Form textarea{min-height:42px;border:1px solid #ccd9e5;border-radius:10px;padding:8px;font:inherit}.v265Form textarea{min-height:78px}.v265Form .full{grid-column:1/-1}.v265Roster{max-height:250px;overflow:auto;border:1px solid #dce5ed;border-radius:12px;padding:7px}.v265Roster label{display:flex!important;align-items:center;gap:7px;padding:6px;border-bottom:1px solid #edf1f5}.v265Roster input{width:auto;min-height:auto}
  .v265Dash{margin:10px 0;padding:11px;border:1px solid #cfe2f2;border-radius:15px;background:linear-gradient(135deg,#f4faff,#fff);display:flex;align-items:center;justify-content:space-between;gap:10px}.v265Dash b,.v265Dash small{display:block}.v265Dash b{color:#154777}.v265Dash small{color:#64788b}
+ .v267AdminLauncher{margin:10px 0;padding:14px;border:1px solid #bcdcf2;border-radius:17px;background:linear-gradient(135deg,#eef8ff,#f8fffc);display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;box-shadow:0 8px 22px #0b508814}.v267AdminLauncher b,.v267AdminLauncher small{display:block}.v267AdminLauncher b{font-size:15px;color:#0c4477}.v267AdminLauncher small{margin-top:3px;color:#597287}
+ .v267TeacherFocus{background:linear-gradient(135deg,#0d3c72,#0b7e9a);color:#fff;border-radius:17px;padding:14px;margin-bottom:10px}.v267TeacherFocus h3{margin:0 0 5px;color:#fff}.v267TeacherFocus p{margin:3px 0;color:#eef9ff}.v267TeacherFocus .v265Badge{background:#ffffff20;color:#fff;border:1px solid #ffffff2c}
+ .v267CompareGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}.v267TeacherCard{background:#fff;border:1px solid #d8e5ef;border-radius:16px;padding:12px;text-align:left;box-shadow:0 6px 16px #12365a0b}.v267TeacherCard.attn{border-left:5px solid #e5a11b}.v267TeacherCard.bad{border-left:5px solid #d74a3b}.v267TeacherCard.ok{border-left:5px solid #16a56e}.v267TeacherCard h3{margin:0 0 4px;color:#153f6c}.v267TeacherCard small{color:#65798c}.v267MiniBars{display:grid;gap:5px;margin:9px 0}.v267MiniBar{display:grid;grid-template-columns:76px 1fr 38px;gap:6px;align-items:center;font-size:10px;color:#566c80}.v267MiniBar i{height:8px;border-radius:999px;background:#edf2f6;overflow:hidden}.v267MiniBar em{display:block;height:100%;border-radius:999px;background:#2581d6}.v267MiniBar:nth-child(2) em{background:#1da97d}.v267MiniBar:nth-child(3) em{background:#8a5bda}.v267SelectBig select{min-width:240px;border:2px solid #1780c5!important;font-weight:850;color:#17486f}
  @media(max-width:900px){.v265Stats{grid-template-columns:repeat(3,1fr)}.v265GraphGrid{grid-template-columns:1fr}.v265BarRow{grid-template-columns:1fr}.v265Donuts{grid-template-columns:repeat(3,1fr)}}
  @media(max-width:560px){.v265Stats{grid-template-columns:1fr 1fr}.v265Donuts{grid-template-columns:1fr 1fr 1fr}.v265Ring{width:76px;height:76px}.v265Ring:after{inset:8px}.v265Ring b{font-size:17px}.v265Form{grid-template-columns:1fr}.v265Form .full{grid-column:auto}.v265Toolbar>*{flex:1 1 140px}}
  `;
@@ -79,19 +82,21 @@ function subjectOpts(){
  return `<option value="">All Subjects</option>${vals.map(x=>`<option value="${E(x)}" ${state.subject===x?'selected':''}>${E(x)}</option>`).join('')}`;
 }
 function teacherOpts(){
- let vals=[...new Map(state.diary.filter(x=>x.teacher_user_id).map(x=>[String(x.teacher_user_id),String(x.teacher_name||'Teacher')])).entries()].sort((a,b)=>a[1].localeCompare(b[1]));
- return `<option value="">All Teachers</option>${vals.map(x=>`<option value="${E(x[0])}" ${state.teacher===x[0]?'selected':''}>${E(x[1])}</option>`).join('')}`;
+ let vals=(state.teachers||[]).filter(x=>x.auth_user_id&&x.is_active!==false&&(!x.approval_status||norm(x.approval_status)==='approved')).map(x=>[String(x.auth_user_id),String(x.teacher_name||x.full_name||'Teacher')]);
+ vals=[...new Map(vals).entries()].sort((a,b)=>a[1].localeCompare(b[1]));
+ return `<option value="">All Teachers — Comparison</option>${vals.map(x=>`<option value="${E(x[0])}" ${state.teacher===x[0]?'selected':''}>${E(x[1])}</option>`).join('')}`;
 }
 function toolbar(){
  return `<div class="v265Toolbar">
+  ${isAdmin()?`<label class="v267SelectBig">👨‍🏫 Select Teacher<select id="v265Teacher" onchange="v267SelectTeacher(this.value)">${teacherOpts()}</select></label>`:''}
   <label>Period<select id="v265Days" onchange="v265Filter()"><option value="7" ${state.days===7?'selected':''}>Last 7 Days</option><option value="30" ${state.days===30?'selected':''}>Last 30 Days</option><option value="90" ${state.days===90?'selected':''}>Last 90 Days</option></select></label>
-  ${isAdmin()?`<label>Class<select id="v265Class" onchange="v265Filter('class')">${classOpts()}</select></label><label>Subject<select id="v265Subject" onchange="v265Filter()">${subjectOpts()}</select></label><label>Teacher<select id="v265Teacher" onchange="v265Filter()">${teacherOpts()}</select></label>`:''}
-  <button class="primary" onclick="v265Reload()">↻ Refresh Data</button>
+  ${isAdmin()&&state.teacher&&state.detailLoaded?`<label>Class<select id="v265Class" onchange="v265Filter('class')">${classOpts()}</select></label><label>Subject<select id="v265Subject" onchange="v265Filter()">${subjectOpts()}</select></label><button onclick="v267ClearTeacher()">👥 All Teachers</button>`:''}
+  <button class="primary" onclick="v265Reload()">↻ Refresh</button>
  </div>`;
 }
 function shell(){
  return `<div class="v265Page">
-  <section class="v265Hero"><small>CENTRAL ACADEMIC QUALITY CONTROL</small><h2>📊 Teaching Progress & Copy Checking Monitor</h2><p>Teaching → Copy Checking → Learning Verified → Bell Test • Central Timetable + Daily Teaching data</p></section>
+  <section class="v265Hero"><small>${isAdmin()?'PRINCIPAL / ADMIN ACADEMIC CONTROL':'CENTRAL ACADEMIC QUALITY CONTROL'}</small><h2>${isAdmin()?'📊 Teacher Academic Analysis':'📊 Teaching Progress & Copy Checking Monitor'}</h2><p>${isAdmin()?'Select Teacher → Class → Subject → Lesson → Pending Students':'Teaching → Copy Checking → Learning Verified → Bell Test • Central Timetable + Daily Teaching data'}</p></section>
   <div class="v265Tabs">${tabButton('progress','📈 Progress Graph')}${tabButton('bells','🔔 Bell Performance')}${tabButton('tests','📝 Class Test Monitor')}${tabButton('lessons','📚 Lesson / Copy Check')}${isAdmin()?tabButton('audit','🔎 Principal Audit'):''}</div>
   <section class="v265Panel">${toolbar()}</section>
   <div id="v265Body"><div class="empty">Loading central academic data…</div></div>
@@ -100,7 +105,7 @@ function shell(){
 
 window.v265AcademicCenter=async function(){
  if(!isAdmin()&&!isTeacher())return window.toast?.('Admin / Teacher only');
- routeHead(isTeacher()?'📊 My Teaching Performance':'📊 Academic Monitoring Center',isTeacher()?'My Bells • Teaching • Copy Checking • Class Tests':'Class • Subject • Teacher • Bell • Copy Check • Test');
+ routeHead(isTeacher()?'📊 My Teaching Performance':'📊 Teacher Academic Analysis',isTeacher()?'My Bells • Teaching • Copy Checking • Class Tests':'Select one Teacher → complete syllabus, checking, tests and bell analysis');
  setMain(shell());
  await loadAll(true);
  setMain(shell());
@@ -129,31 +134,63 @@ async function loadAll(force=false){
     safe('timetable','*',q=>q.eq('teacher_name',name).order('day_name').order('period_no').limit(500)),
     safeMaybe('attendance','admission_no,class_name,status,date',q=>q.eq('date',end).limit(6000))
    ]);
-   state.diary=di;state.copy=cp;state.tests=te;state.syllabus=sy;state.timetable=tt;state.attendance=at;
+   state.diary=di;state.copy=cp;state.tests=te;state.syllabus=sy;state.timetable=tt;state.attendance=at;state.detailLoaded=true;
   }else{
-   const [di,cp,te,sy,tt,tp,at]=await Promise.all([
-    safe('teaching_diary','*',q=>q.gte('teaching_date',start).lte('teaching_date',end).order('teaching_date',{ascending:false}).limit(15000)),
-    safe('ldm_v265_copy_checks','*',q=>q.gte('teaching_date',start).lte('teaching_date',end).order('teaching_date',{ascending:false}).limit(15000)),
-    safe('ldm_v265_bell_tests','*',q=>q.gte('test_date',start).lte('test_date',end).order('test_date',{ascending:false}).limit(15000)),
-    safe('syllabus_master','*',q=>q.eq('academic_session',session()).limit(2000)),
-    safe('timetable','*',q=>q.order('day_name').order('period_no').limit(10000)),
-    safe('teacher_profiles','id,auth_user_id,teacher_name,full_name,approval_status,is_active',q=>q.limit(3000)),
-    safeMaybe('attendance','admission_no,class_name,status,date',q=>q.eq('date',end).limit(10000))
-   ]);
-   state.diary=di;state.copy=cp;state.tests=te;state.syllabus=sy;state.timetable=tt;state.teachers=tp;state.attendance=at;
+   // ADMIN PERFORMANCE RULE: initial open never pulls school-wide diary/copy/test/timetable rows.
+   // Only Teacher Master + one server-side aggregate RPC. Teacher detail is loaded on selection.
+   const tp=await safe('teacher_profiles','id,auth_user_id,teacher_name,full_name,approval_status,is_active',q=>q.order('teacher_name').limit(3000));
+   state.teachers=tp;state.diary=[];state.copy=[];state.tests=[];state.syllabus=[];state.timetable=[];state.attendance=null;state.detailLoaded=false;
+   state.adminSummary=[];state.adminSummaryError='';
+   try{
+    const sr=await db().rpc('ldm_v267_teacher_academic_summary',{p_days:state.days,p_session:session()});
+    if(sr.error)throw sr.error;
+    state.adminSummary=sr.data||[];
+   }catch(e){
+    state.adminSummaryError=String(e?.message||e);
+    // Comparison may be unavailable before V267 SQL, but teacher-specific analysis still works.
+   }
+   if(state.teacher)await loadAdminTeacherDetail(state.teacher);
   }
   state.loaded=true;
  }catch(e){
-  const b=$('v265Body');if(b)b.innerHTML=`<div class="dangerNote">${E(e?.message||e)}<br><b>V265_SAFE_ADDITIVE.sql</b> Supabase में run/re-run करें.</div>`;
+  const b=$('v265Body');if(b)b.innerHTML=`<div class="dangerNote">${E(e?.message||e)}</div>`;
   throw e;
  }
 }
-window.v265Reload=async function(){state.loaded=false;await loadAll(true);renderCurrent();if(isTeacher())armBellReminder()};
+async function loadAdminTeacherDetail(teacherId){
+ if(!isAdmin()||!teacherId)return;
+ const tp=(state.teachers||[]).find(x=>String(x.auth_user_id||'')===String(teacherId));
+ if(!tp)throw new Error('Teacher Master mapping नहीं मिला.');
+ const name=String(tp.teacher_name||tp.full_name||'').trim(),end=indiaYMD(),start=rangeStart();
+ const [di,cp,te,tt]=await Promise.all([
+  safe('teaching_diary','*',q=>q.eq('teacher_user_id',teacherId).gte('teaching_date',start).lte('teaching_date',end).order('teaching_date',{ascending:false}).limit(2500)),
+  safe('ldm_v265_copy_checks','*',q=>q.eq('teacher_user_id',teacherId).gte('teaching_date',start).lte('teaching_date',end).order('teaching_date',{ascending:false}).limit(2500)),
+  safe('ldm_v265_bell_tests','*',q=>q.eq('teacher_user_id',teacherId).gte('test_date',start).lte('test_date',end).order('test_date',{ascending:false}).limit(2500)),
+  safe('timetable','*',q=>q.eq('teacher_name',name).order('day_name').order('period_no').limit(700))
+ ]);
+ const classSet=[...new Set(tt.map(x=>cls(x.class_name)).filter(Boolean))];
+ let sy=[];
+ if(classSet.length){
+   // Small master only; fetch the session once and normalize class aliases in JS.
+   // This avoids LKG/UKG/"Class 1" alias misses.
+   let qr=db().from('syllabus_master').select('*').eq('academic_session',session()).limit(1500);
+   let rr=await qr;if(rr.error)throw rr.error;sy=(rr.data||[]).filter(x=>classSet.includes(cls(x.class_name)));
+ }
+ state.diary=di;state.copy=cp;state.tests=te;state.timetable=tt;state.syllabus=sy;state.attendance=null;state.detailLoaded=true;
+}
+window.v267SelectTeacher=async function(id){
+ state.teacher=String(id||'');state.className='';state.subject='';state.view='progress';
+ if(!state.teacher){state.detailLoaded=false;state.diary=[];state.copy=[];state.tests=[];state.timetable=[];state.syllabus=[];setMain(shell());return renderCurrent()}
+ const b=$('v265Body');if(b)b.innerHTML='<div class="empty">Selected Teacher का academic analysis loading…</div>';
+ try{await loadAdminTeacherDetail(state.teacher);setMain(shell());renderCurrent()}catch(e){window.toast?.(e?.message||String(e));setMain(shell());renderCurrent()}
+};
+window.v267ClearTeacher=function(){state.teacher='';state.className='';state.subject='';state.detailLoaded=false;state.diary=[];state.copy=[];state.tests=[];state.timetable=[];state.syllabus=[];setMain(shell());renderCurrent()};
+window.v265Reload=async function(){state.loaded=false;await loadAll(true);setMain(shell());renderCurrent();if(isTeacher())armBellReminder()};
 
 window.v265Filter=function(kind=''){
  const d=n($('v265Days')?.value||30);if(d&&d!==state.days){state.days=d;return window.v265Reload()}
- if(isAdmin()){
-  state.className=String($('v265Class')?.value||'');state.subject=String($('v265Subject')?.value||'');state.teacher=String($('v265Teacher')?.value||'');
+ if(isAdmin()&&state.teacher){
+  state.className=String($('v265Class')?.value||'');state.subject=String($('v265Subject')?.value||'');
   if(kind==='class'){const s=$('v265Subject');if(s)s.innerHTML=subjectOpts()}
  }
  renderCurrent();
@@ -204,7 +241,16 @@ function groupMetrics(){
   }else z.unchecked++;
   if(!c||n(c.checked_students)<n(c.total_students)){if(!z.oldestPending||String(x.teaching_date)<z.oldestPending)z.oldestPending=String(x.teaching_date||'')}
  });
- return [...g.values()].map(x=>({...x,totalLessons:syllabusTotal(x.class_name,x.subject),checkRate:pct(x.full,x.taught),studentCheckRate:pct(x.checkedStudents,x.totalStudents),verifyRate:pct(x.verified,x.taught),gap:x.taught-x.full})).sort((a,b)=>b.gap-a.gap||a.class_name.localeCompare(b.class_name,undefined,{numeric:true}));
+ // Include assigned Class/Subject even when Teacher has taught 0 lessons in selected period.
+ (state.timetable||[]).forEach(r=>{
+   if(state.className&&cls(r.class_name)!==state.className)return;
+   if(state.subject&&String(r.subject||'')!==state.subject)return;
+   const tu=isTeacher()?uid():(state.teacher||bellTeacherUid(r)||'');
+   if(state.teacher&&tu&&String(tu)!==String(state.teacher))return;
+   const key=[cls(r.class_name),String(r.subject||''),String(tu||'')].join('|');
+   if(!g.has(key))g.set(key,{class_name:cls(r.class_name),subject:String(r.subject||''),teacher_user_id:String(tu||''),teacher_name:String(r.teacher_name||selectedTeacherName()||'Teacher'),taught:0,full:0,partial:0,unchecked:0,verified:0,totalStudents:0,checkedStudents:0,oldestPending:''});
+ });
+ return [...g.values()].map(x=>({...x,totalLessons:syllabusTotal(x.class_name,x.subject),checkRate:pct(x.full,x.taught),studentCheckRate:pct(x.checkedStudents,x.totalStudents),verifyRate:pct(x.verified,x.taught),gap:x.taught-x.full})).sort((a,b)=>b.gap-a.gap||classIndex(a.class_name)-classIndex(b.class_name)||a.subject.localeCompare(b.subject));
 }
 function globalMetrics(){
  const g=groupMetrics(),taught=g.reduce((a,x)=>a+x.taught,0),full=g.reduce((a,x)=>a+x.full,0),partial=g.reduce((a,x)=>a+x.partial,0),unchecked=g.reduce((a,x)=>a+x.unchecked,0),verified=g.reduce((a,x)=>a+x.verified,0);
@@ -229,9 +275,29 @@ function weeklyTrend(){
 function heatmap(g){
  return `<div class="v265Heat">${g.map(x=>{let cl=x.checkRate>=80?'ok':x.checkRate>=50?'warn':'bad';return `<button class="v265HeatCell ${cl}" onclick="v265OpenGroup('${E(x.class_name)}','${E(x.subject)}','${E(x.teacher_user_id)}')"><b>Class ${E(x.class_name)} • ${E(x.subject)}</b><small>${E(x.teacher_name)}</small><small>Checked ${x.checkRate}% • Verified ${x.verifyRate}% • Gap ${x.gap}</small></button>`}).join('')||'<div class="empty">No data.</div>'}</div>`;
 }
+
+function selectedTeacherProfile(){return (state.teachers||[]).find(x=>String(x.auth_user_id||'')===String(state.teacher||''))||null}
+function selectedTeacherName(){const t=selectedTeacherProfile();return String(t?.teacher_name||t?.full_name||state.diary?.[0]?.teacher_name||'Teacher')}
+function teacherFocus(){
+ if(!isAdmin()||!state.teacher)return '';
+ const classes=[...new Set((state.timetable||[]).map(x=>cls(x.class_name)).filter(Boolean))].sort((a,b)=>classIndex(a)-classIndex(b));
+ const subjects=[...new Set((state.timetable||[]).map(x=>String(x.subject||'').trim()).filter(Boolean))].sort();
+ return `<section class="v267TeacherFocus"><small>SELECTED TEACHER</small><h3>👨‍🏫 ${E(selectedTeacherName())}</h3><p>${classes.length?`Classes: ${E(classes.join(', '))}`:'No timetable class mapped'} • ${subjects.length?`Subjects: ${E(subjects.join(', '))}`:'No subject mapped'} • ${state.timetable.length} weekly bell rows</p><div><span class="v265Badge">${state.days} day analysis</span><span class="v265Badge">Central Timetable</span><span class="v265Badge">Daily Teaching</span></div></section>`;
+}
+function renderAdminLanding(){
+ const rows=(state.adminSummary||[]).slice().sort((a,b)=>n(b.checking_gap)-n(a.checking_gap)||n(a.copy_check_rate)-n(b.copy_check_rate)||String(a.teacher_name||'').localeCompare(String(b.teacher_name||'')));
+ const totalTeachers=(state.teachers||[]).filter(x=>x.auth_user_id&&x.is_active!==false).length;
+ const taught=rows.reduce((a,x)=>a+n(x.lessons_taught),0),checked=rows.reduce((a,x)=>a+n(x.fully_checked),0),tests=rows.reduce((a,x)=>a+n(x.tests_taken),0);
+ const cards=rows.length?rows.map(x=>{
+   const taughtN=n(x.lessons_taught),full=n(x.fully_checked),ver=n(x.learning_verified),gap=n(x.checking_gap),cr=n(x.copy_check_rate),vr=n(x.verify_rate),testRate=n(x.test_coverage_rate);
+   const st=gap>=3||cr<50?'bad':gap>0||cr<80?'attn':'ok';
+   return `<button class="v267TeacherCard ${st}" onclick="v267SelectTeacher('${E(x.teacher_user_id)}')"><h3>👨‍🏫 ${E(x.teacher_name||'Teacher')}</h3><small>Taught ${taughtN} • Full Check ${full} • Gap ${gap} • Tests ${n(x.tests_taken)}</small><div class="v267MiniBars"><div class="v267MiniBar"><span>Copy Check</span><i><em style="width:${cr}%"></em></i><b>${cr}%</b></div><div class="v267MiniBar"><span>Verified</span><i><em style="width:${vr}%"></em></i><b>${vr}%</b></div><div class="v267MiniBar"><span>Test</span><i><em style="width:${testRate}%"></em></i><b>${testRate}%</b></div></div><span class="v265Badge ${st==='bad'?'bad':st==='attn'?'warn':'ok'}">${st==='bad'?'Urgent Review':st==='attn'?'Needs Attention':'Good'}</span><span class="v265Badge">Open Full Analysis →</span></button>`;
+ }).join(''):`<div class="empty">${state.adminSummaryError?'All-teacher comparison RPC अभी उपलब्ध नहीं है; ऊपर Teacher चुनकर full analysis फिर भी खोल सकते हैं.':'No summary data yet.'}</div>`;
+ $('v265Body').innerHTML=`<div class="v265Stats"><div class="v265Stat"><small>Active Teachers</small><b>${totalTeachers}</b></div><div class="v265Stat"><small>Lessons Taught</small><b>${taught}</b></div><div class="v265Stat ok"><small>Fully Checked</small><b>${checked}</b></div><div class="v265Stat"><small>Tests Taken</small><b>${tests}</b></div><div class="v265Stat warn"><small>Analysis Period</small><b>${state.days}d</b></div><div class="v265Stat"><small>Mode</small><b>On-Demand</b></div></div><section class="v265Panel"><h3>👨‍🏫 Select Teacher → Complete Academic Analysis</h3><p class="v265Sub">किसी Teacher पर click करें. उसके बाद केवल उसी Teacher का syllabus, teaching, copy checking, tests और bell data load होगा.</p>${state.adminSummaryError?`<div class="v265Note">Comparison summary: ${E(state.adminSummaryError)} • V267 SQL run करने पर lightweight comparison भी active हो जाएगा.</div>`:''}<div class="v267CompareGrid">${cards}</div></section>`;
+}
 function renderProgress(){
  const m=globalMetrics(),g=groupMetrics(),taughtSyllabus=g.reduce((a,x)=>a+x.totalLessons,0),taughtCount=g.reduce((a,x)=>a+x.taught,0),teachPct=taughtSyllabus?pct(taughtCount,taughtSyllabus):m.taught?100:0;
- $('v265Body').innerHTML=`${summaryStats(m)}<div class="v265GraphGrid"><section class="v265Panel"><h3>Premium Progress Graph</h3><p class="v265Sub">Click any class/subject bar for exact lesson pending detail.</p>${progressBars(g)}</section><section class="v265Panel"><h3>Overall Quality</h3><div class="v265Donuts">${ring(teachPct,'Syllabus Taught','#2f81d7')}${ring(m.checkRate,'Copy Fully Checked','#16a77b')}${ring(m.verifyRate,'Learning Verified','#8a5bd8')}</div><p class="v265Sub">${taughtSyllabus?'Teaching % uses syllabus_master total lessons.':'Syllabus total not set: teaching ring shows observed scope.'}</p></section></div><div class="v265GraphGrid"><section class="v265Panel"><h3>Class / Subject Heatmap</h3>${heatmap(g)}</section><section class="v265Panel"><h3>Last 7 Days Trend</h3>${weeklyTrend()}</section></div>`;
+ $('v265Body').innerHTML=`${teacherFocus()}${summaryStats(m)}<div class="v265GraphGrid"><section class="v265Panel"><h3>Premium Progress Graph</h3><p class="v265Sub">Click any class/subject bar for exact lesson pending detail.</p>${progressBars(g)}</section><section class="v265Panel"><h3>Overall Quality</h3><div class="v265Donuts">${ring(teachPct,'Syllabus Taught','#2f81d7')}${ring(m.checkRate,'Copy Fully Checked','#16a77b')}${ring(m.verifyRate,'Learning Verified','#8a5bd8')}</div><p class="v265Sub">${taughtSyllabus?'Teaching % uses syllabus_master total lessons.':'Syllabus total not set: teaching ring shows observed scope.'}</p></section></div><div class="v265GraphGrid"><section class="v265Panel"><h3>Class / Subject Heatmap</h3>${heatmap(g)}</section><section class="v265Panel"><h3>Last 7 Days Trend</h3>${weeklyTrend()}</section></div>`;
 }
 window.v265OpenGroup=function(c,s,t){
  state.className=c;state.subject=s;state.teacher=t||state.teacher;state.view='lessons';
@@ -299,6 +365,8 @@ function renderAudit(){
 }
 function renderCurrent(){
  if(!state.loaded)return;
+ if(isAdmin()&&!state.teacher)return renderAdminLanding();
+ if(isAdmin()&&state.teacher&&!state.detailLoaded){$('v265Body').innerHTML='<div class="empty">Teacher analysis loading…</div>';return}
  if(state.view==='bells')return renderBells();
  if(state.view==='tests')return renderTests();
  if(state.view==='lessons')return renderLessons();
@@ -419,12 +487,28 @@ function decorateDashboard(){
  const target=host.querySelector('.ldmTeacherModules');if(target)target.parentNode.insertBefore(b,target);else host.insertBefore(b,host.firstChild?.nextSibling||host.firstChild);
 }
 
+
+function decorateAdminDashboard(){
+ if(!isAdmin())return;
+ const host=$('erpContent');if(!host||host.querySelector('[data-v267-admin-academic]'))return;
+ const b=document.createElement('button');b.type='button';b.dataset.v267AdminAcademic='1';b.className='v267AdminLauncher';b.onclick=()=>window.render?.('academic_monitor');
+ b.innerHTML='<span><b>📊 Teacher Academic Analysis</b><small>Select Teacher → Full Syllabus • Teaching • Copy Check • Bell Test</small></span><strong>OPEN →</strong>';
+ const alarm=host.querySelector('[data-v264-dash]');
+ if(alarm)alarm.insertAdjacentElement('afterend',b);
+ else{
+   const management=host.querySelector('.v114ManagementPanel,.v90Quick,.v90MonitorGrid');
+   if(management)management.parentNode.insertBefore(b,management);
+   else host.insertBefore(b,host.firstChild?.nextSibling||host.firstChild);
+ }
+}
+
 const prevRender=window.render;
 window.render=async function(route='dashboard'){
  const r=String(route||'dashboard');
  if(r==='academic_monitor')return window.v265AcademicCenter();
  const out=await prevRender.apply(this,arguments);
  if(r==='dashboard'&&isTeacher())setTimeout(bootTeacherDashboard,0);
+ if(r==='dashboard'&&isAdmin())setTimeout(decorateAdminDashboard,0);
  return out;
 };
 try{render=window.render}catch(_e){}
@@ -437,6 +521,8 @@ window.LDM_V265_ACADEMIC=Object.freeze({
  bellTestTable:'ldm_v265_bell_tests',
  adminAuditTable:'ldm_v265_principal_audits',
  reminderEngine:'V264 central alarm hook',
+ adminLoadMode:'teacher-list + aggregate summary; selected-teacher detail only',
+ dashboardAdminFetch:false,
  polling:false,realtime:false,cron:false
 });
 })();

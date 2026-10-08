@@ -1,0 +1,141 @@
+L D MODERN EDUCATION ACADEMY — V267 FINAL
+TEACHER-CENTRIC ADMIN ACADEMIC ANALYSIS
+Base: V266 FINAL
+Date: 2026-10-08
+
+ADMIN ROOT FLOW
+Admin Dashboard -> prominent "Teacher Academic Analysis" launcher
+-> Select Teacher
+-> Complete teacher-specific analysis
+-> Class -> Subject -> Lesson -> Pending Students.
+
+ADMIN INITIAL LOAD — LIGHTWEIGHT
+The previous Academic Monitor could request school-wide:
+- teaching_diary up to 15,000 rows
+- copy checks up to 15,000 rows
+- bell tests up to 15,000 rows
+- timetable up to 10,000 rows
+V267 removes that Admin initial-load pattern.
+
+Now Admin initial open loads only:
+1. Teacher Master list.
+2. One read-only aggregate summary RPC (ldm_v267_teacher_academic_summary).
+
+Only after one Teacher is selected:
+- that Teacher's teaching_diary (max 2,500 in selected 7/30/90-day window)
+- that Teacher's copy checks (max 2,500)
+- that Teacher's bell tests (max 2,500)
+- that Teacher's timetable (max 700)
+- small syllabus_master session rows, filtered locally by assigned class aliases.
+No student roster is loaded until Admin/Teacher explicitly clicks "Load Students / Pending List".
+
+ADMIN ANALYSIS
+- Teacher selector is the primary control.
+- All Teachers comparison is available from lightweight server aggregation.
+- Selected Teacher header shows assigned Classes, Subjects and weekly bell rows.
+- Syllabus planned vs taught.
+- Assigned Class/Subject appears even if 0 lessons were taught.
+- Fully Checked / Partial / Not Checked / Learning Verified / Checking Gap.
+- Class/Subject heatmap.
+- 7-day trend.
+- Bell-wise Good / Needs Attention / Urgent.
+- Teaching update / Homework-Worksheet / Test signals.
+- Class tests: Taken / Planned / Rescheduled / explicit Not Taken.
+- Lesson drill-down and pending-student drill-down.
+- Principal Random 5 audit remains available.
+
+TEACHER SIDE
+Teacher side remains own-data only and retains existing My Teaching Performance behavior.
+
+DASHBOARD
+Admin dashboard gets a prominent Teacher Academic Analysis launcher.
+This launcher performs ZERO database fetches; data loads only when opened.
+
+SQL V267
+V267_SAFE_ADDITIVE.sql creates/replaces one read-only Admin aggregate RPC only.
+It performs no table creation and no business-data write.
+
+SQL SAFETY
+{
+  "DROP TABLE": false,
+  "TRUNCATE": false,
+  "DELETE FROM": false,
+  "DROP COLUMN": false,
+  "INSERT": false,
+  "UPDATE": false
+}
+
+PERFORMANCE CHECKS
+{
+  "No setInterval": true,
+  "No Supabase realtime": true,
+  "No 15000 row admin load": true,
+  "No 10000 row timetable load": true,
+  "Admin initial uses summary RPC": true,
+  "Selected teacher detail only": true,
+  "Dashboard launcher has no fetch": true,
+  "Student roster click-only": true
+}
+
+FEATURE CHECKS
+{
+  "Admin prominent launcher": true,
+  "Teacher selector": true,
+  "All Teachers comparison": true,
+  "Teacher focus": true,
+  "Teacher->Class->Subject": true,
+  "Assigned zero-taught subjects": true,
+  "Syllabus planned vs taught": true,
+  "Copy full partial pending": true,
+  "Learning verified": true,
+  "Bell performance": true,
+  "Homework signal": true,
+  "Tests": true,
+  "Lesson drilldown": true,
+  "Pending students": true
+}
+
+REGRESSION / DISTURBANCE
+- index.html changes only academic_monitor cache version + build labels.
+- Reverting these restores V266 index exactly: True
+- alarm.js / assembly.js / vercel.json / V266 master SQL unchanged:
+{
+  "alarm.js": true,
+  "assembly.js": true,
+  "vercel.json": true,
+  "RUN_ONLY_THIS_V266_COMPLETE_MASTER.sql": true
+}
+- Previous critical markers preserved:
+{
+  "ldm-v2621-fast-security": true,
+  "v2611-final-root-audit": true,
+  "v261-central-due-report": true,
+  "ldm-v260-assistant-permission-bridge": true,
+  "ldm-v2592-gate-pass-delegation": true,
+  "ldm-v258-teacher-fee-assignment": true,
+  "ldm-v257-assistant-admin-catalog": true,
+  "ldm-v263-assigned-work-marker": true,
+  "v266BlockedDelegationRoutes": true,
+  "academic_monitor": true
+}
+- Inline executable index JS: 124 PASS, 0 failures.
+- academic_monitor.js: PASS
+- alarm.js: PASS
+- assembly.js: PASS
+- No polling / realtime / cron introduced.
+
+DEPLOY
+1. Supabase SQL Editor -> run V267_SAFE_ADDITIVE.sql (small SQL).
+2. Deploy index.html.
+3. Replace academic_monitor.js with V267 file.
+4. Keep existing V266 alarm.js / assembly.js / vercel.json unchanged.
+5. Admin Dashboard -> Teacher Academic Analysis -> select Teacher.
+
+LIVE NOT VERIFIED
+Real Supabase execution/RLS, real Teacher mappings/data and production deployment are not available here,
+so they are correctly marked NOT VERIFIED.
+
+SHA256
+index.html: 90993b25efc861b84dc30a95d75c16a28c4229c8eeb8041dacb890d6dcfc8d04
+academic_monitor.js: b48acf47c553401b74e3fa715a1f0669778db4ddd0e5957889289ee7e700c746
+V267_SAFE_ADDITIVE.sql: bc9cd888592cc399226b5f2973f5b8ccf488b1a3c654d9696b160b6ec56d4e72
