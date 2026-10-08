@@ -1,0 +1,167 @@
+L D MODERN EDUCATION ACADEMY — V265 FINAL
+ACADEMIC MONITORING CENTER
+Base: V264 FINAL
+Date: 2026-10-08
+
+ROOT INTEGRATION
+- timetable remains the one central Bell/Timetable source.
+- teaching_diary remains the one central Daily Teaching/Lesson source.
+- syllabus_master remains the syllabus-total source.
+- attendance is read-only and optional for today's Bell signal.
+- V264 Smart Work Alarm remains the central sound/popup engine.
+- No duplicate timetable or duplicate teaching register was created.
+
+TEACHER FEATURES
+- My Teaching Performance route.
+- Teaching -> Copy Checking -> Learning Verified progression.
+- Total / Checked / Pending copy counts.
+- Student-level pending list loaded only on explicit click.
+- Bell performance: Good / Needs Attention / Urgent with visible reason.
+- Teaching, Homework/Worksheet, Attendance-when-readable, and Test signals.
+- Bell Test: Planned / Taken / explicit Not Taken / Rescheduled.
+- Test Type / Topic / Max Marks / Students Tested / Remark.
+- About 3 minutes before the next Bell, the central V264 Alarm shows:
+  Bell + Class + Subject + performance reason + Test status.
+- When one Bell reminder fires, the next Bell is armed through the same alarm engine.
+
+ADMIN / PRINCIPAL FEATURES
+- One Academic Monitoring Center.
+- Class / Subject / Teacher filters.
+- 7 / 30 / 90 day monitoring.
+- Premium progress bars.
+- Teaching / Full Copy Check / Learning Verified rings.
+- Class/Subject heatmap.
+- 7-day trend.
+- Attention Needed list.
+- Lesson drill-down.
+- Bell-wise teacher performance.
+- Class x Subject x Teacher x Bell Test matrix.
+- Grey Pending/Not Updated is not counted as Not Taken.
+- Explicit Not Taken remains separate.
+- Period Test Taken / Planned-Rescheduled / Not Taken counts.
+- Random 5 Student physical-copy audit.
+
+DATABASE
+New state only:
+- ldm_v265_copy_checks
+- ldm_v265_bell_tests
+- ldm_v265_principal_audits
+
+SECURITY
+- RLS enabled on all new V265 tables.
+- Teacher copy save requires an existing own teaching_diary Bell.
+- Teacher test save requires their actual central timetable Bell.
+- Admin cannot silently save a Teacher test/copy record under Admin ID when Teacher mapping is missing.
+- Student roster is returned only through a validated RPC.
+- Nursery / LKG / UKG / Class aliases are normalized centrally.
+- New writes use the ERP academic session dynamically.
+
+FREE-TIER / PERFORMANCE
+- No polling.
+- No Supabase realtime subscription.
+- No cron job.
+- Academic Center loads on explicit open.
+- Teacher dashboard performs one limited 30-day load only for the requested Bell Reminder/performance card.
+- Student roster loads only on click.
+- Writes only on Copy Check / Test status / Principal Audit.
+- Graphs are lightweight HTML/CSS; no new chart CDN.
+
+NON-DESTRUCTIVE SQL AUDIT
+{
+  "DROP TABLE": false,
+  "TRUNCATE": false,
+  "DELETE FROM": false,
+  "DROP COLUMN": false,
+  "ALTER CORE TABLE": false
+}
+
+EXISTING CORE TABLE WRITE AUDIT
+{
+  "teaching_diary write": false,
+  "timetable write": false,
+  "students write": false,
+  "attendance write": false
+}
+
+DISTURBANCE / REGRESSION AUDIT
+- Reverting only intended V265 index changes restores V264 index exactly: True
+- Removing the isolated Alarm extension restores V264 alarm.js exactly: True
+- assembly.js unchanged byte-for-byte: True
+- vercel.json unchanged byte-for-byte: True
+- Previous critical markers preserved:
+{
+  "ldm-v2621-fast-security": true,
+  "v2611-final-root-audit": true,
+  "v261-central-due-report": true,
+  "ldm-v260-assistant-permission-bridge": true,
+  "ldm-v2592-gate-pass-delegation": true,
+  "ldm-v258-teacher-fee-assignment": true,
+  "ldm-v257-assistant-admin-catalog": true,
+  "ldm-v263-assigned-work-marker": true,
+  "smart_work_alarm": true
+}
+
+STATIC CODE AUDIT
+- Inline executable index JavaScript blocks: 124 PASS
+- Inline syntax failures: 0
+- academic_monitor.js: PASS
+- alarm.js: PASS
+- assembly.js: PASS
+- Feature checks:
+{
+  "Central teaching source": true,
+  "Central timetable source": true,
+  "Syllabus source": true,
+  "Premium progress graph": true,
+  "Heatmap": true,
+  "7-day trend": true,
+  "Copy checking": true,
+  "Pending student list": true,
+  "Learning Verified": true,
+  "Bell performance": true,
+  "Good/Attention/Urgent": true,
+  "Test matrix": true,
+  "Pending separate from Not Taken": true,
+  "7/30/90 period": true,
+  "Random 5 audit": true,
+  "Alarm reuse": true,
+  "Attendance signal": true,
+  "Homework signal": true
+}
+- SQL required-object checks:
+{
+  "public.ldm_v265_copy_checks": true,
+  "public.ldm_v265_bell_tests": true,
+  "public.ldm_v265_principal_audits": true,
+  "public.ldm_v265_norm_class": true,
+  "public.ldm_v265_teacher_can_bell": true,
+  "public.ldm_v265_class_roster": true,
+  "public.ldm_v265_copy_check_save": true,
+  "public.ldm_v265_bell_test_save": true,
+  "public.ldm_v265_principal_audit_save": true,
+  "notify pgrst, 'reload schema';": true
+}
+
+LIVE NOT VERIFIED / NO FAKE PASS
+- Production Supabase execution/schema cache
+- Production RLS with real Admin/Teacher accounts
+- Real teacher_name <-> timetable mapping
+- Real student counts
+- Mobile browser sound/vibration permissions
+- Vercel production deployment
+These require live authenticated testing after deployment.
+
+DEPLOY ORDER
+1. Supabase SQL Editor -> run V265_SAFE_ADDITIVE.sql
+2. Deploy index.html
+3. Upload academic_monitor.js beside index.html
+4. Replace alarm.js with the V265 version
+5. Keep assembly.js + vercel.json from this ZIP
+6. Admin -> Academics -> Academic Monitoring Center
+7. Teacher -> My Teaching Performance
+
+SHA256
+index.html: 1edbd6b3a74bf03966f674ee0a4c00e0ee5020636ed2f8fec206ea37d925a1c7
+academic_monitor.js: c1fdb15d258baa7732d8375a7bf454579bb340d1db1132f3abf2f8522eab3944
+alarm.js: efa41670382c9c7a868715b29d9d1f666ffcd94777d91c56a7527e14ba138308
+V265_SAFE_ADDITIVE.sql: 5f125dca2acdda60b9b1573c0f48897fb49e7031e1cc01146206def095e3546b
