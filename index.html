@@ -30,8 +30,8 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 })();
 </script>
 <!-- ===== END LDM EARLY RUNTIME DEDUP BOOTSTRAP ===== -->
-<meta charset="utf-8"><meta name="ld-modern-build" content="V262-SECURITY-ROOT-HARDENED-2026-10-08"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V262-SECURITY-ROOT-HARDENED-2026-10-08"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<meta charset="utf-8"><meta name="ld-modern-build" content="V262.1-FAST-SECURITY-2026-10-08"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V262.1-FAST-SECURITY-2026-10-08"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -1144,7 +1144,17 @@ function publicModule(k){
   openPortal();
 }
 
-function init(){sb=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}function saveCloud(){let url=$("cloudUrl").value.trim().replace(/\/+$/,""),key=$("cloudKey").value.trim();if(!url||!key)return toast("URL and key required");try{if(key.split(".").length===3){let p=JSON.parse(atob(key.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));if(String(p.role||"").toLowerCase()==="service_role")return toast("SECURITY BLOCK: service_role key browser/index.html में कभी save नहीं करें.")}}catch(_e){}localStorage.setItem(K,JSON.stringify({url,key}));location.reload()}function resetCloud(){localStorage.removeItem(K);location.reload()}
+function init(){
+ sb=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ try{
+  const h=String(location.hostname||'').toLowerCase(),official=new Set(['myldm.com','www.myldm.com','ld-modern-school-v5.vercel.app','localhost','127.0.0.1']),preview=h.endsWith('.vercel.app')&&!official.has(h);
+  window.LDM_SECURITY=Object.freeze({currentHost:h,isOfficial:official.has(h),isVercelPreview:preview,realPasswordAllowed:!preview});
+  if(preview&&sb?.auth?.signInWithPassword&&!sb.auth.__ldmPreviewGuard){
+   sb.auth.signInWithPassword=async function(){return {data:{user:null,session:null},error:new Error('Security lock: Preview Vercel URL पर real password login बंद है. Official Production domain खोलें.')}};
+   sb.auth.__ldmPreviewGuard=true;
+  }
+ }catch(_e){}
+}function saveCloud(){let url=$("cloudUrl").value.trim().replace(/\/+$/,""),key=$("cloudKey").value.trim();if(!url||!key)return toast("URL and key required");try{if(key.split(".").length===3){let p=JSON.parse(atob(key.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));if(String(p.role||"").toLowerCase()==="service_role")return toast("SECURITY BLOCK: service_role key browser/index.html में कभी save नहीं करें.")}}catch(_e){}localStorage.setItem(K,JSON.stringify({url,key}));location.reload()}function resetCloud(){localStorage.removeItem(K);location.reload()}
 async function boot(){if(cfg){init();await loadSchool()}else{fillClasses();return}fillClasses();let{data:{session}}=cfg?await sb.auth.getSession():{data:{session:null}};if(session){user=session.user;await loadProfile()}}
 function fillClasses(){document.querySelectorAll('select[name="class_name"]').forEach(s=>{if(!s.options.length||s.options.length===1)s.innerHTML='<option value="">Select Class</option>'+cls.map(x=>`<option>${x}</option>`).join("")})}
 async function loadSchool(){let{data}=await sb.from("school_settings").select("*").eq("id",1).maybeSingle();school=data||{};applySchool()}
@@ -18055,7 +18065,7 @@ window.v200PrintDueReport=function(){
 
 <!-- ===== V261.1 FINAL ROOT AUDIT MARKER ===== -->
 <script id="v2611-final-root-audit">
-window.LDM_FINAL_BUILD='V261.1-ROOT-AUDITED-2026-10-08';
+window.LDM_FINAL_BUILD='V262.1-FAST-SECURITY-2026-10-08';
 window.LDM_V2611_AUDIT=Object.freeze({
   base:'V260 + requested V261 corrections only',
   back:'one canonical internal ERP history owner; legacy competing layers gated/retired',
@@ -18067,125 +18077,35 @@ window.LDM_V2611_AUDIT=Object.freeze({
 <!-- ===== END V261.1 FINAL ROOT AUDIT MARKER ===== -->
 
 
-<!-- ===== V262 SECURITY ROOT HARDENING ===== -->
-<style id="ldm-v262-security-style">
-.ldmSecurityOrigin{margin:10px 0 8px;padding:9px 11px;border:1px solid #cfe0f3;border-radius:10px;background:#f4f9ff;color:#244765;font-size:11px;line-height:1.45}
+<!-- ===== V262.1 FAST SECURITY — NO OBSERVER / NO TIMER ===== -->
+<style id="ldm-v2621-security-style">
+.ldmSecurityOrigin{margin:9px 0 7px;padding:8px 10px;border:1px solid #cfe0f3;border-radius:10px;background:#f4f9ff;color:#244765;font-size:11px;line-height:1.4}
 .ldmSecurityOrigin.ok{background:#eefaf3;border-color:#bfe5ce;color:#17643d}
 .ldmSecurityOrigin.warn{background:#fff6e8;border-color:#ffd391;color:#8a5200}
-.ldmLoginLabel{display:block;margin-top:7px;font-size:11px;font-weight:800;color:#40566d}
-.ldmPreviewLock{margin:10px 0;padding:10px 12px;border-radius:10px;background:#fff2f0;border:1px solid #ffc7c2;color:#9b241c;font-size:11px;font-weight:750;line-height:1.5}
+.ldmLoginLabel{display:block;margin-top:6px;font-size:11px;font-weight:800;color:#40566d}
 </style>
-<script id="ldm-v262-security-runtime">
+<script id="ldm-v2621-fast-security">
 (function(){
 'use strict';
-if(window.__LDM_V262_SECURITY)return;
-window.__LDM_V262_SECURITY=true;
-window.LDM_FINAL_BUILD='V262-SECURITY-ROOT-HARDENED-2026-10-08';
-
-const OFFICIAL_HOSTS=new Set([
-  'myldm.com',
-  'www.myldm.com',
-  'ld-modern-school-v5.vercel.app',
-  'localhost',
-  '127.0.0.1'
-]);
+if(window.__LDM_V2621_FAST_SECURITY)return;
+window.__LDM_V2621_FAST_SECURITY=true;
+window.LDM_FINAL_BUILD='V262.1-FAST-SECURITY-2026-10-08';
+const OFFICIAL=new Set(['myldm.com','www.myldm.com','ld-modern-school-v5.vercel.app','localhost','127.0.0.1']);
 const host=String(location.hostname||'').toLowerCase();
-const isVercelPreview=host.endsWith('.vercel.app')&&!OFFICIAL_HOSTS.has(host);
-const isOfficial=OFFICIAL_HOSTS.has(host);
-
-window.LDM_SECURITY=Object.freeze({
-  officialHosts:[...OFFICIAL_HOSTS],
-  currentHost:host,
-  isOfficial,
-  isVercelPreview,
-  realPasswordAllowed:!isVercelPreview
-});
-
-function hardenCredentialFields(root=document){
-  try{
-    root.querySelectorAll('input[type="password"]').forEach(el=>{
-      const key=(String(el.id||'')+' '+String(el.name||'')+' '+String(el.placeholder||'')).toLowerCase();
-      if(!el.autocomplete){
-        el.autocomplete=/(new|create|confirm|reset|change)/.test(key)?'new-password':'current-password';
-      }
-      el.spellcheck=false;
-    });
-    root.querySelectorAll('input[type="email"]').forEach(el=>{
-      if(!el.autocomplete)el.autocomplete='username';
-      el.autocapitalize='none';el.spellcheck=false;
-    });
-  }catch(_e){}
+const preview=host.endsWith('.vercel.app')&&!OFFICIAL.has(host);
+function paintOnce(){
+ const box=document.getElementById('ldmSecurityOrigin');
+ if(box){box.className='ldmSecurityOrigin '+(preview?'warn':'ok');box.innerHTML=preview?'⚠ Preview deployment: <b>'+host+'</b><br>Real password login यहाँ बंद है. Stable Production domain use करें.':'✓ Official login origin: <b>'+host+'</b>'}
+ const email=document.getElementById('email');if(email){email.autocomplete='username';email.autocapitalize='none';email.spellcheck=false}
+ const pw=document.getElementById('password');if(pw)pw.autocomplete='current-password';
+ if(preview){if(pw){pw.value='';pw.readOnly=true;pw.placeholder='Preview URL पर real password disabled'}const b=document.getElementById('ldmPrimaryLoginBtn');if(b){b.disabled=true;b.title='Official Production domain खोलें'}}
 }
-window.ldmHardenCredentialFields=hardenCredentialFields;
-
-function applyOriginTrust(){
-  const box=document.getElementById('ldmSecurityOrigin');
-  if(box){
-    if(isVercelPreview){
-      box.className='ldmSecurityOrigin warn';
-      box.innerHTML='⚠ Preview deployment: <b>'+host+'</b><br>Real school passwords are disabled here. Use the official Production domain.';
-    }else{
-      box.className='ldmSecurityOrigin ok';
-      box.innerHTML='✓ Official login origin: <b>'+host+'</b><br>Your password is sent only to the configured Supabase Auth service over HTTPS.';
-    }
-  }
-  if(isVercelPreview){
-    document.querySelectorAll('#login input[type="password"],#parentGate input[type="password"],#v14Modal input[type="password"],#v32Modal input[type="password"]').forEach(el=>{
-      el.value='';el.readOnly=true;el.setAttribute('aria-disabled','true');
-      el.placeholder='Preview URL पर real password disabled';
-    });
-    const btn=document.getElementById('ldmPrimaryLoginBtn');
-    if(btn){btn.disabled=true;btn.title='Use official Production domain for real login';}
-    if(!document.getElementById('ldmPreviewSecurityNotice')){
-      const card=document.querySelector('#login .authCard');
-      if(card){
-        const n=document.createElement('div');n.id='ldmPreviewSecurityNotice';n.className='ldmPreviewLock';
-        n.textContent='Security lock: Vercel preview/unique deployment URLs are for UI testing only. Promote this deployment to Production and sign in on the stable official domain.';
-        card.prepend(n);
-      }
-    }
-  }
-}
-
-hardenCredentialFields();
-applyOriginTrust();
-
-const mo=new MutationObserver(muts=>{
-  let touched=false;
-  for(const m of muts){if(m.addedNodes&&m.addedNodes.length){touched=true;break}}
-  if(touched){hardenCredentialFields();if(isVercelPreview)applyOriginTrust();}
-});
-mo.observe(document.documentElement,{childList:true,subtree:true});
-
-window.ldmSecurityAssertPasswordOrigin=function(){
-  if(isVercelPreview){
-    try{window.toast?.('Security: Preview URL पर real password login बंद है. Official Production domain खोलें.')}catch(_e){}
-    return false;
-  }
-  return true;
-};
-
-/* Central Auth guard: even if an old/dynamic login button bypasses UI locking,
-   real password authentication is never sent from a random Vercel preview URL. */
-function wrapSupabasePasswordAuth(){
-  try{
-    if(!window.sb?.auth?.signInWithPassword||window.sb.auth.__ldmV262Wrapped)return;
-    const original=window.sb.auth.signInWithPassword.bind(window.sb.auth);
-    window.sb.auth.signInWithPassword=async function(credentials){
-      if(isVercelPreview){
-        return {data:{user:null,session:null},error:new Error('Security lock: real password login is disabled on Vercel preview URLs. Use the official Production domain.')};
-      }
-      return original(credentials);
-    };
-    window.sb.auth.__ldmV262Wrapped=true;
-  }catch(_e){}
-}
-wrapSupabasePasswordAuth();
-let tries=0,authTimer=setInterval(()=>{wrapSupabasePasswordAuth();if(++tries>=20)clearInterval(authTimer)},250);
-
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',paintOnce,{once:true,passive:true});else paintOnce();
+document.addEventListener('focusin',function(e){if(!preview)return;const el=e.target;if(el&&String(el.type||'').toLowerCase()==='password'){try{el.value='';el.blur()}catch(_e){}try{window.toast?.('Security: Preview URL पर real password न डालें. Official Production domain खोलें.')}catch(_e){}}},true);
+window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMutationObserver:false,polling:false,authRetryTimer:false,stableProductionLogin:true});
 })();
 </script>
-<!-- ===== END V262 SECURITY ROOT HARDENING ===== -->
+<!-- ===== END V262.1 FAST SECURITY ===== -->
 
 </body>
 </html>

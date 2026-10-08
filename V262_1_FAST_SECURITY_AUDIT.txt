@@ -1,0 +1,42 @@
+L D MODERN EDUCATION ACADEMY — V262.1 FAST SECURITY AUDIT
+Base: V261.1 ROOT AUDITED
+
+CONFIRMED ROOT CAUSE OF V262 SLOWDOWN
+V262 added a permanent MutationObserver over the whole document. On random Vercel preview URLs,
+its callback called applyOriginTrust(), which rewrote the security status HTML. That DOM write
+could trigger the same observer again, causing repeated work and slow/hanging behavior. V262 also
+ran an auth wrapper retry every 250ms for up to 5 seconds.
+
+V262.1 ROOT FIX
+- V262 security MutationObserver removed completely.
+- V262 auth retry setInterval removed completely.
+- Preview-password auth guard installs once inside the existing Supabase init() only.
+- Login security status paints once.
+- Dynamic password protection uses one passive interaction path (focus delegation), not DOM scans.
+- Restrictive CSP removed from vercel.json to avoid blocking legacy/dynamic ERP helpers.
+- HSTS, nosniff, X-Frame-Options, Referrer-Policy and Permissions-Policy retained.
+- Moderate cache header added for static assets to improve repeat-load speed.
+- No SQL, table, RLS, fee, attendance, exam, student or central-data change.
+
+REGRESSION / STATIC AUDIT
+- Executable inline JavaScript: 123 checked, 0 syntax failures.
+- assembly.js: node syntax PASS.
+- V262.1 security block contains NO `new MutationObserver` and NO `setInterval`.
+- Diff versus V261.1 is limited to build label, login security semantics, one-time init auth guard,
+  final audit marker label, and the isolated V262.1 security block.
+- Previous critical feature blocks preserved: {"ldm-v254-root-js": true, "ldm-v255-central-root-final": true, "ldm-v256-menu-admit-root": true, "ldm-v257-assistant-admin-catalog": true, "ldm-v258-teacher-fee-assignment": true, "ldm-v2592-gate-pass-delegation": true, "ldm-v260-assistant-permission-bridge": true, "v261-central-due-report": true, "v2611-final-root-audit": true}
+- New SQL required: NO.
+
+SECURITY BEHAVIOR
+- Stable Production login hosts remain enabled.
+- Random/unique Vercel deployment URLs remain preview-only for real passwords.
+- Browser Safe Browsing reputation warnings are external to ERP JavaScript; use the stable Production URL.
+
+SHA256 index.html:
+1c8bda1fe680af57402a65b576b5eeeab0e49d8b9911c19c89b9b371d6e67e42
+
+SHA256 assembly.js:
+645a2dfdbc3204bd2ab5c9c6311a70ba901cbbee5cc0f329c34cb2d0735fc193
+
+SHA256 vercel.json:
+9f4861958198278d4298fb6422e8feba20caf03aeb8e4c2a3fbf8d01c5cde4c8
