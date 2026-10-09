@@ -1,0 +1,9 @@
+{
+  "name": "Sky Sir Teacher-First Learning Hub D1",
+  "short_name": "Sky Sir D1",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#0d63c8",
+  "description": "Easy teacher-first Board + Competition class hub with local material and optional cloud backup"
+}

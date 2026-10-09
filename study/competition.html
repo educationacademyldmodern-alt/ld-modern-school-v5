@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0d63c8">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Sky Sir Full Static + Teacher Exam Hub — F2</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="competition.css">
+  <link rel="stylesheet" href="static-master-f2.css">
+</head>
+<body class="competition-page">
+<section class="auth-gate" id="compLoginGate" hidden>
+  <div class="login-shell comp-login-shell">
+    <div class="login-brand-panel">
+      <div class="brand-mark xl">SS</div><span class="eyebrow light">SKY SIR COMPETITION HUB</span>
+      <h1>All competitive exams. One preparation workspace.</h1>
+      <p>Syllabus, study material, one-click complete class, current affairs, PYQ-style practice, tests and PPT in one place.</p>
+      <div class="login-feature-row"><span>✓ 512 Topic Packs</span><span>✓ 62 Exam Options</span><span>✓ Test Generator</span><span>✓ PPTX</span></div>
+    </div>
+    <div class="login-card">
+      <span class="eyebrow">SECURE ACCESS</span><h2>Competition Hub Login</h2>
+      <p class="muted-line">Same Teaching Studio account.</p>
+      <label>Email<input id="compGateEmail" type="email" placeholder="Email" autocomplete="username"/></label>
+      <label>Password<input id="compGatePassword" type="password" placeholder="Password" autocomplete="current-password"/></label>
+      <button class="btn primary full" id="compGateLoginBtn">LOGIN & CONTINUE</button>
+      <a class="btn soft full" href="index.html">← Back to Learning Hub</a>
+      <div class="login-status" id="compGateStatus">Secure cloud login</div>
+    </div>
+  </div>
+</section>
+
+<div class="app-shell comp-shell" id="compAppShell">
+  <div class="utility-strip">
+    <div><b>FULL STATIC + TEACHER EXAM HUB F2</b><span>Exam → Paper/Post → Official Syllabus → Topic → One-Click PPT</span></div>
+    <div class="utility-actions"><button data-act="accuracy">Source & Accuracy</button><button data-act="cloudSync" id="cloudChip">☁ Backup (Optional)</button><span id="netChip">● Offline-ready</span></div>
+  </div>
+  <header class="topbar comp-header">
+    <a class="brand-wrap reset comp-home" href="index.html"><div class="brand-mark">SS</div><div><div class="eyebrow">SKY SIR CLASSES</div><h1>Competition Exam Hub</h1></div></a>
+    <button class="header-search" data-act="search"><span>⌕</span><b>Search exam, subject, topic, question, PYQ...</b><kbd>SEARCH</kbd></button>
+    <div class="top-actions"><button class="chip" data-act="favorites">★ Saved</button><button class="chip" data-act="admin">⚙ Admin</button></div>
+  </header>
+  <nav class="primary-nav comp-nav">
+    <a href="index.html">Home</a><button data-quick-exam="CTET Paper 1">Teaching Exams</button><button data-quick-exam="UPPSC">State PCS</button><button data-quick-exam="SSC CGL">SSC</button><button data-quick-exam="RRB NTPC">Railway</button><button data-quick-exam="SBI PO">Banking</button><button data-quick-exam="UP Police">Police / Defence</button><button data-quick-exam="CUET">Entrance</button><button data-act="current">Current Affairs</button><button data-act="testGen">Test Series</button>
+  </nav>
+
+  <main>
+    <section class="comp-hero-new">
+      <div class="comp-hero-copy">
+        <span class="status-pill">● FULL STATIC + TEACHER EXAM HUB F2 • SOURCE-LINKED</span>
+        <h2>हर Exam का syllabus साफ क्रम में — और Topic से सीधे One‑Click PPT.</h2>
+        <p>Exam → Paper/Post → Official Syllabus → Subject → Unit/Topic. जहाँ exact current official source lock नहीं है, system साफ बताएगा — generic list को official नहीं कहेगा.</p>
+        <div class="hero-actions"><button class="btn primary" data-act="officialHub">📚 OPEN COMPLETE SYLLABUS HUB</button><button class="btn outline" data-act="focusSelector">▶ START CLASS</button><button class="btn ppt-hero" data-act="exportCompPptx">📊 ONE-CLICK PPT</button></div>
+        <div class="comp-trust-row"><span><b id="bankTopics">0</b> Topic records</span><span><b id="bankQuestions">0</b> Questions</span><span><b id="coursePercent">0%</b> Complete</span></div>
+      </div>
+      <div class="active-selection-card">
+        <span class="mini-label">ACTIVE EXAM</span><strong id="activeExam">Select Exam</strong>
+        <div class="source-line" id="activePath">Exam → Subject → Chapter → Topic</div>
+        <div class="active-actions"><button data-act="today">🔥 Today's Class</button><button data-act="planner">🗓 Plan</button><button data-act="revision">⚡ Revision</button></div>
+        <div class="safe-banner">🛡 Verified/current/source status is kept separate from prepared core study material.</div>
+        <div class="exam-source-status" id="examSourceStatus"><b>Official mapping:</b> select an exam</div>
+      </div>
+    </section>
+
+    <section class="official-hub-zone" id="officialHubZone">
+      <div class="section-title-row"><div><span class="eyebrow">COMPLETE SYLLABUS HUB</span><h3>Choose exam category — official/source status is visible on every exam</h3></div><span class="official-badge">F2 • FULL STATIC READY</span></div>
+      <div class="official-category-grid" id="officialCategoryGrid"></div>
+      <div class="official-exam-panel" id="officialExamPanel">
+        <div class="official-panel-head"><div><span class="eyebrow">EXAM DIRECTORY</span><h3 id="officialPanelTitle">All Competitive Exams</h3></div><button class="btn soft" data-act="focusSelector">Go to Class Selector ↓</button></div>
+        <div class="official-exam-grid" id="officialExamGrid"></div>
+      </div>
+    </section>
+
+    <section class="exam-hubs">
+      <div class="section-title-row"><div><span class="eyebrow">POPULAR EXAM HUBS</span><h3>Jump directly to your exam</h3></div><button class="link-btn" data-act="syllabus">View all syllabus →</button></div>
+      <div class="exam-hub-grid">
+        <button data-quick-exam="CTET Paper 1"><span>👩‍🏫</span><b>CTET / Teaching</b><small>CDP, EVS, Languages, Maths</small></button>
+        <button data-quick-exam="BPSC TRE"><span>🎓</span><b>BPSC TRE</b><small>Teacher recruitment preparation</small></button>
+        <button data-quick-exam="UPPSC"><span>🏛️</span><b>State PCS</b><small>GS, CSAT, current affairs</small></button>
+        <button data-quick-exam="SSC CGL"><span>📊</span><b>SSC</b><small>Quant, reasoning, English, GK</small></button>
+        <button data-quick-exam="RRB NTPC"><span>🚆</span><b>Railway</b><small>Maths, reasoning, GS</small></button>
+        <button data-quick-exam="SBI PO"><span>🏦</span><b>Banking</b><small>Quant, reasoning, English, awareness</small></button>
+        <button data-quick-exam="UP Police"><span>👮</span><b>Police / Defence</b><small>GS, law/GK, reasoning, aptitude</small></button>
+        <button data-quick-exam="CUET"><span>🎯</span><b>Entrance</b><small>General test + subject preparation</small></button>
+      </div>
+    </section>
+
+    <section class="competition-easy-guide">
+      <div><span>1</span><b>Exam चुनें</b><small>जैसे BPSC TRE / CTET / SSC</small></div>
+      <div><span>2</span><b>Subject + Topic चुनें</b><small>Syllabus bank से</small></div>
+      <div><span>3</span><b>START CLASS</b><small>Teach + Notes + MCQ + DPP + PPT</small></div>
+    </section>
+
+    <section class="selector-panel" id="selectorPanel">
+      <div class="selector-title"><div><span class="eyebrow">OFFICIAL SYLLABUS से CLASS खोलें</span><h3>Exam → Paper/Post → Subject → Unit/Chapter → Topic → Duration</h3></div><span class="selector-status" id="selectorStatus">Waiting for selection</span></div>
+      <div class="selector-grid selector-grid-wide">
+        <label>Exam<select id="examSelect"></select></label>
+        <label>Paper / Post<select id="paperPostSelect"></select></label>
+        <label>Subject<select id="subjectSelect"></select></label>
+        <label>Chapter<select id="chapterSelect"></select></label>
+        <label>Topic<select id="topicSelect"></select></label>
+        <label class="advanced-field">Level<select id="levelSelect"></select></label>
+        <label>Duration<select id="durationSelect"></select></label>
+        <label class="advanced-field">Batch<select id="batchSelect"><option value="">No Batch</option></select></label>
+        <label class="advanced-field">Language<select id="languageSelect"><option>Hindi + English</option><option>Hindi</option><option>English</option></select></label>
+        <label class="advanced-field">Mode<select id="teachingModeSelect"><option>Complete</option><option>Online</option><option>Offline</option><option>YouTube</option><option>Live</option></select></label>
+      </div>
+      <div class="selector-actions flagship-actions"><button class="btn primary giant" data-act="startComplete">▶ START COMPLETE CLASS</button><button class="btn one-click-ppt" data-act="exportCompPptx">📊 ONE-CLICK PPT</button><button class="btn syllabus-btn" data-act="syllabus">📚 OFFICIAL SYLLABUS</button><button class="btn outline" data-act="notes">📝 NOTES</button><button class="btn outline" data-act="practice">❓ PRACTICE</button></div>
+    </section>
+
+    <section class="hub-section">
+      <div class="section-title-row"><div><span class="eyebrow">LEARN</span><h3>Syllabus & Study Material</h3></div><span class="section-note">Start from exam or directly from a topic</span></div>
+      <div class="resource-grid" id="compCards">
+        <button class="resource-card featured" data-act="materialHub"><span>🧠</span><div><b>Advanced Study Material Hub</b><small>Hundreds of core topics with notes + PPT + teaching pack</small></div><em>A–Z HUB</em></button>
+        <button class="resource-card" data-act="syllabus"><span>📚</span><div><b>Full Syllabus Browser</b><small>Exam → subjects → chapters → topics</small></div><em>SYLLABUS</em></button>
+        <button class="resource-card" data-act="complete"><span>🚀</span><div><b>Complete Class</b><small>25-part ready-to-teach sequence</small></div><em>1-CLICK</em></button>
+        <button class="resource-card" data-act="notes"><span>📝</span><div><b>Notes Generator</b><small>Full, class, one-page, last-minute, pocket</small></div><em>5 FORMATS</em></button>
+        <button class="resource-card" data-act="subjectModes"><span>🧩</span><div><b>Subject Modes</b><small>Maths, Reasoning, Polity, History, Science & more</small></div><em>SPECIALIZED</em></button>
+        <button class="resource-card" data-act="stateGk"><span>🗺️</span><div><b>State-Specific GK</b><small>UP, Bihar and other state layers</small></div><em>STATE</em></button>
+      </div>
+    </section>
+
+    <section class="hub-section split-zone">
+      <div class="zone-card current-zone">
+        <div class="zone-heading"><span>📰</span><div><span class="eyebrow">CURRENT AFFAIRS</span><h3>Fresh, dated and source-aware</h3></div></div>
+        <p>Daily, weekly, monthly, exam-wise and state-wise current affairs are kept separate from static GK.</p>
+        <div class="zone-actions"><button data-act="current">Open Current Affairs</button><button data-act="current100">10 / 25 / 50 / 100 Set</button><button data-act="vocab">Daily Vocabulary</button></div>
+      </div>
+      <div class="zone-card practice-zone">
+        <div class="zone-heading"><span>🧪</span><div><span class="eyebrow">PRACTICE & TEST</span><h3>Questions, tests and mocks</h3></div></div>
+        <p>Practice the same syllabus with question bank, test generator, mock tests, PYQ-style practice and explanations.</p>
+        <div class="zone-actions"><button data-act="questionBank">Question Bank</button><button data-act="testGen">Test Generator</button><button data-act="mock">Mock Test</button><button data-act="practice">Practice Mode</button><button data-act="pyq">PYQ Center</button></div>
+      </div>
+    </section>
+
+    <section class="hub-section">
+      <div class="section-title-row"><div><span class="eyebrow">REVISION & COURSE MANAGEMENT</span><h3>Plan, revise and track completion</h3></div></div>
+      <div class="resource-grid compact-grid">
+        <button class="resource-card" data-act="today"><span>🔥</span><div><b>Today's Class</b><small>Batch + exam + topic + start</small></div></button>
+        <button class="resource-card" data-act="planner"><span>🗓️</span><div><b>Course Planner</b><small>Target date → daily plan</small></div></button>
+        <button class="resource-card" data-act="completion"><span>📈</span><div><b>Syllabus Completion</b><small>Completed, remaining, tests</small></div></button>
+        <button class="resource-card" data-act="revision"><span>⚡</span><div><b>Revision Class</b><small>15/30/60 min and full subject</small></div></button>
+        <button class="resource-card" data-act="marathon"><span>🏃</span><div><b>Marathon Class</b><small>High-priority rapid preparation</small></div></button>
+        <button class="resource-card" data-act="weeklyFinal"><span>🔁</span><div><b>Weekly + Final Revision</b><small>Weak-topic recovery + mocks</small></div></button>
+        <button class="resource-card" data-act="batches"><span>👥</span><div><b>Batch Management</b><small>Schedule and progress mapping</small></div></button>
+        <button class="resource-card" data-act="schedule"><span>⏭️</span><div><b>Class Continuity</b><small>Continue tomorrow / reschedule</small></div></button>
+      </div>
+    </section>
+
+    <section class="hub-section">
+      <div class="section-title-row"><div><span class="eyebrow">TEACHER & CREATOR STUDIO</span><h3>Teach online, offline and on YouTube</h3></div></div>
+      <div class="resource-grid compact-grid">
+        <button class="resource-card" data-act="online"><span>🌐</span><div><b>Online Class</b><small>Screen-share friendly teaching</small></div></button>
+        <button class="resource-card" data-act="offline"><span>🏫</span><div><b>Offline Class</b><small>Digital board + print kit</small></div></button>
+        <button class="resource-card" data-act="youtube"><span>▶</span><div><b>YouTube Class</b><small>Title, hook, script, chapters</small></div></button>
+        <button class="resource-card" data-act="liveScript"><span>🎙️</span><div><b>Live Script</b><small>Large readable teaching script</small></div></button>
+        <button class="resource-card" data-act="slides"><span>🖥️</span><div><b>PPT / Slides</b><small>14-step sequence + PPTX</small></div></button>
+        <button class="resource-card" data-act="shortsShare"><span>📱</span><div><b>Shorts + Share</b><small>30s/60s/revision content</small></div></button>
+        <button class="resource-card" data-act="studentPack"><span>🎒</span><div><b>Student Material Pack</b><small>Notes + DPP + homework + quiz</small></div></button>
+        <button class="resource-card" data-act="doubt"><span>❓</span><div><b>Doubt Teaching</b><small>Search concept / solution safely</small></div></button>
+      </div>
+    </section>
+
+    <section class="hub-section admin-strip">
+      <div><span class="eyebrow">CONTENT & QUALITY CONTROL</span><h3>Canonical content, versions and source safety</h3></div>
+      <div class="admin-strip-actions"><button data-act="contentBank">Content Bank</button><button data-act="masterTopic">Master Topic / Versions</button><button data-act="examLayer">Exam Layer</button><button data-act="personal">My Content</button><button data-act="accuracy">Source & Accuracy</button><button data-act="search">Global Search</button><button data-act="favorites">Favorites</button><button data-act="remote">Teacher Remote</button><button data-act="admin">Admin Control</button></div>
+    </section>
+
+    <section class="module-panel comp-workspace" id="compWorkspace">
+      <div class="module-head"><div><span class="eyebrow" id="moduleEyebrow">READY</span><h3 id="moduleTitle">Choose an exam, syllabus or study tool</h3><p class="muted-line" id="moduleMeta">Only the selected module becomes active.</p></div><button class="close-panel" data-act="close">×</button></div>
+      <div id="moduleBody" class="comp-body"><div class="empty-state"><b>Your preparation workspace is ready.</b><span>Select Exam → Subject → Topic → Level → Duration above.</span></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div><div class="brand-wrap static"><div class="brand-mark">SS</div><div><b>Sky Sir Competition Exam Hub</b><small>Study • Practice • Teach • Revise</small></div></div><p>Prepared content bank with source-aware dynamic layers for current affairs, PYQ authenticity and changing exam patterns.</p></div><div><b>Learn</b><button data-act="syllabus">Syllabus</button><button data-act="materialHub">Study Material</button><button data-act="current">Current Affairs</button></div><div><b>Practice</b><button data-act="questionBank">Question Bank</button><button data-act="testGen">Test Series</button><button data-act="mock">Mock Tests</button></div></footer>
+</div>
+
+<dialog id="teachDialog" class="board-modal"><div class="board-wrap"><div class="board-topbar"><div><strong id="teachTitle">Complete Class</strong><span id="teachSub">Competition Studio</span></div><div class="board-actions"><button data-act="prevTeach">◀</button><button data-act="teachBoard">✏ Board</button><button data-act="teachReveal">💡 Answer</button><button data-act="teachTimer">⏱</button><button data-act="nextTeach">▶</button><button data-act="printPack">🖨 Kit</button><button data-act="exportCompPptx">⬇ PPTX</button><button data-act="continueTomorrow">↪ Continue Tomorrow</button><button data-act="finishClass">✅ Complete</button><button data-close="teachDialog">✕</button></div></div><div class="slide-stage"><div id="teachSlide" class="slide"></div><canvas id="compWhiteboard"></canvas><div id="teachCountdown" class="countdown" hidden>00:30</div></div><div class="slide-dots" id="teachDots"></div></div></dialog>
+<dialog id="practiceDialog" class="modal"><div class="modal-card wide"><div class="modal-head"><div><span class="eyebrow">PRACTICE / TEST</span><h3 id="practiceTitle">Practice</h3></div><button class="close" data-close="practiceDialog">×</button></div><div id="practiceBody"></div></div></dialog>
+<div class="toast" id="toast" hidden></div>
+<script src="config.js"></script><script src="db.js"></script><script src="pptxgen.min.js"></script><script src="current-affairs.js"></script><script src="shared-content.js"></script><script src="competition-data.js"></script><script src="advanced-content.js"></script><script src="legacy-topic-overrides-v4.js"></script><script src="exam-source-profiles-v4.js"></script><script src="premium-content-d1.js"></script><script src="complete-content-v4.js"></script><script src="exam-syllabus-v4.js"></script><script src="official-syllabus-hub.js"></script><script src="teacher-exam-packs-f1.js"></script><script src="teacher-study-notes-f1.js"></script><script src="competition-studio.js"></script><script src="teacher-exam-hub-f1.js"></script><script src="static-master-library-f2.js"></script><script src="static-master-hub-f2.js"></script>
+<script>
+(()=>{
+ const gate=document.getElementById('compLoginGate'),app=document.getElementById('compAppShell');
+ if(gate) gate.hidden=true; if(app) app.hidden=false;
+})();
+</script>
+</body></html>

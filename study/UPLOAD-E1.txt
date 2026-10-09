@@ -1,0 +1,15 @@
+SKY SIR OFFICIAL SYLLABUS HUB E1 — SAFE UPDATE
+
+1. Open GitHub repo: sky-sir-teaching-studio
+2. Add file -> Upload files
+3. Upload/replace ALL files from this ZIP at repository root.
+4. DO NOT delete or replace your existing config.js. This ZIP intentionally does not contain config.js.
+5. Commit message: Official Syllabus Hub E1
+6. Vercel should auto-deploy.
+7. After deploy, open in incognito or fully close/reopen the site once because service-worker cache version changed.
+
+Expected visible markers:
+- Home: Premium Complete Syllabus Hub E1
+- Competition: OFFICIAL SYLLABUS HUB E1
+- Large button: ONE-CLICK PPT
+- Selector includes Paper / Post

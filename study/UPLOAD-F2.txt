@@ -1,0 +1,16 @@
+SKY SIR FULL STATIC HUB F2 — SAFE UPDATE
+
+1. Extract the ZIP.
+2. Open GitHub repository: sky-sir-teaching-studio.
+3. Upload/replace ALL files from this ZIP into repository root.
+4. KEEP the existing config.js already in GitHub. Do not delete or replace it.
+5. Do NOT rerun Supabase SQL for this F2 static update.
+6. Commit message: Full Static Hub F2
+7. Wait for Vercel auto-deploy.
+8. Reopen site in Incognito once or close/reopen so new service-worker cache takes control.
+
+Expected marker in Competition page:
+FULL STATIC + TEACHER EXAM HUB F2
+
+Expected new section:
+FULL STATIC MASTER LIBRARY

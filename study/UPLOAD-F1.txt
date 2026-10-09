@@ -1,0 +1,23 @@
+TEACHER EXAM FINAL HUB F1 — SAFE UPLOAD
+
+DO:
+1. Keep existing config.js in GitHub.
+2. Upload/replace every file from this folder/ZIP into repo root.
+3. Commit: Teacher Exam Final Hub F1
+4. Wait for Vercel deployment.
+5. Open site in Incognito first.
+
+DO NOT:
+- delete or replace your existing config.js
+- run Supabase SQL again for this F1 update
+- upload the ZIP itself as the website source
+
+CHECK AFTER DEPLOY:
+- TEACHER EXAM FINAL HUB F1 marker visible
+- UP Primary Teacher Dec 2026 card visible
+- BPSC TRE 4 PRT card visible
+- COMPLETE SYLLABUS works
+- topic → PPT works
+- 100 PRACTICE works
+- FULL MOCK works
+- PYQ / SOURCES works
