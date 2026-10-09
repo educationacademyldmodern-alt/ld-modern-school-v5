@@ -1,0 +1,13 @@
+L D MODERN EDUCATION ACADEMY
+V274 — LDM SMART STUDY & COMPETITION HUB
+
+- Main ERP में केवल premium launcher card जोड़ा गया।
+- Actual Study Hub /study/ folder में अलग रखा गया।
+- Main ERP के heavy runtime में Study Hub JS/CSS embed नहीं हुआ।
+- Study Hub का nested vercel.json हटाया गया ताकि root ERP config disturb न हो।
+- Missing config.js का safe offline fallback जोड़ा गया; कोई secret/key hardcode नहीं है।
+- Card: School Control Center → LDM Smart Study & Competition Hub
+- Click: ./study/index.html (same tab)
+- Browser Back: ERP पर वापस।
+
+Preview में पहले test करें, फिर Production करें।

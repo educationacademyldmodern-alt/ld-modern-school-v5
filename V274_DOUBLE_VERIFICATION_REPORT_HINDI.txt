@@ -1,0 +1,45 @@
+L D MODERN EDUCATION ACADEMY
+V274 — LDM SMART STUDY & COMPETITION HUB
+DOUBLE ROOT VERIFICATION REPORT
+
+FINAL INTEGRATION
+- Main School ERP: V273 functional/premium baseline preserved.
+- New launcher: LDM Smart Study & Competition Hub.
+- Location: Admin/Principal School Control Center.
+- Target: ./study/index.html, same tab.
+- Actual Hub isolated in /study/.
+- Hub heavy JS/CSS main ERP में load नहीं होते।
+- Nested Hub vercel.json root ERP में merge नहीं किया गया।
+- Missing config.js safe local/offline fallback से पूरा किया गया।
+- Supabase URL/anon key blank; कोई secret hardcode नहीं।
+- Study service-worker relative scope में रहता है।
+
+FIRST VERIFICATION: PASS
+- ERP inline JS: 124, failures 0.
+- ERP external JS: PASS.
+- Hub local refs: 45, missing 0.
+- Hub JS: 22, syntax failures 0.
+- Main ERP MutationObserver: 0.
+- Main ERP realtime: 0.
+- Main ERP setInterval: existing 2 scanner loops only.
+
+SECOND FRESH VERIFICATION: PASS
+- V273 runtime_guard/academic_monitor/alarm/assembly/vercel/SQL files byte-for-byte unchanged.
+- Study launcher admin/principal workspace guard preserved.
+- No iframe/embed; Hub scripts do not load in main ERP.
+- Service-worker asset manifest complete including config.js.
+- Root ERP and /study/ entry paths independently present.
+- Fresh JS syntax pass.
+- V273 Assign Work fix, validation RPC, Teacher Assigned Work, Premium Card System, Daily Quick Desk preserved.
+
+DEPLOY
+1. इस ZIP की पूरी content repository/project root में रखें।
+2. Preview deployment बनाकर पहले test करें।
+3. Admin -> School Control Center -> LDM Smart Study & Competition Hub.
+4. Hub home, Competitive Exams, Board Digital Class, Current Affairs, Tests खोलें।
+5. Browser Back से ERP पर लौटें।
+6. सब सही हो तभी Production करें।
+
+NOTE
+यह static/root-level double verification है।
+Live Vercel/Supabase authenticated behavior Preview deploy के बाद verify होगा।

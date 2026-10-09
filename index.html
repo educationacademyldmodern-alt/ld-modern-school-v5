@@ -30,8 +30,8 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 })();
 </script>
 
-<meta charset="utf-8"><meta name="ld-modern-build" content="V271-PREMIUM-ADMIN-CONSOLIDATED-2026-10-08"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V271-PREMIUM-ADMIN-CONSOLIDATED-2026-10-08"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<meta charset="utf-8"><meta name="ld-modern-build" content="V274-STUDY-HUB-INTEGRATED-2026-10-09"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V274-STUDY-HUB-INTEGRATED-2026-10-09"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -9527,7 +9527,7 @@ async function v90AdminDashboard(){
  let actCache='',noticeCache='',eventCache='';try{actCache=sessionStorage.getItem('ldm_admin_activities_html')||'';noticeCache=sessionStorage.getItem('ldm_admin_notices_html')||'';eventCache=sessionStorage.getItem('ldm_admin_events_html')||''}catch(_e){}
  const hold=Array.from({length:6},()=>'<div class="v90Stat ldmStatHold"><span>•</span><div><small>Tap Refresh Dashboard</small><b>—</b></div></div>').join('');
  v90Set(`<div class="v90Dash v114AdminDash ldmRootAdminDash v271AdminPremium">
- <section id="v185FrontDesk" class="v90Panel v185FrontDesk"><div class="v185FrontHead"><div><small>DAILY COUNTER</small><h2>🏢 Front Desk Quick Desk</h2><p>Fee Inquiry • Fee Collection • Admission • Student Search • Receipt/Ledger</p></div><button class="secondary" onclick="v185RefreshDashboardData(this)">↻ Refresh Dashboard</button></div><div class="v185FrontActions"><button onclick="v185FrontFee()">💰 Fee Inquiry / Collect</button><button onclick="openAdd('students')">➕ Add Student</button><button onclick="v185NewAdmission()">🎓 New Admission</button><button onclick="v185FindStudent()">🔎 Find Student</button><button onclick="render('fee_dashboard')">🧾 Receipt / Ledger</button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">Fee पूछने/जमा करने के लिए नाम लिखें और Search दबाएँ.</div></div><div id="v105FeeAccount"></div></section>
+ <section id="v185FrontDesk" class="v90Panel v185FrontDesk"><div class="v185FrontHead"><div><small>DAILY COUNTER</small><h2>⚡ Daily Quick Desk</h2><p>Fee Check • Pay Now • Student Search • Admission • Receipt / Ledger</p></div><button class="secondary" onclick="v185RefreshDashboardData(this)">↻ Refresh Dashboard</button></div><div class="v185FrontActions"><button onclick="v185FrontFee()">💰 Fee Inquiry / Collect</button><button onclick="openAdd('students')">➕ Add Student</button><button onclick="v185NewAdmission()">🎓 New Admission</button><button onclick="v185FindStudent()">🔎 Find Student</button><button onclick="render('fee_dashboard')">🧾 Receipt / Ledger</button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">Fee पूछने/जमा करने के लिए नाम लिखें और Search दबाएँ.</div></div><div id="v105FeeAccount"></div></section>
  <section class="v156DailyControl" aria-label="Daily School Control"><div id="v114AdminClassSlot"></div>
  <section class="v114AdminMainGrid">
   <article class="v90Panel v114AttendancePanel"><div class="v114PanelHead"><h3>Student Attendance (Today)</h3><button onclick="render('attendance')">View Details →</button></div><div class="v114AttendanceVisual"><div id="v114AttDonut" class="v114Donut" style="--p:0"><div><b id="v114AttPct">—</b><small>Present</small></div></div><div class="v114Legend"><span><i class="p"></i>Present <b id="v114AttPresent">—</b></span><span><i class="a"></i>Absent <b id="v114AttAbsent">—</b></span><span><i class="l"></i>Leave <b id="v114AttLeave">—</b></span><span><i class="t"></i>Marked <b id="v114AttMarked">—</b></span><span><i class="n"></i>Not Marked <b id="v114AttNotMarked">—</b></span><span><i class="t"></i>Total Students <b id="v114AttTotal">—</b></span></div></div></article>
@@ -15386,7 +15386,6 @@ if(typeof statsBase==='function'){
     ['v90_teacher_daily','📖 Daily Teaching Update'],
     ['homework','✏ Homework / Worksheet'],
     ['academic_monitor','📊 Teaching Performance'],
-    ['exams','📊 Exams / Marks'],
     ['v90_teacher_marks','📝 Copy Check / Marks'],
     ['teacher_notices','📣 Teacher Notices'],
     ['gallery','🖼 Gallery'],
@@ -15441,7 +15440,7 @@ if(typeof statsBase==='function'){
     if(selected&&!v272DelegationReadySet.has(selected))html+=`<option value="${E(selected)}" selected disabled>⚠ ${E(selected)} — old Admin-only/non-ready route</option>`;
     return html;
   }
-  function renderTasks(){let host=q('v187TaskList');if(!host)return;const tasks=window.__v187Tasks;host.innerHTML=tasks.length?tasks.map(t=>{let a=window.__v187Assignees.filter(x=>String(x.task_id)===String(t.id)&&x.is_active!==false),route=String(t.module_route||'').trim(),details=String(t.details||'').trim(),broken=!route&&!details;return `<article class="v187TaskCard ${t.status==='cancelled'?'cancelled':''}"><div class="v187TaskTop"><div><h3>${E(t.title)}</h3><div class="v187Badges"><span class="v187Badge ${tstatus(t.priority)}">${E(t.priority)}</span><span class="v187Badge ${tstatus(t.status)}">${E(t.status)}</span>${route?`<span class="v187Badge">ERP: ${E(route)}</span>`:broken?`<span class="v187Badge off">⚠ Link Missing</span>`:`<span class="v187Badge">General Work • No ERP Link</span>`}${t.work_date?`<span class="v187Badge">Work ${E(fmt(t.work_date))}</span>`:''}${t.work_date?`<span class="v187Badge ${available?'ok':'warn'}">${available?'Available':'Starts'} ${E(fmt(t.work_date))}</span>`:''}${t.due_date?`<span class="v187Badge">Due ${E(fmt(t.due_date))}</span>`:''}</div></div><small>${E(fmt(t.created_at))}</small></div>${broken?`<div class="v187NoteBox"><b>⚠ पुराना/अधूरा task:</b> Linked ERP Function और Instructions दोनों खाली हैं. नीचे Link Now दबाएँ.</div>`:`<p>${E(t.details||'').replace(/\n/g,'<br>')}</p>`}<div class="v187Assignees">${a.map(x=>`<div class="v187Assignee"><b>${x.responsibility==='primary'?'⭐ ':''}${E(x.teacher_name)}</b><span>${E(x.status)}${x.teacher_note?' • '+E(x.teacher_note):''}</span></div>`).join('')||'<div class="empty">No active team</div>'}</div><div class="v187TaskActions">${broken?`<button class="primary" onclick="v187EditTask('${t.id}')">🔗 Link Now</button>`:`<button onclick="v187EditTask('${t.id}')">✏ Edit</button>`}<button onclick="v187EditTeam('${t.id}')">👥 Team</button>${t.status!=='completed'?`<button class="primary" onclick="v187SetTaskStatus('${t.id}','completed')">✓ Complete</button>`:''}${t.status!=='cancelled'?`<button class="danger" onclick="v187SetTaskStatus('${t.id}','cancelled')">⛔ Off / Cancel</button>`:`<button onclick="v187SetTaskStatus('${t.id}','assigned')">↻ Reactivate</button>`}</div></article>`}).join(''):'<div class="empty">अभी कोई delegated task नहीं है.</div>'}
+  function renderTasks(){let host=q('v187TaskList');if(!host)return;const tasks=window.__v187Tasks;host.innerHTML=tasks.length?tasks.map(t=>{let a=window.__v187Assignees.filter(x=>String(x.task_id)===String(t.id)&&x.is_active!==false),route=String(t.module_route||'').trim(),details=String(t.details||'').trim(),broken=!route&&!details;return `<article class="v187TaskCard ${t.status==='cancelled'?'cancelled':''}"><div class="v187TaskTop"><div><h3>${E(t.title)}</h3><div class="v187Badges"><span class="v187Badge ${tstatus(t.priority)}">${E(t.priority)}</span><span class="v187Badge ${tstatus(t.status)}">${E(t.status)}</span>${route?`<span class="v187Badge">ERP: ${E(route)}</span>`:broken?`<span class="v187Badge off">⚠ Link Missing</span>`:`<span class="v187Badge">General Work • No ERP Link</span>`}${t.work_date?`<span class="v187Badge">Work ${E(fmt(t.work_date))}</span>`:''}${t.due_date?`<span class="v187Badge">Due ${E(fmt(t.due_date))}</span>`:''}</div></div><small>${E(fmt(t.created_at))}</small></div>${broken?`<div class="v187NoteBox"><b>⚠ पुराना/अधूरा task:</b> Linked ERP Function और Instructions दोनों खाली हैं. नीचे Link Now दबाएँ.</div>`:`<p>${E(t.details||'').replace(/\n/g,'<br>')}</p>`}<div class="v187Assignees">${a.map(x=>`<div class="v187Assignee"><b>${x.responsibility==='primary'?'⭐ ':''}${E(x.teacher_name)}</b><span>${E(x.status)}${x.teacher_note?' • '+E(x.teacher_note):''}</span></div>`).join('')||'<div class="empty">No active team</div>'}</div><div class="v187TaskActions">${broken?`<button class="primary" onclick="v187EditTask('${t.id}')">🔗 Link Now</button>`:`<button onclick="v187EditTask('${t.id}')">✏ Edit</button>`}<button onclick="v187EditTeam('${t.id}')">👥 Team</button>${t.status!=='completed'?`<button class="primary" onclick="v187SetTaskStatus('${t.id}','completed')">✓ Complete</button>`:''}${t.status!=='cancelled'?`<button class="danger" onclick="v187SetTaskStatus('${t.id}','cancelled')">⛔ Off / Cancel</button>`:`<button onclick="v187SetTaskStatus('${t.id}','assigned')">↻ Reactivate</button>`}</div></article>`}).join(''):'<div class="empty">अभी कोई delegated task नहीं है.</div>'}
   window.ldmDelegationCenter=async function(){
     if(!admin())return window.toast?.('Admin / Principal only');window.__v90Route='work_delegation';window.v90Head?.('🧩 Admin Assistant / Work Delegation','One or many teachers • responsibility • temporary work shortcut');window.v90InstallShell?.('work_delegation');
     window.v90Set?.(`<div class="v187Page"><section class="v187Hero"><small>ADMIN ASSISTANT CENTER</small><h2>काम बाँटिए, जिम्मेदारी स्पष्ट रखिए</h2><p>एक काम एक या कई teachers को दें. Teacher Dashboard पर Assigned Work दिखेगा. कोई polling/realtime नहीं.</p></section><section class="panel"><div class="panelHead"><div><h3>➕ Assign New Work</h3><p class="note">Mapped Active Teachers ही selectable हैं.</p></div></div><div id="v187CreateArea"><div class="empty">Loading teachers…</div></div></section><section class="panel"><div class="panelHead"><div><h3>📋 Assigned Work</h3><p class="note">Edit • Add/Remove Team • Complete • Off/Cancel</p></div><button class="secondary" onclick="ldmDelegationCenter()">↻ Refresh</button></div><div id="v187TaskList"><div class="empty">Loading…</div></div></section></div>`);
@@ -16151,7 +16150,7 @@ if(typeof statsBase==='function'){
 </script>
 
 <style id="v230-master-workspace-style">
-.ldmMasterGrid #v230UdiseCard,.ldmMasterGrid #v230AdvocateCard,.ldmMasterGrid #v230DeveloperCard{position:relative;overflow:hidden;color:#fff!important;border:0!important;min-height:104px!important;box-shadow:0 7px 0 rgba(7,38,75,.16),0 15px 26px rgba(7,38,75,.15)!important}.ldmMasterGrid #v230UdiseCard{background:linear-gradient(145deg,#0ea5e9,#1768df 55%,#0f766e)!important}.ldmMasterGrid #v230AdvocateCard{background:linear-gradient(145deg,#1f2937,#334155 52%,#7c3aed)!important}.ldmMasterGrid #v230DeveloperCard{background:linear-gradient(145deg,#7c3aed,#ec4899 52%,#f59e0b)!important}.ldmMasterGrid #v230UdiseCard:before,.ldmMasterGrid #v230AdvocateCard:before,.ldmMasterGrid #v230DeveloperCard:before{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-22px;top:-28px;background:#ffffff20;box-shadow:0 0 0 16px #ffffff0c}.ldmMasterGrid #v230UdiseCard *,.ldmMasterGrid #v230AdvocateCard *,.ldmMasterGrid #v230DeveloperCard *{color:#fff!important;position:relative;z-index:1}.ldmMasterGrid #v230UdiseCard i,.ldmMasterGrid #v230AdvocateCard i,.ldmMasterGrid #v230DeveloperCard i{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#ffffff24;box-shadow:inset 0 1px 0 #ffffff66,0 8px 16px #06294c24;font-style:normal}.ldmMasterGrid #v230UdiseCard small,.ldmMasterGrid #v230AdvocateCard small,.ldmMasterGrid #v230DeveloperCard small{opacity:.95}.ldmMasterGrid #v230UdiseCard em,.ldmMasterGrid #v230AdvocateCard em,.ldmMasterGrid #v230DeveloperCard em{display:inline-flex;width:max-content;padding:4px 9px;border-radius:999px;background:#ffffff1f;font-weight:900}
+.ldmMasterGrid #v230UdiseCard,.ldmMasterGrid #v230AdvocateCard,.ldmMasterGrid #v230DeveloperCard,.ldmMasterGrid #v274StudyHubCard{position:relative;overflow:hidden;color:#fff!important;border:0!important;min-height:104px!important;box-shadow:0 7px 0 rgba(7,38,75,.16),0 15px 26px rgba(7,38,75,.15)!important}.ldmMasterGrid #v230UdiseCard{background:linear-gradient(145deg,#0ea5e9,#1768df 55%,#0f766e)!important}.ldmMasterGrid #v230AdvocateCard{background:linear-gradient(145deg,#1f2937,#334155 52%,#7c3aed)!important}.ldmMasterGrid #v230DeveloperCard{background:linear-gradient(145deg,#7c3aed,#ec4899 52%,#f59e0b)!important}.ldmMasterGrid #v274StudyHubCard{background:linear-gradient(145deg,#0f766e,#0ea5e9 52%,#7c3aed)!important}.ldmMasterGrid #v230UdiseCard:before,.ldmMasterGrid #v230AdvocateCard:before,.ldmMasterGrid #v230DeveloperCard:before,.ldmMasterGrid #v274StudyHubCard:before{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-22px;top:-28px;background:#ffffff20;box-shadow:0 0 0 16px #ffffff0c}.ldmMasterGrid #v230UdiseCard *,.ldmMasterGrid #v230AdvocateCard *,.ldmMasterGrid #v230DeveloperCard *,.ldmMasterGrid #v274StudyHubCard *{color:#fff!important;position:relative;z-index:1}.ldmMasterGrid #v230UdiseCard i,.ldmMasterGrid #v230AdvocateCard i,.ldmMasterGrid #v230DeveloperCard i,.ldmMasterGrid #v274StudyHubCard i{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#ffffff24;box-shadow:inset 0 1px 0 #ffffff66,0 8px 16px #06294c24;font-style:normal}.ldmMasterGrid #v230UdiseCard small,.ldmMasterGrid #v230AdvocateCard small,.ldmMasterGrid #v230DeveloperCard small,.ldmMasterGrid #v274StudyHubCard small{opacity:.95}.ldmMasterGrid #v230UdiseCard em,.ldmMasterGrid #v230AdvocateCard em,.ldmMasterGrid #v230DeveloperCard em,.ldmMasterGrid #v274StudyHubCard em{display:inline-flex;width:max-content;padding:4px 9px;border-radius:999px;background:#ffffff1f;font-weight:900}
 </style>
 <script id="v230-master-workspace-js">
 (function(){'use strict';
@@ -16160,8 +16159,9 @@ if(typeof statsBase==='function'){
  function schoolAllowed(){return ['admin','super_admin','principal'].includes(role())}
  function ownerRole(){return ['admin','super_admin'].includes(role())}
  function openApp(file){const target=/^https?:\/\//i.test(String(file||''))?String(file):'./'+file;window.open(target,'_blank','noopener,noreferrer')}
+ function openStudyHub(){window.location.href='./study/index.html'}
  function card(id,icon,title,sub,file){let b=document.createElement('button');b.id=id;b.type='button';b.innerHTML=`<i>${icon}</i><b>${title}</b><small>${sub}</small><em>OPEN →</em>`;b.onclick=()=>openApp(file);return b}
- function install(){if(!schoolAllowed())return;let grid=document.querySelector('.ldmMasterGrid');if(!grid)return;if(!document.getElementById('v230UdiseCard'))grid.appendChild(card('v230UdiseCard','🏫','UDISE+ Control Center','Profile • Facilities • Students • Teachers • Readiness','udise.html'));if(ownerRole()&&!document.getElementById('v230AdvocateCard'))grid.appendChild(card('v230AdvocateCard','⚖️','Advocate Control Center','FIR/CNR • Cases • Hearings • Drafting • Legal Books','advocate.html'));if(ownerRole()&&!document.getElementById('v230DeveloperCard'))grid.appendChild(card('v230DeveloperCard','💻','ERP Builder & Developer Studio','Sector ERP • Requirements • Security Gate • Version • Delivery','https://ldm-erp-factory-pro.vercel.app'))}
+ function install(){if(!schoolAllowed())return;let grid=document.querySelector('.ldmMasterGrid');if(!grid)return;if(!document.getElementById('v230UdiseCard'))grid.appendChild(card('v230UdiseCard','🏫','UDISE+ Control Center','Profile • Facilities • Students • Teachers • Readiness','udise.html'));if(ownerRole()&&!document.getElementById('v230AdvocateCard'))grid.appendChild(card('v230AdvocateCard','⚖️','Advocate Control Center','FIR/CNR • Cases • Hearings • Drafting • Legal Books','advocate.html'));if(ownerRole()&&!document.getElementById('v230DeveloperCard'))grid.appendChild(card('v230DeveloperCard','💻','ERP Builder & Developer Studio','Sector ERP • Requirements • Security Gate • Version • Delivery','https://ldm-erp-factory-pro.vercel.app'));if(!document.getElementById('v274StudyHubCard')){let b=document.createElement('button');b.id='v274StudyHubCard';b.type='button';b.innerHTML='<i>🎓</i><b>LDM Smart Study & Competition Hub</b><small>Board Class • Competitive Exams • Current Affairs • Test • PPT • Notes</small><em>OPEN STUDY HUB →</em>';b.onclick=openStudyHub;grid.appendChild(b)}}
  window.ldmV230InstallWorkspace=install;
  /* V245: workspace cards are installed by V233 dashboard owner; no all-route wrapper. */
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,120),{once:true});else setTimeout(install,120);
@@ -17481,7 +17481,7 @@ window.__LDM_V272_DELEGATED_OPERATION=true;
 const norm=v=>String(v??'').trim();
 const low=v=>norm(v).toLowerCase();
 const teacher=()=>low(window.profile?.role)==='teacher';
-const ready=new Set(['attendance','master_attendance','teacher_bells','v90_teacher_daily','homework','academic_monitor','exams','v90_teacher_marks','teacher_notices','gallery','my_notes','class_opinions','v91_student_photos','v143_teacher_qr_attendance','master_gate_pass','v66_programs']);
+const ready=new Set(['attendance','master_attendance','teacher_bells','v90_teacher_daily','homework','academic_monitor','v90_teacher_marks','teacher_notices','gallery','my_notes','class_opinions','v91_student_photos','v143_teacher_qr_attendance','master_gate_pass','v66_programs']);
 
 window.ldmDelegatedRouteActive=function(route=''){
   if(!teacher())return false;
@@ -17719,7 +17719,7 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
 #v187MyTaskList .v187AssignedCard .v187TaskActions{margin-top:11px;display:flex;gap:8px;flex-wrap:wrap}
 #v187MyTaskList .v187AssignedCard .v187TaskActions button{min-height:42px}
 </style>
-<script id="ldm-v263-assigned-work-marker">window.LDM_FINAL_BUILD='V271-PREMIUM-ADMIN-CONSOLIDATED-2026-10-08';</script>
+<script id="ldm-v263-assigned-work-marker">window.LDM_FINAL_BUILD='V274-STUDY-HUB-INTEGRATED-2026-10-09';</script>
 
 <script src="./alarm.js?v=V265"></script>
 
@@ -17805,6 +17805,214 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
 @media(max-width:430px){#erpContent .v271AdminPremium .v90MonitorGrid{grid-template-columns:1fr!important}#erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v271HeroActions button{flex:1 1 100%}}
 </style>
 
-<script src="./runtime_guard.js?v=V271"></script>
+
+<style id="v273-premium-card-system">
+/* V273 — central lightweight premium card language.
+   CSS only: no network, JS loop, timer, observer, animation library or DB call. */
+:root{
+ --v273-shadow:0 8px 0 rgba(8,43,78,.17),0 16px 28px rgba(7,42,77,.15);
+ --v273-inset:inset 0 1px 0 rgba(255,255,255,.48),inset 0 -12px 24px rgba(1,24,48,.12);
+ --v273-r:18px;
+}
+#erpContent .v271AdminPremium>#v233Greeting{order:0!important}
+#erpContent .v271AdminPremium>#v185FrontDesk{order:1!important}
+#erpContent .v271AdminPremium>.v156DailyControl{order:2!important}
+#erpContent .v271AdminPremium>#v90Stats{order:3!important}
+#erpContent .v271AdminPremium>.v114ManagementPanel{order:4!important}
+#erpContent .v271AdminPremium>.ldmMasterControl{order:5!important}
+#erpContent .v271AdminPremium>#v149AdminQuickSlot{order:6!important}
+#erpContent .v271AdminPremium>.v114AdminFeedGrid{order:7!important}
+
+/* Daily Quick Desk */
+#erpContent .v271AdminPremium #v185FrontDesk{
+ position:relative;overflow:hidden!important;
+ background:linear-gradient(145deg,#f8fbff,#eef7ff)!important;
+ border:1px solid #cfe2f2!important;
+ box-shadow:0 10px 26px rgba(12,57,94,.11)!important
+}
+#erpContent .v271AdminPremium #v185FrontDesk:before{
+ content:"₹";position:absolute;right:22px;top:-35px;font-size:125px;font-weight:950;
+ color:rgba(21,104,190,.055);pointer-events:none
+}
+#erpContent .v271AdminPremium .v185FrontHead{position:relative;z-index:1}
+#erpContent .v271AdminPremium .v185FrontHead h2{font-size:19px!important;color:#123e6a!important}
+#erpContent .v271AdminPremium .v185FrontHead p{color:#5f7890!important}
+#erpContent .v271AdminPremium .v185FrontActions button{
+ min-height:54px!important;color:#fff!important;border:0!important;border-radius:14px!important;
+ font-weight:900!important;box-shadow:0 5px 0 rgba(5,40,76,.16),0 10px 18px rgba(8,48,86,.13)!important
+}
+#erpContent .v271AdminPremium .v185FrontActions button:nth-child(5n+1){background:linear-gradient(145deg,#079a70,#16bf8d)!important}
+#erpContent .v271AdminPremium .v185FrontActions button:nth-child(5n+2){background:linear-gradient(145deg,#1768df,#2596e8)!important}
+#erpContent .v271AdminPremium .v185FrontActions button:nth-child(5n+3){background:linear-gradient(145deg,#7b49d6,#aa59dd)!important}
+#erpContent .v271AdminPremium .v185FrontActions button:nth-child(5n+4){background:linear-gradient(145deg,#d66a08,#f0a128)!important}
+#erpContent .v271AdminPremium .v185FrontActions button:nth-child(5n){background:linear-gradient(145deg,#d23d70,#ef668e)!important}
+#erpContent .v271AdminPremium .v105PaySearch{
+ display:grid!important;grid-template-columns:minmax(260px,1.7fr) minmax(135px,.55fr) auto!important;
+ gap:8px!important;margin-top:11px!important;padding:10px!important;border-radius:14px!important;
+ background:#fff!important;border:1px solid #d9e7f2!important;box-shadow:0 5px 14px rgba(15,60,98,.07)!important;
+ position:relative;z-index:1
+}
+#erpContent .v271AdminPremium .v105PaySearch input,
+#erpContent .v271AdminPremium .v105PaySearch select{min-height:44px!important;border-radius:10px!important}
+#erpContent .v271AdminPremium .v105PaySearch button{
+ min-width:106px!important;border-radius:10px!important;background:linear-gradient(145deg,#1268c7,#188be2)!important;
+ color:#fff!important;font-weight:900!important;border:0!important
+}
+
+/* Admin Quick Links — full color premium */
+#erpContent .v271AdminPremium .v114QuickGrid button{
+ position:relative;overflow:hidden!important;color:#fff!important;border:0!important;border-radius:var(--v273-r)!important;
+ box-shadow:var(--v273-shadow),var(--v273-inset)!important;min-height:92px!important
+}
+#erpContent .v271AdminPremium .v114QuickGrid button:after,
+#erpContent .v271AdminPremium .v90Monitor:after,
+#erpContent .v271AdminPremium .ldmMasterGrid button:after,
+#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button:after{
+ content:"";position:absolute;width:82px;height:82px;border-radius:50%;right:-22px;top:-24px;
+ background:rgba(255,255,255,.16);box-shadow:0 0 0 15px rgba(255,255,255,.06);pointer-events:none
+}
+#erpContent .v271AdminPremium .v114QuickGrid button:nth-child(6n+1){background:linear-gradient(145deg,#0d76d8,#22a0ee)!important}
+#erpContent .v271AdminPremium .v114QuickGrid button:nth-child(6n+2){background:linear-gradient(145deg,#07936d,#1bbb8c)!important}
+#erpContent .v271AdminPremium .v114QuickGrid button:nth-child(6n+3){background:linear-gradient(145deg,#8a4bd4,#bd5bd2)!important}
+#erpContent .v271AdminPremium .v114QuickGrid button:nth-child(6n+4){background:linear-gradient(145deg,#d46b0b,#efa026)!important}
+#erpContent .v271AdminPremium .v114QuickGrid button:nth-child(6n+5){background:linear-gradient(145deg,#13849a,#1db5c8)!important}
+#erpContent .v271AdminPremium .v114QuickGrid button:nth-child(6n){background:linear-gradient(145deg,#d34368,#ee6987)!important}
+#erpContent .v271AdminPremium .v114QuickGrid button b,
+#erpContent .v271AdminPremium .v114QuickGrid button span{color:#fff!important;position:relative;z-index:1;text-shadow:0 1px 2px rgba(0,0,0,.15)!important}
+
+/* Management cards */
+#erpContent .v271AdminPremium .v90Monitor{
+ position:relative;overflow:hidden!important;border:0!important;color:#fff!important;
+ box-shadow:var(--v273-shadow),var(--v273-inset)!important;min-height:104px!important
+}
+#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+1){background:linear-gradient(145deg,#136ec4,#2098e4)!important}
+#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+2){background:linear-gradient(145deg,#087e60,#13ad7d)!important}
+#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+3){background:linear-gradient(145deg,#7044c0,#9f59d2)!important}
+#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+4){background:linear-gradient(145deg,#cc650a,#e9951c)!important}
+#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+5){background:linear-gradient(145deg,#0d839c,#18abc0)!important}
+#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+6){background:linear-gradient(145deg,#c53c69,#e65b86)!important}
+#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+7){background:linear-gradient(145deg,#45647f,#647f97)!important}
+#erpContent .v271AdminPremium .v90Monitor:nth-child(8n){background:linear-gradient(145deg,#2854a8,#566fe1)!important}
+#erpContent .v271AdminPremium .v90MonitorIcon{
+ background:rgba(255,255,255,.19)!important;color:#fff!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 7px 15px rgba(0,0,0,.12)!important
+}
+#erpContent .v271AdminPremium .v90Monitor b,
+#erpContent .v271AdminPremium .v90Monitor small{color:#fff!important;position:relative;z-index:1}
+#erpContent .v271AdminPremium .v90Monitor small{opacity:.92!important}
+
+/* School Control Center — same visual language as Certificate cards */
+#erpContent .v271AdminPremium .ldmMasterGrid button{
+ position:relative;overflow:hidden!important;border:0!important;color:#fff!important;
+ min-height:126px!important;border-radius:20px!important;box-shadow:var(--v273-shadow),var(--v273-inset)!important;
+ padding:15px!important
+}
+#erpContent .v271AdminPremium .ldmMasterGrid button:nth-child(8n+1){background:linear-gradient(145deg,#0d70cd,#2197e5)!important}
+#erpContent .v271AdminPremium .ldmMasterGrid button:nth-child(8n+2){background:linear-gradient(145deg,#087f5e,#16aa79)!important}
+#erpContent .v271AdminPremium .ldmMasterGrid button:nth-child(8n+3){background:linear-gradient(145deg,#8a45c6,#be57bd)!important}
+#erpContent .v271AdminPremium .ldmMasterGrid button:nth-child(8n+4){background:linear-gradient(145deg,#bb6209,#e69617)!important}
+#erpContent .v271AdminPremium .ldmMasterGrid button:nth-child(8n+5){background:linear-gradient(145deg,#136d9d,#1598b6)!important}
+#erpContent .v271AdminPremium .ldmMasterGrid button:nth-child(8n+6){background:linear-gradient(145deg,#c43c66,#e65e82)!important}
+#erpContent .v271AdminPremium .ldmMasterGrid button:nth-child(8n+7){background:linear-gradient(145deg,#405b7c,#627791)!important}
+#erpContent .v271AdminPremium .ldmMasterGrid button:nth-child(8n){background:linear-gradient(145deg,#5a45b6,#785fe0)!important}
+#erpContent .v271AdminPremium .ldmMasterGrid i{
+ width:46px!important;height:46px!important;border-radius:14px!important;background:rgba(255,255,255,.2)!important;
+ color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 8px 16px rgba(0,0,0,.13)!important
+}
+#erpContent .v271AdminPremium .ldmMasterGrid b,
+#erpContent .v271AdminPremium .ldmMasterGrid small,
+#erpContent .v271AdminPremium .ldmMasterGrid em{color:#fff!important;position:relative;z-index:1}
+#erpContent .v271AdminPremium .ldmMasterGrid small{opacity:.92!important}
+#erpContent .v271AdminPremium .ldmMasterGrid em{
+ display:inline-flex!important;margin-top:7px!important;padding:4px 9px!important;border-radius:999px!important;
+ background:rgba(255,255,255,.15)!important
+}
+
+/* Stats — compact colored glass cards */
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat{
+ border:0!important;color:#fff!important;box-shadow:0 7px 0 rgba(8,42,75,.13),0 12px 22px rgba(8,42,75,.10)!important
+}
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat:nth-child(6n+1){background:linear-gradient(145deg,#1479d2,#36a3e8)!important}
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat:nth-child(6n+2){background:linear-gradient(145deg,#0b9270,#20b88b)!important}
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat:nth-child(6n+3){background:linear-gradient(145deg,#7650c1,#a36bd5)!important}
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat:nth-child(6n+4){background:linear-gradient(145deg,#d27613,#efa636)!important}
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat:nth-child(6n+5){background:linear-gradient(145deg,#16849c,#20afc1)!important}
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat:nth-child(6n){background:linear-gradient(145deg,#c94c78,#e66f94)!important}
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat b,
+#erpContent .v271AdminPremium .v114AdminStats .v90Stat small{color:#fff!important}
+
+/* QR / Storage quick cards */
+#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button{
+ position:relative;overflow:hidden!important;color:#fff!important;border:0!important;
+ box-shadow:var(--v273-shadow),var(--v273-inset)!important;min-height:108px!important
+}
+#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button:nth-child(4n+1){background:linear-gradient(145deg,#087d5e,#17aa7e)!important}
+#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button:nth-child(4n+2){background:linear-gradient(145deg,#1768ce,#2298e5)!important}
+#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button:nth-child(4n+3){background:linear-gradient(145deg,#8050c6,#aa65d6)!important}
+#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button:nth-child(4n){background:linear-gradient(145deg,#c76b12,#e69c26)!important}
+#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button b,
+#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button small{color:#fff!important;position:relative;z-index:1}
+
+/* Teacher dashboard: retain existing colors, normalize depth/readability. */
+#erp.ldmTeacherCanonical .ldmTeacherModules button{
+ overflow:hidden!important;position:relative!important;box-shadow:var(--v273-shadow),var(--v273-inset)!important
+}
+#erp.ldmTeacherCanonical .ldmTeacherModules button:after{
+ content:"";position:absolute;right:-25px;top:-26px;width:90px;height:90px;border-radius:50%;
+ background:rgba(255,255,255,.14);box-shadow:0 0 0 16px rgba(255,255,255,.055);pointer-events:none
+}
+#erp.ldmTeacherCanonical .ldmTeacherModules button i,
+#erp.ldmTeacherCanonical .ldmTeacherModules button b,
+#erp.ldmTeacherCanonical .ldmTeacherModules button small{position:relative;z-index:1}
+
+/* Parent: premium colorful navigation/stat cards, content panels stay readable white. */
+body.ldmSurfaceParent .v114PortalStats button,
+body.ldmSurfaceParent .v114PortalQuick button{
+ position:relative!important;overflow:hidden!important;color:#fff!important;border:0!important;border-radius:16px!important;
+ box-shadow:0 6px 0 rgba(8,43,78,.13),0 12px 22px rgba(8,43,78,.11)!important
+}
+body.ldmSurfaceParent .v114PortalStats button:nth-child(6n+1),
+body.ldmSurfaceParent .v114PortalQuick button:nth-child(6n+1){background:linear-gradient(145deg,#1478d1,#32a1e8)!important}
+body.ldmSurfaceParent .v114PortalStats button:nth-child(6n+2),
+body.ldmSurfaceParent .v114PortalQuick button:nth-child(6n+2){background:linear-gradient(145deg,#07906b,#18b489)!important}
+body.ldmSurfaceParent .v114PortalStats button:nth-child(6n+3),
+body.ldmSurfaceParent .v114PortalQuick button:nth-child(6n+3){background:linear-gradient(145deg,#794bc4,#a966d5)!important}
+body.ldmSurfaceParent .v114PortalStats button:nth-child(6n+4),
+body.ldmSurfaceParent .v114PortalQuick button:nth-child(6n+4){background:linear-gradient(145deg,#cf6c0c,#eaa02b)!important}
+body.ldmSurfaceParent .v114PortalStats button:nth-child(6n+5),
+body.ldmSurfaceParent .v114PortalQuick button:nth-child(6n+5){background:linear-gradient(145deg,#14849b,#1faec1)!important}
+body.ldmSurfaceParent .v114PortalStats button:nth-child(6n),
+body.ldmSurfaceParent .v114PortalQuick button:nth-child(6n){background:linear-gradient(145deg,#c74570,#e9688f)!important}
+body.ldmSurfaceParent .v114PortalStats button *,
+body.ldmSurfaceParent .v114PortalQuick button *{color:#fff!important;position:relative;z-index:1}
+body.ldmSurfaceParent .v114PortalStats button em,
+body.ldmSurfaceParent .v114PortalStats button small{opacity:.93!important}
+
+/* Generic dashboard card polish only — do not affect forms/tables/print cards. */
+#erpContent .v90Dash button,
+#erpContent .v114TeacherDash button,
+body.ldmSurfaceParent #parentDashboardBody button{touch-action:manipulation}
+#erpContent .v271AdminPremium button:hover,
+#erp.ldmTeacherCanonical .ldmTeacherModules button:hover,
+body.ldmSurfaceParent .v114PortalQuick button:hover{transform:translateY(-2px)!important;filter:saturate(1.04)}
+#erpContent .v271AdminPremium button:active,
+#erp.ldmTeacherCanonical .ldmTeacherModules button:active,
+body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!important}
+
+@media(max-width:760px){
+ #erpContent .v271AdminPremium .v105PaySearch{grid-template-columns:1fr!important}
+ #erpContent .v271AdminPremium .v105PaySearch button{width:100%!important}
+ #erpContent .v271AdminPremium .ldmMasterGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erpContent .v271AdminPremium .ldmMasterGrid button{min-height:132px!important}
+}
+@media(max-width:430px){
+ #erpContent .v271AdminPremium .ldmMasterGrid{grid-template-columns:1fr!important}
+}
+@media print{
+ #v273-premium-card-system{display:none!important}
+}
+</style>
+
+<script src="./runtime_guard.js?v=V273"></script>
 </body>
 </html>

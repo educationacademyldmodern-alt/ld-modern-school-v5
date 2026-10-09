@@ -1,0 +1,122 @@
+L D MODERN EDUCATION ACADEMY
+V273 FINAL PREMIUM STABLE
+दिनांक: 08-10-2026
+
+========================================
+FINAL SCOPE
+========================================
+1. Admin Assigned Work का `available is not defined` root defect ठीक।
+2. Admin Work Date + Due Date + delegation-ready function।
+3. Teacher को exact active assignment verify होने के बाद ही linked function open।
+4. Work Date future हो तो Teacher आज operate नहीं कर सकता; date शुरू होने पर available।
+5. High-risk Admin routes delegation से blocked।
+6. Broad Admin Exams route हटाकर Teacher-specific Marks route रखा।
+7. Program/Tour Register के लिए dedicated delegated DB/RLS adapter।
+8. Master Gate Pass का existing delegated security path preserved।
+9. Admin Daily Quick Desk greeting के तुरंत नीचे।
+10. Fee Check / Pay / Search / Admission / Receipt-Ledger daily-use area compact।
+11. Admin Quick Links full-color premium 3D।
+12. Management Center full-color premium 3D।
+13. School Control Center cards Certificate Center जैसा premium color language।
+14. Admin Stats full-color premium।
+15. QR/Storage Quick Access premium।
+16. Teacher dashboard premium card depth/readability standardized।
+17. Parent dashboard stat/quick cards premium color treatment।
+18. Forms, tables, modals और print layouts को broad color CSS से नहीं छेड़ा गया।
+19. Existing runtime_guard / academic_monitor / alarm / assembly unchanged।
+20. No new polling/realtime/permanent observer।
+
+========================================
+FIRST CODE-BY-CODE VERIFICATION
+========================================
+PASS
+- 124 inline JS blocks checked, 0 syntax failures।
+- runtime_guard.js PASS।
+- academic_monitor.js PASS।
+- alarm.js PASS।
+- assembly.js PASS।
+- Assign Work admin renderer undefined variable defect absent।
+- V272 create/edit/validate RPC chain present।
+- Teacher future Work Date guard present।
+- Global Admin role mutation absent।
+- Premium card system present।
+- Admin Daily Quick Desk top order present।
+- MutationObserver = 0।
+- Supabase realtime = 0।
+- runtime setInterval = 0।
+- index setInterval = 2, existing scanner loops only।
+- eval/new Function = 0।
+- Central Home/Back/Admin/Teacher/Parent paths present।
+- SQL destructive audit: DROP TABLE/TRUNCATE/DELETE FROM/DROP COLUMN = 0।
+- Master SQL and 2-part SQL dependency checks PASS।
+
+========================================
+SECOND FRESH CODE-BY-CODE VERIFICATION
+========================================
+PASS
+- 124 inline JS fresh extraction, 0 failures।
+- All delegation-ready routes have code evidence।
+- Admin renderTasks contains no `available` reference।
+- Server validator binds assignment to auth.uid()।
+- Exact route required।
+- Work Date server-side required।
+- Completed/cancelled assignments denied।
+- No profile.role = admin mutation।
+- service_role browser key security block retained।
+- HSTS / nosniff / X-Frame-Options / Referrer-Policy / Permissions-Policy present।
+- MutationObserver = 0।
+- Realtime = 0।
+- Total setInterval = 2 scanner loops only।
+- Premium CSS scoped to Admin/Teacher/Parent dashboard cards।
+- No universal/table/modal broad selector in V273 premium layer।
+- runtime_guard / academic_monitor / alarm / assembly / vercel unchanged।
+- SQL ADD COLUMN IF NOT EXISTS / CREATE INDEX IF NOT EXISTS / CREATE OR REPLACE / policy-if-not-exists checks PASS।
+- V273 premium style singleton = 1।
+- Delegated operation bridge singleton = 1।
+- Assign handler singleton = 1।
+- Open Function handler singleton = 1।
+
+========================================
+SQL
+========================================
+Preferred:
+RUN_ONLY_THIS_V273_MASTER.sql
+
+मोबाइल में बड़ा SQL copy न हो तो:
+1. V273_SQL_PART_1_OF_2.sql
+2. V273_SQL_PART_2_OF_2.sql
+
+दोनों क्रम से चलाएँ। Part 1 successful होने के बाद ही Part 2।
+
+SQL non-destructive:
+- NO DROP TABLE
+- NO TRUNCATE
+- NO DELETE FROM
+- NO DROP COLUMN
+- Existing business records delete नहीं होते।
+- work_date missing पुराने delegated tasks पर safe backfill होता है।
+- Safe to re-run pattern used।
+
+========================================
+DEPLOY
+========================================
+1. Supabase में V273 Master SQL या 2 parts run करें।
+2. V273 index.html deploy करें।
+3. runtime_guard.js साथ रखें।
+4. academic_monitor.js, alarm.js, assembly.js, vercel.json साथ रखें।
+5. Browser/PWA एक बार पूरी तरह बंद करके फिर खोलें।
+
+TEST AFTER DEPLOY
+Admin:
+Dashboard -> Daily Quick Desk -> Fee Search -> Assign Work -> Academic Analysis -> Home/Back
+
+Teacher:
+Dashboard -> Admin Assigned Work -> Open Function -> Start/Submit/Complete -> Home/Back
+
+Parent:
+Login -> Child -> Quick Cards -> Menu -> My Children -> Logout -> Login
+
+IMPORTANT:
+Static/root-level double verification PASS है।
+Real production Supabase/Vercel authenticated behavior deployment के बाद ही live verify हो सकता है;
+उसको बिना test किए fake PASS नहीं लिखा गया है।
