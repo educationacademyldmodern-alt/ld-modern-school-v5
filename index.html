@@ -30,8 +30,8 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 })();
 </script>
 
-<meta charset="utf-8"><meta name="ld-modern-build" content="V274-STUDY-HUB-INTEGRATED-2026-10-09"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V274-STUDY-HUB-INTEGRATED-2026-10-09"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<meta charset="utf-8"><meta name="ld-modern-build" content="V276-FAST-OPEN-2026-10-09"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V276-FAST-OPEN-2026-10-09"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -15440,7 +15440,7 @@ if(typeof statsBase==='function'){
     if(selected&&!v272DelegationReadySet.has(selected))html+=`<option value="${E(selected)}" selected disabled>⚠ ${E(selected)} — old Admin-only/non-ready route</option>`;
     return html;
   }
-  function renderTasks(){let host=q('v187TaskList');if(!host)return;const tasks=window.__v187Tasks;host.innerHTML=tasks.length?tasks.map(t=>{let a=window.__v187Assignees.filter(x=>String(x.task_id)===String(t.id)&&x.is_active!==false),route=String(t.module_route||'').trim(),details=String(t.details||'').trim(),broken=!route&&!details;return `<article class="v187TaskCard ${t.status==='cancelled'?'cancelled':''}"><div class="v187TaskTop"><div><h3>${E(t.title)}</h3><div class="v187Badges"><span class="v187Badge ${tstatus(t.priority)}">${E(t.priority)}</span><span class="v187Badge ${tstatus(t.status)}">${E(t.status)}</span>${route?`<span class="v187Badge">ERP: ${E(route)}</span>`:broken?`<span class="v187Badge off">⚠ Link Missing</span>`:`<span class="v187Badge">General Work • No ERP Link</span>`}${t.work_date?`<span class="v187Badge">Work ${E(fmt(t.work_date))}</span>`:''}${t.due_date?`<span class="v187Badge">Due ${E(fmt(t.due_date))}</span>`:''}</div></div><small>${E(fmt(t.created_at))}</small></div>${broken?`<div class="v187NoteBox"><b>⚠ पुराना/अधूरा task:</b> Linked ERP Function और Instructions दोनों खाली हैं. नीचे Link Now दबाएँ.</div>`:`<p>${E(t.details||'').replace(/\n/g,'<br>')}</p>`}<div class="v187Assignees">${a.map(x=>`<div class="v187Assignee"><b>${x.responsibility==='primary'?'⭐ ':''}${E(x.teacher_name)}</b><span>${E(x.status)}${x.teacher_note?' • '+E(x.teacher_note):''}</span></div>`).join('')||'<div class="empty">No active team</div>'}</div><div class="v187TaskActions">${broken?`<button class="primary" onclick="v187EditTask('${t.id}')">🔗 Link Now</button>`:`<button onclick="v187EditTask('${t.id}')">✏ Edit</button>`}<button onclick="v187EditTeam('${t.id}')">👥 Team</button>${t.status!=='completed'?`<button class="primary" onclick="v187SetTaskStatus('${t.id}','completed')">✓ Complete</button>`:''}${t.status!=='cancelled'?`<button class="danger" onclick="v187SetTaskStatus('${t.id}','cancelled')">⛔ Off / Cancel</button>`:`<button onclick="v187SetTaskStatus('${t.id}','assigned')">↻ Reactivate</button>`}</div></article>`}).join(''):'<div class="empty">अभी कोई delegated task नहीं है.</div>'}
+  function renderTasks(){let host=q('v187TaskList');if(!host)return;const tasks=window.__v187Tasks;host.innerHTML=tasks.length?tasks.map(t=>{let a=window.__v187Assignees.filter(x=>String(x.task_id)===String(t.id)&&x.is_active!==false),route=String(t.module_route||'').trim(),details=String(t.details||'').trim(),broken=!route&&!details;return `<article class="v187TaskCard ${t.status==='cancelled'?'cancelled':''}"><div class="v187TaskTop"><div><h3>${E(t.title)}</h3><div class="v187Badges"><span class="v187Badge ${tstatus(t.priority)}">${E(t.priority)}</span><span class="v187Badge ${tstatus(t.status)}">${E(t.status)}</span>${route?`<span class="v187Badge">ERP: ${E(route)}</span>`:broken?`<span class="v187Badge off">⚠ Link Missing</span>`:`<span class="v187Badge">General Work • No ERP Link</span>`}${t.work_date?`<span class="v187Badge">Work ${E(fmt(t.work_date))}</span>`:''}${t.due_date?`<span class="v187Badge">Due ${E(fmt(t.due_date))}</span>`:''}</div></div><small>${E(fmt(t.created_at))}</small></div>${broken?`<div class="v187NoteBox"><b>⚠ पुराना/अधूरा task:</b> Linked ERP Function और Instructions दोनों खाली हैं. नीचे Link Now दबाएँ.</div>`:`<p>${E(t.details||'').replace(/\n/g,'<br>')}</p>`}<div class="v187Assignees">${a.map(x=>`<div class="v187Assignee"><b>${x.responsibility==='primary'?'⭐ ':''}${E(x.teacher_name)}</b><span>${E(x.status)}${x.teacher_note?' • '+E(x.teacher_note):''}</span></div>`).join('')||'<div class="empty">No active team</div>'}</div><div class="v187TaskActions">${broken?`<button class="primary" onclick="v187EditTask('${t.id}')">🔗 Link Function / Work</button>`:`<button onclick="v187EditTask('${t.id}')">✏ Update Work</button><button onclick="v187EditTask('${t.id}')">🔗 Change Function</button>`}<button onclick="v187EditTeam('${t.id}')">👥 Add / Remove Teacher</button>${t.status!=='completed'?`<button class="primary" onclick="v187SetTaskStatus('${t.id}','completed')">✓ Complete Work</button>`:''}${t.status!=='cancelled'?`<button class="danger" onclick="v187SetTaskStatus('${t.id}','cancelled')">⛔ Stop Work</button>`:`<button onclick="v187SetTaskStatus('${t.id}','assigned')">↻ Reactivate</button>`}</div></article>`}).join(''):'<div class="empty">अभी कोई delegated task नहीं है.</div>'}
   window.ldmDelegationCenter=async function(){
     if(!admin())return window.toast?.('Admin / Principal only');window.__v90Route='work_delegation';window.v90Head?.('🧩 Admin Assistant / Work Delegation','One or many teachers • responsibility • temporary work shortcut');window.v90InstallShell?.('work_delegation');
     window.v90Set?.(`<div class="v187Page"><section class="v187Hero"><small>ADMIN ASSISTANT CENTER</small><h2>काम बाँटिए, जिम्मेदारी स्पष्ट रखिए</h2><p>एक काम एक या कई teachers को दें. Teacher Dashboard पर Assigned Work दिखेगा. कोई polling/realtime नहीं.</p></section><section class="panel"><div class="panelHead"><div><h3>➕ Assign New Work</h3><p class="note">Mapped Active Teachers ही selectable हैं.</p></div></div><div id="v187CreateArea"><div class="empty">Loading teachers…</div></div></section><section class="panel"><div class="panelHead"><div><h3>📋 Assigned Work</h3><p class="note">Edit • Add/Remove Team • Complete • Off/Cancel</p></div><button class="secondary" onclick="ldmDelegationCenter()">↻ Refresh</button></div><div id="v187TaskList"><div class="empty">Loading…</div></div></section></div>`);
@@ -15518,7 +15518,7 @@ if(typeof statsBase==='function'){
       };
       host.innerHTML=window.__v187MyAssignments.length?window.__v187MyAssignments.map(a=>{
         let t=a.ldm_work_tasks||{},route=String(t.module_route||'').trim(),details=String(t.details||'').trim();
-        let available=v272TaskAvailable(t),active=available&&a.is_active!==false&&!['cancelled','completed'].includes(String(t.status||'').toLowerCase());
+        let available=v272TaskAvailable(t),ast=String(a.status||'').toLowerCase(),active=available&&a.is_active!==false&&!['removed','completed'].includes(ast)&&!['cancelled','completed'].includes(String(t.status||'').toLowerCase());
         let functionBox=route
           ?`<div class="v187NoteBox"><b>🔗 Linked ERP Function:</b> ${E(routeLabel(route))}<br><small>${E(route)}</small></div>`
           :details
@@ -15538,9 +15538,9 @@ if(typeof statsBase==='function'){
           ${a.teacher_note?`<div class="v187NoteBox"><b>My Note:</b> ${E(a.teacher_note)}</div>`:''}
           ${!available?`<div class="v187NoteBox"><b>🗓 Upcoming Work:</b> यह function ${E(fmt(t.work_date))} से operate होगा.</div>`:''}
           <div class="v187TaskActions">
-            ${active&&a.status==='assigned'?`<button class="primary" onclick="v187TeacherTaskStatus('${a.id}','in_progress')">▶ Start</button>`:''}
-            ${active&&a.status!=='completed'?`<button onclick="v187TeacherTaskStatus('${a.id}','submitted')">📤 Submit</button><button onclick="v187TeacherTaskStatus('${a.id}','completed')">✓ Complete</button>`:''}
-            ${active&&route?`<button class="primary" onclick="v187OpenAssignedFunction('${a.id}')">🔓 Open Function →</button>`:''}
+            ${active&&a.status==='assigned'?`<button class="primary" onclick="v187TeacherTaskStatus('${a.id}','in_progress')">▶ Start Work</button>`:''}
+            ${active&&route?`<button class="primary" onclick="v187OpenAssignedFunction('${a.id}')">🔓 Open & Work →</button>`:''}
+            ${active&&a.status!=='completed'?`<button onclick="v187TeacherUpdateProgress('${a.id}')">📝 Update Progress</button><button onclick="v187TeacherTaskStatus('${a.id}','submitted')">📤 Submit Work</button><button onclick="v187TeacherTaskStatus('${a.id}','completed')">✓ Complete Work</button>`:''}
           </div>
         </article>`;
       }).join(''):'<div class="empty">अभी कोई active/recent responsibility नहीं है.</div>';
@@ -15555,6 +15555,18 @@ if(typeof statsBase==='function'){
     let r=await sb.rpc('ldm_teacher_update_task_assignment',{p_assignment_id:id,p_status:status,p_note:raw});
     if(r.error)return window.toast?.(r.error.message);window.toast?.('Work status updated');await ldmTeacherAssignedWork();
   };
+  window.v187TeacherUpdateProgress=async function(id){
+    let a=window.__v187MyAssignments.find(x=>String(x.id)===String(id)),t=a?.ldm_work_tasks||{};if(!a)return;
+    if(!v272TaskAvailable(t))return window.toast?.('यह काम '+fmt(t.work_date)+' से available होगा.');
+    let note=prompt('Work progress / क्या काम किया, क्या बाकी है?',a.teacher_note||'');if(note===null)return;
+    let st=String(a.status||'assigned').toLowerCase();
+    if(st==='assigned')st='in_progress';
+    if(!['in_progress','submitted'].includes(st))st='in_progress';
+    let r=await sb.rpc('ldm_teacher_update_task_assignment',{p_assignment_id:id,p_status:st,p_note:note});
+    if(r.error)return window.toast?.(r.error.message);
+    window.toast?.('Progress updated');
+    await ldmTeacherAssignedWork();
+  };
   window.v187OpenAssignedFunction=async function(id){
     let a=window.__v187MyAssignments.find(x=>String(x.id)===String(id)),t=a?.ldm_work_tasks||{};
     let route=String(t.module_route||'').trim();
@@ -15562,22 +15574,30 @@ if(typeof statsBase==='function'){
     if(!v272DelegationReadySet.has(route))return window.toast?.('यह पुराना/Admin-only route Teacher operation के लिए ready नहीं है. Admin task Edit करके delegation-ready function चुनें.');
     if(!v272TaskAvailable(t))return window.toast?.('यह function '+fmt(t.work_date)+' से operate होगा.');
     try{
+      window.ldmFastOpenStart?.(route,'Secure permission check…');
       const vr=await sb.rpc('ldm_v272_validate_delegated_route',{p_assignment_id:id,p_route:route});
       if(vr.error)throw vr.error;
       if(vr.data!==true)throw new Error('Active delegated permission verify नहीं हुई.');
       window.__ldmDelegatedContext={assignmentId:String(id),route,expiresAt:Date.now()+30*60*1000};
       window.__ldmDelegatedOpeningRoute=route;
+
+      let statusPromise=Promise.resolve({error:null});
       if(a.status==='assigned'){
-        let sr=await sb.rpc('ldm_teacher_update_task_assignment',{p_assignment_id:id,p_status:'in_progress',p_note:a.teacher_note||''});
-        if(sr.error)throw sr.error;
-        a.status='in_progress';
+        statusPromise=sb.rpc('ldm_teacher_update_task_assignment',{p_assignment_id:id,p_status:'in_progress',p_note:a.teacher_note||''})
+          .then(sr=>{if(!sr.error)a.status='in_progress';return sr});
       }
-      const out=await window.render?.(route);
+
+      window.ldmFastOpenStart?.(route,'Opening assigned function…');
+      const renderPromise=Promise.resolve(window.render?.(route));
+      const [rr,sr]=await Promise.allSettled([renderPromise,statusPromise]);
+      if(sr.status==='fulfilled'&&sr.value?.error)window.toast?.('Work status update: '+sr.value.error.message);
+      if(rr.status==='rejected')throw rr.reason;
       if(String(window.__v90Route||'')!==route)window.__v90Route=route;
-      return out;
+      return rr.value;
     }catch(e){
       window.__ldmDelegatedContext=null;
-      window.toast?.((e?.message||String(e))+' • V272 delegation check');
+      window.ldmFastOpenStop?.();
+      window.toast?.((e?.message||String(e))+' • delegation check');
     }finally{
       window.__ldmDelegatedOpeningRoute='';
     }
@@ -17719,7 +17739,7 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
 #v187MyTaskList .v187AssignedCard .v187TaskActions{margin-top:11px;display:flex;gap:8px;flex-wrap:wrap}
 #v187MyTaskList .v187AssignedCard .v187TaskActions button{min-height:42px}
 </style>
-<script id="ldm-v263-assigned-work-marker">window.LDM_FINAL_BUILD='V274-STUDY-HUB-INTEGRATED-2026-10-09';</script>
+<script id="ldm-v263-assigned-work-marker">window.LDM_FINAL_BUILD='V276-FAST-OPEN-2026-10-09';</script>
 
 <script src="./alarm.js?v=V265"></script>
 
@@ -18013,6 +18033,58 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
 }
 </style>
 
-<script src="./runtime_guard.js?v=V273"></script>
+
+<style id="v275-readable-admin-cards">
+@media (min-width:761px){
+  #erpContent .v271AdminPremium .v114QuickGrid button{min-height:96px!important;padding:13px 10px!important}
+  #erpContent .v271AdminPremium .v114QuickGrid button b{font-size:25px!important;line-height:1.05!important}
+  #erpContent .v271AdminPremium .v114QuickGrid button span{margin-top:8px!important;font-size:13.5px!important;line-height:1.25!important;font-weight:900!important}
+
+  #erpContent .v271AdminPremium .v90Monitor{min-height:108px!important;padding:14px!important;gap:11px!important}
+  #erpContent .v271AdminPremium .v90MonitorIcon{width:46px!important;height:46px!important;font-size:22px!important;flex:0 0 46px!important}
+  #erpContent .v271AdminPremium .v90Monitor b{font-size:15.5px!important;line-height:1.22!important;font-weight:900!important}
+  #erpContent .v271AdminPremium .v90Monitor small{margin-top:5px!important;font-size:12.5px!important;line-height:1.35!important;font-weight:650!important}
+  #erpContent .v271AdminPremium .v90Monitor em{font-size:13px!important;font-weight:900!important}
+
+  #erpContent .v271AdminPremium .ldmMasterGrid button{min-height:142px!important;padding:17px!important}
+  #erpContent .v271AdminPremium .ldmMasterGrid button i{width:52px!important;height:52px!important;font-size:25px!important}
+  #erpContent .v271AdminPremium .ldmMasterGrid button b{font-size:16.5px!important;line-height:1.22!important;font-weight:950!important}
+  #erpContent .v271AdminPremium .ldmMasterGrid button small{margin-top:6px!important;font-size:12.5px!important;line-height:1.35!important;font-weight:650!important}
+  #erpContent .v271AdminPremium .ldmMasterGrid button em{font-size:12px!important;font-weight:950!important}
+
+  #erpContent .v271AdminPremium .v114AdminStats .v90Stat small{font-size:12.5px!important;line-height:1.25!important;font-weight:750!important}
+  #erpContent .v271AdminPremium .v114AdminStats .v90Stat b{font-size:20px!important;line-height:1.1!important}
+
+  #erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button b{font-size:16px!important;line-height:1.2!important}
+  #erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button small{font-size:12.5px!important;line-height:1.35!important}
+
+  #erpContent .v271AdminPremium .v114PanelHead h3,
+  #erpContent .v271AdminPremium .v90SectionTitle h2,
+  #erpContent .v271AdminPremium .ldmMasterTitle h2{font-size:19px!important;line-height:1.2!important}
+  #erpContent .v271AdminPremium .v90SectionTitle p,
+  #erpContent .v271AdminPremium .ldmMasterTitle small,
+  #erpContent .v271AdminPremium .ldmMasterTitle span{font-size:12.5px!important;line-height:1.35!important}
+}
+
+.v187TaskActions{display:flex!important;flex-wrap:wrap!important;gap:9px!important;margin-top:12px!important}
+.v187TaskActions button{min-height:44px!important;padding:9px 13px!important;font-size:13.5px!important;line-height:1.2!important;font-weight:900!important;border-radius:11px!important}
+.v187TaskCard h3{font-size:18px!important;line-height:1.25!important}
+.v187TaskCard p,.v187NoteBox,.v187Assignee span{font-size:13px!important;line-height:1.45!important}
+.v187Badge{font-size:11.5px!important;line-height:1.2!important}
+
+@media (min-width:1200px){
+  #erpContent .v271AdminPremium .v90MonitorGrid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  #erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+}
+@media (max-width:760px){
+  .v187TaskActions button{flex:1 1 calc(50% - 9px)!important;font-size:13px!important}
+  .v187TaskCard h3{font-size:16px!important}
+}
+@media (max-width:430px){
+  .v187TaskActions button{flex:1 1 100%!important}
+}
+</style>
+
+<script src="./runtime_guard.js?v=V276"></script>
 </body>
 </html>

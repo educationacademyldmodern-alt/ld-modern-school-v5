@@ -5,7 +5,7 @@
 'use strict';
 if(window.__LDM_V270_RUNTIME)return;
 window.__LDM_V270_RUNTIME=true;
-window.LDM_FINAL_BUILD='V271-PREMIUM-ADMIN-CONSOLIDATED-2026-10-08';
+window.LDM_FINAL_BUILD='V276-FAST-OPEN-2026-10-09';
 
 const q=id=>document.getElementById(id);
 const role=()=>String(window.profile?.role||'').trim().toLowerCase();
@@ -41,14 +41,43 @@ window.__ldmV270RuntimeState=S;
  body.ldmSurfaceParent #parentPortal,
  body.ldmSurfaceParent #parentDashboard,
  body.ldmSurfaceParent #v6422ParentBar{pointer-events:auto!important}
- #erpContent.ldmRuntimeBusy{will-change:opacity;transition:opacity .1s ease;opacity:.99}
- #erpContent.ldmRuntimeReady{animation:ldmRuntimeIn .12s ease-out}
- @keyframes ldmRuntimeIn{from{opacity:.95;transform:translateY(1px)}to{opacity:1;transform:none}}
- @media(prefers-reduced-motion:reduce){#erpContent.ldmRuntimeBusy,#erpContent.ldmRuntimeReady{transition:none!important;animation:none!important}}
+ #erpContent.ldmRuntimeBusy{opacity:1!important}
+ #erpContent.ldmRuntimeReady{opacity:1!important}
+ #ldmFastOpenLayer{position:fixed;left:50%;top:88px;transform:translateX(-50%);z-index:2147483000;
+   display:flex;align-items:center;gap:9px;max-width:min(90vw,420px);padding:10px 14px;border-radius:999px;
+   background:rgba(6,47,88,.96);color:#fff;font:800 13px/1.2 system-ui,sans-serif;
+   box-shadow:0 8px 24px rgba(0,28,58,.22);pointer-events:none}
+ #ldmFastOpenLayer[hidden]{display:none!important}
+ #ldmFastOpenLayer .ldmFastDot{width:10px;height:10px;border-radius:50%;background:#54f0bc;
+   box-shadow:0 0 0 0 rgba(84,240,188,.5);animation:ldmFastPulse .65s ease-out infinite}
+ @keyframes ldmFastPulse{to{box-shadow:0 0 0 9px rgba(84,240,188,0)}}
+ @media(prefers-reduced-motion:reduce){#ldmFastOpenLayer .ldmFastDot{animation:none!important}}
  `;
  document.head.appendChild(st);
 })();
 
+function fastLayer(){
+ let el=q('ldmFastOpenLayer');
+ if(!el){
+   el=document.createElement('div');el.id='ldmFastOpenLayer';el.hidden=true;
+   el.innerHTML='<span class="ldmFastDot"></span><span id="ldmFastOpenText">Opening…</span>';
+   document.body.appendChild(el);
+ }
+ return el;
+}
+function routeLabel(r){
+ const map={dashboard:'Dashboard',assigned_work:'Assigned Work',smart_fee_center:'Fee Center',fee_dashboard:'Fee Dashboard',
+ attendance:'Attendance',master_attendance:'Master Attendance',academic_monitor:'Academic Analysis',
+ v90_teacher_marks:'Marks',homework:'Homework',v66_programs:'Programs',master_gate_pass:'Gate Pass',
+ teacher_notices:'Notices',gallery:'Gallery',my_notes:'Notes',v91_student_photos:'Student Photos'};
+ return map[r]||String(r||'Module').replace(/^v\d+_/,'').replace(/_/g,' ').replace(/\b\w/g,x=>x.toUpperCase());
+}
+function fastStart(r,msg){
+ const el=fastLayer(),tx=q('ldmFastOpenText');if(tx)tx.textContent=msg||('Opening '+routeLabel(r)+'…');
+ el.hidden=false;
+}
+function fastStop(){const el=q('ldmFastOpenLayer');if(el)el.hidden=true}
+window.ldmFastOpenStart=fastStart;window.ldmFastOpenStop=fastStop;
 function roleKey(){return admin()?'admin':teacher()?'teacher':parent()?'parent':role()||'other'}
 function routeNow(){
  try{return String(sessionStorage.getItem('ldm_current_route')||window.__v90Route||'dashboard')}
@@ -150,10 +179,9 @@ function duplicateFast(r){
 function markBusy(){const h=host();if(h){h.classList.add('ldmRuntimeBusy');h.setAttribute('aria-busy','true')}}
 function clearBusy(){const h=host();if(h){h.classList.remove('ldmRuntimeBusy');h.removeAttribute('aria-busy')}}
 async function settleDashboard(seq){
- await nextFrame();await sleep(95);await nextFrame();
+ await nextFrame();
  if(seq!==S.seq||S.intent!=='dashboard')return;
  cleanupDuplicates();storeDashboard();clearBusy();
- const h=host();if(h){h.classList.add('ldmRuntimeReady');setTimeout(()=>h.classList.remove('ldmRuntimeReady'),150)}
  reconcile('dashboard-ready');
 }
 
@@ -178,7 +206,9 @@ try{
    if(S.inFlight.has(r))return S.inFlight.get(r);
    if(duplicateFast(r)&&r==='dashboard'&&dashboardReady())return true;
 
-   const seq=++S.seq;S.intent=r;markBusy();
+   const seq=++S.seq;S.intent=r;
+   if(r!=='dashboard')fastStart(r);
+   markBusy();
    const promise=(async()=>{
     try{
       const out=await base.apply(this,arguments);
@@ -192,7 +222,7 @@ try{
     }catch(err){
       if(r==='dashboard'&&!dashboardReady())restoreDashboard();
       clearBusy();reconcile('render-error');throw err;
-    }finally{S.inFlight.delete(r);if(seq===S.seq&&r!=='dashboard')clearBusy()}
+    }finally{S.inFlight.delete(r);if(seq===S.seq&&r!=='dashboard'){clearBusy();fastStop()}}
    })();
    S.inFlight.set(r,promise);return promise;
   };
@@ -281,7 +311,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 window.ldmRuntimeAudit=function(){
  return{
-  build:'V271-PREMIUM-ADMIN-CONSOLIDATED-2026-10-08',
+  build:'V276-FAST-OPEN-2026-10-09',
   surface:surface(),role:roleKey(),route:routeNow(),intent:S.intent,
   inFlight:[...S.inFlight.keys()],dashboardReady:dashboardReady(),
   dashboardCacheBytes:(S.dashboardHTML[roleKey()]||'').length,
