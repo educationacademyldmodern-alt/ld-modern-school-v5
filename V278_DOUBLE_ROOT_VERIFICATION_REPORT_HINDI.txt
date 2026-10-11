@@ -1,0 +1,46 @@
+L D MODERN EDUCATION ACADEMY
+V278 ROOT STABLE — FINAL ROOT RECHECK
+
+मुख्य findings/fixes
+===================
+1. V277 Fast Search cache सही था, लेकिन Student update के बाद immediate invalidate नहीं था.
+   V278 final ldmMarkDataDirty wrapper Student/Admission write पर search cache तुरंत clear करता है.
+2. Fee meaningful write पर V277 fee-account cache तुरंत clear होता है.
+3. पुराने V187 ldm_create_work_task / ldm_admin_update_work_task में केवल पुराने routes की whitelist थी.
+   इससे नया delegated route database में NULL हो सकता था.
+   V278 SQL ने यह root defect खत्म किया.
+4. V278 Assistant SQL self-contained है:
+   task table, assignee table, event table, Admin create/edit/team, Teacher status, validation.
+5. Exact Teacher auth user + exact route + active assignment + Work Date required.
+6. India date Asia/Kolkata server-side use होती है.
+7. Teacher controls:
+   Start Work / Open & Work / Update Progress / Submit Work / Complete Work.
+8. Removed/completed/cancelled assignment operate नहीं कर सकता.
+9. Assistant Center खोलने पर Delegation Ready health status दिखाई देता है.
+10. High-risk Fee/Settings/Students/Admin controls delegation list में blocked हैं.
+11. V277 Study Hub, external CSS, V276 Fast Open और core JS untouched हैं.
+12. No new polling/realtime/MutationObserver.
+
+FIRST ROOT CODE-BY-CODE VERIFICATION: PASS
+- 125 inline JS blocks, 0 syntax error.
+- External JS PASS.
+- Frontend/SQL route set exact 15/15 match.
+- SQL destructive audit PASS.
+- MutationObserver 0, realtime 0, existing scanner setInterval 2 only.
+- V277 core files unchanged.
+
+SECOND FRESH ROOT VERIFICATION: PASS
+- Fresh 125 inline JS PASS.
+- Assistant create/edit/team/teacher operation chain PASS.
+- Secure validation before delegated context PASS.
+- No Teacher delete/global Admin role mutation.
+- Cache coherence/order PASS.
+- Master + 2-part SQL safety/order PASS.
+- Study Hub file names + byte hashes unchanged.
+- Performance regression scan PASS.
+
+IMPORTANT
+=========
+यह static/root-level double verification है.
+Live Supabase/Vercel authenticated execution deployment के बाद ही confirm हो सकता है.
+V278 के Assistant root repair के लिए V278 SQL चलाना आवश्यक है.

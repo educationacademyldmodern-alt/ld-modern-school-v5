@@ -1,0 +1,12 @@
+V275 — Assigned Work + Laptop Readability Fix
+
+1. Admin Assigned Work buttons clear:
+   Update Work / Change Function / Add-Remove Teacher / Complete Work / Stop Work.
+2. Teacher Assigned Work buttons clear:
+   Start Work / Open & Work / Update Progress / Submit Work / Complete Work.
+3. Completed/removed assignment पर operational buttons बंद।
+4. Teacher global Admin नहीं बनता; exact delegated function security preserved।
+5. Laptop/desktop premium cards की title/subtitle/action typography बड़ा और readable।
+6. Mobile responsive layout preserved।
+7. V274 Study Hub पूरा preserved।
+8. कोई नया SQL नहीं।

@@ -1,0 +1,49 @@
+L D MODERN EDUCATION ACADEMY
+V275 — ASSIGNED WORK + LAPTOP READABILITY
+
+ROOT FIX
+1. Admin Assigned Work:
+   Update Work
+   Change Function
+   Add / Remove Teacher
+   Complete Work
+   Stop Work
+2. Teacher Assigned Work:
+   Start Work
+   Open & Work
+   Update Progress
+   Submit Work
+   Complete Work
+3. Removed/completed assignment operational actions बंद।
+4. Teacher task delete/Admin-global permission नहीं दिया गया।
+5. Exact delegated route + server validator preserved।
+6. Laptop/desktop Admin cards का title/subtitle/action text बड़ा किया गया।
+7. Mobile responsive rules preserved।
+8. V274 Study Hub पूरा preserved।
+9. कोई नया SQL नहीं।
+
+FIRST CODE-BY-CODE VERIFICATION: PASS
+- 124 inline JS, 0 syntax errors
+- runtime_guard / academic_monitor / alarm / assembly PASS
+- Assigned Work controls PASS
+- Readability CSS PASS
+- Study Hub PASS
+- MutationObserver 0
+- Realtime 0
+- Existing setInterval 2 scanner loops only
+- eval/new Function 0
+
+SECOND FRESH CODE-BY-CODE VERIFICATION: PASS
+- V274 core runtime, vercel config और V273 SQL files byte-for-byte unchanged
+- Teacher/Admin workflow controls exact renderer में मौजूद
+- Delegated validator preserved
+- Teacher delete operation absent
+- V275 CSS dashboard/task scoped; table/form global override नहीं
+- Study folder file names/count V274 के समान
+- Fresh inline JS 124 PASS
+- Study JS PASS
+
+DEPLOY
+- V273 SQL अगर पहले run हो चुका है तो V275 के लिए SQL दुबारा जरूरी नहीं।
+- पहले Preview में deploy/test करें।
+- फिर Production।

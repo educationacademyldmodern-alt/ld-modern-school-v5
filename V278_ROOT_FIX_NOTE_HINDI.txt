@@ -1,0 +1,20 @@
+V278 ROOT STABLE — Assistant + Teacher Work + Fast Cache Coherence
+
+मुख्य root fixes:
+1. पुराने V187 route whitelist का route-null defect database level पर खत्म।
+2. Assistant create/edit/team functions self-contained repair।
+3. Exact Teacher assignment + exact route + India Work Date server validation।
+4. Teacher Start / Open & Work / Update Progress / Submit / Complete flow preserved।
+5. Removed/completed/cancelled assignment operate नहीं कर सकता।
+6. Assistant Center DB readiness status दिखाता है।
+7. Student/Admission meaningful write के बाद V277 student search cache तुरंत invalid।
+8. Fee meaningful write के बाद fee account cache तुरंत invalid।
+9. No polling / realtime / MutationObserver added।
+10. Study Hub / Premium UI / V276 Fast Open / V277 external CSS preserved।
+
+SQL:
+RUN_ONLY_THIS_V278_ROOT_ASSISTANT.sql
+या मोबाइल में:
+V278_SQL_PART_1_OF_2.sql
+फिर
+V278_SQL_PART_2_OF_2.sql

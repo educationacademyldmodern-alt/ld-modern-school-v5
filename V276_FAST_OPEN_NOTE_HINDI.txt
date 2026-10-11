@@ -1,0 +1,13 @@
+V276 FAST OPEN — Root Performance Correction
+
+- हर ERP route click पर immediate Opening shell दिखता है।
+- Route data/security complete होने तक user को dead click महसूस नहीं होगा।
+- Dashboard का artificial 95ms settle delay हटाया।
+- Runtime opacity/entry animation हटाई।
+- Assigned Work: secure validate RPC पहले रहता है।
+- Validate successful होते ही route render और status-update RPC parallel चलते हैं।
+- Teacher global Admin नहीं बनता।
+- कोई prefetch नहीं।
+- कोई polling/realtime/MutationObserver नहीं।
+- कोई नया SQL नहीं।
+- Silent Until Click preserved।
