@@ -1,0 +1,25 @@
+V286 PUBLIC PREVIEW FIRST-PAINT ROOT FIX
+
+Root cause:
+public-final.css में यह rule था:
+#exactHome:not(.v1142FinalBuilt){visibility:hidden!important}
+
+इससे Vercel Preview screenshot/first paint पर JS build complete होने से पहले पूरा
+public home invisible हो जाता था और pale-blue blank area दिखती थी.
+
+Fix:
+उस pre-hide rule को हटाया गया.
+Original public home अब enhanced public shell ready होने तक visible रहता है.
+Enhanced shell build होने के बाद existing V285 rule पुराने children को safely hide करता है.
+
+NOT CHANGED:
+- Admin login
+- Teacher login
+- Parent login
+- Supabase auth
+- Dashboard renderers
+- Session logic
+- Study Hub
+- SQL
+
+No new SQL.

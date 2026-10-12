@@ -319,5 +319,5 @@ body:not(.v1142-erp-active) .v1142PublicControlHide{display:none!important}
 }
 
 /* V284 ROOT: legacy public shell must never flash before canonical public UI builds. */
-#exactHome:not(.v1142FinalBuilt){visibility:hidden!important}
+/* V286: keep original public home visible until enhanced shell is ready; prevents blank Preview/first paint. */
 #exactHome.v1142FinalBuilt{visibility:visible!important}
