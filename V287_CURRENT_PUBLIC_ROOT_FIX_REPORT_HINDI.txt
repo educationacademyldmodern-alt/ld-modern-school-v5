@@ -1,0 +1,32 @@
+L D MODERN EDUCATION ACADEMY — V287 CURRENT PUBLIC ROOT FIX
+
+ROOT CAUSE:
+public-final.js का script tag actual page body में नहीं था.
+वह index.html के print-function JavaScript template के अंदर insert हो गया था,
+इसलिए browser ने current/new public-page builder को load ही नहीं किया.
+
+V287 FIX:
+- गलत embedded public-final.js tag हटाया
+- public-final.js को actual अंतिम </body> के ठीक पहले जोड़ा
+- public-final.css cache-bust V287 किया
+- current public builder assets preserved
+- old SCHOOL WEBSITE page अब केवल underlying fallback DOM है; current public builder उसके ऊपर canonical page बनाता है
+
+NOT CHANGED:
+- Admin login/auth
+- Teacher login/auth
+- Parent login/auth
+- Supabase signInWithPassword
+- role dashboards
+- session logic
+- fee/data logic
+- SQL
+
+NO NEW SQL.
+
+VERIFICATION:
+- public-final.js reference exactly 1
+- public-final.css reference exactly 1
+- script actual final </body> के ठीक पहले
+- current public-page builder markers present
+- production auth/login markers present
