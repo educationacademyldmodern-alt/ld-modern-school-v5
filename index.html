@@ -22,8 +22,8 @@
 })();
 </script>
 
-<meta charset="utf-8"><meta name="ld-modern-build" content="V278-ROOT-STABLE-DELEGATION-FAST-2026-10-10"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V278-ROOT-STABLE-DELEGATION-FAST-2026-10-10"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<meta charset="utf-8"><meta name="ld-modern-build" content="V282-ROOT-CLEAN-SELF-CONTAINED-2026-10-12"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V282-ROOT-CLEAN-SELF-CONTAINED-2026-10-12"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -67,15 +67,6 @@ window.addEventListener('load',()=>setTimeout(v55VisualGuard,180),{once:true,pas
 
 <style id="v107-clean-premium-ui"></style>
 
-<link rel="stylesheet" href="public-final.css?v=FINAL2&build=V643">
-<link rel="stylesheet" href="final-master-upgrade.css?v=FINAL-MASTER-1&build=V643">
-
-<link rel="stylesheet" href="v53-final-polish.css?v=V53-FINAL-POLISH-1&build=V643">
-<link rel="stylesheet" href="v54-final-integration.css?v=V54-FINAL-1&build=V643">
-<link rel="stylesheet" href="v57-school-operations.css?v=V57-1&build=V643">
-<link rel="stylesheet" href="v63-final-repair.css?build=V643">
-
-
 <style id="v149-final-ui-css"></style>
 
 <style id="v177-id-physical-guard"></style>
@@ -83,6 +74,7 @@ window.addEventListener('load',()=>setTimeout(v55VisualGuard,180),{once:true,pas
 <style id="v234-admission-form-style"></style>
 <meta name="ldm-fix" content="V247 canonical LKG/UKG attendance root fix">
 <link rel="stylesheet" href="./erp_styles_v277.css?v=V277">
+<!-- V282: legacy missing external bundles consolidated/removed; package is self-contained. -->
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -256,11 +248,9 @@ function init(){
  sb=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  try{
   const h=String(location.hostname||'').toLowerCase(),official=new Set(['myldm.com','www.myldm.com','ld-modern-school-v5.vercel.app','localhost','127.0.0.1']),preview=h.endsWith('.vercel.app')&&!official.has(h);
-  window.LDM_SECURITY=Object.freeze({currentHost:h,isOfficial:official.has(h),isVercelPreview:preview,realPasswordAllowed:!preview});
-  if(preview&&sb?.auth?.signInWithPassword&&!sb.auth.__ldmPreviewGuard){
-   sb.auth.signInWithPassword=async function(){return {data:{user:null,session:null},error:new Error('Security lock: Preview Vercel URL पर real password login बंद है. Official Production domain खोलें.')}};
-   sb.auth.__ldmPreviewGuard=true;
-  }
+  /* V281: Vercel preview deployments are valid authenticated test surfaces.
+     Do not monkey-patch Supabase auth; RLS remains the real security boundary. */
+  window.LDM_SECURITY=Object.freeze({currentHost:h,isOfficial:official.has(h),isVercelPreview:preview,realPasswordAllowed:true,previewTestingAllowed:true});
  }catch(_e){}
 }function saveCloud(){let url=$("cloudUrl").value.trim().replace(/\/+$/,""),key=$("cloudKey").value.trim();if(!url||!key)return toast("URL and key required");try{if(key.split(".").length===3){let p=JSON.parse(atob(key.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));if(String(p.role||"").toLowerCase()==="service_role")return toast("SECURITY BLOCK: service_role key browser/index.html में कभी save नहीं करें.")}}catch(_e){}localStorage.setItem(K,JSON.stringify({url,key}));location.reload()}function resetCloud(){localStorage.removeItem(K);location.reload()}
 async function boot(){if(cfg){init();await loadSchool()}else{fillClasses();return}fillClasses();let{data:{session}}=cfg?await sb.auth.getSession():{data:{session:null}};if(session){user=session.user;await loadProfile()}}
@@ -8272,11 +8262,10 @@ async function v90AdminDashboard(){
  let actCache='',noticeCache='',eventCache='';try{actCache=sessionStorage.getItem('ldm_admin_activities_html')||'';noticeCache=sessionStorage.getItem('ldm_admin_notices_html')||'';eventCache=sessionStorage.getItem('ldm_admin_events_html')||''}catch(_e){}
  const hold=Array.from({length:6},()=>'<div class="v90Stat ldmStatHold"><span>•</span><div><small>Tap Refresh Dashboard</small><b>—</b></div></div>').join('');
  v90Set(`<div class="v90Dash v114AdminDash ldmRootAdminDash v271AdminPremium">
- <section id="v185FrontDesk" class="v90Panel v185FrontDesk"><div class="v185FrontHead"><div><small>DAILY COUNTER</small><h2>⚡ Daily Quick Desk</h2><p>Fee Check • Pay Now • Student Search • Admission • Receipt / Ledger</p></div><button class="secondary" onclick="v185RefreshDashboardData(this)">↻ Refresh Dashboard</button></div><div class="v185FrontActions"><button onclick="v185FrontFee()">💰 Fee Inquiry / Collect</button><button onclick="openAdd('students')">➕ Add Student</button><button onclick="v185NewAdmission()">🎓 New Admission</button><button onclick="v185FindStudent()">🔎 Find Student</button><button onclick="render('fee_dashboard')">🧾 Receipt / Ledger</button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" onfocus="ldmV277LoadStudentIndex().catch(()=>{})" placeholder="Student Name / Father / Admission / Roll / Mobile" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">Fee पूछने/जमा करने के लिए नाम लिखें और Search दबाएँ.</div></div><div id="v105FeeAccount"></div></section>
+ <section class="v279QuickDeskGrid"><section id="v185FrontDesk" class="v90Panel v185FrontDesk v279FeeDesk"><div class="v185FrontHead"><div><small>DAILY FEE COUNTER</small><h2>💰 Fee Search & Pay</h2><p>Name / Father / Admission / Roll / Mobile से खोजें • Current Due → Pay → Receipt / Ledger</p></div></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" onfocus="ldmV277LoadStudentIndex().catch(()=>{})" placeholder="Student Name / Father / Admission / Roll / Mobile" oninput="v279FeeSearchInput(this.value)" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass" onchange="v105DashboardFeeSearch()"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search & Pay</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">नाम का पहला अक्षर लिखें या Class चुनें। Search result पर tap करके Fee जमा करें.</div></div><div id="v105FeeAccount"></div></section><aside class="v279AdmissionShortcut"><span>🎓</span><small>NEW STUDENT</small><h3>Admission / Add Student</h3><p>Admission entry से Student master तक central data flow.</p><button onclick="v185NewAdmission()">➕ New Admission</button></aside></section>
  <section class="v156DailyControl" aria-label="Daily School Control"><div id="v114AdminClassSlot"></div>
  <section class="v114AdminMainGrid">
   <article class="v90Panel v114AttendancePanel"><div class="v114PanelHead"><h3>Student Attendance (Today)</h3><button onclick="render('attendance')">View Details →</button></div><div class="v114AttendanceVisual"><div id="v114AttDonut" class="v114Donut" style="--p:0"><div><b id="v114AttPct">—</b><small>Present</small></div></div><div class="v114Legend"><span><i class="p"></i>Present <b id="v114AttPresent">—</b></span><span><i class="a"></i>Absent <b id="v114AttAbsent">—</b></span><span><i class="l"></i>Leave <b id="v114AttLeave">—</b></span><span><i class="t"></i>Marked <b id="v114AttMarked">—</b></span><span><i class="n"></i>Not Marked <b id="v114AttNotMarked">—</b></span><span><i class="t"></i>Total Students <b id="v114AttTotal">—</b></span></div></div></article>
-  <article class="v90Panel v114FeeChartPanel"><div class="v114PanelHead"><h3>Fee Collection</h3><button onclick="render('v200_due_fee_report')">View Due Report →</button></div><div class="v114Bars"><div><span id="v114FeeBarCollected" class="green" style="height:25%"></span><small>Collected</small><b id="v114FeeCollected">—</b></div><div><span id="v114FeeBarDue" class="orange" style="height:25%"></span><small>Total Due</small><b id="v114FeeDue">—</b></div><div><span class="red" style="height:45%"></span><small>Requests</small><b id="v114PendingReq">—</b></div></div></article>
   <article class="v90Panel v114QuickPanel"><div class="v114PanelHead"><h3>Quick Links</h3><button onclick="render('settings')">⚙</button></div><div class="v114QuickGrid">${[['👩‍🏫','Add Teacher','staff'],['📅','Mark Attendance','attendance'],['📉','Add Expense','expenses'],['📊','Generate Report','reports'],['✉','Send Notice','notice_order_center'],['⚙','Settings','settings']].map(x=>`<button onclick="render('${x[2]}')"><b>${x[0]}</b><span>${x[1]}</span></button>`).join('')}</div></article>
  </section></section>
  <section id="v90Stats" class="v90Stats v114AdminStats v156ClickableStats">${window.__ldmAdminStatsHTML||hold}</section>
@@ -8315,7 +8304,7 @@ async function v90LoadDashboardStats(){
  try{let [l,c,r,t]=await Promise.all([sb.from('student_leave_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('student_correction_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('student_roster_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('v90_teacher_requests').select('id',{count:'exact',head:true}).eq('status','Pending')]);pending=(l.count||0)+(c.count||0)+(r.count||0)+(t.count||0)}catch(_e){}
  const data=[['👥','Total Students',students],['👩‍🏫','Total Teachers',teachers],['₹','Fee Collection',v90Money(collection)],['💰','Total Due',v90Money(due)],['✅','Attendance',attPct?attPct+'%':'—'],['📬','Pending Requests',pending]];
  host.innerHTML=data.map(x=>`<div class="v90Stat"><span>${x[0]}</span><div><small>${x[1]}</small><b>${x[2]}</b></div></div>`).join('');window.__ldmAdminStatsHTML=host.innerHTML;try{sessionStorage.setItem('ldm_admin_stats_html',host.innerHTML)}catch(_e){}
- let pct=v90Q('v114AttPct'),donut=v90Q('v114AttDonut');if(pct)pct.textContent=attPct?attPct+'%':'—';if(donut)donut.style.setProperty('--p',String(attPct));[['v114AttPresent',attPresent],['v114AttAbsent',attAbsent],['v114AttLeave',attLeave],['v114AttMarked',attMarked],['v114PendingReq',pending]].forEach(([id,v])=>{let e=v90Q(id);if(e)e.textContent=String(v)});let fc=v90Q('v114FeeCollected'),fd=v90Q('v114FeeDue');if(fc)fc.textContent=v90Money(collection);if(fd)fd.textContent=v90Money(due);let mx=Math.max(collection,due,1);let bc=v90Q('v114FeeBarCollected'),bd=v90Q('v114FeeBarDue');if(bc)bc.style.height=Math.max(12,Math.round(collection*100/mx))+'%';if(bd)bd.style.height=Math.max(12,Math.round(due*100/mx))+'%';
+ let pct=v90Q('v114AttPct'),donut=v90Q('v114AttDonut');if(pct)pct.textContent=attMarked?attPct+'%':'—';if(donut)donut.style.setProperty('--p',String(attPct));let notMarked=Math.max(Number(students||0)-Number(attMarked||0),0);[['v114AttPresent',attPresent],['v114AttAbsent',attAbsent],['v114AttLeave',attLeave],['v114AttMarked',attMarked],['v114AttNotMarked',notMarked],['v114AttTotal',students]].forEach(([id,v])=>{let e=v90Q(id);if(e)e.textContent=String(v)});
 }
 
 async function v90TeacherDashboard(){
@@ -8646,8 +8635,7 @@ let v92Exams=[],v92Candidates=[],v92PubMap={};
 
 function v92PrintCss(){return `@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111;background:#fff}.v92A4Page{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v92A4Page:last-child{page-break-after:auto}.v92BlankSlot{height:89mm}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;background:#fff;color:#111;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91;overflow:hidden}.v69AdmitHead .seal img{width:14mm!important;height:14mm!important;object-fit:cover!important;border-radius:2mm!important}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse!important;min-width:0!important;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a!important;padding:.8mm 1mm!important;text-align:center!important;font-size:6.5px!important;line-height:1.05}.v69TT th{background:#edf3f9!important}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm;color:#333}`}
 
-window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');w.document.write(`<html><head><title>Admit Card A4</title><style>${v92PrintCss()}</style><link rel="stylesheet" href="final53-complete.css?v=V53-COMPLETE&build=V643">
-</head><body>${el.innerHTML}
+window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview first');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');w.document.write(`<html><head><title>Admit Card A4</title><style>${v92PrintCss()}</style></head><body>${el.innerHTML}
 
 </body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
 window.v92PdfArea=function(id,name){let el=q92(id);if(!el)return toast('Preview first');if(!window.html2pdf)return v92PrintArea(id);let opt={margin:[10,10,10,10],filename:name||'admit-cards.pdf',image:{type:'jpeg',quality:.94},html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};html2pdf().set(opt).from(el).save();};
@@ -9773,7 +9761,6 @@ try{const v113LogoutBase=logout;logout=async function(){await v113StopChannel(v1
 
 </script>
 
-<link rel="stylesheet" href="premium-role-ui.css?v=1142fix1&build=V643">
 <script>window.V114_BUILD='V114.2-CLEAN-LAYOUT-3D-FIX-2026-09-15';</script>
 
 <script id="v1142-clean-layout-fix">
@@ -9868,31 +9855,6 @@ try{const v113LogoutBase=logout;logout=async function(){await v113StopChannel(v1
   window.addEventListener('load',()=>setTimeout(refresh,320));
 })();
 </script>
-
-<script src="v64-2-state-bridge.js?v=64.2&build=V643"></script>
-<script src="final-master-upgrade.js?v=FINAL-MASTER-1&build=V643"></script>
-<script src="public-final.js?v=FINAL3&build=V643"></script>
-
-<script src="final53-complete.js?v=V53-COMPLETE&build=V643"></script>
-<script src="v53-stability-fix.js?v=V53-STABILITY-20260919&build=V643"></script>
-<script src="v53-final-polish.js?v=V53-FINAL-POLISH-1&build=V643"></script>
-<script src="v54-final-integration.js?v=V54-FINAL-1&build=V643"></script>
-<link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1&build=V643">
-<script src="v57-school-operations.js?v=V57-1&build=V643"></script>
-<script src="v58-complaint-discipline.js?v=V58-1&build=V643"></script>
-<script src="v59-academic-calendar.js?v=V59-1&build=V643"></script>
-
-<link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1&build=V643">
-<script src="v60-session-admit-health.js?v=V60-1&build=V643"></script>
-<link rel="stylesheet" href="v62-render-safe.css?v=V62-1&build=V643">
-<script src="v62-render-safe.js?v=V62-1&build=V643"></script>
-<script src="v63-final-repair.js?v=64.2&build=V643"></script>
-<link rel="stylesheet" href="v64-final-layout-interaction.css?v=V64-2-1&build=V643">
-<script src="v64-final-layout-interaction.js?v=V64-2-1&build=V643"></script>
-<link rel="stylesheet" href="v64-3-responsive.css?v=64.3&build=V643">
-<script src="v64-3-parent-actions.js?v=64.3&build=V643"></script>
-<script src="v64-3-teacher-handover.js?v=64.3&build=V643"></script>
-<script src="v64-3-print.js?v=64.3&build=V643"></script>
 
 <style id="v644-safe-css"></style>
 <script id="v644-safe-js">
@@ -15335,30 +15297,37 @@ window.LDM_V2611_AUDIT=Object.freeze({
 </script>
 
 <style id="ldm-v2621-security-style"></style>
-<script id="ldm-v2621-fast-security">
+<script id="ldm-v281-preview-login-security">
 (function(){
 'use strict';
-if(window.__LDM_V2621_FAST_SECURITY)return;
-window.__LDM_V2621_FAST_SECURITY=true;
-window.LDM_FINAL_BUILD='V262.1-FAST-SECURITY-2026-10-08';
+if(window.__LDM_V281_PREVIEW_LOGIN_SECURITY)return;
+window.__LDM_V281_PREVIEW_LOGIN_SECURITY=true;
 const OFFICIAL=new Set(['myldm.com','www.myldm.com','ld-modern-school-v5.vercel.app','localhost','127.0.0.1']);
 const host=String(location.hostname||'').toLowerCase();
 const preview=host.endsWith('.vercel.app')&&!OFFICIAL.has(host);
 function paintOnce(){
  const box=document.getElementById('ldmSecurityOrigin');
- if(box){box.className='ldmSecurityOrigin '+(preview?'warn':'ok');box.innerHTML=preview?'⚠ Preview deployment: <b>'+host+'</b><br>Real password login यहाँ बंद है. Stable Production domain use करें.':'✓ Official login origin: <b>'+host+'</b>'}
- const email=document.getElementById('email');if(email){email.autocomplete='username';email.autocapitalize='none';email.spellcheck=false}
- const pw=document.getElementById('password');if(pw)pw.autocomplete='current-password';
- if(preview){if(pw){pw.value='';pw.readOnly=true;pw.placeholder='Preview URL पर real password disabled'}const b=document.getElementById('ldmPrimaryLoginBtn');if(b){b.disabled=true;b.title='Official Production domain खोलें'}}
+ if(box){
+  box.className='ldmSecurityOrigin '+(preview?'warn':'ok');
+  box.innerHTML=preview
+   ? '🧪 Preview Test Mode: <b>'+host+'</b><br>Login enabled • Test carefully • Production publish से पहले verify करें.'
+   : '✓ Official login origin: <b>'+host+'</b>';
+ }
+ const email=document.getElementById('email');
+ if(email){email.autocomplete='username';email.autocapitalize='none';email.spellcheck=false}
+ const pw=document.getElementById('password');
+ if(pw){pw.readOnly=false;pw.autocomplete='current-password';pw.placeholder='Password'}
+ const b=document.getElementById('ldmPrimaryLoginBtn');
+ if(b){b.disabled=false;b.removeAttribute('disabled');b.title=preview?'Preview test login enabled':'Login'}
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',paintOnce,{once:true,passive:true});else paintOnce();
-document.addEventListener('focusin',function(e){if(!preview)return;const el=e.target;if(el&&String(el.type||'').toLowerCase()==='password'){try{el.value='';el.blur()}catch(_e){}try{window.toast?.('Security: Preview URL पर real password न डालें. Official Production domain खोलें.')}catch(_e){}}},true);
-window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMutationObserver:false,polling:false,authRetryTimer:false,stableProductionLogin:true});
+window.LDM_V281_SECURITY=Object.freeze({previewPasswordGuard:false,previewLoginAllowed:true,permanentMutationObserver:false,polling:false,authRetryTimer:false,stableProductionLogin:true,rlsRequired:true});
+window.LDM_FINAL_BUILD='V281-PREVIEW-LOGIN-ROOT-FIX-2026-10-12';
 })();
 </script>
 
 <style id="ldm-v263-assigned-work-style"></style>
-<script id="ldm-v263-assigned-work-marker">window.LDM_FINAL_BUILD='V278-ROOT-STABLE-DELEGATION-FAST-2026-10-10';</script>
+<script id="ldm-v263-assigned-work-marker">window.LDM_FINAL_BUILD='V282-ROOT-CLEAN-SELF-CONTAINED-2026-10-12';</script>
 
 <script src="./alarm.js?v=V265"></script>
 
@@ -15411,6 +15380,59 @@ window.LDM_V278_CACHE=Object.freeze({
 })();
 </script>
 
-<script src="./runtime_guard.js?v=V278"></script>
+
+<style id="ldm-v279-root-premium-style">
+:root{--v279Ink:#123554;--v279Blue:#096bd8;--v279Shadow:0 12px 26px rgba(18,53,84,.12)}
+/* Compact canonical Admin command bar */
+#erp.ldmAdminCanonical .erpTop{display:grid!important;grid-template-columns:minmax(240px,1fr) auto auto auto auto minmax(250px,420px) auto!important;align-items:center!important;gap:8px!important;padding:8px 12px!important;min-height:64px!important}
+#erp.ldmAdminCanonical .ldmAdminSchoolIdentity{min-width:0!important;padding:0 8px!important}
+#erp.ldmAdminCanonical .ldmAdminSchoolIdentity b{font-size:16px!important;line-height:1.1!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#erp.ldmAdminCanonical .ldmAdminSchoolIdentity small{font-size:11.5px!important;line-height:1.2!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#erp.ldmAdminCanonical .erpTop button,#erp.ldmAdminCanonical .erpTop .v90TopBtn{min-height:40px!important;width:auto!important;padding:8px 11px!important;border-radius:11px!important;font-size:13.5px!important;font-weight:850!important;white-space:nowrap}
+#erp.ldmAdminCanonical #v75TopSearch,#erp.ldmAdminCanonical .v75TopSearch{min-width:0!important;width:auto!important;margin:0!important}
+#erp.ldmAdminCanonical #v75TopSearch input,#erp.ldmAdminCanonical .v75TopSearch input{min-width:0!important;height:40px!important;font-size:14px!important}
+/* Global premium readable cards */
+#erp .v90Monitor b,#erp .ldmMasterGrid button b,#erp .ldmTeacherModules button b,#erp .v114QuickGrid button span,#erp .v90Quick button span,#erp .v90Stat small,#erp .v39Stat small{font-weight:850!important;letter-spacing:.01em}
+#erp .v90Monitor b,#erp .ldmMasterGrid button b,#erp .ldmTeacherModules button b{font-size:16px!important;line-height:1.22!important}
+#erp .v90Monitor small,#erp .ldmMasterGrid button small,#erp .ldmTeacherModules button small{font-size:13px!important;line-height:1.35!important;font-weight:650!important;opacity:.96!important}
+#erp .v90Stat b{font-size:21px!important;line-height:1.1!important}
+#erp .v90Stat small{font-size:12.5px!important;line-height:1.25!important}
+#erp .v90Monitor,#erp .ldmMasterGrid button,#erp .ldmTeacherModules button{min-height:104px!important;padding:16px!important;box-shadow:var(--v279Shadow)!important}
+#erp .v90Monitor>span:nth-child(2),#erp .ldmMasterGrid button,#erp .ldmTeacherModules button{min-width:0}
+/* Fee-only quick desk + separate admission shortcut */
+.v279QuickDeskGrid{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:14px;align-items:stretch;margin:0 0 14px}
+.v279FeeDesk{margin:0!important;min-width:0}.v279FeeDesk .v185FrontHead{margin-bottom:10px}.v279FeeDesk .v185FrontHead h2{font-size:24px!important;color:var(--v279Ink);margin:2px 0}.v279FeeDesk .v185FrontHead p{font-size:14px!important;margin:2px 0;color:#607386}
+.v279AdmissionShortcut{border:1px solid #d8e7f7;border-radius:20px;padding:18px;background:linear-gradient(145deg,#0c75df,#0751a7);color:#fff;box-shadow:var(--v279Shadow);display:flex;flex-direction:column;justify-content:center;min-width:0}
+.v279AdmissionShortcut>span{font-size:34px}.v279AdmissionShortcut small{font-weight:900;letter-spacing:.08em;opacity:.82}.v279AdmissionShortcut h3{font-size:20px;line-height:1.15;margin:6px 0}.v279AdmissionShortcut p{font-size:13px;line-height:1.4;margin:0 0 12px;opacity:.9}.v279AdmissionShortcut button{min-height:44px;border:0;border-radius:12px;background:#fff;color:#0b4e92;font-weight:900;font-size:14px}
+.v279FeeDesk .v105PaySearch{display:grid!important;grid-template-columns:minmax(240px,1fr) 180px 150px!important;gap:8px!important}.v279FeeDesk .v105PaySearch input,.v279FeeDesk .v105PaySearch select,.v279FeeDesk .v105PaySearch button{min-height:46px!important;font-size:15px!important}
+/* Attendance: keep values close to chart, never pushed to far screen edge */
+.v114AdminMainGrid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)!important}.v114AttendanceVisual{display:grid!important;grid-template-columns:150px minmax(220px,360px)!important;justify-content:start!important;gap:18px!important;align-items:center!important}.v114Legend{display:grid!important;gap:5px!important;max-width:360px!important}.v114Legend span{display:grid!important;grid-template-columns:12px minmax(0,1fr) auto!important;align-items:center!important;gap:7px!important;padding:4px 0!important;font-size:13.5px!important}.v114Legend span b{min-width:44px!important;text-align:right!important;font-size:15px!important;color:#143b60!important}.v114Donut{margin:0!important}
+/* Canonical transition guard prevents stale role/dashboard flash */
+body.ldmRoleTransition #erpContent{visibility:hidden!important}body.ldmRoleTransition #erp{pointer-events:none!important}
+@media(max-width:1050px){#erp.ldmAdminCanonical .erpTop{grid-template-columns:1fr repeat(5,auto)!important}.ldmAdminSchoolIdentity{grid-column:1/-1!important;text-align:center!important}.v279QuickDeskGrid{grid-template-columns:1fr 220px}.v279FeeDesk .v105PaySearch{grid-template-columns:1fr 150px!important}.v279FeeDesk .v105PaySearch button{grid-column:1/-1}}
+@media(max-width:720px){#erp.ldmAdminCanonical .erpTop{grid-template-columns:repeat(5,1fr)!important;padding:8px!important;gap:6px!important}.ldmAdminSchoolIdentity{grid-column:1/-1!important;padding:3px 5px!important}.ldmAdminSchoolIdentity b{font-size:17px!important}.ldmAdminSchoolIdentity small{font-size:11px!important}#erp.ldmAdminCanonical .erpTop button,#erp.ldmAdminCanonical .erpTop .v90TopBtn{min-width:0!important;padding:7px 5px!important;font-size:12px!important;justify-content:center!important}#erp.ldmAdminCanonical #v75TopSearch,#erp.ldmAdminCanonical .v75TopSearch{grid-column:1/-1!important;width:100%!important}.v279QuickDeskGrid{grid-template-columns:1fr}.v279AdmissionShortcut{min-height:135px}.v279FeeDesk .v105PaySearch{grid-template-columns:1fr!important}.v279FeeDesk .v105PaySearch button{grid-column:auto}.v114AdminMainGrid{grid-template-columns:1fr!important}.v114AttendanceVisual{grid-template-columns:124px minmax(0,1fr)!important;gap:12px!important}.v114Legend{max-width:none!important}.v114Legend span{font-size:12.8px!important}.v114Legend span b{font-size:14.5px!important;min-width:34px!important}#erp .v90Monitor b,#erp .ldmMasterGrid button b,#erp .ldmTeacherModules button b{font-size:15.5px!important}#erp .v90Monitor small,#erp .ldmMasterGrid button small,#erp .ldmTeacherModules button small{font-size:12.5px!important}#erp .v90Monitor,#erp .ldmMasterGrid button,#erp .ldmTeacherModules button{min-height:96px!important;padding:14px!important}}
+</style>
+<script id="ldm-v279-root-corrections">
+(function(){'use strict';
+if(window.__LDM_V279_ROOT)return;window.__LDM_V279_ROOT=true;
+window.LDM_FINAL_BUILD='V279-ROOT-CORRECTION-PREMIUM-FAST-2026-10-12';
+let feeTimer=0;window.v279FeeSearchInput=function(v){clearTimeout(feeTimer);const q=String(v||'').trim();if(q.length<1)return;feeTimer=setTimeout(()=>{try{window.v105DashboardFeeSearch?.()}catch(_e){}},90)};
+/* Final header normalizer: canonical controls only, compact order, no duplicate rows. */
+const baseHeader=window.ldmCanonicalAdminHeader;
+if(typeof baseHeader==='function'&&!baseHeader.__v279){const f=function(){const ok=baseHeader.apply(this,arguments);try{const top=document.querySelector('#erp .erpTop');if(!top)return ok;const pick=['.ldmAdminSchoolIdentity','.hamb','#ldmDeviceLockBtn','.websiteBtn','#v90BackBtn','#v90HomeBtn','#v75TopSearch'];pick.forEach(sel=>{const el=top.querySelector(sel);if(el)top.appendChild(el)});top.querySelectorAll('.v45NavControls,.erpHomeBtn').forEach(x=>x.style.display='none')}catch(_e){}return ok};f.__v279=true;window.ldmCanonicalAdminHeader=f;}
+/* One role-transition surface: never show an old role/dashboard while login/openERP is resolving. */
+const openBase=window.openERP;if(typeof openBase==='function'&&!openBase.__v279){const f=async function(){document.body.classList.add('ldmRoleTransition');try{const host=document.getElementById('erpContent');if(host)host.innerHTML='';return await openBase.apply(this,arguments)}finally{requestAnimationFrame(()=>{document.body.classList.remove('ldmRoleTransition');try{window.ldmCanonicalAdminHeader?.()}catch(_e){}})}};f.__v279=true;window.openERP=f;try{openERP=f}catch(_e){}}
+const logoutBase=window.logout;if(typeof logoutBase==='function'&&!logoutBase.__v279){const f=async function(){document.body.classList.add('ldmRoleTransition');try{window.__v179AdminDashAt=0;window.__ldmDashVerifiedThisRuntime=false;try{document.getElementById('erpContent').innerHTML=''}catch(_e){}return await logoutBase.apply(this,arguments)}finally{document.body.classList.remove('ldmRoleTransition')}};f.__v279=true;window.logout=f;try{logout=f}catch(_e){}}
+/* Sorting remains permission-neutral; decorate only rendered tables. */
+const renderBase=window.render;if(typeof renderBase==='function'&&!renderBase.__v279){const f=async function(){const out=await renderBase.apply(this,arguments);try{window.ldmDecorateSortableTables?.(document.getElementById('erpContent'))}catch(_e){}try{window.ldmCanonicalAdminHeader?.()}catch(_e){}return out};f.__v279=true;window.render=f;try{render=f}catch(_e){}}
+window.LDM_V279_AUDIT=Object.freeze({header:'compact-canonical',quickDesk:'fee-search-pay-only-plus-admission-shortcut',attendance:'near-chart-values',duplicateFeeChartRemoved:true,cardTypography:'central-premium-readable',searchDebounceMs:90,cache:'V278-coherent',renderGuard:true,sort:'canonical-existing-global',studyHub:'clean-dashboard',newSql:false,polling:false,realtime:false,mutationObserver:false});
+})();
+</script>
+
+<link rel="stylesheet" href="./v280_root.css?v=V280">
+<script src="./v280_root.js?v=V280"></script>
+<script src="./runtime_guard.js?v=V280"></script>
+<link rel="stylesheet" href="./v283_system_update.css?v=V283">
+<script src="./v283_system_update.js?v=V283"></script>
 </body>
 </html>
