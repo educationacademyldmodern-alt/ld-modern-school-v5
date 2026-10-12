@@ -176,11 +176,12 @@ function start(){
   document.addEventListener('click',()=>setTimeout(state,0),true);
   window.addEventListener('resize',state,{passive:true});
 
-  const ob=new MutationObserver(()=>state());
-  const pub=document.getElementById('publicSite');
-  if(pub)ob.observe(pub,{attributes:true,subtree:false,attributeFilter:['class']});
-  const home=document.getElementById('exactHome');
-  if(home)ob.observe(home,{attributes:true,subtree:false,attributeFilter:['class']});
+  /* V284: event-driven public state only — no permanent MutationObserver. */
+  window.addEventListener('pageshow',state,{passive:true});
+  window.addEventListener('popstate',()=>setTimeout(state,0),{passive:true});
+  window.addEventListener('hashchange',()=>setTimeout(state,0),{passive:true});
+  window.addEventListener('focus',state,{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)state()},{passive:true});
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});

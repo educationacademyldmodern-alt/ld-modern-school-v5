@@ -1,0 +1,5 @@
+V284 UPLOAD ONLY
+इन files को current production-excel-sync-fix branch की same paths पर replace/upload करें.
+कोई नया V284 SQL नहीं है.
+V282 SQL Part 3 success होना Teacher Daily Work/Admin Review live DB features के लिए जरूरी है.
+पहले Vercel Preview पर test करें, फिर Production promote करें.

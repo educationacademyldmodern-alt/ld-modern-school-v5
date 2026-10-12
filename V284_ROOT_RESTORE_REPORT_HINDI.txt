@@ -1,0 +1,37 @@
+L D MODERN EDUCATION ACADEMY — V284 ROOT RESTORE
+Base: production-excel-sync-fix (user supplied current main ERP)
+
+ROOT FIXES:
+1. Current approved public-final.css/js re-linked into index.html.
+2. Legacy built-in SCHOOL WEBSITE remains only as fallback DOM; approved public-final layer is canonical public UI.
+3. Missing v280_root.js/css restored from verified V282 package.
+4. Study Hub remote 1.5-second polling removed; on-demand command check restored.
+5. public-final permanent MutationObserver removed; event-driven state sync used.
+6. V283 System & Update Center preserved.
+7. Existing production data/UI/functions preserved; no new SQL required by V284 frontend fix.
+
+Database note: V282 SQL must already be run for Teacher Work/Admin Review DB functions. User reported mobile SQL Parts 1 and 2 success; Part 3 must also succeed.
+8. Study Hub dashboard clean V282 layout restored (current heavy content banks preserved); Remote Check button matches on-demand app logic.
+9. V282 Academic Monitoring Admin review UI restored (View/Edit/Delete/Verify/Return for Correction).
+
+VERIFICATION ROUND 1:
+- Admin compact header: PASS
+- Teacher Daily Work CRUD/Preview/Upload: PASS
+- Admin Academic Review View/Edit/Delete/Verify/Return: PASS
+- Global sort + canonical class order: PASS
+- Premium readable cards: PASS
+- Fee Search & Pay + separate Admission: PASS
+- Study Hub clean dashboard + on-demand Remote: PASS
+- Attendance near-chart values + duplicate fee chart removed: PASS
+- Fast search/cache + render guard: PASS
+- Preview login enabled: PASS
+- Current approved public-final page linked and legacy no-flash: PASS
+- Assistant exact routes 15/15: PASS
+- Active local refs missing: 0
+- 126 executable inline JS syntax: PASS
+- 73 JS files syntax: PASS
+
+IMPORTANT DATABASE STATUS:
+V284 adds no new SQL. Teacher Daily Work/Admin Review needs the V282 database migration already discussed.
+If V282 Mobile SQL Part 3 has not shown SUCCESS, finish Part 3 before live workflow testing.
+Do NOT run old historical SQL files from this repository unless specifically instructed.

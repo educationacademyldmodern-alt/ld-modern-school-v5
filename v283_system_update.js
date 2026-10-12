@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 if(window.__LDM_V283_SYSTEM_UPDATE)return; window.__LDM_V283_SYSTEM_UPDATE=true;
-const BUILD='V283-SYSTEM-UPDATE-CENTER-2026-10-12';
+const BUILD='V284-MAIN-PRODUCTION-ROOT-RESTORE-2026-10-12';
 window.LDM_FINAL_BUILD=BUILD;
 const $=id=>document.getElementById(id);
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -35,7 +35,7 @@ window.v283SystemUpdateCenter=function(){
   <section class="v283Card"><div class="v283CardHead"><span class="v283Icon">🔐</span><div><h3>Security Audit</h3><p>HTTPS, session, role और deployment safety check.</p></div></div><div class="v283Actions"><button class="primary" onclick="v283RunSecurity()">Run Security Audit</button></div><div id="v283Security" class="v283Result">Audit on-demand है.</div></section>
   <section class="v283Card wide"><div class="v283CardHead"><span class="v283Icon">⬆️</span><div><h3>Update Package Validator</h3><p>ZIP को browser में local validate करें; production पर automatic apply नहीं होगा.</p></div></div><div class="v283Actions"><label class="v283FileBtn primary">Choose Update ZIP<input id="v283UpdateFile" type="file" accept=".zip,application/zip,application/x-zip-compressed" onchange="v283ValidateUpdate(this.files?.[0])"></label><button id="v283CopyDeploy" disabled onclick="v283CopyDeployChecklist()">Copy Deployment Checklist</button><button disabled title="Security rule: deployment remains GitHub/Vercel controlled">Apply Update (Controlled)</button></div><div id="v283UpdateResult" class="v283Result">कोई package selected नहीं है.</div><div class="v283Notice v283Danger"><b>Safety:</b> arbitrary HTML/JS upload करके live ERP overwrite नहीं होगा. Validated package को Preview branch → Vercel Preview → live test के बाद Production में deploy करें.</div></section>
   <section class="v283Card"><div class="v283CardHead"><span class="v283Icon">💾</span><div><h3>Backup / Restore Status</h3><p>Existing safe backup flow reuse होता है; destructive auto-restore नहीं.</p></div></div><div class="v283Actions"><button class="safe" onclick="v283BackupNow()">Download Backup</button><button onclick="v283RestoreInfo()">Restore Guidance</button></div><div id="v283Backup" class="v283Result">Backup manually download करें और सुरक्षित रखें.</div></section>
-  <section class="v283Card"><div class="v283CardHead"><span class="v283Icon">📋</span><div><h3>Version & Changelog</h3><p>Current build और update validation history.</p></div></div><div id="v283VersionInfo" class="v283Result good"><b>${safe(BUILD)}</b><br>V282 root-clean baseline + safe System & Update Center. No new SQL required.</div><div class="v283Actions" style="margin-top:10px"><button onclick="v283ShowHistory()">Validation History</button></div></section>
+  <section class="v283Card"><div class="v283CardHead"><span class="v283Icon">📋</span><div><h3>Version & Changelog</h3><p>Current build और update validation history.</p></div></div><div id="v283VersionInfo" class="v283Result good"><b>${safe(BUILD)}</b><br>Current production base + V282 root workflow + V283 safe System & Update Center + V284 public/dependency restore. No new V284 SQL required.</div><div class="v283Actions" style="margin-top:10px"><button onclick="v283ShowHistory()">Validation History</button></div></section>
  </div></div>`;
  installNav(); window.scrollTo(0,0);
 };
