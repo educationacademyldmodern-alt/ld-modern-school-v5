@@ -1,0 +1,38 @@
+L D MODERN EDUCATION ACADEMY — V285 SAFE RESTORE
+
+BASE:
+User supplied working production branch:
+ld-modern-school-v5-production-excel-sync-fix
+
+RULE:
+Admin / Teacher / Parent working login, session and dashboards are preserved from
+the supplied production index. V285 does NOT rebuild auth or dashboard renderers.
+
+INDEX CHANGE:
+Only 2 safe references were added:
+- public-final.css
+- public-final.js
+
+If these two references are removed, V285 index.html is byte-for-byte identical
+to the supplied working production index.html.
+
+FIXES KEPT:
+- Current approved public page linked
+- Missing v280_root.js / v280_root.css restored
+- Teacher Daily Work root extension restored
+- Admin Academic Review final UI restored
+- Study Hub clean dashboard restored
+- Study DB background polling = 0; remote is on-demand
+- Existing V283 System & Update Center preserved
+
+PREVIEW LOGIN:
+The supplied working production index already contains V281 preview-login allowance.
+V285 preserves that code unchanged.
+
+SQL:
+No new SQL for V285.
+Previously required V282 SQL remains the DB prerequisite.
+
+LIVE:
+Static/package verification cannot prove Vercel Preview + Supabase authenticated login.
+Test Preview before Production.
