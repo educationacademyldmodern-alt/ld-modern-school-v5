@@ -1,0 +1,40 @@
+L D MODERN EDUCATION ACADEMY — V288 AUTH ROOT DIAGNOSTIC + REPAIR
+
+BASE:
+V287 current public-page root fix.
+
+WHY V288:
+Admin / Teacher / Parent login forms opened in Preview but authentication did not complete reliably.
+The source contained multiple historical login overrides. V288 adds ONE final canonical auth owner
+at the actual end of the page, without rebuilding dashboards or user data.
+
+V288 DOES:
+- Admin/Office login final owner
+- Teacher login final owner
+- Parent/Student login final owner
+- Direct email password auth (no pre-login DB lookup)
+- Mobile/internal-login fallback compatible with existing generated accounts
+- 15s auth timeout so button cannot hang forever
+- Exact on-screen stage/error + Technical Details
+- Copy Diagnostic (no password/token included)
+- Existing profiles/RLS/Supabase accounts are reused
+- Existing Admin/Teacher/Parent dashboards are reused
+- Current public page from V287 is preserved
+
+IMPORTANT ROLE FIX:
+Office login allows existing staff roles according to the ERP role system:
+super_admin, admin, principal, admission, accountant, librarian, transport, viewer.
+Teacher and Parent/Student continue through their dedicated portals.
+
+NO:
+- New user/auth database
+- New SQL
+- Polling
+- Realtime
+- MutationObserver
+- Password logging
+- Token logging
+
+LIVE TEST:
+Code/static verification does NOT prove a live Supabase password is valid.
+Preview login result will now show the exact failing stage if live auth still fails.

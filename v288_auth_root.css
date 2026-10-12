@@ -1,0 +1,9 @@
+
+.v288AuthStatus{margin:12px 0 0;padding:12px 14px;border-radius:14px;border:1px solid #cfe0ef;background:#f7fbff;color:#173b5c;font-size:13.5px;line-height:1.45;overflow-wrap:anywhere}
+.v288AuthStatus.busy{background:#eef7ff;border-color:#9dc9ef}
+.v288AuthStatus.ok{background:#ecfbf4;border-color:#9bd8b7;color:#145b3a}
+.v288AuthStatus.bad{background:#fff3f1;border-color:#efb4aa;color:#7d2c23}
+.v288AuthStatus details{margin-top:8px}
+.v288AuthStatus summary{cursor:pointer;font-weight:800}
+.v288AuthStatus pre{white-space:pre-wrap;word-break:break-word;max-height:180px;overflow:auto;background:#fff;border:1px solid #dce7f1;border-radius:10px;padding:8px;font-size:11px;color:#263849}
+.v288CopyDiag{margin-top:6px;border:0;border-radius:9px;padding:7px 10px;background:#116fc5;color:#fff;font-weight:800}
