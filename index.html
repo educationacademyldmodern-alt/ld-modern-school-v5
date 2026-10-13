@@ -15117,7 +15117,7 @@ if(typeof statsBase==='function'){
 #erp.ldmAdminCanonical #v75TopSearch input{width:100%!important;min-width:0!important;height:40px!important;padding:7px 10px!important;border-radius:10px!important}
 #erp.ldmAdminCanonical #v75TopSearch button{width:82px!important;min-width:82px!important;height:40px!important;padding:4px!important;border-radius:10px!important;background:#fff!important;color:#173b68!important}
 
-#erp.ldmAdminCanonical .erpTop > :not(.ldmAdminSchoolIdentity):not(#ldmDeviceLockBtn):not(.hamb):not([data-v58-order]):not(.websiteBtn):not(#v90BackBtn):not(#v90HomeBtn):not(#v62Bell):not(#v75TopSearch):not(#v62NotifPanel){display:none!important}
+#erp.ldmAdminCanonical .erpTop > :not(.ldmAdminSchoolIdentity):not(#ldmDeviceLockBtn):not(.hamb):not([data-v58-order]):not(.websiteBtn):not(#v90BackBtn):not(#v90HomeBtn):not(#v62Bell):not(#v75TopSearch):not(#v62NotifPanel):not(#ldmV281Refresh){display:none!important}
 #erp.ldmAdminCanonical .v6412SchoolIdentity,#erp.ldmAdminCanonical .v6415School,#erp.ldmAdminCanonical .v6416School,#erp.ldmAdminCanonical .ldmV183AdminSchool,#erp.ldmAdminCanonical #v6418WebsiteBtn,#erp.ldmAdminCanonical #v58LiveDot,#erp.ldmAdminCanonical #v764LiveBadge,#erp.ldmAdminCanonical #v113EcoBadge,#erp.ldmAdminCanonical #v64HealthBadge,#erp.ldmAdminCanonical #v97TopIdentity{display:none!important}
 #erp.ldmAdminCanonical .erpTop>div:has(#erpTitle){display:none!important}
 #erp.ldmAdminCanonical .erpTop>.erpHomeBtn{display:none!important}
@@ -18660,7 +18660,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
  const getButton=()=>document.getElementById('ldmV281Refresh');
  const getHeader=()=>document.querySelector('#erp .erpTop');
  function sync(){const b=getButton(),h=getHeader();if(!b||!h)return;
-   const admin=!!document.querySelector('#erpContent .ldmRootAdminDash');
+   const admin=!!document.querySelector('#erp.ldmAdminCanonical:not(.hidden) .erpTop');
    if(admin){if(b.parentElement!==h)h.appendChild(b)}
    else if(b.parentElement!==document.body)document.body.appendChild(b);
  }
@@ -18670,14 +18670,16 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
  document.addEventListener('DOMContentLoaded',()=>{const host=document.getElementById('erpContent');if(host)obs.observe(host,{childList:true,subtree:false})});
 })();
 </script>
-<link rel="stylesheet" href="dashboard-v304.css?v=304">
-<script src="dashboard-v304.js?v=304"></script>
+<link rel="stylesheet" href="dashboard-v304.css?v=308">
+<script src="dashboard-v304.js?v=308"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=305"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
 <script src="udise-core-v306.js?v=306"></script>
 <script src="udise-app-v306.js?v=306"></script>
 <link rel="stylesheet" href="absence-followup-v307.css?v=307">
-<script src="absence-followup-v307.js?v=307"></script>
+<script src="absence-followup-v307.js?v=308"></script>
+<link rel="stylesheet" href="corrections-v308.css?v=308">
+<script src="corrections-v308.js?v=308"></script>
 </body>
 </html>
