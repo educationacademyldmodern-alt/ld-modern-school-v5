@@ -1,0 +1,6 @@
+V286 targeted repair
+Inline scripts checked: 128
+Syntax failures: 0
+[]
+Assistant review moved outside print HTML template.
+No live database or browser E2E testing. NOT production-certified.

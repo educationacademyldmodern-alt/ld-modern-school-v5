@@ -1,0 +1,47 @@
+L D MODERN EDUCATION ACADEMY — V280 COMPLETE REPOSITORY
+QUALITY ASSURANCE / परीक्षण रिपोर्ट — 2026-10-13
+
+SOURCE
+- Original Production GitHub commit: e5e0c602c29ebdbae37af889eca789af0b137a59
+- Original archive: ld-modern-school-v5-e5e0c602c29ebdbae37af889eca789af0b137a59.zip
+- 241/241 original files were preserved. Only root index.html replaced by the previously prepared V279 HTML.
+- One new additive SQL file: V280_LINK_MANAGER_SAFE.sql (NOT run).
+- Existing Vercel config and original /study, /api, CSS, JS, assets, logo unchanged.
+
+VERIFIED TESTS — COMPLETED
+[PASS] 241/241 original source files found; 240/241 match original byte-for-byte; root index.html changed intentionally.
+[PASS] 126/126 inline JavaScript scripts parse successfully (node --check). One JSON-LD metadata block omitted from JS syntax test.
+[PASS] 71/71 external JavaScript files parse successfully (node --check).
+[PASS] 11/11 JSON files parse successfully.
+[PASS] 20/20 local script references in updated main HTML resolve to included files.
+[PASS] Root HTML, Study Hub, Advocate, UDISE, Owner Ledger, logo, Vercel config served HTTP 200 by local static server.
+[PASS] Mobile 390px and desktop 1280px static visual initial page rendered, no document horizontal overflow detected.
+[PASS] Repository full archive CRC tested after packaging.
+
+NOT TESTED / BLOCKED
+[BLOCKED] Real Admin/Teacher/Parent authentication with production Supabase. No verified test users or access to production accounts.
+[BLOCKED] Database writes: fee collection, refund, dues, attendance, admission and Excel import/export; DO NOT use real financial data for initial testing.
+[BLOCKED] RLS/SQL policy execution and per-role cross-access test against production Supabase. SQL is prepared but has NOT run.
+[BLOCKED] Live camera/QR, GPS, photo uploads, Vercel deployment, full A4 Print/PDF on physical printer, load/stress with 2000+ students.
+[BLOCKED] Browser navigation to local HTTP endpoint by testing environment returned ERR_BLOCKED_BY_ADMINISTRATOR.
+[LIMITED] set_content visual smoke: Supabase CDN and Browser Storage unavailable (supabase not defined, localStorage blocked), so NOT an authentication smoke pass.
+
+IMPORTANT
+- Full end-to-end tests CANNOT truthfully be certified until the code is deployed to an isolated Preview environment with test accounts and safe test dataset.
+- This package is a COMPLETE SOURCE PACKAGE, not a deployed or fully certified production release.
+- No GitHub, Vercel, or Supabase changes were performed by assistant.
+- Existing main ERP data remains untouched.
+
+REQUIRED PRE-PRODUCTION ACCEPTANCE
+1. Create GitHub preview branch from current production commit; upload updated root index.html there, leave all other files unchanged.
+2. Use a Vercel Preview Deployment on that branch (do not switch Production yet).
+3. Confirm login/logout/refresh & Back/Home for Admin, Teacher, Parent using authorized test users.
+4. Verify Student Search, Fee Search, Current Due, Fee Save, Ledger, Receipt, Bulk Fees on dummy accounts with rollback plan.
+5. Verify class attendance/not-submitted totals and India date across midnight; verify after teacher attendance submission.
+6. Verify Link Manager admin permissions; apply reviewed additive SQL only to the correct DB after backup; assert teacher/parent denied.
+7. Check mobile/desktop responsive, all role menu links, camera/QR, Excel, ID Card, admit card, A4 print.
+8. Check Vercel logs, browser errors, Supabase quotas/traffic, 2000+ students load under representative test data.
+9. Merge to Production only after acceptance, rollback by redeploying prior commit on failure.
+
+NOTE ON SOURCES
+- Previous V277-V279 component tests were reported separately; they are not repeated as live E2E claims here.

@@ -1,0 +1,40 @@
+LDM ERP V281 — Search Speed + One ERP Refresh — परीक्षण रिपोर्ट
+दिनांक: 13 अक्टूबर 2026
+आधार: उपयोगकर्ता की Production e5e0c602 ZIP से तैयार पूरा V280 (V279 merged) Source
+
+1. वास्तविक सुधार
+- Master Fee: छात्र खोज में 35–45 तक सीमित परिणाम पहले दिखते हैं; फीस के Current Due Snapshot का इंतजार नहीं करना पड़ता। रकम आने पर उसी Row में update; गणना असफल हो तो ₹0 का झूठा परिणाम नहीं।
+- Admin Master Search: विद्यार्थी (अधिकतम 15) और Staff (अधिकतम 6) के तेज परिणाम; अन्य मॉड्यूलों की पहले वाली RPC खोज 'All Modules' बटन से। गहरी Search हटाई नहीं गई।
+- Student Master table: Filter परिणामों की पूरी संख्या उपलब्ध; एक साथ अधिकतम 90 Row render. मूल डेटाबेस रिकॉर्ड या Excel export नहीं घटाए।
+- सामान्य CRUD सूची: अधिकतम 120 Row स्क्रीन पर, Filter 140 ms debounce. पूरा sourceRows डेटा यथावत।
+- Central Refresh: ERP खुला होने पर एक नया fixed बटन; active route के लिए module-specific refresh (जहाँ संभव), अन्यथा उसी route को render; HTML location.reload() नहीं। Input/Search का मान और scroll बचाने का प्रयास; form में unsaved बदलाव हों तो Confirm.
+- Admin Dashboard: V279 का IST दिन/Cache सुधार सुरक्षित; मैनुअल Central Refresh पर दूसरे Dashboard Panel की अनावश्यक duplicate call हटाई।
+- Parent Portal: सक्रिय पेरेंट Session होने पर उसका मौजूदा सुरक्षित loader इस्तेमाल; नई Login प्रक्रिया नहीं।
+- नये Database Tables/Triggers/Policies नहीं बनाए; फीस गणना/Receipt/Save/Authentication के मौजूदा तर्क नहीं बदले।
+
+2. सफल नियंत्रित परीक्षण (Chromium isolated/mocked)
+PASS: केवल एक Global Refresh control, ERP के बाहर अदृश्य।
+PASS: Admin Dashboard Refresh केवल canonical API एक बार।
+PASS: अन्य module में Refresh पर same route बना रहा।
+PASS: Master Search में student का परिणाम staff से पहले, full search विकल्प सुरक्षित।
+PASS: Fee Search में छात्र पहले और Current Due ₹1,200 बाद में update।
+PASS: कोई नाम/Class दिए बिना Master Fee सभी विद्यार्थियों की फीस preload नहीं करता।
+PASS: 127 inline JavaScript scripts Syntax parse (non-JS blocks excluded)।
+PASS: अन्य मूल स्रोत फाइलों की अखंडता (नीचे पैकेज जाँच देखें)।
+
+3. अप्रमाणित/लाइव के बिना संभव नहीं
+NOT TESTED: वास्तविक Admin/Teacher/Parent credentials, Database permissions/RLS, Fee Collection/ledger write, Production networking.
+NOT TESTED: वास्तविक 2,000+ छात्रों पर Query latency and Index performance; इंटरनेट के उतार-चढ़ाव के कारण मिलीसेकंड की गारंटी नहीं।
+NOT TESTED: हर पुराने विशेष मॉड्यूल का End-to-End क्लिक या प्रिंट।
+NOTE: इस वातावरण में localhost पर पूरा ERP खोलने का प्रयास ERR_BLOCKED_BY_ADMINISTRATOR से रुका; अलग Mock Browser टेस्ट सफल रहे।
+NOTE: कुछ विशेष मॉड्यूलों के स्वयं के Data Reload/Scanner Refresh बटन सुरक्षित रखे गए हैं ताकि काम न टूटे। Dashboard के दो पुराने duplicate manual controls छिपाए गए हैं।
+
+4. सुरक्षित अपलोड / ROLLBACK
+(क) वर्तमान Production Commit व Database का अलग Backup रखें।
+(ख) सबसे पहले GitHub की एक नई परीक्षण Branch पर पूरा पैकेज रखें और Vercel Preview बनाएं।
+(ग) Preview में Admin, Teacher, Parent, Admission, Fee Save/Receipt, Search, Back, Home, Print और Refresh जाँचें।
+(घ) सही होने पर नियंत्रित Production Commit करें। खराबी आए तो पुराने e5e0c602 या वर्तमान Production Commit पर rollback करें।
+(ङ) V281 के Search/Refresh सुधार के लिए कोई नया SQL नहीं चलाना है। पहले के Link Manager की SQL अलग आवश्यकता है।
+
+5. सत्यापन सीमा
+सभी सुविधाएँ 100% error-free या Search instant होने का दावा नहीं। Live ERP/GitHub/Vercel/Supabase पर कोई बदलाव assistant ने नहीं किया।

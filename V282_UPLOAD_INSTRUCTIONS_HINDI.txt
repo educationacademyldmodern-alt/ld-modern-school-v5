@@ -1,0 +1,7 @@
+V282 — अपलोड / जाँच
+1. पूरा ZIP GitHub की नई TEST Branch पर Extract/Upload करें (मौजूदा ERP का backup रखें)।
+2. केवल मुख्य index.html बदला है; बाकी V281 code फाइलें यथावत हैं।
+3. HTML अकेली मोबाइल पर खोलकर Login टेस्ट नहीं करना है; Login होस्ट किए हुए Preview पर ही टेस्ट करें।
+4. Preview सफल होने पर ही Production Branch पर Commit करें।
+5. इस V282 Search/Click अपडेट के लिए नया SQL नहीं है।
+6. देखें: V282_TEST_REPORT_HINDI.txt

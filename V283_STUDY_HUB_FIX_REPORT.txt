@@ -1,0 +1,25 @@
+LDM ERP V283 STUDY HUB & PAPER DASHBOARD - SAFE PATCH
+
+BASE: Full ERP V282 working project, not standalone local index.html.
+
+CONFIRMED ROOT CAUSE:
+Main ERP School Control Center Study Hub card ran ./study/index.html (older E1 dashboard), not the V27 separate Teaching Studio homepage. Hence user continued to see old inconsistent design after updating another repository.
+
+CHANGES:
+1) Root index.html: exactly two Study Hub paths now ./study/hub.html (main launcher and initial Admin Link Manager default). No payment, parent, teacher, RLS or attendance logic changes.
+2) study/hub.html: new light bilingual premium responsive launcher with one-active-sector navigation and fast client search. No automatic Supabase fetch, no polling.
+3) study/paper-center/index.html: copied complete V26 offline exam maker into an on-demand static local route, changed misleading V22 heading to V26 and homepage screen-only card CSS, added Back to Study Hub. Pre-primary original V22 question bank and print functions are not changed.
+4) study/index.html, study/competition.html, all old study modules/assets and rest of ERP remain untouched.
+
+TEST EXPECTATIONS:
+- School Control Center -> Smart Study Hub card -> /study/hub.html.
+- Exam Paper Center -> /study/paper-center/index.html.
+- Home/back sector selections; mobile fit; navigation to old modules.
+- Paper Home -> Nursery -> Preview; LKG -> Preview; GK -> Preview; Art -> Preview; browser Print/PDF requires manual real device verification.
+- Admin session in the main ERP is independent of the public static child routes. School exam questions in static HTML may be publicly reachable if no server authorization is added.
+
+NOT TESTED: Live Supabase data, Teacher/Parent RLS, actual print hardware, future question accuracy, Vercel live deployment.
+
+UPLOAD: Create a TEST branch from current actual production code; compare before replacing. Do not drop this ZIP atop changed future main branch without review. Main ERP uses full bundle; local single HTML may miss dependency assets.
+
+Extra: 3 separate Study Hub buttons deep-link to corresponding pre/art/gk Paper Center screens; original question engine preserved.

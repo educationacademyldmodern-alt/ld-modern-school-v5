@@ -1,0 +1,9 @@
+LDM ERP V281 — इस्तेमाल और अपलोड
+
+1. इस ZIP में पूरी V280 Repository है (main index + api/ + study/ + CSS/JS assets)। अकेली HTML को मोबाइल के content://downloads से खोलने पर Login/Assets काम न भी करें।
+2. इसी ZIP के index.html में V281 Search & Refresh सुधार हैं। अन्य मूल Code/Data फाइलें नहीं बदली गईं।
+3. पहले GitHub पर TEST Branch बनाएँ, Preview Deploy करें। मौजूदा Production सीधे Replace न करें।
+4. Test: Master Fee Search में नाम पहले, Current Due बाद; Master Search में Full Search; Student Master; एक Refresh बटन; Teacher/Parent Login; Fee Receipt; Back/Home।
+5. SQL: V281 के लिए कोई नया Database SQL नहीं। पुराने link manager tables के लिए V278 SQL तभी चलाएँ जब वास्तव में जरूरत हो।
+6. Live URL/current Production Commit को बिना परीक्षण न बदलें।
+7. कार्य का पूरा विवरण: V281_FAST_SEARCH_SINGLE_REFRESH_QA_HINDI.txt

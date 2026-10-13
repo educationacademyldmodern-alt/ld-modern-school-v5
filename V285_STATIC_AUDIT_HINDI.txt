@@ -1,0 +1,18 @@
+LDM ERP V285 - STATIC CODE AUDIT / सीमित कोड परीक्षण
+Date: 2026-10-13
+Source: V284 SAFE ASSISTANT REVIEW PREVIEW
+
+CONFIRMED FIX:
+V284 injected <script id="v284-safe-delegation-review"> inside the JavaScript template string of v14Print. This made the enclosing script invalid and could break application startup. Moved this script after the enclosing script tag. Assistant review remains read-only.
+
+TESTS:
+External JS files checked: 71; syntax failures: 0 []
+Inline JS blocks checked: 128; syntax failures: 0
+Missing local script references: 0 []
+ZIP integrity checked during packaging.
+
+NOT VERIFIED / NOT COMPLETE:
+Live Supabase connectivity, database permissions and RLS, fee reconciliation, family payments, books/items collection, module-wide assistant edit/approval, browser end-to-end tests, performance and production deploy.
+Do not run old SQL scripts in bulk. Do not deploy to production without staging tests and database backup.
+
+No real financial data was changed. This is a code syntax hotfix, NOT a complete ERP certification.

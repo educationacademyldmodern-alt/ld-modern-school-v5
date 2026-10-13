@@ -1,0 +1,23 @@
+V288 संयुक्त ERP ZIP — परीक्षण हेतु
+
+यह V286 की पूरी फाइल सूची और V287 का Discount Default 0 वाला index.html मिलाकर तैयार हुआ है।
+इस ZIP को GitHub में उसी प्रोजेक्ट के root पर extract/merge करना है; ZIP फाइल स्वयं Vercel में अपलोड करने से ERP अपने आप अपडेट नहीं होगा।
+
+अभी Production पर अपलोड न करें। पहले GitHub की अलग testing branch / Vercel Preview Deployment पर जांचें।
+पुरानी 35 SQL फाइलें सिर्फ संदर्भ के लिए हैं, इन्हें Supabase SQL Editor में एक साथ बिल्कुल न चलाएँ।
+वास्तविक Fee Ledger, Family Fee, Assistant Approval/RLS तथा Browser E2E का परीक्षण बाकी है।
+
+सुरक्षित प्रक्रिया: मौजूदा Production commit सुरक्षित रखें → testing branch बनाएं → ZIP extract करके root पर files merge करें → Preview deployment → Admin/Teacher/Parent login, fee payment, discount=0, receipts, attendance, study/paper, permissions जांचें → तभी production promote करें।
+
+LDM ERP V288 - Consolidated package verification (13 October 2026)
+
+Source: V286 complete package (256 entries) + V287 index.html discount-zero patch.
+Total entries: 256
+Inline JavaScript blocks checked by node --check: 128
+Inline JS syntax failures: 0
+Missing local script references: 0
+Details: [] []
+
+IMPORTANT: This is NOT a fully tested production release. No live Supabase, RLS, payment, family collection, assistant write-approval, or browser end-to-end tests.
+Do not execute any of the 35 legacy SQL scripts in bulk. No automatic SQL migration is included.
+Deploy only after backup, isolated staging deployment and payment/permission checks.

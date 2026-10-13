@@ -1,0 +1,12 @@
+{
+  "baseline_files": 246,
+  "unchanged": 245,
+  "changed": [
+    "index.html"
+  ],
+  "javascript_files_checked": 71,
+  "inline_scripts_checked": 127,
+  "json_files_checked": 11,
+  "local_script_refs_missing": [],
+  "browser_qa": "V282 isolated Chromium passed"
+}

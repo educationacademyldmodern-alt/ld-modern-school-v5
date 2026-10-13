@@ -1,0 +1,49 @@
+LDM ERP V282 — One-Click Loading + Fast Search — सत्यापन रिपोर्ट
+दिनांक: 13 अक्टूबर 2026
+मूल: उपयोगकर्ता की Production e5e0c602 से बना V281 पूरा Source
+
+क्या बदला:
+1. सामान्य CRUD सूची: मॉड्यूल क्लिक करते ही Loading/View दिखाता है; सर्वर से रिकॉर्ड मिलने तक पिछली स्क्रीन अटकी नहीं रहती। पुरानी धीमी Query से लौटे परिणाम नए खुले मॉड्यूल पर नहीं चढ़ते।
+2. प्रथम सूची: अधिकतम 90 पंक्तियाँ DOM में, पूरी प्राप्त सूची में खोज। पहले एक साथ बहुत सी पंक्तियों का HTML बनाने की जरूरत नहीं।
+3. सामान्य सूची Search: खोज-योग्य नाम/पिता/आईडी/अन्य कॉलम एक बार तैयार होते हैं। फिर 85 ms debounce पर फ़िल्टर। मूल रिकॉर्ड नहीं हटाए।
+4. Student Master: 5,000 तक लाए गए रिकॉर्ड में एक बार searchable index; कक्षा/नाम में खोज और पहले 90 परिणाम रेंडर। अनावश्यक बार-बार Text conversion कम।
+5. Admin Master Search: Students और Staff दोनों Query एक साथ शुरू होते हैं; जो पहले तैयार हो वह पहले दिखेगा। बाद में Student→Staff क्रम स्थिर होगा। सभी Modules की पुरानी Deep Search अलग बटन से उपलब्ध।
+6. V281 Master Fee Progressive Search तथा एक Global Refresh ज्यों के त्यों सुरक्षित। फीस भुगतान, Login, RLS, Current Due का मूल Business Logic नहीं बदला गया।
+7. कोई नया SQL, DB migration, cron, background subscription या stored PDF नहीं।
+
+Controlled Chromium परीक्षण:
+PASS - क्लिक पर सूची का Loading दृश्य तुरंत लगा (380 ms नकली DB delay के दौरान)।
+PASS - 2,000 mock Students: 90 पंक्तियाँ दिखाई गईं, आखिरी 1999वाँ रिकॉर्ड खोज में मिला।
+PASS - पुरानी लिस्ट Query का Result दूसरे खुले मॉड्यूल को Replace नहीं करता।
+PASS - Staff Query, Student Query से पहले लौटने पर परिणाम पहले दिखा; बाद में Student→Staff क्रम सही।
+PASS - पहले वाला Full Search उपलब्ध तथा Result button का Index सही।
+PASS - JavaScript/JSON Syntax और relative Script References की जाँच (सही संख्या नीचे QA summary में)।
+
+अभी क्या प्रमाणित नहीं है:
+- वास्तविक Supabase पर फीस, Admission, Staff/Parent permissions और नेटवर्क की देरी; 2,000+ लाइव छात्रों के साथ latency.
+- सभी पुराने 30+ modules का end-to-end; सभी क्लिक/Back/Home/Print की लाइव जाँच.
+- Production credentials, Supabase RLS, payment/ledger writes.
+- हर Query के लिए Server-side DB Index की प्रभावशीलता; इनका परीक्षण आवश्यक हो सकता है.
+- कोई मिलीसेकंड या nanosecond गारंटी नहीं।
+
+सुरक्षित उपयोग:
+A. यह पूरा स्रोत ZIP है: इसे एकल HTML की तरह मोबाइल पर content://downloads से नहीं चलाना है।
+B. वर्तमान Production Commit/DB backup रखें; GitHub TEST branch पर Deploy कर Vercel Preview करें।
+C. Preview पर Admin, Teacher, Parent Login, Fee Save, Fee Search, Master Search, Attendance, Back/Home और Refresh जाँचें।
+D. पुष्टि होने पर ही Production पर एक नियंत्रित Commit करें।
+E. Rollback: पिछले चालू Production Commit पर लौटें।
+F. Live GitHub/Vercel/Supabase में ChatGPT की ओर से कोई बदलाव नहीं किया गया है।
+
+QA COUNTS:
+{
+  "baseline_files": 246,
+  "unchanged": 245,
+  "changed": [
+    "index.html"
+  ],
+  "javascript_files_checked": 71,
+  "inline_scripts_checked": 127,
+  "json_files_checked": 11,
+  "local_script_refs_missing": [],
+  "browser_qa": "V282 isolated Chromium passed"
+}
