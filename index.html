@@ -3344,29 +3344,44 @@ function v39ActivityTime(x){let d=x?.created_at||x?.updated_at||x?.date||x?.admi
 function v39Short(s,n=52){s=String(s||'');return s.length>n?s.slice(0,n-1)+'…':s}
 function v39StartClock(){clearInterval(window.v39ClockTimer);window.v39ClockTimer=null;return false}
 async function v39LoadAdminPanels(){
-  let [adm,fee,diary,notice,event]=await Promise.all([
-    v39SafeRows('admissions','id,student_name,class_name,admission_no,admission_date,created_at','created_at',5),
-    v39SafeRows('fees','id,student_name,paid_amount,receipt_no,date,created_at','created_at',5),
-    v39SafeRows('teaching_diary','id,teacher_name,class_name,subject,topic,teaching_date,period_no,created_at','created_at',5),
-    v39SafeRows('notices','id,date,title,audience,message,created_at','date',5),
-    v39SafeRows('events','id,event_date,title,event_type,audience,description,created_at','event_date',20)
+  // V291: each panel loads independently; a missing column/table must not block the others.
+  const request=async(table,columns,order,limit)=>{
+    let q=sb.from(table).select(columns);
+    if(order)q=q.order(order,{ascending:false});
+    const r=await q.limit(limit);
+    if(r.error)throw new Error(table+': '+String(r.error.message||r.error));
+    return r.data||[];
+  };
+  const put=(id,html)=>{const host=document.getElementById('erpContent');if(!host)return;host.querySelectorAll('[id="'+id+'"]').forEach(el=>el.innerHTML=html)};
+  const errorHtml=e=>'<div class="v39Empty">डेटा लोड नहीं हुआ / Load failed: '+esc(String(e?.message||e))+'</div>';
+  const [activities,notices,events]=await Promise.allSettled([
+    Promise.allSettled([
+      request('admissions','id,student_name,class_name,admission_date,created_at','created_at',5),
+      request('fees','id,student_name,paid_amount,date,created_at','created_at',5),
+      request('teaching_diary','id,teacher_name,class_name,subject,topic,teaching_date,created_at','created_at',5)
+    ]),
+    request('notices','id,date,title,audience,message,created_at','date',5),
+    request('events','id,event_date,title,event_type,audience,description,created_at','event_date',20)
   ]);
-  let acts=[];
-  adm.forEach(x=>acts.push({d:x.created_at||x.admission_date,ic:'🎓',t:'New Admission',s:`${x.student_name||''} • Class ${x.class_name||''}`}));
-  fee.forEach(x=>acts.push({d:x.created_at||x.date,ic:'💳',t:'Fee Received',s:`${x.student_name||''} • ${money(x.paid_amount||0)}`}));
-  diary.forEach(x=>acts.push({d:x.created_at||x.teaching_date,ic:'📖',t:'Teaching Update',s:`${x.teacher_name||''} • Class ${x.class_name||''} • ${x.subject||''}: ${x.topic||''}`}));
-  acts.sort((a,b)=>new Date(b.d||0)-new Date(a.d||0));acts=acts.slice(0,8);
-  const actHtml=acts.length?acts.map(x=>`<div class="v39Feed"><span>${x.ic}</span><div><b>${esc(x.t)}</b><small>${esc(v39Short(x.s,70))}</small></div><time>${esc(v39ActivityTime(x))}</time></div>`).join(''):'<div class="v39Empty">No recent activity yet.</div>';
-  const noticeHtml=notice.length?notice.map(x=>`<button class="v39Notice" onclick="render('notices')"><span>📢</span><div><b>${esc(x.title||'Notice')}</b><small>${esc(v39Short(x.message,75))}</small><em>${esc(x.date||'')} ${x.audience?'• '+esc(x.audience):''}</em></div></button>`).join(''):'<div class="v39Empty">No notices yet.</div>';
-  const td=today();
-  const ordered=(event||[]).slice().sort((a,b)=>{const ad=String(a.event_date||''),bd=String(b.event_date||''),au=!!ad&&ad>=td,bu=!!bd&&bd>=td;if(au!==bu)return au?-1:1;return au?ad.localeCompare(bd):bd.localeCompare(ad)});
-  const topEvents=ordered.slice(0,5);
-  const eventHtml=topEvents.length?topEvents.map(x=>{let day='--',mon='';try{let d=new Date((x.event_date||today())+'T00:00:00');day=String(d.getDate()).padStart(2,'0');mon=d.toLocaleDateString('en-IN',{month:'short'}).toUpperCase()}catch(e){}return `<button class="v39Event" onclick="render('events')"><span><b>${day}</b><small>${mon}</small></span><div><b>${esc(x.title||'Event')}</b><small>${esc(x.event_type||x.audience||'School Event')}</small></div></button>`}).join(''):'<div class="v39Empty">No events.</div>';
-  if($('v39Activities'))$('v39Activities').innerHTML=actHtml;
-  if($('v39Notices'))$('v39Notices').innerHTML=noticeHtml;
-  if($('v39Events'))$('v39Events').innerHTML=eventHtml;
-  if($('v39BellCount'))$('v39BellCount').textContent=String((diary||[]).filter(x=>x.teaching_date===today()).length);
-  try{sessionStorage.setItem('ldm_admin_activities_html',actHtml);sessionStorage.setItem('ldm_admin_notices_html',noticeHtml);sessionStorage.setItem('ldm_admin_events_html',eventHtml)}catch(_e){}
+  let failed=0;
+  if(activities.status==='fulfilled'){
+    const types=[['🎓','New Admission'],['💳','Fee Received'],['📖','Teaching Update']];let rows=[],errors=[];
+    activities.value.forEach((r,i)=>{if(r.status==='rejected'){errors.push(r.reason?.message||String(r.reason));return}for(const x of r.value){rows.push({d:x.created_at||x.admission_date||x.date||x.teaching_date,ic:types[i][0],t:types[i][1],s:i===0?`${x.student_name||''} • Class ${x.class_name||''}`:i===1?`${x.student_name||''} • ${money(x.paid_amount||0)}`:`${x.teacher_name||''} • Class ${x.class_name||''} • ${x.subject||''}: ${x.topic||''}`})}});
+    rows.sort((a,b)=>new Date(b.d||0)-new Date(a.d||0));
+    let html=rows.slice(0,8).map(x=>`<div class="v39Feed"><span>${x.ic}</span><div><b>${esc(x.t)}</b><small>${esc(v39Short(x.s,70))}</small></div><time>${esc(v39ActivityTime(x))}</time></div>`).join('');
+    if(errors.length){failed++;html+=errorHtml(errors.join('; '))}else if(!html)html='<div class="v39Empty">No recent activity yet.</div>';
+    put('v39Activities',html);if(!errors.length)try{sessionStorage.setItem('ldm_admin_activities_html',html)}catch(_e){}
+  }else{failed++;put('v39Activities',errorHtml(activities.reason))}
+  if(notices.status==='fulfilled'){
+    const html=notices.value.map(x=>`<button class="v39Notice" onclick="render('notices')"><span>📢</span><div><b>${esc(x.title||'Notice')}</b><small>${esc(v39Short(x.message,75))}</small><em>${esc(x.date||'')} ${x.audience?'• '+esc(x.audience):''}</em></div></button>`).join('')||'<div class="v39Empty">No notices yet.</div>';
+    put('v39Notices',html);try{sessionStorage.setItem('ldm_admin_notices_html',html)}catch(_e){}
+  }else{failed++;put('v39Notices',errorHtml(notices.reason))}
+  if(events.status==='fulfilled'){
+    const td=today();const ordered=events.value.slice().sort((a,b)=>{const ad=String(a.event_date||''),bd=String(b.event_date||''),au=!!ad&&ad>=td,bu=!!bd&&bd>=td;if(au!==bu)return au?-1:1;return au?ad.localeCompare(bd):bd.localeCompare(ad)});
+    const html=ordered.slice(0,5).map(x=>{let day='--',mon='';try{const d=new Date((x.event_date||td)+'T00:00:00');day=String(d.getDate()).padStart(2,'0');mon=d.toLocaleDateString('en-IN',{month:'short'}).toUpperCase()}catch(_e){}return `<button class="v39Event" onclick="render('events')"><span><b>${day}</b><small>${mon}</small></span><div><b>${esc(x.title||'Event')}</b><small>${esc(x.event_type||x.audience||'School Event')}</small></div></button>`}).join('')||'<div class="v39Empty">No events.</div>';
+    put('v39Events',html);try{sessionStorage.setItem('ldm_admin_events_html',html)}catch(_e){}
+  }else{failed++;put('v39Events',errorHtml(events.reason))}
+  if(failed)throw new Error(failed+' dashboard feed source(s) could not be loaded');
   return true;
 }
 
@@ -9569,6 +9584,7 @@ async function v90AdminDashboard(){
  try{window.restoreDash?.('back')}catch(_e){}
  /* V186: Back restores last-good dashboard silently. Fetch only on first load or after a local data change. */
  let __dirty=false;try{__dirty=!!sessionStorage.getItem('ldm_dashboard_dirty')}catch(_e){}
+ setTimeout(()=>{if(document.querySelector('#erpContent .ldmRootAdminDash'))window.v39LoadAdminPanels?.().catch(e=>console.warn('Admin feeds:',e))},0);
  if(!window.__ldmDashVerifiedThisRuntime||__dirty){window.__ldmDashVerifiedThisRuntime=true;setTimeout(()=>{try{window.ldmRefreshDashboardOnce?.({force:true,reason:__dirty?'dirty':'first-runtime-load'})}catch(_e){}},0);}
 }
 
@@ -18525,13 +18541,17 @@ body:has(#erp:not(.hidden)) #ldmV281Refresh,body:has(#parentPortal:not(.hidden) 
      if(parentVisible){
        if(typeof window.loadParentPortal!=='function')throw Error('Parent Portal refresh unavailable');
        await window.loadParentPortal();
-     }else if(current==='dashboard'){
+     }else if(current==='dashboard'||(q('erpContent')?.querySelector('.ldmRootAdminDash')&&['admin','super_admin','principal'].includes(String((window.profile||{}).role||'').toLowerCase()))){
        const role=String((window.profile||{}).role||'').toLowerCase();
        const isAdminRole=['admin','super_admin','principal'].includes(role);
        if(isAdminRole&&q('erpContent')?.querySelector('.ldmRootAdminDash')&&typeof window.ldmRefreshDashboardOnce==='function'){
          try{window.ldmMarkDataDirty?.('dashboard')}catch(_){}
-         const ok=await window.ldmRefreshDashboardOnce({force:true,reason:'v281-single-global'});
-         if(ok===false){notify('आज के डेटा का अपडेट जारी है या डेटा उपलब्ध नहीं।');return}
+         let ok=false, counterError=null;
+         try{ok=await window.ldmRefreshDashboardOnce({force:true,reason:'v281-single-global'})}catch(e){counterError=e}
+         // Always attempt the feed panels even if the counter service failed.
+         if(typeof window.v39LoadAdminPanels==='function') await window.v39LoadAdminPanels();
+         if(counterError)throw counterError;
+         if(ok===false){notify('मुख्य आँकड़ों का अपडेट उपलब्ध नहीं; गतिविधियाँ/सूचनाएँ जाँची गईं।');return}
        }else if(typeof window.render==='function')await window.render('dashboard');
        else throw Error('Dashboard refresh unavailable');
      }else if(current==='master_fee'&&q('v75MFResults')){
@@ -18616,6 +18636,38 @@ body:has(#erp:not(.hidden)) #ldmV281Refresh,body:has(#parentPortal:not(.hidden) 
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
  window.ldmV281Refresh=refresh;
  window.LDM_V281_BUILD='V282-FAST-CLICK-AND-SEARCH';
+})();
+</script>
+
+<style id="ldm-v289-admin-dashboard-preview">
+/* Admin-only visual refinement. Existing navigation, cards, routes and data remain unchanged. */
+body:has(#erpContent .ldmRootAdminDash) #erp .erpTop{background:linear-gradient(110deg,#071b62 0%,#1250bd 55%,#086b9c 100%)!important;border:1px solid #4274e6!important;border-radius:18px!important;color:#fff!important;box-shadow:0 12px 28px #061f6638!important;padding:13px 16px!important}
+body:has(#erpContent .ldmRootAdminDash) #erp .erpTop h2,body:has(#erpContent .ldmRootAdminDash) #erp .erpTop p{color:#fff!important;text-shadow:0 2px 5px #06153e80}
+body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Panel{border-radius:20px!important;box-shadow:0 10px 25px #0a35621a!important}
+body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Monitor{transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 7px 13px #0a356226!important}
+@media(hover:hover){body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Monitor:hover{transform:translateY(-2px);box-shadow:0 11px 19px #0a35623b!important}}
+/* Reposition the existing one-refresh control as a normal header action, never a floating overlay. */
+body:has(#erpContent .ldmRootAdminDash) #ldmV281Refresh{position:static!important;z-index:auto!important;max-width:none!important;margin:0!important;white-space:nowrap;background:linear-gradient(120deg,#03b25a,#0b8b48)!important;color:white!important;border:1px solid #38da87!important;box-shadow:0 4px 10px #064c2e55!important;border-radius:12px!important;font-weight:750!important}
+body:has(#erpContent .ldmRootAdminDash) #erp .erpTop{display:flex!important;flex-wrap:wrap;align-items:center;gap:8px}
+body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-width:0}
+@media(max-width:680px){body:has(#erpContent .ldmRootAdminDash) #erp .erpTop{padding:10px!important;gap:7px!important}body:has(#erpContent .ldmRootAdminDash) #ldmV281Refresh{font-size:12px!important;min-height:38px!important;padding:8px 11px!important}body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium{min-width:0!important}}
+@media(prefers-reduced-motion:reduce){body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Monitor{transition:none!important}}
+</style>
+<script id="ldm-v289-admin-refresh-header">
+(function(){'use strict';
+ // Relocate the existing refresh button only while the Admin dashboard is visible.
+ // No extra refresh button, no new data calls, and no mutation of other role dashboards.
+ const getButton=()=>document.getElementById('ldmV281Refresh');
+ const getHeader=()=>document.querySelector('#erp .erpTop');
+ function sync(){const b=getButton(),h=getHeader();if(!b||!h)return;
+   const admin=!!document.querySelector('#erpContent .ldmRootAdminDash');
+   if(admin){if(b.parentElement!==h)h.appendChild(b)}
+   else if(b.parentElement!==document.body)document.body.appendChild(b);
+ }
+ document.addEventListener('click',()=>queueMicrotask(sync),true);
+ document.addEventListener('DOMContentLoaded',sync);
+ const obs=new MutationObserver(sync);
+ document.addEventListener('DOMContentLoaded',()=>{const host=document.getElementById('erpContent');if(host)obs.observe(host,{childList:true,subtree:false})});
 })();
 </script>
 </body>
