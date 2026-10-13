@@ -317,7 +317,3 @@ body:not(.v1142-erp-active) .v1142PublicControlHide{display:none!important}
 @media(max-width:430px){
   .v1142RefNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
-
-/* V284 ROOT: legacy public shell must never flash before canonical public UI builds. */
-/* V286: keep original public home visible until enhanced shell is ready; prevents blank Preview/first paint. */
-#exactHome.v1142FinalBuilt{visibility:visible!important}

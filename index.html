@@ -1025,7 +1025,7 @@ students:{title:"Student Management",fields:[F("student_name","Student Name","te
 academics:{title:"Academic Management",fields:[F("academic_session","Session"),F("class_name","Class","class"),F("section","Section"),F("subject","Subject"),F("teacher_name","Teacher"),F("assignment_note","Subject Assignment")],cols:[["academic_session","Session"],["class_name","Class"],["section","Section"],["subject","Subject"],["teacher_name","Teacher"]]},
 attendance:{title:"Student Attendance",fields:[F("date","Date","date"),F("student_name","Student"),F("admission_no","Admission No."),F("class_name","Class","class"),F("section","Section"),F("status","Status","attendance"),F("remark","Remark")],cols:[["date","Date"],["student_name","Student"],["admission_no","Adm No"],["class_name","Class"],["section","Sec"],["status","Status"]]},
 staff_attendance:{title:"Staff Attendance",fields:[F("date","Date","date"),F("staff_name","Staff Name"),F("employee_id","Employee ID"),F("status","Status","attendance"),F("remark","Remark")],cols:[["date","Date"],["employee_id","ID"],["staff_name","Staff"],["status","Status"],["remark","Remark"]]},
-fees:{title:"Smart Fee Collection",fields:[["#","Student & Receipt"],F("date","Payment Date","date"),F("receipt_no","Receipt No."),F("student_name","Student Name","text",1),F("admission_no","Admission No.","text",1),F("class_name","Class","class"),F("phone","Parent Mobile"),["#","Fee Plan / Cycle"],F("fee_structure_id","Fee Plan","planselect"),F("fee_type","Fee Type","feeplan"),F("fee_month","Month","month"),F("installment_no","Installment No.","number"),F("custom_installment_label","Installment / Custom Label"),F("fee_head","Fee Head"),F("billing_period","Billing Period"),["#","Amount & Late Fee"],F("base_fee","Base Fee","number"),F("late_fee","Late Fee","number"),F("discount","Discount","number"),F("total_fee","Total Fee","number"),F("paid_amount","Paid Amount","number"),F("payment_status","Payment Status"),F("due_date","Due Date","date"),["#","Payment"],F("payment_mode","Payment Mode"),F("transaction_ref","Transaction Ref"),F("note","Note","textarea",0,"full")],cols:[["receipt_no","Receipt"],["student_name","Student"],["fee_month","Month"],["custom_installment_label","Installment"],["total_fee","Total"],["paid_amount","Paid"],["due_amount","Due"],["due_date","Due Date"]]},
+fees:{title:"Smart Fee Collection",fields:[["#","Student & Receipt"],F("date","Payment Date","date"),F("receipt_no","Receipt No."),F("student_name","Student Name","text",1),F("admission_no","Admission No.","text",1),F("class_name","Class","class"),F("phone","Parent Mobile"),["#","Fee Plan / Cycle"],F("fee_structure_id","Fee Plan","planselect"),F("fee_type","Fee Type","feeplan"),F("fee_month","Month","month"),F("installment_no","Installment No.","number"),F("custom_installment_label","Installment / Custom Label"),F("fee_head","Fee Head"),F("billing_period","Billing Period"),["#","Amount & Late Fee"],F("base_fee","Base Fee","number"),F("late_fee","Late Fee","number"),F("discount","Discount (Default ₹0)","number"),F("total_fee","Total Fee","number"),F("paid_amount","Paid Amount","number"),F("payment_status","Payment Status"),F("due_date","Due Date","date"),["#","Payment"],F("payment_mode","Payment Mode"),F("transaction_ref","Transaction Ref"),F("note","Note","textarea",0,"full")],cols:[["receipt_no","Receipt"],["student_name","Student"],["fee_month","Month"],["custom_installment_label","Installment"],["total_fee","Total"],["paid_amount","Paid"],["due_amount","Due"],["due_date","Due Date"]]},
 exams:{title:"Examination & Result",fields:[F("exam_name","Exam"),F("exam_date","Exam Date","date"),F("student_name","Student"),F("admission_no","Admission No."),F("class_name","Class","class"),F("subject","Subject"),F("internal_marks","Internal","number"),F("external_marks","External","number"),F("max_marks","Max Marks","number"),F("grade","Grade"),F("result_status","Approval / Publish Status")],cols:[["exam_name","Exam"],["student_name","Student"],["class_name","Class"],["subject","Subject"],["internal_marks","Internal"],["external_marks","External"],["total_marks","Total"],["percentage","%"],["grade","Grade"],["result_status","Status"]]},
 staff:{title:"Staff Database",fields:[F("employee_id","Employee ID"),F("staff_name","Name"),F("staff_type","Teaching / Non-Teaching"),F("designation","Designation"),F("subject","Subject"),F("phone","Phone"),F("email","Email","email"),F("joining_date","Joining","date"),F("salary","Salary","number"),F("status","Status")],cols:[["employee_id","ID"],["staff_name","Name"],["staff_type","Type"],["designation","Designation"],["subject","Subject"],["salary","Salary"],["status","Status"]]},
 leave:{title:"Staff Leave",fields:[F("staff_name","Staff"),F("employee_id","Employee ID"),F("from_date","From","date"),F("to_date","To","date"),F("leave_type","Leave Type"),F("reason","Reason","textarea",0,"full"),F("status","Approval Status")],cols:[["staff_name","Staff"],["from_date","From"],["to_date","To"],["leave_type","Type"],["status","Status"]]},
@@ -1230,8 +1230,14 @@ const nameKeys={admissions:["student_name","father_name","mother_name","guardian
 async function list(k,q="",nq=""){
  page=k;
  head(M[k].title,"Cloud Sync • Name Search • Full Search • Excel");
- let{data,error}=await getRows(k);
- if(error)return $("erpContent").innerHTML=`<div class="panel">${esc(error.message)}</div>`;
+ const root=document.getElementById('erpContent');
+ const ticket=String(window.__ldmV282ListTicket=(window.__ldmV282ListTicket||0)+1);
+ if(root)root.innerHTML=`<div class="panel" data-ldm-v282-list="${ticket}" role="status"><h3>${esc(M[k].title)}</h3><div class="empty">⏳ डेटा आ रहा है… / Loading ${esc(M[k].title)}</div></div>`;
+ let result;
+ try{result=await getRows(k)}catch(err){result={error:err}};
+ if(!root||!root.querySelector(`[data-ldm-v282-list="${ticket}"]`))return;
+ let{data,error}=result||{};
+ if(error)return root.innerHTML=`<div class="panel dangerNote">${esc(error.message||String(error))}</div>`;
  let rows=data||[];
  if(k==='events'){
    const td=today();
@@ -1244,20 +1250,20 @@ async function list(k,q="",nq=""){
      return 0;
    });
  }
- $("erpContent").innerHTML=`<div class="panel"><div class="panelHead"><div><h3>${M[k].title}</h3><p class="note">Search बिना page reload के तुरंत filter होगा.</p></div><div class="tools searchTools"><input id="nameSearch" placeholder="🔎 Name / Parent / Roll..." autocomplete="off"><input id="search" placeholder="Search any field..." autocomplete="off">${k==="attendance"&&canEdit(k)?`<button class="secondary" onclick="autoAttendance()">⚡ Auto Attendance</button>`:""}${can("excel")?`<button class="secondary" onclick="exportExcel('${k}')">Excel</button>${k==="students"?`<button class="secondary" onclick="studentExcelTools()">⇄ Class-wise Student Excel</button>`:""}`:""}${k==="admissions"&&can(k)?`<button class="secondary" onclick="v234BlankAdmissionForm()">🖨 Blank Admission Form</button>`:""}${canEdit(k)?`<button class="primary" onclick="openAdd('${k}')">+ Add New</button>`:""}</div></div><div id="listTableWrap">${makeTable(k,rows)}</div>${k==="admissions"&&v14Admin()?`<div id="admissionSyncReport" style="margin-top:12px"><button id="syncApprovedBtn" class="primary" onclick="syncAllApprovedAdmissions()">↻ Sync All Approved → Students</button><p class="note">Approved admission missing हो तो Student Register में जोड़ देगा; existing Admission No./same Name+Mobile को duplicate नहीं बनाएगा, data update करेगा.</p></div>`:""}</div>`;
+ $("erpContent").innerHTML=`<div class="panel"><div class="panelHead"><div><h3>${M[k].title}</h3><p class="note">Search बिना page reload के तुरंत filter होगा.</p></div><div class="tools searchTools"><input id="nameSearch" placeholder="🔎 Name / Parent / Roll..." autocomplete="off"><input id="search" placeholder="Search any field..." autocomplete="off">${k==="attendance"&&canEdit(k)?`<button class="secondary" onclick="autoAttendance()">⚡ Auto Attendance</button>`:""}${can("excel")?`<button class="secondary" onclick="exportExcel('${k}')">Excel</button>${k==="students"?`<button class="secondary" onclick="studentExcelTools()">⇄ Class-wise Student Excel</button>`:""}`:""}${k==="admissions"&&can(k)?`<button class="secondary" onclick="v234BlankAdmissionForm()">🖨 Blank Admission Form</button>`:""}${canEdit(k)?`<button class="primary" onclick="openAdd('${k}')">+ Add New</button>`:""}</div></div><div id="listTableWrap">${rows.length>90?`<p class="note" role="status">${rows.length} रिकॉर्ड • पहले 90 दिख रहे हैं, सभी रिकॉर्ड खोज में उपलब्ध हैं।</p>`:""}${makeTable(k,rows.slice(0,90))}</div>${k==="admissions"&&v14Admin()?`<div id="admissionSyncReport" style="margin-top:12px"><button id="syncApprovedBtn" class="primary" onclick="syncAllApprovedAdmissions()">↻ Sync All Approved → Students</button><p class="note">Approved admission missing हो तो Student Register में जोड़ देगा; existing Admission No./same Name+Mobile को duplicate नहीं बनाएगा, data update करेगा.</p></div>`:""}</div>`;
  const sourceRows=rows;
+ const keys=nameKeys[k]||[];
+ const searchable=sourceRows.map(r=>({row:r,
+   name:[...keys.map(key=>r[key]),r.roll_no,r.father_name,r.mother_name,r.phone,r.admission_no].map(v=>String(v??'')).join(' ').toLocaleLowerCase(),
+   all:Object.values(r).map(v=>typeof v==='object'?'':String(v??'')).join(' ').toLocaleLowerCase()}));
  const filterNow=()=>{
    let nq=($("nameSearch")?.value||"").trim().toLowerCase(),q=($("search")?.value||"").trim().toLowerCase();
-   let keys=nameKeys[k]||[];
-   let out=sourceRows.filter(r=>{
-     let nameOk=!nq||keys.some(key=>String(r[key]??"").toLowerCase().includes(nq))||[r.roll_no,r.father_name,r.mother_name,r.phone,r.admission_no].some(v=>String(v??"").toLowerCase().includes(nq));
-     let allOk=!q||Object.values(r).some(v=>String(v??"").toLowerCase().includes(q));
-     return nameOk&&allOk;
-   });
-   $("listTableWrap").innerHTML=makeTable(k,out);
+   const matches=searchable.filter(x=>(!nq||x.name.includes(nq))&&(!q||x.all.includes(q)));
+   const wrap=document.getElementById('listTableWrap');if(!wrap)return;
+   wrap.innerHTML=(matches.length>90?`<p class="note" role="status">${matches.length} matches • पहले 90 दिखाए हैं। सटीक नाम/ID लिखकर सूची सीमित करें।</p>`:"")+makeTable(k,matches.slice(0,90).map(x=>x.row));
  };
  $("nameSearch").value=nq||"";$("search").value=q||"";
- $("nameSearch").oninput=filterNow;$("search").oninput=filterNow;
+ let v281FilterDelay;const v281FilterInput=()=>{clearTimeout(v281FilterDelay);v281FilterDelay=setTimeout(filterNow,85)};$("nameSearch").oninput=v281FilterInput;$("search").oninput=v281FilterInput;
 }
 function admissionToStudent(r,adm){return {student_name:r.student_name||'',admission_no:adm,student_id:r.student_id||adm,roll_no:r.roll_no||'',class_name:r.class_name||'',section:r.section||'',father_name:r.father_name||'',mother_name:r.mother_name||'',phone:r.primary_phone||r.parent_verified_phone||'',student_email:r.email||'',parent_email:r.parent_email||'',address:r.address||'',dob:r.dob||null,gender:r.gender||'',guardian_name:r.guardian_name||'',emergency_phone:r.alternate_phone||'',photo_path:r.photo_path||'',status:'Active',fee_category:'Regular',remarks:r.remarks||''}}
 async function syncOneApprovedAdmission(r){
@@ -1327,6 +1333,7 @@ async function saveRecord(k,form,id=null){
   let btn=form.querySelector('button[type="submit"],button.primary'),st=form.querySelector('.saveStatus');if(!st){st=document.createElement('div');st.className='saveStatus';form.appendChild(st)}
   st.className='saveStatus';st.textContent=id?'Updating...':'Saving...';if(btn){btn.disabled=true;btn.classList.add('saveBusy')}
   try{let oldRow=null;if(id&&['students','admissions','gallery'].includes(k)){let rr=await sb.from(k).select('*').eq('id',id).maybeSingle();oldRow=rr.data||null}let o=Object.fromEntries(new FormData(form));await processUploads(k,form,o);normalize(k,o);
+    if(k==='fees'){const disc=Number(o.discount||0),total=Number(o.total_fee||0),paid=Number(o.paid_amount||0);if(!Number.isFinite(disc)||disc<0||disc>total||!Number.isFinite(paid)||paid<0||paid+disc>total)throw new Error('Invalid discount/payment: discount and payment must be nonnegative and not exceed total fee / छूट व भुगतान कुल फीस से अधिक नहीं हो सकते');}
     Object.keys(o).forEach(key=>{if(o[key]===''&&['admission_date','dob','due_date','exam_date','joining_date','from_date','to_date','payment_date','event_date','date','issue_date','follow_up_date','effective_from','effective_to','start_time','end_time','fee_structure_id','installment_id'].includes(key))o[key]=null});
     let q=id?sb.from(k).update(o).eq('id',id):sb.from(k).insert(o);let{error}=await q;if(error)throw error;if(id)await cleanupReplacedAssets(k,oldRow,o);
     if(k==='students'){
@@ -1336,7 +1343,7 @@ async function saveRecord(k,form,id=null){
     st.className='saveStatus saveOk';st.textContent=id?'✓ Updated successfully':'✓ Saved successfully';toast(st.textContent);try{window.ldmMarkDataDirty?.(k)}catch(_e){}setTimeout(()=>{closeModal();afterSave(k)},450);
   }catch(err){let msg=err?.message||String(err)||'Save failed';st.className='saveStatus saveError';st.textContent='Save failed: '+msg;toast('Save failed: '+msg)}finally{if(btn){btn.disabled=false;btn.classList.remove('saveBusy')}}
 }
-function openAdd(k){let m=M[k];if(!m)return;$('modalTitle').textContent='+ Add '+m.title;$('dataForm').innerHTML=m.fields.map(f=>field(f,(f[2]==='date'&&['date','admission_date'].includes(f[0]))?{[f[0]]:today()}:{})).join('')+`<button type="submit" class="primary">Save</button><div class="saveStatus">Ready to save</div>`;$('modal').classList.remove('hidden');$('dataForm').onsubmit=e=>{e.preventDefault();saveRecord(k,e.currentTarget)}}
+function openAdd(k){let m=M[k];if(!m)return;$('modalTitle').textContent='+ Add '+m.title;$('dataForm').innerHTML=m.fields.map(f=>field(f,k==='fees'&&f[0]==='discount'?{discount:0}:(f[2]==='date'&&['date','admission_date'].includes(f[0]))?{[f[0]]:today()}:{})).join('')+`<button type="submit" class="primary">Save</button><div class="saveStatus">Ready to save</div>`;$('modal').classList.remove('hidden');$('dataForm').onsubmit=e=>{e.preventDefault();saveRecord(k,e.currentTarget)}}
 
 function openEdit(k,r){$('modalTitle').textContent='Edit '+M[k].title;$('dataForm').innerHTML=M[k].fields.map(f=>field(f,r)).join('')+`<button type="submit" class="primary">Update</button><div class="saveStatus">Ready to update</div>`;$('modal').classList.remove('hidden');$('dataForm').onsubmit=e=>{e.preventDefault();saveRecord(k,e.currentTarget,r.id)}}
 
@@ -1495,7 +1502,25 @@ function v14Print(elId){let el=$(elId);if(!el)return toast('Preview first');let 
 
 \n\n
 
+
+
 </body></html>`);w.document.close();setTimeout(()=>w.print(),300)}
+</script>
+<script id="v284-safe-delegation-review">
+/* V284: read-only review; approval MUST NOT mutate student or financial records. */
+(function(){
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+window.v284ApprovalReview=async function(){
+ const role=String(window.profile?.role||'').toLowerCase();
+ if(!['admin','super_admin','principal'].includes(role))return window.toast?.('Admin only / केवल एडमिन');
+ const tasks=window.__v187Tasks||[], assignments=window.__v187Assignees||[];
+ const rows=assignments.filter(a=>a.is_active!==false).map(a=>({a,t:tasks.find(t=>String(t.id)===String(a.task_id))})).filter(x=>x.t&&x.t.status!=='cancelled');
+ const pending=rows.filter(x=>/pending|review|submitted|completed|done/i.test(String(x.a.status||'')));
+ const list=pending.length?pending.map(({a,t})=>`<article class="v187TaskCard"><h3>${esc(t.title)}</h3><p>${esc(a.teacher_name)} · ${esc(a.status)} · ${esc(t.module_route||'General work')}</p><p>${esc(a.teacher_note||'No note submitted')}</p><small>Read-only review: verify actual work in its module before approving any change.</small></article>`).join(''):'<div class="empty">No submitted/pending-review assignments found in the loaded work list.</div>';
+ if(typeof window.v90Head==='function')window.v90Head('Assistant Work Review','Read-only · verify before approval');
+ if(typeof window.v90Set==='function')window.v90Set(`<div class="v187Page"><section class="panel"><h2>Assistant Work Review / समीक्षा</h2><p>Showing ${pending.length} candidate tasks from last loaded delegation data. This is NOT a financial approval or a database commit.</p><button onclick="window.ldmDelegationCenter?.()">← Back to Delegation</button>${list}</section></div>`);
+};
+})();
 </script>
 
 <style>
@@ -13537,14 +13562,14 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
 (()=>{'use strict';
  const E=v=>typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const isAdmin=()=>{let r=String(window.profile?.role||'').toLowerCase();return ['admin','super_admin','principal'].includes(r)||(typeof window.v90Admin==='function'&&window.v90Admin())};
- let rows=[];
+ let rows=[],v282StudentIndex=[];
  window.v150StudentMaster=async function(){
    if(!isAdmin())return window.toast?.('Admin / Principal only');window.__v90Route='v150_student_master';window.head?.('🎓 Student Master Control','Full Details • Edit • Correct • Update • Delete Safety');
    let h=document.getElementById('erpContent');h.innerHTML='<div class="panel"><div class="empty">Loading central Student Master…</div></div>';
-   let r=await sb.from('students').select('*').order('class_name').order('roll_no').limit(5000);if(r.error){h.innerHTML='<div class="dangerNote">'+E(r.error.message)+'</div>';return}rows=r.data||[];
+   let r=await sb.from('students').select('*').order('class_name').order('roll_no').limit(5000);if(!h.querySelector('.empty')||String(window.__v90Route)!=='v150_student_master')return;if(r.error){h.innerHTML='<div class="dangerNote">'+E(r.error.message)+'</div>';return}rows=r.data||[];v282StudentIndex=rows.map(row=>({row,cls:String(row.class_name||''),key:[row.student_name,row.father_name,row.roll_no,row.admission_no,row.student_id,row.phone].map(v=>String(v??'')).join(' ').toLocaleLowerCase()}));
    h.innerHTML=`<div class="panel"><div class="panelHead"><div><h2>🎓 Student Master Control</h2><p class="note">Same central Student record • no duplicate master table</p></div><div class="v150MasterActions"><button class="primary" onclick="openAdd('students')">＋ Add Student</button><button onclick="studentExcelCenter?.()">Excel Import / Update</button></div></div><div class="v150MasterKpis"><button><small>Total Records</small><b>${rows.length}</b></button><button><small>Active</small><b>${rows.filter(x=>String(x.status||'Active').toLowerCase()==='active').length}</b></button><button><small>Classes</small><b>${new Set(rows.map(x=>x.class_name).filter(Boolean)).size}</b></button><button><small>Safety</small><b>Central</b></button></div><div class="v150MasterToolbar"><label>Class<select id="v150SMClass" onchange="v150RenderStudents()"><option value="">All Classes</option>${[...new Set(rows.map(x=>x.class_name).filter(Boolean))].map(x=>`<option>${E(x)}</option>`).join('')}</select></label><label>Search<input id="v150SMQ" placeholder="Name / Father / Roll / Admission / Mobile" oninput="clearTimeout(window.__v150SMD);window.__v150SMD=setTimeout(v150RenderStudents,150)"></label></div><div id="v150SMBody"></div></div>`;v150RenderStudents();window.scrollTo(0,0)
  };
- window.v150RenderStudents=function(){let q=String(document.getElementById('v150SMQ')?.value||'').toLowerCase().trim(),cl=document.getElementById('v150SMClass')?.value||'',a=rows.filter(x=>(!cl||x.class_name===cl)&&(!q||[x.student_name,x.father_name,x.roll_no,x.admission_no,x.student_id,x.phone].some(v=>String(v||'').toLowerCase().includes(q))));let b=document.getElementById('v150SMBody');if(!b)return;b.innerHTML=`<div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Class</th><th>Roll</th><th>Admission / Student ID</th><th>Mobile</th><th>Status</th><th>Master Actions</th></tr>${a.map(x=>`<tr><td><b>${E(x.student_name||'')}</b></td><td>${E(x.father_name||'—')}</td><td>${E(x.class_name||'—')}</td><td>${E(x.roll_no||'—')}</td><td>${E(x.admission_no||'—')}<small class="cellSub">${E(x.student_id||'')}</small></td><td>${E(x.phone||'—')}</td><td>${E(x.status||'Active')}</td><td><div class="v150MasterActions"><button onclick="dashboardStudentFull('${E(x.id)}')">Full Details</button><button class="edit" onclick='openEdit("students",${JSON.stringify(x).replace(/'/g,"&#39;")})'>Edit / Correct</button><button onclick="openStudentFeeAccount?.('${E(x.id)}')">Fee Link</button><button class="del" onclick="v150SafeStudentDelete('${E(x.id)}')">Delete Safety</button></div></td></tr>`).join('')||'<tr><td colspan="8">No matching students</td></tr>'}</table></div>`};
+ window.v150RenderStudents=function(){let q=String(document.getElementById('v150SMQ')?.value||'').toLocaleLowerCase().trim(),cl=document.getElementById('v150SMClass')?.value||'',a=v282StudentIndex.filter(x=>(!cl||x.cls===cl)&&(!q||x.key.includes(q))).map(x=>x.row);let b=document.getElementById('v150SMBody');if(!b)return;const v281Count=a.length;a=a.slice(0,90);b.innerHTML=`<p class="note" role="status">${v281Count} विद्यार्थी मिले • ${a.length} दिखाए गए। और के लिए Class/नाम/Admission से खोजें।</p><div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Class</th><th>Roll</th><th>Admission / Student ID</th><th>Mobile</th><th>Status</th><th>Master Actions</th></tr>${a.map(x=>`<tr><td><b>${E(x.student_name||'')}</b></td><td>${E(x.father_name||'—')}</td><td>${E(x.class_name||'—')}</td><td>${E(x.roll_no||'—')}</td><td>${E(x.admission_no||'—')}<small class="cellSub">${E(x.student_id||'')}</small></td><td>${E(x.phone||'—')}</td><td>${E(x.status||'Active')}</td><td><div class="v150MasterActions"><button onclick="dashboardStudentFull('${E(x.id)}')">Full Details</button><button class="edit" onclick='openEdit("students",${JSON.stringify(x).replace(/'/g,"&#39;")})'>Edit / Correct</button><button onclick="openStudentFeeAccount?.('${E(x.id)}')">Fee Link</button><button class="del" onclick="v150SafeStudentDelete('${E(x.id)}')">Delete Safety</button></div></td></tr>`).join('')||'<tr><td colspan="8">No matching students</td></tr>'}</table></div>`};
  window.v150SafeStudentDelete=async function(id){let x=rows.find(r=>String(r.id)===String(id));if(!x)return;if(!confirm('Delete Safety permanent data delete नहीं करेगा. Student को Inactive/Archived करना है?\n'+(x.student_name||'')))return;let u=await sb.from('students').update({status:'Inactive'}).eq('id',id);if(u.error)return window.toast?.(u.error.message);window.toast?.('✓ Student archived safely • history preserved');await v150StudentMaster()};
  // ID printing is owned by the canonical V164 engine below.
  // Final dispatch extension, preserving V149 owner for every other route.
@@ -13639,7 +13664,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
    h.innerHTML=`<div class="panel"><div class="panelHead"><div><h2>🎓 Student Master Control</h2><p class="note">One canonical Student Master • वही identity Excel, Attendance, Due, Marksheet, Admit Card, ID और Certificate में use होगी.</p></div><div class="v150MasterActions"><button class="primary" onclick="openAdd('students')">＋ Add Student</button><button onclick="studentExcelCenter?.()">Excel Import / Update</button><button onclick="render('v65_recycle')">♻ Recycle Bin</button></div></div><div class="v150MasterKpis"><button><small>Active Records</small><b>${masterRows.length}</b></button><button><small>Standard Classes</small><b>${usedStandard.size}</b></button><button class="${classFixCount?'v255KpiWarn':''}" onclick="document.getElementById('v150SMClass').value='__CLASS_FIX__';v150RenderStudents()"><small>Class Fix Needed</small><b>${classFixCount}</b></button><button><small>Delete Rule</small><b>Recycle First</b></button><button><small>Safety</small><b>Central</b></button></div><div class="v155DeletedNote">Delete Safety → Recycle Bin. Unknown/blank class को किसी class में guess करके auto-change नहीं किया जाएगा; Admin सही class चुनकर correction करेगा.</div><div class="v150MasterToolbar"><label>Class<select id="v150SMClass" onchange="v150RenderStudents()"><option value="">All Classes</option>${standardClasses.map(x=>`<option value="${E(x)}">${E(x)}</option>`).join('')}${classFixCount?`<option value="__CLASS_FIX__">⚠ Class Fix Needed (${classFixCount})</option>`:''}</select></label><label>Search<input id="v150SMQ" placeholder="Name / Father / Roll / Admission / Mobile" oninput="clearTimeout(window.__v150SMD);window.__v150SMD=setTimeout(v150RenderStudents,150)"></label></div><div id="v150SMBody"></div><section id="v150SMDetail"></section></div>`;
    window.v150RenderStudents();window.scrollTo(0,0);
  };
- window.v150RenderStudents=function(){let q=String(document.getElementById('v150SMQ')?.value||'').toLowerCase().trim(),cl=document.getElementById('v150SMClass')?.value||'',standardSet=new Set((Array.isArray(cls)?cls:[]).map(x=>ldmClassCanonical(x)).filter(Boolean)),a=masterRows.filter(x=>{let canon=ldmClassCanonical(x.class_name),classOk=!cl||(cl==='__CLASS_FIX__'?!standardSet.has(canon):ldmClassSame(x.class_name,cl));return classOk&&(!q||[x.student_name,x.father_name,x.roll_no,x.admission_no,x.student_id,x.phone].some(v=>String(v||'').toLowerCase().includes(q)))});let b=document.getElementById('v150SMBody');if(!b)return;b.innerHTML=`<div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Class</th><th>Roll</th><th>Admission / Student ID</th><th>Mobile</th><th>Status</th><th>Master Actions</th></tr>${a.map(x=>{let canon=ldmClassCanonical(x.class_name),bad=!standardSet.has(canon),show=bad?'⚠ Fix Needed':canon;return `<tr class="${bad?'v255ClassFixRow':''}"><td><b>${E(x.student_name||'')}</b></td><td>${E(x.father_name||'—')}</td><td><b>${E(show||'⚠ Fix Needed')}</b>${bad?`<small class="cellSub">Saved: ${E(x.class_name||'blank')}</small>`:''}</td><td>${E(x.roll_no||'—')}</td><td>${E(x.admission_no||'—')}<small class="cellSub">${E(x.student_id||'')}</small></td><td>${E(x.phone||'—')}</td><td>${E(x.status||'Active')}</td><td><div class="v150MasterActions"><button onclick="dashboardStudentFull('${E(x.id)}');setTimeout(()=>document.getElementById('v150SMDetail')?.scrollIntoView({behavior:'smooth',block:'start'}),50)">Full Details</button><button class="edit" onclick='openEdit("students",${JSON.stringify(x).replace(/'/g,"&#39;")})'>Edit / Correct</button><button onclick="openStudentFeeAccount?.('${E(x.id)}')">Fee Link</button><button class="del" onclick="v150SafeStudentDelete('${E(x.id)}')">Delete Safety</button></div></td></tr>`}).join('')||'<tr><td colspan="8">No matching active students</td></tr>'}</table></div>`;window.ldmDecorateSortableTables?.()};
+ window.v150RenderStudents=function(){let q=String(document.getElementById('v150SMQ')?.value||'').toLowerCase().trim(),cl=document.getElementById('v150SMClass')?.value||'',standardSet=new Set((Array.isArray(cls)?cls:[]).map(x=>ldmClassCanonical(x)).filter(Boolean)),a=masterRows.filter(x=>{let canon=ldmClassCanonical(x.class_name),classOk=!cl||(cl==='__CLASS_FIX__'?!standardSet.has(canon):ldmClassSame(x.class_name,cl));return classOk&&(!q||[x.student_name,x.father_name,x.roll_no,x.admission_no,x.student_id,x.phone].some(v=>String(v||'').toLowerCase().includes(q)))});let b=document.getElementById('v150SMBody');if(!b)return;const v281Count=a.length;a=a.slice(0,90);b.innerHTML=`<p class="note" role="status">${v281Count} विद्यार्थी मिले • ${a.length} दिखाए गए। और के लिए Class/नाम/Admission से खोजें।</p><div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Class</th><th>Roll</th><th>Admission / Student ID</th><th>Mobile</th><th>Status</th><th>Master Actions</th></tr>${a.map(x=>{let canon=ldmClassCanonical(x.class_name),bad=!standardSet.has(canon),show=bad?'⚠ Fix Needed':canon;return `<tr class="${bad?'v255ClassFixRow':''}"><td><b>${E(x.student_name||'')}</b></td><td>${E(x.father_name||'—')}</td><td><b>${E(show||'⚠ Fix Needed')}</b>${bad?`<small class="cellSub">Saved: ${E(x.class_name||'blank')}</small>`:''}</td><td>${E(x.roll_no||'—')}</td><td>${E(x.admission_no||'—')}<small class="cellSub">${E(x.student_id||'')}</small></td><td>${E(x.phone||'—')}</td><td>${E(x.status||'Active')}</td><td><div class="v150MasterActions"><button onclick="dashboardStudentFull('${E(x.id)}');setTimeout(()=>document.getElementById('v150SMDetail')?.scrollIntoView({behavior:'smooth',block:'start'}),50)">Full Details</button><button class="edit" onclick='openEdit("students",${JSON.stringify(x).replace(/'/g,"&#39;")})'>Edit / Correct</button><button onclick="openStudentFeeAccount?.('${E(x.id)}')">Fee Link</button><button class="del" onclick="v150SafeStudentDelete('${E(x.id)}')">Delete Safety</button></div></td></tr>`}).join('')||'<tr><td colspan="8">No matching active students</td></tr>'}</table></div>`;window.ldmDecorateSortableTables?.()};
  window.v150SafeStudentDelete=async function(id){let x=masterRows.find(r=>String(r.id)===String(id));if(!x)return;if(!confirm(`Student को Recycle Bin में भेजना है?\n${x.student_name||''}\nRestore possible रहेगा.`))return;let rr=await sb.rpc('v65_move_to_recycle',{p_table:'students',p_id:String(id)});if(rr.error)return window.toast?.(rr.error.message+' • Recycle Bin SQL check करें');masterRows=masterRows.filter(r=>String(r.id)!==String(id));window.v150RenderStudents();window.toast?.('✓ Student Recycle Bin में भेजा गया • main list से हट गया')};
 
  /* V156 Admin Dashboard canonical order + summary drill-down. Existing module renderers remain the single owners. */
@@ -15443,7 +15468,7 @@ if(typeof statsBase==='function'){
   function renderTasks(){let host=q('v187TaskList');if(!host)return;const tasks=window.__v187Tasks;host.innerHTML=tasks.length?tasks.map(t=>{let a=window.__v187Assignees.filter(x=>String(x.task_id)===String(t.id)&&x.is_active!==false),route=String(t.module_route||'').trim(),details=String(t.details||'').trim(),broken=!route&&!details;return `<article class="v187TaskCard ${t.status==='cancelled'?'cancelled':''}"><div class="v187TaskTop"><div><h3>${E(t.title)}</h3><div class="v187Badges"><span class="v187Badge ${tstatus(t.priority)}">${E(t.priority)}</span><span class="v187Badge ${tstatus(t.status)}">${E(t.status)}</span>${route?`<span class="v187Badge">ERP: ${E(route)}</span>`:broken?`<span class="v187Badge off">⚠ Link Missing</span>`:`<span class="v187Badge">General Work • No ERP Link</span>`}${t.work_date?`<span class="v187Badge">Work ${E(fmt(t.work_date))}</span>`:''}${t.due_date?`<span class="v187Badge">Due ${E(fmt(t.due_date))}</span>`:''}</div></div><small>${E(fmt(t.created_at))}</small></div>${broken?`<div class="v187NoteBox"><b>⚠ पुराना/अधूरा task:</b> Linked ERP Function और Instructions दोनों खाली हैं. नीचे Link Now दबाएँ.</div>`:`<p>${E(t.details||'').replace(/\n/g,'<br>')}</p>`}<div class="v187Assignees">${a.map(x=>`<div class="v187Assignee"><b>${x.responsibility==='primary'?'⭐ ':''}${E(x.teacher_name)}</b><span>${E(x.status)}${x.teacher_note?' • '+E(x.teacher_note):''}</span></div>`).join('')||'<div class="empty">No active team</div>'}</div><div class="v187TaskActions">${broken?`<button class="primary" onclick="v187EditTask('${t.id}')">🔗 Link Function / Work</button>`:`<button onclick="v187EditTask('${t.id}')">✏ Update Work</button><button onclick="v187EditTask('${t.id}')">🔗 Change Function</button>`}<button onclick="v187EditTeam('${t.id}')">👥 Add / Remove Teacher</button>${t.status!=='completed'?`<button class="primary" onclick="v187SetTaskStatus('${t.id}','completed')">✓ Complete Work</button>`:''}${t.status!=='cancelled'?`<button class="danger" onclick="v187SetTaskStatus('${t.id}','cancelled')">⛔ Stop Work</button>`:`<button onclick="v187SetTaskStatus('${t.id}','assigned')">↻ Reactivate</button>`}</div></article>`}).join(''):'<div class="empty">अभी कोई delegated task नहीं है.</div>'}
   window.ldmDelegationCenter=async function(){
     if(!admin())return window.toast?.('Admin / Principal only');window.__v90Route='work_delegation';window.v90Head?.('🧩 Admin Assistant / Work Delegation','One or many teachers • responsibility • temporary work shortcut');window.v90InstallShell?.('work_delegation');
-    window.v90Set?.(`<div class="v187Page"><section class="v187Hero"><small>ADMIN ASSISTANT CENTER</small><h2>काम बाँटिए, जिम्मेदारी स्पष्ट रखिए</h2><p>एक काम एक या कई teachers को दें. Teacher Dashboard पर Assigned Work दिखेगा. कोई polling/realtime नहीं.</p></section><section class="panel"><div class="panelHead"><div><h3>➕ Assign New Work</h3><p class="note">Mapped Active Teachers ही selectable हैं.</p></div></div><div id="v187CreateArea"><div class="empty">Loading teachers…</div></div></section><section class="panel"><div class="panelHead"><div><h3>📋 Assigned Work</h3><p class="note">Edit • Add/Remove Team • Complete • Off/Cancel</p></div><button class="secondary" onclick="ldmDelegationCenter()">↻ Refresh</button></div><div id="v187TaskList"><div class="empty">Loading…</div></div></section></div>`);
+    window.v90Set?.(`<div class="v187Page"><section class="v187Hero"><small>ADMIN ASSISTANT CENTER</small><h2>काम बाँटिए, जिम्मेदारी स्पष्ट रखिए</h2><p>एक काम एक या कई teachers को दें. Teacher Dashboard पर Assigned Work दिखेगा. कोई polling/realtime नहीं.</p></section><section class="panel"><div class="panelHead"><div><h3>➕ Assign New Work</h3><p class="note">Mapped Active Teachers ही selectable हैं.</p></div></div><div id="v187CreateArea"><div class="empty">Loading teachers…</div></div></section><section class="panel"><div class="panelHead"><div><h3>📋 Assigned Work</h3><p class="note">Edit • Add/Remove Team • Complete • Off/Cancel</p></div><button class="secondary" onclick="ldmDelegationCenter()">↻ Refresh</button></div><p><button class="secondary" onclick="window.v284ApprovalReview()">📋 Assistant Work Review / Approval Queue</button></p><div id="v187TaskList"><div class="empty">Loading…</div></div></section></div>`);
     try{await loadDelegationData();let c=q('v187CreateArea');if(c)c.innerHTML=`<div class="v187FormGrid"><label>Work / Responsibility<input id="v187TaskTitle" placeholder="e.g. Annual Program Photo & Notice Update"></label><label>Priority<select id="v187TaskPriority"><option>Normal</option><option>High</option><option>Urgent</option><option>Low</option></select></label><label>Work Date / कब करना है<input id="v272TaskWorkDate" type="date" value="${new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'})}"><small>कल का काम है तो कल की तारीख चुनें.</small></label><label>Due Date<input id="v187TaskDue" type="date"></label><label>Linked ERP Function<select id="v187TaskRoute">${routeOptions()}</select><small><b>सिर्फ delegation-ready functions</b> दिखेंगे; high-risk Admin controls blocked हैं.</small></label><label><span>Work Type</span><span style="display:flex;align-items:center;gap:7px;min-height:42px"><input id="v266GeneralWork" type="checkbox" style="width:auto;min-height:auto"> 📝 General Work — ERP link नहीं चाहिए</span></label><label class="full">Instructions<textarea id="v187TaskDetails" placeholder="काम क्या करना है, क्या submit करना है…"></textarea></label></div><h4>Select Teacher(s) • Primary के लिए radio चुनें</h4>${teacherPickHTML('v187New')}<p><button id="v187AssignBtn" class="primary" onclick="v187CreateTask()">✓ Assign Responsibility</button></p>`;renderTasks()}catch(e){q('v187CreateArea').innerHTML=`<div class="dangerNote">${E(e.message||e)}</div>`;q('v187TaskList').innerHTML='<div class="empty">V187 SQL run करने के बाद यह center काम करेगा.</div>'}
   };
   function selectedTeam(prefix){let picks=[...document.querySelectorAll('.'+prefix+'Teacher:checked')],primary=document.querySelector('.'+prefix+'Primary:checked')?.value,chosen=new Set(picks.map(x=>String(x.dataset.i)));if(!chosen.has(String(primary)))primary=picks[0]?.dataset.i;return picks.map(x=>{let i=Number(x.dataset.i),t=window.__v187Teachers[i];return {teacher_auth_user_id:t.auth_user_id,teacher_profile_id:String(t.id||''),teacher_name:t.teacher_name||'Teacher',responsibility:String(i)===String(primary)?'primary':'assistant'}})}
@@ -16179,7 +16204,7 @@ if(typeof statsBase==='function'){
  function schoolAllowed(){return ['admin','super_admin','principal'].includes(role())}
  function ownerRole(){return ['admin','super_admin'].includes(role())}
  function openApp(file){const target=/^https?:\/\//i.test(String(file||''))?String(file):'./'+file;window.open(target,'_blank','noopener,noreferrer')}
- function openStudyHub(){window.location.href='./study/index.html'}
+ function openStudyHub(){window.location.href='./study/hub.html'}
  function card(id,icon,title,sub,file){let b=document.createElement('button');b.id=id;b.type='button';b.innerHTML=`<i>${icon}</i><b>${title}</b><small>${sub}</small><em>OPEN →</em>`;b.onclick=()=>openApp(file);return b}
  function install(){if(!schoolAllowed())return;let grid=document.querySelector('.ldmMasterGrid');if(!grid)return;if(!document.getElementById('v230UdiseCard'))grid.appendChild(card('v230UdiseCard','🏫','UDISE+ Control Center','Profile • Facilities • Students • Teachers • Readiness','udise.html'));if(ownerRole()&&!document.getElementById('v230AdvocateCard'))grid.appendChild(card('v230AdvocateCard','⚖️','Advocate Control Center','FIR/CNR • Cases • Hearings • Drafting • Legal Books','advocate.html'));if(ownerRole()&&!document.getElementById('v230DeveloperCard'))grid.appendChild(card('v230DeveloperCard','💻','ERP Builder & Developer Studio','Sector ERP • Requirements • Security Gate • Version • Delivery','https://ldm-erp-factory-pro.vercel.app'));if(!document.getElementById('v274StudyHubCard')){let b=document.createElement('button');b.id='v274StudyHubCard';b.type='button';b.innerHTML='<i>🎓</i><b>LDM Smart Study & Competition Hub</b><small>Board Class • Competitive Exams • Current Affairs • Test • PPT • Notes</small><em>OPEN STUDY HUB →</em>';b.onclick=openStudyHub;grid.appendChild(b)}}
  window.ldmV230InstallWorkspace=install;
@@ -18158,56 +18183,59 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
    const box=byId('v75MFResults'),input=byId('v75MFQ');if(!box)return;
    const q=cleanSearch(input?.value),cls=byId('v75MFClass')?.value||'',sortDir=byId('v75MFSort')?.value==='desc'?'desc':'asc';
    const token=++masterSequence;
-   masterAbort=startReq(token,masterAbort);
-   const abort=masterAbort;
+   if(masterAbort)try{masterAbort.abort()}catch(_){}
+   masterAbort=new AbortController();const signal=masterAbort.signal;
    const fresh=()=>token===masterSequence&&box===byId('v75MFResults')&&box.isConnected;
-   // Class browsing remains possible; initial opening is intentionally lightweight.
-   const limit=q?65:cls?95:35;
-   if(!q&&!cls&&silent){box.innerHTML='<div class="empty">नाम या Admission No. लिखें, या Class चुनें। पूरा डेटा तभी लोड होगा।</div>';return}
-   if(!q&&!cls){box.innerHTML='<div class="empty">पहले 35 विद्यार्थी दिख रहे हैं। अन्य विद्यार्थी के लिए नाम, पिता या Admission No. लिखें।</div>'}
-   const client=getSB();if(!client)return notify('Database connection not ready / डेटाबेस उपलब्ध नहीं');
+   if(!q&&!cls){window.v75MFStudents=[];window.v111FeeRows=[];box.innerHTML='<div class="empty">नाम, पिता, Admission No. लिखें या कक्षा चुनें। खोजने से पहले पूरी फीस लोड नहीं होगी।</div>';return}
+   const limit=q?35:45,client=getSB();if(!client){box.textContent='Database connection not ready / डेटाबेस उपलब्ध नहीं';return}
+   box.innerHTML='<div class="empty" role="status">🔎 विद्यार्थियों की खोज…</div>';
    try{
      let qry=client.from('students').select(feeFields).order('student_name',{ascending:sortDir==='asc'}).order('roll_no').limit(limit);
-     if(cls&&typeof ldmApplyClassFilter==='function')qry=ldmApplyClassFilter(qry,'class_name',cls);
-     else if(cls)qry=qry.eq('class_name',cls);
+     if(cls&&typeof ldmApplyClassFilter==='function')qry=ldmApplyClassFilter(qry,'class_name',cls);else if(cls)qry=qry.eq('class_name',cls);
      if(q)qry=qry.or(searchOr(q,['student_name','admission_no','father_name','phone','student_id','roll_no']));
-     if(typeof qry.abortSignal==='function')qry=qry.abortSignal(abort.signal);
-     const {data,error}=await qry;
-     if(!fresh())return;
-     if(error){if(abort.signal.aborted)return;throw error}
-     const active=typeof v111ActiveStudents==='function'?v111ActiveStudents(data||[]):data||[];
-     const rows=active.slice(0,limit);
+     if(typeof qry.abortSignal==='function')qry=qry.abortSignal(signal);
+     const {data,error}=await qry;if(!fresh())return;
+     if(error){if(signal.aborted)return;throw error}
+     const rows=typeof v111ActiveStudents==='function'?v111ActiveStudents(data||[]):data||[];
      window.v75MFStudents=rows;window.v111FeeRows=rows;
-     if(!rows.length){box.innerHTML=`<div class="empty">${q||cls?'कोई विद्यार्थी नहीं मिला। नाम/कक्षा जाँचें।':'नाम लिखें या कक्षा चुनें।'}</div>`;return}
-     // V278: Central Current Due is the ONE source of financial truth.
-     // The legacy v111FeeMaps added future installments into today's Due.
-     // Never substitute zero for a failed/absent central snapshot.
+     if(!rows.length){box.textContent='कोई विद्यार्थी नहीं मिला। नाम/कक्षा जाँचें।';return}
+     const money=n=>typeof v75Money==='function'?v75Money(n):'₹'+Number(n||0).toLocaleString('en-IN');
+     const heading='<div class="v111StudentHead"><span>Select</span><span>Student</span><span>Father</span><span>Class</span><span>Current Due</span><span>Monthly</span><span>Transport</span><span>Start</span><span>Action</span></div>';
+     box.innerHTML=`<div class="v277-search-count" role="status">${rows.length} विद्यार्थी मिले • नाम अभी, फीस विवरण लोड हो रहा है${rows.length>=limit?' • और खोजने के लिए नाम/ID लिखें':''}</div>`+heading+rows.map((student,i)=>`<div class="v111StudentRow" data-v281-i="${i}"><input class="v111StudentCheck" type="checkbox" value="${escapeHTML(student.admission_no)}" onchange="v111UpdateCount()"><div><b>${escapeHTML(student.student_name)}</b><small>${escapeHTML(student.admission_no)} • Roll ${escapeHTML(student.roll_no||'—')}</small></div><div>${escapeHTML(student.father_name)}<small>${escapeHTML(student.phone)}</small></div><div>Class ${escapeHTML(student.class_name)}</div><div class="v111Money" data-v281-due>⏳</div><div data-v281-monthly>—</div><div data-v281-transport>—</div><div data-v281-start><small>Loading…</small></div><button class="primary" onclick="v111OpenFeePlanner('${escapeHTML(student.id)}')">Open</button></div>`).join('');
+     if(typeof v111UpdateCount==='function')v111UpdateCount();
+     // The first paint is complete. The slower fee snapshot never blocks student discovery.
      const admissions=[...new Set(rows.map(s=>String(s.admission_no||'').trim()).filter(Boolean))];
+     if(!admissions.length)return;
      if(typeof window.ldmFeeDueSnapshot!=='function')throw new Error('Current Due service unavailable / केंद्रीय फीस गणना नहीं मिली');
      const session=(typeof school!=='undefined'&&school?.academic_session)||window.school?.academic_session||'2026-27';
-     const month=(typeof v111MonthKey==='function')?v111MonthKey(new Date()):new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'}).slice(0,7);
-     const [settingsResponse,currentDueRows]=await Promise.all([
-       client.from('student_fee_settings')
-         .select('admission_no,monthly_fee,auto_start_month,transport_fee,transport_start_month')
-         .eq('academic_session',session).in('admission_no',admissions),
+     const month=typeof v111MonthKey==='function'?v111MonthKey(new Date()):new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'}).slice(0,7);
+     const [settings,currentDueRows]=await Promise.all([
+       client.from('student_fee_settings').select('admission_no,monthly_fee,auto_start_month,transport_fee,transport_start_month').eq('academic_session',session).in('admission_no',admissions),
        window.ldmFeeDueSnapshot(admissions,session,month)
      ]);
      if(!fresh())return;
-     if(settingsResponse.error)throw settingsResponse.error;
-     if(!Array.isArray(currentDueRows))throw new Error('Invalid Current Due response / फीस डेटा उपलब्ध नहीं');
-     const maps={sm:new Map((settingsResponse.data||[]).map(x=>[String(x.admission_no),x])),
-       dm:new Map(currentDueRows.map(x=>[String(x.admission_no),Number(x.current_due||0)]))};
-     const summary=`<div class="v277-search-count" role="status">${rows.length} विद्यार्थी दिखाए गए${rows.length===limit?' • और खोजने के लिए पूरा नाम/कक्षा लिखें':''}</div>`;
-     const heading='<div class="v111StudentHead"><span>Select</span><span>Student</span><span>Father</span><span>Class</span><span>Current Due</span><span>Monthly</span><span>Transport</span><span>Start</span><span>Action</span></div>';
-     const money=(n)=>typeof v75Money==='function'?v75Money(n):'₹'+Number(n||0).toLocaleString('en-IN');
-     const rowsHTML=rows.map(s=>{
-       const cfg=maps.sm.get(String(s.admission_no))||{},due=Number(maps.dm.get(String(s.admission_no))||0);
-       const free=String(s.fee_category||'').toLowerCase()==='free'||Number(s.fee_waiver_percent||0)>=100;
-       return `<div class="v111StudentRow"><input class="v111StudentCheck" type="checkbox" value="${escapeHTML(s.admission_no)}" onchange="v111UpdateCount()"><div><b>${escapeHTML(s.student_name)}</b><small>${escapeHTML(s.admission_no)} • Roll ${escapeHTML(s.roll_no||'—')}</small></div><div>${escapeHTML(s.father_name)}<small>${escapeHTML(s.phone)}</small></div><div>Class ${escapeHTML(s.class_name)}</div><div class="v111Money ${due&&!free?'v111Due':'v111Good'}">${free?'FREE':money(due)}</div><div>${money(cfg.monthly_fee||0)}</div><div>${money(cfg.transport_fee||0)}</div><div><small>M: ${escapeHTML(cfg.auto_start_month||'—')}</small><small>T: ${escapeHTML(cfg.transport_start_month||cfg.auto_start_month||'—')}</small></div><button class="primary" onclick="v111OpenFeePlanner('${escapeHTML(s.id)}')">Open</button></div>`;
-     }).join('');
-     box.innerHTML=summary+heading+rowsHTML;
-     if(typeof v111UpdateCount==='function')v111UpdateCount();
-   }catch(e){if(!fresh()||abort.signal.aborted)return;box.innerHTML=`<div class="dangerNote">Search failed / खोज विफल: ${escapeHTML(e.message||e)}</div>`}
+     if(settings.error)throw settings.error;
+     if(!Array.isArray(currentDueRows))throw new Error('Current Due response invalid / फीस विवरण उपलब्ध नहीं');
+     const sm=new Map((settings.data||[]).map(x=>[String(x.admission_no),x]));
+     const dm=new Map(currentDueRows.map(x=>[String(x.admission_no),Number(x.current_due||0)]));
+     rows.forEach((student,i)=>{
+       const el=box.querySelector(`[data-v281-i="${i}"]`);if(!el)return;
+       const cfg=sm.get(String(student.admission_no))||{},due=dm.get(String(student.admission_no));
+       const dueCell=el.querySelector('[data-v281-due]');
+       const free=String(student.fee_category||'').toLowerCase()==='free'||Number(student.fee_waiver_percent||0)>=100;
+       dueCell.textContent=free?'FREE':due===undefined?'—':money(due);
+       dueCell.classList.add(free||due===0?'v111Good':'v111Due');
+       el.querySelector('[data-v281-monthly]').textContent=money(cfg.monthly_fee||0);
+       el.querySelector('[data-v281-transport]').textContent=money(cfg.transport_fee||0);
+       el.querySelector('[data-v281-start]').textContent='M: '+(cfg.auto_start_month||'—')+' • T: '+(cfg.transport_start_month||cfg.auto_start_month||'—');
+     });
+     const count=box.querySelector('.v277-search-count');if(count)count.textContent=`${rows.length} विद्यार्थी • Current Due आज तक अपडेट`;
+   }catch(e){if(!fresh()||signal.aborted)return;
+     // If list has rendered, keep it: do not mislabel unknown dues as ₹0.
+     const count=box.querySelector('.v277-search-count');
+     if(count){count.textContent='विद्यार्थी मिल गए • फीस विवरण उपलब्ध नहीं: '+String(e.message||e);count.setAttribute('data-status','error');box.querySelectorAll('[data-v281-due]').forEach(x=>x.textContent='जाँचें');}
+     else box.innerHTML=`<div class="dangerNote">Search failed / खोज विफल: ${escapeHTML(e.message||e)}</div>`;
+   }
  };
  assign('v75MFSearch',newMasterFeeSearch);
  // The dashboard quick fee lookup is already server-side. Cancel old requests to prevent results overwriting a later search.
@@ -18307,7 +18335,7 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
  }
  // Persistent Admin Link Manager (Supabase table, RLS admin-only); no data fetch before button is opened.
  const defaultLinks=[
-   {name:'School Study Hub',url:'./study/index.html',description:'ERP के अंदर मौजूद Study Hub',internal:true},
+   {name:'School Study Hub',url:'./study/hub.html',description:'ERP के अंदर मौजूद Study Hub',internal:true},
    {name:'SKY SIR Teaching Studio',url:'https://sky-sir-teaching-studio.vercel.app/',description:'Digital Teaching • Exams',internal:false},
    {name:'Exam Paper Center',url:'https://sky-sir-teaching-studio.vercel.app/exam-paper-center/index.html',description:'Nursery–10 • Art • GK • Print',internal:false}
  ];
@@ -18462,6 +18490,132 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
  window.addEventListener('pagehide',stop);
  // Only the local-date check runs on Dashboard; data requests are throttled to PERIOD.
  window.LDM_V279_DASHBOARD_BUILD='V279-IST-DATE-AUTO-REFRESH-CANONICAL';
+})();
+</script>
+<style id="ldm-v281-one-refresh-style">
+#ldmV281Refresh{display:none;position:fixed;z-index:2147482500;top:86px;right:10px;border:1px solid #acc9e3;border-radius:13px;background:#f4faff;color:#18436e;box-shadow:0 4px 15px #132f4930;padding:9px 12px;font:700 13px/1.15 system-ui,sans-serif;min-height:42px;max-width:195px;cursor:pointer;align-items:center;gap:6px}
+#ldmV281Refresh:disabled{opacity:.7;cursor:wait}
+body:has(#erp:not(.hidden)) #ldmV281Refresh,body:has(#parentPortal:not(.hidden) #parentDashboard:not(.hidden)) #ldmV281Refresh{display:inline-flex}
+@media(max-width:630px){#ldmV281Refresh{top:83px;right:8px;padding:7px 9px;font-size:12px;max-width:140px}}
+@media print{#ldmV281Refresh{display:none!important}}
+/* The two old dashboard refresh controls are superseded; route-specific business action buttons remain. */
+#erpContent .ldmRootAdminDash [onclick*="v185RefreshDashboardData"],#erpContent .ldmRootAdminDash [onclick*="v39LoadAdminPanels"],#erpContent .ldmRootAdminDash #v185RefreshDashboardBtn{display:none!important}
+#erpContent .v281SearchHint{border:1px solid #d8e6f5;padding:9px 10px;border-radius:9px;background:#f6faff;font-size:12px;color:#24517a}
+</style>
+<script id="ldm-v281-one-refresh-and-progressive-search">
+/* V281: ONE ERP-only Refresh; immediate student lists; no polling or fresh global DB fetch on typing.
+   Preserve active module and searches, no reload()/location changes, no changes to saves or auth. */
+(function(){'use strict';if(window.__LDM_V281__)return;window.__LDM_V281__=true;
+ const q=id=>document.getElementById(id),E=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const allowed=()=>{let p=window.profile;try{if(!p&&typeof profile!=='undefined')p=profile}catch(_){};return !!p};
+ const route=()=>String(window.__v90Route||'dashboard');
+ const notify=txt=>{try{window.toast?.(txt)}catch(_){}};
+ const getSB=()=>{try{return typeof sb!=='undefined'?sb:null}catch(_){return null}};
+ let refreshBusy=false;
+ function setup(){if(q('ldmV281Refresh'))return;const b=document.createElement('button');b.type='button';b.id='ldmV281Refresh';b.title='इस खुले हुए मॉड्यूल के डेटा को फिर जाँचें; पूरे ERP को Reload न करें।';b.textContent='↻ Refresh / अपडेट';b.onclick=refresh;document.body.appendChild(b)}
+ const storedSearchIds=['v75MFQ','v75MFClass','v75MFSort','v150SMQ','v150SMClass','v105FeeQ','v105FeeClass','globalStudentSearch','v75TopQ','nameSearch','search'];
+ function snapshotSearch(){const m={};for(const id of storedSearchIds){const el=q(id);if(el&&'value'in el)m[id]=el.value}return m}
+ function restoreSearch(m){for(const [id,v] of Object.entries(m)){const el=q(id);if(el&&'value'in el){el.value=v;if(id==='v150SMQ'||id==='v150SMClass')window.v150RenderStudents?.()}}}
+ async function refresh(){const b=q('ldmV281Refresh');if(refreshBusy||!allowed()||!b)return;
+   const erp=q('erp');const erpVisible=!!(erp&&!erp.classList.contains('hidden'));
+   const parentVisible=!erpVisible&&!!(q('parentPortal')&&!q('parentPortal').classList.contains('hidden')&&q('parentDashboard')&&!q('parentDashboard').classList.contains('hidden'));
+   if(!erpVisible&&!parentVisible)return;
+   const current=parentVisible?'parent_portal':route();refreshBusy=true;b.disabled=true;b.textContent='↻ Updating…';
+   try{
+     if(parentVisible){
+       if(typeof window.loadParentPortal!=='function')throw Error('Parent Portal refresh unavailable');
+       await window.loadParentPortal();
+     }else if(current==='dashboard'){
+       const role=String((window.profile||{}).role||'').toLowerCase();
+       const isAdminRole=['admin','super_admin','principal'].includes(role);
+       if(isAdminRole&&q('erpContent')?.querySelector('.ldmRootAdminDash')&&typeof window.ldmRefreshDashboardOnce==='function'){
+         try{window.ldmMarkDataDirty?.('dashboard')}catch(_){}
+         const ok=await window.ldmRefreshDashboardOnce({force:true,reason:'v281-single-global'});
+         if(ok===false){notify('आज के डेटा का अपडेट जारी है या डेटा उपलब्ध नहीं।');return}
+       }else if(typeof window.render==='function')await window.render('dashboard');
+       else throw Error('Dashboard refresh unavailable');
+     }else if(current==='master_fee'&&q('v75MFResults')){
+       await window.v75MFSearch?.(true);
+     }else if(current==='fee_dashboard'&&q('v105FeeResults')){
+       await window.v105DashboardFeeSearch?.();
+     }else{
+       // Do not clear unsaved form entries silently.
+       const changed=[...erp.querySelectorAll('textarea,input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"])')]
+         .some(el=>el.closest('form')&&el.value&&el.value!==el.defaultValue&&!storedSearchIds.includes(el.id));
+       if(changed&&!window.confirm('इस पेज में भरे हुए लेकिन Save न किए गए डेटा को नुकसान हो सकता है। फिर भी Refresh करें?'))return;
+       const searches=snapshotSearch();const scroll=window.scrollY;
+       try{window.ldmMarkDataDirty?.(current)}catch(_){}
+       if(typeof window.render!=='function')throw Error('Module refresh is not available');
+       await window.render(current);
+       restoreSearch(searches);
+       if(scroll>0)window.scrollTo({top:scroll,behavior:'instant'});
+     }
+     notify('✓ '+current+' • डेटा अपडेट किया गया');
+   }catch(e){notify('Refresh failed / अपडेट नहीं हुआ: '+String(e?.message||e))}
+   finally{refreshBusy=false;b.disabled=false;b.textContent='↻ Refresh / अपडेट'}
+ }
+ // Native master-search RPC scans many tables. First show small student+staff results;
+ // the comprehensive original RPC remains available only on explicit demand.
+ const originalSearch=window.v764MasterSearchRun;
+ let seq=0,controller=null;const cache=new Map();
+ function postgrestOr(term,fields){const safe=term.replace(/[%_,()\\]/g,' ').replace(/\s+/g,' ').trim().slice(0,70);return fields.map(f=>`${f}.ilike.%${safe}%`).join(',')}
+ function showRows(rows,host,term,busy){
+   if(!host)return;
+   if(!rows.length){host.innerHTML=`<div class="v281SearchHint">${busy?'विद्यार्थी मिलान पूरा • अन्य रिकॉर्ड खोज रहे हैं…':'कोई परिणाम नहीं मिला। सभी मॉड्यूलों के लिए Full Search दबाएँ।'}</div>`;return}
+   host.innerHTML=`<div class="v281SearchHint" role="status">${rows.length} परिणाम • ${busy?'आंशिक परिणाम, बाकी आ रहे हैं…':'तैयार'} • नाम पर क्लिक करके पूरा विवरण देखें।</div>`+rows.map((x,i)=>`<div class="v764SearchRow"><div><b>${E(x.icon)} ${E(x.title)}</b><small>${E(x.subtitle)}</small></div><button type="button" onclick="v764OpenSearchResult(${i})">Open</button></div>`).join('');
+ }
+ async function quickSearch(){
+   const inp=q('v75TopQ'),term=String(inp?.value||'').trim();if(term.length<2)return notify('कम से कम दो अक्षर लिखें');
+   const client=getSB();if(!client)return notify('Database connection is unavailable');
+   const stamp=++seq;if(controller)try{controller.abort()}catch(_){}controller=new AbortController();const signal=controller.signal;
+   if(typeof v64Modal!=='function')return notify('Search panel unavailable');
+   v64Modal('<h2>🔎 Fast Master Search</h2><p class="note">Students और Staff पहले • बाकी मॉड्यूल जरूरत पर</p><div class="tools"><button type="button" class="secondary" id="v281FullSearch">🔎 All Modules / पूरी खोज</button></div><div id="v764SearchBox" class="empty" role="status">नाम खोज रहे हैं…</div>');
+   const host=q('v764SearchBox'),deep=q('v281FullSearch');if(deep)deep.onclick=()=>{if(typeof originalSearch==='function')originalSearch()};
+   const valid=()=>stamp===seq&&q('v764SearchBox')===host;
+   const key=term.toLowerCase();if(cache.has(key)&&Date.now()-cache.get(key).at<45000){const rows=cache.get(key).rows;try{v764SearchRows=rows}catch(_){};showRows(rows,host,term,false);return}
+   const studentResults=[],staffResults=[],errors=[];
+   let pending=2;
+   const safe=postgrestOr(term,['student_name','father_name','admission_no','roll_no','phone']);
+   const update=()=>{
+     if(!valid()||signal.aborted)return;
+     const all=[...studentResults,...staffResults];
+     try{v764SearchRows=all}catch(_){}
+     if(all.length)showRows(all,host,term,pending>0);
+     else if(!pending)host.innerHTML=errors.length?`<div class="dangerNote">Search failed / खोज त्रुटि: ${E(errors.join(' • '))}</div>`:'<div class="v281SearchHint">कोई परिणाम नहीं मिला। Full Search से अन्य मॉड्यूल खोजें।</div>';
+   };
+   const students=(async()=>{
+     try{
+       let req=client.from('students').select('id,student_name,father_name,admission_no,roll_no,class_name,phone').or(safe).limit(15);
+       if(typeof req.abortSignal==='function')req=req.abortSignal(signal);
+       const response=await req;if(!valid()||signal.aborted)return;
+       if(response.error)throw response.error;
+       (response.data||[]).forEach(x=>studentResults.push({icon:'🎓',module:'Students',title:x.student_name,subtitle:`${x.class_name||''} • Adm ${x.admission_no||'—'} • Father ${x.father_name||'—'}`,route:'students',record_id:x.id}));
+     }catch(e){if(!signal.aborted)errors.push('Student: '+String(e.message||e))}
+     finally{pending--;update()}
+   })();
+   const staff=(async()=>{
+     try{
+       let req=client.from('staff').select('id,staff_name,employee_id,designation,phone').or(postgrestOr(term,['staff_name','employee_id','phone'])).limit(6);
+       if(typeof req.abortSignal==='function')req=req.abortSignal(signal);
+       const response=await req;if(!valid()||signal.aborted)return;
+       if(response.error)throw response.error;
+       (response.data||[]).forEach(x=>staffResults.push({icon:'👩‍🏫',module:'Staff',title:x.staff_name,subtitle:`${x.designation||'Staff'} • ${x.employee_id||'—'}`,route:'staff',record_id:x.id}));
+     }catch(e){if(!signal.aborted)errors.push('Staff: '+String(e.message||e))}
+     finally{pending--;update()}
+   })();
+   await Promise.all([students,staff]);
+   if(!valid()||signal.aborted)return;
+   if(!errors.length){cache.set(key,{rows:[...studentResults,...staffResults],at:Date.now()});if(cache.size>25)cache.delete(cache.keys().next().value)}
+
+ }
+ if(typeof originalSearch==='function'){
+   window.v764MasterSearchRun=quickSearch;
+   try{v764MasterSearchRun=quickSearch}catch(_){}
+   try{v75TopSearchRun=quickSearch}catch(_){}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+ window.ldmV281Refresh=refresh;
+ window.LDM_V281_BUILD='V282-FAST-CLICK-AND-SEARCH';
 })();
 </script>
 </body>
