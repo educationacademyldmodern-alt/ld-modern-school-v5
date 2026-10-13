@@ -1,0 +1,9 @@
+/* Only public home, admin fee counter and absence controls. */
+#publicSite .v1142Hero img{object-fit:contain!important;object-position:center!important;width:100%!important;height:100%!important;filter:none!important}
+#publicSite>.v57TopInfo{min-height:82px;box-sizing:border-box;margin:0 0 8px}
+#v309Other,#v309Correction{padding:16px;border:1px solid #c5d9e9;border-radius:14px;background:#f6fbff;margin:12px 0;display:grid;gap:10px;font-family:u306Text,Arial,sans-serif}
+#v309Other input,#v309Other select,#v309Correction textarea{min-width:0;max-width:100%;font-size:16px;padding:10px}
+#v309Other button,#v309Correction button,#v309Next,#v309PDF,#v309Share,#v309PrepareShare,#v309Correct,#v309OtherOpen{background:#155a74;color:white;border:0;border-radius:9px;padding:11px;margin:5px;min-height:42px;cursor:pointer}
+#v309MoneyStatus{white-space:pre-wrap}#v309Correction label{display:flex;gap:8px;align-items:start}.v309DashClass{padding:10px;min-height:44px;font-size:16px;max-width:100%}
+
+#v304ReceiptPaper{font-family:u306Text,Arial,sans-serif}

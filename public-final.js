@@ -45,7 +45,7 @@ function hidePublicControls(){
 
 function build(){
   const home=document.getElementById('exactHome');
-  if(!home || document.getElementById('v1142RefPage')) return;
+  if(!home)return;const existing=document.getElementById('v1142RefPage');if(existing){existing.querySelectorAll('.v1142RefNav button').forEach(b=>{if(!b.dataset.v309Bound){b.dataset.v309Bound='1';b.addEventListener('click',()=>publicGo(b.dataset.page))}});if(!home.classList.contains('v1142FinalBuilt'))home.classList.add('v1142FinalBuilt');return}
 
   const logins=home.querySelector('.v26LoginCards');
   if(!logins) return;
@@ -168,21 +168,23 @@ function hookSchoolRefresh(){
 }
 
 function start(){
+  const pub=document.getElementById('publicSite');
+  if(pub&&!pub.querySelector(':scope>.v57TopInfo')){const greeting=document.createElement('section');greeting.className='v57TopInfo';const hour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'numeric',hourCycle:'h23'}).format(new Date()));greeting.innerHTML='<div class="v57Clock"><b>'+ (hour<12?'Good Morning':hour<17?'Good Afternoon':'Good Evening')+'</b><span data-v57time>'+safeText(new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'}))+'</span></div>';pub.prepend(greeting)}
   build();
   hookSchoolRefresh();
   state();
-  [300,900,1800].forEach(ms=>setTimeout(()=>{build();sync();state()},ms));
+  
 
   document.addEventListener('click',()=>setTimeout(state,0),true);
   window.addEventListener('resize',state,{passive:true});
 
   const ob=new MutationObserver(()=>state());
-  const pub=document.getElementById('publicSite');
   if(pub)ob.observe(pub,{attributes:true,subtree:false,attributeFilter:['class']});
   const home=document.getElementById('exactHome');
   if(home)ob.observe(home,{attributes:true,subtree:false,attributeFilter:['class']});
 }
 
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});
-else start();
+document.addEventListener('DOMContentLoaded',()=>{hookSchoolRefresh();sync();state()},{once:true});
+// The home DOM already exists at this script position: build before the first visible switch.
+start();
 })();
