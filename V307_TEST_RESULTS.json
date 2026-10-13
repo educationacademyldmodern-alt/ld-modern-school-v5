@@ -1,0 +1,69 @@
+{
+  "database": {
+    "passed": 28,
+    "tests": [
+      "Four days qualifies, three days excluded",
+      "Present, Leave, missing and unresolved conflicts break streak",
+      "Duplicate identical A/Absent records count once",
+      "Transferred and previous session records excluded",
+      "Duplicate admission identity excluded across classes",
+      "Admin sees both permitted classes",
+      "Future as-of date rejected",
+      "Class Teacher gets assigned class with Roman alias only",
+      "Subject-only teacher receives no class list",
+      "Holiday attendance is excluded rather than treated absent",
+      "Holiday bridges four actual school days",
+      "Sunday skipped and last absent date remains Saturday",
+      "Configured working Sunday with missing attendance breaks streak",
+      "Working Sunday absent counts as school day",
+      "Network retry saves only one shared log",
+      "Changed streak cannot reuse same request UUID",
+      "Teacher reads admin follow-up with actual author",
+      "Teacher cannot save outside assigned class",
+      "Admin sees teacher shared follow-up",
+      "Follow-up never modifies attendance",
+      "Direct client insert denied",
+      "Authenticated teacher RLS reads shared own-class remarks",
+      "Revoked assignment immediately denies history and save",
+      "Disabled admin denied list and follow-up",
+      "Existing resolved Present overrides conflicting absent rows",
+      "Existing resolved Absent permits confirmed streak",
+      "Today unmarked optionally shows only confirmed prior school-day streak",
+      "Today-unmarked option off excludes unfinished current streak"
+    ],
+    "engine": "PGlite PostgreSQL isolated fixture",
+    "live_supabase_tested": false
+  },
+  "browser": {
+    "passed": 18,
+    "tests": [
+      "Admin dashboard auto-list and navigation installed once",
+      "Existing dashboard groups, exam and UDISE entry preserved",
+      "Call link sanitizes phone and does not save contact result",
+      "Full list shows missing number and today-unmarked label",
+      "Class filter restricts rows",
+      "Search returns clear empty state",
+      "Empty default follow-up rejected without write",
+      "Admin saves shared history and refreshed list",
+      "Teacher dashboard automatically displays only own scope",
+      "Class Teacher can see Admin shared remark",
+      "Unknown network result locks details and retains retry",
+      "Pending retry blocks navigation",
+      "Retry uses same UUID without duplicate saved history",
+      "Bundled Hindi font loads for absence list",
+      "Mobile page fits viewport with internally scrolling table",
+      "Admin sees Teacher latest shared follow-up",
+      "Missing database migration displays setup error not false zero",
+      "No browser runtime errors"
+    ],
+    "engine": "153.0.8010.0",
+    "fixture_only": true,
+    "live_supabase_tested": false
+  },
+  "additional_regressions": {
+    "udise_core": 30,
+    "existing_behavior": 6,
+    "inline_script_syntax": 129
+  },
+  "live_database_tested": false
+}
