@@ -1329,7 +1329,7 @@ $("enquiryForm").onsubmit=async e=>{
 
 function makeTable(k,rows){let m=M[k];return`<div class="tableWrap"><table><tr>${m.cols.map(c=>`<th>${c[1]}</th>`).join("")}${k==="fees"?"<th>Reminder</th>":""}${canEdit(k)?"<th>Actions</th>":""}</tr>${rows.map(r=>`<tr>${m.cols.map(c=>`<td>${["amount","salary","basic_salary","allowance","deduction","net_salary","total_fee","paid_amount","due_amount","monthly_fee","total_amount","admission_fee","annual_charge","transport_fee","late_fee"].includes(c[0])?money(r[c[0]]):esc(r[c[0]])}</td>`).join("")}${k==="fees"?`<td>${reminder(r)}</td>`:""}${canEdit(k)?`<td><button class="mini edit" onclick='openEdit("${k}",${JSON.stringify(r).replace(/'/g,"&#39;")})'>✏ Edit</button> ${k==="admissions"?`<button class="mini" onclick="v234FilledAdmissionForm('${r.id}')">🖨 Form</button>`:""} <button class="mini del" onclick="delRow('${k}','${r.id}')">🗑 Delete</button></td>`:""}</tr>`).join("")}</table></div>`}
 
-function afterSave(k){return ['fee_structures','fee_installments','fee_heads'].includes(k)?feeStructure():render(k)}
+function afterSave(k){window.ldmMarkDataDirty?.(k);return ['fee_structures','fee_installments','fee_heads'].includes(k)?feeStructure():render(k)}
 
 async function saveRecord(k,form,id=null){
   let btn=form.querySelector('button[type="submit"],button.primary'),st=form.querySelector('.saveStatus');if(!st){st=document.createElement('div');st.className='saveStatus';form.appendChild(st)}
@@ -1366,7 +1366,7 @@ async function delRow(k,id){
 function autoAttendance(){head("Automatic Attendance","Select class/date → all Active students Present");$("erpContent").innerHTML=`<div class="panel"><h3>⚡ Automatic Student Attendance</h3><div class="tools"><select id="ac"><option value="">Class</option>${cls.map(x=>`<option>${x}</option>`).join("")}</select><input id="ad" type="date" value="${today()}"><input id="asec" placeholder="Section optional"><button class="primary" onclick="markAll()">Mark All Present</button></div><p class="note">बाद में absent/leave students को Attendance list में Edit करें।</p></div>`}
 async function markAll(){let c=$("ac").value,d=$("ad").value,s=$("asec").value.trim();if(!c)return toast("Select class");let q=ldmApplyClassFilter(sb.from("students").select("id,student_name,admission_no,class_name,section,status"),"class_name",c);if(s)q=q.eq("section",s);let{data}=await q;data=window.ldmCanonicalActiveStudents?window.ldmCanonicalActiveStudents(data||[]):(data||[]).filter(x=>!['inactive','deleted','trashed','recycled','archived','left','withdrawn'].includes(String(x.status||'active').toLowerCase()));if(!data.length)return toast("No active students found");let rows=data.map(x=>({date:d,student_name:x.student_name,admission_no:x.admission_no,class_name:ldmClassCanonical(x.class_name)||x.class_name,section:x.section,status:"Present",remark:"Auto"}));let{error}=await sb.from("attendance").upsert(rows,{onConflict:"date,admission_no"});if(!error)try{window.ldmMarkDataDirty?.('attendance')}catch(_e){}toast(error?error.message:rows.length+" students Present")}
 
-async function feeStructure(){head("Flexible Fee Structure","Monthly • Installment • Custom • One Time");let[p,i,h]=await Promise.all([sb.from('fee_structures').select('*').order('created_at',{ascending:false}),sb.from('fee_installments').select('*').order('sort_order',{ascending:true}),sb.from('fee_heads').select('*').order('sort_order',{ascending:true})]);if(p.error)return toast(p.error.message);feePlans=p.data||[];let planName=id=>{let x=feePlans.find(z=>z.id===id);return x?`${x.class_name||''} • ${x.plan_name||''}`:'—'};$('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div><h3>Fee Plans - Latest Flexible Version</h3><p class="note">Monthly, installment, custom, one-time, grace days और late-fee rule owner अपनी जरूरत से बना/edit कर सकते हैं.</p></div>${canEdit('fee_structures')?`<button class="primary" onclick="openAdd('fee_structures')">+ Add Fee Plan</button>`:''}</div>${makeTable('fee_structures',feePlans)}</div><div class="panel"><div class="panelHead"><h3>Installments / Months</h3>${canEdit('fee_installments')?`<button class="primary" onclick="openAdd('fee_installments')">+ Add Month / Installment</button>`:''}</div>${feeMasterTable('fee_installments',i.data||[],planName)}</div><div class="panel"><div class="panelHead"><h3>Fee Heads</h3>${canEdit('fee_heads')?`<button class="primary" onclick="openAdd('fee_heads')">+ Add Fee Head</button>`:''}</div>${feeMasterTable('fee_heads',h.data||[],planName)}</div>`}
+async function feeStructure(){head("Flexible Fee Structure","Monthly • Installment • Custom • One Time");let[p,i,h]=await Promise.all([sb.from('fee_structures').select('*').order('created_at',{ascending:false}),sb.from('fee_installments').select('*').order('sort_order',{ascending:true}),sb.from('fee_heads').select('*').order('sort_order',{ascending:true})]);if(p.error||i.error||h.error)return toast((p.error||i.error||h.error).message);feePlans=p.data||[];let planName=id=>{let x=feePlans.find(z=>z.id===id);return x?`${x.class_name||''} • ${x.plan_name||''}`:'—'};$('erpContent').innerHTML=`<div class="r322FeeStructure"><header class="r322FeeHero"><div><small>FEES & ACCOUNTS</small><h2>फीस संरचना / Fee Structure</h2><p>कक्षा की फीस योजना, मासिक किस्तें और फीस मद एक जगह।</p></div><div class="r322FeeCounts"><span><b>${feePlans.length}</b> फीस योजनाएँ</span><span><b>${(i.data||[]).length}</b> किस्तें / माह</span><span><b>${(h.data||[]).length}</b> फीस मद</span></div></header><div class="panel"><div class="panelHead"><div><h3>फीस योजनाएँ / Fee Plans</h3><p class="note">Monthly, installment, custom, one-time, grace days और late-fee rule owner अपनी जरूरत से बना/edit कर सकते हैं.</p></div>${canEdit('fee_structures')?`<button class="primary" onclick="openAdd('fee_structures')">+ फीस योजना जोड़ें</button>`:''}</div>${makeTable('fee_structures',feePlans)}</div><div class="panel"><div class="panelHead"><h3>मासिक फीस / किस्तें</h3>${canEdit('fee_installments')?`<button class="primary" onclick="openAdd('fee_installments')">+ माह / किस्त जोड़ें</button>`:''}</div>${feeMasterTable('fee_installments',i.data||[],planName)}</div><div class="panel"><div class="panelHead"><h3>फीस मद / Fee Heads</h3>${canEdit('fee_heads')?`<button class="primary" onclick="openAdd('fee_heads')">+ फीस मद जोड़ें</button>`:''}</div>${feeMasterTable('fee_heads',h.data||[],planName)}</div></div>`}
 
 function feeMasterTable(k,rows,planName){let m=M[k];return`<div class="tableWrap"><table><tr><th>Fee Plan</th>${m.cols.map(c=>`<th>${c[1]}</th>`).join('')}${canEdit(k)?'<th>Actions</th>':''}</tr>${rows.map(r=>`<tr><td>${esc(planName(r.fee_structure_id))}</td>${m.cols.map(c=>`<td>${['amount','late_fee'].includes(c[0])?money(r[c[0]]):esc(r[c[0]])}</td>`).join('')}${canEdit(k)?`<td><button class="mini edit" onclick='openEdit("${k}",${JSON.stringify(r).replace(/'/g,"&#39;")})'>✏ Edit</button> <button class="mini del" onclick="delRow('${k}','${r.id}')">🗑 Delete</button></td>`:''}</tr>`).join('')}</table></div>`}
 
@@ -9567,27 +9567,26 @@ async function v90AdminDashboard(){
  window.__v90Route='dashboard';v90Head('Admin Dashboard','Premium School Command Center • On-Demand Data');v90InstallShell('dashboard');
  if(!window.__ldmAdminStatsHTML){try{window.__ldmAdminStatsHTML=sessionStorage.getItem('ldm_admin_stats_html')||''}catch(_e){}}
  let actCache='',noticeCache='',eventCache='';try{actCache=sessionStorage.getItem('ldm_admin_activities_html')||'';noticeCache=sessionStorage.getItem('ldm_admin_notices_html')||'';eventCache=sessionStorage.getItem('ldm_admin_events_html')||''}catch(_e){}
- const hold=Array.from({length:6},()=>'<div class="v90Stat ldmStatHold"><span>•</span><div><small>Tap Refresh Dashboard</small><b>—</b></div></div>').join('');
+ const hold=Array.from({length:6},()=>'<div class="v90Stat ldmStatHold"><span>•</span><div><small>आँकड़े लोड हो रहे हैं…</small><b>—</b></div></div>').join('');
  v90Set(`<div class="v90Dash v114AdminDash ldmRootAdminDash v271AdminPremium">
  <section id="v185FrontDesk" class="v90Panel v185FrontDesk"><div class="v185FrontHead"><div><small>DAILY COUNTER</small><h2>⚡ Daily Quick Desk</h2><p>Fee Check • Pay Now • Student Search • Admission • Receipt / Ledger</p></div><span id="ldmV279Freshness" class="ldmV279Freshness" role="status" aria-live="polite">◷ आज का डेटा जाँच रहे हैं…</span></div><div class="v185FrontActions"><button onclick="v185FrontFee()">💰 Fee Inquiry / Collect</button><button onclick="openAdd('students')">➕ Add Student</button><button onclick="v185NewAdmission()">🎓 New Admission</button><button onclick="v185FindStudent()">🔎 Find Student</button><button onclick="render('fee_dashboard')">🧾 Receipt / Ledger</button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">Fee पूछने/जमा करने के लिए नाम लिखें और Search दबाएँ.</div></div><div id="v105FeeAccount"></div></section>
  <section class="v156DailyControl" aria-label="Daily School Control"><div id="v114AdminClassSlot"></div>
  <section class="v114AdminMainGrid">
   <article class="v90Panel v114AttendancePanel"><div class="v114PanelHead"><h3>Student Attendance (Today)</h3><button onclick="render('attendance')">View Details →</button></div><div class="v114AttendanceVisual"><div id="v114AttDonut" class="v114Donut" style="--p:0"><div><b id="v114AttPct">—</b><small>Present</small></div></div><div class="v114Legend"><span><i class="p"></i>Present <b id="v114AttPresent">—</b></span><span><i class="a"></i>Absent <b id="v114AttAbsent">—</b></span><span><i class="l"></i>Leave <b id="v114AttLeave">—</b></span><span><i class="t"></i>Marked <b id="v114AttMarked">—</b></span><span><i class="n"></i>Not Marked <b id="v114AttNotMarked">—</b></span><span><i class="t"></i>Total Students <b id="v114AttTotal">—</b></span></div></div></article>
-  <article class="v90Panel v114FeeChartPanel"><div class="v114PanelHead"><h3>Fee Collection</h3><button onclick="render('v200_due_fee_report')">View Due Report →</button></div><div class="v114Bars"><div><span id="v114FeeBarCollected" class="green" style="height:25%"></span><small>Collected</small><b id="v114FeeCollected">—</b></div><div><span id="v114FeeBarDue" class="orange" style="height:25%"></span><small>Total Due</small><b id="v114FeeDue">—</b></div><div><span class="red" style="height:45%"></span><small>Requests</small><b id="v114PendingReq">—</b></div></div></article>
   <article class="v90Panel v114QuickPanel"><div class="v114PanelHead"><h3>Quick Links</h3><button onclick="render('settings')">⚙</button></div><div class="v114QuickGrid">${[['👩‍🏫','Add Teacher','staff'],['📅','Mark Attendance','attendance'],['📉','Add Expense','expenses'],['📊','Generate Report','reports'],['✉','Send Notice','notice_order_center'],['⚙','Settings','settings']].map(x=>`<button onclick="render('${x[2]}')"><b>${x[0]}</b><span>${x[1]}</span></button>`).join('')}</div></article>
  </section></section>
  <section id="v90Stats" class="v90Stats v114AdminStats v156ClickableStats">${window.__ldmAdminStatsHTML||hold}</section>
  <section class="ldmMasterControl"><div class="ldmMasterTitle"><div><small>ADMIN MASTER CONTROL</small><h2>School Control Center</h2></div><span>Central • Safe • On Demand</span></div><div class="ldmMasterGrid"><button onclick="render('class_teacher_control')"><i>👨‍🏫</i><b>Class Teacher Control</b><small>Assign • Repair • Change • Handover • Open Class</small><em>OPEN →</em></button><button onclick="render('v150_student_master')"><i>🎓</i><b>Student Master Control</b><small>Full Details • Edit • Correct • Update • Delete Safety</small><em>OPEN →</em></button><button onclick="render('v6422_due_master')"><i>⚡</i><b>Quick Due Fee Update</b><small>Central Ledger • Monthly • Installment • Reminder</small><em>OPEN →</em></button><button onclick="render('idcard_center')"><i>🪪</i><b>ID Card Center</b><small>10 Formats • Preview • A4 Print</small><em>OPEN →</em></button><button onclick="render('work_delegation')"><i>🧩</i><b>Assistant / Work Delegation</b><small>Assign • Multi Teacher • Responsibility • Off</small><em>OPEN →</em></button><button onclick="render('certificate_center')"><i>🏆</i><b>Premium Certificate Center</b><small>10 A4 Formats • Photo • QR • PDF</small><em>OPEN →</em></button></div></section>
  <div id="v149AdminQuickSlot"><section id="v147AdminQuick" class="panel"><h3>⚡ QR / Storage Quick Access</h3><div class="ldmTeacherModules"><button onclick="render('v147_admin_presence')"><i>🏫</i><b>QR Gate & Presence</b><small>Entered • Inside • Exited • Not Arrived</small></button><button onclick="render('v130_qr_scanner')"><i>📷</i><b>Admin QR Scanner</b><small>Entry / Exit / Teacher Gate</small></button><button onclick="render('v147_admin_student_qr')"><i>▦</i><b>Student QR Center</b><small>View • Print • Regenerate</small></button><button onclick="render('v130_storage')"><i>🗄</i><b>Storage Center</b><small>Usage • Safe Cleanup</small></button></div></section></div>
  <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">ON DEMAND</span></div><div class="v90MonitorGrid">${v90Card('📅','Attendance Status','Class-wise done / not marked','v90_attendance_monitor')}${v90Card('⚠️','Attendance Conflicts','Duplicate • Resolve • History','attendance_conflict_center')}${v90Card('📝','Exam Participation','Selected • Admit • Appeared','v90_exam_monitor')}${v90Card('📊','Marks Entry Progress','Teacher • Subject • Pending','v90_marks_monitor')}${v90Card('🚌','Transport Trip','Pickup / Drop attendance','v90_transport_monitor')}${v90Card('👥','Presence & Leave','Students + Teachers today','v90_presence_monitor')}${v90Card('🎓','Student Requests','Leave • Correction • Add/Remove','v90_student_requests')}${v90Card('👨‍🏫','Teacher Requests','Personal + class related','v90_teacher_requests')}${v90Card('🗓','Timetable Master','Fast bell + whole week','timetable_master','strong')}${v90Card('📚','Daily Teaching','Timetable → lesson update','v90_teaching_monitor')}${v90Card('📊','Academic Monitoring','Teaching • Copy Check • Bell Tests','academic_monitor','strong')}<button class="v90Monitor strong v102DashGate" data-v102-gate-card="1" onclick="render('master_gate_pass')"><span class="v90MonitorIcon">🚪</span><span><b>Master Gate Pass</b><small>Early Leave • Group • Approval</small></span><em data-v102-gate-badge class="v102DashBadge">Today</em></button><button class="v90Monitor" data-v91-parent-update="1" onclick="render('v91_parent_updates')"><span class="v90MonitorIcon">✏</span><span><b>Parent Data Updates</b><small>Approve once → sync everywhere</small></span><em>›</em></button><button class="v90Monitor" data-v92-admit-pub="1" onclick="render('v92_admit_publish')"><span class="v90MonitorIcon">🎫</span><span><b>Admit Publish</b><small>Fee clear • Select • Parent show</small></span><em>›</em></button>${v90Card('🔐','Student / Parent Login','One Password • Live Status','parent_access','strong')}</div></section>
- <section class="v114AdminFeedGrid"><article class="v90Panel"><div class="v114PanelHead"><h3>Recent Activities</h3><button onclick="render('v185_admin_activities')">View All →</button></div><div id="v39Activities">${actCache||'<div class="v39Empty">Refresh Dashboard पर click करें.</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Important Notices</h3><button onclick="render('notices')">View All →</button></div><div id="v39Notices">${noticeCache||'<div class="v39Empty">Refresh Dashboard पर click करें.</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Calendar & Events</h3><button onclick="render('events')">View Calendar →</button></div><div id="v39Events">${eventCache||'<div class="v39Empty">Refresh Dashboard पर click करें.</div>'}</div></article></section>
+ <section class="v114AdminFeedGrid"><article class="v90Panel"><div class="v114PanelHead"><h3>Recent Activities</h3><button onclick="render('v185_admin_activities')">View All →</button></div><div id="v39Activities">${actCache||'<div class="v39Empty">नई जानकारी लोड हो रही है…</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Important Notices</h3><button onclick="render('notices')">View All →</button></div><div id="v39Notices">${noticeCache||'<div class="v39Empty">नई जानकारी लोड हो रही है…</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Calendar & Events</h3><button onclick="render('events')">View Calendar →</button></div><div id="v39Events">${eventCache||'<div class="v39Empty">नई जानकारी लोड हो रही है…</div>'}</div></article></section>
  </div>`);
  try{window.v154OneGreeting?.()}catch(_e){}
  try{window.restoreDash?.('back')}catch(_e){}
  /* V186: Back restores last-good dashboard silently. Fetch only on first load or after a local data change. */
  let __dirty=false;try{__dirty=!!sessionStorage.getItem('ldm_dashboard_dirty')}catch(_e){}
- setTimeout(()=>{if(document.querySelector('#erpContent .ldmRootAdminDash'))window.v39LoadAdminPanels?.().catch(e=>console.warn('Admin feeds:',e))},0);
- if(!window.__ldmDashVerifiedThisRuntime||__dirty){window.__ldmDashVerifiedThisRuntime=true;setTimeout(()=>{try{window.ldmRefreshDashboardOnce?.({force:true,reason:__dirty?'dirty':'first-runtime-load'})}catch(_e){}},0);}
+ 
+
 }
 
 let __v105FeeTimer=null;
@@ -18420,97 +18419,7 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
 #erpContent .ldmV279Freshness[data-status="ok"]{background:#ebf8ef;color:#226347;border-color:#c9e8d4}
 @media(max-width:690px){#erpContent .v185FrontHead{align-items:flex-start!important;gap:8px!important;flex-wrap:wrap!important}#erpContent .ldmV279Freshness{font-size:11px}}
 </style>
-<script id="ldm-v279-canonical-day-dashboard">
-/* V279: IST business date + daily cache rollover + ONE auto refresh owner.
-   No interval/network outside visible Admin dashboard, no realtime channels or DB writes. */
-(function(){'use strict';
- if(window.__LDM_V279_DASH__)return;
- window.__LDM_V279_DASH__=true;
- const DAYKEY='ldm_v279_dashboard_last_verified_ist';
- const STATSKEY='ldm_admin_stats_html';
- const SNAPSHOTKEY='ldm_v182_dash_state';
- const PERIOD=300000; // 5-minute upper freshness window, ONLY while Admin dashboard is open/visible
- let ticker=null,afterMount=null,lastOk=0,lastStarted=0,inFlight=false,lastRequestedDay='',wasActive=false;
- const q=id=>document.getElementById(id);
- const isAdmin=()=>{let p=window.profile;try{if(!p&&typeof profile!=='undefined')p=profile}catch(_){}return ['admin','super_admin','principal'].includes(String(p?.role||'').trim().toLowerCase())};
- const route=()=>String(window.__v90Route||'dashboard');
- const active=()=>isAdmin()&&route()==='dashboard'&&document.visibilityState!=='hidden'&&!!q('erpContent')?.querySelector('.ldmRootAdminDash');
- const todayIST=()=>{try{if(typeof today==='function')return today()}catch(_){}const z=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).filter(a=>a.type!=='literal').map(a=>[a.type,a.value]));return `${z.year}-${z.month}-${z.day}`};
- const friendlyTime=()=>{try{return new Intl.DateTimeFormat('hi-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:true}).format(new Date())}catch(_){return ''}};
- function status(txt,kind='busy'){const e=q('ldmV279Freshness');if(!e)return;e.dataset.status=kind;e.textContent=txt;e.title=txt}
- function clearDailyUI(){
-   const blank=['v114AttPresent','v114AttAbsent','v114AttLeave','v114AttMarked','v114AttNotMarked','v114AttPct','v114FeeCollected'];
-   blank.forEach(id=>{const el=q(id);if(el)el.textContent='—'});
-   const donut=q('v114AttDonut');if(donut)donut.style.setProperty('--p','0');
-   const bar=q('v114FeeBarCollected');if(bar)bar.style.height='0%';
-   const cards=q('v90Stats');if(cards){for(const el of cards.querySelectorAll('.v90Stat')){const lab=String(el.querySelector('small')?.textContent||'');if(/Fee Collection|Attendance/i.test(lab)){const num=el.querySelector('b');if(num)num.textContent='—'}}}
-   try{window.ldmV233InstallDashboard?.()}catch(_){}
- }
- function invalidateForNewDate(){
-   const day=todayIST(),last=sessionStorage.getItem(DAYKEY)||'';
-   if(last===day)return false;
-   lastOk=0;lastRequestedDay='';
-   // Cache contains unlabelled/yesterday dashboard values; NEVER treat them as today.
-   try{sessionStorage.removeItem(STATSKEY);sessionStorage.removeItem(SNAPSHOTKEY);sessionStorage.setItem('ldm_dashboard_dirty',String(Date.now()));sessionStorage.setItem('ldm_dashboard_dirty_kind','ist-date-rollover')}catch(_){}
-   window.__ldmAdminStatsHTML='';
-   if(active())clearDailyUI();
-   status('◷ '+day+' • आज के आँकड़े लोड हो रहे हैं');
-   return true;
- }
- // Keep entry-point's existing safe/central fee/attendance calculation. Observe only its outcome.
- const origRefresh=window.ldmRefreshDashboardOnce;
- if(typeof origRefresh==='function'){
-   window.ldmRefreshDashboardOnce=async function(opts={}){
-     const day=todayIST(),reason=String(opts?.reason||'');
-     if(!active())return false;
-     if(inFlight)return false;
-     invalidateForNewDate();inFlight=true;lastStarted=Date.now();lastRequestedDay=day;
-     status('◷ '+day+' • डेटा अपडेट हो रहा है');
-     try{
-       const ok=await origRefresh.call(this,{...opts,force:true,reason:reason||'v279-auto'});
-       if(!ok){status('◷ अगला अपडेट प्रतीक्षारत');return false}
-       if(day!==todayIST()){invalidateForNewDate();status('◷ नई तारीख के आँकड़े प्रतीक्षारत');return false}
-       const host=q('v90Stats');
-       if(host&&/Master data check:|Database error|permission denied/i.test(host.textContent||''))throw new Error('Dashboard data not available');
-       lastOk=Date.now();sessionStorage.setItem(DAYKEY,day);
-       status('● आज का डेटा • '+friendlyTime()+' पर अपडेट','ok');
-       return true;
-     }catch(e){
-       status('! नेटवर्क/डेटाबेस त्रुटि • पिछला डेटा विश्वसनीय नहीं','error');
-       try{console.warn('V279 dashboard refresh',e)}catch(_){}
-       return false;
-     }finally{inFlight=false}
-   };
- }
- async function maybeUpdate(reason='automatic',force=false){
-   if(!active())return;
-   const changed=invalidateForNewDate();
-   const need=changed||force||!lastOk||Date.now()-lastOk>=PERIOD;
-   if(!need||inFlight||Date.now()-lastStarted<7000)return;
-   await window.ldmRefreshDashboardOnce?.({force:true,reason:'v279-'+reason});
- }
- function stop(){if(ticker){clearInterval(ticker);ticker=null}if(afterMount){clearTimeout(afterMount);afterMount=null}wasActive=false}
- function start(){if(!active())return;invalidateForNewDate();wasActive=true;if(!ticker){ticker=setInterval(()=>{if(!active()){stop();return}maybeUpdate('visible-periodic')},30000)}
-   if(afterMount)clearTimeout(afterMount);
-   afterMount=setTimeout(()=>{afterMount=null;maybeUpdate('dashboard-entry')},1500);
- }
- // canonical renderer can be reached from ERP Home, Back, refresh or login.
- const oldDash=window.v90AdminDashboard;
- if(typeof oldDash==='function')window.v90AdminDashboard=async function(...args){invalidateForNewDate();const result=await oldDash.apply(this,args);start();return result};
- const oldRender=window.render;
- if(typeof oldRender==='function')window.render=async function(...args){const r=String(args[0]||'dashboard');if(r!=='dashboard')stop();const result=await oldRender.apply(this,args);if(r==='dashboard')start();return result};
- try{if(typeof render==='function')render=window.render}catch(_){}
- const oldDashboard=window.dashboard;
- if(typeof oldDashboard==='function')window.dashboard=async function(...args){const r=await oldDashboard.apply(this,args);start();return r};
- try{if(typeof dashboard==='function')dashboard=window.dashboard}catch(_){}
- function onVisible(){if(active())start();else if(document.visibilityState==='hidden')stop()}
- document.addEventListener('visibilitychange',onVisible);
- window.addEventListener('focus',onVisible);
- window.addEventListener('pagehide',stop);
- // Only the local-date check runs on Dashboard; data requests are throttled to PERIOD.
- window.LDM_V279_DASHBOARD_BUILD='V279-IST-DATE-AUTO-REFRESH-CANONICAL';
-})();
-</script>
+<!-- V322: dashboard lifecycle is owned by root-corrections-v320.js. -->
 <style id="ldm-v281-one-refresh-style">
 #ldmV281Refresh{display:none;position:fixed;z-index:2147482500;top:86px;right:10px;border:1px solid #acc9e3;border-radius:13px;background:#f4faff;color:#18436e;box-shadow:0 4px 15px #132f4930;padding:9px 12px;font:700 13px/1.15 system-ui,sans-serif;min-height:42px;max-width:195px;cursor:pointer;align-items:center;gap:6px}
 #ldmV281Refresh:disabled{opacity:.7;cursor:wait}
@@ -18674,7 +18583,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v304.js?v=320"></script>
+<script src="dashboard-v304.js?v=322"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=305"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18685,13 +18594,14 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="corrections-v308.css?v=309">
 <script src="corrections-v308.js?v=320"></script>
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
-<script src="receipt-actions-v309.js?v=320"></script>
+<script src="receipt-actions-v309.js?v=322"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v320.js?v=320"></script>
-<script src="daily-reminders-v320.js?v=320"></script>
+<script src="root-corrections-v320.js?v=322"></script>
+<script src="daily-reminders-v320.js?v=322"></script>
 <script src="exam-central-v320.js?v=320"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
-<script src="smart-work-v321.js?v=321r2"></script>
+<link rel="stylesheet" href="mobile-premium-v322.css?v=322">
+<script src="smart-work-v321.js?v=322"></script>
 </body>
 </html>
