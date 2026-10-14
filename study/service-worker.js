@@ -1,5 +1,10 @@
-const CACHE='sky-sir-full-static-hub-f2-v1';
-const ASSETS=['./','./index.html','./styles.css','./app.js','./course-data.js','./competition.html','./competition.css','./competition-data.js','./advanced-content.js','./legacy-topic-overrides-v4.js','./exam-source-profiles-v4.js','./premium-content-d1.js','./complete-content-v4.js','./exam-syllabus-v4.js','./official-syllabus-hub.js','./teacher-exam-packs-f1.js','./teacher-study-notes-f1.js','./teacher-exam-hub-f1.js','./static-master-library-f2.js','./static-master-hub-f2.js','./static-master-f2.css','./competition-studio.js','./config.js','./db.js','./current-affairs.js','./shared-content.js','./pptxgen.min.js','./manifest.webmanifest'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))])));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==location.origin)return;e.respondWith(fetch(e.request).then(r=>{if(r&&r.ok){const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy))}return r}).catch(()=>caches.match(e.request).then(x=>x||caches.match('./index.html'))))});
+/* Sky Sir Study Hub V27: small shell precache, feature bundles only after user opens */
+const CACHE='sky-sir-study-hub-v27';
+const SHELL=['./','./index.html','./study-dashboard-v27.css','./study-dashboard-v27.js','./exam-centric-f4.css','./competition.html','./board.html'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>Promise.allSettled(SHELL.map(u=>c.add(u)))).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('sky-sir-')&&k!==CACHE).map(k=>caches.delete(k))))])));
+self.addEventListener('fetch',e=>{const req=e.request;if(req.method!=='GET')return;const u=new URL(req.url);if(u.origin!==self.location.origin||u.pathname.startsWith('/api/'))return;
+// HTML/CSS navigation: fresh when online, cached offline. Immutable heavy JS reused from cache.
+const isDoc=req.mode==='navigate'||/\.(html|css)(\?|$)/.test(u.pathname);
+if(isDoc){e.respondWith(fetch(req).then(r=>{if(r.ok){const copy=r.clone();e.waitUntil(caches.open(CACHE).then(c=>c.put(req,copy)))}return r}).catch(()=>caches.match(req).then(x=>x||Response.error())));return;}
+e.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(r=>{if(r.ok){const copy=r.clone();e.waitUntil(caches.open(CACHE).then(c=>c.put(req,copy)))}return r})));});

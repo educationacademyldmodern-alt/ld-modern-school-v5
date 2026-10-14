@@ -1,0 +1,2 @@
+@font-face{font-family:ldmStudyHindi;src:url('../udise-v306-devanagari.woff2') format('woff2');font-weight:100 900;font-display:swap;unicode-range:U+0900-097F,U+200C-200D,U+20B9,U+A8E0-A8FF}
+body,button,input,select,textarea{font-family:system-ui,ldmStudyHindi,Arial,sans-serif!important}
