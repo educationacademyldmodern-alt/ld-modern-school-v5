@@ -22,7 +22,7 @@ function inlinePage(url,title){const host=$('erpContent');if(!host)return;window
 function install(){
  if(!admin())return;const dash=document.querySelector('#erpContent .ldmRootAdminDash');if(!dash)return;
  dash.dataset.v309Mounted='1';
- const greeting=$('v233Greeting');if(greeting)dash.prepend(greeting);
+ const greeting=$('v233Greeting');if(greeting&&!greeting.closest('#r323AdminControl'))dash.prepend(greeting);
  // Original dashboard action grids remain in their original layout.
  // Do not move, group or remove their buttons.
  for(const [id,url,title] of [['v236OwnerLedgerCard','./owner-ledger.html','Owner Money Ledger'],['v230UdiseCard','./udise.html','UDISE Control Center'],['v230AdvocateCard','./advocate.html','Advocate Control Center'],['v230DeveloperCard','https://ldm-erp-factory-pro.vercel.app','Developer Studio'],['v274StudyHubCard','./study/hub.html','Smart Study Hub']]){const button=$(id);if(button)button.onclick=()=>inlinePage(url,title)}
