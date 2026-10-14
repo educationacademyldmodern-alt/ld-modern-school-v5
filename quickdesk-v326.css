@@ -1,0 +1,67 @@
+/* V326: scoped front desk and request decisions. */
+#erpContent #v185FrontDesk{background:linear-gradient(145deg,#fff,#f1f8fc)!important;border:1px solid #d8e6ee!important;border-radius:22px!important;padding:22px!important;box-shadow:0 8px 26px #1437530c!important;min-width:0}
+#erpContent #v185FrontDesk .v185FrontHead{display:flex!important;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+#erpContent #v185FrontDesk .v185FrontHead small{font-size:11px;letter-spacing:1px;color:#53748b}
+#erpContent #v185FrontDesk .v185FrontHead h2{font-size:24px!important;line-height:1.3;margin:5px 0!important;color:#153e58!important}
+#erpContent #v185FrontDesk .v185FrontHead p{font-size:14px!important;line-height:1.7;color:#506d7f;margin:4px 0!important}
+#erpContent #v185FrontDesk .v185FrontActions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;margin:0 0 18px!important}
+#erpContent #v185FrontDesk .v185FrontActions button{display:grid!important;grid-template-columns:35px minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px;text-align:left!important;align-content:center;min-height:88px!important;border-radius:14px!important;padding:14px!important;box-shadow:0 3px 8px #113f5912!important;border:1px solid #ffffff55!important;line-height:1.4!important;font-family:inherit!important;color:white!important}
+#erpContent #v185FrontDesk .v185FrontActions button span{grid-row:1/3;font-size:25px;align-self:center;justify-self:center}
+#erpContent #v185FrontDesk .v185FrontActions button b{font-size:15px!important;line-height:1.6}
+#erpContent #v185FrontDesk .v185FrontActions button small{font-size:11px!important;line-height:1.5;opacity:.95;color:inherit!important}
+#erpContent #v185FrontDesk .v185FrontActions button:nth-child(1){background:linear-gradient(115deg,#08765f,#119d7c)!important}
+#erpContent #v185FrontDesk .v185FrontActions button:nth-child(2){background:linear-gradient(115deg,#1259aa,#1c7ed0)!important}
+#erpContent #v185FrontDesk .v185FrontActions button:nth-child(3){background:linear-gradient(115deg,#6440aa,#8762c3)!important}
+#erpContent #v185FrontDesk .v185FrontActions button:nth-child(4){background:linear-gradient(115deg,#a85b0b,#cb7d1a)!important}
+#erpContent #v185FrontDesk .v185FrontActions button:nth-child(5){background:linear-gradient(115deg,#9a386d,#bc5484)!important}
+#erpContent #v185FrontDesk .v308FeeNote{font-size:13px!important;line-height:1.8!important;color:#3c6077!important;padding:12px 14px;background:#e9f3f9;border-radius:12px;font-weight:600!important;margin:8px 0 12px!important}
+#erpContent #v185FrontDesk #v308FeeOpen{min-height:46px!important;border-radius:12px!important;background:#153f5b!important;color:white!important;border:0!important;padding:12px 16px!important;font-size:14px!important;margin:0 0 12px!important;max-width:100%;white-space:normal}
+#erpContent #v185FrontDesk .v105PaySearch{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(130px,1fr) auto!important;gap:10px!important;margin:0 0 12px!important;padding:14px!important;border-radius:16px!important;background:#fff!important;border:1px solid #dae6ed!important;box-shadow:none!important}
+#erpContent #v185FrontDesk .v105PaySearch input,#erpContent #v185FrontDesk .v105PaySearch select{width:100%!important;min-width:0!important;min-height:48px!important;font:inherit!important;font-size:15px!important;padding:12px!important;border:1px solid #cfdee8!important;border-radius:10px!important;background:#fff!important;color:#21435b!important}
+#erpContent #v185FrontDesk .v105PaySearch button{min-height:48px!important;border:0!important;border-radius:10px!important;padding:12px 22px!important;background:#116db3!important;color:#fff!important;font-size:15px!important;font-weight:700!important}
+#erpContent #v185FrontDesk #v309OtherOpen,#erpContent #v185FrontDesk #v309ReceiptFind{min-height:44px;border:1px solid #c9dfe9!important;background:#fff!important;color:#15536d!important;padding:10px 14px!important;border-radius:10px!important;font-size:13px!important;margin:0 8px 12px 0!important;max-width:100%;white-space:normal}
+#erpContent #v185FrontDesk .v304ResultHead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 8px}
+#erpContent #v185FrontDesk .v304ResultHead b{font-size:17px;color:#153e58}
+#erpContent #v185FrontDesk .v304ResultHead small{display:block;font-size:12px;color:#527085;margin-top:5px}
+#erpContent #v185FrontDesk .v304ResultHead button,#erpContent #v185FrontDesk .v304Result>button{border:1px solid #bdd9df!important;border-radius:10px!important;background:#0c6b70!important;color:#fff!important;padding:10px 13px!important;min-height:44px!important;font-size:13px!important;white-space:normal!important;line-height:1.5!important;box-shadow:none!important}
+#erpContent #v185FrontDesk .r326FamilyHint{font-size:12px!important;line-height:1.8;color:#5b7180;margin:8px 0 12px}
+#erpContent #v185FrontDesk .v304Result{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center;gap:14px!important;padding:16px!important;margin:8px 0!important;background:#fff!important;border:1px solid #dce7ee!important;border-radius:14px!important;min-width:0}
+#erpContent #v185FrontDesk .v304Result>div{min-width:0}
+#erpContent #v185FrontDesk .v304Result small{display:block;font-size:13px!important;line-height:1.8!important;color:#4d6778!important;overflow-wrap:anywhere}
+#erpContent #v185FrontDesk .r326StudentTitle{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 5px}
+#erpContent #v185FrontDesk .r326StudentTitle b{font-size:17px!important;color:#183c56!important;overflow-wrap:anywhere}
+#erpContent #v185FrontDesk .r326StudentTitle span{font-size:11px;padding:3px 8px;border-radius:7px;background:#edf5fb;color:#20577b}
+#erpContent #v185FrontDesk .r326Due{display:block;font-size:14px;color:#16615e;margin:7px 0 0}
+#erpContent #v185FrontDesk .v105SearchEmpty{padding:18px!important;border:1px dashed #c6dce6;border-radius:12px!important;color:#496b81;font-size:14px;line-height:1.8;margin-top:10px}
+#erpContent #v185FrontDesk button:disabled{opacity:.6!important;cursor:default!important;transform:none!important}
+#erpContent #v185FrontDesk button:focus-visible,#erpContent #v185FrontDesk input:focus-visible,#erpContent #v185FrontDesk select:focus-visible{outline:3px solid #85c7ee!important;outline-offset:2px}
+#erpContent #r320DailyReminderCard{border:1px solid #d7e6ee!important;border-radius:17px!important;box-shadow:0 4px 16px #163c5410!important;overflow:hidden!important;background:#fff!important;padding:0!important}
+#r320DailyReminderCard summary{display:flex!important;gap:12px!important;align-items:center!important;justify-content:space-between!important;padding:17px!important;background:#eff7fb!important;cursor:pointer;font-size:16px!important;list-style:none}
+#r320DailyReminderCard summary span{color:#183e58;font-weight:800}
+#r320DailyReminderCard summary small{font-size:12px!important;color:#507086;line-height:1.6}
+#r320DailyReminderCard details>button{margin:14px!important;border:0!important;background:#17677d!important;color:#fff!important;border-radius:10px!important;padding:12px 16px!important;min-height:44px;font-size:14px!important}
+#r320DailyReminderCard [data-reminder-card-body]{padding:0 14px 14px}
+#r320DailyReminderCard details:not([open]) [data-reminder-card-body]{display:none}
+#r320Review{max-height:90dvh!important;overflow:auto!important;width:min(620px,94vw)!important;box-sizing:border-box!important;border-radius:18px!important;padding:22px!important;line-height:1.6;color:#183d55}
+#r320Review h2{font-size:23px;color:#173f5a;margin:0 0 15px}
+#r320Review label{display:grid;gap:7px;font-weight:700;margin:14px 0}
+#r320Review select,#r320Review textarea{width:100%;box-sizing:border-box;min-height:46px;padding:10px;border:1px solid #c6dbe7;border-radius:10px;font:inherit;font-size:15px;background:#fff}
+#r320Review textarea{min-height:100px}
+#r320Review button{min-height:44px;margin:6px 8px 6px 0;padding:10px 16px;border:1px solid #c9dde7;border-radius:10px;font:inherit;font-size:14px;cursor:pointer}
+#r320Save{background:#0b7568!important;color:white!important}#r320Save:disabled{opacity:.6}
+#v90TRStats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px!important;margin:16px 0!important}
+#v90TRStats .v90Stat{display:block!important;min-width:0;background:#fff;border:1px solid #dce7ee;border-radius:12px;padding:13px!important}
+#v90TRStats small{display:block;font-size:12px;color:#567080}#v90TRStats b{display:block;font-size:23px;color:#153f59;margin-top:6px}
+#v90TRBody{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+.r326RequestList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.r326Request{min-width:0;padding:20px;border-radius:17px;border:1px solid #d8e5ed;background:#fff;color:#25465b}
+.r326Request header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.r326Request h3{font-size:18px;margin:5px 0;overflow-wrap:anywhere}.r326Request header small{font-size:12px;color:#597487}
+.r326Status{flex-shrink:0;border-radius:8px;padding:5px 9px;font-size:12px;background:#edf2f7}.r326Status.pending{background:#fff4d9;color:#805300}.r326Status.approved{background:#def5ea;color:#116441}.r326Status.rejected{background:#ffebec;color:#923742}
+.r326Request p{font-size:14px;line-height:1.8;overflow-wrap:anywhere}.r326RequestReason{white-space:pre-wrap}.r326AdminNote{padding:10px;border-radius:9px;background:#f0f7fb}
+.r326Request footer{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.r326Request button{min-height:44px;padding:10px 13px;border:1px solid #cddfe8;border-radius:10px;background:#fff;color:#284d64;font:inherit;font-size:13px;cursor:pointer;line-height:1.5}.r326Request .r326Approve{background:#0d7869;color:#fff;border-color:#0d7869}.r326Request .r326Reject{background:#fff3f3;color:#a52b3e;border-color:#f1c5cd}
+@media(max-width:700px){#erpContent #v185FrontDesk{padding:16px!important}#erpContent #v185FrontDesk .v185FrontActions{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent #v185FrontDesk .v185FrontActions button{grid-template-columns:26px minmax(0,1fr);gap:5px;padding:12px 10px!important;min-height:94px!important}#erpContent #v185FrontDesk .v185FrontActions button b{font-size:13px!important}#erpContent #v185FrontDesk .v185FrontActions button small{font-size:10px!important}#erpContent #v185FrontDesk .v185FrontActions button span{font-size:22px}#erpContent #v185FrontDesk .v185FrontActions button:last-child{grid-column:1/-1;min-height:74px!important}#erpContent #v185FrontDesk .v105PaySearch{grid-template-columns:1fr!important}#erpContent #v185FrontDesk .v304Result{padding:13px!important;gap:10px!important;grid-template-columns:minmax(0,1fr)!important}#erpContent #v185FrontDesk .v304Result>button{justify-self:stretch!important}#r320DailyReminderCard summary{align-items:flex-start!important;flex-wrap:wrap!important}#v90TRStats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.r326RequestList{grid-template-columns:1fr}.r326Request{padding:16px}.r326Request footer button{flex:1 1 auto}#r320Review{padding:17px!important}}
+@media(max-width:360px){#erpContent #v185FrontDesk .v185FrontActions{grid-template-columns:1fr!important}#erpContent #v185FrontDesk .v185FrontActions button:last-child{grid-column:auto}}
+/* Keep Hindi controls readable and isolate request cards from public-page footer rules. */
+#erpContent #v185FrontDesk,#v90TRBody,#v90TRStats,#v90TRTeacher,#v90TRClass,#v90TRStatus,#r320Review,#r320Review button,#r320Review select,#r320Review textarea{font-family:u306Text,system-ui,Arial,sans-serif!important}
+.r326Request footer{background:transparent!important;color:inherit!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;text-align:left!important;position:static!important}
+#erpContent #v185FrontDesk button,#erpContent #v185FrontDesk input,#erpContent #v185FrontDesk select,#v90TRBody .r326Request button{font-family:u306Text,system-ui,Arial,sans-serif!important}
