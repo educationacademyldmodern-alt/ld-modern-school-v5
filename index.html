@@ -11824,22 +11824,7 @@ window.V6413_BUILD='V64.13-CENTRAL-MASTER-RECONCILED-2026-09-20';
 (function(){
  const N=v=>Number(v||0), norm=v=>String(v||'').trim().toLowerCase();
  const activeStudent=s=>norm(s?.status)!=='inactive';
- async function feeRegister(){
-   const session=school?.academic_session||school?.current_session||(typeof v90Session==='function'?v90Session():'2026-27');
-   const [sr,schr,ar,pr]=await Promise.all([
-    sb.from('students').select('id,student_name,admission_no,roll_no,class_name,father_name,mother_name,phone,status,fee_category,fee_waiver_percent').limit(10000),
-    sb.from('student_fee_schedules').select('admission_no,amount,paid_amount,status,due_date,academic_session').eq('academic_session',session).limit(30000),
-    sb.from('v65_fee_adjustments').select('admission_no,adjustment_type,amount,is_active').eq('is_active',true).limit(20000),
-    sb.from('fee_payments').select('admission_no,amount,payment_date').limit(30000)
-   ]);
-   if(sr.error||schr.error)throw(sr.error||schr.error); const students=(sr.data||[]).filter(activeStudent), schedules=schr.data||[], adjustments=ar.error?[]:(ar.data||[]), payments=pr.error?[]:(pr.data||[]);
-   const due={}, total={}, paid={};
-   schedules.forEach(x=>{const k=String(x.admission_no||'');if(!k)return;const amt=N(x.amount),pd=N(x.paid_amount),bal=norm(x.status)==='paid'?0:Math.max(amt-pd,0);total[k]=(total[k]||0)+amt;due[k]=(due[k]||0)+bal;});
-   adjustments.forEach(x=>{const k=String(x.admission_no||'');if(!k)return;const sign=['waiver','discount'].includes(norm(x.adjustment_type))?-1:1;due[k]=(due[k]||0)+sign*Math.abs(N(x.amount));});
-   payments.forEach(x=>{const k=String(x.admission_no||'');if(k)paid[k]=(paid[k]||0)+N(x.amount)});
-   const rows=students.map(st=>{const k=String(st.admission_no||''),free=norm(st.fee_category)==='free'||N(st.fee_waiver_percent)>=100,d=free?0:Math.max(N(due[k]),0);return {...st,_total:N(total[k]),_paid:N(paid[k]),_due:d,_free:free}});
-   return {session,rows,payments,totalDue:rows.reduce((a,x)=>a+x._due,0),dueStudents:rows.filter(x=>x._due>0).length,totalCollection:payments.reduce((a,x)=>a+N(x.amount),0)};
- }
+ async function feeRegister(){return window.LDM_FEE_LEDGER.register()}
  window.v6413CentralFeeRegister=feeRegister;
  /* Fee Dashboard now reads the same schedule+adjustment+payment ledger as Master Due cards/reminders. */
  window.feeDashboard=async function(filter='all',q='',classFilter='',sortDir='asc'){
@@ -18583,7 +18568,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v304.js?v=326"></script>
+<script src="dashboard-v330.js?v=330"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=305"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18592,20 +18577,20 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="absence-followup-v307.css?v=307">
 <script src="absence-followup-v307.js?v=320"></script>
 <link rel="stylesheet" href="corrections-v308.css?v=309">
-<script src="corrections-v308.js?v=320"></script>
+<script src="corrections-v328.js?v=328"></script>
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
-<script src="receipt-actions-v309.js?v=322"></script>
+<script src="receipt-actions-v329.js?v=329"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v326.js?v=326"></script>
+<script src="root-corrections-v327.js?v=327"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
 <script src="exam-central-v320.js?v=320"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
-<script src="smart-work-v326.js?v=326"></script>
+<script src="smart-work-v327.js?v=327"></script>
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
-<script src="resources-v325.js?v=325-direct"></script>
+<script src="resources-v330.js?v=330"></script>
 <script src="controls-v323.js?v=323"></script>
 <style id="v325BannerFit">
 /* Match the whole banner to its natural ratio on phones; fill the desktop hero. */
@@ -18616,5 +18601,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 }
 </style>
 <link rel="stylesheet" href="quickdesk-v326.css?v=326">
+<link rel="stylesheet" href="fee-layout-v327.css?v=327">
+<script src="fee-ledger-v327.js?v=327"></script>
 </body>
 </html>
