@@ -965,7 +965,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 </section>
 <div id="publicPageView" class="publicPageView hidden"><div class="publicPageBar"><button onclick="showPublicPage('home')">← Home</button><b id="publicPageTitle">School</b></div><div id="publicPageBody"></div></div>
 <section class="publicSection stats premiumStats"><div><b>Nursery–10</b><span>Classes</span></div><div><b>Smart ERP</b><span>School Management</span></div><div><b>Secure Portals</b><span>Teacher & Parent</span></div><div><b>Any Device</b><span>Mobile • Tablet • Laptop</span></div></section>
-<script src="public-final.js?v=V309&build=V643"></script>
+<script src="public-final.js?v=320"></script>
 <section id="about" class="publicSection two"><div><span class="eyebrow">ABOUT SCHOOL</span><h2>Learning with values and modern education</h2><p id="aboutText">Quality education with discipline, values, technology and all-round student development.</p></div><div class="quote"><h3>Principal / Director Message</h3><p id="principalMsg">“Every child deserves an environment where curiosity, discipline and confidence grow together.”</p></div></section>
 <section id="faculty" class="publicSection"><span class="eyebrow">OUR TEAM</span><h2>Faculty & Staff</h2><div id="facultyCards" class="cards3"><div class="empty">Faculty will appear here.</div></div></section>
 <section id="facilities" class="publicSection soft"><span class="eyebrow">FACILITIES</span><h2>School Facilities</h2><div class="cards3"><article><h3>Smart Learning</h3><p>Digital and classroom learning support.</p></article><article><h3>Student Development</h3><p>Academic, cultural and co-curricular activities.</p></article><article><h3>Safe Management</h3><p>Attendance, communication and school records in one system.</p></article></div></section>
@@ -993,8 +993,8 @@ function ldmClassCanonical(v){
   let noPrefix=k.replace(/^(class|std\.?|standard|grade|कक्षा)\s*/i,'').trim();
   let c=noPrefix.replace(/[.\-_/\\()\s]+/g,'');
   if(['nursery','nur','nurs','nry','prekg','preprimary','preprimary1','नर्सरी'].includes(c)||/^(nursery|nur|nurs|nry)$/i.test(noPrefix))return 'Nursery';
-  if(['lkg','lowerkg','lowerkindergarten','kg1','jrkg','juniorkg','एलकेजी'].includes(c))return 'LKG';
-  if(['ukg','upperkg','upperkindergarten','kg2','srkg','seniorkg','यूकेजी'].includes(c))return 'UKG';
+  if(['lkg','lowerkg','lowerkindergarten','kg1','kgi','jrkg','juniorkg','एलकेजी'].includes(c))return 'LKG';
+  if(['ukg','upperkg','upperkindergarten','kg2','kgii','srkg','seniorkg','यूकेजी'].includes(c))return 'UKG';
   const roman={i:'1',ii:'2',iii:'3',iv:'4',v:'5',vi:'6',vii:'7',viii:'8',ix:'9',x:'10'};
   if(roman[c])return roman[c];
   let m=c.match(/^0*(10|[1-9])(?:st|nd|rd|th)?$/);if(m)return String(Number(m[1]));
@@ -1005,13 +1005,13 @@ function ldmClassAliases(v){
   const add=x=>{x=String(x??'').replace(/\u00a0/g,' ');if(!x)return;set.add(x);set.add(x.trim());set.add(x.toUpperCase());set.add(x.toLowerCase());set.add(' '+x.trim());set.add(x.trim()+' ')};
   add(v);add(canon);
   if(canon==='Nursery')['Nursery','NURSERY','nursery','Nur','NUR','nur','Nurs','NURS','NRY','Pre KG','Pre-KG','Pre Primary','नर्सरी'].forEach(add);
-  else if(canon==='LKG')['LKG','L.K.G','L.K.G.','L K G','L-K-G','lkg','Lkg','Lower KG','Lower-KG','Lower Kindergarten','KG1','KG-1','Jr KG','Junior KG','एलकेजी'].forEach(add);
-  else if(canon==='UKG')['UKG','U.K.G','U.K.G.','U K G','U-K-G','ukg','Ukg','Upper KG','Upper-KG','Upper Kindergarten','KG2','KG-2','Sr KG','Senior KG','यूकेजी'].forEach(add);
+  else if(canon==='LKG')['LKG','L.K.G','L.K.G.','L K G','L-K-G','lkg','Lkg','Lower KG','Lower-KG','Lower Kindergarten','KG1','KG-1','KG I','KG-I','KGI','Jr KG','Junior KG','एलकेजी'].forEach(add);
+  else if(canon==='UKG')['UKG','U.K.G','U.K.G.','U K G','U-K-G','ukg','Ukg','Upper KG','Upper-KG','Upper Kindergarten','KG2','KG-2','KG II','KG-II','KGII','Sr KG','Senior KG','यूकेजी'].forEach(add);
   else if(/^([1-9]|10)$/.test(canon)){
     const n=Number(canon),rom=['','I','II','III','IV','V','VI','VII','VIII','IX','X'][n];
     [canon,String(n).padStart(2,'0'),`Class ${canon}`,`CLASS ${canon}`,`class ${canon}`,`Std ${canon}`,`STD ${canon}`,`Standard ${canon}`,`Grade ${canon}`,rom,rom?.toLowerCase()].forEach(add);
   }
-  return [...set].filter(Boolean).slice(0,60);
+  return [...set].filter(Boolean).slice(0,180);
 }
 function ldmApplyClassFilter(query,column,value){const a=ldmClassAliases(value);if(!a.length)return query;return a.length===1?query.eq(column,a[0]):query.in(column,a)}
 function ldmClassSame(a,b){return ldmClassCanonical(a)===ldmClassCanonical(b)}
@@ -1142,7 +1142,7 @@ function v105DetailItem(label,value){return `<div class="v105DetailItem"><span>$
 async function dashboardStudentFull(id){
  let box=v105DetailHost();if(!box)return;box.innerHTML='<div class="empty">Loading full student details...</div>';
  try{let{data:x,error}=await sb.from('students').select('*').eq('id',id).single();if(error)throw error;
-  if(typeof v90Teacher==='function'&&v90Teacher()){try{await v103RefreshTeacherContext?.();let allowed=v103ClassTeacherClasses?.()||[];if(!allowed.includes(String(x.class_name||'')))throw new Error('इस student की class आपके Class Teacher assignment में नहीं है')}catch(e){throw e}}
+  if(typeof v90Teacher==='function'&&v90Teacher()){try{await v103RefreshTeacherContext?.();let allowed=v103ClassTeacherClasses?.()||[];if(!allowed.some(c=>ldmClassSame(c,x.class_name)))throw new Error('इस student की class आपके Class Teacher assignment में नहीं है')}catch(e){throw e}}
   let adm=x.admission_no||'';try{if(typeof v91AttachStudentPhoto==='function')await v91AttachStudentPhoto(x)}catch(_e){}
   let[fr,ar,mr,er,sr]=await Promise.all([adm?sb.from('fees').select('*').eq('admission_no',adm):Promise.resolve({data:[]}),adm?sb.from('attendance').select('*').eq('admission_no',adm).order('date',{ascending:false}).limit(500):Promise.resolve({data:[]}),adm?sb.from('student_marks').select('*').eq('admission_no',adm):Promise.resolve({data:[]}),adm?sb.from('exams').select('*').eq('admission_no',adm).order('exam_date',{ascending:false}).limit(100):Promise.resolve({data:[]}),adm?sb.from('student_fee_schedules').select('*').eq('admission_no',adm).order('due_date'):Promise.resolve({data:[]})]);
   let fees=fr.data||[],atts=ar.data||[],marks=mr.data||[],exams=er.data||[],schedules=sr.data||[],hasSchedule=schedules.length>0,paid=hasSchedule?schedules.reduce((a,r)=>a+Number(r.paid_amount||0),0):fees.reduce((a,r)=>a+Number(r.paid_amount||0),0),total=hasSchedule?schedules.reduce((a,r)=>a+Number(r.amount||0),0):fees.reduce((a,r)=>a+Number(r.total_fee||0),0),due=String(x.fee_category||'').toLowerCase()==='free'||Number(x.fee_waiver_percent||0)>=100?0:(hasSchedule?schedules.reduce((a,r)=>a+(String(r.status||'').toLowerCase()==='paid'?0:Math.max(Number(r.amount||0)-Number(r.paid_amount||0),0)),0):fees.reduce((a,r)=>a+Number(r.due_amount||0),0));
@@ -6545,7 +6545,7 @@ async function v69ToggleHold(i,hold){let s=v69Candidates[i];if(!s)return;if(hold
 function v69SelectedStudents(){return [...document.querySelectorAll('.v69CandCheck:checked')].map(x=>v69Candidates[Number(x.dataset.i)]).filter(Boolean)}
 function v69CardHtml(s){let rows=v69Timetable.filter(x=>ldmClassSame(x.class_name,s.class_name)).sort((a,b)=>String(a.exam_date).localeCompare(String(b.exam_date))||String(a.start_time||'').localeCompare(String(b.start_time||'')));let logo=document.querySelector('.v26Brand img')?.src||$('pubLogo')?.src||school?.logo_url||new URL('school-logo.png',location.href).href,inst=v69CurrentExam?.instructions||'Bring this Admit Card and School ID. Reach the examination room on time.';return `<article class="v69AdmitCard"><div class="v69AdmitHead"><img src="${esc(logo)}" alt="Logo"><div class="v69School"><b>${esc(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b><span>${esc(school?.address||'GAMBHIRIYA BUJURG, SINGHAPATTI-KUSHINAGAR')}</span><strong>${esc(v69CurrentExam?.exam_name||'EXAMINATION')} • ADMIT CARD • ${esc(v69CurrentExam?.academic_session||'')}</strong></div><div class="seal">PHOTO / SEAL</div></div><div class="v69StudentInfo"><div><b>STUDENT ID</b><br>${esc(s.student_id||s.admission_no||'')}</div><div><b>NAME</b><br>${esc(s.student_name||'')}</div><div><b>FATHER</b><br>${esc(s.father_name||'')}</div><div><b>CLASS / ROLL</b><br>${esc(s.class_name||'')} / ${esc(s.roll_no||'—')}</div><div><b>ADMISSION NO.</b><br>${esc(s.admission_no||'')}</div><div><b>SESSION</b><br>${esc(v69CurrentExam?.academic_session||'')}</div><div><b>EXAM</b><br>${esc(v69CurrentExam?.exam_name||'')}</div><div><b>STATUS</b><br>ELIGIBLE</div></div><table class="v69TT"><tr><th>Date</th><th>Subject</th><th>Time</th></tr>${rows.length?rows.map(r=>`<tr><td>${esc(v69FmtDate(r.exam_date))}</td><td>${esc(r.subject_name||'')}</td><td>${esc(v69FmtTime(r.start_time))} - ${esc(v69FmtTime(r.end_time))}</td></tr>`).join(''):'<tr><td colspan="3">Timetable not set for this class</td></tr>'}</table><div class="v69AdmitFoot"><div class="v69Instructions"><b>Instructions:</b> ${esc(inst)}</div><div class="v69Sign">Principal / Director</div></div></article>`}
 function v69GenerateCards(){if(!v69CurrentExam)return toast('Exam select करें');let ss=v69SelectedStudents();if(!ss.length){$('v69Preview').innerHTML='<div class="empty">Print के लिए eligible students select करें.</div>';return}let pages=[];for(let i=0;i<ss.length;i+=3)pages.push(`<section class="v69PrintPage">${ss.slice(i,i+3).map(v69CardHtml).join('')}</section>`);$('v69Preview').innerHTML=`<div class="v69PreviewShell"><div id="v69PrintArea">${pages.join('')}</div></div><div class="saveStatus saveOk">✓ ${ss.length} Admit Card ready • ${pages.length} A4 page(s) • Maximum 3 cards per page</div>`}
-function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCards();area=$('v69PrintArea')}if(!area)return toast('पहले Admit Cards generate करें');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111}.v69PrintPage{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v69PrintPage:last-child{page-break-after:auto}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a;padding:.8mm 1mm;text-align:center;font-size:6.5px;line-height:1.05}.v69TT th{background:#edf3f9}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm}`;w.document.write(`<html><head><title>${esc(v69CurrentExam?.exam_name||'Exam')} Admit Cards</title>
+function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCards();area=$('v69PrintArea')}if(!area)return toast('पहले Admit Cards generate करें');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111}.v69PrintPage{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v69PrintPage:last-child{page-break-after:auto}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a;padding:.8mm 1mm;text-align:center;font-size:6.5px;line-height:1.05}.v69TT th{background:#edf3f9}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm}`;w.document.write(`<html><head><title>${esc(v69CurrentExam?.exam_name||'Exam')} Admit Cards</title><meta charset="utf-8"><style>${css}</style>
 </head><body>${area.innerHTML}
 
 </body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
@@ -9697,7 +9697,7 @@ function v90RenderStudentRequests(){let rows=window.__v90MonitorCache.studentReq
 
 /* ---------- Teacher Requests separate ---------- */
 async function v90TeacherRequests(){if(!v90Admin())return v90Toast('Admin / Principal only');window.__v90Route='v90_teacher_requests';v90Head('👨‍🏫 Teacher Request Monitor','Teacher personal requests + selected class requests');v90InstallShell(window.__v90Route);v90Set(`<div class="v90Page"><div class="v90Toolbar"><label>Teacher<select id="v90TRTeacher" onchange="v90RenderTeacherRequests()"><option value="">All Teachers</option></select></label><label>Class<select id="v90TRClass" onchange="v90RenderTeacherRequests()">${v90ClassOptions()}</select></label><label>Status<select id="v90TRStatus" onchange="v90RenderTeacherRequests()"><option>Pending</option><option value="">All</option><option>Approved</option><option>Rejected</option></select></label><button class="primary" onclick="v90LoadTeacherRequests()">↻ Refresh</button></div><div id="v90TRStats" class="v90Stats mini"></div><div class="v90Panel" id="v90TRBody"><div class="empty">Loading...</div></div></div>`);await v90LoadTeacherRequests()}
-async function v90LoadTeacherRequests(){try{let [t,p,r,l]=await Promise.all([sb.from('teacher_profiles').select('id,auth_user_id,teacher_name,approval_status').limit(1000),sb.from('v90_teacher_requests').select('*').order('created_at',{ascending:false}).limit(2000),sb.from('student_roster_requests').select('*').order('created_at',{ascending:false}).limit(2000),sb.from('leave').select('*').order('from_date',{ascending:false}).limit(1500)]);let e=t.error||p.error||r.error||l.error;if(e)throw e;window.__v90TeacherRows=t.data||[];v90Q('v90TRTeacher').innerHTML='<option value="">All Teachers</option>'+window.__v90TeacherRows.map(x=>`<option value="${v90Safe(x.teacher_name)}">${v90Safe(x.teacher_name)}</option>`).join('');let requests=[...(p.data||[]).map(x=>({...x,_scope:'Personal'})),...(r.data||[]).map(x=>({...x,teacher_name:x.requested_by_name||'',request_type:x.request_type||'Student Request',_scope:'Class'})),...(l.data||[]).map(x=>({...x,teacher_name:x.staff_name||'',request_type:'Teacher Leave',_scope:'Personal',created_at:x.from_date}))];window.__v90MonitorCache.teacherRequests=requests;v90RenderTeacherRequests()}catch(e){v90Q('v90TRBody').innerHTML=`<div class="empty">${v90Safe(e.message)}${String(e.message).includes('v90_teacher_requests')?'<br>Final SQL run करें.':''}</div>`}}
+async function v90LoadTeacherRequests(){try{let [t,p,r,l]=await Promise.all([sb.from('teacher_profiles').select('id,auth_user_id,teacher_name,approval_status').limit(1000),sb.from('v90_teacher_requests').select('*').order('created_at',{ascending:false}).limit(2000),sb.from('student_roster_requests').select('*').order('created_at',{ascending:false}).limit(2000),sb.from('leave').select('*').order('from_date',{ascending:false}).limit(1500)]);let e=t.error||p.error||r.error||l.error;if(e)throw e;window.__v90TeacherRows=t.data||[];v90Q('v90TRTeacher').innerHTML='<option value="">All Teachers</option>'+window.__v90TeacherRows.map(x=>`<option value="${v90Safe(x.teacher_name)}">${v90Safe(x.teacher_name)}</option>`).join('');let requests=[...(p.data||[]).map(x=>({...x,_scope:'Personal',_table:'v90_teacher_requests'})),...(r.data||[]).map(x=>({...x,teacher_name:x.requested_by_name||'',request_type:x.request_type||'Student Request',_scope:'Class',_table:'student_roster_requests'})),...(l.data||[]).map(x=>({...x,teacher_name:x.staff_name||'',request_type:'Teacher Leave',_scope:'Personal',_table:'leave',created_at:x.from_date}))];window.__v90MonitorCache.teacherRequests=requests;v90RenderTeacherRequests()}catch(e){v90Q('v90TRBody').innerHTML=`<div class="empty">${v90Safe(e.message)}${String(e.message).includes('v90_teacher_requests')?'<br>Final SQL run करें.':''}</div>`}}
 function v90RenderTeacherRequests(){let rows=window.__v90MonitorCache.teacherRequests||[],teacher=v90Q('v90TRTeacher')?.value||'',cl=v90Q('v90TRClass')?.value||'',st=v90Q('v90TRStatus')?.value||'';if(teacher)rows=rows.filter(x=>x.teacher_name===teacher||x.requested_by_name===teacher);if(cl)rows=rows.filter(x=>x.class_name===cl);if(st)rows=rows.filter(x=>v90Norm(x.status)===v90Norm(st));v90Q('v90TRStats').innerHTML=[['Total Teacher Requests',rows.length],['Pending',rows.filter(x=>v90Norm(x.status)==='pending').length],['Personal',rows.filter(x=>x._scope==='Personal').length],['Class Related',rows.filter(x=>x._scope==='Class').length],['Approved',rows.filter(x=>v90Norm(x.status)==='approved').length]].map(x=>`<div class="v90Stat"><div><small>${x[0]}</small><b>${x[1]}</b></div></div>`).join('');v90Q('v90TRBody').innerHTML=`<div class="tableWrap"><table class="v90Table"><tr><th>Teacher</th><th>Class</th><th>Scope</th><th>Request Type</th><th>Date</th><th>Reason / Details</th><th>Status</th></tr>${rows.map(x=>`<tr><td><b>${v90Safe(x.teacher_name||x.requested_by_name||x.staff_name||'')}</b></td><td>${v90Safe(x.class_name||'—')}</td><td>${v90Safe(x._scope)}</td><td>${v90Safe(x.request_type||x.leave_type||'Request')}</td><td>${x.created_at?new Date(x.created_at).toLocaleDateString('en-IN'):'—'}</td><td>${v90Safe(x.reason||x.details||'')}</td><td>${v90StatusPill(x.status||'Pending',v90Norm(x.status)==='approved'?'ok':v90Norm(x.status)==='pending'?'warn':'bad')}</td></tr>`).join('')||'<tr><td colspan="7">No teacher requests.</td></tr>'}</table></div>`}
 
 /* ---------- Daily teaching monitor / fast teacher entry ---------- */
@@ -11417,7 +11417,7 @@ try{const v113LogoutBase=logout;logout=async function(){await v113StopChannel(v1
 <script src="v53-final-polish.js?v=V53-FINAL-POLISH-1&build=V643"></script>
 <script src="v54-final-integration.js?v=V54-FINAL-1&build=V643"></script>
 <link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1&build=V643">
-<script src="v57-school-operations.js?v=V309&build=V643"></script>
+<script src="v57-school-operations.js?v=320"></script>
 <script src="v58-complaint-discipline.js?v=V58-1&build=V643"></script>
 <script src="v59-academic-calendar.js?v=V59-1&build=V643"></script>
 
@@ -15783,6 +15783,7 @@ if(typeof statsBase==='function'){
    return dir==='desc'?-c:c;
  }
  function sortTable(table,col,dir,btn){
+   if(typeof table.__ldmSortRows==='function'&&table.__ldmSortRows(col,dir))return;
    const body=[...table.tBodies].find(tb=>[...tb.rows].some(r=>r.cells?.length&&!r.querySelector('th')));if(!body)return;
    const rows=[...body.rows].filter(r=>r.cells?.length&&!r.querySelector('th'));if(rows.length<2)return;
    const header=[...table.querySelectorAll('tr')].find(r=>r.querySelector('th')),label=rawText(header?.cells?.[col]).replace(/[↑↓]/g,'').trim(),isClass=/^(class|class name|कक्षा)$/i.test(label);
@@ -15812,7 +15813,7 @@ if(typeof statsBase==='function'){
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scan,{once:true});else scan();
  /* V244: do not rescan every table after every click/change. Decorate once after route render. */
  /* V245: table-sort render wrapper retired; V185 canonical post-render calls ldmDecorateSortableTables once. */
- window.ldmDecorateSortableTables=scan;
+ window.ldmSortCompare=compare;window.ldmSortTableByColumn=sortTable;window.ldmDecorateSortableTables=scan;
  window.ldmQueueSortableTables=queue;
  })();
 </script>
@@ -17335,7 +17336,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
  const sess=()=>String(window.school?.academic_session||window.school?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
  const monthNow=()=>{try{let z=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit'}).formatToParts(new Date()),m=Object.fromEntries(z.map(x=>[x.type,x.value]));return m.year+'-'+m.month}catch(_e){let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}};
  const money=v=>typeof window.money==='function'?window.money(N(v)):'₹'+N(v).toLocaleString('en-IN');
- function classKey(v){try{if(typeof window.ldmClassCanonical==='function')return String(window.ldmClassCanonical(v)||'').trim().toLowerCase()}catch(_e){}let k=String(v||'').trim().toLowerCase().replace(/^(class|std|standard|grade|कक्षा)[\s.:_-]*/i,'').replace(/[\s._/()\-]+/g,'');if(['lkg','lowerkg','lowerkindergarten','kg1','jrkg','juniorkg','एलकेजी'].includes(k))return'lkg';if(['ukg','upperkg','upperkindergarten','kg2','srkg','seniorkg','यूकेजी'].includes(k))return'ukg';if(['nursery','nur','nurs','nry','prekg','नर्सरी'].includes(k))return'nursery';return k}
+ function classKey(v){try{if(typeof window.ldmClassCanonical==='function')return String(window.ldmClassCanonical(v)||'').trim().toLowerCase()}catch(_e){}let k=String(v||'').trim().toLowerCase().replace(/^(class|std|standard|grade|कक्षा)[\s.:_-]*/i,'').replace(/[\s._/()\-]+/g,'');if(['lkg','lowerkg','lowerkindergarten','kg1','kgi','jrkg','juniorkg','एलकेजी'].includes(k))return'lkg';if(['ukg','upperkg','upperkindergarten','kg2','kgii','srkg','seniorkg','यूकेजी'].includes(k))return'ukg';if(['nursery','nur','nurs','nry','prekg','नर्सरी'].includes(k))return'nursery';return k}
  function displayClass(v){let k=classKey(v);if(k==='lkg')return'LKG';if(k==='ukg')return'UKG';if(k==='nursery')return'Nursery';return String(v||'')}
 
  /* ---------- A) Class Teacher Fee Status: secure read-only RPC ---------- */
@@ -18673,17 +18674,24 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v304.js?v=309"></script>
+<script src="dashboard-v304.js?v=320"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=305"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
-<script src="udise-core-v306.js?v=306"></script>
-<script src="udise-app-v306.js?v=306"></script>
+<script src="udise-core-v306.js?v=320"></script>
+<script src="udise-app-v306.js?v=320"></script>
 <link rel="stylesheet" href="absence-followup-v307.css?v=307">
-<script src="absence-followup-v307.js?v=309"></script>
+<script src="absence-followup-v307.js?v=320"></script>
 <link rel="stylesheet" href="corrections-v308.css?v=309">
-<script src="corrections-v308.js?v=309"></script>
+<script src="corrections-v308.js?v=320"></script>
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
-<script src="receipt-actions-v309.js?v=309"></script>
+<script src="receipt-actions-v309.js?v=320"></script>
+<link rel="stylesheet" href="root-corrections-v320.css?v=320">
+<script src="root-corrections-v320.js?v=320"></script>
+<script src="daily-reminders-v320.js?v=320"></script>
+<script src="exam-central-v320.js?v=320"></script>
+<script src="udise-v306-jspdf.umd.min.js?v=321"></script>
+<script src="udise-v306-html2canvas.min.js?v=321"></script>
+<script src="smart-work-v321.js?v=321r2"></script>
 </body>
 </html>
