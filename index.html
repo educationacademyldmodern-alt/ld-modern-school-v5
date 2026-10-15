@@ -2437,8 +2437,8 @@ async function loadResultControlStudents(){
  </table></div>`;
 }
 
-function rcCheckAll(v){document.querySelectorAll('.rcCheck').forEach(x=>x.checked=v)}
-function rcSelectPaidOnly(){v17ResultRows.forEach((s,i)=>{let f=v17ResultFeeMap[s.admission_no]||{};$('rc'+i).checked=!!f.free||Number(f.due||0)<=0})}
+function rcCheckAll(v){return window.LDM_CENTRAL_EXAM.resultSelect(v?'all':'none')}
+function rcSelectPaidOnly(){return window.LDM_CENTRAL_EXAM.resultSelect('clear')}
 function rcUnselectDue(){v17ResultRows.forEach((s,i)=>{let f=v17ResultFeeMap[s.admission_no]||{};if(!f.free&&Number(f.due||0)>0)$('rc'+i).checked=false})}
 
 async function saveResultVisibility(){
@@ -6297,7 +6297,7 @@ const V67_BASE_OK=window.V66_VERIFIED_BUILD==='V66-FINAL-VERIFIED-2026-09-12';
 window.v67ResultAccessMap={};
 function v67Session(){return school?.academic_session||'2026-27'}
 function v67ModeLabel(m){m=String(m||'auto').toLowerCase();return m==='allow'?'FORCE SHOW':m==='hide'?'FORCE HIDE':'AUTO'}
-function v67AccessPreview(mode,due,isPublished=true){mode=String(mode||'auto').toLowerCase();due=Number(due||0);if(!isPublished)return '<span class="v67AccessState hide">○ Unpublished</span>';if(mode==='hide')return '<span class="v67AccessState hide">⛔ Admin Hide</span>';if(mode==='allow')return `<span class="v67AccessState show">✅ Admin Show${due>0?' • Due':''}</span>`;return due<=0?'<span class="v67AccessState show">✅ Auto Show</span>':'<span class="v67AccessState lock">🔒 Fee Due Lock</span>'}
+function v67AccessPreview(mode,due,isPublished=true){if(due===null||due===undefined||!Number.isFinite(Number(due)))return '<span class="v92Warn">फीस सत्यापन बाकी</span>';mode=String(mode||'auto').toLowerCase();due=Number(due||0);if(!isPublished)return '<span class="v67AccessState hide">○ Unpublished</span>';if(mode==='hide')return '<span class="v67AccessState hide">⛔ Admin Hide</span>';if(mode==='allow')return `<span class="v67AccessState show">✅ Admin Show${due>0?' • Due':''}</span>`;return due<=0?'<span class="v67AccessState show">✅ Auto Show</span>':'<span class="v67AccessState lock">🔒 Fee Due Lock</span>'}
 
 /* Upgrade existing Result Publish Control without removing the old publication table. */
 resultPublishControl=async function(){
@@ -6311,46 +6311,13 @@ resultPublishControl=async function(){
  </div>`;
 };
 
-loadResultControlStudents=async function(){
- let c=$('rcClass').value,exam=$('rcExam').value.trim(),box=$('rcBody');if(!c||!exam)return toast('Class और Exam Name चुनें');
- box.innerHTML='<div class="empty">Loading fee, publication and access status...</div>';
- let {data:students,error:se}=await ldmApplyClassFilter(sb.from('students').select('id,admission_no,student_name,father_name,roll_no,class_name,fee_category,fee_waiver_percent,status'),'class_name',c).order('roll_no').order('student_name');if(se){box.innerHTML=esc(se.message);return}
- let rows=students||[],adms=rows.map(x=>x.admission_no).filter(Boolean),fees=[],sch=[],ctrl=[],marks=[],adj=[],access=[];
- if(adms.length){
-  let [fr,sr,cr,mr,ar,xr]=await Promise.all([
-   sb.from('fees').select('admission_no,paid_amount,due_amount,total_fee').in('admission_no',adms),
-   sb.from('student_fee_schedules').select('admission_no,amount,paid_amount,status').in('admission_no',adms),
-   sb.from('result_publication_controls').select('*').eq('class_name',c).eq('exam_name',exam).in('admission_no',adms),
-   ldmApplyClassFilter(sb.from('student_marks').select('admission_no,id'),'class_name',c).eq('exam_name',exam).in('admission_no',adms),
-   sb.from('v65_fee_adjustments').select('admission_no,adjustment_type,amount,is_active,academic_session').in('admission_no',adms).eq('is_active',true),
-   sb.from('v67_result_access_controls').select('*').eq('academic_session',v67Session()).eq('exam_name',exam).in('admission_no',adms)
-  ]);
-  let er=fr.error||sr.error||cr.error||mr.error||ar.error||xr.error;if(er){box.innerHTML=`<div class="enquiryStatus err">${esc(er.message)} • V67 SQL run करें.</div>`;return}
-  fees=fr.data||[];sch=sr.data||[];ctrl=cr.data||[];marks=mr.data||[];adj=ar.data||[];access=xr.data||[];
- }
- let hasSchedule=new Set(sch.map(x=>x.admission_no)),fm={},markCount={};
- fees.forEach(f=>{if(hasSchedule.has(f.admission_no))return;fm[f.admission_no]??={paid:0,due:0,total:0};fm[f.admission_no].paid+=Number(f.paid_amount||0);fm[f.admission_no].due+=Number(f.due_amount||0);fm[f.admission_no].total+=Number(f.total_fee||0)});
- sch.forEach(x=>{fm[x.admission_no]??={paid:0,due:0,total:0};fm[x.admission_no].paid+=Number(x.paid_amount||0);fm[x.admission_no].total+=Number(x.amount||0);fm[x.admission_no].due+=String(x.status||'').toLowerCase()==='paid'?0:Math.max(Number(x.amount||0)-Number(x.paid_amount||0),0)});
- adj.filter(x=>!x.academic_session||x.academic_session===v67Session()).forEach(x=>{fm[x.admission_no]??={paid:0,due:0,total:0};let n=Math.abs(Number(x.amount||0));fm[x.admission_no].due+=String(x.adjustment_type||'').toLowerCase()==='waiver'?-n:n});
- rows.forEach(x=>{fm[x.admission_no]??={paid:0,due:0,total:0};if(String(x.fee_category||'').toLowerCase()==='free'||Number(x.fee_waiver_percent||0)>=100){fm[x.admission_no].due=0;fm[x.admission_no].free=true}else fm[x.admission_no].due=Math.max(Number(fm[x.admission_no].due||0),0)});
- marks.forEach(m=>markCount[m.admission_no]=(markCount[m.admission_no]||0)+1);
- let cm={},xm={};ctrl.forEach(x=>cm[x.admission_no]=x);access.forEach(x=>xm[x.admission_no]=x);v17ResultRows=rows;v17ResultFeeMap=fm;v17ResultControlMap=cm;window.v67ResultAccessMap=xm;
- box.innerHTML=`<div class="tools"><button class="secondary" onclick="rcCheckAll(true)">Publish All</button><button class="secondary" onclick="rcCheckAll(false)">Unpublish All</button><button class="secondary" onclick="rcSelectPaidOnly()">Publish Clear/Free</button><button class="secondary" onclick="v67SetAllModes('auto')">AUTO All</button><button class="secondary" onclick="v67AllowDue()">Allow Due</button><button class="primary" onclick="saveResultVisibility()">Save Controls</button></div>
- <div class="tableWrap"><table class="resultControlTable"><tr><th>Publish</th><th>Student</th><th>Father</th><th>Roll</th><th>Fee Due</th><th>Access Mode</th><th>Parent Status</th><th>Marks / Marksheet</th></tr>
- ${rows.map((s,i)=>{let f=fm[s.admission_no]||{paid:0,due:0},published=!!cm[s.admission_no]?.is_visible,mode=String(xm[s.admission_no]?.access_mode||'auto').toLowerCase(),free=!!f.free;return `<tr><td><input class="rcCheck" id="rc${i}" type="checkbox" ${published?'checked':''}></td><td><b>${esc(s.student_name||'')}</b><small class="cellSub">${esc(s.admission_no||'')}</small></td><td>${esc(s.father_name||'')}</td><td>${esc(s.roll_no||'')}</td><td>${free?'<span class="feeFreeBadge">FREE</span>':Number(f.due||0)>0?`<span class="feeDueBadge">${money(f.due)}</span>`:'<span class="feePaidBadge">₹0 Clear</span>'}</td><td><select class="v67AccessSel rcAccessMode" id="rcMode${i}"><option value="auto" ${mode==='auto'?'selected':''}>AUTO • Clear Show / Due Lock</option><option value="allow" ${mode==='allow'?'selected':''}>FORCE SHOW • Due पर भी</option><option value="hide" ${mode==='hide'?'selected':''}>FORCE HIDE • Clear पर भी</option></select></td><td id="rcPreview${i}">${v67AccessPreview(mode,f.due,published)}</td><td><b>${markCount[s.admission_no]||0}</b> subjects <div class="markActionRow"><button class="mini edit" onclick="openResultMarksEditor('${s.id}')">Add/Edit</button><button class="mini" onclick="previewResultStudentMarksheet('${s.id}')">Preview</button></div></td></tr>`}).join('')}</table></div>`;
- rows.forEach((s,i)=>{$('rc'+i)?.addEventListener('change',()=>v67RefreshRowPreview(i));$('rcMode'+i)?.addEventListener('change',()=>v67RefreshRowPreview(i))});
-};
+loadResultControlStudents=async function(){return window.LDM_CENTRAL_EXAM.resultLoad()};
+
 function v67RefreshRowPreview(i){let s=v17ResultRows[i],f=v17ResultFeeMap[s?.admission_no]||{};let p=$('rcPreview'+i);if(p)p.innerHTML=v67AccessPreview($('rcMode'+i)?.value,f.due,$('rc'+i)?.checked)}
 function v67SetAllModes(m){document.querySelectorAll('.rcAccessMode').forEach(x=>{x.value=m;x.dispatchEvent(new Event('change'))})}
 function v67AllowDue(){v17ResultRows.forEach((s,i)=>{let f=v17ResultFeeMap[s.admission_no]||{};if(!f.free&&Number(f.due||0)>0){$('rcMode'+i).value='allow';v67RefreshRowPreview(i)}})}
 
-saveResultVisibility=async function(){
- let c=$('rcClass').value,exam=$('rcExam').value.trim();if(!c||!exam)return;let session=v67Session();
- let pub=v17ResultRows.map((s,i)=>({academic_session:session,exam_name:exam,admission_no:s.admission_no,class_name:c,is_visible:$('rc'+i).checked,updated_by:user?.id||null,updated_at:new Date().toISOString()}));
- let acc=v17ResultRows.map((s,i)=>({academic_session:session,exam_name:exam,admission_no:s.admission_no,access_mode:$('rcMode'+i)?.value||'auto',updated_by:user?.id||null,updated_at:new Date().toISOString()}));
- let [a,b]=await Promise.all([sb.from('result_publication_controls').upsert(pub,{onConflict:'academic_session,exam_name,admission_no'}),sb.from('v67_result_access_controls').upsert(acc,{onConflict:'academic_session,exam_name,admission_no'})]);
- let er=a.error||b.error;if(er)return toast(er.message+' • V67 SQL check करें');toast('Result publish + fee access saved for '+pub.length+' students');loadResultControlStudents();
-};
+saveResultVisibility=async function(){return window.LDM_CENTRAL_EXAM.resultSave()};
 
 /* Parent portal: show clear result automatically, locked due message, and respect Admin overrides. */
 const v67ParentEnhanceBase=v64EnhanceParentPortal;
@@ -6452,7 +6419,7 @@ const v68OpenFeeBase=openStudentFeeAccount;openStudentFeeAccount=async function(
 const v68FeeCardBase=feeCardData;feeCardData=async function(s){try{await v68RefreshTransportOne(s?.admission_no)}catch(_e){}return v68FeeCardBase(s)};
 const v68DueBase=loadDueReminders;loadDueReminders=async function(){if(v14Admin?.())await v68GenerateAllTransportDue();return v68DueBase()};
 if(typeof v65LoadFeeControl==='function'){const v68V65FeeBase=v65LoadFeeControl;v65LoadFeeControl=async function(){if(v14Admin?.())await v68GenerateAllTransportDue();return v68V65FeeBase()}}
-if(typeof loadResultControlStudents==='function'){const v68ResultControlBase=loadResultControlStudents;loadResultControlStudents=async function(){if(v14Admin?.())await v68GenerateAllTransportDue();return v68ResultControlBase()}}
+/* Result reads use Central Due Fee; no legacy transport fee rebuild on opening a list. */
 if(typeof studentRiskCenter==='function'){const v68RiskBase=studentRiskCenter;studentRiskCenter=async function(){if(v14Admin?.())await v68GenerateAllTransportDue();return v68RiskBase()}}
 const v68DashboardBase=dashboard;dashboard=async function(){if(v14Admin?.())await v68GenerateAllTransportDue();return v68DashboardBase()};
 
@@ -9967,98 +9934,13 @@ async function v92AdmitPublishCenter(){
 window.v92AdmitPublishCenter=v92AdmitPublishCenter;
 async function v92LoadExams(){let r=await sb.from('v69_exam_master').select('id,exam_name,academic_session,is_active,created_at').eq('is_active',true).order('created_at',{ascending:false}).limit(100);if(r.error)return q92('v92Body').innerHTML=`<div class="empty">${s92(r.error.message)}</div>`;v92Exams=r.data||[];let sel=q92('v92Exam');sel.innerHTML='<option value="">Select Exam</option>'+v92Exams.map(x=>`<option value="${s92(x.id)}">${s92(x.exam_name)} • ${s92(x.academic_session||'')}</option>`).join('');if(v92Exams.length){sel.value=v92Exams[0].id;await v92LoadPublishStudents()}}
 window.v92LoadExams=v92LoadExams;
-async function v92LoadPublishStudents(){
- let exam=q92('v92Exam')?.value;if(!exam)return;
- let body=q92('v92Body');if(body)body.innerHTML='<div class="empty">Central Student Master + Admit status loading...</div>';
- try{
-   const centralQ=sb.from('students').select('id,admission_no,student_id,student_name,father_name,class_name,roll_no,status').limit(10000);
-   const [cr,pr,sr,hr]=await Promise.all([
-     sb.from('v69_exam_classes').select('class_name').eq('exam_id',exam).order('class_name'),
-     sb.from('v92_admit_publication_controls').select('*').eq('exam_id',exam),
-     centralQ,
-     sb.from('v69_admit_card_controls').select('admission_no,is_withheld,hold_reason').eq('exam_id',exam)
-   ]);
-   let err=cr.error||pr.error||sr.error;
-   if(err)throw err;
-
-   const standard=(typeof cls!=='undefined'&&Array.isArray(cls)?cls:['Nursery','LKG','UKG','1','2','3','4','5','6','7','8','9','10']).map(String);
-   const isActive=x=>!['inactive','deleted','trashed','recycled','archived','left','withdrawn'].includes(String(x?.status||'active').trim().toLowerCase());
-   const canon=x=>window.ldmClassCanonical?.(x)||String(x||'').trim();
-   const same=(a,b)=>window.ldmClassSame?.(a,b)??canon(a)===canon(b);
-
-   let central=(sr.data||[]).filter(isActive).map(x=>({...x,class_name:canon(x.class_name)}));
-   let standardSet=new Set(standard);
-   central=central.filter(x=>standardSet.has(canon(x.class_name)));
-
-   /* Class selector is always canonical school order from ONE Central Student Master.
-      This prevents an old/incomplete exam-class row (e.g. only "8") from hiding LKG/UKG/other classes. */
-   let present=new Set(central.map(x=>canon(x.class_name)));
-   let examSaved=new Set((cr.data||[]).map(x=>canon(x.class_name)).filter(Boolean));
-   let classes=standard.filter(c=>present.has(c)||examSaved.has(c));
-
-   let csel=q92('v92Class'),old=canon(csel?.value||'');
-   if(csel){
-     csel.innerHTML='<option value="">All Classes</option>'+classes.map(c=>`<option value="${s92(c)}">${s92(c)}</option>`).join('');
-     if(classes.includes(old))csel.value=old;
-   }
-
-   v92PubMap={};(pr.data||[]).forEach(x=>v92PubMap[String(x.admission_no)]=x);
-   const holdMap={};if(!hr.error)(hr.data||[]).forEach(x=>holdMap[String(x.admission_no)]=x);
-
-   let rpcRows=[];
-   if(classes.length){
-     const rpcClasses=[...new Set(classes.flatMap(c=>window.ldmClassAliases?.(c)||[c]))];
-     const ar=await sb.rpc('v69_admit_candidates',{p_exam_id:exam,p_classes:rpcClasses});
-     if(!ar.error)rpcRows=(ar.data?.students||[]);
-   }
-   const byAdm=new Map();
-   rpcRows.forEach(x=>{
-     let adm=String(x.admission_no||'').trim();if(!adm)return;
-     byAdm.set(adm,{...x,class_name:canon(x.class_name)});
-   });
-
-   /* Fill missing candidates from central students, while keeping existing V69 RPC data/hold data.
-      Due is loaded from the canonical central due snapshot only for rows the old RPC did not return. */
-   const missing=central.filter(x=>x.admission_no&&!byAdm.has(String(x.admission_no)));
-   let dueMap=new Map();
-   if(missing.length){
-     const adms=[...new Set(missing.map(x=>String(x.admission_no)).filter(Boolean))];
-     const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit'}).formatToParts(new Date());
-     const z=Object.fromEntries(parts.map(x=>[x.type,x.value])),until=z.year+'-'+z.month;
-     const session=school?.academic_session||school?.current_session||'2026-27';
-     let dueRows=[];
-     for(let i=0;i<adms.length;i+=300){
-       let dr=await sb.rpc('ldm_fee_due_snapshot_v2',{p_session:session,p_admission_nos:adms.slice(i,i+300),p_until_month:until});
-       if(!dr.error)dueRows.push(...(dr.data||[]));
-     }
-     dueMap=new Map(dueRows.map(x=>[String(x.admission_no),Number(x.current_due||0)]));
-   }
-   missing.forEach(x=>{
-     const adm=String(x.admission_no||''),h=holdMap[adm]||{};
-     byAdm.set(adm,{...x,fee_due:Number(dueMap.get(adm)||0),is_withheld:!!h.is_withheld,hold_reason:h.hold_reason||''});
-   });
-
-   v92Candidates=[...byAdm.values()]
-     .filter(x=>classes.some(c=>same(x.class_name,c)))
-     .map(x=>({...x,class_name:canon(x.class_name),_pub:v92PubMap[String(x.admission_no)]||null}))
-     .sort((a,b)=>{
-       let ai=standard.indexOf(canon(a.class_name)),bi=standard.indexOf(canon(b.class_name));
-       if(ai!==bi)return (ai<0?999:ai)-(bi<0?999:bi);
-       let ar=Number(a.roll_no),br=Number(b.roll_no);
-       if(Number.isFinite(ar)&&Number.isFinite(br)&&ar!==br)return ar-br;
-       return String(a.student_name||'').localeCompare(String(b.student_name||''),undefined,{numeric:true,sensitivity:'base'});
-     });
-   v92RenderPublishStudents();
- }catch(e){
-   if(body)body.innerHTML=`<div class="empty">${s92(e?.message||e)} • Central Admit load failed.</div>`;
- }
-}
+async function v92LoadPublishStudents(){return window.LDM_CENTRAL_EXAM.admitLoad()}
 window.v92LoadPublishStudents=v92LoadPublishStudents;
-function v92Filtered(){let rows=v92Candidates||[],cl=q92('v92Class')?.value||'',q=n92(q92('v92Q')?.value),st=q92('v92Status')?.value||'';if(cl)rows=rows.filter(x=>window.ldmClassSame?.(x.class_name,cl)??String(x.class_name||'')===String(cl));if(q)rows=rows.filter(x=>[x.student_name,x.father_name,x.admission_no,x.class_name].some(v=>n92(v).includes(q)));if(st==='published')rows=rows.filter(x=>!!x._pub?.is_published);if(st==='not')rows=rows.filter(x=>!x._pub?.is_published);if(st==='due')rows=rows.filter(x=>Number(x.fee_due||0)>0);return rows}
-function v92RenderPublishStudents(){let rows=v92Filtered(),published=rows.filter(x=>x._pub?.is_published).length,due=rows.filter(x=>Number(x.fee_due||0)>0).length,clear=rows.length-due,held=rows.filter(x=>x.is_withheld).length;q92('v92Stats').innerHTML=[['Students',rows.length],['Fee Clear',clear],['Due',due],['Published',published],['Held',held]].map(x=>`<div class="v90Stat"><div><small>${x[0]}</small><b>${x[1]}</b></div></div>`).join('');q92('v92Body').innerHTML=`<div class="tableWrap"><table class="v90Table"><tr><th>✓</th><th>Student</th><th>Class</th><th>Father</th><th>Fee</th><th>Admit Hold</th><th>Parent Publish</th></tr>${rows.map(x=>{let due=Number(x.fee_due||0),pub=!!x._pub?.is_published,over=!!x._pub?.allow_due_override;return `<tr><td><input class="v92Check" type="checkbox" data-adm="${s92(x.admission_no||'')}"></td><td><b>${s92(x.student_name||'')}</b><small class="cellSub">${s92(x.admission_no||'')}</small></td><td>${s92(x.class_name||'')}</td><td>${s92(x.father_name||'')}</td><td>${due>0?`<span class="v92Bad">${typeof money==='function'?money(due):due}</span>`:'<span class="v92Good">CLEAR</span>'}</td><td>${x.is_withheld?'<span class="v92Bad">HELD</span>':'<span class="v92Good">Open</span>'}</td><td>${pub?`<span class="v92Published">Published</span>${over?' <span class="v92DueOverride">Due Override</span>':''}`:'<span class="v92Warn">Not Published</span>'}</td></tr>`}).join('')||'<tr><td colspan="7">No students.</td></tr>'}</table></div><p class="v92PrintRule">Normal Publish केवल Fee Clear + Not Held students पर होगा. Due student के लिए Admin Override button जानबूझकर अलग रखा गया है. Parent को केवल Published/Allowed card दिखेगा.</p>`}
+function v92Filtered(){return window.LDM_CENTRAL_EXAM.admitFilter()}
+function v92RenderPublishStudents(){return window.LDM_CENTRAL_EXAM.admitRender()}
 window.v92RenderPublishStudents=v92RenderPublishStudents;
-window.v92SelectPublish=function(mode){let visible=new Set(v92Filtered().filter(x=>mode==='all'||(mode==='clear'&&Number(x.fee_due||0)<=0&&!x.is_withheld)).map(x=>String(x.admission_no)));document.querySelectorAll('.v92Check').forEach(c=>c.checked=mode!=='none'&&visible.has(c.dataset.adm))};
-window.v92SetPublish=async function(pub,override){let adms=[...document.querySelectorAll('.v92Check:checked')].map(x=>x.dataset.adm).filter(Boolean);if(!adms.length)return toast('Student select करें');if(override&&pub&&!confirm(`Due Fee वाले selected students को भी Parent Admit Card allow करना है? (${adms.length} selected)`))return;if(!pub&&!confirm(`${adms.length} selected Admit Cards Parent से hide/unpublish करना है?`))return;v91BusyStart?.();let r=await sb.rpc('v92_set_admit_publication',{p_exam_id:q92('v92Exam').value,p_admission_nos:adms,p_publish:!!pub,p_allow_due_override:!!override});v91BusyEnd?.();if(r.error)return toast(r.error.message+' • V92 SQL run करें');let d=r.data||{};toast(`${pub?'Publish':'Unpublish'} updated: ${d.updated||0}${d.skipped_due_or_hold?' • '+d.skipped_due_or_hold+' due/held skipped':''}`);await v92LoadPublishStudents();try{v58BroadcastUpdate?.('v92_admit_publication_controls')}catch(_e){}};
+window.v92SelectPublish=mode=>window.LDM_CENTRAL_EXAM.admitSelect(mode);
+window.v92SetPublish=(pub,override)=>window.LDM_CENTRAL_EXAM.admitSave(pub,override);
 
 // ---------------- PARENT / STUDENT: ONLY PUBLISHED CARDS ----------------
 window.v92ParentAdmits=[];
@@ -13672,7 +13554,7 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  /* V156 Admin Dashboard canonical order + summary drill-down. Existing module renderers remain the single owners. */
  window.v156AdminSummaryDrill=function(kind){
    if(!admin())return window.toast?.('Admin / Principal only');
-   const routes={students:'v150_student_master',teachers:'staff',collection:'fee_dashboard',due:'v6422_due_master',attendance:'v90_attendance_monitor'};
+   const routes={students:'v150_student_master',teachers:'staff',collection:'fee_dashboard',due:'v200_due_fee_report',attendance:'v90_attendance_monitor'};
    if(routes[kind])return window.render?.(routes[kind]);
    if(kind==='requests'){
      window.__v90Route='v156_pending_requests';window.head?.('📬 Pending Requests','Student + Teacher pending work');
@@ -18568,7 +18450,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v330.js?v=330"></script>
+<script src="dashboard-v332.js?v=332"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=305"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18581,16 +18463,16 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v329.js?v=329"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v327.js?v=327"></script>
+<script src="root-corrections-v332.js?v=332"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
 <script src="exam-central-v320.js?v=320"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
-<script src="smart-work-v327.js?v=327"></script>
+<script src="smart-work-v333.js?v=333"></script>
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
-<script src="resources-v330.js?v=330"></script>
+<script src="resources-v334.js?v=334"></script>
 <script src="controls-v323.js?v=323"></script>
 <style id="v325BannerFit">
 /* Match the whole banner to its natural ratio on phones; fill the desktop hero. */
@@ -18603,5 +18485,6 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="quickdesk-v326.css?v=326">
 <link rel="stylesheet" href="fee-layout-v327.css?v=327">
 <script src="fee-ledger-v327.js?v=327"></script>
+<script src="central-exam-fees-v333.js?v=333"></script>
 </body>
 </html>
