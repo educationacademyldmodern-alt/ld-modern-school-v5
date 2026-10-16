@@ -30,8 +30,8 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 })();
 </script>
 
-<meta charset="utf-8"><meta name="ld-modern-build" content="V276-FAST-OPEN-2026-10-09"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V276-FAST-OPEN-2026-10-09"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<meta charset="utf-8"><meta name="ld-modern-build" content="V342-ORIGINAL-V339-DASHBOARD-2026-10-16"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V342-ORIGINAL-V339-DASHBOARD-2026-10-16"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
@@ -16575,11 +16575,17 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 
   async function saveFeeConfig(student,state,next,diff){
     if(!diff.monthly&&!diff.start&&!diff.plan)return false;
-    const row={admission_no:student.admission_no,academic_session:sess(),class_name:student.class_name||state.cfg?.class_name||''};
+    // V341: validate before writing; never insert NULL or invent a fee start month.
+    const start=String(next.start||state.cfg?.auto_start_month||'').trim();
+    if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(start))throw Error('Select Fixed Fee Start month before saving / पहले फीस शुरू होने का महीना चुनें');
+    const row={class_name:student.class_name||state.cfg?.class_name||''};
     if(diff.monthly)row.monthly_fee=next.monthly;
-    if(diff.start)row.auto_start_month=next.start||null;
+    if(diff.start)row.auto_start_month=start;
     if(diff.plan)row.ldm_plan_mode=next.plan;
-    const r=await sb.from('student_fee_settings').upsert(row,{onConflict:'admission_no,academic_session'});
+    const exists=!!state.cfg?.admission_no;
+    const r=exists
+      ?await sb.from('student_fee_settings').update(row).eq('admission_no',student.admission_no).eq('academic_session',sess())
+      :await sb.from('student_fee_settings').insert({...row,admission_no:student.admission_no,academic_session:sess(),auto_start_month:start,monthly_fee:next.monthly??0,ldm_plan_mode:next.plan});
     if(r.error)throw r.error;
     try{if(typeof window.ldmEnsureFeeMonths==='function')await window.ldmEnsureFeeMonths([student.admission_no],monthNow(),sess())}catch(e){console.warn('V240 fee ensure',e?.message||e)}
     return true;
@@ -18418,5 +18424,11 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="save-stay-v338.js?v=338"></script>
 <link rel="stylesheet" href="admit-layout-v339.css?v=339">
 <script src="admit-layout-v339.js?v=339"></script>
+<link rel="stylesheet" href="document-layout-v341.css?v=341">
+<script src="document-layout-v341.js?v=341"></script>
+<link rel="stylesheet" href="original-dashboard-v342.css?v=342">
+<script src="original-dashboard-v342.js?v=342"></script>
+<link rel="stylesheet" href="paper-center-v343.css?v=343">
+<script src="paper-center-v343.js?v=343"></script>
 </body>
 </html>
