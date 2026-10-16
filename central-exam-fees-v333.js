@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id),E=s=>String(s??'').replace(/[&<>"']/g,c=
 const actor=()=>typeof profile!=='undefined'?profile:window.profile,db=()=>typeof sb!=='undefined'?sb:window.sb;
 const admin=()=>['admin','super_admin','principal'].includes(String(actor()?.role||'').toLowerCase())&&String(actor()?.status||'active').toLowerCase()==='active';
 const session=()=>String((typeof school!=='undefined'?school:window.school)?.academic_session||'2026-27');
-const month=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit'}).format(new Date()).slice(0,7);
+const month=()=>{const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return p.year+'-'+p.month};
 const sessionKey=x=>{const m=/^(\d{4})\s*[-–/]\s*(\d{2}|\d{4})$/.exec(String(x||'').trim());return m?m[1]+'-'+m[2].slice(-2):String(x||'').trim()};
 const canon=x=>window.ldmClassCanonical?.(x)||String(x||'').trim();
 const active=x=>!['inactive','deleted','trashed','recycled','archived','left','withdrawn','transferred'].includes(String(x.status||'active').trim().toLowerCase());
