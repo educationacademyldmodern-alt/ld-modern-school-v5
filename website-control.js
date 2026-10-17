@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-const DEFAULT_NOTICE='Admissions Open for Session 2026-27 (Nursery to Class 10) | Quality Education for a Better Tomorrow | Building Character, Creating Brighter Futures | Welcome to L D Modern Education Academy';
+const DEFAULT_NOTICE='Admissions Open for Session 2026-27 (Nursery to Class 10) | Quality Education for a Better Tomorrow | Building Character, Creating Brighter Futures | Welcome to L D MODERN EDUCATION ACADEMY';
 const DEFAULT_EMAIL='educationacademyldmodern@gmail.com';
 const DEFAULT_PHONE='9625688873';
 

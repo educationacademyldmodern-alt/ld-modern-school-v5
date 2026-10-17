@@ -1,0 +1,35 @@
+/* Named formats own their layout inside the existing document renderer. */
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark{--m344-accent:#173d64}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344-classic{--m344-accent:#254e3e}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344-maroon{--m344-accent:#74192b}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344-official{border:2px double #173d64!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344-termwise{border-top-color:#176270!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344-detailed{border-top-color:#48366c!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark *{text-shadow:none!important;filter:none!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .v341MarkHeader{display:grid!important;grid-template-columns:20mm 1fr 23mm!important;align-items:center!important;gap:3mm!important;min-height:30mm!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Logo{width:18mm!important;height:18mm!important;object-fit:contain}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Photo{width:23mm!important;height:29mm!important;object-fit:cover!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark h2{font:700 14pt/1.3 u337Text,Arial!important;margin:0!important;color:var(--m344-accent)}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark h3{font-size:11pt;margin:1mm 0}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark p{margin:1.4mm 0;font-size:8pt;line-height:1.4}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Status{font:700 9pt/1.5 u337Text,Arial;background:#fff5db;border:1px solid #c6a55b;padding:1mm 2mm;margin-bottom:3mm}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .markInfo{font:9pt/1.35 u337Text,Arial,sans-serif!important;padding:2mm!important;gap:1mm 3mm!important;margin:0 0 3mm!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark :is(td,th){padding:1mm 1.3mm!important;font:9pt/1.3 u337Text,Arial,sans-serif!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Subjects tr{height:6.5mm!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .v32ResultRow{margin:4mm 0!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .v32ResultRow span{padding:2mm!important;font-size:8pt!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .v32ResultRow strong{font-size:12pt!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Issues{font-size:7.5pt;line-height:1.4;color:#7c4219}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .v341MarkSign{padding-top:7mm!important;min-height:17mm!important;font-size:9pt!important;background:#fff!important;color:#173d64!important;box-shadow:none!important;text-align:center!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .v341MarkSign span{color:#173d64!important;opacity:1!important;background:#fff!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Terms :is(th,td):first-child{width:30%!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Terms tr{height:8mm}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Panels{display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin-top:4mm}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark :is(.m344Panels>div,.m344Remarks,.m344Detailed aside){border:1px solid #a8bdcf;padding:2mm}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark h4{background:var(--m344-accent);color:#fff;font-size:9pt;margin:-2mm -2mm 2mm;padding:2mm}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Detailed{display:grid;grid-template-columns:1fr 38mm;gap:3mm}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Detailed :is(td,th){font-size:8.5pt!important;padding:1mm!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Detailed tr{height:6mm!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Detailed :is(th,td):first-child{width:37%!important}
+:is(#erpContent,#a337Document #erpContent) .markPreview.m344Mark .m344Remarks{margin-top:4mm}
+.m344Samples{width:96vw;max-width:1000px;height:94vh;max-height:94vh;overflow:auto;background:#e9eff5;border:1px solid #8198b0}.m344Samples::backdrop{background:#082139aa}.m344Samples>button{position:sticky;top:0;z-index:2;padding:12px}.m344Tools p{font-size:13px}

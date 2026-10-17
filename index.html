@@ -15,34 +15,22 @@ body.ldmSurfaceParent #erp,body.ldmSurfaceParent #login,body.ldmSurfaceParent #s
 </script>
 
 <script id="ldm-runtime-dedup-bootstrap">
-(function(){
- if(window.__ldmRuntimeDedupeInstalled)return; window.__ldmRuntimeDedupeInstalled=true;
- const seen=new WeakMap(), nativeAdd=EventTarget.prototype.addEventListener;
- EventTarget.prototype.addEventListener=function(type,fn,opt){
-   if(typeof fn!=='function')return nativeAdd.apply(this,arguments);
-   let m=seen.get(this); if(!m){m=new Set();seen.set(this,m)}
-   let cap=typeof opt==='boolean'?opt:!!(opt&&opt.capture), once=!!(opt&&typeof opt==='object'&&opt.once);
-   let src='';try{src=Function.prototype.toString.call(fn).replace(/\\s+/g,' ')}catch(_e){src=String(fn)}
-   const key=String(type)+'|'+cap+'|'+once+'|'+src;
-   if(m.has(key))return; m.add(key); return nativeAdd.apply(this,arguments);
- };
- // V160: native setInterval retained; module timers/scanners own their lifecycle.
-})();
+/* Native EventTarget semantics retained. Different closures may have identical source. Module owners bind their own handlers once. */
 </script>
 
 <meta charset="utf-8"><meta name="ld-modern-build" content="V342-ORIGINAL-V339-DASHBOARD-2026-10-16"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>L D Modern Education Academy Kushinagar | School Login</title><meta name="build" content="V342-ORIGINAL-V339-DASHBOARD-2026-10-16"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D Modern Education Academy, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
+<title>L D MODERN EDUCATION ACADEMY Kushinagar | School Login</title><meta name="build" content="V342-ORIGINAL-V339-DASHBOARD-2026-10-16"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png"><link rel="shortcut icon" href="favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="description" content="L D MODERN EDUCATION ACADEMY, Gambhiriya Bujurg, Singhapatti, Kushinagar. Official school website for admission, Admin Login, Teacher Access, Parent Login, fees, attendance, exams, results and school management.">
 <meta name="theme-color" content="#0b4eb8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="LD Modern Academy"><meta name="apple-mobile-web-app-title" content="LD Modern Academy"><meta name="keywords" content="L D Modern Education Academy, LD Modern Education Academy, LD Modern Academy, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
+<meta name="robots" content="index,follow,max-image-preview:large"><meta name="application-name" content="L D MODERN EDUCATION ACADEMY"><meta name="apple-mobile-web-app-title" content="L D MODERN EDUCATION ACADEMY"><meta name="keywords" content="L D MODERN EDUCATION ACADEMY, L D MODERN EDUCATION ACADEMY, L D MODERN EDUCATION ACADEMY, school Kushinagar, school Singhapatti, school Gambhiriya Bujurg, parent login, teacher login, school login">
 <link rel="canonical" href="/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="L D Modern Education Academy Kushinagar">
-<meta property="og:description" content="Official school website and secure Admin, Teacher and Parent Login for L D Modern Education Academy, Kushinagar.">
+<meta property="og:title" content="L D MODERN EDUCATION ACADEMY Kushinagar">
+<meta property="og:description" content="Official school website and secure Admin, Teacher and Parent Login for L D MODERN EDUCATION ACADEMY, Kushinagar.">
 
 <meta property="og:image" content="icon-512.png">
 <meta name="twitter:card" content="summary">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"School","name":"L D Modern Education Academy","alternateName":["LD Modern Education Academy","LD Modern Academy","L D Modern School"],"address":{"@type":"PostalAddress","addressLocality":"Gambhiriya Bujurg, Singhapatti","addressRegion":"Uttar Pradesh","addressCountry":"IN"},"description":"School website with admission and secure Admin, Teacher and Parent portals."}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"School","name":"L D MODERN EDUCATION ACADEMY","alternateName":["L D MODERN EDUCATION ACADEMY","L D MODERN EDUCATION ACADEMY","L D Modern School"],"address":{"@type":"PostalAddress","addressLocality":"Gambhiriya Bujurg, Singhapatti","addressRegion":"Uttar Pradesh","addressCountry":"IN"},"description":"School website with admission and secure Admin, Teacher and Parent portals."}
 </script>
 <style>
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:#162238;background:#f6f8fc}button,input,select,textarea{font:inherit}button,[role="button"],a[href],#erpNav button,.erpTop button,.primary,.secondary,.mini,.logout,.card[onclick],.stat[onclick],[data-route]{-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}input,textarea,[contenteditable="true"],[contenteditable=""]{-webkit-user-select:text;user-select:text;touch-action:auto}.hidden,[hidden]{pointer-events:none!important}.hidden{display:none!important}.pubTop{height:76px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 max(5vw,20px);position:sticky;top:0;z-index:30;border-bottom:1px solid #e8edf4}.pubBrand{display:flex;gap:10px;align-items:center}.pubBrand b{display:block;font-size:13px}.pubBrand small{display:block;color:#6d7b8f}.logoText,.logo{width:48px;height:48px;border-radius:14px}.logoText{display:grid;place-items:center;background:linear-gradient(135deg,#092a59,#1768df);color:#fff;font-weight:900}.logo{object-fit:cover}.pubTop nav{display:flex;gap:18px;align-items:center}.pubTop nav a{text-decoration:none;color:#304057;font-size:12px;font-weight:700}.pubTop nav button,.publicForm button,.searchBox button,.heroBtns button,.authCard button{border:0;background:linear-gradient(135deg,#0b4eb8,#2877ed);color:#fff;border-radius:9px;padding:10px 14px;font-weight:800;cursor:pointer}.hamb{display:none;border:1px solid #dfe6ef;background:#fff;border-radius:8px;padding:8px}.pubHero{min-height:540px;display:flex;align-items:center;padding:70px max(7vw,25px);background:linear-gradient(110deg,#061b3beF,#0b4c9ac7),var(--hero-bg,linear-gradient(135deg,#0a2347,#0e5ab5));background-size:cover;background-position:center;color:#fff}.pubHero>div{max-width:720px}.pubHero h1{font-size:54px;line-height:1.02;margin:14px 0}.pubHero p{font-size:18px;color:#d8e6fa}.pill,.eyebrow{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.1em;color:#1760bd;background:#eaf2ff;padding:7px 9px;border-radius:999px}.pubHero .pill{color:#fff;background:#ffffff20}.heroBtns{display:flex;gap:9px;margin-top:24px}.heroBtns .outline{background:#ffffff15;border:1px solid #ffffff55}.publicSection{padding:70px max(7vw,25px);max-width:1500px;margin:auto}.publicSection h2{font-size:34px;margin:10px 0 24px}.soft{background:#eef4fb;max-width:none}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:-35px;position:relative}.stats div,.cards3 article,.quote{background:#fff;border:1px solid #e2e9f2;border-radius:17px;padding:22px;box-shadow:0 12px 30px #0d2a500c}.stats b{display:block;font-size:20px}.stats span{color:#6e7c91;font-size:11px}.two{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center}.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.cards3 article h3{margin-top:0}.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.gallery img,.gallery video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:#e8edf4}.noticeList{display:grid;gap:9px}.noticeItem{background:#fff;border:1px solid #e1e8f1;border-radius:12px;padding:15px}.publicForm{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:900px}.publicForm input,.publicForm select,.publicForm textarea,.searchBox input,.authCard input{padding:12px;border:1px solid #d5deea;border-radius:10px;background:#fff}.publicForm textarea{grid-column:1/-1;min-height:90px}.publicForm button{width:max-content}.searchBox{display:flex;gap:8px;max-width:600px}.searchBox input{flex:1}.resultCard{background:#fff;border:1px solid #e1e8f1;border-radius:14px;padding:18px;margin-top:15px}footer{padding:30px max(7vw,25px);background:#06162d;color:#fff;display:flex;justify-content:space-between}footer span{color:#aebed2}.empty{color:#7b8899;padding:20px;border:1px dashed #ccd7e5;border-radius:12px}.auth{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#eaf2ff,#f9fbfe)}.loginGrid{width:min(980px,100%);display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center}.loginHero{padding:30px}.loginHero h1{font-size:40px;margin:18px 0 7px}.loginHero p{color:#6e7c91}.ghost{border:1px solid #d7e0eb;background:#fff;padding:9px 12px;border-radius:9px}.authCard{background:#fff;border:1px solid #dfe6ef;border-radius:24px;padding:30px;box-shadow:0 25px 70px #102b4c20}.authCard input{width:100%;margin:6px 0}.authCard button{width:100%;margin-top:8px}.loginLinks{display:flex;justify-content:space-between;margin:14px 0}.loginLinks a{color:#1768df;cursor:pointer}.erp aside{position:fixed;inset:0 auto 0 0;width:282px;background:linear-gradient(180deg,#06152b,#0a2a55);color:#fff;padding:14px;display:flex;flex-direction:column;z-index:40}.sideBrand{display:flex;align-items:center;gap:10px;padding:8px 4px 14px;border-bottom:1px solid #ffffff17}.logoText.small{width:46px;height:46px}.sideBrand b{font-size:12px;display:block}.sideBrand small{font-size:9px;color:#b6c9e2;text-transform:uppercase}.erp aside nav{display:grid;gap:3px;overflow:auto;padding-top:10px}.erp aside nav button,.logout{border:0;background:transparent;color:#d4e0ef;text-align:left;padding:10px 11px;border-radius:9px;cursor:pointer}.erp aside nav button:hover,.erp aside nav button.active{background:#ffffff13;color:#fff}.logout{margin-top:auto}.erp main{margin-left:282px}.erpTop{height:76px;background:#fff;border-bottom:1px solid #e3eaf3;display:flex;align-items:center;gap:12px;padding:0 22px;position:sticky;top:0;z-index:20}.erpTop h2{margin:0;font-size:20px}.erpTop p{margin:3px 0;color:#718096;font-size:11px}.websiteBtn{margin-left:auto;border:1px solid #dce4ee;background:#fff;border-radius:9px;padding:8px 10px}#erpContent{padding:22px;max-width:1500px;margin:auto}.dashHero{padding:25px;border-radius:22px;background:linear-gradient(135deg,#071b38,#1555a5);color:#fff}.dashHero h2{margin:0}.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}.quick button{border:1px solid #ffffff33;background:#ffffff14;color:#fff;border-radius:8px;padding:9px 11px}.erpCards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:15px}.stat,.panel{background:#fff;border:1px solid #e2e9f2;border-radius:15px;box-shadow:0 10px 25px #102a430b}.stat{padding:17px}.stat span{font-size:11px;color:#6d7b8e}.stat b{display:block;font-size:24px;margin-top:7px}.panel{padding:17px;margin-top:16px}.panelHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.tools{display:flex;gap:7px;flex-wrap:wrap}.tools input,.tools select,.panel input,.panel select,.panel textarea{padding:9px;border:1px solid #d6dfeb;border-radius:9px}.primary,.secondary,.mini{border:0;border-radius:8px;padding:8px 10px;cursor:pointer}.primary{background:#1768df;color:#fff}.secondary{background:#fff;border:1px solid #d6dfeb}.mini{font-size:10px;text-decoration:none;display:inline-block}.call{background:#e9f2ff;color:#1558b0}.wa{background:#e7faef;color:#087c5b}.sms{background:#fff6df;color:#8b6500}.edit{background:#eaf2ff;color:#174ea6}.del{background:#ffeded;color:#b42318}.tableWrap{overflow:auto;border:1px solid #edf1f5;border-radius:10px;margin-top:12px}table{width:100%;border-collapse:collapse;min-width:850px}th,td{padding:10px;border-bottom:1px solid #edf1f5;text-align:left;font-size:12px}th{background:#f8fafc;color:#5e6c80}.modal{position:fixed;inset:0;background:#06152b99;display:grid;place-items:center;padding:15px;z-index:100}.modalCard{width:min(1050px,100%);max-height:94vh;overflow:auto;background:#fff;border-radius:18px}.modalHead{display:flex;justify-content:space-between;padding:17px;border-bottom:1px solid #e2e9f2}.modalHead h3{margin:0}.modalHead button{border:0;background:#f1f4f8;border-radius:8px}#dataForm{padding:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.field{display:grid;gap:5px}.field label{font-size:11px;font-weight:800}.field input,.field select,.field textarea{padding:10px;border:1px solid #d5deea;border-radius:9px}.field textarea{min-height:80px}.full,.section{grid-column:1/-1}.section{font-weight:900;color:#174e9a;padding:9px 0;border-bottom:1px solid #e4eaf2}.toast{position:fixed;right:18px;bottom:18px;background:#102a43;color:#fff;padding:12px 16px;border-radius:9px;z-index:200}.note{color:#718096;font-size:11px}@media(max-width:1050px){.pubTop nav{display:none;position:absolute;top:76px;left:0;right:0;background:#fff;padding:18px;flex-direction:column}.pubTop nav.show{display:flex}.hamb{display:block}.loginGrid,.two{grid-template-columns:1fr}.erp aside{transform:translateX(-100%);transition:.2s}.erp aside.open{transform:translateX(0)}.erp main{margin-left:0}.erpCards{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.pubHero{min-height:480px}.pubHero h1{font-size:37px}.stats,.cards3,.gallery,.erpCards{grid-template-columns:1fr}.publicForm{grid-template-columns:1fr}.publicForm textarea{grid-column:auto}.publicSection{padding:50px 18px}.stats{margin-top:0}.searchBox{flex-direction:column}footer{flex-direction:column;gap:7px}#erpContent{padding:13px}#dataForm{grid-template-columns:1fr}.full,.section{grid-column:auto}.panelHead{align-items:flex-start;flex-direction:column}}
@@ -915,12 +903,13 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @page{size:A4 portrait;margin:0}
 </style>
 <meta name="ldm-fix" content="V247 canonical LKG/UKG attendance root fix">
+<link rel="stylesheet" href="marksheet-core.css?v=344">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
 <div id="publicSite"><div id="runningNotices" class="runningNoticeHost"></div>
 <section class="v57TopInfo"><div class="v57Clock"><b>Welcome</b><span data-v57time></span></div></section>
-<section id="exactHome" class="v26Home v114ReferenceHome" aria-label="L D Modern Education Academy home page">
+<section id="exactHome" class="v26Home v114ReferenceHome" aria-label="L D MODERN EDUCATION ACADEMY home page">
   <header class="v26Top">
     <button class="v26Menu" onclick="document.getElementById('v26Nav').classList.toggle('show')" aria-label="Menu">☰</button>
     <div class="v26Brand"><img src="school-logo.png" alt="School Logo"><div><b>L D MODERN EDUCATION ACADEMY</b><span>GAMBHIRIYA BUJURG, SINGHAPATTI, KUSHINAGAR</span><small>Nursery to Class 10 &nbsp; | &nbsp; Quality Education for a Better Tomorrow</small></div></div>
@@ -965,7 +954,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 </section>
 <div id="publicPageView" class="publicPageView hidden"><div class="publicPageBar"><button onclick="showPublicPage('home')">← Home</button><b id="publicPageTitle">School</b></div><div id="publicPageBody"></div></div>
 <section class="publicSection stats premiumStats"><div><b>Nursery–10</b><span>Classes</span></div><div><b>Smart ERP</b><span>School Management</span></div><div><b>Secure Portals</b><span>Teacher & Parent</span></div><div><b>Any Device</b><span>Mobile • Tablet • Laptop</span></div></section>
-<script src="public-final.js?v=320"></script>
+<script src="public-final.js?v=344"></script>
 <section id="about" class="publicSection two"><div><span class="eyebrow">ABOUT SCHOOL</span><h2>Learning with values and modern education</h2><p id="aboutText">Quality education with discipline, values, technology and all-round student development.</p></div><div class="quote"><h3>Principal / Director Message</h3><p id="principalMsg">“Every child deserves an environment where curiosity, discipline and confidence grow together.”</p></div></section>
 <section id="faculty" class="publicSection"><span class="eyebrow">OUR TEAM</span><h2>Faculty & Staff</h2><div id="facultyCards" class="cards3"><div class="empty">Faculty will appear here.</div></div></section>
 <section id="facilities" class="publicSection soft"><span class="eyebrow">FACILITIES</span><h2>School Facilities</h2><div class="cards3"><article><h3>Smart Learning</h3><p>Digital and classroom learning support.</p></article><article><h3>Student Development</h3><p>Academic, cultural and co-curricular activities.</p></article><article><h3>Safe Management</h3><p>Attendance, communication and school records in one system.</p></article></div></section>
@@ -1099,7 +1088,7 @@ function init(){
 }function saveCloud(){let url=$("cloudUrl").value.trim().replace(/\/+$/,""),key=$("cloudKey").value.trim();if(!url||!key)return toast("URL and key required");try{if(key.split(".").length===3){let p=JSON.parse(atob(key.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));if(String(p.role||"").toLowerCase()==="service_role")return toast("SECURITY BLOCK: service_role key browser/index.html में कभी save नहीं करें.")}}catch(_e){}localStorage.setItem(K,JSON.stringify({url,key}));location.reload()}function resetCloud(){localStorage.removeItem(K);location.reload()}
 async function boot(){if(cfg){init();await loadSchool()}else{fillClasses();return}fillClasses();let{data:{session}}=cfg?await sb.auth.getSession():{data:{session:null}};if(session){user=session.user;await loadProfile()}}
 function fillClasses(){document.querySelectorAll('select[name="class_name"]').forEach(s=>{if(!s.options.length||s.options.length===1)s.innerHTML='<option value="">Select Class</option>'+cls.map(x=>`<option>${x}</option>`).join("")})}
-async function loadSchool(){let{data}=await sb.from("school_settings").select("*").eq("id",1).maybeSingle();school=data||{};applySchool()}
+async function loadSchool(){let{data}=await sb.from("school_settings").select("*").eq("id",1).maybeSingle();school=data||{};school.school_name='L D MODERN EDUCATION ACADEMY';applySchool()}
 function renderRunningNotices(){let host=$('runningNotices');if(!host)return;let defaults=['📢 L D MODERN EDUCATION ACADEMY','🎓 Admission & Academic Updates','✅ Important School Notice'];let rows=[[school.notice1_text||defaults[0],school.notice1_enabled!==false,'r1'],[school.notice2_text||defaults[1],school.notice2_enabled!==false,'r2'],[school.notice3_text||defaults[2],school.notice3_enabled!==false,'r3']].filter(x=>x[1]);host.innerHTML=rows.map(x=>`<div class="runStrip ${x[2]}"><span>${esc(x[0])}</span></div>`).join('');host.style.display=rows.length?'block':'none'}
 function applyPortalWallpapers(){let erp=$('erp');if(erp){let role=String(profile?.role||'').toLowerCase(),url=['super_admin','admin','principal','admission','accountant'].includes(role)?school.admin_wallpaper_url:role==='teacher'?school.teacher_wallpaper_url:null;if(url){erp.classList.add('roleWallpaper');erp.style.setProperty('--role-wallpaper',`url("${url}")`)}else{erp.classList.remove('roleWallpaper');erp.style.removeProperty('--role-wallpaper')}}let pp=$('parentPortal');if(pp){if(school.parent_wallpaper_url){pp.classList.add('parentWallpaper');pp.style.setProperty('--parent-wallpaper',`url("${school.parent_wallpaper_url}")`)}else{pp.classList.remove('parentWallpaper');pp.style.removeProperty('--parent-wallpaper')}}}
 function applySchool(){
@@ -1121,7 +1110,7 @@ async function publicData(){let [{data:staff},{data:events},{data:notices},{data
 function openPortal(target){if(target)localStorage.setItem('ld_after_login_target',target);if(!cfg){$("publicSite").classList.add("hidden");$("setup").classList.remove("hidden");return}$("publicSite").classList.add("hidden");$("login").classList.remove("hidden")}function backWebsite(){window.__ldmPublicMode=true;try{history.pushState({ldmPublic:true},"",location.href)}catch(_e){};["login","setup","erp","parentDashboard"].forEach(x=>$(x)?.classList.add("hidden"));$("publicSite")?.classList.remove("hidden");showPublicPage("home");setTimeout(()=>{window.scrollTo(0,0)},0)}
 async function login(){let{data,error}=await sb.auth.signInWithPassword({email:$("email").value,password:$("password").value});if(error)return toast(error.message);user=data.user;await loadProfile();openERP()}async function signup(){let name=prompt("Full Name");if(!name)return;let email=prompt("Email");if(!email)return;let password=prompt("Password (minimum 6)");if(!password)return;let{error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});toast(error?error.message:"Account created. Admin will assign role.")}async function loadProfile(){let{data}=await sb.from("profiles").select("*").eq("id",user.id).single();profile=data||{role:"viewer",full_name:user.email}}async function logout(){await sb.auth.signOut();location.reload()}
 function erpGoHome(){document.querySelector('#erp aside')?.classList.remove('open');render('dashboard');}
-function openERP(){$("login").classList.add("hidden");$("publicSite").classList.add("hidden");$("erp").classList.remove("hidden");$("roleText").textContent=(profile.role||"viewer").replaceAll("_"," ");$("erpNav").innerHTML=nav.filter(x=>can(x[0])).map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join("");let t=localStorage.getItem('ld_after_login_target');localStorage.removeItem('ld_after_login_target');applyPortalWallpapers();render(t&&can(t)?t:"dashboard")}
+function openERP(){window.LDM_MARKSHEET?.ensurePreference()?.catch(e=>console.warn("Document preference unavailable",e.message));$("login").classList.add("hidden");$("publicSite").classList.add("hidden");$("erp").classList.remove("hidden");$("roleText").textContent=(profile.role||"viewer").replaceAll("_"," ");$("erpNav").innerHTML=nav.filter(x=>can(x[0])).map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join("");let t=localStorage.getItem('ld_after_login_target');localStorage.removeItem('ld_after_login_target');applyPortalWallpapers();render(t&&can(t)?t:"dashboard")}
 
 async function dashboardStudentSearch(){
  let q=$("globalStudentSearch").value.trim(),box=$("globalStudentResults");if(!q){box.innerHTML='<div class="empty">Search text डालें.</div>';return}
@@ -1209,9 +1198,9 @@ async function compressImageFile(file,minKB,maxKB,maxDim=900,prefix='photo'){
 async function compressCanvasToPhotoFile(canvas){
  let blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',.9));if(!blob)throw new Error('Photo capture failed');let f=new File([blob],`camera-${Date.now()}.jpg`,{type:'image/jpeg'});return await compressImageFile(f,10,25,640,'camera');
 }
-async function safeStorageRemove(bucket,path){if(!path)return;try{await sb.storage.from(bucket).remove([path])}catch(e){console.warn('Old file cleanup skipped',e)}}
+async function safeStorageRemove(bucket,path){if(!path)return;if(bucket==='student-media'){return false /* reference-safe server cleanup requires the issued-document schema */}try{await sb.storage.from(bucket).remove([path])}catch(e){console.warn('Old file cleanup skipped',e)}}
 async function cleanupReplacedAssets(k,oldRow,newRow){if(!oldRow)return;try{
- if(['students','admissions'].includes(k)&&newRow.photo_path&&oldRow.photo_path&&newRow.photo_path!==oldRow.photo_path)await safeStorageRemove('student-media',oldRow.photo_path);
+ // Student-photo object deletion requires a server-side reference check, including issued snapshots. Retain until schema audit. No unsafe client deletion.
  if(k==='admissions'&&newRow.aadhaar_url&&oldRow.aadhaar_url&&newRow.aadhaar_url!==oldRow.aadhaar_url)await safeStorageRemove('student-media',oldRow.aadhaar_url);
  if(k==='gallery'&&newRow.storage_path&&oldRow.storage_path&&newRow.storage_path!==oldRow.storage_path)await safeStorageRemove('gallery-media',oldRow.storage_path);
  }catch(e){console.warn(e)}}
@@ -1222,7 +1211,13 @@ async function uploadPublicAsset(file,folder='documents'){
  let{error}=await sb.storage.from('school-media').upload(path,file,{upsert:false,contentType:file.type});if(error)throw error;
  let{data}=sb.storage.from('school-media').getPublicUrl(path);return {url:data.publicUrl,path};
 }
-async function uploadStudentPhoto(form,k,o){let pick=form.querySelector('[name="student_photo_file"]'),file=form._cameraFile||pick?.files?.[0];if(!file){delete o.student_photo_file;return;}file=await compressImageFile(file,10,25,640,'student');let path=`${k}/${user?.id||'public'}/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;let{error}=await sb.storage.from('student-media').upload(path,file,{upsert:false,contentType:'image/jpeg'});if(error)throw error;o.photo_path=path;o.photo_source=form._cameraFile?'camera':'upload';o.photo_taken_at=new Date().toISOString();delete o.student_photo_file}
+async function uploadStudentPhoto(form,k,o){
+ const pick=form.querySelector('[name="student_photo_file"]'),file=form._cameraFile||pick?.files?.[0];delete o.student_photo_file;if(!file)return;
+ let staged=form._ldmStudentPhotoUpload;
+ if(!staged||staged.file!==file){const reviewed=await window.LDM_PHOTO_V337.cropForReview(file);if(!reviewed)throw Error('Photo crop cancelled; previous photo is unchanged');if(reviewed.size>25*1024)throw Error('Student photo exceeds 25 KB');staged={file,blob:reviewed,path:`${k}/${user.id}/${crypto.randomUUID()}.jpg`,uploaded:false};form._ldmStudentPhotoUpload=staged;}
+ if(!staged.uploaded){const probe=await sb.storage.from('student-media').download(staged.path);if(!probe.error){const a=new Uint8Array(await probe.data.arrayBuffer()),b=new Uint8Array(await staged.blob.arrayBuffer());if(a.length!==b.length||a.some((x,i)=>x!==b[i]))throw Error('Staged photo identity differs; choose the photo again');}else{const r=await sb.storage.from('student-media').upload(staged.path,staged.blob,{upsert:false,contentType:'image/jpeg'});if(r.error)throw r.error;}staged.uploaded=true;}
+ o.photo_path=staged.path;o.photo_source=form._cameraFile?'camera':'upload';o.photo_taken_at=new Date().toISOString();
+}
 async function uploadGalleryMedia(form,o){let input=form.querySelector('[name="gallery_media_file"]'),file=input?.files?.[0];if(!file){delete o.gallery_media_file;return}file=await compressImageFile(file,15,50,1000,'gallery');let path=`gallery/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;let{error}=await sb.storage.from('gallery-media').upload(path,file,{upsert:false,contentType:'image/jpeg'});if(error)throw error;let{data}=sb.storage.from('gallery-media').getPublicUrl(path);o.media_url=data.publicUrl;o.storage_path=path;o.file_name=file.name;o.mime_type='image/jpeg';o.file_size=file.size;o.media_type='Photo';delete o.gallery_media_file}
 async function uploadAadhaar(form,o){let input=form.querySelector('[name="aadhaar_file"]'),file=input?.files?.[0];if(!file){delete o.aadhaar_file;return}validateUploadFile(file);let ext=(file.name.split('.').pop()||'bin').toLowerCase(),path=`admissions/${user?.id||'admin'}/aadhaar-${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;let{error}=await sb.storage.from('student-media').upload(path,file,{upsert:false,contentType:file.type});if(error)throw error;o.aadhaar_url=path;delete o.aadhaar_file}
 async function uploadNoticeAttachment(form,o){let input=form.querySelector('[name="document_upload_file"]'),file=input?.files?.[0];if(!file){delete o.document_upload_file;return}let a=await uploadPublicAsset(file,'notices');o.download_url=a.url;delete o.document_upload_file}
@@ -1338,7 +1333,18 @@ async function saveRecord(k,form,id=null){
   try{let oldRow=null;if(id&&['students','admissions','gallery'].includes(k)){let rr=await sb.from(k).select('*').eq('id',id).maybeSingle();oldRow=rr.data||null}let o=Object.fromEntries(new FormData(form));await processUploads(k,form,o);normalize(k,o);
     if(k==='fees'){const disc=Number(o.discount||0),total=Number(o.total_fee||0),paid=Number(o.paid_amount||0);if(!Number.isFinite(disc)||disc<0||disc>total||!Number.isFinite(paid)||paid<0||paid+disc>total)throw new Error('Invalid discount/payment: discount and payment must be nonnegative and not exceed total fee / छूट व भुगतान कुल फीस से अधिक नहीं हो सकते');}
     Object.keys(o).forEach(key=>{if(o[key]===''&&['admission_date','dob','due_date','exam_date','joining_date','from_date','to_date','payment_date','event_date','date','issue_date','follow_up_date','effective_from','effective_to','start_time','end_time','fee_structure_id','installment_id'].includes(key))o[key]=null});
-    let q=id?sb.from(k).update(o).eq('id',id):sb.from(k).insert(o);let{error}=await q;if(error)throw error;if(id)await cleanupReplacedAssets(k,oldRow,o);
+    let q;
+    if(id){
+      const original=form._ldmEditOriginal;
+      if(!original||String(original.id)!==String(id)||form._ldmEditKind!==k)throw Error('Original record revision unavailable; close and reopen this record before updating / रिकॉर्ड फिर खोलें');
+      if(original.updated_at)o.updated_at=new Date().toISOString();q=sb.from(k).update(o).eq('id',id);let guards=0;
+      if(original.updated_at){q=q.eq('updated_at',original.updated_at);guards++;}
+      for(const key of Object.keys(o)){if(key==='id'||key==='updated_at'||key.startsWith('photo')||!(key in original))continue;const value=original[key];if(value===null){q=q.is(key,null);guards++;}else if(['string','number','boolean'].includes(typeof value)&&String(value).length<500){q=q.eq(key,value);guards++;}}
+      if(!guards)throw Error('Cannot verify the original record; reopen it before updating');
+      const result=await q.select('id').maybeSingle();if(result.error)throw result.error;if(!result.data)throw Error('Record changed on another device or update is not permitted. Your input is preserved; reopen the latest record. / दूसरे डिवाइस का बदलाव मिला');
+      form._ldmEditOriginal={...original,...o};
+    }else{q=sb.from(k).insert(o);const result=await q;if(result.error)throw result.error;}
+    if(id)await cleanupReplacedAssets(k,oldRow,o);
     if(k==='students'){
       const adm=String(o.admission_no||oldRow?.admission_no||'').trim();
       if(adm){try{let p=await sb.rpc('v64_propagate_student_master',{p_admission_no:adm});if(p.error)console.warn('Student propagation warning:',p.error.message)}catch(_e){}}
@@ -1346,9 +1352,9 @@ async function saveRecord(k,form,id=null){
     st.className='saveStatus saveOk';st.textContent=id?'✓ Updated successfully':'✓ Saved successfully';toast(st.textContent);try{window.ldmMarkDataDirty?.(k)}catch(_e){}setTimeout(()=>{if(stayContext&&window.LDM_SAVE_STAY_V338)return window.LDM_SAVE_STAY_V338.finish(k,form,id,stayContext);closeModal();afterSave(k)},450);
   }catch(err){let msg=err?.message||String(err)||'Save failed';st.className='saveStatus saveError';st.textContent='Save failed: '+msg;toast('Save failed: '+msg)}finally{if(btn){btn.disabled=false;btn.classList.remove('saveBusy')}}
 }
-function openAdd(k){let m=M[k];if(!m)return;$('modalTitle').textContent='+ Add '+m.title;$('dataForm').innerHTML=m.fields.map(f=>field(f,k==='fees'&&f[0]==='discount'?{discount:0}:(f[2]==='date'&&['date','admission_date'].includes(f[0]))?{[f[0]]:today()}:{})).join('')+`<button type="submit" class="primary">Save</button><div class="saveStatus">Ready to save</div>`;$('modal').classList.remove('hidden');$('dataForm').onsubmit=e=>{e.preventDefault();saveRecord(k,e.currentTarget)}}
+function openAdd(k){delete $('dataForm')._ldmStudentPhotoUpload;delete $('dataForm')._ldmEditOriginal;delete $('dataForm')._ldmEditKind;let m=M[k];if(!m)return;$('modalTitle').textContent='+ Add '+m.title;$('dataForm').innerHTML=m.fields.map(f=>field(f,k==='fees'&&f[0]==='discount'?{discount:0}:(f[2]==='date'&&['date','admission_date'].includes(f[0]))?{[f[0]]:today()}:{})).join('')+`<button type="submit" class="primary">Save</button><div class="saveStatus">Ready to save</div>`;$('modal').classList.remove('hidden');$('dataForm').onsubmit=e=>{e.preventDefault();saveRecord(k,e.currentTarget)}}
 
-function openEdit(k,r){$('modalTitle').textContent='Edit '+M[k].title;$('dataForm').innerHTML=M[k].fields.map(f=>field(f,r)).join('')+`<button type="submit" class="primary">Update</button><div class="saveStatus">Ready to update</div>`;$('modal').classList.remove('hidden');$('dataForm').onsubmit=e=>{e.preventDefault();saveRecord(k,e.currentTarget,r.id)}}
+function openEdit(k,r){delete $('dataForm')._ldmStudentPhotoUpload;$('dataForm')._ldmEditOriginal=JSON.parse(JSON.stringify(r));$('dataForm')._ldmEditKind=k;$('modalTitle').textContent='Edit '+M[k].title;$('dataForm').innerHTML=M[k].fields.map(f=>field(f,r)).join('')+`<button type="submit" class="primary">Update</button><div class="saveStatus">Ready to update</div>`;$('modal').classList.remove('hidden');$('dataForm').onsubmit=e=>{e.preventDefault();saveRecord(k,e.currentTarget,r.id)}}
 
 function closeModal(){$('modal').classList.add('hidden')}
 
@@ -2456,7 +2462,7 @@ async function openResultMarksEditor(studentId){
  let {data:marks,error:me}=await sb.from('student_marks').select('*').eq('admission_no',s.admission_no).eq('exam_name',exam).order('subject_name');if(me)return toast(me.message);
  v14Modal(`<h2>${esc(s.student_name)} • ${esc(exam)}</h2><p class="note">Father: ${esc(s.father_name||'')} • Roll: ${esc(s.roll_no||'')} • Admission: ${esc(s.admission_no||'')}</p>
  <div id="rcMarkRows"><div class="tableWrap"><table class="markEditTable"><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>Grade</th><th>Marksheet No.</th><th>Action</th></tr>
- ${(marks||[]).map(m=>`<tr><td><input id="rsub${m.id}" value="${esc(m.subject_name||'')}"></td><td><input id="rmax${m.id}" type="number" value="${Number(m.max_marks||100)}"></td><td><input id="rgot${m.id}" type="number" value="${Number(m.obtained_marks||0)}"></td><td><input id="rgrade${m.id}" value="${esc(m.grade||'')}"></td><td><input id="rno${m.id}" value="${esc(m.marksheet_no||'')}"></td><td><div class="markActionRow"><button onclick="updateResultMark('${m.id}')">Save</button><button onclick="deleteResultMark('${m.id}','${s.id}')">Delete</button></div></td></tr>`).join('')||'<tr><td colspan="6">No marks yet. Add first subject below.</td></tr>'}
+ ${(marks||[]).map(m=>`<tr><td><input id="rsub${m.id}" value="${esc(m.subject_name||'')}"></td><td><input id="rmax${m.id}" type="number" value="${Number(m.max_marks||100)}"></td><td><input id="rgot${m.id}" type="number" value="${m.obtained_marks==null?'':Number(m.obtained_marks)}"></td><td><input id="rgrade${m.id}" value="${esc(m.grade||'')}"></td><td><input id="rno${m.id}" value="${esc(m.marksheet_no||'')}"></td><td><div class="markActionRow"><button onclick="updateResultMark('${m.id}')">Save</button><button onclick="deleteResultMark('${m.id}','${s.id}')">Delete</button></div></td></tr>`).join('')||'<tr><td colspan="6">No marks yet. Add first subject below.</td></tr>'}
  </table></div></div><hr>
  <h3>Add Subject Mark</h3><div class="v14Search"><input id="rcNewSubject" placeholder="Subject"><input id="rcNewMax" type="number" value="100" placeholder="Max"><input id="rcNewGot" type="number" value="0" placeholder="Obtained"><input id="rcNewNo" placeholder="Marksheet No."><button class="v14Action primary" onclick="addResultMark('${s.id}')">Add</button></div>
  <div class="v14Tabs"><button class="v14Action" onclick="$('v14Modal').remove();previewResultStudentMarksheet('${s.id}')">Preview Marksheet</button></div>`);
@@ -2488,8 +2494,8 @@ async function previewResultStudentMarksheet(studentId){
 }
 
 async function marksheetCenter(){
- if(!v14Admin())return toast('यह विकल्प आपके वर्तमान account role के लिए उपलब्ध नहीं है। Admin से आवश्यक permission/assignment जाँचें।');head('Smart Marksheet Center','Search • 5 Formats • PDF/Print • Class-wise generation');
- $('erpContent').innerHTML=`<div class="panel"><div class="v14Search"><input id="mkSearch" placeholder="Student Name / Roll Number"><input id="mkExam" placeholder="Exam Name"><select id="mkTemplate" onchange="saveDocFormat('marksheet',this.value)">${[1,2,3,4,5].map(x=>`<option value="${x}" ${getDocFormat('marksheet')==x?'selected':''}>Report Card Format ${x}</option>`).join('')}</select><button class="v14Action primary" onclick="findMarkStudent()">Search Student</button></div><div class="v14Tabs"><select id="mkClass">${v14ClassOptions()}</select><button class="v14Action" onclick="generateClassMarksheets()">Generate All Class Marksheets</button><button class="v14Action" onclick="manageExamSubjects()">Add / Edit Subjects</button><button class="v14Action" onclick="exportReportCardExcel()">Excel Export</button><button class="v14Action" onclick="excelCenter()">Excel Import</button></div><div id="mkWork"></div></div>`;
+ if(!v14Admin())return toast('यह विकल्प आपके वर्तमान account role के लिए उपलब्ध नहीं है। Admin से आवश्यक permission/assignment जाँचें।');head('Smart Marksheet Center','Draft • Six requested formats • PDF / Print');
+ $('erpContent').innerHTML=`<div class="panel"><div class="v14Search"><input id="mkSearch" placeholder="Student Name / Roll Number"><input id="mkExam" placeholder="Exam Name"><select id="mkTemplate" >${[1,2,3,4,5].map(x=>`<option value="${x}" ${getDocFormat('marksheet')==x?'selected':''}>Report Card Format ${x}</option>`).join('')}</select><button class="v14Action primary" onclick="findMarkStudent()">Search Student</button></div><div class="v14Tabs"><select id="mkClass">${v14ClassOptions()}</select><button class="v14Action" onclick="generateClassMarksheets()">Generate All Class Marksheets</button><button class="v14Action" onclick="manageExamSubjects()">Add / Edit Subjects</button><button class="v14Action" onclick="exportReportCardExcel()">Excel Export</button><button class="v14Action" onclick="excelCenter()">Excel Import</button></div><div id="mkWork"></div></div>`;
 }
 async function findMarkStudent(){
  let z=$('mkSearch').value.trim();if(!z)return toast('Name or Roll No. डालें');let {data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${z.replace(/,/g,'')}%,roll_no.ilike.%${z.replace(/,/g,'')}%`).limit(10);if(error)return toast(error.message);
@@ -2500,19 +2506,20 @@ async function loadMarkStudent(id){
  let {data:s,error}=await sb.from('students').select('*').eq('id',id).single();if(error)return toast(error.message);v14MarkStudent=s;let exam=$('mkExam').value.trim();if(!exam)return toast('Exam Name डालें');
  let [{data:subs},{data:marks}]=await Promise.all([sb.from('exam_subjects').select('*').eq('class_name',s.class_name).eq('exam_name',exam).eq('is_active',true).order('sort_order'),sb.from('student_marks').select('*').eq('admission_no',s.admission_no).eq('exam_name',exam)]);
  let mm={};(marks||[]).forEach(x=>mm[x.subject_name]=x);
- $('mkWork').innerHTML=`<h3>${esc(s.student_name)} • Roll ${esc(s.roll_no||'')}</h3><div class="tableWrap"><table><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>Grade</th></tr>${(subs||[]).map((x,i)=>{let m=mm[x.subject_name]||{};return `<tr><td>${esc(x.subject_name)}</td><td><input id="mMax${i}" type="number" value="${Number(m.max_marks||x.max_marks||100)}"></td><td><input id="mGot${i}" type="number" value="${Number(m.obtained_marks||0)}"></td><td>${esc(m.grade||'')}</td></tr>`}).join('')}</table></div><div class="v14Tabs"><input id="mkNo" placeholder="Marksheet No." value="${esc((marks||[])[0]?.marksheet_no||'')}"><button class="v14Action primary" onclick='saveMarksheetMarks(${JSON.stringify(subs||[]).replace(/'/g,"&#39;")})'>Save Marks</button><button class="v14Action" onclick="previewMarksheet()">Preview</button><button class="v14Action" onclick="v14Pdf('markPreviewBox','${esc((s.student_name||'student').replace(/[^a-z0-9]/gi,'_'))}-marksheet.pdf')">PDF</button><button class="v14Action" onclick="v14Print('markPreviewBox')">Print</button></div><div id="markPreviewBox"></div>`;
+ $('mkWork').innerHTML=`<h3>${esc(s.student_name)} • Roll ${esc(s.roll_no||'')}</h3><div class="tableWrap"><table><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>Grade</th></tr>${(subs||[]).map((x,i)=>{let m=mm[x.subject_name]||{};return `<tr><td>${esc(x.subject_name)}</td><td><input id="mMax${i}" type="number" value="${Number(m.max_marks||x.max_marks||100)}"></td><td><input id="mGot${i}" type="number" value="${m.obtained_marks==null?'':Number(m.obtained_marks)}"></td><td>${esc(m.grade||'')}</td></tr>`}).join('')}</table></div><div class="v14Tabs"><input id="mkNo" readonly placeholder="Existing legacy number (read-only)" value="${esc((marks||[])[0]?.marksheet_no||'')}"><button class="v14Action primary" onclick='saveMarksheetMarks(${JSON.stringify(subs||[]).replace(/'/g,"&#39;")})'>Save Marks</button><button class="v14Action" onclick="previewMarksheet()">Preview</button><button class="v14Action" onclick="v14Pdf('markPreviewBox','${esc((s.student_name||'student').replace(/[^a-z0-9]/gi,'_'))}-marksheet.pdf')">PDF</button><button class="v14Action" onclick="v14Print('markPreviewBox')">Print</button></div><div id="markPreviewBox"></div>`;
 }
 async function saveMarksheetMarks(subs){
- let s=v14MarkStudent,exam=$('mkExam').value.trim(),no=$('mkNo').value.trim(),rows=subs.map((x,i)=>{let max=Number($('mMax'+i).value||0),got=Number($('mGot'+i).value||0),pct=v14Pct(got,max);return {academic_session:'2026-27',exam_name:exam,admission_no:s.admission_no,roll_no:s.roll_no||null,student_name:s.student_name,class_name:s.class_name,subject_name:x.subject_name,max_marks:max,obtained_marks:got,grade:v14Grade(pct),marksheet_no:no||null,updated_at:new Date().toISOString()}});
- let {error}=await sb.from('student_marks').upsert(rows,{onConflict:'academic_session,exam_name,admission_no,subject_name'});toast(error?error.message:'Marks saved');if(!error)previewMarksheet();
+ const s=v14MarkStudent,exam=$('mkExam')?.value.trim(),session=school?.academic_session,who=profile?.id;if(!s||!exam||!session)return toast('Student, exam and saved academic session are required');if(window.__m344Saving)return;window.__m344Saving=true;
+ try{const ctx=await window.LDM_MARKSHEET.context(s,exam),rows=[];let pending=0,absent=0;for(let i=0;i<subs.length;i++){const subject=subs[i].subject_name,raw=String($('mGot'+i)?.value||'').trim(),attendance=ctx.attendance.get(String(s.admission_no)+'|'+subject);if(attendance==='Absent'){absent++;continue}if(raw===''){pending++;continue}if(attendance!=='Present')throw Error(subject+': central paper attendance must be verified before saving marks');const max=Number($('mMax'+i)?.value),got=Number(raw);if(!Number.isFinite(max)||max<=0||!Number.isFinite(got)||got<0||got>max)throw Error(subject+': enter valid maximum/obtained marks');rows.push({academic_session:session,exam_name:exam,admission_no:s.admission_no,roll_no:s.roll_no||null,student_name:s.student_name,class_name:s.class_name,subject_name:subject,max_marks:max,obtained_marks:got,grade:null,updated_at:new Date().toISOString()})}
+ if(!rows.length)return toast(`No new scores • Pending ${pending} • Central AB ${absent}`);if(who!==profile?.id||v14MarkStudent?.id!==s.id||$('mkExam')?.value.trim()!==exam)throw Error('Student/account/exam changed; reopen the marks form');const result=await sb.from('student_marks').upsert(rows,{onConflict:'academic_session,exam_name,admission_no,subject_name'}).select('subject_name,obtained_marks');if(result.error)throw result.error;if(!Array.isArray(result.data)||result.data.length!==rows.length)throw Error('Marks save not fully confirmed; verify saved records before retrying');window.ldmMarkDataDirty?.('marks');toast(`Draft scores confirmed: ${rows.length} • Pending ${pending} • Central AB ${absent} • No issued number assigned`);await previewMarksheet();
+ }catch(e){toast(e.message||String(e))}finally{window.__m344Saving=false}
 }
+
 async function previewMarksheet(){
- let s=v14MarkStudent;if(!s)return toast('Select student');let exam=$('mkExam').value.trim(),{data:marks,error}=await sb.from('student_marks').select('*').eq('admission_no',s.admission_no).eq('exam_name',exam).order('subject_name');if(error)return toast(error.message);$('markPreviewBox').innerHTML=renderMarksheetHtml(s,marks||[],exam,$('mkTemplate').value);
+ let s=v14MarkStudent;if(!s)return toast('Select student');let exam=$('mkExam').value.trim(),{data:marks,error}=await sb.from('student_marks').select('*').eq('academic_session',school.academic_session).eq('admission_no',s.admission_no).eq('exam_name',exam).order('subject_name');if(error)return toast(error.message);await window.LDM_MARKSHEET.context(s,exam);$('markPreviewBox').innerHTML=renderMarksheetHtml(s,marks||[],exam,$('mkTemplate').value);
 }
-function renderMarksheetHtml(s,marks,exam,t){
- let max=marks.reduce((a,x)=>a+Number(x.max_marks||0),0),got=marks.reduce((a,x)=>a+Number(x.obtained_marks||0),0),pct=v14Pct(got,max),res=pct>=40?'PASS':'FAIL';
- return `<div class="markPreview t${t}"><div class="markHead"><h2>${esc(school.school_name||'L D MODERN EDUCATION ACADEMY')}</h2><b>${esc(exam)} MARKSHEET</b></div><div class="markInfo"><div><b>Student:</b> ${esc(s.student_name)}</div><div><b>Roll No:</b> ${esc(s.roll_no||'')}</div><div><b>Father:</b> ${esc(s.father_name||'')}</div><div><b>Mother:</b> ${esc(s.mother_name||'')}</div><div><b>DOB:</b> ${esc(v14FmtDate(s.dob))}</div><div><b>Class:</b> ${esc(s.class_name||'')}</div></div><table><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>Grade</th></tr>${marks.map(m=>`<tr><td>${esc(m.subject_name)}</td><td>${m.max_marks}</td><td>${m.obtained_marks}</td><td>${esc(m.grade||v14Grade(v14Pct(m.obtained_marks,m.max_marks)))}</td></tr>`).join('')}<tr><th>Total</th><th>${max}</th><th>${got}</th><th>${pct}%</th></tr></table><p><b>Result:</b> ${res} &nbsp; <b>Overall Grade:</b> ${v14Grade(pct)}</p></div>`;
-}
+function renderMarksheetHtml(s,marks,exam,t){return window.LDM_MARKSHEET.render(s,marks,exam,t)}
+
 async function manageExamSubjects(){
  let c=$('mkClass').value,exam=$('mkExam').value.trim();if(!c||!exam)return toast('Class और Exam Name चुनें');
  let {data}=await sb.from('exam_subjects').select('*').eq('class_name',c).eq('exam_name',exam).order('sort_order');
@@ -2522,9 +2529,14 @@ async function addExamSubject(){let c=$('mkClass').value,exam=$('mkExam').value.
 async function updateExamSubject(id){let{error}=await sb.from('exam_subjects').update({subject_name:$('sn'+id).value.trim(),max_marks:Number($('sm'+id).value||100)}).eq('id',id);toast(error?error.message:'Updated')}
 async function deleteExamSubject(id){if(!confirm('Delete subject?'))return;let{error}=await sb.from('exam_subjects').delete().eq('id',id);toast(error?error.message:'Deleted');if(!error)manageExamSubjects()}
 async function generateClassMarksheets(){
- let c=$('mkClass').value,exam=$('mkExam').value.trim();if(!c||!exam)return toast('Class and Exam required');
- let [{data:students},{data:marks}]=await Promise.all([ldmApplyClassFilter(sb.from('students').select('*'),'class_name',c).order('roll_no'),ldmApplyClassFilter(sb.from('student_marks').select('*'),'class_name',c).eq('exam_name',exam)]);
- let by={};(marks||[]).forEach(m=>(by[m.admission_no]??=[]).push(m));$('mkWork').innerHTML=`<div id="markPreviewBox">${(students||[]).map(s=>renderMarksheetHtml(s,by[s.admission_no]||[],exam,$('mkTemplate').value)).join('<div style="page-break-after:always"></div>')}</div><div class="v14Tabs"><button class="v14Action primary" onclick="v14Pdf('markPreviewBox','${c}-${exam.replace(/[^a-z0-9]/gi,'_')}-marksheets.pdf')">PDF All</button><button class="v14Action" onclick="v14Print('markPreviewBox')">Print All</button></div>`;
+ const c=$('mkClass').value,exam=$('mkExam').value.trim(),host=$('mkWork'),who=profile?.id,view=window.__v90Route;if(!c||!exam)return toast('Class and Exam required');host.textContent='Loading complete class marksheets…';
+ const all=async make=>{let data=[];for(let offset=0;offset<100000;offset+=500){const r=await make().range(offset,offset+499);if(r.error)throw r.error;if(!Array.isArray(r.data))throw Error('Incomplete class data');data.push(...r.data);if(r.data.length<500)return data}throw Error('Narrow the selected class')};
+ try{const students=await all(()=>ldmApplyClassFilter(sb.from('students').select('*'),'class_name',c).order('id'));const active=students.filter(s=>(!s.academic_session||s.academic_session===school?.academic_session)&&!['inactive','deleted','left','withdrawn','archived','trashed','recycled'].includes(String(s.status||'active').toLowerCase()));let marks=[];for(let i=0;i<active.length;i+=100){const keys=active.slice(i,i+100).map(s=>s.admission_no);marks.push(...await all(()=>sb.from('student_marks').select('*').eq('academic_session',school.academic_session).eq('exam_name',exam).in('admission_no',keys).order('id')))}if(who!==profile?.id||view!==window.__v90Route||!host.isConnected||$('mkClass')?.value!==c||$('mkExam')?.value.trim()!==exam)return;
+ if(active.length)await window.LDM_MARKSHEET.context(active[0],exam);const by=new Map();for(const m of marks){if(!by.has(m.admission_no))by.set(m.admission_no,[]);by.get(m.admission_no).push(m)}host.replaceChildren();const controls=document.createElement('div');controls.className='v14Tabs';controls.innerHTML='<label>Students<select id="mkSelectedStudents" multiple size="6"></select></label><button id="mkUseSelected">Preview selected students</button><button id="mkUseAll">Preview full class</button><label>Print batch<select id="mkBatch"></select></label><span id="mkBatchStatus"></span><button id="mkPrintBatch">Preview / Print / PDF current batch</button>';host.append(controls);const picker=$('mkSelectedStudents');picker.innerHTML=active.map(s=>`<option value="${esc(s.id)}">${esc(s.roll_no||'')} · ${esc(s.student_name)} · ${esc(s.admission_no)}</option>`).join('');let selection=active,batchEpoch=0;const preview=document.createElement('div');preview.id='markPreviewBox';host.append(preview);
+ const build=async()=>{const token=++batchEpoch,number=Number($('mkBatch').value)||0,subset=selection.slice(number*100,number*100+100);preview.replaceChildren();$('mkBatchStatus').textContent=`${selection.length} students · current ${selection.length?number*100+1:0}–${number*100+subset.length} · print all listed batches for complete output`;for(let i=0;i<subset.length;i+=20){if(token!==batchEpoch||who!==profile?.id||view!==window.__v90Route||!preview.isConnected)return;preview.insertAdjacentHTML('beforeend',subset.slice(i,i+20).map(s=>renderMarksheetHtml(s,by.get(s.admission_no)||[],exam,$('mkTemplate').value)).join(''));await new Promise(r=>requestAnimationFrame(r))}if(!subset.length)preview.textContent='कोई रिकॉर्ड नहीं मिला / No records found';};
+ const batches=()=>{$('mkBatch').innerHTML=Array.from({length:Math.max(1,Math.ceil(selection.length/100))},(_,i)=>`<option value="${i}">${i*100+1}–${Math.min((i+1)*100,selection.length)} of ${selection.length}</option>`).join('');build()};$('mkUseSelected').onclick=()=>{const ids=new Set([...picker.selectedOptions].map(o=>o.value));selection=active.filter(s=>ids.has(String(s.id)));batches()};$('mkUseAll').onclick=()=>{selection=active;batches()};$('mkBatch').onchange=build;$('mkPrintBatch').onclick=()=>window.LDM_A4_V337.preview(preview,'Class marksheets · '+$('mkBatchStatus').textContent,{orientation:'portrait'});batches();
+
+ }catch(e){if(host.isConnected&&who===profile?.id&&view===window.__v90Route)host.textContent=e.message||String(e)}
 }
 
 async function v14AttachSignedPhotos(rows){
@@ -2572,7 +2584,7 @@ async function idCardCenter(){
  idStudioUpdateSelectedCount();
 }
 const ID_STUDIO_TEMPLATE_NAMES=['Royal Blue Left','Modern Right','Green Center','Purple Left','Executive Right'];
-let idStudioRows=[],idStudioSelected=new Set();
+let idStudioRows=[],idStudioSelected=new Set(),idStudioListPage=1,idLoadEpoch=0,idPreviewEpoch=0,idReadController=null;
 function idStudioClamp(v,min,max,fallback){v=Number(v);return Number.isFinite(v)?Math.max(min,Math.min(max,v)):fallback}
 function idStudioDefaults(){return {width:85.6,height:54,font:9.2,photo:20,radius:3.2,photoShape:'rounded',session:'2026-27',footer:'Student Identity Card',showAdmission:true,showRoll:true,showDob:true,showFather:true,showMother:false,showMobile:true,showAddress:false}}
 function idStudioGetSettings(){let d=idStudioDefaults(),x={};try{x=JSON.parse(localStorage.getItem('ld_idcard_settings_v104')||'{}')||{}}catch(_e){};x={...d,...x};x.width=idStudioClamp(x.width,72,88,d.width);x.height=idStudioClamp(x.height,42,54,d.height);x.font=idStudioClamp(x.font,7,12,d.font);x.photo=idStudioClamp(x.photo,16,24,d.photo);x.radius=idStudioClamp(x.radius,0,7,d.radius);return x}
@@ -2584,11 +2596,18 @@ function idStudioSaveSettings(silent=false){let x=idStudioReadControls();localSt
 function idStudioApplyStandard(){let d=idStudioDefaults();localStorage.setItem('ld_idcard_settings_v104',JSON.stringify(d));[['idWidth',d.width],['idHeight',d.height],['idFont',d.font],['idPhoto',d.photo],['idRadius',d.radius],['idSession',d.session],['idFooter',d.footer]].forEach(([id,v])=>{if($(id))$(id).value=v});if($('idPhotoShape'))$('idPhotoShape').value=d.photoShape;[['idShowAdmission',d.showAdmission],['idShowRoll',d.showRoll],['idShowDob',d.showDob],['idShowFather',d.showFather],['idShowMother',d.showMother],['idShowMobile',d.showMobile],['idShowAddress',d.showAddress]].forEach(([id,v])=>{if($(id))$(id).checked=v});toast('Standard A4 × 10 card size applied');if($('idA4Preview'))idStudioPreview(true)}
 function idStudioRollValue(v){let m=String(v??'').match(/\d+/);return m?Number(m[0]):999999}
 function idStudioSortRows(rows){return [...rows].sort((a,b)=>idStudioRollValue(a.roll_no)-idStudioRollValue(b.roll_no)||String(a.student_name||'').localeCompare(String(b.student_name||''))) }
-async function idLoadClassStudents(){let c=$('idClass')?.value||'',box=$('idStudentList');idStudioSelected.clear();idStudioRows=[];idStudioUpdateSelectedCount();if(!c){if(box)box.innerHTML='<div class="empty">Class चुनें.</div>';return}if(box)box.innerHTML='<div class="empty">Loading students...</div>';let q=ldmApplyClassFilter(sb.from('students').select('*'),'class_name',c);let{data,error}=await q.order('student_name');if(error){box.innerHTML=`<div class="empty">${esc(error.message)}</div>`;return}idStudioRows=idStudioSortRows((data||[]).filter(x=>String(x.status||'Active').toLowerCase()!=='inactive'));idStudioRenderStudentList()}
+async function idLoadClassStudents(){
+ const c=$('idClass')?.value||'',box=$('idStudentList'),mine=++idLoadEpoch,who=profile?.id;idReadController?.abort();idReadController=new AbortController();const signal=idReadController.signal;idStudioSelected.clear();idStudioRows=[];idStudioListPage=1;idPreviewEpoch++;$('idWork')?.replaceChildren();idStudioUpdateSelectedCount();if(!c){if(box)box.textContent='Class चुनें.';return}if(box)box.textContent='Loading students…';
+ try{let data=[];for(let offset=0;offset<100000;offset+=500){let q=ldmApplyClassFilter(sb.from('students').select('id,student_id,admission_no,student_name,father_name,mother_name,guardian_name,class_name,section,roll_no,phone,dob,address,status,academic_session,photo_path,photo_url,student_photo_url'),'class_name',c).order('id').range(offset,offset+499);if(q.abortSignal)q=q.abortSignal(signal);const r=await q;if(mine!==idLoadEpoch||who!==profile?.id||!box?.isConnected||$('idClass')?.value!==c)return;if(r.error)throw r.error;if(!Array.isArray(r.data))throw Error('Student list response incomplete');data.push(...r.data);if(r.data.length<500)break;if(offset+500>=100000)throw Error('Narrow the selected class range')}
+ idStudioRows=idStudioSortRows(data.filter(x=>(!x.academic_session||x.academic_session===school?.academic_session)&&!['inactive','deleted','left','withdrawn','archived','trashed','recycled','transferred'].includes(String(x.status||'active').toLowerCase())));idStudioRenderStudentList();
+ }catch(e){if(mine===idLoadEpoch&&box?.isConnected&&!signal.aborted)box.textContent=e.message||String(e)}
+}
+window.ldmCancelIdReads=()=>{idLoadEpoch++;idPreviewEpoch++;idReadController?.abort();clearTimeout(window.__idStudioPreviewTimer)};
+
 function idStudioFilteredRows(){let q=String($('idSearch')?.value||'').trim().toLowerCase();let rows=idStudioRows;if(q)rows=rows.filter(x=>[x.student_name,x.father_name,x.roll_no,x.admission_no,x.phone].some(v=>String(v||'').toLowerCase().includes(q)));return rows}
-function idStudioRenderStudentList(){let box=$('idStudentList');if(!box)return;let rows=idStudioFilteredRows();box.innerHTML=`<div class="tableWrap"><table><tr><th>✓</th><th>S.No.</th><th>Roll</th><th>Student</th><th>Father</th><th>Admission No.</th></tr>${rows.map((s,i)=>`<tr><td><input type="checkbox" ${idStudioSelected.has(String(s.id))?'checked':''} onchange="idStudioToggle('${esc(String(s.id))}',this.checked)"></td><td>${i+1}</td><td>${esc(s.roll_no||'—')}</td><td><button class="v105PersonLink" onclick="dashboardStudentFull('${s.id}')">${esc(s.student_name||'')}</button></td><td>${esc(s.father_name||'')}</td><td>${esc(s.admission_no||'')}</td></tr>`).join('')||'<tr><td colspan="6">No students found.</td></tr>'}</table></div>`;idStudioUpdateSelectedCount()}
+function idStudioRenderStudentList(page=1){let box=$('idStudentList');if(!box)return;const all=idStudioFilteredRows();idStudioListPage=Math.max(1,Math.min(Number(page)||1,Math.max(1,Math.ceil(all.length/50))));let rows=all.slice((idStudioListPage-1)*50,idStudioListPage*50);box.innerHTML=`<div class="tableWrap"><table><tr><th>✓</th><th>S.No.</th><th>Roll</th><th>Student</th><th>Father</th><th>Admission No.</th></tr>${rows.map((s,i)=>`<tr><td><input type="checkbox" ${idStudioSelected.has(String(s.id))?'checked':''} onchange="idStudioToggle('${esc(String(s.id))}',this.checked)"></td><td>${i+1}</td><td>${esc(s.roll_no||'—')}</td><td><button class="v105PersonLink" onclick="dashboardStudentFull('${s.id}')">${esc(s.student_name||'')}</button></td><td>${esc(s.father_name||'')}</td><td>${esc(s.admission_no||'')}</td></tr>`).join('')||'<tr><td colspan="6">No students found.</td></tr>'}</table></div><div class="tools"><button id="idListPrev">← Previous</button><span>${idStudioListPage} / ${Math.max(1,Math.ceil(all.length/50))} · ${all.length} students</span><button id="idListNext">Next →</button></div>`;$('idListPrev').disabled=idStudioListPage<=1;$('idListNext').disabled=idStudioListPage*50>=all.length;$('idListPrev').onclick=()=>idStudioRenderStudentList(idStudioListPage-1);$('idListNext').onclick=()=>idStudioRenderStudentList(idStudioListPage+1);idStudioUpdateSelectedCount()}
 function idStudioToggle(id,on){on?idStudioSelected.add(String(id)):idStudioSelected.delete(String(id));idStudioUpdateSelectedCount()}
-function idStudioSelectVisible(on){idStudioFilteredRows().forEach(x=>on?idStudioSelected.add(String(x.id)):idStudioSelected.delete(String(x.id)));idStudioRenderStudentList()}
+function idStudioSelectVisible(on){idStudioFilteredRows().slice((idStudioListPage-1)*50,idStudioListPage*50).forEach(x=>on?idStudioSelected.add(String(x.id)):idStudioSelected.delete(String(x.id)));idStudioRenderStudentList(idStudioListPage)}
 function idStudioUpdateSelectedCount(){let x=$('idSelectedCount');if(x)x.textContent=`${idStudioSelected.size} selected`}
 function idStudioChunks(arr,n){let out=[];for(let i=0;i<arr.length;i+=n)out.push(arr.slice(i,i+n));return out}
 function idStudioPageHtml(rows,fmt){let cells=rows.map(s=>`<div class="idA4Cell">${renderIdCard(s,fmt)}</div>`);while(cells.length<10)cells.push('<div class="idA4Cell"></div>');return `<section class="idA4Page">${cells.join('')}</section>`}
@@ -2603,7 +2622,7 @@ async function findIdStudent(){let z=String($('idSearch')?.value||'').trim();if(
 async function loadIdStudent(id){let{data:s,error}=await sb.from('students').select('*').eq('id',id).single();if(error)return toast(error.message);await v14AttachSignedPhotos([s]);idStudioRows=[s];idStudioSelected=new Set([String(s.id)]);idStudioUpdateSelectedCount();idStudioPreview()}
 async function generateClassIds(){let c=$('idClass')?.value||'';if(!c)return toast('Class चुनें');if(!idStudioRows.length)await idLoadClassStudents();idStudioRows.forEach(x=>idStudioSelected.add(String(x.id)));idStudioRenderStudentList();return idStudioPreview()}
 
-function getDocFormat(k){return Number(localStorage.getItem('ld_docfmt_'+k)||1)}
+function getDocFormat(k){if(k==='marksheet'&&window.LDM_MARKSHEET?.getDefault())return window.LDM_MARKSHEET.getDefault();return Number(localStorage.getItem('ld_docfmt_'+k)||1)}
 function saveDocFormat(k,v){localStorage.setItem('ld_docfmt_'+k,String(v));toast('Format '+v+' default selected')}
 function exportRowsXlsx(rows,name){if(!window.XLSX)return toast('Excel library not loaded');let wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(rows||[]);XLSX.utils.book_append_sheet(wb,ws,'Data');XLSX.writeFile(wb,(name||'export')+'.xlsx')}
 async function exportReportCardExcel(){let c=$('mkClass')?.value||'',exam=$('mkExam')?.value?.trim()||'';let q=sb.from('student_marks').select('*');if(c)q=ldmApplyClassFilter(q,'class_name',c);if(exam)q=q.eq('exam_name',exam);let{data,error}=await q;if(error)return toast(error.message);exportRowsXlsx((data||[]).map(x=>({...x,class_name:ldmClassCanonical(x.class_name)||x.class_name})),'Report-Cards-'+(c||'All')+'-'+(exam||'All'))}
@@ -2942,7 +2961,7 @@ saveRecord=async function(k,form,id=null){
     let file=form._cameraFile||form.querySelector('[name="public_photo_file"]')?.files?.[0];delete o.public_photo_file;
     let submitBtn=form.querySelector('button[type="submit"],button:not([type])');if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='Submitting...'}
     try{
-      if(file){file=await compressImageFile(file,10,25,640,'student');let path=`public-admission/public/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;let{error:upErr}=await sb.storage.from('student-media').upload(path,file,{upsert:false,contentType:'image/jpeg'});if(upErr)throw upErr;o.photo_path=path;o.photo_source=form._cameraFile?'camera':'upload';o.photo_taken_at=new Date().toISOString()}
+      if(file){file=await window.LDM_PHOTO_V337.cropForReview(file);if(!file)throw Error('Photo crop was cancelled; existing photo remains unchanged');if(file.size>25*1024)throw Error('Student photo exceeds 25 KB');let path=`public-admission/public/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;let{error:upErr}=await sb.storage.from('student-media').upload(path,file,{upsert:false,contentType:'image/jpeg'});if(upErr)throw upErr;o.photo_path=path;o.photo_source=form._cameraFile?'camera':'upload';o.photo_taken_at=new Date().toISOString()}
       o.academic_session=o.academic_session||'2026-27';
       let {data,error}=await sb.rpc('submit_admission_application',{p_payload:o});if(error)throw error;
       let app=(data&&data.application_no)||'';
@@ -3093,10 +3112,8 @@ function v107DocHeader(title,subTitle,session){
 }
 
 // ---------- 15 actual prepared document designs ----------
-renderMarksheetHtml=function(s,marks,exam,t){
-  t=Number(t||1);let max=marks.reduce((a,x)=>a+Number(x.max_marks||0),0),got=marks.reduce((a,x)=>a+Number(x.obtained_marks||0),0),pct=v14Pct(got,max),res=pct>=40?'PASS':'FAIL',grade=v14Grade(pct);
-  return `<div class="markPreview t${t} v32Mark v107OfficialDoc">${v107DocHeader(`${exam||'EXAM'} • REPORT CARD`,'RESULT / MARKSHEET','2026-27')}<div class="markInfo"><div><b>Student:</b> ${esc(s.student_name)}</div><div><b>Admission:</b> ${esc(s.admission_no||'')}</div><div><b>Roll No:</b> ${esc(s.roll_no||'')}</div><div><b>Class:</b> ${esc(s.class_name||'')}</div><div><b>Father:</b> ${esc(s.father_name||'')}</div><div><b>Mother:</b> ${esc(s.mother_name||'')}</div><div><b>DOB:</b> ${esc(v14FmtDate(s.dob))}</div><div><b>Result:</b> ${res}</div></div><table><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>%</th><th>Grade</th></tr>${marks.map(m=>`<tr><td>${esc(m.subject_name)}</td><td>${Number(m.max_marks||0)}</td><td>${Number(m.obtained_marks||0)}</td><td>${v14Pct(m.obtained_marks,m.max_marks)}%</td><td>${esc(m.grade||v14Grade(v14Pct(m.obtained_marks,m.max_marks)))}</td></tr>`).join('')}<tr><th>Total</th><th>${max}</th><th>${got}</th><th>${pct}%</th><th>${grade}</th></tr></table><div class="v32ResultRow"><span><b>Percentage</b><strong>${pct}%</strong></span><span><b>Overall Grade</b><strong>${grade}</strong></span><span><b>Result</b><strong>${res}</strong></span></div><div class="v32SignRow"><span>Class Teacher</span><span>Parent Signature</span><span>Principal / Director</span></div></div>`;
-};
+renderMarksheetHtml=function(s,marks,exam,t){return window.LDM_MARKSHEET.render(s,marks,exam,t)};
+
 renderIdCard=function(s,t){
   t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));let set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=v107DocLogo(),radius=set.photoShape==='circle'?'50%':set.photoShape==='square'?'0':'12%',addr=school?.address||'';
   let lines=[];lines.push(`<div class="v104Line"><b>Class:</b> ${esc(s.class_name||'—')}</div>`);if(set.showRoll)lines.push(`<div class="v104Line"><b>Roll:</b> ${esc(s.roll_no||'—')}</div>`);if(set.showAdmission)lines.push(`<div class="v104Line"><b>Adm:</b> ${esc(s.admission_no||'—')}</div>`);if(set.showDob)lines.push(`<div class="v104Line"><b>DOB:</b> ${esc(v14FmtDate(s.dob)||'—')}</div>`);if(set.showFather)lines.push(`<div class="v104Line"><b>Father:</b> ${esc(s.father_name||'—')}</div>`);if(set.showMother)lines.push(`<div class="v104Line"><b>Mother:</b> ${esc(s.mother_name||'—')}</div>`);if(set.showMobile)lines.push(`<div class="v104Line"><b>Mobile:</b> ${esc(s.phone||'—')}</div>`);if(set.showAddress)lines.push(`<div class="v104Line"><b>Address:</b> ${esc(s.address||'—')}</div>`);
@@ -3674,7 +3691,7 @@ async function v48PolishAdminHero(){
   if(!v14Admin?.()) return;
   const hero=document.querySelector('.v39Hero'); if(!hero)return;
   const hello=hero.querySelector('.v39Hello'); if(hello)hello.textContent='Welcome to';
-  const h2=hero.querySelector('.v39HeroCopy h2'); if(h2)h2.textContent='L D Modern Education Academy';
+  const h2=hero.querySelector('.v39HeroCopy h2'); if(h2)h2.textContent='L D MODERN EDUCATION ACADEMY';
   const repeated=hero.querySelector('.v39HeroSchool'); if(repeated)repeated.style.display='none';
 
   const adminBox=hero.querySelector('.v39AdminBox');
@@ -5693,7 +5710,7 @@ const v62InstantBase=v58InstantRefresh;v58InstantRefresh=async function(reason){
 const V63_BUILD='V63-APPROVED-DESIGN-MERGE';
 (function v63BuildHeader(){
  const top=document.querySelector('#erp .erpTop'); if(!top||document.getElementById('v63SchoolHead'))return;
- const schoolHead=document.createElement('div');schoolHead.id='v63SchoolHead';schoolHead.className='v63SchoolHead';schoolHead.innerHTML='<b>L.D. MODERN EDUCATION ACADEMY</b><span>GAMBHIRIYA BUJURG, SINGHAPATTI, KUSHINAGAR</span>';
+ const schoolHead=document.createElement('div');schoolHead.id='v63SchoolHead';schoolHead.className='v63SchoolHead';schoolHead.innerHTML='<b>L D MODERN EDUCATION ACADEMY</b><span>GAMBHIRIYA BUJURG, SINGHAPATTI, KUSHINAGAR</span>';
  const titleWrap=top.querySelector('div'); if(titleWrap)top.insertBefore(schoolHead,titleWrap);
  const admin=document.createElement('div');admin.id='v63AdminBox';admin.className='v63AdminBox';admin.innerHTML='<div class="v63Avatar">👨‍💼</div><div><b id="v63UserName">User</b><small id="v63UserRole">Portal</small></div>';
  const lo=document.createElement('button');lo.className='v63TopLogout';lo.innerHTML='⏻ Logout';lo.onclick=logout;
@@ -6511,8 +6528,8 @@ function v69RenderCandidates(){let b=$('v69CandidateBody');if(!b)return;b.innerH
 function v69SelectCandidates(v){document.querySelectorAll('.v69CandCheck').forEach(x=>{if(!x.disabled)x.checked=v});if(v)v69GenerateCards();else $('v69Preview').innerHTML=''}
 async function v69ToggleHold(i,hold){let s=v69Candidates[i];if(!s)return;if(hold&&!confirm(`${s.student_name} का Admit Card Due Fee ${money(s.fee_due)} के कारण HOLD करें?`))return;let{error}=await sb.rpc('v69_set_admit_hold',{p_exam_id:v69CurrentExam.id,p_admission_no:s.admission_no,p_hold:hold,p_reason:hold?'Fee Due':''});if(error)return toast(error.message);toast(hold?'Admit Card held':'Admit Card released');await v69LoadCandidates(false);v69GenerateCards()}
 function v69SelectedStudents(){return [...document.querySelectorAll('.v69CandCheck:checked')].map(x=>v69Candidates[Number(x.dataset.i)]).filter(Boolean)}
-function v69CardHtml(s){let rows=v69Timetable.filter(x=>ldmClassSame(x.class_name,s.class_name)).sort((a,b)=>String(a.exam_date).localeCompare(String(b.exam_date))||String(a.start_time||'').localeCompare(String(b.start_time||'')));let logo=document.querySelector('.v26Brand img')?.src||$('pubLogo')?.src||school?.logo_url||new URL('school-logo.png',location.href).href,inst=v69CurrentExam?.instructions||'Bring this Admit Card and School ID. Reach the examination room on time.';return `<article class="v69AdmitCard"><div class="v69AdmitHead"><img src="${esc(logo)}" alt="Logo"><div class="v69School"><b>${esc(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b><span>${esc(school?.address||'GAMBHIRIYA BUJURG, SINGHAPATTI-KUSHINAGAR')}</span><strong>${esc(v69CurrentExam?.exam_name||'EXAMINATION')} • ADMIT CARD • ${esc(v69CurrentExam?.academic_session||'')}</strong></div><div class="seal">PHOTO / SEAL</div></div><div class="v69StudentInfo"><div><b>STUDENT ID</b><br>${esc(s.student_id||s.admission_no||'')}</div><div><b>NAME</b><br>${esc(s.student_name||'')}</div><div><b>FATHER</b><br>${esc(s.father_name||'')}</div><div><b>CLASS / ROLL</b><br>${esc(s.class_name||'')} / ${esc(s.roll_no||'—')}</div><div><b>ADMISSION NO.</b><br>${esc(s.admission_no||'')}</div><div><b>SESSION</b><br>${esc(v69CurrentExam?.academic_session||'')}</div><div><b>EXAM</b><br>${esc(v69CurrentExam?.exam_name||'')}</div><div><b>STATUS</b><br>ELIGIBLE</div></div><table class="v69TT"><tr><th>Date</th><th>Subject</th><th>Time</th></tr>${rows.length?rows.map(r=>`<tr><td>${esc(v69FmtDate(r.exam_date))}</td><td>${esc(r.subject_name||'')}</td><td>${esc(v69FmtTime(r.start_time))} - ${esc(v69FmtTime(r.end_time))}</td></tr>`).join(''):'<tr><td colspan="3">Timetable not set for this class</td></tr>'}</table><div class="v69AdmitFoot"><div class="v69Instructions"><b>Instructions:</b> ${esc(inst)}</div><div class="v69Sign">Principal / Director</div></div></article>`}
-function v69GenerateCards(){if(!v69CurrentExam)return toast('Exam select करें');let ss=v69SelectedStudents();if(!ss.length){$('v69Preview').innerHTML='<div class="empty">Print के लिए eligible students select करें.</div>';return}let pages=[];for(let i=0;i<ss.length;i+=3)pages.push(`<section class="v69PrintPage">${ss.slice(i,i+3).map(v69CardHtml).join('')}</section>`);$('v69Preview').innerHTML=`<div class="v69PreviewShell"><div id="v69PrintArea">${pages.join('')}</div></div><div class="saveStatus saveOk">✓ ${ss.length} Admit Card ready • ${pages.length} A4 page(s) • Maximum 3 cards per page</div>`}
+function v69CardHtml(s){const rows=v69Timetable.filter(x=>ldmClassSame(x.class_name,s.class_name)).sort((a,b)=>String(a.exam_date).localeCompare(String(b.exam_date))||String(a.start_time||'').localeCompare(String(b.start_time||'')));return window.LDM_ADMIT_V339.render(s,v69CurrentExam||{},rows)}
+function v69GenerateCards(){if(!v69CurrentExam)return toast('Exam select करें');let ss=v69SelectedStudents();if(!ss.length){$('v69Preview').innerHTML='<div class="empty">Print के लिए eligible students select करें.</div>';return}let pages=[];for(let i=0;i<ss.length;i+=2)pages.push(`<section class="v69PrintPage">${ss.slice(i,i+2).map(v69CardHtml).join('')}</section>`);$('v69Preview').innerHTML=`<div class="v69PreviewShell"><div id="v69PrintArea">${pages.join('')}</div></div><div class="saveStatus saveOk">✓ ${ss.length} Admit Card ready • ${pages.length} A4 page(s) • 2 cards per A4 page</div>`}
 function v69PrintAdmitCards(){let area=$('v69PrintArea');if(!area){v69GenerateCards();area=$('v69PrintArea')}if(!area)return toast('पहले Admit Cards generate करें');let w=window.open('','_blank','width=1000,height=800');if(!w)return toast('Popup allow करें');let css=`@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Cambria,Georgia,serif;color:#111}.v69PrintPage{width:190mm;height:277mm;display:grid;grid-template-rows:repeat(3,89mm);gap:3.5mm;page-break-after:always;overflow:hidden}.v69PrintPage:last-child{page-break-after:auto}.v69AdmitCard{height:89mm;border:1.6px solid #133d73;border-radius:3mm;padding:3mm;overflow:hidden;display:flex;flex-direction:column}.v69AdmitHead{display:grid;grid-template-columns:16mm 1fr 16mm;gap:2mm;align-items:center;border-bottom:1px solid #284e7b;padding-bottom:1.5mm}.v69AdmitHead img{width:14mm;height:14mm;object-fit:contain}.seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69AdmitHead .seal{width:14mm;height:14mm;border:1px solid #8aa0b6;border-radius:50%;display:grid;place-items:center;font-size:6px;color:#697c91}.v69School{text-align:center}.v69School b{display:block;font-family:Cambria,Georgia,serif;font-size:12.5px;line-height:1.05;color:#0b376c;font-weight:900;letter-spacing:.12px}.v69School span{display:block;font-size:7px;margin-top:1px}.v69School strong{display:block;font-size:9px;margin-top:2px}.v69StudentInfo{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm 2mm;font-size:7.5px;padding:1.5mm 0}.v69StudentInfo div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v69StudentInfo b{font-size:6.5px;color:#53667a}.v69TT{width:100%;border-collapse:collapse;font-size:6.5px;table-layout:fixed}.v69TT th,.v69TT td{border:1px solid #78889a;padding:.8mm 1mm;text-align:center;font-size:6.5px;line-height:1.05}.v69TT th{background:#edf3f9}.v69AdmitFoot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;font-size:6.5px;padding-top:1mm}.v69Sign{text-align:center;min-width:35mm;border-top:1px solid #444;padding-top:.7mm}.v69Instructions{font-size:6px;line-height:1.15;max-width:95mm}`;w.document.write(`<html><head><title>${esc(v69CurrentExam?.exam_name||'Exam')} Admit Cards</title><meta charset="utf-8"><style>${css}</style>
 </head><body>${area.innerHTML}
 
@@ -8982,7 +8999,7 @@ async function v75DeleteNote(id){if(!confirm('Delete this private note?'))return
 /* ---------- PARENT / STUDENT ADMIT CARD ---------- */
 window.v75ParentAdmits=[];
 async function v75EnhanceParentAdmit(){let box=$('parentDashboardBody');if(!box||!user||!['parent','student'].includes(String(profile?.role||'')))return;let old=$('v75ParentAdmit');if(old)old.remove();let{data,error}=await sb.rpc('v75_parent_admit_cards');let sec=document.createElement('section');sec.id='v75ParentAdmit';sec.className='v32ParentNotices';if(error){sec.innerHTML=`<h3>🎫 Admit Card</h3><div class="note">Parent Admit Card setup pending • ${v75Esc(error.message)}</div>`;box.appendChild(sec);return}window.v75ParentAdmits=Array.isArray(data)?data:(data?.cards||[]);sec.innerHTML=`<h3>🎫 Exam Admit Card</h3><div class="v75ParentAdmitList">${window.v75ParentAdmits.map((x,i)=>{let s=x.student||{},e=x.exam||{},hold=!!s.is_withheld;return `<div class="v75ParentAdmitRow ${hold?'lock':''}"><div><b>${v75Esc(e.exam_name||'Exam')}</b><small>${v75Esc(e.academic_session||'')} • ${v75Esc(s.student_name||'')} • Class ${v75Esc(s.class_name||'')}</small></div><div>${hold?`<b class="v75Due">🔒 HELD</b><small>${v75Esc(s.hold_reason||'Admin hold')}</small>`:'<b class="v75Clear">✅ Available</b><small>Preview before PDF/Print</small>'}</div>${hold?'<span></span>':`<button class="primary" onclick="v75OpenParentAdmit(${i})">Preview Admit Card</button>`}</div>`}).join('')||'<div class="empty">No Admit Card published/available yet.</div>'}</div>`;box.appendChild(sec)}
-function v75ParentAdmitHtml(x){let s=x.student||{},e=x.exam||{},rows=x.timetable||[],logo=document.querySelector('.v26Brand img')?.src||$('pubLogo')?.src||school?.logo_url||'school-logo.png',inst=e.instructions||'Bring this Admit Card and School ID. Reach the examination room on time.';return `<article class="v69AdmitCard"><div class="v69AdmitHead"><img src="${v75Esc(logo)}" alt="Logo"><div class="v69School"><b>${v75Esc(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b><span>${v75Esc(school?.address||'')}</span><strong>${v75Esc(e.exam_name||'EXAMINATION')} • ADMIT CARD • ${v75Esc(e.academic_session||'')}</strong></div><div class="seal">PHOTO / SEAL</div></div><div class="v69StudentInfo"><div><b>STUDENT ID</b><br>${v75Esc(s.student_id||s.admission_no||'')}</div><div><b>NAME</b><br>${v75Esc(s.student_name||'')}</div><div><b>FATHER</b><br>${v75Esc(s.father_name||'')}</div><div><b>CLASS / ROLL</b><br>${v75Esc(s.class_name||'')} / ${v75Esc(s.roll_no||'—')}</div><div><b>ADMISSION NO.</b><br>${v75Esc(s.admission_no||'')}</div><div><b>SESSION</b><br>${v75Esc(e.academic_session||'')}</div><div><b>EXAM</b><br>${v75Esc(e.exam_name||'')}</div><div><b>STATUS</b><br>ELIGIBLE</div></div><table class="v69TT"><tr><th>Date</th><th>Subject</th><th>Time</th></tr>${rows.length?rows.map(r=>`<tr><td>${v75Esc(typeof v69FmtDate==='function'?v69FmtDate(r.exam_date):r.exam_date||'')}</td><td>${v75Esc(r.subject_name||'')}</td><td>${v75Esc(typeof v69FmtTime==='function'?v69FmtTime(r.start_time):r.start_time||'')} - ${v75Esc(typeof v69FmtTime==='function'?v69FmtTime(r.end_time):r.end_time||'')}</td></tr>`).join(''):'<tr><td colspan="3">Timetable not set</td></tr>'}</table><div class="v69AdmitFoot"><div class="v69Instructions"><b>Instructions:</b> ${v75Esc(inst)}</div><div class="v69Sign">Principal / Director</div></div></article>`}
+function v75ParentAdmitHtml(x){return window.LDM_ADMIT_V339.render(x.student||{},x.exam||{},x.timetable||[])}
 function v75OpenParentAdmit(i){let x=window.v75ParentAdmits?.[i];if(!x||x.student?.is_withheld)return toast('Admit Card held');let id='v75ParentAdmitPreview';v64Modal(`<h2>🎫 Admit Card Preview</h2><div class="v69PreviewShell"><div id="${id}">${v75ParentAdmitHtml(x)}</div></div><div class="v64ServiceActions"><button class="primary" onclick="v14Pdf('${id}','${v75Esc((x.student?.student_name||'student').replace(/[^a-z0-9]/gi,'_'))}-admit-card.pdf')">Download PDF</button><button onclick="v14Print('${id}')">Print</button></div>`)}
 
 /* Parent portal wrapper */
@@ -9864,8 +9881,8 @@ async function v91TeacherPhotos(){
 }
 window.v91TeacherPhotos=v91TeacherPhotos;
 window.v91RenderTeacherPhotos=function(){let cl=q91('v91PhotoClass')?.value||'',qq=norm91(q91('v91PhotoQ')?.value),rows=v91TeacherPhotoRows;if(cl)rows=rows.filter(x=>x.class_name===cl);if(qq)rows=rows.filter(x=>[x.student_name,x.father_name,x.admission_no].some(v=>norm91(v).includes(qq)));let host=q91('v91PhotoGrid');if(!host)return;host.innerHTML=rows.map(s=>`<article class="v91PhotoCard" id="v91PhotoCard_${safe91(s.id)}"><div class="v91PhotoFace">${s._signed_photo?`<img src="${safe91(s._signed_photo)}${String(s._signed_photo).includes('?')?'&':'?'}v=${Date.now()}" alt="Student">`:'NO PHOTO'}</div><div><b>${safe91(s.student_name||'')}</b><small>Father: ${safe91(s.father_name||'—')}</small><small>Class ${safe91(s.class_name||'')} • ${safe91(s.admission_no||'')}</small><label class="v91PhotoBtn">📷 ${s.photo_path?'Change Photo':'Add Photo'}<input type="file" accept="image/*" capture="environment" hidden onchange="v91TeacherUploadPhoto('${safe91(s.id)}',this)"></label>${s.photo_path?`<button class="mini del" onclick="v91TeacherRemovePhoto('${safe91(s.id)}')">Remove Photo</button>`:''}</div></article>`).join('')||'<div class="empty">No students.</div>'};
-window.v91TeacherUploadPhoto=async function(id,input){let f=input?.files?.[0];if(!f)return;let s=v91TeacherPhotoRows.find(x=>String(x.id)===String(id));if(!s)return toast('Student not found');let card=q91('v91PhotoCard_'+id);card?.classList.add('uploading');v91BusyStart();try{f=await compressImageFile(f,10,25,640,'student');if(f.size>35*1024)throw new Error('Photo 35KB से बड़ी रह गई. दूसरा photo चुनें.');let path=`teacher-student-photo/${user.id}/${s.id}.jpg`;let up=await sb.storage.from('student-media').upload(path,f,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'});if(up.error)throw up.error;let rr=await sb.rpc('ldm_teacher_set_student_photo_v190',{p_student_id:s.id,p_photo_path:path});if(rr.error)throw rr.error;s.photo_path=path;s.photo_url='';s.student_photo_url='';photoCache91.delete(path);await v91AttachStudentPhoto(s);v91RenderTeacherPhotos();toast(`Photo updated • ${Math.round(f.size/1024)} KB • All student formats synced`);try{v58BroadcastUpdate?.('students')}catch(_e){} }catch(e){toast(e.message||String(e))}finally{card?.classList.remove('uploading');v91BusyEnd();if(input)input.value=''}};
-window.v91TeacherRemovePhoto=async function(id){let s=v91TeacherPhotoRows.find(x=>String(x.id)===String(id));if(!s||!s.photo_path)return;if(!confirm('इस student की current photo remove करनी है?'))return;v91BusyStart();try{let rr=await sb.rpc('ldm_teacher_remove_student_photo_v190',{p_student_id:s.id});if(rr.error)throw rr.error;try{await sb.storage.from('student-media').remove([s.photo_path])}catch(_e){}s.photo_path='';s.photo_url='';s.student_photo_url='';s._signed_photo='';photoCache91.delete(s.photo_path);v91RenderTeacherPhotos();toast('Student photo removed • Central Student Master synced');try{v58BroadcastUpdate?.('students')}catch(_e){}}catch(e){toast(e.message||String(e))}finally{v91BusyEnd()}};
+window.v91TeacherUploadPhoto=async function(id,input){let f=input?.files?.[0];if(!f)return;let s=v91TeacherPhotoRows.find(x=>String(x.id)===String(id));if(!s)return toast('Student not found');let card=q91('v91PhotoCard_'+id);card?.classList.add('uploading');v91BusyStart();try{f=await compressImageFile(f,10,25,640,'student');if(f.size>25*1024)throw new Error('Photo 25KB से बड़ी रह गई. दूसरा photo चुनें.');let path=`teacher-student-photo/${user.id}/${s.id}.jpg`;let up=await sb.storage.from('student-media').upload(path,f,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'});if(up.error)throw up.error;let rr=await sb.rpc('ldm_teacher_set_student_photo_v190',{p_student_id:s.id,p_photo_path:path});if(rr.error)throw rr.error;s.photo_path=path;s.photo_url='';s.student_photo_url='';photoCache91.delete(path);await v91AttachStudentPhoto(s);v91RenderTeacherPhotos();toast(`Photo updated • ${Math.round(f.size/1024)} KB • All student formats synced`);try{v58BroadcastUpdate?.('students')}catch(_e){} }catch(e){toast(e.message||String(e))}finally{card?.classList.remove('uploading');v91BusyEnd();if(input)input.value=''}};
+window.v91TeacherRemovePhoto=async function(id){let s=v91TeacherPhotoRows.find(x=>String(x.id)===String(id));if(!s||!s.photo_path)return;if(!confirm('इस student की current photo remove करनी है?'))return;v91BusyStart();try{let rr=await sb.rpc('ldm_teacher_remove_student_photo_v190',{p_student_id:s.id});if(rr.error)throw rr.error;try{await safeStorageRemove('student-media',s.photo_path)}catch(_e){}s.photo_path='';s.photo_url='';s.student_photo_url='';s._signed_photo='';photoCache91.delete(s.photo_path);v91RenderTeacherPhotos();toast('Student photo removed • Central Student Master synced');try{v58BroadcastUpdate?.('students')}catch(_e){}}catch(e){toast(e.message||String(e))}finally{v91BusyEnd()}};
 
 // Add V91 routes visibly to the final V90 navigation.
 try{if(Array.isArray(V90_TEACHER_NAV)&&!V90_TEACHER_NAV.some(x=>x[0]==='v91_student_photos')){let i=V90_TEACHER_NAV.findIndex(x=>x[0]==='teacher_class');V90_TEACHER_NAV.splice(i<0?2:i+1,0,['v91_student_photos','📷 Student Photos'])}}catch(_e){}
@@ -9924,7 +9941,7 @@ window.v92PrintArea=function(id){let el=q92(id);if(!el)return toast('Preview fir
 </body></html>`);w.document.close();let fire=()=>{try{w.focus();w.print()}catch(_e){}};setTimeout(fire,700)};
 window.v92PdfArea=function(id,name){let el=q92(id);if(!el)return toast('Preview first');if(!window.html2pdf)return v92PrintArea(id);let opt={margin:[10,10,10,10],filename:name||'admit-cards.pdf',image:{type:'jpeg',quality:.94},html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:['css','legacy']}};html2pdf().set(opt).from(el).save();};
 
-function v92BuildPages(cards){let pages=[];for(let i=0;i<cards.length;i+=3){let chunk=cards.slice(i,i+3),html=chunk.map(x=>v75ParentAdmitHtml(x)).join('');for(let j=chunk.length;j<3;j++)html+='<div class="v92BlankSlot"></div>';pages.push(`<section class="v92A4Page">${html}</section>`)}return pages.join('')}
+function v92BuildPages(cards){let pages=[];for(let i=0;i<cards.length;i+=2){let chunk=cards.slice(i,i+2),html=chunk.map(x=>v75ParentAdmitHtml(x)).join('');for(let j=chunk.length;j<2;j++)html+='<div class="v92BlankSlot"></div>';pages.push(`<section class="v92A4Page">${html}</section>`)}return pages.join('')}
 async function v92PrepareCards(cards){let ss=(cards||[]).map(x=>x.student).filter(Boolean);try{if(typeof v91AttachStudentPhotos==='function')await v91AttachStudentPhotos(ss)}catch(_e){}return cards||[]}
 
 // ---------------- ADMIN PUBLISH CONTROL ----------------
@@ -10270,7 +10287,7 @@ function v97ApplyPublicBranding(){
   let footer=document.querySelector('#publicSite footer');if(!footer)return;
   let old=document.getElementById('v97PublicLeader');if(old)old.remove();
   let nm=String(school?.public_person_name||'').trim(),des=String(school?.public_person_designation||'').trim(),pic=String(school?.public_person_photo_url||'').trim();
-  if(nm||des||pic){let sec=document.createElement('section');sec.id='v97PublicLeader';sec.className='v97PublicLeader';sec.innerHTML=`<div class="v97PublicLeaderCard">${pic?`<img src="${v97Safe(pic)}" alt="${v97Safe(nm||des||'School Profile')}">`:''}<div><b>${v97Safe(nm||'L D Modern Education Academy')}</b>${des?`<span>${v97Safe(des)}</span>`:''}</div></div>`;footer.parentNode.insertBefore(sec,footer)}
+  if(nm||des||pic){let sec=document.createElement('section');sec.id='v97PublicLeader';sec.className='v97PublicLeader';sec.innerHTML=`<div class="v97PublicLeaderCard">${pic?`<img src="${v97Safe(pic)}" alt="${v97Safe(nm||des||'School Profile')}">`:''}<div><b>${v97Safe(nm||'L D MODERN EDUCATION ACADEMY')}</b>${des?`<span>${v97Safe(des)}</span>`:''}</div></div>`;footer.parentNode.insertBefore(sec,footer)}
   let fl=document.getElementById('v97FounderLine');if(fl)fl.remove();let fn=String(school?.founder_name||'').trim();if(fn){fl=document.createElement('div');fl.id='v97FounderLine';fl.className='v97FounderLine';fl.textContent=`${school?.founder_label||'Founder'} — ${fn}`;footer.appendChild(fl)}
  }catch(_e){}
 }
@@ -10387,7 +10404,7 @@ v64SaveTeacherStudent=async function(id){return v98TeacherBasicSave(id,'attendan
 function v98FileBase64(f){return new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>resolve(String(r.result||'').split(',')[1]||'');r.onerror=()=>reject(new Error('Photo read failed'));r.readAsDataURL(f)})}
 window.v91TeacherUploadPhoto=async function(id,input){
   let f=input?.files?.[0];if(!f)return;let srow=(typeof v91TeacherPhotoRows!=='undefined'?v91TeacherPhotoRows:[]).find(x=>String(x.id)===String(id));if(!srow)return toast('Student not found');let card=document.getElementById('v91PhotoCard_'+id);card?.classList.add('uploading');try{
-    f=await compressImageFile(f,10,25,640,'student');if(f.size>45*1024)throw new Error('Photo 45KB से बड़ी रह गई. दूसरा photo चुनें.');let token=await v98AuthToken();if(!token)throw new Error('Teacher session expired. फिर login करें.');let b64=await v98FileBase64(f);
+    f=await window.LDM_PHOTO_V337.cropForReview(f);if(!f)return;if(f.size>25*1024)throw new Error('Photo 25KB से बड़ी रह गई. दूसरा photo चुनें.');let token=await v98AuthToken();if(!token)throw new Error('Teacher session expired. फिर login करें.');let b64=await v98FileBase64(f);
     let r=await fetch('/api/student-media',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({student_id:id,file_base64:b64,mime:'image/jpeg'})}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Student photo update failed');
     srow.photo_path=j.path;srow.photo_url='';srow.student_photo_url='';if(j.signed_url){srow._signed_photo=j.signed_url;try{photoCache91?.set(j.path,{url:j.signed_url,exp:Date.now()+3300000})}catch(_e){}}else{try{await v91AttachStudentPhoto(srow)}catch(_e){}}
     try{v91RenderTeacherPhotos()}catch(_e){};toast(`Photo updated • ${Math.round(f.size/1024)} KB • synced`);try{v58BroadcastUpdate?.('students')}catch(_e){}
@@ -11707,19 +11724,39 @@ window.V6413_BUILD='V64.13-CENTRAL-MASTER-RECONCILED-2026-09-20';
 (function(){
  const N=v=>Number(v||0), norm=v=>String(v||'').trim().toLowerCase();
  const activeStudent=s=>norm(s?.status)!=='inactive';
- async function feeRegister(){return window.LDM_FEE_LEDGER.register()}
+ let ledgerCache=null,ledgerFlight=null,ledgerEpoch=0,feeViewEpoch=0;
+ window.ldmInvalidateFeeRegister=()=>{ledgerCache=null;ledgerEpoch++;feeViewEpoch++;};
+ async function feeRegister(){
+ const key=String(profile?.id||'')+'|'+String(school?.academic_session||'');if(ledgerCache?.key===key&&Date.now()-ledgerCache.at<15000)return ledgerCache.value;
+ if(ledgerFlight?.key===key&&ledgerFlight.epoch===ledgerEpoch)return ledgerFlight.promise;const mine=ledgerEpoch;
+ const promise=readFeeRegister().then(value=>{if(mine===ledgerEpoch&&String(profile?.id||'')+'|'+String(school?.academic_session||'')===key)ledgerCache={key,at:Date.now(),value};return value}).finally(()=>{if(ledgerFlight?.promise===promise)ledgerFlight=null});ledgerFlight={key,promise,epoch:mine};return promise;
+ }
+ async function readFeeRegister(){
+   const settings=(typeof school!=='undefined'?school:window.school)||{},sess=settings.academic_session;
+   if(!sess)throw Error('Academic session is not configured');
+   const all=async make=>{let out=[];for(let offset=0;offset<200000;offset+=500){const r=await make().range(offset,offset+499);if(r.error)throw r.error;if(!Array.isArray(r.data))throw Error('Incomplete central fee register response');out.push(...r.data);if(r.data.length<500)return out;}throw Error('Select a smaller class range')};
+   const [students,payments]=await Promise.all([all(()=>sb.from('students').select('id,admission_no,student_name,father_name,phone,class_name,status,academic_session,fee_category,fee_waiver_percent').order('id')),all(()=>sb.from('fee_payments').select('id,admission_no,amount,payment_date').order('id'))]);
+   const active=students.filter(s=>!['inactive','deleted','trashed','recycled','archived','left','withdrawn','transferred'].includes(String(s.status||'active').toLowerCase())&&(!s.academic_session||s.academic_session===sess));
+   const until=(()=>{const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return p.year+'-'+p.month})();
+   const balances=await window.ldmFeeDueSnapshot(active.map(s=>s.admission_no),sess,until),byDue=new Map(balances.map(x=>[String(x.admission_no),x])),paid=new Map();
+   payments.forEach(p=>{if(!Number.isFinite(Number(p.amount)))throw Error('Invalid payment amount');const a=String(p.admission_no);paid.set(a,(paid.get(a)||0)+Number(p.amount))});
+   const rows=active.map(s=>{const x=byDue.get(String(s.admission_no));if(!x||x.current_due==null||!Number.isFinite(Number(x.current_due)))throw Error('Central balance unverified: '+s.admission_no);const _due=Number(x.current_due),_paid=paid.get(String(s.admission_no))||0;return {...s,_due,_paid,_total:_due+_paid,_free:String(s.fee_category||'').toLowerCase()==='free'||Number(s.fee_waiver_percent)>=100}});
+   return {rows,totalDue:rows.reduce((n,x)=>n+x._due,0),dueStudents:rows.filter(x=>x._due>0).length,totalCollection:payments.reduce((n,x)=>n+Number(x.amount),0),session:sess,cutoff:until};
+ }
  window.v6413CentralFeeRegister=feeRegister;
  /* Fee Dashboard now reads the same schedule+adjustment+payment ledger as Master Due cards/reminders. */
- window.feeDashboard=async function(filter='all',q='',classFilter='',sortDir='asc'){
+ window.feeDashboard=async function(filter='all',q='',classFilter='',sortDir='asc',page=1){const mine=++feeViewEpoch,viewRoute=window.__v90Route,who=profile?.id;
    head('Smart Student Fee Dashboard','CENTRAL LEDGER • Student • Father • Mobile • Class • Paid • Due');
    try{
-    const x=await feeRegister(); let rows=x.rows.slice(),z=String(q||'').toLowerCase().trim();
+    const x=await feeRegister();if(mine!==feeViewEpoch||who!==profile?.id||viewRoute!==window.__v90Route)return; let rows=x.rows.slice(),z=String(q||'').toLowerCase().trim();
     if(z)rows=rows.filter(r=>[r.student_name,r.father_name,r.phone,r.admission_no,r.class_name].some(v=>String(v||'').toLowerCase().includes(z)));
     if(classFilter)rows=rows.filter(r=>String(r.class_name||'')===String(classFilter));
     if(filter==='paid')rows=rows.filter(r=>!r._free&&r._due<=0&&r._paid>0); if(filter==='due')rows=rows.filter(r=>!r._free&&r._due>0); if(filter==='free')rows=rows.filter(r=>r._free); sortDir=String(sortDir||'asc').toLowerCase()==='desc'?'desc':'asc'; rows.sort((a,b)=>{const c=String(a.student_name||'').localeCompare(String(b.student_name||''),undefined,{numeric:true,sensitivity:'base'});return sortDir==='desc'?-c:c});
     const all=x.rows.length,paid=x.rows.filter(r=>!r._free&&r._due<=0&&r._paid>0).length,due=x.dueStudents,free=x.rows.filter(r=>r._free).length;
-    $('erpContent').innerHTML=`<div class="feeSummary"><button onclick="feeDashboard('all')"><b>${all}</b><span>Total Students</span></button><button onclick="feeDashboard('paid')"><b>${paid}</b><span>Paid</span></button><button onclick="feeDashboard('due')"><b>${due}</b><span>Due</span></button><button onclick="feeDashboard('free')"><b>${free}</b><span>Free Fee</span></button><div><b>${money(x.totalCollection)}</b><span>Total Collection</span></div><div><b>${money(x.totalDue)}</b><span>Total Pending</span></div></div><div class="panel"><div class="panelHead"><div><h3>Central Student Fee Register</h3><p class="note">Master Fee, Dashboard और Due list एक ही schedule + adjustment + payment ledger से calculate होते हैं.</p></div><div class="tools searchTools"><input id="feeQ" placeholder="🔎 Search student / father / mobile..." value="${esc(q)}"><select id="feeClass"><option value="">All Classes</option>${cls.map(c=>`<option ${c===classFilter?'selected':''}>${esc(c)}</option>`).join('')}</select><select id="feeSort" onchange="feeDashboard('${filter}',$('feeQ').value,$('feeClass').value,this.value)"><option value="asc" ${sortDir==='asc'?'selected':''}>Name A→Z</option><option value="desc" ${sortDir==='desc'?'selected':''}>Name Z→A</option></select><button class="secondary" onclick="feeDashboard('${filter}',$('feeQ').value,$('feeClass').value,$('feeSort').value)">Search</button></div></div><div class="feeTabs"><button onclick="feeDashboard('all',$('feeQ').value,$('feeClass').value,$('feeSort').value)">All</button><button onclick="feeDashboard('paid',$('feeQ').value,$('feeClass').value,$('feeSort').value)">Paid</button><button onclick="feeDashboard('due',$('feeQ').value,$('feeClass').value,$('feeSort').value)">Due</button><button onclick="feeDashboard('free',$('feeQ').value,$('feeClass').value,$('feeSort').value)">Free Fee</button></div><div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Mobile</th><th>Class</th><th>Scheduled</th><th>Paid</th><th>Due</th><th>Status</th><th>Action</th></tr>${rows.map(r=>`<tr><td><b>${esc(r.student_name||'')}</b><small class="cellSub">${esc(r.admission_no||'')}</small></td><td>${esc(r.father_name||'')}</td><td>${esc(r.phone||'')}</td><td>${esc(r.class_name||'')}</td><td>${money(r._total)}</td><td>${money(r._paid)}</td><td><b>${money(r._due)}</b></td><td>${r._free?'<span class="badge free">FREE</span>':r._due>0?'<span class="badge due">DUE</span>':'<span class="badge paid">CLEAR</span>'}</td><td><button class="mini edit" onclick="openFeeStudentByAdmission('${esc(r.admission_no||'')}')">Open Fee</button></td></tr>`).join('')||'<tr><td colspan="9">No matching students.</td></tr>'}</table></div></div>`;
-   }catch(e){$('erpContent').innerHTML=`<div class="panel"><div class="empty">Central fee ledger error: ${esc(e.message||String(e))}</div></div>`}
+    page=Math.max(1,Math.min(Number(page)||1,Math.max(1,Math.ceil(rows.length/50))));const shown=rows.slice((page-1)*50,page*50);
+    $('erpContent').innerHTML=`<div class="feeSummary"><button onclick="feeDashboard('all')"><b>${all}</b><span>Total Students</span></button><button onclick="feeDashboard('paid')"><b>${paid}</b><span>Paid</span></button><button onclick="feeDashboard('due')"><b>${due}</b><span>Due</span></button><button onclick="feeDashboard('free')"><b>${free}</b><span>Free Fee</span></button><div><b>${money(x.totalCollection)}</b><span>Total Collection</span></div><div><b>${money(x.totalDue)}</b><span>Total Pending</span></div></div><div class="panel"><div class="panelHead"><div><h3>Central Student Fee Register</h3><p class="note">Master Fee, Dashboard और Due list एक ही schedule + adjustment + payment ledger से calculate होते हैं.</p></div><div class="tools searchTools"><input id="feeQ" placeholder="🔎 Search student / father / mobile..." value="${esc(q)}"><select id="feeClass"><option value="">All Classes</option>${cls.map(c=>`<option ${c===classFilter?'selected':''}>${esc(c)}</option>`).join('')}</select><select id="feeSort" onchange="feeDashboard('${filter}',$('feeQ').value,$('feeClass').value,this.value)"><option value="asc" ${sortDir==='asc'?'selected':''}>Name A→Z</option><option value="desc" ${sortDir==='desc'?'selected':''}>Name Z→A</option></select><button class="secondary" onclick="feeDashboard('${filter}',$('feeQ').value,$('feeClass').value,$('feeSort').value)">Search</button></div></div><div class="feeTabs"><button onclick="feeDashboard('all',$('feeQ').value,$('feeClass').value,$('feeSort').value)">All</button><button onclick="feeDashboard('paid',$('feeQ').value,$('feeClass').value,$('feeSort').value)">Paid</button><button onclick="feeDashboard('due',$('feeQ').value,$('feeClass').value,$('feeSort').value)">Due</button><button onclick="feeDashboard('free',$('feeQ').value,$('feeClass').value,$('feeSort').value)">Free Fee</button></div><div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Mobile</th><th>Class</th><th>Paid + Current Due</th><th>Paid (recorded history)</th><th>Current Due</th><th>Status</th><th>Action</th></tr>${shown.map(r=>`<tr><td><b>${esc(r.student_name||'')}</b><small class="cellSub">${esc(r.admission_no||'')}</small></td><td>${esc(r.father_name||'')}</td><td>${esc(r.phone||'')}</td><td>${esc(r.class_name||'')}</td><td>${money(r._total)}</td><td>${money(r._paid)}</td><td><b>${money(r._due)}</b></td><td>${r._free?'<span class="badge free">FREE</span>':r._due>0?'<span class="badge due">DUE</span>':'<span class="badge paid">CLEAR</span>'}</td><td><button class="mini edit" onclick="openFeeStudentByAdmission('${esc(r.admission_no||'')}')">Open Fee</button></td></tr>`).join('')||'<tr><td colspan="9">No matching students.</td></tr>'}</table></div><div class="tools"><button id="feePrev">← Previous</button><span>${page} / ${Math.max(1,Math.ceil(rows.length/50))} · ${rows.length} matching students</span><button id="feeNext">Next →</button><button id="feeReload">Refresh central balances</button></div></div>`;
+    for(const [id,target]of [['feePrev',page-1],['feeNext',page+1]]){const el=$(id);el.disabled=target<1||target>Math.ceil(rows.length/50);el.onclick=()=>feeDashboard(filter,$('feeQ').value,$('feeClass').value,$('feeSort').value,target)}$('feeReload').onclick=()=>{window.ldmInvalidateFeeRegister();feeDashboard(filter,$('feeQ').value,$('feeClass').value,$('feeSort').value,page)};
+   }catch(e){if(mine!==feeViewEpoch||who!==profile?.id||viewRoute!==window.__v90Route)return;$('erpContent').innerHTML=`<div class="panel"><div class="empty">Central fee ledger error: ${esc(e.message||String(e))}</div></div>`}
  };
  /* Exact Master Plan audit: compare headline and drill-down sources on demand, never via polling. */
  window.v6413MasterRecheck=async function(){
@@ -12332,8 +12369,8 @@ window.ldmScanFeedback=beep;
 
  window.v130StorageCenter=async function(){if(!admin())return toast('Admin only');head?.('🗄 Free Storage Center','Review first • no automatic delete');let host=document.getElementById('erpContent');host.innerHTML='<div class="panel"><h3>Storage Usage</h3><div id="v130Storage">Loading…</div></div><div class="panel"><h3>Largest Stored Files</h3><div id="v130Files">Loading…</div></div>';let [s,f]=await Promise.all([sb.rpc('ldm_storage_summary'),sb.rpc('ldm_storage_largest',{p_limit:100})]);if(s.error){v130Storage.textContent=s.error.message;return}let bytes=Number(s.data?.bytes||0);v130Storage.innerHTML='<div class="v130Grid"><div class="v130Card"><b>Objects</b><div class="v130Big">'+Number(s.data?.objects||0)+'</div></div><div class="v130Card"><b>Used</b><div class="v130Big">'+(bytes/1048576).toFixed(2)+' MB</div></div><div class="v130Card"><b>Buckets</b><div class="v130Big">'+Number(s.data?.buckets||0)+'</div></div></div><p class="v130SecurityNote">Active Student/Teacher photo या required document automatic delete नहीं होगा. Cleanup review के बाद ही करें.</p>';v130Files.innerHTML=f.error?E(f.error.message):'<div class="tableWrap"><table><tr><th>Bucket</th><th>File</th><th>Size</th><th>Updated</th></tr>'+((f.data||[]).map(x=>'<tr><td>'+E(x.bucket_id)+'</td><td>'+E(x.name)+'</td><td>'+((Number(x.size_bytes||0)/1024).toFixed(1))+' KB</td><td>'+E(String(x.updated_at||'').slice(0,10))+'</td></tr>').join('')||'<tr><td colspan="4">No stored files</td></tr>')+'</table></div>'}
 
- const hi='आदरणीय अभिभावक, आपके बच्चे {Student Name} ({Class}) की विद्यालय शुल्क ₹{Due Amount}, {Till Month} तक बकाया है। कृपया सुविधानुसार विद्यालय में शुल्क जमा करने का कष्ट करें। — L D Modern Education Academy';
- const en='Dear Parent, the school fee of ₹{Due Amount} for your child {Student Name} ({Class}) is pending up to {Till Month}. Kindly deposit the outstanding fee at your earliest convenience. — L D Modern Education Academy';
+ const hi='आदरणीय अभिभावक, आपके बच्चे {Student Name} ({Class}) की विद्यालय शुल्क ₹{Due Amount}, {Till Month} तक बकाया है। कृपया सुविधानुसार विद्यालय में शुल्क जमा करने का कष्ट करें। — L D MODERN EDUCATION ACADEMY';
+ const en='Dear Parent, the school fee of ₹{Due Amount} for your child {Student Name} ({Class}) is pending up to {Till Month}. Kindly deposit the outstanding fee at your earliest convenience. — L D MODERN EDUCATION ACADEMY';
  window.v130FeeReminder=async function(){if(!['admin','super_admin','principal','accountant'].includes(role()))return toast('Authorized Admin/Accounts only');head?.('📲 FREE WhatsApp Fee Reminder','Central Fee Ledger • Hindi / English / Custom');let host=document.getElementById('erpContent');host.innerHTML='<div class="panel"><div class="v130Grid"><label>Class<select id="v130FeeClass"><option value="">All Classes</option></select></label><label>Language<select id="v130Lang"><option value="hi">Hindi</option><option value="en">English</option></select></label><label>Due Till Month<input id="v130Till" type="month" value="'+new Date().toISOString().slice(0,7)+'"></label></div><p><textarea id="v130Template" class="v130FeeMsg">'+E(hi)+'</textarea></p><div class="tools"><button onclick="v130Template.value='+JSON.stringify(hi)+'">Hindi Format</button><button onclick="v130Template.value='+JSON.stringify(en)+'">English Format</button><button class="primary" onclick="v130LoadFeeReminder()">Load Due Students</button><button onclick="navigator.clipboard?.writeText(v130Template.value);toast(\'Template copied for WhatsApp Broadcast\')">Copy Class Broadcast Text</button></div><div id="v130FeeRows"></div></div>';let r=await sb.from('students').select('class_name').limit(6000),allClasses=(typeof cls!=='undefined'&&Array.isArray(cls)?cls:[]),used=new Set((r.data||[]).map(x=>window.ldmClassCanonical?.(x.class_name)||'').filter(Boolean)),classOptions=allClasses.filter(x=>used.has(x));v130FeeClass.insertAdjacentHTML('beforeend',classOptions.map(x=>'<option>'+E(x)+'</option>').join(''))}
  window.v130LoadFeeReminder=async function(){v130FeeRows.innerHTML='Loading…';let cl=v130FeeClass.value,sq=sb.from('students').select('student_name,father_name,admission_no,class_name,phone,status').limit(6000);if(cl)sq=ldmApplyClassFilter(sq,'class_name',cl);let [sr,fr]=await Promise.all([sq,sb.from('fees').select('admission_no,due_amount').limit(12000)]);if(sr.error||fr.error){v130FeeRows.textContent=(sr.error||fr.error).message;return}let dm={};(fr.data||[]).forEach(x=>dm[x.admission_no]=(dm[x.admission_no]||0)+Number(x.due_amount||0));let rows=(sr.data||[]).filter(x=>String(x.status||'').toLowerCase()!=='inactive'&&dm[x.admission_no]>0);v130FeeRows.innerHTML='<div class="tableWrap"><table><tr><th>Student</th><th>Father</th><th>Due</th><th>Mobile</th><th>FREE Action</th></tr>'+rows.map((s,i)=>{let due=dm[s.admission_no],phone=String(s.phone||'').replace(/\D/g,'').slice(-10),msg=(v130Template.value||hi).replaceAll('{Student Name}',s.student_name||'').replaceAll('{Class}',s.class_name||'').replaceAll('{Due Amount}',String(due)).replaceAll('{Till Month}',v130Till.value||'');return '<tr><td><b>'+E(s.student_name)+'</b><small class="cellSub">'+E(s.class_name)+' • '+E(s.admission_no)+'</small></td><td>'+E(s.father_name||'')+'</td><td>₹'+due.toFixed(2)+'</td><td>'+E(phone)+'</td><td>'+(phone?'<a class="mini wa" target="_blank" rel="noopener" href="https://wa.me/91'+phone+'?text='+encodeURIComponent(msg)+'">WhatsApp</a> <a class="mini call" href="tel:'+phone+'">Call</a>':'No mobile')+'</td></tr>'}).join('')+'</table></div><p class="note">Free/safe mode: WhatsApp chat pre-filled खुलेगा; Send Admin confirm करेगा. Unofficial auto-bulk bot नहीं.</p>'}
 
@@ -12591,7 +12628,7 @@ function clearPhotoDraft(id){
   photoDrafts.delete(k);
 }
 
-function setPhotoDraft(id,file){
+async function setPhotoDraft(id,file){
   if(!file)return;
 
   if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||'')){
@@ -12602,6 +12639,7 @@ function setPhotoDraft(id,file){
     return window.toast?.('Photo बहुत बड़ा है');
   }
 
+  file=await window.LDM_PHOTO_V337.cropForReview(file);if(!file)return;
   clearPhotoDraft(id);
 
   photoDrafts.set(String(id),{
@@ -12757,35 +12795,8 @@ function renderPhotos(){
       x.student_photo_url ||
       '';
 
-    return `
-      <article class="v136PhotoCard">
-
-        <div style="
-          background:linear-gradient(135deg,#0759ad,#148ee8);
-          color:#fff;
-          border-radius:12px;
-          padding:8px 10px;
-          text-align:center;
-          margin-bottom:10px">
-
-          <b style="color:#fff">
-            L D MODERN EDUCATION ACADEMY
-          </b>
-
-          <small style="color:#fff">
-            STUDENT PHOTO / ID
-          </small>
-
-        </div>
-
-        <div class="v136PhotoFace">
-          ${
-            photo
-              ? `<img src="${v136Esc(photo)}" alt="Student Photo">`
-              : '<span>NO PHOTO</span>'
-          }
-        </div>
-
+    const cardHtml=window.renderIdCard({...x,_signed_photo:photo},getDocFormat('idcard')).replace(/ data-p337-(adm|id)="[^"]*"/g,'');
+    return `<article class="v136PhotoCard"><div class="v136RealID" data-teacher-photo="${v136Esc(x.id)}">${cardHtml}</div>
         <div class="v136PhotoInfo">
 
           <b>${v136Esc(x.student_name||'—')}</b>
@@ -12878,6 +12889,7 @@ function renderPhotos(){
         </div>
       </article>`;
   }).join('') || '<div class="empty">No students found.</div>';
+ h.querySelectorAll('.v136RealID .v164Photo').forEach(el=>{el.style.cursor='pointer';el.onclick=()=>{const id=el.closest('[data-teacher-photo]').dataset.teacherPhoto;const input=el.closest('.v136PhotoCard').querySelector('input[type=file]');input?.click()}});
 }
 
 window.v136Gallery=function(id,input){
@@ -12912,42 +12924,36 @@ window.v138UploadStudentPhoto=async function(id){
     );
   }
 
+  if(draft.busy)return;draft.busy=true;
   let f=draft.file;
-  let path='';
+  let path=draft.uploadPath||'';
 
   try{
-    if(typeof compressImageFile==='function'){
-      f=await compressImageFile(
-        f,
-        10,
-        25,
-        640,
-        'student'
-      );
-    }
+    // The reviewed crop is already compressed; do not alter approved pixels again.
 
-    if(f.size>35*1024){
+    if(f.size>25*1024){
       throw new Error(
-        'Photo 35 KB से बड़ी रह गई. दूसरा photo चुनें.'
+        'Photo 25 KB से बड़ी रह गई. दूसरा photo चुनें.'
       );
     }
 
     path=
-      `teacher-student-photo/${window.user.id}/${row.id}.jpg`;
+      `teacher-student-photo/${window.user.id}/${row.id}/${draft.request|| (draft.request=crypto.randomUUID())}.jpg`;
 
+    if(!draft.uploaded){draft.uploadPath=path;
     const up=await sb.storage
       .from('student-media')
       .upload(
         path,
         f,
         {
-          upsert:true,
+          upsert:false,
           contentType:'image/jpeg',
           cacheControl:'3600'
         }
       );
 
-    if(up.error)throw up.error;
+    if(up.error)throw up.error;draft.uploaded=true;}
 
     const rr=await sb.rpc(
       'ldm_teacher_set_student_photo_v190',
@@ -12958,12 +12964,7 @@ window.v138UploadStudentPhoto=async function(id){
     );
 
     if(rr.error){
-      try{
-        await sb.storage
-          .from('student-media')
-          .remove([path]);
-      }catch(_e){}
-
+      // Keep staged bytes on uncertain response; the server may have committed. Retry uses the same path.
       throw rr.error;
     }
 
@@ -12990,7 +12991,7 @@ window.v138UploadStudentPhoto=async function(id){
       ? 'Storage / Permission Error: '+raw+' • V210 final safe SQL और Supabase Storage policy जाँचें.'
       : raw;
     window.toast?.(msg);
-  }
+  }finally{draft.busy=false}
 };
 
 window.v138RemoveStudentPhoto=async function(id){
@@ -13017,9 +13018,7 @@ window.v138RemoveStudentPhoto=async function(id){
     if(rr.error)throw rr.error;
 
     try{
-      await sb.storage
-        .from('student-media')
-        .remove([oldPath]);
+      await safeStorageRemove('student-media',oldPath);
     }catch(_e){}
 
     row.photo_path='';
@@ -13677,22 +13676,29 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  window.idStudioTemplateButtons=function(active){return N.map((n,i)=>`<button type="button" class="idTemplatePick ${active===i+1?'active':''}" onclick="idStudioSetTemplate(${i+1})"><span class="idTemplateSwatch t${i+1}"></span><b>${i+1}. ${safe(n.split(' • ')[0])}</b><span class="v164OrientTag">${i<5?'LANDSCAPE':'PORTRAIT'}</span></button>`).join('')};
  window.idStudioSetTemplate=function(n){n=Math.max(1,Math.min(10,Number(n)||1));localStorage.setItem('ld_docfmt_idcard',String(n));let g=$('idTemplateGrid');if(g)g.innerHTML=idStudioTemplateButtons(n);if($('idA4Preview'))idStudioPreview(true)};
  window.renderIdCard=function(s,t){
-   t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));const portrait=t>5,set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=(typeof v107DocLogo==='function'?v107DocLogo():(school?.logo_url||'school-logo.png')),addr=school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar',sig=school?.principal_signature_url||school?.director_signature_url||'',parent=s.father_name||s.guardian_name||s.mother_name||'—';
+   t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));const portrait=t>5,set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=(typeof v107DocLogo==='function'?v107DocLogo():(school?.logo_url||'school-logo.png')),addr=school?.address||'',sig=school?.principal_signature_url||school?.director_signature_url||'',parent=s.father_name||s.guardian_name||s.mother_name||'—';
    const ph=photo?`<img class="v164Photo" src="${safe(photo)}" alt="Student Photo">`:`<div class="v164Photo v164NoPhoto">PHOTO</div>`;
    const opt=[]; if(set.showRoll&&s.roll_no)opt.push(`<div class="v164Line"><b>Roll No.:</b> ${safe(s.roll_no)}</div>`); if(set.showDob&&s.dob)opt.push(`<div class="v164Line"><b>DOB:</b> ${safe(s.dob)}</div>`); if(set.showMother&&s.mother_name)opt.push(`<div class="v164Line"><b>Mother:</b> ${safe(s.mother_name)}</div>`); if(set.showAddress&&s.address)opt.push(`<div class="v164Line"><b>Address:</b> ${safe(s.address)}</div>`);
    return `<article data-id-adm="${safe(s.admission_no||'')}" class="v164Id ${portrait?'portrait':'landscape'} t${t}"><header class="v164Head"><img class="v164Logo" src="${safe(logo)}" alt="School Logo"><div class="v164School"><strong>${safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</strong><small>${safe(addr)}</small><em>STUDENT ID CARD • ${safe(set.session)}</em></div></header><main class="v164Main">${ph}<div class="v164Info"><div class="v164Name">${safe(s.student_name||'Student')}</div><div class="v164Line"><b>Class:</b> ${safe(s.class_name||'—')}${s.section?` • <b>Sec:</b> ${safe(s.section)}`:''}</div>${set.showFather?`<div class="v164Line"><b>Father:</b> ${safe(parent)}</div>`:''}${set.showAdmission?`<div class="v164Line"><b>Admission No.:</b> ${safe(s.admission_no||'—')}</div>`:''}${set.showMobile?`<div class="v164Line"><b>Mobile:</b> ${safe(s.phone||'—')}</div>`:''}${opt.join('')}</div><div class="v164MainQr"><div class="v164QrBox"><div class="v164IdQr" aria-label="Student QR"></div><small>${safe(set.footer||'Student Identity Card')}</small></div></div></main><div class="v164Bottom"><div class="v164Sign">${sig?`<img src="${safe(sig)}" alt="Authorized Signature">`:''}<span>Principal / Director</span></div></div><footer class="v164Foot">${safe(N[t-1])}</footer></article>`;
  };
  window.idStudioPageHtml=function(rows,fmt){const portrait=Number(fmt)>5,cap=portrait?9:10;let cells=rows.map(s=>`<div class="idA4Cell">${renderIdCard(s,fmt)}</div>`);while(cells.length<cap)cells.push('<div class="idA4Cell"></div>');return `<section class="idA4Page ${portrait?'v164PortraitPage':'v164LandscapePage'}">${cells.join('')}</section>`};
  async function v164PaintQr(root){
+   if(!root?.isConnected)return;
    root=root||document;const cards=[...root.querySelectorAll('.v164Id[data-id-adm]')];if(!cards.length)return;
    if(typeof window.ensureQR!=='function')throw new Error('QR generator unavailable');await window.ensureQR();
-   for(const card of cards){const box=card.querySelector('.v164IdQr'),adm=String(card.dataset.idAdm||'').trim();if(!box||!adm)continue;
+   for(const card of cards){if(!root.isConnected)return;const box=card.querySelector('.v164IdQr'),adm=String(card.dataset.idAdm||'').trim();if(!box||!adm)continue;
      try{let r=await sb.rpc('ldm_get_student_qr',{p_admission_no:adm});if(r.error)throw r.error;let token=r.data?.token;if(!token)throw new Error('Student QR token missing');box.innerHTML='';new QRCode(box,{text:location.origin+location.pathname+'?student_verify='+encodeURIComponent(token),width:192,height:192,correctLevel:QRCode.CorrectLevel.H});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));let cv=box.querySelector('canvas');if(cv){let im=document.createElement('img');im.alt='Student QR';im.src=cv.toDataURL('image/png');box.innerHTML='';box.appendChild(im)}}
      catch(e){box.innerHTML='<span style="font-size:4px;color:#a00">QR unavailable</span>';box.title=e?.message||String(e)}
    }
  }
- function v164AutoFit(root){(root||document).querySelectorAll('.v164Id').forEach(card=>card.querySelectorAll('.v164Name,.v164Line').forEach(el=>{let fs=parseFloat(getComputedStyle(el).fontSize)||8,g=0;while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1)&&fs>5&&g++<12){fs-=.3;el.style.fontSize=fs+'px'}}))}
- window.idStudioPreview=async function(silent=false){let ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');let rows=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));await v14AttachSignedPhotos(rows);let fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),cap=fmt>5?9:10,pages=idStudioChunks(rows,cap).map(x=>idStudioPageHtml(x,fmt)).join(''),work=$('idWork');if(!work)return;work.innerHTML=`<div class="idStudioPreviewActions"><b>${rows.length} cards • ${Math.ceil(rows.length/cap)} A4 page(s) • Format ${fmt} • ${fmt>5?'Portrait':'Landscape'}</b><button class="primary" onclick="idStudioPrint()">🖨 Print</button><button class="primary" onclick="idStudioPdf()">PDF</button><button class="secondary" onclick="idStudioPreview()">↻ Refresh Preview</button></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;await v164PaintQr($('idA4Preview'));v164AutoFit($('idA4Preview'));if(!silent)toast('Premium ID preview ready')};
+ function v164AutoFit(root){(root||document).querySelectorAll('.v164Id').forEach(card=>{const overflow=[...card.querySelectorAll('.v164Name,.v164Line,.v164Main,.v164School')].some(el=>el.scrollWidth>el.clientWidth+2||el.scrollHeight>el.clientHeight+2);card.dataset.idOverflow=overflow?'1':''})}
+
+ window.idStudioPreview=async function(silent=false,batch=0){
+ const ids=[...idStudioSelected];if(!ids.length)return silent?null:toast('कम से कम एक student select करें');const mine=++idPreviewEpoch,who=profile?.id,view=window.__v90Route;const all=idStudioSortRows(idStudioRows.filter(x=>ids.includes(String(x.id))));const batches=Math.max(1,Math.ceil(all.length/100));batch=Math.max(0,Math.min(Number(batch)||0,batches-1));const rows=all.slice(batch*100,batch*100+100);await v14AttachSignedPhotos(rows);if(mine!==idPreviewEpoch||who!==profile?.id||view!==window.__v90Route)return;const fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1)),cap=fmt>5?9:10,pages=idStudioChunks(rows,cap).map(x=>idStudioPageHtml(x,fmt)).join(''),work=$('idWork');if(!work)return;
+ work.innerHTML=`<div class="idStudioPreviewActions"><b>${all.length} selected · Preview ${batch*100+1}–${batch*100+rows.length} · Batch ${batch+1}/${batches} · ${Math.ceil(rows.length/cap)} A4 page(s)</b><label>Print batch<select id="idBatchSelect">${Array.from({length:batches},(_,i)=>`<option value="${i}" ${i===batch?'selected':''}>${i*100+1}–${Math.min((i+1)*100,all.length)} of ${all.length}</option>`).join('')}</select></label><button class="primary" onclick="idStudioPrint()">Print current batch</button><button class="primary" onclick="idStudioPdf()">PDF current batch</button><button id="idRefreshBatch">Refresh current batch</button><p>All selected students are included across the listed batches. Print every batch for the complete selection.</p></div><div id="idA4Preview" class="idA4Preview">${pages}</div>`;
+ $('idBatchSelect').onchange=e=>idStudioPreview(true,Number(e.target.value));$('idRefreshBatch').onclick=()=>idStudioPreview(false,batch);const root=$('idA4Preview');await v164PaintQr(root);if(mine!==idPreviewEpoch||!root.isConnected)return;v164AutoFit(root);if(!silent)toast('ID preview prepared; check the batch count and QR before printing');
+ };
+
  window.idStudioPrint=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');let w=window.open('','_blank','width=1100,height=850');if(!w)return toast('Print window allow करें');let css=document.getElementById('v164-idcard-premium-css')?.textContent||'';w.document.write(`<html><head><title>ID Cards</title><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}body{margin:0;background:#fff}.idA4Page{width:210mm;height:297mm;display:grid;align-content:start;page-break-after:always;overflow:hidden}.idA4Page:last-child{page-break-after:auto}.idA4Cell{display:flex;align-items:center;justify-content:center;overflow:hidden}.v164LandscapePage{grid-template-columns:repeat(2,85.6mm);grid-template-rows:repeat(5,54mm);justify-content:center;gap:2mm 4mm;padding:6mm 7mm}.v164PortraitPage{grid-template-columns:repeat(3,54mm);grid-template-rows:repeat(3,85.6mm);justify-content:center;gap:3mm 5mm;padding:12mm 7mm 6mm}${css}</style></head><body>${el.innerHTML}</body></html>`);w.document.close();let printed=false,fire=()=>{if(printed)return;printed=true;w.focus();w.print()};setTimeout(()=>{let pending=[...w.document.images].filter(x=>!x.complete);if(!pending.length)return fire();let left=pending.length,done=()=>{if(--left<=0)fire()};pending.forEach(x=>{x.addEventListener('load',done,{once:true});x.addEventListener('error',done,{once:true})});setTimeout(fire,1800)},250)};
  window.idStudioPdf=function(){let el=$('idA4Preview');if(!el)return toast('Preview first');if(!window.html2pdf)return idStudioPrint();let c=$('idClass')?.value||'Class',fmt=Math.max(1,Math.min(10,getDocFormat('idcard')||1));html2pdf().set({margin:0,filename:`${c}-ID-Cards-${fmt>5?'Portrait':'Landscape'}-Format-${fmt}.pdf`,image:{type:'png',quality:1},html2canvas:{scale:3,useCORS:true,backgroundColor:'#ffffff',letterRendering:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:false},pagebreak:{mode:['css','legacy'],after:'.idA4Page'}}).from(el).save()};
  window.LDM_IDCARD_BUILD='V181-VIDEO-ROOT-CONSOLIDATED-2026-09-26';
@@ -14455,7 +14461,7 @@ async function finalHome(){
           challenge:bytes(32),
 
           rp:{
-            name:'L D Modern Education Academy ERP'
+            name:'L D MODERN EDUCATION ACADEMY ERP'
           },
 
           user:{
@@ -15243,8 +15249,9 @@ if(typeof statsBase==='function'){
   };
 
   window.v186SaveCentralStudent=async function(form){
+    if(form._ldmCentralSaving)return;form._ldmCentralSaving=true;
     const stayContext=window.LDM_SAVE_STAY_V338?.capture('students',form,null);
-    if(!studentCreator())return window.toast?.('Student Add permission required');
+    if(!studentCreator()){form._ldmCentralSaving=false;return window.toast?.('Student Add permission required')}
     const btn=form.querySelector('button[type="submit"]'),st=form.querySelector('.saveStatus');if(btn)btn.disabled=true;
     try{
       const nums=await nextStudentNumbers();
@@ -15265,7 +15272,7 @@ if(typeof statsBase==='function'){
       window.toast?.('Student saved in Central Master • '+o.admission_no);
       setTimeout(async()=>{if(stayContext&&window.LDM_SAVE_STAY_V338)return window.LDM_SAVE_STAY_V338.finish('students',form,ins?.data?.id||null,stayContext);try{closeModal()}catch(_e){};if(route()==='v150_student_master')await window.v150StudentMaster?.()},350);
     }catch(e){if(st){st.className='saveStatus saveError';st.textContent='Save failed: '+(e?.message||e)}window.toast?.('Save failed: '+(e?.message||e))}
-    finally{if(btn)btn.disabled=false}
+    finally{form._ldmCentralSaving=false;if(btn)btn.disabled=false}
   };
 
   /* One Admin student-add path everywhere: Quick Links, Front Desk, Student Master, generic Students list. */
@@ -16158,7 +16165,7 @@ if(typeof statsBase==='function'){
  }
  stopPassiveUiTimers();
  /* Data changes mark dashboard dirty only. No immediate dashboard fetch/write loop. */
- window.ldmMarkDataDirty=function(kind){try{sessionStorage.setItem('ldm_dashboard_dirty',String(Date.now()));sessionStorage.setItem('ldm_dashboard_dirty_kind',String(kind||'data'))}catch(_e){}return true};
+ window.ldmMarkDataDirty=function(kind){window.ldmInvalidateFeeRegister?.();window.LDM_MARKSHEET?.clear();try{sessionStorage.setItem('ldm_dashboard_dirty',String(Date.now()));sessionStorage.setItem('ldm_dashboard_dirty_kind',String(kind||'data'))}catch(_e){}return true};
  /* One canonical Admin dashboard renderer. All stacked legacy dashboard wrappers are bypassed only for Admin dashboard. */
  const previousRender=window.render;let dashPromise=null;
  async function canonicalAdminDashboard(){
@@ -18390,9 +18397,9 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=335"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v332.js?v=335"></script>
+<script src="root-corrections-v332.js?v=344"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
-<script src="exam-central-v320.js?v=336"></script>
+<script src="exam-central-v320.js?v=344"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18411,24 +18418,26 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 </style>
 <link rel="stylesheet" href="quickdesk-v326.css?v=326">
 <script src="central-exam-fees-v333.js?v=335"></script>
-<script src="central-fee-class-v335.js?v=335"></script>
+<script src="central-fee-class-v335.js?v=344"></script>
 <link rel="stylesheet" href="school-workspace-v336.css?v=336">
 <script src="school-workspace-v336.js?v=336"></script>
 
-<link rel="stylesheet" href="interface-v337.css?v=337">
+<link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=337"></script>
-<script src="student-photo-v337.js?v=337"></script>
-<script src="a4-print-v337.js?v=339"></script>
-<script src="print-bridge-v337.js?v=337"></script>
+<script src="student-photo-v337.js?v=344"></script>
+<script src="a4-print-v337.js?v=344"></script>
+<script src="print-bridge-v337.js?v=344"></script>
 
 <script src="save-stay-v338.js?v=338"></script>
-<link rel="stylesheet" href="admit-layout-v339.css?v=339">
-<script src="admit-layout-v339.js?v=339"></script>
-<link rel="stylesheet" href="document-layout-v341.css?v=341">
-<script src="document-layout-v341.js?v=341"></script>
-<link rel="stylesheet" href="original-dashboard-v342.css?v=342">
-<script src="original-dashboard-v342.js?v=342"></script>
+<link rel="stylesheet" href="admit-layout-v339.css?v=344">
+<script src="admit-layout-v339.js?v=344"></script>
+<link rel="stylesheet" href="document-layout-v341.css?v=344">
+<script src="document-layout-v341.js?v=344"></script>
+<link rel="stylesheet" href="original-dashboard-v342.css?v=344">
+<script src="original-dashboard-v342.js?v=344"></script>
 <link rel="stylesheet" href="paper-center-v343.css?v=343">
-<script src="paper-center-v343.js?v=343"></script>
+<script src="marksheet-core.js?v=344"></script>
+<script src="report-core.js?v=344"></script>
+<script src="paper-center-v343.js?v=344"></script>
 </body>
 </html>
