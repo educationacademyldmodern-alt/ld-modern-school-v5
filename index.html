@@ -903,7 +903,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @page{size:A4 portrait;margin:0}
 </style>
 <meta name="ldm-fix" content="V247 canonical LKG/UKG attendance root fix">
-<link rel="stylesheet" href="marksheet-core.css?v=347">
+<link rel="stylesheet" href="marksheet-core.css?v=348">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -2536,7 +2536,7 @@ async function generateClassMarksheets(){
  const c=$('mkClass').value,exam=$('mkExam').value.trim(),host=$('mkWork'),who=profile?.id,view=window.__v90Route;if(!c||!exam)return toast('Class and Exam required');host.textContent='Loading complete class marksheets…';
  const all=async make=>{let data=[];for(let offset=0;offset<100000;offset+=500){const r=await make().range(offset,offset+499);if(r.error)throw r.error;if(!Array.isArray(r.data))throw Error('Incomplete class data');data.push(...r.data);if(r.data.length<500)return data}throw Error('Narrow the selected class')};
  try{const students=await all(()=>ldmApplyClassFilter(sb.from('students').select('*'),'class_name',c).order('id'));const active=students.filter(s=>(!s.academic_session||s.academic_session===school?.academic_session)&&!['inactive','deleted','left','withdrawn','archived','trashed','recycled'].includes(String(s.status||'active').toLowerCase()));let marks=[];for(let i=0;i<active.length;i+=100){const keys=active.slice(i,i+100).map(s=>s.admission_no);marks.push(...await all(()=>sb.from('student_marks').select('*').eq('academic_session',school.academic_session).eq('exam_name',exam).in('admission_no',keys).order('id')))}if(who!==profile?.id||view!==window.__v90Route||!host.isConnected||$('mkClass')?.value!==c||$('mkExam')?.value.trim()!==exam)return;
- if(active.length)await window.LDM_MARKSHEET.context(active[0],exam);const by=new Map();for(const m of marks){if(!by.has(m.admission_no))by.set(m.admission_no,[]);by.get(m.admission_no).push(m)}host.replaceChildren();const controls=document.createElement('div');controls.className='v14Tabs';controls.innerHTML='<label>Students<select id="mkSelectedStudents" multiple size="6"></select></label><button id="mkUseSelected">Preview selected students</button><button id="mkUseAll">Preview full class</button><label>Print batch<select id="mkBatch"></select></label><span id="mkBatchStatus"></span><button id="mkPrintBatch">Preview / Print / PDF current batch</button>';host.append(controls);const picker=$('mkSelectedStudents');picker.innerHTML=active.map(s=>`<option value="${esc(s.id)}">${esc(s.roll_no||'')} · ${esc(s.student_name)} · ${esc(s.admission_no)}</option>`).join('');let selection=active,batchEpoch=0;const preview=document.createElement('div');preview.id='markPreviewBox';host.append(preview);
+ for(const s of [...new Map(active.map(s=>[String(s.section||''),s])).values()])await window.LDM_MARKSHEET.context(s,exam);const by=new Map();for(const m of marks){if(!by.has(m.admission_no))by.set(m.admission_no,[]);by.get(m.admission_no).push(m)}host.replaceChildren();const controls=document.createElement('div');controls.className='v14Tabs';controls.innerHTML='<label>Students<select id="mkSelectedStudents" multiple size="6"></select></label><button id="mkUseSelected">Preview selected students</button><button id="mkUseAll">Preview full class</button><label>Print batch<select id="mkBatch"></select></label><span id="mkBatchStatus"></span><button id="mkPrintBatch">Preview / Print / PDF current batch</button>';host.append(controls);const picker=$('mkSelectedStudents');picker.innerHTML=active.map(s=>`<option value="${esc(s.id)}">${esc(s.roll_no||'')} · ${esc(s.student_name)} · ${esc(s.admission_no)}</option>`).join('');let selection=active,batchEpoch=0;const preview=document.createElement('div');preview.id='markPreviewBox';host.append(preview);
  const build=async()=>{const token=++batchEpoch,number=Number($('mkBatch').value)||0,subset=selection.slice(number*100,number*100+100);preview.replaceChildren();$('mkBatchStatus').textContent=`${selection.length} students · current ${selection.length?number*100+1:0}–${number*100+subset.length} · print all listed batches for complete output`;for(let i=0;i<subset.length;i+=20){if(token!==batchEpoch||who!==profile?.id||view!==window.__v90Route||!preview.isConnected)return;preview.insertAdjacentHTML('beforeend',subset.slice(i,i+20).map(s=>renderMarksheetHtml(s,by.get(s.admission_no)||[],exam,$('mkTemplate').value)).join(''));await new Promise(r=>requestAnimationFrame(r))}if(!subset.length)preview.textContent='कोई रिकॉर्ड नहीं मिला / No records found';};
  const batches=()=>{$('mkBatch').innerHTML=Array.from({length:Math.max(1,Math.ceil(selection.length/100))},(_,i)=>`<option value="${i}">${i*100+1}–${Math.min((i+1)*100,selection.length)} of ${selection.length}</option>`).join('');build()};$('mkUseSelected').onclick=()=>{const ids=new Set([...picker.selectedOptions].map(o=>o.value));selection=active.filter(s=>ids.has(String(s.id)));batches()};$('mkUseAll').onclick=()=>{selection=active;batches()};$('mkBatch').onchange=build;$('mkPrintBatch').onclick=()=>window.LDM_A4_V337.preview(preview,'Class marksheets · '+$('mkBatchStatus').textContent,{orientation:'portrait'});batches();
 
@@ -10716,10 +10716,12 @@ teacherAssertStudent=async function(studentId){await v103RefreshTeacherContext()
 
 function v103TeacherClassTable(rows,fm,am,q=''){
  let all=v103SortStudents(rows||[]),show=all.filter(x=>v103MatchStudent(x,q)),cnt=v103Counts(all,am||{});
- return `${v103StatsHtml(cnt)}<div class="v103LiveHint">S.No. Roll Number के क्रम में • Search result live update</div><div class="tableWrap"><table class="v103ClassTable"><tr><th>S.No.</th><th>Roll No.</th><th>Student</th><th>Father</th><th>Attendance Today</th><th>Paid</th><th>Due</th><th>Class Teacher Actions</th></tr>${show.map((s,i)=>{let f=fm?.[s.admission_no]||{paid:0,due:0};return `<tr><td>${i+1}</td><td><b>${esc(s.roll_no||'—')}</b></td><td><b>${esc(s.student_name||'')}</b><small class="cellSub">${esc(s.admission_no||'')}</small></td><td>${esc(s.father_name||'')}</td><td>${esc(am?.[s.admission_no]||'Not Marked')}</td><td>${money(Number(f.paid||0))}</td><td><b>${money(Number(f.due||0))}</b></td><td><div class="v65Actions"><button class="primary" onclick="teacherEditStudent('${s.id}')">✏ Update</button><button onclick="v65TeacherOfficialCorrection('${s.id}')">Official Correction</button><button onclick="teacherViewMarksheet('${s.id}')">Marksheet</button><button onclick="teacherViewIdCard('${s.id}')">ID</button><button class="del" onclick="v65TeacherDeleteRequest('${s.id}')">🗑 Delete / Remove</button></div></td></tr>`}).join('')||'<tr><td colspan="8">No matching students.</td></tr>'}</table></div>`
+ return `${v103StatsHtml(cnt)}<div class="v103LiveHint">S.No. Roll Number के क्रम में • Search result live update</div><div class="tableWrap"><table class="v103ClassTable"><tr><th>S.No.</th><th>Roll No.</th><th>Student</th><th>Father</th><th>Attendance Today</th><th>Paid</th><th>Due</th><th>Class Teacher Actions</th></tr>${show.map((s,i)=>{let f=fm?.[s.admission_no]||{};const known=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));return `<tr><td>${i+1}</td><td><b>${esc(s.roll_no||'—')}</b></td><td><b>${esc(s.student_name||'')}</b><small class="cellSub">${esc(s.admission_no||'')}</small></td><td>${esc(s.father_name||'')}</td><td>${esc(am?.[s.admission_no]||'Not Marked')}</td><td>${known(f.paid)?money(Number(f.paid)):'उपलब्ध नहीं'}</td><td><b>${f.centralVerified&&known(f.due)?money(Number(f.due)):'उपलब्ध नहीं'}</b></td><td><div class="v65Actions"><button class="primary" onclick="teacherEditStudent('${s.id}')">✏ Update</button><button onclick="v65TeacherOfficialCorrection('${s.id}')">Official Correction</button><button onclick="teacherViewMarksheet('${s.id}')">Marksheet</button><button onclick="teacherViewIdCard('${s.id}')">ID</button><button class="del" onclick="v65TeacherDeleteRequest('${s.id}')">🗑 Delete / Remove</button></div></td></tr>`}).join('')||'<tr><td colspan="8">No matching students.</td></tr>'}</table></div>`
 }
 teacherClassPortal=async function(){await v103RefreshTeacherContext();head('My Class Portal','Class Teacher assigned data only • auto load • live search');let classes=v103ClassTeacherClasses();if(!classes.length)return $('erpContent').innerHTML='<div class="panel"><div class="empty">Admin ने अभी आपको किसी class का Class Teacher assign नहीं किया है.</div></div>';$('erpContent').innerHTML=`<div class="teacherTop"><h2>${esc(v14TeacherProfile?.teacher_name||profile?.full_name||'Teacher')}</h2><p>Class Teacher Access: ${classes.map(c=>`<span class="v14ClassPill">${esc(c)}</span>`).join(' ')}</p></div><div class="panel"><div class="v68TeacherTools"><select id="teacherClassSel" onchange="teacherLoadSelectedClass()">${classes.map(c=>`<option>${esc(c)}</option>`).join('')}</select><input id="v103TeacherClassQ" autocomplete="off" placeholder="Search name / father / admission / roll" oninput="v103RenderTeacherClass()"><button onclick="v68TeacherAddStudent()">➕ Add Student</button></div><div class="v68SafeBanner">Class select करते ही data automatic load होगा. Student data/attendance केवल Class Teacher assigned class का.</div><div id="teacherClassBody"><div class="empty">Loading...</div></div></div>`;await teacherLoadSelectedClass()};
-teacherLoadSelectedClass=async function(){let c=$('teacherClassSel')?.value||'',classes=v103ClassTeacherClasses();if(!classes.some(x=>ldmClassSame(x,c)))return toast('Class Teacher access denied');let d=await v68TeacherClassData(c),box=$('teacherClassBody');if(!box)return;if(d.error)return box.innerHTML=esc(d.error.message);d.students=v103SortStudents(d.students||[]);window.__v103TeacherClassData={...d,className:c};v103RenderTeacherClass()};
+let teacher350Epoch=0;
+teacherLoadSelectedClass=async function(){const c=$('teacherClassSel')?.value||'',classes=v103ClassTeacherClasses(),box=$('teacherClassBody'),who=profile?.id,sess=school?.academic_session,mine=++teacher350Epoch;if(!box)return;if(!classes.some(x=>ldmClassSame(x,c)))return toast('Class Teacher access denied');box.textContent='Class और केंद्रीय फीस लोड हो रही है…';const month=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit'}).formatToParts(new Date()),parts=Object.fromEntries(month.map(x=>[x.type,x.value]));let timer;try{const fees=Promise.race([sb.rpc('ldm_teacher_class_fee_due_v254',{p_class:null,p_session:sess,p_until_month:parts.year+'-'+parts.month}),new Promise((_,reject)=>timer=setTimeout(()=>reject(Error('Central fee response timed out')),12000))]);const [classResult,feeResult]=await Promise.allSettled([v68TeacherClassData(c),fees]);if(mine!==teacher350Epoch||who!==profile?.id||sess!==school?.academic_session||!box.isConnected||$('teacherClassSel')?.value!==c)return;if(classResult.status==='rejected')throw classResult.reason;const d=classResult.value;if(d.error)throw d.error;const reply=feeResult.status==='fulfilled'?feeResult.value:null,feeRows=reply&&!reply.error&&Array.isArray(reply.data)?reply.data:[],fm={};for(const student of d.students||[]){const matches=feeRows.filter(r=>String(r.admission_no||'')===String(student.admission_no||'')&&!!student.admission_no),r=matches.length===1?matches[0]:null,value=r?.current_due,verified=value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))&&Number(value)>=0;fm[student.admission_no]={...(d.fm?.[student.admission_no]||{}),due:verified?Number(value):null,centralVerified:verified}}d.students=v103SortStudents(d.students||[]);window.__v103TeacherClassData={...d,fm,className:c};v103RenderTeacherClass();if(feeRows.length===0||Object.values(fm).some(r=>!r.centralVerified)){const note=document.createElement('p');note.className='note';note.textContent='कुछ बकाया उपलब्ध नहीं हैं; गलत ₹0 नहीं दिखाया गया है।';const retry=document.createElement('button');retry.id='teacher350FeeRetry';retry.textContent='Refresh Current Due / फिर जाँचें';retry.onclick=()=>teacherLoadSelectedClass();box.prepend(retry);box.prepend(note)}}catch(e){if(mine===teacher350Epoch&&who===profile?.id&&box.isConnected)box.textContent=e.message||String(e)}finally{clearTimeout(timer)}};
+
 function v103RenderTeacherClass(){let d=window.__v103TeacherClassData||{},box=$('teacherClassBody');if(!box)return;box.innerHTML=v103TeacherClassTable(d.students||[],d.fm||{},d.am||{},$('v103TeacherClassQ')?.value||'')}
 teacherStudentTable=function(rows,fm,am){return v103TeacherClassTable(rows,fm,am,'')};
 v68TeacherAddStudent=function(){let classes=v103ClassTeacherClasses();if(!classes.length)return toast('Class Teacher assignment नहीं है');let selected=$('teacherClassSel')?.value||classes[0];v64Modal(`<h2>➕ Add Student • Class Teacher</h2><p class="note">Request Admin approval में जाएगी.</p><div class="v64Form"><label>Class<select id="v68TaClass">${classes.map(c=>`<option ${c===selected?'selected':''}>${esc(c)}</option>`).join('')}</select></label><label>Student Name<input id="v68TaName"></label><label>Father Name<input id="v68TaFather"></label><label>Parent Mobile<input id="v68TaPhone" inputmode="tel"></label><label class="full">Reason / Note<input id="v68TaReason"></label></div><button class="primary" onclick="v68TeacherSubmitAdd()">Send Add Student Request</button>`)};
@@ -15665,7 +15667,9 @@ if(typeof statsBase==='function'){
    table.dataset.ldmSortColumn=String(col);table.dataset.ldmSortDirection=dir;
  }
  function decorate(table){
-   if(!table||table.dataset.ldmSortReady==='1'||table.classList.contains('noAutoSort'))return;
+   if(!table)return;
+   if(table.closest('[data-doc-kind],.markPreview,.v69AdmitCard,.v339Page,#v69PrintArea,#v92ParentA4Area')){table.querySelectorAll('.ldmSortCtl').forEach(n=>n.remove());return;}
+   if(table.dataset.ldmSortReady==='1'||table.classList.contains('noAutoSort'))return;
    const header=[...table.querySelectorAll('tr')].find(r=>r.querySelector('th'));if(!header)return;
    [...header.cells].forEach((th,col)=>{
      if(th.tagName!=='TH'||th.querySelector('.ldmSortCtl'))return;
@@ -16474,7 +16478,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   const txt=v=>String(v??'').trim();
   const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0};
   const esc2=v=>typeof window.esc==='function'?window.esc(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const sess=()=>String(window.school?.academic_session||window.school?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
+  const sess=()=>String((typeof school!=='undefined'?school:window.school)?.academic_session||(typeof school!=='undefined'?school:window.school)?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
   const monthNow=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
   const admKey=v=>txt(v).replace(/\.0$/,'').replace(/\s+/g,'').toLowerCase();
   const idKey=v=>txt(v).replace(/\.0$/,'').replace(/\s+/g,'').toLowerCase();
@@ -16811,7 +16815,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   const q=id=>document.getElementById(id);
   const n=v=>Number.isFinite(Number(v))?Number(v):0;
   const tx=v=>String(v??'').trim();
-  const sess=()=>String(window.school?.academic_session||window.school?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
+  const sess=()=>String((typeof school!=='undefined'?school:window.school)?.academic_session||(typeof school!=='undefined'?school:window.school)?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
   const nowMonth=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
   const active=s=>!['inactive','deleted','trashed','recycled','archived','left','withdrawn'].includes(String(s||'active').toLowerCase());
   const monthOK=m=>/^\d{4}-(0[1-9]|1[0-2])$/.test(String(m||''));
@@ -17128,7 +17132,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
  const role=()=>String(window.profile?.role||'').trim().toLowerCase();
  const admin=()=>['admin','super_admin','principal'].includes(role());
  const teacher=()=>role()==='teacher';
- const sess=()=>String(window.school?.academic_session||window.school?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
+ const sess=()=>String((typeof school!=='undefined'?school:window.school)?.academic_session||(typeof school!=='undefined'?school:window.school)?.current_session||(typeof window.v90Session==='function'?window.v90Session():'2026-27'));
  const monthNow=()=>{try{let z=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit'}).formatToParts(new Date()),m=Object.fromEntries(z.map(x=>[x.type,x.value]));return m.year+'-'+m.month}catch(_e){let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}};
  const money=v=>typeof window.money==='function'?window.money(N(v)):'₹'+N(v).toLocaleString('en-IN');
  function classKey(v){try{if(typeof window.ldmClassCanonical==='function')return String(window.ldmClassCanonical(v)||'').trim().toLowerCase()}catch(_e){}let k=String(v||'').trim().toLowerCase().replace(/^(class|std|standard|grade|कक्षा)[\s.:_-]*/i,'').replace(/[\s._/()\-]+/g,'');if(['lkg','lowerkg','lowerkindergarten','kg1','kgi','jrkg','juniorkg','एलकेजी'].includes(k))return'lkg';if(['ukg','upperkg','upperkindergarten','kg2','kgii','srkg','seniorkg','यूकेजी'].includes(k))return'ukg';if(['nursery','nur','nurs','nry','prekg','नर्सरी'].includes(k))return'nursery';return k}
@@ -17144,7 +17148,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
    let body=rows.map((s,i)=>{let due=N(s.current_due),ph=phone10(s.phone),wa=ph?`https://wa.me/91${ph}?text=${encodeURIComponent(reminderText(s))}`:'';return `<tr><td>${i+1}</td><td><b>${E(s.student_name||'')}</b><small class="cellSub">${E(s.admission_no||'')} • ${E(displayClass(s.class_name)||'')}</small></td><td>${E(s.father_name||'—')}</td><td>${E(s.roll_no||'—')}</td><td class="${due>0?'v254FeeDue':'v254FeeClear'}">${money(due)}</td><td>${due>0?'DUE':'CLEAR'}</td><td>${due>0?(ph?`<div class="v254Contact"><a class="wa" href="${E(wa)}" target="_blank" rel="noopener">WhatsApp Reminder</a><a class="call" href="tel:+91${ph}">☎ Call</a></div>`:'<span class="v254NoPhone">Mobile not saved</span>'):'—'}</td></tr>`}).join('');
    host.innerHTML=`<div class="v254FeeStats"><div><small>Total Students</small><b>${rows.length}</b></div><div><small>Due Students</small><b>${dueRows.length}</b></div><div><small>Clear Students</small><b>${Math.max(rows.length-dueRows.length,0)}</b></div><div><small>Class Current Due</small><b>${money(sum)}</b></div></div><div class="tableWrap"><table><tr><th>S.N.</th><th>Student</th><th>Father</th><th>Roll</th><th>Current Due</th><th>Status</th><th>Reminder / Call</th></tr>${body||'<tr><td colspan="7">इस Class में active student नहीं मिला.</td></tr>'}</table></div>`;
  }
- window.v254LoadTeacherFee=async function(keepClass=''){let host=q('v254TeacherFeeBody');if(host)host.innerHTML='<div class="empty">Central current due loading…</div>';try{let r=await sb.rpc('ldm_teacher_class_fee_due_v254',{p_class:null,p_session:sess(),p_until_month:monthNow()});if(r.error)throw r.error;feeRows=r.data||[];let classes=feeClasses(),sel=keepClass||q('v254TeacherFeeClass')?.value||classes[0]||'';renderTeacherFee(sel);if(!feeRows.length&&host)host.innerHTML='<div class="empty">Assigned class मिला, लेकिन active student record नहीं मिला.</div>'}catch(e){if(host)host.innerHTML=`<div class="dangerNote"><b>Fee Status नहीं खुला:</b> ${E(e?.message||e)}<br><small>V254_SAFE_ADDITIVE.sql run होना जरूरी है.</small></div>`}};
+ window.v254LoadTeacherFee=async function(keepClass=''){let host=q('v254TeacherFeeBody');if(host)host.innerHTML='<div class="empty">Central current due loading…</div>';try{let r=await sb.rpc('ldm_teacher_class_fee_due_v254',{p_class:null,p_session:sess(),p_until_month:monthNow()});if(r.error)throw r.error;if(!Array.isArray(r.data)||r.data.some(x=>!String(x.admission_no||'').trim()||x.current_due===null||x.current_due===undefined||x.current_due===''||!Number.isFinite(Number(x.current_due))||Number(x.current_due)<0)||new Set(r.data.map(x=>String(x.admission_no))).size!==r.data.length)throw Error('केंद्रीय फीस का उत्तर अधूरा है। Refresh करें; बकाया को ₹0 नहीं माना गया।');feeRows=r.data;let classes=feeClasses(),sel=keepClass||q('v254TeacherFeeClass')?.value||classes[0]||'';renderTeacherFee(sel);if(!feeRows.length&&host)host.innerHTML='<div class="empty">Assigned class मिला, लेकिन active student record नहीं मिला.</div>'}catch(e){if(host)host.innerHTML=`<div class="dangerNote"><b>Fee Status नहीं खुला:</b> ${E(e?.message||e)}<br><small>Refresh करें। केंद्रीय फीस सेवा और assigned-class permissions जाँचें.</small></div>`}};
  window.v254RenderTeacherFee=()=>renderTeacherFee(q('v254TeacherFeeClass')?.value||'');
  window.teacherFeeView=async function(){if(!teacher())return window.toast?.('Teacher only / केवल शिक्षक');try{window.__v90Route='fees';window.v90InstallShell?.('fees')}catch(_e){};try{window.head?.('₹ Class Fee Status','Assigned class only • Read Only • Due Reminder + Direct Call')}catch(_e){}let host=q('erpContent');if(!host)return;host.innerHTML=`<section class="v254FeeHero"><div><h2>₹ Class Fee Status</h2><p>केवल आपकी assigned class/classes • Central current due • कोई fee edit/delete permission नहीं</p></div><div class="lock">🔒</div></section><section class="panel"><div class="v254FeeTools"><label>Class<select id="v254TeacherFeeClass" onchange="v254RenderTeacherFee()"></select></label><button class="primary" onclick="v254LoadTeacherFee(document.getElementById('v254TeacherFeeClass')?.value||'')">↻ Refresh Due</button></div><div id="v254TeacherFeeBody"><div class="empty">Loading…</div></div></section>`;await window.v254LoadTeacherFee()};
  try{teacherFeeView=window.teacherFeeView}catch(_e){}
@@ -18390,15 +18394,15 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="corrections-v308.css?v=309">
 <script src="corrections-v308.js?v=335"></script>
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
-<script src="receipt-actions-v309.js?v=335"></script>
+<script src="receipt-actions-v309.js?v=349"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v332.js?v=344"></script>
+<script src="root-corrections-v332.js?v=349"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
-<script src="exam-central-v320.js?v=346"></script>
+<script src="exam-central-v320.js?v=349"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
-<script src="smart-work-v333.js?v=333"></script>
+<script src="smart-work-v333.js?v=348"></script>
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
 <script src="resources-v334.js?v=347"></script>
@@ -18420,27 +18424,28 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=346"></script>
 <script src="student-photo-v337.js?v=346"></script>
-<script src="a4-print-v337.js?v=347"></script>
+<script src="a4-print-v337.js?v=348"></script>
 <script src="print-bridge-v337.js?v=344"></script>
 
 <script src="save-stay-v338.js?v=347"></script>
 <link rel="stylesheet" href="admit-layout-v339.css?v=347">
-<script src="admit-layout-v339.js?v=347"></script>
+<script src="admit-layout-v339.js?v=348"></script>
 <link rel="stylesheet" href="document-layout-v341.css?v=345">
 <script src="document-layout-v341.js?v=346"></script>
 <link rel="stylesheet" href="original-dashboard-v342.css?v=344">
 <script src="original-dashboard-v342.js?v=344"></script>
-<link rel="stylesheet" href="paper-center-v343.css?v=343">
-<script src="marksheet-core.js?v=347"></script>
+<link rel="stylesheet" href="paper-center-v343.css?v=350">
+<script src="marksheet-core.js?v=348"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=345"></script>
-<link rel="stylesheet" href="marksheet-core.css?v=347">
+<script src="paper-center-v343.js?v=350"></script>
+<link rel="stylesheet" href="marksheet-core.css?v=348">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
 <script src="documents-v345.js?v=347"></script>
 <script src="teacher-save-v345.js?v=346"></script>
 <script src="paper-import-v345.js?v=345"></script>
-<link rel="stylesheet" href="premium-dashboard-v347.css?v=347">
+<link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=347"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=350"><script src="dashboard-order-v350.js?v=350"></script>
 </body>
 </html>

@@ -2,3 +2,5 @@
 @media(max-width:1050px){.pc343Grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.pc343Filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:12px}.pc343Grid{grid-template-columns:1fr}.pc343Hero{padding:16px}.pc343Dialog{inset:0;width:100%;height:100%;border-radius:0}.pc343DialogHeader{padding:10px}.pc343DialogHeader button{font-size:12px;padding:9px}.pc343DialogHeader h3{font-size:16px}.pc343DialogHeader p{display:none}}
 /* Legacy ERP labels use a serif font; keep Devanagari legible in this workspace. */
 #erp #pc343Center,#erp #pc343Center *,.pc343Dialog,.pc343Dialog *{font-family:u337Text,Arial,sans-serif!important}
+
+.pc350Teacher .pc343DialogHeader h3{font-size:15px;margin-bottom:6px}.pc350Teacher .pc343DialogHeader p{display:none}.pc350Teacher .pc343DialogHeader button{min-height:42px;padding:8px 10px}.pc350Teacher .pc343DialogHeader .pc343Status{font-size:12px}.pc350Teacher .pc343Tools{gap:6px}

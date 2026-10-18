@@ -40,3 +40,17 @@
 #erp#erp #erpContent #r323ControlActions>button>.r347Icon svg{display:block!important;width:22px!important;height:22px!important;max-width:22px!important;color:var(--card)!important}
 #erp#erp #erpContent #r323ControlActions>button>i,#erp#erp #erpContent #r323ControlActions>button>span:not(.r347Icon):not(:has(b)):first-of-type{display:none!important}
 #erp#erp #erpContent #r323ControlActions>button>.r347LegacyIcon{display:none!important}
+
+/* V348: full colour raised surfaces, as requested in the circled reference. */
+#erp#erp #erpContent #r323AdminControl{background:linear-gradient(145deg,#edf6ff,#f6efff)!important;border:1px solid #fff!important;box-shadow:inset 0 1px 0 #fff,0 12px 28px #173e6520!important}
+#erp#erp #erpContent #s336DashboardCard .s336Hero,#erp#erp #erpContent #r323ControlGreeting #v233Greeting{background:linear-gradient(125deg,#173d82,#087e91)!important;color:#fff!important;border:1px solid #82bbdf!important;border-bottom:5px solid #123860!important;box-shadow:inset 0 2px 0 #ffffff45,0 9px 16px #173e6525!important}
+#erp#erp #erpContent #r323ControlGreeting #v233Greeting :is(b,small,p){color:#fff!important}
+#erp#erp #erpContent #r323ControlActions>[data-r347-card=alarm]{--card:#b57013;--shine:#efa72f;--deep:#995409}
+#erp#erp #erpContent #r323ControlActions>[data-r347-card=assign]{--card:#078166;--shine:#12b498;--deep:#055e50}
+#erp#erp #erpContent #r323ControlActions>[data-r347-card=academic]{--card:#713cb2;--shine:#a16bd6;--deep:#502886}
+#erp#erp #erpContent #r323ControlActions>[data-r347-card=paper]{--card:#2057a7;--shine:#2498d6;--deep:#163e80}
+#erp#erp #erpContent #r323ControlActions>button{background:linear-gradient(135deg,var(--shine),var(--card) 80%)!important;color:#fff!important;border:1px solid #ffffff80!important;border-top:1px solid #ffffffb0!important;border-bottom:5px solid var(--deep)!important;box-shadow:inset 0 2px 0 #ffffff40,0 8px 14px #173f5e28!important}
+#erp#erp #erpContent #r323ControlActions>button:hover{box-shadow:inset 0 2px 0 #ffffff50,0 11px 19px #173f5e35!important}
+#erp#erp #erpContent #r323ControlActions>button :is(small,em,span.v264Open){color:#fff!important}
+#erp#erp #erpContent #r323ControlActions>button>.r347Icon{background:#ffffff24!important;color:#fff!important;border-color:#ffffff70!important;box-shadow:inset 0 1px 0 #ffffff50,0 3px 6px #00000015!important}
+#erp#erp #erpContent #r323ControlActions>button>.r347Icon svg{color:#fff!important}
