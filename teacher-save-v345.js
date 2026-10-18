@@ -34,7 +34,7 @@ async function saveStudent(id,source='class'){
   W.ldmMarkDataDirty?.('students');W.dispatchEvent(new CustomEvent('ldmea:student-updated',{detail:{id,requestId:job.p_request}}));
   status('✓ Student Master में बदलाव सुरक्षित सेव हुआ।','ok');W.toast?.('Student updated successfully');
   // Do not rewrite historical admission/fee/result names through a broad propagation RPC.
-  try{if(source==='attendance'&&$('attClass'))await W.loadAttendanceClass?.();else if($('teacherClassSel'))await W.teacherLoadSelectedClass?.()}catch(e){status('✓ सेव हो गया। सूची Refresh करें: '+e.message,'ok')}
+  const route=W.__v90Route,host=$('teacherClassBody')||$('attendanceSheet');Promise.resolve().then(()=>{if(actor()!==who||session()!==sess||route!==W.__v90Route||host&&!host.isConnected)return;if(source==='attendance'&&$('attClass'))return W.loadAttendanceClass?.();if($('teacherClassSel'))return W.teacherLoadSelectedClass?.()}).catch(e=>{if(actor()===who&&session()===sess&&(!host||host.isConnected))status('✓ सेव हो गया। सूची Refresh करें: '+e.message,'ok')});
  }catch(e){
   const definitive=['42501','22023','P0002','40001','PGRST202','42883','23514','22P02'].includes(e.code);
   if(definitive)pending.delete(k);if(actor()===who&&session()===sess){let m=e.message||String(e);

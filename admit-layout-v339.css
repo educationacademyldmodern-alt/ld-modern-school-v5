@@ -9,3 +9,25 @@
 @media print{.v339Page{margin:0!important}.v339UnsafePrint #a337Document{display:none!important}.v345Admit{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
 .v345-compact .v69School span,.v345-compact h2{display:none!important}.v345-compact .v69School strong::after{content:' | ADMIT CARD'}
+
+/* Keep legacy ERP small/div rules out of physical document slots. */
+#erpContent .v345Admit .v345Identity,#a337Document #erpContent .v345Admit .v345Identity{overflow:visible!important;white-space:normal!important;text-overflow:clip!important}
+#erpContent .v345Admit .v345Identity>div,#a337Document #erpContent .v345Admit .v345Identity>div{overflow:visible!important;white-space:normal!important;text-overflow:clip!important}
+#erpContent .v345Admit .v345DocQR small,#a337Document #erpContent .v345Admit .v345DocQR small{display:block!important;margin:0!important;padding:0!important;font:5pt/1.05 u337Text,Arial,sans-serif!important;color:#53616e!important;white-space:normal!important}
+#erpContent .v345Admit .v339Signatures span,#a337Document #erpContent .v345Admit .v339Signatures span{color:#17293d!important;font:6.5pt/1.1 u337Text,Arial,sans-serif!important}
+/* Teal reference: identity panel spans the left, school/timetable on the right. */
+.v347AdmitPhoto{width:16mm;height:20mm;flex-shrink:0;border:.2mm solid #8395a7;background:#f0f4f6;color:#17384e;display:grid;place-content:center;text-align:center;font:6pt/1.2 Arial}
+.v347AdmitPhoto small{font:5pt/1.1 Arial!important}.v347IdentityTitle{font:700 7pt/1.1 Arial!important;text-align:center;margin:0 0 1mm!important;color:white!important}
+.v345-teal .v345Body{flex:1!important}.v345-teal .v69StudentInfo{flex-direction:column!important;align-items:stretch!important;gap:1.3mm!important;border-radius:1mm!important;padding:2mm!important}
+.v345-teal .v345Identity{flex:0 0 auto!important;display:flex!important;gap:1.8mm!important}.v345-teal .v345Identity>div{border-radius:1mm;background:#fff;color:#133e47;padding:1mm;font-size:7.5pt!important;line-height:1.15}
+.v345-teal .v345Identity b{color:#133e47!important}.v345-teal :is(.v345Photo,.v347AdmitPhoto){align-self:center!important;width:19mm!important;height:24mm!important}
+.v345-teal .v345DocQR{align-self:center;margin-top:auto;background:#fff;color:#143b5b!important}.v345-teal .v339Tables{display:flex!important;flex-direction:column!important}
+.v345-teal .v69AdmitHead{min-height:14mm!important;margin-bottom:2mm!important;border-bottom:.2mm solid #176875!important}
+.v345-teal .v69AdmitFoot{min-height:10mm!important}.v345-teal .v345Bottom{min-height:8mm!important}
+.v345-teal .v69School b{font-size:10.5pt!important}.v345-teal .v69School strong{font-size:6.5pt!important}
+.v345-teal .v69TT th{background:#d5ecf0!important}
+#erpContent .v339Page .v339Card,#a337Document #erpContent .v339Page .v339Card{border:.8mm double #173c66!important}
+#erpContent .v339Page .v345-teal,#a337Document #erpContent .v339Page .v345-teal{border:.8mm double #00616d!important;border-radius:2mm!important}
+#erpContent .v339Page .v345-mono,#a337Document #erpContent .v339Page .v345-mono{border-color:#111!important}
+#erpContent .v339Page[data-cards="3"] .v339Card,#a337Document #erpContent .v339Page[data-cards="3"] .v339Card{padding:1.5mm 3mm!important}
+#erpContent .v339Page[data-cards="3"] .v345Admit .v69TT :is(th,td),#a337Document #erpContent .v339Page[data-cards="3"] .v345Admit .v69TT :is(th,td){line-height:1!important}
