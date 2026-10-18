@@ -2504,7 +2504,7 @@ async function findMarkStudent(){
 }
 async function loadMarkStudent(id){
  let {data:s,error}=await sb.from('students').select('*').eq('id',id).single();if(error)return toast(error.message);v14MarkStudent=s;let exam=$('mkExam').value.trim();if(!exam)return toast('Exam Name डालें');
- let [{data:subs},{data:marks}]=await Promise.all([sb.from('exam_subjects').select('*').eq('class_name',s.class_name).eq('exam_name',exam).eq('is_active',true).order('sort_order'),sb.from('student_marks').select('*').eq('admission_no',s.admission_no).eq('exam_name',exam)]);
+ let [{data:subs},{data:marks}]=await Promise.all([sb.from('exam_subjects').select('*').eq('academic_session',school.academic_session).eq('class_name',s.class_name).eq('exam_name',exam).eq('is_active',true).order('sort_order'),sb.from('student_marks').select('*').eq('academic_session',school.academic_session).eq('admission_no',s.admission_no).eq('exam_name',exam)]);
  let mm={};(marks||[]).forEach(x=>mm[x.subject_name]=x);
  $('mkWork').innerHTML=`<h3>${esc(s.student_name)} • Roll ${esc(s.roll_no||'')}</h3><div class="tableWrap"><table><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>Grade</th></tr>${(subs||[]).map((x,i)=>{let m=mm[x.subject_name]||{};return `<tr><td>${esc(x.subject_name)}</td><td><input id="mMax${i}" type="number" value="${Number(m.max_marks||x.max_marks||100)}"></td><td><input id="mGot${i}" type="number" value="${m.obtained_marks==null?'':Number(m.obtained_marks)}"></td><td>${esc(m.grade||'')}</td></tr>`}).join('')}</table></div><div class="v14Tabs"><input id="mkNo" readonly placeholder="Existing legacy number (read-only)" value="${esc((marks||[])[0]?.marksheet_no||'')}"><button class="v14Action primary" onclick='saveMarksheetMarks(${JSON.stringify(subs||[]).replace(/'/g,"&#39;")})'>Save Marks</button><button class="v14Action" onclick="previewMarksheet()">Preview</button><button class="v14Action" onclick="v14Pdf('markPreviewBox','${esc((s.student_name||'student').replace(/[^a-z0-9]/gi,'_'))}-marksheet.pdf')">PDF</button><button class="v14Action" onclick="v14Print('markPreviewBox')">Print</button></div><div id="markPreviewBox"></div>`;
 }
@@ -2516,16 +2516,20 @@ async function saveMarksheetMarks(subs){
 }
 
 async function previewMarksheet(){
- let s=v14MarkStudent;if(!s)return toast('Select student');let exam=$('mkExam').value.trim(),{data:marks,error}=await sb.from('student_marks').select('*').eq('academic_session',school.academic_session).eq('admission_no',s.admission_no).eq('exam_name',exam).order('subject_name');if(error)return toast(error.message);await window.LDM_MARKSHEET.context(s,exam);$('markPreviewBox').innerHTML=renderMarksheetHtml(s,marks||[],exam,$('mkTemplate').value);
+ const s=v14MarkStudent,exam=$('mkExam')?.value.trim(),who=profile?.id,session=school.academic_session,box=$('markPreviewBox');if(!s||!exam||!box)return toast('Select student and exam');const token=window.__m345Preview=(window.__m345Preview||0)+1;
+ try{await window.LDM_DOCUMENTS_V345?.loadSettings();const all=[];for(let off=0;off<100000;off+=500){const r=await sb.from('student_marks').select('*').eq('academic_session',session).eq('admission_no',s.admission_no).order('id').range(off,off+499);if(r.error)throw r.error;all.push(...(r.data||[]));if((r.data||[]).length<500)break;if(off+500>=100000)throw Error('Too many marks rows; narrow the selection')}
+ const context=await window.LDM_MARKSHEET.context(s,exam),options={...window.LDM_DOCUMENTS_V345?.previewOptions(s,exam),context,termMarks:all,termContexts:{}};if($('mkTemplate').value==='termwise')for(const name of options.termNames)options.termContexts[name]=await window.LDM_MARKSHEET.context(s,name);
+ if(token!==window.__m345Preview||who!==profile?.id||session!==school.academic_session||s!==v14MarkStudent||!box.isConnected)return;box.innerHTML=window.LDM_MARKSHEET.render(s,all,exam,$('mkTemplate').value,options);await window.LDM_DOCUMENTS_V345?.hydrate(box);
+ }catch(e){if(box.isConnected&&token===window.__m345Preview)box.textContent=e.message;toast(e.message)}
 }
-function renderMarksheetHtml(s,marks,exam,t){return window.LDM_MARKSHEET.render(s,marks,exam,t)}
+function renderMarksheetHtml(s,marks,exam,t){return window.LDM_MARKSHEET.render(s,marks,exam,t,window.LDM_DOCUMENTS_V345?.previewOptions(s,exam)||{})}
 
 async function manageExamSubjects(){
  let c=$('mkClass').value,exam=$('mkExam').value.trim();if(!c||!exam)return toast('Class और Exam Name चुनें');
  let {data}=await sb.from('exam_subjects').select('*').eq('class_name',c).eq('exam_name',exam).order('sort_order');
  v14Modal(`<h2>Subjects • ${esc(c)} • ${esc(exam)}</h2><div id="subRows">${(data||[]).map(r=>`<div class="v14Search"><input id="sn${r.id}" value="${esc(r.subject_name)}"><input id="sm${r.id}" type="number" value="${Number(r.max_marks||100)}"><button onclick="updateExamSubject('${r.id}')">Save</button><button onclick="deleteExamSubject('${r.id}')">Delete</button></div>`).join('')}</div><hr><div class="v14Search"><input id="newSub" placeholder="New Subject"><input id="newSubMax" type="number" value="100"><button class="v14Action primary" onclick="addExamSubject()">Add Subject</button></div>`);
 }
-async function addExamSubject(){let c=$('mkClass').value,exam=$('mkExam').value.trim(),name=$('newSub').value.trim();if(!name)return;let{error}=await sb.from('exam_subjects').insert({academic_session:'2026-27',class_name:c,exam_name:exam,subject_name:name,max_marks:Number($('newSubMax').value||100),is_active:true});toast(error?error.message:'Subject added');if(!error)manageExamSubjects()}
+async function addExamSubject(){let c=$('mkClass').value,exam=$('mkExam').value.trim(),name=$('newSub').value.trim();if(!name)return;let{error}=await sb.from('exam_subjects').insert({academic_session:school.academic_session,class_name:c,exam_name:exam,subject_name:name,max_marks:Number($('newSubMax').value||100),is_active:true});toast(error?error.message:'Subject added');if(!error)manageExamSubjects()}
 async function updateExamSubject(id){let{error}=await sb.from('exam_subjects').update({subject_name:$('sn'+id).value.trim(),max_marks:Number($('sm'+id).value||100)}).eq('id',id);toast(error?error.message:'Updated')}
 async function deleteExamSubject(id){if(!confirm('Delete subject?'))return;let{error}=await sb.from('exam_subjects').delete().eq('id',id);toast(error?error.message:'Deleted');if(!error)manageExamSubjects()}
 async function generateClassMarksheets(){
@@ -3112,7 +3116,7 @@ function v107DocHeader(title,subTitle,session){
 }
 
 // ---------- 15 actual prepared document designs ----------
-renderMarksheetHtml=function(s,marks,exam,t){return window.LDM_MARKSHEET.render(s,marks,exam,t)};
+renderMarksheetHtml=function(s,marks,exam,t){return window.LDM_MARKSHEET.render(s,marks,exam,t,window.LDM_DOCUMENTS_V345?.previewOptions(s,exam)||{})};
 
 renderIdCard=function(s,t){
   t=Math.max(1,Math.min(10,Number(t||getDocFormat('idcard')||1)));let set=idStudioGetSettings(),photo=s._signed_photo||s.student_photo_url||s.photo_url||'',logo=v107DocLogo(),radius=set.photoShape==='circle'?'50%':set.photoShape==='square'?'0':'12%',addr=school?.address||'';
@@ -3300,7 +3304,7 @@ function v38AddSyllabusRow(){let s=$('smNewSub').value.trim(),t=$('smNewTotal').
 async function saveSyllabusMaster(c){let rows=[...document.querySelectorAll('#smRows .v14Form')].map(r=>({class_name:c,subject:r.querySelector('.smSub').value.trim(),total_lessons:Number(r.querySelector('.smTotal').value||0),academic_session:'2026-27',updated_at:new Date().toISOString()})).filter(x=>x.subject&&x.total_lessons);if(!rows.length)return toast('कम से कम एक subject रखें');let q=await sb.from('syllabus_master').upsert(rows,{onConflict:'academic_session,class_name,subject'});if(q.error)return toast(q.error.message);$('v14Modal')?.remove();toast('Syllabus master saved');loadTeachingMonitor()}
 
 async function teacherEditStudent(id){
-  let s=await teacherAssertStudent(id);if(!s)return;
+  let s=await teacherAssertStudent(id);if(!s)return;window.LDMEA_ROOT?.capture(id,s);
   v14Modal(`<h2>Update Student • ${esc(s.student_name||'')}</h2><p class="v14Muted">Teacher केवल अपनी assigned class के student की basic information update कर सकता है. Class/Admission No. locked है.</p><div class="v14Form"><div><label>Student Name</label><input id="tesName" value="${esc(s.student_name||'')}"></div><div><label>Roll No.</label><input id="tesRoll" value="${esc(s.roll_no||'')}"></div><div><label>Father Name</label><input id="tesFather" value="${esc(s.father_name||'')}"></div><div><label>Mother Name</label><input id="tesMother" value="${esc(s.mother_name||'')}"></div><div><label>Mobile</label><input id="tesPhone" value="${esc(s.phone||'')}"></div><div><label>Class</label><input value="${esc(s.class_name||'')}" readonly></div><div class="full"><label>Address</label><textarea id="tesAddress">${esc(s.address||'')}</textarea></div><div class="full"><button class="v14Action primary" onclick="teacherSaveStudent('${esc(s.id)}')">Save Student Update</button></div></div>`)
 }
 async function teacherSaveStudent(id){let s=await teacherAssertStudent(id);if(!s)return;let o={student_name:$('tesName').value.trim(),roll_no:$('tesRoll').value.trim(),father_name:$('tesFather').value.trim(),mother_name:$('tesMother').value.trim(),phone:$('tesPhone').value.trim(),address:$('tesAddress').value.trim()};let {error}=await sb.from('students').update(o).eq('id',id);if(error)return toast(error.message);try{window.ldmMarkDataDirty?.('students')}catch(_e){}$('v14Modal')?.remove();toast('Student updated');teacherLoadSelectedClass()}
@@ -5891,7 +5895,7 @@ async function v64SubmitNewStudentRequest(){let c=$('attClass')?.value||'',name=
 async function v64RosterRequest(adm,type){let c=$('attClass')?.value||'',target=null,reason='';if(type==='transfer'){target=prompt('Target Class (Nursery/LKG/UKG/1...10)');if(!target)return;reason=prompt('Transfer reason')||''}else{reason=prompt('Remove from class reason')||'';if(!confirm('यह Student Master को अभी delete नहीं करेगा. Admin approval के बाद status/class update होगा. Continue?'))return}let s=attendanceRows.find(x=>x.admission_no===adm)||{};let{error}=await sb.rpc('v64_teacher_submit_roster_request',{p_type:type,p_admission_no:adm,p_class:c,p_target_class:target,p_student_name:s.student_name||null,p_father_name:s.father_name||null,p_phone:null,p_reason:reason});if(error)return toast(error.message);toast('Roster request sent to Admin')}
 
 async function v64AttendanceEditStudent(id){
-  let s=await teacherAssertStudent(id);if(!s)return;
+  let s=await teacherAssertStudent(id);if(!s)return;window.LDMEA_ROOT?.capture(id,s);
   v64Modal(`<h2>✏ Edit Student • Attendance</h2><p><b>${esc(s.student_name||'')}</b> • ${esc(s.admission_no||'')} • Class ${esc(s.class_name||'')}</p><div class="v64Form"><label>Student Name<input id="v64TeName" value="${esc(s.student_name||'')}"></label><label>Roll No.<input id="v64TeRoll" value="${esc(s.roll_no||'')}"></label><label>Father Name<input id="v64TeFather" value="${esc(s.father_name||'')}"></label><label>Mother Name<input id="v64TeMother" value="${esc(s.mother_name||'')}"></label><label>Mobile<input id="v64TePhone" value="${esc(s.phone||'')}"></label><label class="full">Address<textarea id="v64TeAddress">${esc(s.address||'')}</textarea></label></div><button class="primary" onclick="v64SaveTeacherStudent('${id}')">Save & Sync Everywhere</button>`)
 }
 async function v64SaveTeacherStudent(id){
@@ -10385,19 +10389,8 @@ async function v98RepairStorageOnce(){
 }
 /* V185: /api/storage-repair is user-on-demand only; opening ERP never invokes it. */
 
-async function v98TeacherBasicSave(id,source='class'){
-  let s=await teacherAssertStudent(id);if(!s)return;
-  let isAtt=source==='attendance',val=x=>String($(x)?.value||'').trim();
-  let changes=isAtt?{student_name:val('v64TeName'),roll_no:val('v64TeRoll'),father_name:val('v64TeFather'),mother_name:val('v64TeMother'),phone:val('v64TePhone'),address:val('v64TeAddress')}:{student_name:val('tesName'),roll_no:val('tesRoll'),father_name:val('tesFather'),mother_name:val('tesMother'),phone:val('tesPhone'),address:val('tesAddress')};
-  if(!changes.student_name)return v98InlineStatus('Student Name required.','bad');
-  v98InlineStatus('Student data save हो रहा है…','');
-  try{
-    let r=await sb.rpc('v64_teacher_update_student_basic',{p_student_id:id,p_changes:changes});if(r.error)throw r.error;
-    let adm=r.data;if(adm){let q=await sb.rpc('v64_propagate_student_master',{p_admission_no:adm});if(q.error)console.warn('Student propagation warning',q.error.message)}
-    v98InlineStatus('✓ Student data updated & synced. यह basic update किसी Storage bucket को use नहीं करता.','ok');toast('Student updated successfully');
-    try{if(isAtt&&$('attClass'))await loadAttendanceClass();else if($('teacherClassSel'))await teacherLoadSelectedClass()}catch(_e){}
-  }catch(e){let m=e?.message||String(e);v98InlineStatus('Update failed: '+m,'bad');toast(m)}
-}
+async function v98TeacherBasicSave(id,source='class'){return window.LDMEA_ROOT.saveStudent(id,source)}
+
 teacherSaveStudent=async function(id){return v98TeacherBasicSave(id,'class')};
 v64SaveTeacherStudent=async function(id){return v98TeacherBasicSave(id,'attendance')};
 
@@ -18425,19 +18418,25 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=337"></script>
 <script src="student-photo-v337.js?v=344"></script>
-<script src="a4-print-v337.js?v=344"></script>
+<script src="a4-print-v337.js?v=345"></script>
 <script src="print-bridge-v337.js?v=344"></script>
 
 <script src="save-stay-v338.js?v=338"></script>
-<link rel="stylesheet" href="admit-layout-v339.css?v=344">
-<script src="admit-layout-v339.js?v=344"></script>
-<link rel="stylesheet" href="document-layout-v341.css?v=344">
-<script src="document-layout-v341.js?v=344"></script>
+<link rel="stylesheet" href="admit-layout-v339.css?v=345">
+<script src="admit-layout-v339.js?v=345"></script>
+<link rel="stylesheet" href="document-layout-v341.css?v=345">
+<script src="document-layout-v341.js?v=345"></script>
 <link rel="stylesheet" href="original-dashboard-v342.css?v=344">
 <script src="original-dashboard-v342.js?v=344"></script>
 <link rel="stylesheet" href="paper-center-v343.css?v=343">
-<script src="marksheet-core.js?v=344"></script>
+<script src="marksheet-core.js?v=345"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=344"></script>
+<script src="paper-center-v343.js?v=345"></script>
+<link rel="stylesheet" href="marksheet-core.css?v=345">
+<link rel="stylesheet" href="documents-v345.css?v=345">
+<script src="document-qrcode-v345.min.js?v=345"></script>
+<script src="documents-v345.js?v=345"></script>
+<script src="teacher-save-v345.js?v=345"></script>
+<script src="paper-import-v345.js?v=345"></script>
 </body>
 </html>
