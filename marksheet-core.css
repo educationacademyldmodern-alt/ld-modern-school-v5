@@ -64,3 +64,32 @@
 
 #erpContent#erpContent .m345Mark.m345Mark h4{font:700 10pt/1.15 Arial,u337Text!important;padding:1.5mm!important;margin:2mm 0 0!important}#erpContent#erpContent .m345Mark.m345Mark .m345Identity p{text-align:left!important}#erpContent#erpContent .m345Mark.m345Mark .m345NoPhoto{font:8pt/1.15 Georgia,serif!important;color:#777!important}#erpContent#erpContent .m345Mark.m345Mark .m345IssueInfo small{font:6pt/1.1 u337Text,Arial!important;color:#667!important}
 #erpContent#erpContent .m345Mark.m345Mark :is(th,td){font-family:Georgia,'Times New Roman',u337Text,serif!important}#erpContent#erpContent .m345Mark.m345Mark .m345Identity :is(b,span){font:inherit!important;color:inherit!important}#erpContent#erpContent .m345Mark.m345Mark .m345Identity b{display:inline-block!important;min-width:27mm!important}
+
+/* V359: document geometry is identical at mobile, preview and print widths.
+   Website footer media queries must not stack document signatures, and print
+   cloning must retain each ornamental corner's orientation. */
+#erpContent#erpContent .m345Mark.m345Mark .m345Sign,
+#a337Document .m345Mark.m345Mark .m345Sign{
+ flex-direction:row!important;flex-wrap:nowrap!important;gap:6mm!important;
+ justify-content:space-between!important;align-items:flex-end!important;
+}
+#erpContent#erpContent .m345Mark.m345Mark .m345Sign span,
+#a337Document .m345Mark.m345Mark .m345Sign span{
+ display:block!important;flex:1 1 0!important;text-align:center!important;
+ border-top:.2mm solid #657e92!important;
+}
+#erpContent#erpContent .m345Mark.m345Mark.m345-detailed .m345Sign span,
+#a337Document .m345Mark.m345Mark.m345-detailed .m345Sign span{flex:0 1 44%!important}
+#erpContent#erpContent .m345Mark.m345Mark .m347Corner,
+#a337Document .m345Mark.m345Mark .m347Corner{
+ width:9mm!important;height:9mm!important;transform-origin:50% 50%!important;
+ color:var(--m345-accent)!important;
+}
+#erpContent#erpContent .m345Mark.m345Mark .m347Corner0,
+#a337Document .m345Mark.m345Mark .m347Corner0{transform:rotate(0deg)!important}
+#erpContent#erpContent .m345Mark.m345Mark .m347Corner1,
+#a337Document .m345Mark.m345Mark .m347Corner1{transform:rotate(90deg)!important}
+#erpContent#erpContent .m345Mark.m345Mark .m347Corner2,
+#a337Document .m345Mark.m345Mark .m347Corner2{transform:rotate(180deg)!important}
+#erpContent#erpContent .m345Mark.m345Mark .m347Corner3,
+#a337Document .m345Mark.m345Mark .m347Corner3{transform:rotate(270deg)!important}
