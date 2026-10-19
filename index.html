@@ -18367,6 +18367,10 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop{display:flex!important;flex
 body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-width:0}
 @media(max-width:680px){body:has(#erpContent .ldmRootAdminDash) #erp .erpTop{padding:10px!important;gap:7px!important}body:has(#erpContent .ldmRootAdminDash) #ldmV281Refresh{font-size:12px!important;min-height:38px!important;padding:8px 11px!important}body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium{min-width:0!important}}
 @media(prefers-reduced-motion:reduce){body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Monitor{transition:none!important}}
+/* V363: Teacher refresh participates in header flow, never overlays Home/Back. */
+#erp .erpTop.ldmTeacherRefreshHeader>#ldmV281Refresh{position:static!important;inset:auto!important;z-index:auto!important;margin:0!important;grid-column:1 / -1!important;justify-self:end!important;order:100!important;flex:0 1 auto!important;width:auto!important;max-width:100%!important;min-height:44px!important;white-space:nowrap!important;font-size:13px!important;padding:10px 14px!important;box-sizing:border-box!important}
+#erp .erpTop.ldmTeacherRefreshHeader{flex-wrap:wrap!important;gap:8px!important}
+@media(max-width:630px){#erp .erpTop.ldmTeacherRefreshHeader>#ldmV281Refresh{flex:0 1 auto!important;min-width:140px!important}}
 </style>
 <script id="ldm-v289-admin-refresh-header">
 (function(){'use strict';
@@ -18376,7 +18380,9 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
  const getHeader=()=>document.querySelector('#erp .erpTop');
  function sync(){const b=getButton(),h=getHeader();if(!b||!h)return;
    const admin=!!document.querySelector('#erp.ldmAdminCanonical:not(.hidden) .erpTop');
-   if(admin){if(b.parentElement!==h)h.appendChild(b)}
+   const teacher=String((typeof profile!=='undefined'?profile:window.profile)?.role||'').toLowerCase()==='teacher'&&!document.getElementById('erp')?.classList.contains('hidden');
+   h.classList.toggle('ldmTeacherRefreshHeader',teacher);
+   if(admin||teacher){if(b.parentElement!==h)h.appendChild(b)}
    else if(b.parentElement!==document.body)document.body.appendChild(b);
  }
  document.addEventListener('click',()=>queueMicrotask(sync),true);
@@ -18440,7 +18446,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="paper-center-v343.css?v=358">
 <script src="marksheet-core.js?v=359"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=362"></script>
+<script src="paper-center-v343.js?v=363"></script>
 <link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=362"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=359">
 <link rel="stylesheet" href="documents-v345.css?v=345">
