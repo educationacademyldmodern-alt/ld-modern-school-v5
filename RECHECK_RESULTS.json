@@ -1,0 +1,169 @@
+{
+  "auto_workflow": {
+    "blank50_70_100Generated": true,
+    "existing32QuestionsPreserved": true,
+    "automaticTotals50_70_100": true,
+    "addDeleteRebalance": true,
+    "sequentialNumbering": true,
+    "manualModeAvailable": true,
+    "manualMismatchBlocked": true,
+    "automatic100MarksSent": true,
+    "adminInboxConfirmed": true,
+    "errors": []
+  },
+  "allocation": {
+    "cases": 104,
+    "upTo2000Questions": true,
+    "max20Sections": true,
+    "questionOrderAndAnswersPreserved": true,
+    "exactTotalWithinServerTolerance": true,
+    "errors": []
+  },
+  "refresh_login": {
+    "refreshWithOpenPaperPreservesTyping": true,
+    "refreshWithOpaqueFrameSafe": true,
+    "refreshAfterCloseSafe": true,
+    "refreshLayout": {
+      "inHeader": true,
+      "position": "static",
+      "width": 140,
+      "peers": [
+        {
+          "id": "",
+          "cls": "hamb",
+          "rect": {
+            "x": 5,
+            "y": 85.140625,
+            "width": 121.328125,
+            "height": 38,
+            "top": 85.140625,
+            "right": 126.328125,
+            "bottom": 123.140625,
+            "left": 5
+          },
+          "position": "relative"
+        },
+        {
+          "id": "",
+          "cls": "ldmTeacherSchoolIdentity",
+          "rect": {
+            "x": 5,
+            "y": 5,
+            "width": 380,
+            "height": 64.140625,
+            "top": 5,
+            "right": 385,
+            "bottom": 69.140625,
+            "left": 5
+          },
+          "position": "static"
+        },
+        {
+          "id": "v63AdminBox",
+          "cls": "v63AdminBox",
+          "rect": {
+            "x": 158.65625,
+            "y": 77.140625,
+            "width": 97,
+            "height": 54,
+            "top": 77.140625,
+            "right": 255.65625,
+            "bottom": 131.140625,
+            "left": 158.65625
+          },
+          "position": "static"
+        },
+        {
+          "id": "",
+          "cls": "websiteBtn",
+          "rect": {
+            "x": 263.65625,
+            "y": 85.140625,
+            "width": 121.34375,
+            "height": 38,
+            "top": 85.140625,
+            "right": 385,
+            "bottom": 123.140625,
+            "left": 263.65625
+          },
+          "position": "relative"
+        },
+        {
+          "id": "v90BackBtn",
+          "cls": "v90TopBtn",
+          "rect": {
+            "x": 5,
+            "y": 139.140625,
+            "width": 121.328125,
+            "height": 38,
+            "top": 139.140625,
+            "right": 126.328125,
+            "bottom": 177.140625,
+            "left": 5
+          },
+          "position": "relative"
+        },
+        {
+          "id": "v90HomeBtn",
+          "cls": "v90TopBtn",
+          "rect": {
+            "x": 134.328125,
+            "y": 139.140625,
+            "width": 121.328125,
+            "height": 38,
+            "top": 139.140625,
+            "right": 255.65625,
+            "bottom": 177.140625,
+            "left": 134.328125
+          },
+          "position": "relative"
+        },
+        {
+          "id": "v54ChangePass",
+          "cls": "secondary",
+          "rect": {
+            "x": 263.65625,
+            "y": 139.484375,
+            "width": 121.34375,
+            "height": 37.3125,
+            "top": 139.484375,
+            "right": 385,
+            "bottom": 176.796875,
+            "left": 263.65625
+          },
+          "position": "static"
+        }
+      ],
+      "rect": {
+        "x": 245,
+        "y": 185.140625,
+        "width": 140,
+        "height": 44,
+        "top": 185.140625,
+        "right": 385,
+        "bottom": 229.140625,
+        "left": 245
+      },
+      "overlap": false
+    },
+    "count": {
+      "signins": 1,
+      "renders": 1,
+      "header": 1
+    },
+    "idle": {
+      "reads": 0,
+      "mutations": 0,
+      "renders": 4,
+      "identity": 1,
+      "blank": false,
+      "overflow": false
+    },
+    "restored": {
+      "renders": 1,
+      "identity": 1,
+      "visible": true
+    },
+    "errors": []
+  }
+}

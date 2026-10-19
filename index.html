@@ -18248,6 +18248,7 @@ body:has(#erp:not(.hidden)) #ldmV281Refresh,body:has(#parentPortal:not(.hidden) 
  function snapshotSearch(){const m={};for(const id of storedSearchIds){const el=q(id);if(el&&'value'in el)m[id]=el.value}return m}
  function restoreSearch(m){for(const [id,v] of Object.entries(m)){const el=q(id);if(el&&'value'in el){el.value=v;if(id==='v150SMQ'||id==='v150SMClass')window.v150RenderStudents?.()}}}
  async function refresh(){const b=q('ldmV281Refresh');if(refreshBusy||!allowed()||!b)return;
+   if(window.LDM_PAPER_V343?.hasEditor?.()){notify('पेपर खुला है। पहले Save draft करें और Close करें; फिर Refresh करें।');return;}
    const erp=q('erp');const erpVisible=!!(erp&&!erp.classList.contains('hidden'));
    const parentVisible=!erpVisible&&!!(q('parentPortal')&&!q('parentPortal').classList.contains('hidden')&&q('parentDashboard')&&!q('parentDashboard').classList.contains('hidden'));
    if(!erpVisible&&!parentVisible)return;
@@ -18446,7 +18447,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="paper-center-v343.css?v=358">
 <script src="marksheet-core.js?v=359"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=363"></script>
+<script src="paper-center-v343.js?v=366"></script>
 <link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=362"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=359">
 <link rel="stylesheet" href="documents-v345.css?v=345">
