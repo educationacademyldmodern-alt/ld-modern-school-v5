@@ -15,5 +15,7 @@ for(const name of ['v90Back','v90GoHome','erpGoHome']){const base=W[name];if(typ
 // Legacy toolbar handlers may retain a previous function reference; guard before they mutate history.
 D.addEventListener('click',e=>{if(!e.target.closest?.('#v90BackBtn,#v90HomeBtn,#erpNav button,.erpHomeBtn'))return;if(!canNavigate()){e.preventDefault();e.stopImmediatePropagation();blocked()}},true);
 W.addEventListener('beforeunload',e=>{if([...writes.values()].some(w=>w.owner===owner())){e.preventDefault();e.returnValue=''}});
+const teacherLogin=W.teacherPasswordLogin;let loginFlight=null;
+if(typeof teacherLogin==='function'){W.teacherPasswordLogin=function(...args){if(loginFlight)return loginFlight;W.__ldmInteractiveLogin=true;loginFlight=Promise.resolve().then(()=>teacherLogin.apply(this,args)).finally(()=>{W.__ldmInteractiveLogin=false;loginFlight=null});return loginFlight};try{teacherPasswordLogin=W.teacherPasswordLogin}catch(_){}}
 W.LDM_RUNTIME_V347={canNavigate,beginWrite,endWrite,activeWrites:()=>[...writes.values()].filter(w=>w.owner===owner()).length};W.LDM_FINAL_BUILD='V356-QUIET-ERP-DOCUMENTS';
 })();

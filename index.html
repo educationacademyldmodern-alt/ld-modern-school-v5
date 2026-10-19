@@ -10573,12 +10573,10 @@ async function v100RestoreSession(){
    return false;
  }finally{window.__v100ResumeBusy=false}
 }
-function v100ScheduleRestore(){setTimeout(v100RestoreSession,650)}
-document.addEventListener('DOMContentLoaded',v100ScheduleRestore);
-window.addEventListener('load',()=>setTimeout(v100RestoreSession,950));
+/* V361: startup restore is owned by the canonical restore below. */
 /* V185: no automatic reconnect session query. */
 /* Keep local UI state synced with Supabase token refresh without redirecting or logging out. */
-setTimeout(()=>{try{sb?.auth?.onAuthStateChange?.((event,session)=>{if(event==='SIGNED_OUT'){window.__v100ResumeDone=false;user=null;profile=null}if((event==='TOKEN_REFRESHED'||event==='SIGNED_IN'||event==='INITIAL_SESSION')&&session?.user&&!window.__v100ResumeDone)setTimeout(v100RestoreSession,120)})}catch(_e){}},700);
+setTimeout(()=>{try{sb?.auth?.onAuthStateChange?.((event,session)=>{if(event==='SIGNED_OUT'){window.__v100ResumeDone=false;user=null;profile=null}/* V361: auth token events never rerender the active ERP. */})}catch(_e){}},700);
 </script>
 
 <style id="v102-gate-pass-style">
@@ -12171,7 +12169,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    catch(e){console.error('V114.6 Teacher route failed',route,e);window.toast?.('Teacher module error: '+(e?.message||String(e)));return teacherHome()}
  };
  const baseOpen=window.openERP;
- if(typeof baseOpen==='function')window.openERP=async function(){const t=isTeacher(),host=$id('erpContent');if(t&&host)host.style.visibility='hidden';try{const r=await baseOpen.apply(this,arguments);if(t){try{await refresh(true)}catch(e){window.toast?.(e?.message||String(e))}try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){}applyPermissionUI();await teacherHome()}return r}finally{if(t&&host)host.style.visibility=''}};
+ if(typeof baseOpen==='function')window.openERP=async function(){const t=isTeacher(),host=$id('erpContent');if(t&&host)host.style.visibility='hidden';try{const r=await baseOpen.apply(this,arguments);if(t){try{await refresh(true)}catch(e){window.toast?.(e?.message||String(e))}try{$id('publicPageView')?.classList.add('hidden');$id('publicSite')?.classList.add('hidden');$id('parentDashboard')?.classList.add('hidden');$id('erp')?.classList.remove('hidden')}catch(_e){}applyPermissionUI();if(!$id('erpContent')?.querySelector('.ldmNewTeacher'))await teacherHome()}return r}finally{if(t&&host)host.style.visibility=''}};
  /* Filter Teacher sidebar at construction time, not by a permanent DOM observer. */
  try{const baseBuild=window.v90BuildNav;if(typeof baseBuild==='function')window.v90BuildNav=function(active){const r=baseBuild.apply(this,arguments);if(isTeacher())setTimeout(applyPermissionUI,0);return r}}catch(_e){}
  window.addEventListener('load',()=>setTimeout(applyPermissionUI,400),{once:true,passive:true});
@@ -12541,10 +12539,10 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
  function teacherShell(){
    $('erp')?.classList.toggle('ldmTeacherCanonical',teacher());if(!teacher())return;
    const top=document.querySelector('#erp .erpTop');if(!top)return;
-   top.querySelectorAll('#v63SchoolHead,.v6412SchoolIdentity,.v6415School,#v97TopIdentity,.ldmTeacherSchoolIdentity').forEach(x=>x.remove());
-   const d=document.createElement('div');d.className='ldmTeacherSchoolIdentity';d.innerHTML='<b>L D MODERN EDUCATION ACADEMY</b><small>Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar</small>';const title=top.querySelector('#erpTitle')?.parentElement;if(title)title.style.display='none';top.insertBefore(d,title||top.firstChild);
+   top.querySelectorAll('#v63SchoolHead,.v6412SchoolIdentity,.v6415School,#v97TopIdentity').forEach(x=>x.remove());
+   let d=top.querySelector('.ldmTeacherSchoolIdentity');const title=top.querySelector('#erpTitle')?.parentElement;if(title&&title.style.display!=='none')title.style.display='none';if(!d){d=document.createElement('div');d.className='ldmTeacherSchoolIdentity';d.innerHTML='<b>L D MODERN EDUCATION ACADEMY</b><small>Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar</small>';top.insertBefore(d,title||top.firstChild)}
    const unique=sel=>{let a=[...top.querySelectorAll(sel)];a.slice(1).forEach(x=>x.remove())};unique('#v90BackBtn');unique('#v90HomeBtn');
-   $('v6418WebsiteBtn')?.remove();let ws=[...top.querySelectorAll('.websiteBtn')];ws.slice(1).forEach(x=>x.remove());if(ws[0]){ws[0].style.display='inline-flex';ws[0].textContent='🌐 Website';ws[0].onclick=()=>window.backWebsite?.()}
+   $('v6418WebsiteBtn')?.remove();let ws=[...top.querySelectorAll('.websiteBtn')];ws.slice(1).forEach(x=>x.remove());if(ws[0]){ws[0].style.display='inline-flex';if(ws[0].textContent!=='🌐 Website')ws[0].textContent='🌐 Website';ws[0].onclick=()=>window.backWebsite?.()}
  }
  const newDash0=window.ldmNewTeacherDashboard;
  if(typeof newDash0==='function')window.ldmNewTeacherDashboard=async function(){surface('erp');let r=await newDash0.apply(this,arguments);teacherShell();return r};
@@ -13235,6 +13233,7 @@ function capture(v){
 
 /* FINAL REFRESH RESTORE — same authenticated role + same internal module */
 async function restore(){
+  if(window.__ldmInteractiveLogin)return;
   try{
     if(!window.sb && typeof window.init==='function'){
       await window.init();
@@ -13248,6 +13247,8 @@ async function restore(){
       return;
     }
 
+    if(window.__ldmInteractiveLogin)return;
+    if(window.user?.id===session.user.id&&window.profile&&document.querySelector('#erp:not(.hidden) #erpContent .ldmNewTeacher'))return;
     window.user=session.user;
 
     if(typeof window.loadProfile==='function'){
@@ -13267,7 +13268,6 @@ async function restore(){
 
     /* Admin / Teacher remain inside ERP */
     if(teacher() || admin()){
-      surface('erp');
 
       if(
         teacher() &&
@@ -13275,6 +13275,8 @@ async function restore(){
       ){
         await window.ldmTeacherMasterContext();
       }
+      if(window.__ldmInteractiveLogin)return;
+      surface('erp');
 
       let route='dashboard';
 
@@ -18438,8 +18440,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="paper-center-v343.css?v=358">
 <script src="marksheet-core.js?v=359"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=360"></script>
-<link rel="stylesheet" href="paper-smart-v358.css?v=358"><script src="paper-smart-v358.js?v=360"></script>
+<script src="paper-center-v343.js?v=361"></script>
+<link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=361"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=359">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
@@ -18447,7 +18449,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="teacher-save-v345.js?v=346"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=356"></script>
+<script src="runtime-v347.js?v=361"></script>
 <link rel="stylesheet" href="dashboard-order-v350.css?v=356"><script src="dashboard-order-v350.js?v=356"></script>
 </body>
 </html>
