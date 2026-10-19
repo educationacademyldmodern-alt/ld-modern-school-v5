@@ -1,0 +1,20 @@
+{
+  "checks_passed": [
+    "Initial inbox: 1 sent paper and teacher card, single list RPC",
+    "Repeated list updates keep the verified board visible",
+    "Home and reopen show sent papers automatically",
+    "Refresh keeps paper visible",
+    "Full status refresh then list refresh does not erase summary",
+    "Network failure retains prior rows and explicit error",
+    "Invalid count is rejected without showing a false zero",
+    "All-session filters work",
+    "Late old search cannot replace newer result",
+    "8000 papers: one paged read, exact total and explicit partial teacher count",
+    "Pagination shows next page and maintains total",
+    "Teacher card applies existing teacher filter",
+    "Account switch clears old teacher cards during load",
+    "Teacher assigned-subject draft workflow still reads own central paper"
+  ],
+  "live_database_tested": false,
+  "database_changed": false
+}

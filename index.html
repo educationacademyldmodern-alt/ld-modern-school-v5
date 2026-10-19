@@ -1076,12 +1076,26 @@ function publicModule(k){
 }
 
 function init(){
+ // Never initialize a browser client using a privileged backend key.
+ const browserKey=String(cfg?.key||'');
+ let browserRole='';
+ if(browserKey.split('.').length===3){
+  try{const part=browserKey.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');browserRole=String(JSON.parse(atob(part)).role||'').toLowerCase()}catch(_e){}
+ }
+ if(browserKey.startsWith('sb_secret_')||browserRole==='service_role')throw new Error('Security block: backend secret/service_role key must not be used in a browser.');
  sb=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  try{
   const h=String(location.hostname||'').toLowerCase(),official=new Set(['myldm.com','www.myldm.com','ld-modern-school-v5.vercel.app','localhost','127.0.0.1']),preview=h.endsWith('.vercel.app')&&!official.has(h);
-  window.LDM_SECURITY=Object.freeze({currentHost:h,isOfficial:official.has(h),isVercelPreview:preview,realPasswordAllowed:!preview});
-  if(preview&&sb?.auth?.signInWithPassword&&!sb.auth.__ldmPreviewGuard){
-   sb.auth.signInWithPassword=async function(){return {data:{user:null,session:null},error:new Error('Security lock: Preview Vercel URL पर real password login बंद है. Official Production domain खोलें.')}};
+  const local=h==='localhost'||h==='127.0.0.1';
+  const trusted=official.has(h)&&(location.protocol==='https:'||local);
+  window.LDM_SECURITY=Object.freeze({currentHost:h,isOfficial:official.has(h),isVercelPreview:preview,realPasswordAllowed:trusted});
+  if(!trusted&&sb?.auth&&!sb.auth.__ldmPreviewGuard){
+   // Convenience protection against accidental credential use on copied sites.
+   // Database authorization must still be enforced by server-side RLS.
+   const denied=async function(){return {data:{user:null,session:null},error:new Error('Security lock: इस domain पर account login/change बंद है. Official HTTPS school website खोलें.')}};
+   for(const method of ['signInWithPassword','signInWithOtp','signUp','updateUser','resetPasswordForEmail','signInWithOAuth','signInWithIdToken','verifyOtp']){
+    if(typeof sb.auth[method]==='function')sb.auth[method]=denied;
+   }
    sb.auth.__ldmPreviewGuard=true;
   }
  }catch(_e){}
@@ -18447,8 +18461,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="paper-center-v343.css?v=371">
 <script src="marksheet-core.js?v=359"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=373"></script>
-<link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=373"></script>
+<script src="paper-center-v343.js?v=375"></script>
+<link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=375"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=359">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
@@ -18458,5 +18472,6 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=371"></script>
 <link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=356"></script>
+<link rel="stylesheet" href="dashboard-parent-style-v374.css?v=374">
 </body>
 </html>
