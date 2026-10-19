@@ -1,0 +1,1 @@
+7 root web files + complete paper-import-v369-assets folder: upload to your existing repository root. No new SQL. Includes Import and V370 black/white, Cambria font controls, 1.0 line spacing, matching and continuation fixes. Cambria must be installed on device or upload your licensed font file through Paper font controls. This ZIP replaces the previous broken download.
