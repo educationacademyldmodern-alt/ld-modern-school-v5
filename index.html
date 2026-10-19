@@ -12257,7 +12257,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  try{let h=JSON.parse(sessionStorage.getItem('ldm_nav_history')||'[]');if(Array.isArray(h)&&h.length)window.__v90History=h}catch(_e){}
  window.ldmNewTeacherDashboard=async function(){
    if(!isTeacher())return;let ctx=window.ldmTeacherContext;try{if(!ctx)ctx=await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}
-   window.__v90Route='dashboard';if(typeof v90Head==='function')v90Head('Teacher Dashboard','Teacher Access • Teacher Master controlled');
+   window.__v90Route='dashboard';if(typeof v90Head==='function')v90Head('Teacher Dashboard','Teacher Access • Teacher Master controlled');if(typeof v90InstallShell==='function')v90InstallShell('dashboard');
    const t=ctx.teacher||{},allClasses=(ctx.classes||[]).map(x=>x.class_name).filter(Boolean),classes=(typeof v103ClassTeacherClasses==='function'?v103ClassTeacherClasses():[]),subjects=(ctx.subjects||[]).map(x=>x.subject_name||x.subject).filter(Boolean),host=document.getElementById('erpContent');if(!host)return;
    host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero"><small>NEW TEACHER ACCESS</small><h1>${typeof v90Safe==='function'?v90Safe(t.teacher_name||profile?.full_name||'Teacher'):(t.teacher_name||'Teacher')}</h1><p>Teacher Master से verified Active account</p></section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📷','QR Attendance Scanner','Scan My Class QR → Present','v143_teacher_qr_attendance'],['📋','Master Attendance','Own class status','master_attendance'],['📷','Student Photo','Camera / upload','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['📊','My Teaching Performance','Graph • Copy Check • Bell Test','academic_monitor'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','Assigned subject','exams'],['💰','Fee Status','My assigned class • Read only','fees'],['📋','Admin Assigned Work','Responsibilities / Assistant work','assigned_work'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
    host.querySelectorAll('[data-new-teacher-route]').forEach(b=>b.onclick=async()=>{let r=b.dataset.newTeacherRoute;if(r==='__logout'){try{await sb.auth.signOut()}catch(_e){};location.reload();return}try{await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}if(typeof render==='function')return render(r)});try{scrollTo(0,0)}catch(_e){}
@@ -18415,7 +18415,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="smart-work-v333.js?v=351"></script>
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
-<script src="resources-v334.js?v=356"></script>
+<script src="resources-v334.js?v=371"></script>
 <script src="controls-v323.js?v=356"></script>
 <style id="v325BannerFit">
 /* Match the whole banner to its natural ratio on phones; fill the desktop hero. */
@@ -18444,10 +18444,10 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="document-layout-v341.js?v=356"></script>
 <link rel="stylesheet" href="original-dashboard-v342.css?v=344">
 <script src="original-dashboard-v342.js?v=344"></script>
-<link rel="stylesheet" href="paper-center-v343.css?v=358">
+<link rel="stylesheet" href="paper-center-v343.css?v=371">
 <script src="marksheet-core.js?v=359"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=370"></script>
+<script src="paper-center-v343.js?v=372"></script>
 <link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=362"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=359">
 <link rel="stylesheet" href="documents-v345.css?v=345">
@@ -18456,7 +18456,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="teacher-save-v345.js?v=346"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=362"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=362"><script src="dashboard-order-v350.js?v=356"></script>
+<script src="runtime-v347.js?v=371"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=356"></script>
 </body>
 </html>

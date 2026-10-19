@@ -1,0 +1,1763 @@
+{
+  "v372-final-code-results.json": {
+    "syntaxScriptsChecked": 147,
+    "pdf125QuestionsExactlyOnce": true,
+    "pdfSchoolNameOnlyOnce": true,
+    "pdfPages": 3,
+    "errors": []
+  },
+  "v372-central-workflow-results.json": {
+    "singleSection125SubmittedInPostgres": true,
+    "idempotentRetryPreserved": true,
+    "sqlReapplyPreservesRecords": true,
+    "capacity248QuestionsSavedAndSent": true,
+    "moreThan20SectionsSaved": true,
+    "addPast100ViaBlankAndComposer": true,
+    "bulk125QuestionsAdded": true,
+    "deleteUndoAndAnswersPreserved": true,
+    "fractionalAutoMarksExact": true,
+    "preview248QuestionsOnce": true,
+    "sqlReRunSafe": true,
+    "adminReformattedExistingSentPaper": true,
+    "sameRecordNoDuplicate": true,
+    "teacherOwnerPreserved": true,
+    "adminAuditCorrect": true,
+    "importedQuestionsAndSourceSaved": true,
+    "customFontCentrallySaved": true,
+    "statusRemainsSubmitted": true,
+    "errors": []
+  },
+  "v372-question-edit-results.json": {
+    "cases": [
+      {
+        "width": 390,
+        "deleteMiddleAndAll": true,
+        "undoKeepsNewEdits": true,
+        "positionalAnswers": true,
+        "reorder": true,
+        "reAddAfterEmpty": true,
+        "mcqAndMatching": true,
+        "sectionUndo": true,
+        "blank111Generated": true,
+        "oversizeAllocationBlockedWithoutDataLoss": true
+      },
+      {
+        "width": 1366,
+        "deleteMiddleAndAll": true,
+        "undoKeepsNewEdits": true,
+        "positionalAnswers": true,
+        "reorder": true,
+        "reAddAfterEmpty": true,
+        "mcqAndMatching": true,
+        "sectionUndo": true,
+        "blank111Generated": true,
+        "oversizeAllocationBlockedWithoutDataLoss": true
+      }
+    ],
+    "errors": []
+  },
+  "v372-allocation-results.json": {
+    "cases": 118,
+    "upTo2501Questions": true,
+    "no20SectionCap": true,
+    "questionOrderAndAnswersPreserved": true,
+    "exactTotalWithinServerTolerance": true,
+    "errors": []
+  },
+  "v372-import-results.json": {
+    "import125InOneSection": true,
+    "import25Sections": true,
+    "existingContentPreserved": true,
+    "dirtyRevisionRetained": true,
+    "reviewRequired": true,
+    "importUndo": true,
+    "inertHTML": true,
+    "word": true,
+    "textPDF": true,
+    "scanNeedsOCR": true,
+    "admin": true,
+    "hindi": true,
+    "numberedDocxOptions": true,
+    "oversizeClearsCandidate": true,
+    "malformedFilePreservesPaper": true,
+    "missingPdfAssetHasClearMessage": true,
+    "errors": []
+  },
+  "v372-twenty-year-results.json": {
+    "studio": {
+      "years": 20,
+      "classes": 3,
+      "terms": 4,
+      "subjects": 6,
+      "forms": 3,
+      "papers": 4320,
+      "firstPageOnly": true
+    },
+    "bank": {
+      "papers": 1200,
+      "years": 20,
+      "classes": 3,
+      "terms": 4,
+      "subjects": 5,
+      "headerBlocksOnce": true
+    },
+    "geometry": [
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 0,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 0,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 0,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 0,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 0,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 1,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 1,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 1,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 1,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 1,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 2,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 2,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 2,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 2,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 0,
+        "grade": 2,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 0,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 0,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 0,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 0,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 0,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 1,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 1,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 1,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 1,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 1,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 2,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 2,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 2,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 2,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 0,
+        "exam": 3,
+        "grade": 2,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 0,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 0,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 0,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 0,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 0,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 1,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 1,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 1,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 1,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 1,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 2,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 2,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 2,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 2,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 0,
+        "grade": 2,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 0,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 0,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 0,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 0,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 0,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 1,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 1,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 1,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 1,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 1,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 2,
+        "subject": 0,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 2,
+        "subject": 1,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 2,
+        "subject": 2,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 2,
+        "subject": 3,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 10
+      },
+      {
+        "year": 19,
+        "exam": 3,
+        "grade": 2,
+        "subject": 4,
+        "pages": 2,
+        "headers": [
+          1,
+          0
+        ],
+        "questions": 2
+      }
+    ],
+    "errors": []
+  },
+  "v371-admin-layout-results.json": {
+    "desktopChecks": [
+      {
+        "width": 1024,
+        "columns": 2,
+        "cards": [
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          }
+        ]
+      },
+      {
+        "width": 1366,
+        "columns": 3,
+        "cards": [
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          }
+        ]
+      },
+      {
+        "width": 1920,
+        "columns": 3,
+        "cards": [
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          },
+          {
+            "height": 142,
+            "label": 18,
+            "value": 32
+          }
+        ]
+      }
+    ],
+    "mobile": {
+      "overflow": false,
+      "cols": 2
+    },
+    "errors": [],
+    "icons": [
+      {
+        "bg": "rgb(255, 255, 255)",
+        "stroke": "rgb(18, 61, 99)",
+        "width": 30,
+        "opacity": "1"
+      },
+      {
+        "bg": "rgb(255, 255, 255)",
+        "stroke": "rgb(18, 61, 99)",
+        "width": 30,
+        "opacity": "1"
+      },
+      {
+        "bg": "rgb(255, 255, 255)",
+        "stroke": "rgb(18, 61, 99)",
+        "width": 30,
+        "opacity": "1"
+      },
+      {
+        "bg": "rgb(255, 255, 255)",
+        "stroke": "rgb(18, 61, 99)",
+        "width": 30,
+        "opacity": "1"
+      }
+    ],
+    "state": {
+      "mutations": 0,
+      "reads": 13,
+      "route": "dashboard",
+      "cards": 1
+    },
+    "idleReads": 0,
+    "routes": [
+      {
+        "route": "marksheet_center",
+        "formats": [
+          "classic",
+          "blue",
+          "maroon",
+          "official",
+          "termwise",
+          "detailed"
+        ],
+        "fontControl": false
+      },
+      {
+        "route": "exam_admit_center",
+        "formats": [],
+        "fontControl": true
+      },
+      {
+        "route": "exam_admit_center",
+        "formats": [],
+        "fontControl": false
+      },
+      {
+        "route": "teacher_paper_center",
+        "formats": [],
+        "fontControl": false
+      }
+    ],
+    "resource": {
+      "inline": true,
+      "extraPages": 0
+    }
+  },
+  "v371-teacher-nav-results.json": {
+    "navBefore": {
+      "count": 24,
+      "home": true,
+      "attendance": true
+    },
+    "count": {
+      "signins": 1,
+      "renders": 1,
+      "header": 1
+    },
+    "idle": {
+      "reads": 0,
+      "mutations": 0,
+      "renders": 4,
+      "identity": 1,
+      "blank": false,
+      "overflow": false
+    },
+    "restored": {
+      "renders": 1,
+      "identity": 1,
+      "visible": true
+    },
+    "errors": []
+  },
+  "v371-studio-results.json": {
+    "results": [
+      {
+        "grade": "Nursery",
+        "subject": "Hindi",
+        "headers": 1,
+        "meta": 1,
+        "questions": 5,
+        "expected": 5,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "Nursery",
+        "subject": "English",
+        "headers": 1,
+        "meta": 1,
+        "questions": 5,
+        "expected": 5,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "Nursery",
+        "subject": "Maths",
+        "headers": 1,
+        "meta": 1,
+        "questions": 5,
+        "expected": 5,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "Nursery",
+        "subject": "EVS",
+        "headers": 1,
+        "meta": 1,
+        "questions": 5,
+        "expected": 5,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "LKG",
+        "subject": "Hindi",
+        "headers": 1,
+        "meta": 1,
+        "questions": 10,
+        "expected": 10,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "LKG",
+        "subject": "English",
+        "headers": 1,
+        "meta": 1,
+        "questions": 10,
+        "expected": 10,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "LKG",
+        "subject": "Maths",
+        "headers": 1,
+        "meta": 1,
+        "questions": 10,
+        "expected": 10,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "LKG",
+        "subject": "EVS",
+        "headers": 1,
+        "meta": 1,
+        "questions": 10,
+        "expected": 10,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "UKG",
+        "subject": "Hindi",
+        "headers": 1,
+        "meta": 1,
+        "questions": 10,
+        "expected": 10,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "UKG",
+        "subject": "English",
+        "headers": 1,
+        "meta": 1,
+        "questions": 10,
+        "expected": 10,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "UKG",
+        "subject": "Maths",
+        "headers": 1,
+        "meta": 1,
+        "questions": 10,
+        "expected": 10,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "UKG",
+        "subject": "EVS",
+        "headers": 1,
+        "meta": 1,
+        "questions": 10,
+        "expected": 10,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "5",
+        "subject": "gk",
+        "headers": 1,
+        "meta": 1,
+        "questions": 1,
+        "expected": 1,
+        "secondStartsWithQuestion": true
+      },
+      {
+        "grade": "5",
+        "subject": "art",
+        "headers": 1,
+        "meta": 1,
+        "questions": 1,
+        "expected": 1,
+        "secondStartsWithQuestion": true
+      }
+    ],
+    "oldSnapshot": {
+      "header": 1,
+      "drawings": 1,
+      "questions": 2
+    },
+    "printGeometry": [
+      {
+        "questions": 3,
+        "overlap": false,
+        "footerOverlap": false
+      },
+      {
+        "questions": 4,
+        "overlap": false,
+        "footerOverlap": false
+      },
+      {
+        "questions": 3,
+        "overlap": false,
+        "footerOverlap": false
+      }
+    ],
+    "errors": []
+  },
+  "v371-real-layout-results.json": {
+    "read": {
+      "mode": "auto",
+      "status": "Preparing pages…",
+      "blank": 0,
+      "overflow": false,
+      "pages": [
+        [
+          {
+            "page": 1,
+            "tokens": [
+              1,
+              2,
+              3
+            ],
+            "end": false,
+            "over": false
+          },
+          {
+            "page": 2,
+            "tokens": [
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14
+            ],
+            "end": false,
+            "over": false
+          }
+        ],
+        [
+          {
+            "page": 3,
+            "tokens": [
+              15,
+              16,
+              17,
+              18,
+              19,
+              20
+            ],
+            "end": false,
+            "over": false
+          },
+          {
+            "page": 4,
+            "tokens": [
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31
+            ],
+            "end": false,
+            "over": false
+          }
+        ],
+        [
+          {
+            "page": 5,
+            "tokens": [
+              32
+            ],
+            "end": true,
+            "over": false
+          }
+        ]
+      ]
+    },
+    "imposed": {
+      "mode": "auto",
+      "status": "Preparing pages…",
+      "blank": 3,
+      "overflow": false,
+      "pages": [
+        [
+          {
+            "page": 0,
+            "tokens": [],
+            "end": false,
+            "over": false
+          },
+          {
+            "page": 1,
+            "tokens": [
+              1,
+              2,
+              3
+            ],
+            "end": false,
+            "over": false
+          }
+        ],
+        [
+          {
+            "page": 2,
+            "tokens": [
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14
+            ],
+            "end": false,
+            "over": false
+          },
+          {
+            "page": 0,
+            "tokens": [],
+            "end": false,
+            "over": false
+          }
+        ],
+        [
+          {
+            "page": 0,
+            "tokens": [],
+            "end": false,
+            "over": false
+          },
+          {
+            "page": 3,
+            "tokens": [
+              15,
+              16,
+              17,
+              18,
+              19,
+              20
+            ],
+            "end": false,
+            "over": false
+          }
+        ],
+        [
+          {
+            "page": 4,
+            "tokens": [
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31
+            ],
+            "end": false,
+            "over": false
+          },
+          {
+            "page": 5,
+            "tokens": [
+              32
+            ],
+            "end": true,
+            "over": false
+          }
+        ]
+      ]
+    },
+    "portrait": {
+      "mode": "single",
+      "status": "Preparing pages…",
+      "blank": 0,
+      "overflow": false,
+      "pages": [
+        [
+          {
+            "page": 1,
+            "tokens": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "end": false,
+            "over": false
+          }
+        ],
+        [
+          {
+            "page": 2,
+            "tokens": [
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "end": false,
+            "over": false
+          }
+        ],
+        [
+          {
+            "page": 3,
+            "tokens": [
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ],
+            "end": true,
+            "over": false
+          }
+        ]
+      ]
+    },
+    "all32QuestionsPresent": true,
+    "bookletOrderCorrect": true,
+    "readOrderCorrect": true,
+    "typography": {
+      "font": "Cambria",
+      "spacing": 1,
+      "leading": 1,
+      "headColor": "rgb(0, 0, 0)",
+      "headBackground": "rgb(255, 255, 255)",
+      "repeated": 0,
+      "sections": 8,
+      "expectedSections": 8,
+      "orphanMatches": false
+    },
+    "fontSetupPersists": true,
+    "uploadedFontPersists": true,
+    "errors": []
+  },
+  "v371-duplex-results.json": {
+    "cases": {
+      "1": {
+        "read": [
+          [
+            1,
+            1
+          ]
+        ],
+        "print": [
+          [
+            1,
+            1
+          ]
+        ],
+        "pdf": "generated",
+        "readPreviewRestoredAfterPrint": true
+      },
+      "2": {
+        "read": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "print": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "pdf": "generated",
+        "readPreviewRestoredAfterPrint": true
+      },
+      "3": {
+        "read": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ],
+        "print": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "pdf": "generated",
+        "readPreviewRestoredAfterPrint": true
+      },
+      "4": {
+        "read": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "print": [
+          [
+            4,
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "pdf": "generated",
+        "readPreviewRestoredAfterPrint": true
+      },
+      "6": {
+        "read": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "print": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "pdf": "generated",
+        "readPreviewRestoredAfterPrint": true
+      }
+    },
+    "portrait": [
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ]
+    ],
+    "errors": []
+  },
+  "v371-workspace-results.json": {
+    "cases": [
+      {
+        "teacherSimple": true,
+        "width": 390,
+        "overflow": false,
+        "blank": false,
+        "visiblePrint": [
+          "pw371Order",
+          "pw371Print"
+        ],
+        "shownQuestions": [
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]",
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]"
+        ],
+        "view": "preview"
+      },
+      {
+        "teacherSimple": true,
+        "width": 768,
+        "overflow": false,
+        "blank": false,
+        "visiblePrint": [
+          "pw371Order",
+          "pw371Print"
+        ],
+        "shownQuestions": [
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]",
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]"
+        ],
+        "view": "preview"
+      },
+      {
+        "teacherSimple": true,
+        "width": 1366,
+        "overflow": false,
+        "blank": false,
+        "visiblePrint": [
+          "pw371Order",
+          "pw371Print"
+        ],
+        "shownQuestions": [
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]",
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]"
+        ],
+        "view": "preview"
+      },
+      {
+        "teacherSimple": true,
+        "width": 1920,
+        "overflow": false,
+        "blank": false,
+        "visiblePrint": [
+          "pw371Order",
+          "pw371Print"
+        ],
+        "shownQuestions": [
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]",
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]"
+        ],
+        "view": "preview"
+      },
+      {
+        "teacherSimple": false,
+        "width": 390,
+        "overflow": false,
+        "blank": false,
+        "visiblePrint": [
+          "pw371Order",
+          "pw371Print"
+        ],
+        "shownQuestions": [
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]",
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]"
+        ],
+        "view": "preview"
+      },
+      {
+        "teacherSimple": false,
+        "width": 768,
+        "overflow": false,
+        "blank": false,
+        "visiblePrint": [
+          "pw371Order",
+          "pw371Print"
+        ],
+        "shownQuestions": [
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]",
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]"
+        ],
+        "view": "preview"
+      },
+      {
+        "teacherSimple": false,
+        "width": 1366,
+        "overflow": false,
+        "blank": false,
+        "visiblePrint": [
+          "pw371Order",
+          "pw371Print"
+        ],
+        "shownQuestions": [
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]",
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]"
+        ],
+        "view": "preview"
+      },
+      {
+        "teacherSimple": false,
+        "width": 1920,
+        "overflow": false,
+        "blank": false,
+        "visiblePrint": [
+          "pw371Order",
+          "pw371Print"
+        ],
+        "shownQuestions": [
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]",
+          "Q. 1. Question one[2]",
+          "Q. 2. Question two[2]",
+          "Q. 3. Question three[2]"
+        ],
+        "view": "preview"
+      }
+    ],
+    "errors": []
+  }
+}

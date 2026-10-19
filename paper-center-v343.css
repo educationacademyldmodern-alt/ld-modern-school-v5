@@ -4,3 +4,6 @@
 #erp #pc343Center,#erp #pc343Center *,.pc343Dialog,.pc343Dialog *{font-family:u337Text,Arial,sans-serif!important}
 
 .pc350Teacher .pc343DialogHeader h3{font-size:15px;margin-bottom:6px}.pc350Teacher .pc343DialogHeader p{display:none}.pc350Teacher .pc343DialogHeader button{min-height:42px;padding:8px 10px}.pc350Teacher .pc343DialogHeader .pc343Status{font-size:12px}.pc350Teacher .pc343Tools{gap:6px}
+
+/* One central Save/Send row; editor owns Preview and Print. */
+.pc343DialogHeader #pc343Preview,.pc343DialogHeader #pc343Print{display:none!important}

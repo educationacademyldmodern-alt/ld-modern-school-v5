@@ -67,3 +67,26 @@
 #erp#erp #erpContent #r323ControlActions [data-r347-card]>.r347Icon svg *{
  stroke:#123d63!important;stroke-width:2!important;fill:none!important;opacity:1!important;
 }
+/* V371 desktop readability. Mobile reference layout is deliberately governed by its existing rules. */
+@media(min-width:901px){
+#erp#erp#erp #erpContent .v350Dashboard{gap:18px!important}
+#erp#erp#erp #erpContent .v350Dashboard>#v90Stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+#erp#erp#erp #erpContent .v350Dashboard>#v90Stats>:is(button,.v90Stat){min-height:142px!important;padding:20px!important;display:flex!important;align-items:center!important;gap:16px!important;text-align:left!important}
+#erp#erp#erp #erpContent .v350Dashboard>#v90Stats>:is(button,.v90Stat)>span{width:48px!important;height:48px!important;flex:0 0 48px!important;font-size:30px!important;opacity:1!important}
+#erp#erp#erp #erpContent .v350Dashboard>#v90Stats>:is(button,.v90Stat) small{display:block!important;font-size:18px!important;font-weight:800!important;line-height:1.4!important;color:#fff!important;opacity:1!important;white-space:normal!important;text-shadow:0 1px 2px #0005!important}
+#erp#erp#erp #erpContent .v350Dashboard>#v90Stats>:is(button,.v90Stat) b{font-size:32px!important;line-height:1.3!important;margin-top:8px!important;color:#fff!important;font-weight:800!important}
+#erp#erp#erp #erpContent .v350Dashboard>#v90Stats>:is(button,.v90Stat) em{font-size:14px!important;font-weight:700!important;opacity:1!important;color:#fff!important;position:static!important;margin-left:auto!important;align-self:flex-end!important;white-space:nowrap!important}
+#erp#erp#erp #erpContent .v350Dashboard .v185FrontActions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;align-items:stretch!important}
+#erp#erp#erp #erpContent .v350Dashboard .v185FrontActions>button{min-height:116px!important;display:grid!important;grid-template-columns:40px minmax(0,1fr)!important;align-content:center!important;align-items:center!important;gap:6px 12px!important;padding:18px!important;text-align:left!important;white-space:normal!important;border-radius:16px!important}
+#erp#erp#erp #erpContent .v350Dashboard .v185FrontActions>button>span{grid-row:1 / 3!important;font-size:30px!important}
+#erp#erp#erp #erpContent .v350Dashboard .v185FrontActions>button>b{display:block!important;font-size:18px!important;line-height:1.35!important;color:#fff!important;opacity:1!important}
+#erp#erp#erp #erpContent .v350Dashboard .v185FrontActions>button>small{display:block!important;font-size:14px!important;line-height:1.4!important;color:#fff!important;opacity:1!important}
+#erp#erp#erp #erpContent .v350Dashboard :is(.v114QuickGrid,.v90MonitorGrid,.ldmMasterGrid,.ldmTeacherModules)>button{min-height:140px!important;padding:18px!important}
+#erp#erp#erp #erpContent .v350Dashboard :is(.v114QuickGrid,.v90MonitorGrid,.ldmMasterGrid,.ldmTeacherModules)>button b{font-size:19px!important;line-height:1.4!important;font-weight:800!important}
+#erp#erp#erp #erpContent .v350Dashboard :is(.v114QuickGrid,.v90MonitorGrid,.ldmMasterGrid,.ldmTeacherModules)>button small{font-size:14px!important;line-height:1.5!important;opacity:1!important}
+#erp#erp#erp #erpContent .v350Dashboard #r323AdminControl{align-items:stretch!important;gap:14px!important}
+#erp#erp#erp #erpContent .v350Dashboard #s336DashboardCard .s336Hero{min-height:140px!important;padding:18px!important}
+#erp#erp#erp #erpContent .v350Dashboard #s336DashboardCard .s336Hero h2{font-size:22px!important}
+#erp#erp#erp #erpContent .v350Dashboard #s336DashboardCard .s336Hero p{font-size:15px!important;line-height:1.5!important}
+}
+@media(min-width:1280px){#erp#erp#erp #erpContent .v350Dashboard>#v90Stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
