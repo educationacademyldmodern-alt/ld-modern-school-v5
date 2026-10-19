@@ -46,3 +46,21 @@
 :is(#erpContent,#v14Modal,dialog,#a337Document,body) .m345Mark.m345Mark .m347Corner2,:is(#erpContent,#v14Modal,dialog,#a337Document,body) .m345Mark.m345Mark .m347Corner3{top:auto!important;bottom:1mm!important}
 :is(#erpContent,#v14Modal,dialog,#a337Document,body) .m345Mark.m345Mark .m345Identity{max-width:100%!important;min-width:0!important}
 :is(#erpContent,#v14Modal,dialog,#a337Document,body) .m345Mark.m345Mark .m345Photo{object-fit:cover!important;margin:0!important;max-width:23mm!important;max-height:29mm!important}
+/* V356: physical report panels cannot flex-shrink and overlap signatures. */
+#erpContent#erpContent .m345Mark.m345Mark>*{flex-shrink:0!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345IssueInfo p{font:6.5pt/1.2 u337Text,Arial!important;max-height:none!important;overflow-wrap:anywhere!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345IssueInfo{min-height:18mm!important;flex-shrink:0!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Header{position:relative!important;width:100%!important;border-radius:0!important;box-shadow:none!important;flex-shrink:0!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Identity{display:flex!important;gap:4mm!important;align-items:start!important;flex-shrink:0!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Identity p{font:10pt/1.25 Georgia,u337Text,serif!important;margin:.6mm 0!important;white-space:normal!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Identity span{font:inherit!important;color:inherit!important;white-space:normal!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Sign{position:static!important;height:auto!important;min-height:14mm!important;margin:auto 0 0!important;padding:6mm 0 1mm!important;display:flex!important;flex-shrink:0!important;bottom:auto!important;background:transparent!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Subjects td:first-child{width:35%!important;white-space:normal!important;word-break:normal!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Terms :is(th,td){width:auto!important;padding:1mm!important;font-size:9pt!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Terms :is(th,td):first-child{width:27%!important}
+#erpContent#erpContent .m345Mark.m345Mark.m345-detailed .m345Identity{flex-direction:row-reverse!important}
+#erpContent#erpContent .m345Mark.m345Mark.m345-detailed .m345Subjects td:first-child{width:50%!important}
+#erpContent#erpContent .m345Mark.m345Mark .m345Grading :is(th,td){width:auto!important;font-size:8pt!important;padding:.8mm!important}
+
+#erpContent#erpContent .m345Mark.m345Mark h4{font:700 10pt/1.15 Arial,u337Text!important;padding:1.5mm!important;margin:2mm 0 0!important}#erpContent#erpContent .m345Mark.m345Mark .m345Identity p{text-align:left!important}#erpContent#erpContent .m345Mark.m345Mark .m345NoPhoto{font:8pt/1.15 Georgia,serif!important;color:#777!important}#erpContent#erpContent .m345Mark.m345Mark .m345IssueInfo small{font:6pt/1.1 u337Text,Arial!important;color:#667!important}
+#erpContent#erpContent .m345Mark.m345Mark :is(th,td){font-family:Georgia,'Times New Roman',u337Text,serif!important}#erpContent#erpContent .m345Mark.m345Mark .m345Identity :is(b,span){font:inherit!important;color:inherit!important}#erpContent#erpContent .m345Mark.m345Mark .m345Identity b{display:inline-block!important;min-width:27mm!important}

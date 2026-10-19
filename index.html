@@ -903,7 +903,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @page{size:A4 portrait;margin:0}
 </style>
 <meta name="ldm-fix" content="V247 canonical LKG/UKG attendance root fix">
-<link rel="stylesheet" href="marksheet-core.css?v=348">
+<link rel="stylesheet" href="marksheet-core.css?v=356">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -2488,12 +2488,13 @@ async function addResultMark(studentId){
 async function previewResultStudentMarksheet(studentId){
  let exam=$('rcExam').value.trim(),{data:s,error}=await sb.from('students').select('*').eq('id',studentId).single();if(error)return toast(error.message);
  let {data:marks,error:me}=await sb.from('student_marks').select('*').eq('admission_no',s.admission_no).eq('exam_name',exam).order('subject_name');if(me)return toast(me.message);
+ await window.LDM_DOCUMENTS_V345?.loadSettings();await window.LDM_MARKSHEET.context(s,exam);
  v14Modal(`<h2>Marksheet Preview</h2><div id="rcMarkPreview">${renderMarksheetHtml(s,marks||[],exam,1)}</div><div class="v14Tabs"><button class="v14Action primary" onclick="v14Pdf('rcMarkPreview','${esc((s.student_name||'student').replace(/[^a-z0-9]/gi,'_'))}-${esc(exam.replace(/[^a-z0-9]/gi,'_'))}.pdf')">PDF</button><button class="v14Action" onclick="v14Print('rcMarkPreview')">Print</button></div>`);
 }
 
 async function marksheetCenter(){
  if(!v14Admin())return toast('यह विकल्प आपके वर्तमान account role के लिए उपलब्ध नहीं है। Admin से आवश्यक permission/assignment जाँचें।');head('Smart Marksheet Center','Draft • Six requested formats • PDF / Print');
- $('erpContent').innerHTML=`<div class="panel"><div class="v14Search"><input id="mkSearch" placeholder="Student Name / Roll Number"><input id="mkExam" placeholder="Exam Name"><select id="mkTemplate" >${[1,2,3,4,5].map(x=>`<option value="${x}" ${getDocFormat('marksheet')==x?'selected':''}>Report Card Format ${x}</option>`).join('')}</select><button class="v14Action primary" onclick="findMarkStudent()">Search Student</button></div><div class="v14Tabs"><select id="mkClass">${v14ClassOptions()}</select><button class="v14Action" onclick="generateClassMarksheets()">Generate All Class Marksheets</button><button class="v14Action" onclick="manageExamSubjects()">Add / Edit Subjects</button><button class="v14Action" onclick="exportReportCardExcel()">Excel Export</button><button class="v14Action" onclick="excelCenter()">Excel Import</button></div><div id="mkWork"></div></div>`;
+ $('erpContent').innerHTML=`<div class="panel"><div class="v14Search"><input id="mkSearch" placeholder="Student Name / Roll Number"><input id="mkExam" placeholder="Exam Name"><select id="mkTemplate" >${Object.entries(window.LDM_MARKSHEET.formats).map(([key,label])=>`<option value="${key}" ${getDocFormat('marksheet')===key?'selected':''}>${esc(label)}</option>`).join('')}</select><button class="v14Action primary" onclick="findMarkStudent()">Search Student</button></div><div class="v14Tabs"><select id="mkClass">${v14ClassOptions()}</select><button class="v14Action" onclick="generateClassMarksheets()">Generate All Class Marksheets</button><button class="v14Action" onclick="manageExamSubjects()">Add / Edit Subjects</button><button class="v14Action" onclick="exportReportCardExcel()">Excel Export</button><button class="v14Action" onclick="excelCenter()">Excel Import</button></div><div id="mkWork"></div></div>`;
 }
 async function findMarkStudent(){
  let z=$('mkSearch').value.trim();if(!z)return toast('Name or Roll No. डालें');let {data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${z.replace(/,/g,'')}%,roll_no.ilike.%${z.replace(/,/g,'')}%`).limit(10);if(error)return toast(error.message);
@@ -2533,11 +2534,11 @@ async function addExamSubject(){let c=$('mkClass').value,exam=$('mkExam').value.
 async function updateExamSubject(id){let{error}=await sb.from('exam_subjects').update({subject_name:$('sn'+id).value.trim(),max_marks:Number($('sm'+id).value||100)}).eq('id',id);toast(error?error.message:'Updated')}
 async function deleteExamSubject(id){if(!confirm('Delete subject?'))return;let{error}=await sb.from('exam_subjects').delete().eq('id',id);toast(error?error.message:'Deleted');if(!error)manageExamSubjects()}
 async function generateClassMarksheets(){
- const c=$('mkClass').value,exam=$('mkExam').value.trim(),host=$('mkWork'),who=profile?.id,view=window.__v90Route;if(!c||!exam)return toast('Class and Exam required');host.textContent='Loading complete class marksheets…';
+ const c=$('mkClass').value,exam=$('mkExam').value.trim(),host=$('mkWork'),who=profile?.id,view=window.__v90Route,session=school.academic_session,format=$('mkTemplate').value,job=window.__m356Batch=(window.__m356Batch||0)+1;if(!c||!exam)return toast('Class and Exam required');host.textContent='Loading complete class marksheets…';
  const all=async make=>{let data=[];for(let offset=0;offset<100000;offset+=500){const r=await make().range(offset,offset+499);if(r.error)throw r.error;if(!Array.isArray(r.data))throw Error('Incomplete class data');data.push(...r.data);if(r.data.length<500)return data}throw Error('Narrow the selected class')};
- try{const students=await all(()=>ldmApplyClassFilter(sb.from('students').select('*'),'class_name',c).order('id'));const active=students.filter(s=>(!s.academic_session||s.academic_session===school?.academic_session)&&!['inactive','deleted','left','withdrawn','archived','trashed','recycled'].includes(String(s.status||'active').toLowerCase()));let marks=[];for(let i=0;i<active.length;i+=100){const keys=active.slice(i,i+100).map(s=>s.admission_no);marks.push(...await all(()=>sb.from('student_marks').select('*').eq('academic_session',school.academic_session).eq('exam_name',exam).in('admission_no',keys).order('id')))}if(who!==profile?.id||view!==window.__v90Route||!host.isConnected||$('mkClass')?.value!==c||$('mkExam')?.value.trim()!==exam)return;
- for(const s of [...new Map(active.map(s=>[String(s.section||''),s])).values()])await window.LDM_MARKSHEET.context(s,exam);const by=new Map();for(const m of marks){if(!by.has(m.admission_no))by.set(m.admission_no,[]);by.get(m.admission_no).push(m)}host.replaceChildren();const controls=document.createElement('div');controls.className='v14Tabs';controls.innerHTML='<label>Students<select id="mkSelectedStudents" multiple size="6"></select></label><button id="mkUseSelected">Preview selected students</button><button id="mkUseAll">Preview full class</button><label>Print batch<select id="mkBatch"></select></label><span id="mkBatchStatus"></span><button id="mkPrintBatch">Preview / Print / PDF current batch</button>';host.append(controls);const picker=$('mkSelectedStudents');picker.innerHTML=active.map(s=>`<option value="${esc(s.id)}">${esc(s.roll_no||'')} · ${esc(s.student_name)} · ${esc(s.admission_no)}</option>`).join('');let selection=active,batchEpoch=0;const preview=document.createElement('div');preview.id='markPreviewBox';host.append(preview);
- const build=async()=>{const token=++batchEpoch,number=Number($('mkBatch').value)||0,subset=selection.slice(number*100,number*100+100);preview.replaceChildren();$('mkBatchStatus').textContent=`${selection.length} students · current ${selection.length?number*100+1:0}–${number*100+subset.length} · print all listed batches for complete output`;for(let i=0;i<subset.length;i+=20){if(token!==batchEpoch||who!==profile?.id||view!==window.__v90Route||!preview.isConnected)return;preview.insertAdjacentHTML('beforeend',subset.slice(i,i+20).map(s=>renderMarksheetHtml(s,by.get(s.admission_no)||[],exam,$('mkTemplate').value)).join(''));await new Promise(r=>requestAnimationFrame(r))}if(!subset.length)preview.textContent='कोई रिकॉर्ड नहीं मिला / No records found';};
+ try{await window.LDM_DOCUMENTS_V345?.loadSettings();const termNames=format==='termwise'?[...new Set([exam,...window.LDM_DOCUMENTS_V345.termNames])]:[exam];const batchContexts=new Map();const students=await all(()=>ldmApplyClassFilter(sb.from('students').select('*'),'class_name',c).order('id'));const active=students.filter(s=>(!s.academic_session||s.academic_session===school?.academic_session)&&!['inactive','deleted','left','withdrawn','archived','trashed','recycled'].includes(String(s.status||'active').toLowerCase()));let marks=[];for(let i=0;i<active.length;i+=100){const keys=active.slice(i,i+100).map(s=>s.admission_no);marks.push(...await all(()=>sb.from('student_marks').select('*').eq('academic_session',school.academic_session).in('exam_name',termNames).in('admission_no',keys).order('id')))}if(who!==profile?.id||view!==window.__v90Route||!host.isConnected||$('mkClass')?.value!==c||$('mkExam')?.value.trim()!==exam)return;
+ for(const s of [...new Map(active.map(s=>[String(s.section||''),s])).values()]){const terms={};for(const name of termNames)terms[name]=await window.LDM_MARKSHEET.context(s,name);batchContexts.set(String(s.section||''),terms)}if(job!==window.__m356Batch||who!==profile?.id||session!==school.academic_session||!host.isConnected||$('mkClass')?.value!==c||$('mkExam')?.value.trim()!==exam)return;const by=new Map();for(const m of marks){if(!by.has(m.admission_no))by.set(m.admission_no,[]);by.get(m.admission_no).push(m)}host.replaceChildren();const controls=document.createElement('div');controls.className='v14Tabs';controls.innerHTML='<label>Students<select id="mkSelectedStudents" multiple size="6"></select></label><button id="mkUseSelected">Preview selected students</button><button id="mkUseAll">Preview full class</button><label>Print batch<select id="mkBatch"></select></label><span id="mkBatchStatus"></span><button id="mkPrintBatch">Preview / Print / PDF current batch</button>';host.append(controls);const picker=$('mkSelectedStudents');picker.innerHTML=active.map(s=>`<option value="${esc(s.id)}">${esc(s.roll_no||'')} · ${esc(s.student_name)} · ${esc(s.admission_no)}</option>`).join('');let selection=active,batchEpoch=0;const preview=document.createElement('div');preview.id='markPreviewBox';host.append(preview);
+ const build=async()=>{const token=++batchEpoch,number=Number($('mkBatch').value)||0,subset=selection.slice(number*100,number*100+100);preview.replaceChildren();$('mkBatchStatus').textContent=`${selection.length} students · current ${selection.length?number*100+1:0}–${number*100+subset.length} · print all listed batches for complete output`;for(let i=0;i<subset.length;i+=20){if(token!==batchEpoch||job!==window.__m356Batch||who!==profile?.id||session!==school.academic_session||view!==window.__v90Route||!preview.isConnected)return;preview.insertAdjacentHTML('beforeend',subset.slice(i,i+20).map(s=>{const terms=batchContexts.get(String(s.section||''))||{};return window.LDM_MARKSHEET.render(s,by.get(s.admission_no)||[],exam,format,{...window.LDM_DOCUMENTS_V345?.previewOptions(s,exam),context:terms[exam],termContexts:terms,termMarks:by.get(s.admission_no)||[]})}).join(''));await new Promise(r=>requestAnimationFrame(r))}if(!subset.length)preview.textContent='कोई रिकॉर्ड नहीं मिला / No records found';};
  const batches=()=>{$('mkBatch').innerHTML=Array.from({length:Math.max(1,Math.ceil(selection.length/100))},(_,i)=>`<option value="${i}">${i*100+1}–${Math.min((i+1)*100,selection.length)} of ${selection.length}</option>`).join('');build()};$('mkUseSelected').onclick=()=>{const ids=new Set([...picker.selectedOptions].map(o=>o.value));selection=active.filter(s=>ids.has(String(s.id)));batches()};$('mkUseAll').onclick=()=>{selection=active;batches()};$('mkBatch').onchange=build;$('mkPrintBatch').onclick=()=>window.LDM_A4_V337.preview(preview,'Class marksheets · '+$('mkBatchStatus').textContent,{orientation:'portrait'});batches();
 
  }catch(e){if(host.isConnected&&who===profile?.id&&view===window.__v90Route)host.textContent=e.message||String(e)}
@@ -11313,7 +11314,7 @@ try{const v113LogoutBase=logout;logout=async function(){await v113StopChannel(v1
 <script src="v53-final-polish.js?v=V53-FINAL-POLISH-1&build=V643"></script>
 <script src="v54-final-integration.js?v=V54-FINAL-1&build=V643"></script>
 <link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1&build=V643">
-<script src="v57-school-operations.js?v=320"></script>
+<script src="v57-school-operations.js?v=356"></script>
 <script src="v58-complaint-discipline.js?v=V58-1&build=V643"></script>
 <script src="v59-academic-calendar.js?v=V59-1&build=V643"></script>
 
@@ -18405,8 +18406,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="smart-work-v333.js?v=351"></script>
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
-<script src="resources-v334.js?v=347"></script>
-<script src="controls-v323.js?v=347"></script>
+<script src="resources-v334.js?v=356"></script>
+<script src="controls-v323.js?v=356"></script>
 <style id="v325BannerFit">
 /* Match the whole banner to its natural ratio on phones; fill the desktop hero. */
 #publicSite #v1142RefPage .v1142Hero img{object-fit:cover!important;object-position:center!important;display:block!important;width:100%!important;max-width:100%!important;filter:none!important}
@@ -18423,29 +18424,30 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=346"></script>
-<script src="student-photo-v337.js?v=346"></script>
-<script src="a4-print-v337.js?v=348"></script>
+<script src="student-photo-v337.js?v=356"></script>
+<script src="a4-print-v337.js?v=356"></script>
 <script src="print-bridge-v337.js?v=344"></script>
 
 <script src="save-stay-v338.js?v=347"></script>
-<link rel="stylesheet" href="admit-layout-v339.css?v=347">
-<script src="admit-layout-v339.js?v=348"></script>
+<link rel="stylesheet" href="admit-layout-v339.css?v=356">
+<script src="admit-layout-v339.js?v=356"></script>
 <link rel="stylesheet" href="document-layout-v341.css?v=345">
-<script src="document-layout-v341.js?v=346"></script>
+<script src="document-layout-v341.js?v=356"></script>
 <link rel="stylesheet" href="original-dashboard-v342.css?v=344">
 <script src="original-dashboard-v342.js?v=344"></script>
-<link rel="stylesheet" href="paper-center-v343.css?v=350">
-<script src="marksheet-core.js?v=348"></script>
+<link rel="stylesheet" href="paper-center-v343.css?v=358">
+<script src="marksheet-core.js?v=356"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=350"></script>
-<link rel="stylesheet" href="marksheet-core.css?v=348">
+<script src="paper-center-v343.js?v=358"></script>
+<link rel="stylesheet" href="paper-smart-v358.css?v=358"><script src="paper-smart-v358.js?v=358"></script>
+<link rel="stylesheet" href="marksheet-core.css?v=356">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
-<script src="documents-v345.js?v=347"></script>
+<script src="documents-v345.js?v=356"></script>
 <script src="teacher-save-v345.js?v=346"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=347"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=354"><script src="dashboard-order-v350.js?v=354"></script>
+<script src="runtime-v347.js?v=356"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=356"><script src="dashboard-order-v350.js?v=356"></script>
 </body>
 </html>

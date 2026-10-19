@@ -1,0 +1,30 @@
+L D MODERN EDUCATION ACADEMY — V358
+SMART TEACHER SUBJECTS + ADMIN PAPER INBOX
+
+इस cumulative ZIP में पिछले V356/V357 के सुधार भी शामिल हैं।
+मौजूदा ERP files का backup रखकर ZIP की ERP files उसी root folder में upload/replace करें।
+verification folder केवल जाँच रिपोर्ट है; इसे upload करना जरूरी नहीं।
+नई SQL नहीं चलानी है। पुराने पेपर/छात्र रिकॉर्ड नहीं मिटाए गए हैं।
+Upload के बाद ERP फिर खोलें / hard refresh करें; v358 files साथ upload करें।
+
+TEACHER
+Question Paper Setup खोलें → सत्र, परीक्षा और कक्षा चुनें।
+Assigned विषयों में भेजे गए, निजी Draft और इस परीक्षा का पेपर बाकी अलग दिखेगा।
+भेजना बाकी की गिनती में Draft भी शामिल हैं; जब तक केंद्रीय Send की पुष्टि न हो, Sent नहीं होगा।
+विषय जोड़ें / पेपर शुरू करें → कक्षा, विषय, परीक्षा, सत्र भरें → Draft बनाएँ।
+विवरण भरकर केंद्रीय Draft सेव होगा। उसी विषय का मौजूदा पेपर हो तो उसे खोला जाएगा।
+इससे Teacher Master assignment नहीं बदलता; वही server permissions लागू रहती हैं।
+कार्ड से पेपर खोलें / Edit; Full mode में प्रश्न जोड़ें/हटाएँ; Preview/PDF/Send पहले जैसे उपलब्ध हैं।
+
+ADMIN
+Teacher Paper Inbox में शिक्षकवार भेजे पेपरों की गिनती और विषय/कक्षा देखें।
+“इस शिक्षक के पेपर देखें” से उसकी चुनी scope की सूची खुलेगी।
+Edit, Preview/PDF, Delete तथा Recycle Bin में Restore उपलब्ध हैं।
+नया पेपर Admin के अपने Draft के रूप में बनेगा; इसे My papers में देखें।
+किसी Teacher के मौजूदा पेपर को संपादित करने पर वही record/owner रहेगा।
+सूची 40 पेपर प्रति पन्ना है; पूरे counts के लिए सभी पन्ने जाँचे जाते हैं।
+नेटवर्क/किसी पन्ने में error हो तो counts “—” रहेंगे, गलत Pending नहीं दिखेगा।
+Refresh से ताजा स्थिति लें; पीछे लगातार polling नहीं चलती।
+
+Existing central Paper RPC और teacher assignment permissions जरूरी हैं।
+इस काम में live database का access नहीं था; जाँच नकली server और synthetic records पर हुई है।
