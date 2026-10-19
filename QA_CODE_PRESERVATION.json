@@ -1,0 +1,13 @@
+{
+  "security_init_unchanged": true,
+  "parent_portal_renderer_unchanged": true,
+  "teacher_module_buttons_unchanged": true,
+  "paper_open_unchanged": true,
+  "paper_save_unchanged": true,
+  "paper_retry_unchanged": true,
+  "paper_mutate_unchanged": true,
+  "paper_closeEditor_unchanged": true,
+  "paper_doPreview_unchanged": true,
+  "v375_inbox_summary_fix_preserved": true,
+  "inline_script_syntax_passed": 128
+}

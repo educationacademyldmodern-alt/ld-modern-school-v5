@@ -1,0 +1,13 @@
+{
+  "checks_passed": [
+    "Teacher submit creates one centrally confirmed submitted record",
+    "Admin initially sees submitted paper from another session",
+    "Editing and saving an already submitted paper keeps it in Admin inbox",
+    "Filtered empty view is labelled; All received restores received papers",
+    "Reopening inbox clears old exam/class filters",
+    "Lost submit reply retries identical request without duplicate paper",
+    "Admin refresh shows both teacher submissions"
+  ],
+  "backend": "In-memory central RPC contract model; submitted status retention checked against retained V362 SQL",
+  "live_database_tested": false
+}

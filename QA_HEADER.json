@@ -1,0 +1,42 @@
+{
+  "results": [
+    {
+      "role": "admin",
+      "width": 1024,
+      "header_style_properties_matched": 42,
+      "profile_click_passed": true
+    },
+    {
+      "role": "teacher",
+      "width": 1024,
+      "header_style_properties_matched": 42,
+      "profile_click_passed": true
+    },
+    {
+      "role": "admin",
+      "width": 1366,
+      "header_style_properties_matched": 42,
+      "profile_click_passed": true
+    },
+    {
+      "role": "teacher",
+      "width": 1366,
+      "header_style_properties_matched": 42,
+      "profile_click_passed": true
+    },
+    {
+      "role": "admin",
+      "width": 1600,
+      "header_style_properties_matched": 42,
+      "profile_click_passed": true
+    },
+    {
+      "role": "teacher",
+      "width": 1600,
+      "header_style_properties_matched": 42,
+      "profile_click_passed": true
+    }
+  ],
+  "live_erp_tested": false,
+  "reference": "Parent header rendered from retained ERP styles; same class structure and role-specific content"
+}
