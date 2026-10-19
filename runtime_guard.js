@@ -164,15 +164,10 @@ function cleanupDuplicates(){
  if(h&&admin())dedupe(h,'.ldmRootAdminDash');
  if(h&&teacher())dedupe(h,'.v114TeacherDash');
 }
-function storeDashboard(){
- const h=host(),k=roleKey();if(!h||!dashboardReady()||!['admin','teacher'].includes(k))return false;
- const html=h.innerHTML;if(html.length<250||/Loading\.\.\.|Loading…/i.test(html))return false;
- S.dashboardHTML[k]=html;return true;
-}
-function restoreDashboard(){
- const h=host(),html=S.dashboardHTML[roleKey()];if(!h||!html)return false;
- h.innerHTML=html;cleanupDuplicates();reconcile('dashboard-restore');return true;
-}
+// V362: never restore dashboards from role-only innerHTML snapshots. Such
+// snapshots lose event handlers and may belong to a previous signed-in user.
+function storeDashboard(){return dashboardReady()}
+function restoreDashboard(){return false}
 function duplicateFast(r){
  const now=Date.now(),last=S.lastCall.get(r)||0;S.lastCall.set(r,now);return now-last<280;
 }

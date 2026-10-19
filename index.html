@@ -13248,7 +13248,7 @@ async function restore(){
     }
 
     if(window.__ldmInteractiveLogin)return;
-    if(window.user?.id===session.user.id&&window.profile&&document.querySelector('#erp:not(.hidden) #erpContent .ldmNewTeacher'))return;
+    if(window.user?.id===session.user.id&&window.profile&&document.querySelector('#erp:not(.hidden)')&&(window.__ldmTeacherReadyUid===session.user.id||document.querySelector('#erpContent .ldmNewTeacher')))return;
     window.user=session.user;
 
     if(typeof window.loadProfile==='function'){
@@ -17931,7 +17931,7 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
 }
 </style>
 
-<script src="./runtime_guard.js?v=V276"></script>
+<script src="./runtime_guard.js?v=362"></script>
 
 <style id="v277-fast-search-style">
 /* V277 scoped UI — does not style existing fee or role dashboards. */
@@ -18440,8 +18440,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="paper-center-v343.css?v=358">
 <script src="marksheet-core.js?v=359"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=361"></script>
-<link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=361"></script>
+<script src="paper-center-v343.js?v=362"></script>
+<link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=362"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=359">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
@@ -18449,7 +18449,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="teacher-save-v345.js?v=346"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=361"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=356"><script src="dashboard-order-v350.js?v=356"></script>
+<script src="runtime-v347.js?v=362"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=362"><script src="dashboard-order-v350.js?v=356"></script>
 </body>
 </html>
