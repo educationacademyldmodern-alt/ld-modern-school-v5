@@ -1,0 +1,157 @@
+{
+  "results": [
+    {
+      "role": "admin",
+      "width": 1024,
+      "hasDesktop": true,
+      "brandBeforeWelcome": true,
+      "welcomeBeforeActions": true,
+      "helperBelowModules": true,
+      "headerHeight": 60,
+      "horizontalOverflow": false,
+      "clipped": 0,
+      "tiles": 29,
+      "requests": 0,
+      "mounts": 2,
+      "idleAdditionalMounts": 0,
+      "profileRoute": true,
+      "navigationRestored": true
+    },
+    {
+      "role": "admin",
+      "width": 1366,
+      "hasDesktop": true,
+      "brandBeforeWelcome": true,
+      "welcomeBeforeActions": true,
+      "helperBelowModules": true,
+      "headerHeight": 60,
+      "horizontalOverflow": false,
+      "clipped": 0,
+      "tiles": 29,
+      "requests": 0,
+      "mounts": 2,
+      "idleAdditionalMounts": 0,
+      "profileRoute": true,
+      "navigationRestored": true
+    },
+    {
+      "role": "admin",
+      "width": 1600,
+      "hasDesktop": true,
+      "brandBeforeWelcome": true,
+      "welcomeBeforeActions": true,
+      "helperBelowModules": true,
+      "headerHeight": 60,
+      "horizontalOverflow": false,
+      "clipped": 0,
+      "tiles": 29,
+      "requests": 0,
+      "mounts": 2,
+      "idleAdditionalMounts": 0,
+      "profileRoute": true,
+      "navigationRestored": true
+    },
+    {
+      "role": "teacher",
+      "width": 1024,
+      "hasDesktop": true,
+      "brandBeforeWelcome": true,
+      "welcomeBeforeActions": true,
+      "helperBelowModules": true,
+      "headerHeight": 60,
+      "horizontalOverflow": false,
+      "clipped": 0,
+      "tiles": 17,
+      "requests": 0,
+      "mounts": 2,
+      "idleAdditionalMounts": 0,
+      "profileRoute": true,
+      "navigationRestored": true
+    },
+    {
+      "role": "teacher",
+      "width": 1366,
+      "hasDesktop": true,
+      "brandBeforeWelcome": true,
+      "welcomeBeforeActions": true,
+      "helperBelowModules": true,
+      "headerHeight": 60,
+      "horizontalOverflow": false,
+      "clipped": 0,
+      "tiles": 17,
+      "requests": 0,
+      "mounts": 2,
+      "idleAdditionalMounts": 0,
+      "profileRoute": true,
+      "navigationRestored": true
+    },
+    {
+      "role": "teacher",
+      "width": 1600,
+      "hasDesktop": true,
+      "brandBeforeWelcome": true,
+      "welcomeBeforeActions": true,
+      "helperBelowModules": true,
+      "headerHeight": 60,
+      "horizontalOverflow": false,
+      "clipped": 0,
+      "tiles": 17,
+      "requests": 0,
+      "mounts": 2,
+      "idleAdditionalMounts": 0,
+      "profileRoute": true,
+      "navigationRestored": true
+    },
+    {
+      "role": "admin",
+      "width": 390,
+      "mobileDOMIdentical": true,
+      "mobileCardStylesIdentical": true
+    },
+    {
+      "role": "admin",
+      "width": 768,
+      "mobileDOMIdentical": true,
+      "mobileCardStylesIdentical": true
+    },
+    {
+      "role": "admin",
+      "width": 900,
+      "mobileDOMIdentical": true,
+      "mobileCardStylesIdentical": true
+    },
+    {
+      "role": "teacher",
+      "width": 390,
+      "mobileDOMIdentical": true,
+      "mobileCardStylesIdentical": true
+    },
+    {
+      "role": "teacher",
+      "width": 768,
+      "mobileDOMIdentical": true,
+      "mobileCardStylesIdentical": true
+    },
+    {
+      "role": "teacher",
+      "width": 900,
+      "mobileDOMIdentical": true,
+      "mobileCardStylesIdentical": true
+    },
+    {
+      "role": "admin",
+      "desktopMobileDesktopResize": true,
+      "paperActionRoute": true,
+      "attendanceActionRoute": true
+    },
+    {
+      "role": "teacher",
+      "desktopMobileDesktopResize": true,
+      "paperActionRoute": true,
+      "attendanceActionRoute": true
+    }
+  ],
+  "renderers": "Actual retained Admin/Teacher functions + actual resources, controls, school-workspace, runtime, dashboard-order and Paper Center scripts",
+  "data": "Representative in-memory profile/context and existing summary HTML",
+  "live_erp_tested": false
+}
