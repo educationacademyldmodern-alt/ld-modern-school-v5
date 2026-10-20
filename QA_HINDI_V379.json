@@ -1,0 +1,71 @@
+{
+  "tests": [
+    {
+      "role": "teacher",
+      "width": 390,
+      "nativeHindi": true,
+      "romanHindi": true,
+      "undo": true,
+      "compositionSafe": true,
+      "englishUnchanged": true,
+      "draftPreserved": true,
+      "captureFlush": true,
+      "questionSaved": true,
+      "mobileInputWithoutKeydown": true,
+      "errors": []
+    },
+    {
+      "role": "teacher",
+      "width": 1366,
+      "nativeHindi": true,
+      "romanHindi": true,
+      "undo": true,
+      "compositionSafe": true,
+      "englishUnchanged": true,
+      "draftPreserved": true,
+      "captureFlush": true,
+      "questionSaved": true,
+      "mobileInputWithoutKeydown": true,
+      "errors": []
+    },
+    {
+      "role": "admin",
+      "width": 390,
+      "nativeHindi": true,
+      "romanHindi": true,
+      "undo": true,
+      "compositionSafe": true,
+      "englishUnchanged": true,
+      "draftPreserved": true,
+      "captureFlush": true,
+      "questionSaved": true,
+      "mobileInputWithoutKeydown": true,
+      "errors": []
+    },
+    {
+      "role": "admin",
+      "width": 1366,
+      "nativeHindi": true,
+      "romanHindi": true,
+      "undo": true,
+      "compositionSafe": true,
+      "englishUnchanged": true,
+      "draftPreserved": true,
+      "captureFlush": true,
+      "questionSaved": true,
+      "mobileInputWithoutKeydown": true,
+      "errors": []
+    },
+    {
+      "role": "teacher",
+      "masterQuestionOption": true,
+      "previewHindi": true
+    },
+    {
+      "role": "admin",
+      "masterQuestionOption": true,
+      "previewHindi": true
+    }
+  ],
+  "live_erp_tested": false
+}
