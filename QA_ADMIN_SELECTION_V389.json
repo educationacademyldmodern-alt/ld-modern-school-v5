@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "actual original ERP HTML/scripts, mocked login/DB",
+    "one/class selection preserves due/hold distinctions",
+    "explicit include-due and hold option",
+    "due Admit Preview, QR issue, Print/PDF",
+    "issued reprint creates no new registry entry",
+    "lost response retries identical issue request",
+    "fee-clear and include-due Marksheet class selection",
+    "complete due Marksheets issue and Print/PDF",
+    "incomplete marks blocked from final issue",
+    "no fee amounts/payments/publication changed",
+    "Teacher cannot invoke Admin actions",
+    "no JS errors or missing local assets"
+  ],
+  "limits": "Mock school account and DB responses. No live records changed or live RLS/server connectivity tested."
+}

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "V388_inline_dashboard_css_unchanged": true,
+  "V388_keyboard_paper_dashboard_runtime_files_byte_identical": [
+    "runtime-v347.js",
+    "dashboard-order-v350.js",
+    "desktop-premium-v378.js",
+    "desktop-premium-v378.css",
+    "paper-premium-v381.js",
+    "teacher-paper-form-v343.html"
+  ],
+  "updated_sources": [
+    "V356 paired Admit renderer and document registry client",
+    "V359 marksheet engine and shared preview bridge"
+  ],
+  "local_syntax_checks": "all JS passed",
+  "new_SQL_required_for_this_Admit_Marksheet_fix": false,
+  "existing_QR_registry_RPC_used": "ldm_v345_doc_issue / lookup",
+  "existing_parent_publication_and_fee_payment_RPC_not_modified": true,
+  "live_school_database_tested": false
+}

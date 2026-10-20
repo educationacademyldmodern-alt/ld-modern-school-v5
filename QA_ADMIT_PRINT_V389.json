@@ -1,0 +1,740 @@
+{
+  "passed": true,
+  "one_card_fallback": true,
+  "missing_identity_blocks_print": true,
+  "cases": [
+    {
+      "n": 8,
+      "design": "mono",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 8,
+      "design": "mono",
+      "font": 10,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 8,
+      "design": "classic",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 8,
+      "design": "classic",
+      "font": 10,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 8,
+      "design": "compact",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 8,
+      "design": "compact",
+      "font": 10,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 8,
+      "design": "teal",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 8,
+      "design": "teal",
+      "font": 10,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 10,
+      "design": "mono",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.34375
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.34375
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.34375
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 10,
+      "design": "mono",
+      "font": 10,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 341,
+            "foot": 6.296875
+          },
+          {
+            "height": 332,
+            "scroll": 341,
+            "foot": 6.296875
+          },
+          {
+            "height": 332,
+            "scroll": 341,
+            "foot": 6.296875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 10,
+      "design": "classic",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.34375
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.34375
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.34375
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 10,
+      "design": "classic",
+      "font": 10,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 341,
+            "foot": 6.296875
+          },
+          {
+            "height": 332,
+            "scroll": 341,
+            "foot": 6.296875
+          },
+          {
+            "height": 332,
+            "scroll": 341,
+            "foot": 6.296875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 10,
+      "design": "compact",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -5.578125
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -5.578125
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -5.578125
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 10,
+      "design": "compact",
+      "font": 10,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 344,
+            "foot": 10.0625
+          },
+          {
+            "height": 332,
+            "scroll": 344,
+            "foot": 10.0625
+          },
+          {
+            "height": 332,
+            "scroll": 344,
+            "foot": 10.0625
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 10,
+      "design": "teal",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 10,
+      "design": "teal",
+      "font": 10,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 12,
+      "design": "mono",
+      "font": 8.5,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 352,
+            "foot": 17.625
+          },
+          {
+            "height": 332,
+            "scroll": 352,
+            "foot": 17.625
+          },
+          {
+            "height": 332,
+            "scroll": 352,
+            "foot": 17.625
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 12,
+      "design": "mono",
+      "font": 10,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 370,
+            "foot": 35.5
+          },
+          {
+            "height": 332,
+            "scroll": 370,
+            "foot": 35.5
+          },
+          {
+            "height": 332,
+            "scroll": 370,
+            "foot": 35.5
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 12,
+      "design": "classic",
+      "font": 8.5,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 352,
+            "foot": 17.625
+          },
+          {
+            "height": 332,
+            "scroll": 352,
+            "foot": 17.625
+          },
+          {
+            "height": 332,
+            "scroll": 352,
+            "foot": 17.625
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 12,
+      "design": "classic",
+      "font": 10,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 370,
+            "foot": 35.5
+          },
+          {
+            "height": 332,
+            "scroll": 370,
+            "foot": 35.5
+          },
+          {
+            "height": 332,
+            "scroll": 370,
+            "foot": 35.5
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 12,
+      "design": "compact",
+      "font": 8.5,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 356,
+            "foot": 21.390625
+          },
+          {
+            "height": 332,
+            "scroll": 356,
+            "foot": 21.390625
+          },
+          {
+            "height": 332,
+            "scroll": 356,
+            "foot": 21.390625
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 12,
+      "design": "compact",
+      "font": 10,
+      "initial": {
+        "errors": [
+          "Card 1: Card content exceeds this slot. More space is required.",
+          "Card 2: Card content exceeds this slot. More space is required.",
+          "Card 3: Card content exceeds this slot. More space is required."
+        ],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 374,
+            "foot": 39.265625
+          },
+          {
+            "height": 332,
+            "scroll": 374,
+            "foot": 39.265625
+          },
+          {
+            "height": 332,
+            "scroll": 374,
+            "foot": 39.265625
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 2 per A4 · 100% scale. More space selected automatically; no content cut.",
+      "count": "2",
+      "overflow": []
+    },
+    {
+      "n": 12,
+      "design": "teal",
+      "font": 8.5,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -9.546875
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    },
+    {
+      "n": 12,
+      "design": "teal",
+      "font": 10,
+      "initial": {
+        "errors": [],
+        "cards": [
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -3.484375
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -3.484375
+          },
+          {
+            "height": 332,
+            "scroll": 332,
+            "foot": -3.484375
+          }
+        ]
+      },
+      "disabled": false,
+      "status": "3 cards · 3 per A4 · 100% scale.",
+      "count": "3",
+      "overflow": []
+    }
+  ],
+  "limits": "Real original styles and browser preview/print event; synthetic student/exam records; native OS print-dialog UI not automated."
+}

@@ -903,7 +903,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @page{size:A4 portrait;margin:0}
 </style>
 <meta name="ldm-fix" content="V247 canonical LKG/UKG attendance root fix">
-<link rel="stylesheet" href="marksheet-core.css?v=359">
+<link rel="stylesheet" href="marksheet-core.css?v=389">
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -9815,7 +9815,7 @@ async function v106StudentApi(payload){let {data:{session}}=await sb.auth.getSes
 
 /* ---------- Final dispatcher / wrappers ---------- */
 const v90PrevRender=window.render;
-async function v90Dispatch(route='dashboard',noPush=false){if(!['student_access','parent_access'].includes(String(route||'')))try{v108ClearIssuedPasswords()}catch(_e){}window.__v90Route=route;if(!noPush)v90Push(route);if(route==='dashboard')return v90Teacher()?(typeof window.ldmNewTeacherDashboard==='function'?window.ldmNewTeacherDashboard():v90TeacherDashboard()):v90Admin()?v90AdminDashboard():v90PrevRender(route);if(route==='work_delegation'&&v90Admin())return window.ldmDelegationCenter?.();if(route==='certificate_center'&&v90Admin())return window.ldmCertificateCenter?.();if(route==='assigned_work'&&v90Teacher())return window.ldmTeacherAssignedWork?.();if(route==='v185_admin_activities'&&v90Admin())return window.v185AdminActivities?.();if(route==='v6422_due_master'&&v90Admin())return window.v6422DueMaster?.();if(route==='attendance_conflict_center'&&v90Admin())return window.ldmAttendanceConflictCenter?.();if(route==='v90_attendance_monitor')return v90AttendanceMonitor();if(route==='v90_due_fee_monitor')return window.v6422DueMaster?.();if(route==='v90_exam_monitor')return v90ExamMonitor();if(route==='v90_marks_monitor')return v90MarksMonitor();if(route==='v90_transport_monitor')return v90TransportMonitor();if(route==='v90_presence_monitor')return v90PresenceMonitor();if(route==='v90_student_requests')return v90StudentRequests();if(route==='v90_teacher_requests')return v90TeacherRequests();if(route==='v90_teaching_monitor')return v90TeachingMonitor();if(route==='v90_teacher_daily')return v90TeacherDaily();if(route==='v90_teacher_marks')return v90TeacherMarks();if(route==='v90_my_requests')return v90MyRequests();if(route==='v93_teacher_password')return v93TeacherPasswordPage();if(route==='dashboard_search')return v90MasterSearchPage();if(route==='student_access'&&v90Admin())return v108AccessCenter('student');if(route==='parent_access'&&v90Admin())return v108AccessCenter('both');if(route==='timetable_master'&&typeof v763TimetableMaster==='function')return v763TimetableMaster();let r=v90PrevRender?await v90PrevRender.apply(this,[route]):null;[20,100,260].forEach(ms=>setTimeout(()=>v90InstallShell(route),ms));return r}
+async function v90Dispatch(route='dashboard',noPush=false){if(!['student_access','parent_access'].includes(String(route||'')))try{v108ClearIssuedPasswords()}catch(_e){}window.__v90Route=route;if(!noPush)v90Push(route);if(route==='dashboard')return v90Teacher()?(typeof window.ldmNewTeacherDashboard==='function'?window.ldmNewTeacherDashboard():v90TeacherDashboard()):v90Admin()?v90AdminDashboard():v90PrevRender(route);if(route==='work_delegation'&&v90Admin())return window.ldmDelegationCenter?.();if(route==='certificate_center'&&v90Admin())return window.ldmCertificateCenter?.();if(route==='assigned_work'&&v90Teacher())return window.ldmTeacherAssignedWork?.();if(route==='v185_admin_activities'&&v90Admin())return window.v185AdminActivities?.();if(route==='v6422_due_master'&&v90Admin())return window.v6422DueMaster?.();if(route==='attendance_conflict_center'&&v90Admin())return window.ldmAttendanceConflictCenter?.();if(route==='v90_attendance_monitor')return v90AttendanceMonitor();if(route==='v90_due_fee_monitor')return window.v6422DueMaster?.();if(route==='v90_exam_monitor')return v90ExamMonitor();if(route==='v90_marks_monitor')return v90MarksMonitor();if(route==='v90_transport_monitor')return v90TransportMonitor();if(route==='v90_presence_monitor')return v90PresenceMonitor();if(route==='v90_student_requests')return v90StudentRequests();if(route==='v90_teacher_requests')return v90TeacherRequests();if(route==='v90_teaching_monitor')return v90TeachingMonitor();if(route==='v90_teacher_daily')return v90TeacherDaily();if(route==='v90_teacher_marks')return v90TeacherMarks();if(route==='v90_my_requests')return v90MyRequests();if(route==='v93_teacher_password')return v93TeacherPasswordPage();if(route==='dashboard_search')return v90MasterSearchPage();if(route==='student_access'&&v90Admin())return v108AccessCenter('student');if(route==='parent_access'&&v90Admin())return v108AccessCenter('both');if(route==='timetable_master'&&typeof v763TimetableMaster==='function')return v763TimetableMaster();let r=v90PrevRender?await v90PrevRender.apply(this,[route]):null;[20,100,260].forEach(ms=>setTimeout(()=>{if(window.__v90Route===route)v90InstallShell(route)},ms));return r}
 window.render=v90Dispatch;
 
 const v90PrevOpenERP=window.openERP;
@@ -16452,6 +16452,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   */
   window.addEventListener('popstate',function(e){
     if(guardBusy||!isInternalERP())return;
+    if(window.LDM_RUNTIME_V347?.canNavigate?.()===false){installBrowserPair(routeNow(),readStack(),true);window.toast?.('पहले चालू Save / Retry पूरा करें।');return}
     const st=e.state||{};
     /* Expected path: Back lands on the V237 base state. If a legacy/external history
        entry is encountered, never expose the public website: restore the current
@@ -16468,7 +16469,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     saveStack(h,target);
     setTimeout(async()=>{
       try{
-        if(routeNow()!==target)await renderNoPush(target);
+        await renderNoPush(target); // V387: legacy popstate renderer is retired; render this target once here.
         ensureAdminControls();
         if(target==='dashboard'&&from==='dashboard'){
           installBrowserPair('dashboard',['dashboard'],true);
@@ -18435,7 +18436,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
-<script src="smart-work-v333.js?v=351"></script>
+<script src="smart-work-v333.js?v=389"></script>
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
 <script src="resources-v334.js?v=371"></script>
@@ -18457,32 +18458,33 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=373"></script>
 <script src="student-photo-v337.js?v=356"></script>
-<script src="a4-print-v337.js?v=359"></script>
+<script src="a4-print-v337.js?v=389"></script>
 <script src="print-bridge-v337.js?v=344"></script>
 
 <script src="save-stay-v338.js?v=347"></script>
-<link rel="stylesheet" href="admit-layout-v339.css?v=356">
-<script src="admit-layout-v339.js?v=356"></script>
+<link rel="stylesheet" href="admit-layout-v339.css?v=389">
+<script src="admit-layout-v339.js?v=389"></script>
 <link rel="stylesheet" href="document-layout-v341.css?v=345">
 <script src="document-layout-v341.js?v=356"></script>
 <link rel="stylesheet" href="original-dashboard-v342.css?v=344">
 <script src="original-dashboard-v342.js?v=344"></script>
 <link rel="stylesheet" href="paper-center-v343.css?v=371">
-<script src="marksheet-core.js?v=359"></script>
+<script src="marksheet-core.js?v=389"></script>
 <script src="report-core.js?v=344"></script>
 <script src="paper-center-v343.js?v=377"></script>
 <link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=377"></script>
-<link rel="stylesheet" href="marksheet-core.css?v=359">
+<link rel="stylesheet" href="marksheet-core.css?v=389">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
-<script src="documents-v345.js?v=356"></script>
+<script src="documents-v345.js?v=389"></script>
 <script src="teacher-save-v345.js?v=346"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=371"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=378"></script>
+<script src="runtime-v347.js?v=388"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=388"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
-<link rel="stylesheet" href="desktop-premium-v378.css?v=378">
-<script src="desktop-premium-v378.js?v=378"></script>
+<link rel="stylesheet" href="desktop-premium-v378.css?v=388">
+<script src="desktop-premium-v378.js?v=388"></script>
+<script src="admin-documents-v389.js?v=389"></script>
 </body>
 </html>
