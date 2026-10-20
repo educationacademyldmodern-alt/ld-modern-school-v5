@@ -1,0 +1,132 @@
+/* Screen-only styling. The existing A4 print rules remain authoritative. */
+@media screen {
+:root{--p381-ink:#18314c;--p381-muted:#63768b;--p381-line:#dce5ef;--p381-accent:#087d85}
+#p381Typing{position:relative;margin-top:9px;border-top:1px solid #e4eaf1;padding-top:9px;color:var(--p381-ink);font-family:system-ui,'LDM Deva','Nirmala UI',sans-serif}
+#p381Typing[hidden],#p381Typing [hidden]{display:none!important}
+#p381Typing .p381TypeRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#p381Typing .p381TypeLabel{font-size:13px;font-weight:800;color:#087d85;margin-right:4px}
+#p381Typing label{display:flex;align-items:center;gap:7px;font-size:12px;margin:0;color:#465a71}
+#p381Typing select,#p381Typing button{width:auto;max-width:100%;min-height:36px;font:600 13px/1.3 system-ui,'LDM Deva',sans-serif;padding:7px 10px;border:1px solid #cfdae6;border-radius:8px;background:#fff;color:#18314c;box-shadow:none}
+#p381Typing button:hover{background:#eef6fa;border-color:#a2cbd0}
+#p381Typing button:disabled{opacity:.45;cursor:default}
+#p381Typing button:focus-visible,#p381Typing select:focus-visible,#p381Typing summary:focus-visible{outline:3px solid #12a5ac;outline-offset:2px}
+#p381Typing #p381Voice[aria-pressed=true]{background:#fff0ed;color:#a13326;border-color:#edb7ad}
+#p381Typing summary{cursor:pointer;list-style:none;border:1px solid #cfdae6;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700;background:white}
+#p381Options{position:relative}
+#p381Options[open]>summary{background:#e9f6f5;color:#075f66}
+#p381Typing .p381Tools{position:absolute;right:0;top:calc(100% + 8px);width:360px;max-width:85vw;padding:16px;background:#fff;border:1px solid #cbd9e6;border-radius:12px;box-shadow:0 12px 36px #173d5424;z-index:40}
+#p381Typing .p381Tools label{margin-bottom:12px;line-height:1.5;flex-wrap:wrap}
+#p381Typing .p381Tools input[type=checkbox]{width:17px;height:17px;min-height:0;margin:0;accent-color:#087d85}
+#p381Typing .p381Tools p{font-size:12px;color:#63768b;line-height:1.65;margin:9px 0}
+#p381Typing .p381Symbols{display:flex;flex-wrap:wrap;gap:5px;border-top:1px solid #edf0f4;padding-top:12px;margin:12px 0}
+#p381Typing .p381Symbols button{min-width:36px}
+#p381TypingStatus{font-size:12px!important;line-height:1.5!important;margin:7px 0 0!important;color:#61748a;min-height:18px}
+#p381Suggestions{position:absolute;top:100%;left:0;display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;padding:9px;background:#fff;border:1px solid #c8dfe5;border-radius:10px;box-shadow:0 8px 20px #143b541a;z-index:35}
+#p381Suggestions button{background:#e9f5f6;border-color:#c4e2e5;color:#075e66;min-width:60px;font-size:15px;font-weight:700}
+#p381Suggestions button[aria-pressed=true]{background:#087d85;color:#fff}
+.p381Eyebrow{display:block;font:800 10px/1.4 system-ui,sans-serif;letter-spacing:2px;color:#137b87;margin-bottom:8px}
+.p381Aside>h2{font:800 15px/1.4 system-ui,'LDM Deva',sans-serif;margin:0 0 16px;color:#203c56}
+.p381Quiet{font-size:12px;line-height:1.8;color:#64788d;margin:15px 0 0}
+.p381Grid,.p381Aside,.p381Writing{min-width:0}
+#t350Editor .p381Aside .t350Meta{display:grid;grid-template-columns:1fr;gap:14px}
+#t350Editor .p381Aside .t366Auto{margin-top:18px;font-size:13px;line-height:1.6;display:flex;align-items:flex-start;gap:8px}
+#t350Editor .p381Aside .t366Auto input{flex:none;margin-top:3px}
+#t350Editor .p381Aside #t366Hint{font-size:12px;line-height:1.75;color:#63768b}
+#t350Editor #t350Progress{border-radius:10px;font-size:13px;padding:11px 14px;color:#11665d;background:#e5f4ef}
+#paperWorkspace371{isolation:isolate}
+#paperWorkspace371>nav{position:relative}
+@media(min-width:901px){
+html[data-paper-unified] body[data-paper-view]{background:#f1f5fa!important;color:var(--p381-ink)}
+html[data-paper-unified] body[data-paper-view] #paperWorkspace371{padding:12px 28px!important;border-bottom:1px solid #dce5ef!important;box-shadow:0 3px 14px #153c5610!important}
+#paperWorkspace371>nav>button{border-radius:9px;min-height:40px;box-shadow:none;font-size:14px;padding:9px 16px;background:#f7f9fc;border-color:#dce5ef;color:#52677d}
+#paperWorkspace371>nav>button[aria-selected=true]{background:#183a5c;color:white;border-color:#183a5c}
+#paperWorkspace371>nav>button[data-view=preview]{margin-left:auto}
+#paperWorkspace371>nav>#pw371Print{background:#087d85;color:white;border-color:#087d85}
+#paperWorkspace371>#pw371Status{font-size:12px;color:#7b8c9c;margin:7px 0 0}
+html[data-paper-unified] body[data-paper-view=questions].t350Simple>#t350Editor{width:100%;max-width:1480px!important;padding:24px 28px 50px!important;font-family:system-ui,'LDM Deva','Nirmala UI',sans-serif}
+#t350Editor .t350Heading{display:block;margin:0 0 22px;padding:0 0 20px;border-bottom:1px solid #dbe4ed}
+#t350Editor .t350Heading b{font-size:29px;letter-spacing:-.5px;color:#173552;line-height:1.35}
+#t350Editor .t350Heading small{display:block;font-size:13px;margin-top:7px;color:#74859a}
+.p381Grid{display:grid;grid-template-columns:248px minmax(0,1fr);gap:22px;align-items:start}
+.p381Aside{position:sticky;top:185px;background:white;border:1px solid #dce5ef;border-radius:15px;padding:19px;box-shadow:0 3px 12px #193f5c05;max-height:calc(100vh - 205px);overflow:auto}
+#t350Editor .p381Aside input,#t350Editor .p381Aside select{min-height:43px;border-color:#d9e2ec;border-radius:8px;font-size:14px;background:#f8fafc;width:100%;margin:3px 0 0;box-shadow:none}
+#t350Editor .p381Aside label{font-size:12px;font-weight:700;color:#586d83}
+#t350Editor .p381Writing>.t350Modes{margin:0 0 18px;padding:5px;border:1px solid #dbe5ed;background:#e7eef5;border-radius:11px}
+#t350Editor .t350Modes button{border:0;background:transparent;color:#6a7b8b;min-height:43px;font-size:14px;border-radius:8px;box-shadow:none}
+#t350Editor .t350Modes button[aria-pressed=true]{background:white!important;color:#126777!important;box-shadow:0 2px 7px #163e5812}
+#t350Editor .t350Composer,#t350Editor .t350Question{border:1px solid #dbe4ed;border-radius:14px;padding:20px;background:white;margin:16px 0;box-shadow:0 3px 10px #193b5405}
+#t350Editor .t350Composer>label{color:#5f7288;font-size:12px;font-weight:700}
+#t350Editor .t350Question>label{font-size:13px;letter-spacing:.1px;color:#1c4b6b;margin-bottom:10px}
+#t350Editor .t350Question>label>span{font-size:12px;background:#f0f5fa;color:#63788d;padding:3px 9px;border-radius:6px}
+#t350Editor textarea{min-height:102px;background:#fbfcfe;border:1px solid #d6e2eb;border-radius:10px;font-size:19px;line-height:1.8;padding:14px;resize:vertical}
+#t350Editor input,#t350Editor select{border-color:#dae4ed;border-radius:8px;min-height:43px}
+#t350Editor .t350Options{gap:10px;margin:12px 0}
+#t350Editor .t350Options input{font-size:16px;background:#fbfcfe}
+#t350Editor .t350RowTools{padding-top:10px;border-top:1px solid #eff3f7;margin-top:12px}
+#t350Editor .t350RowTools button{min-height:34px;font-size:12px;padding:6px 10px;background:#f5f8fb;box-shadow:none;color:#667c90}
+#t350Editor .t350Section{border:1px solid #ccdfe8;border-radius:11px;background:#e6f1f5;color:#234d66;margin:24px 0 12px;padding:12px 15px}
+#t350Editor .t350Section strong{font-size:15px}
+#t350Editor .t350Section .t350RowTools{border:0;padding:0;margin:0}
+#t350Editor .t350Question summary{font-size:12px;color:#6b7e90;margin:9px 0;cursor:pointer}
+#t350Editor .t350Question details input{font-size:15px}
+#t350Editor #t350Add,#t350Editor #t350SectionAdd,#t350Editor #t360AddBlank{background:#087d85!important;color:#fff;border-color:#087d85!important;box-shadow:0 3px 0 #07636b;min-height:44px;padding:10px 19px}
+#t350Editor #t350Voice{border-color:#cbdfe6;color:#247181;background:#f1f9fa}
+#t350Editor #t360BottomQuestions{display:flex;flex-wrap:wrap;gap:12px;align-items:end;background:#f8fbfd}
+#t350Editor #t360BottomQuestions label{flex:1;min-width:150px}
+#t350Editor .p381Writing>.p381ComposerFold{background:white;border-color:#cce0e8;color:#1b6d78}
+#t350Editor .p381ComposerFold>.t350Composer{border:0;padding:10px 0 0;margin:0;box-shadow:none}
+#t350Editor .p381Writing>details{border:1px solid #dce5ef;background:#f8fafc;border-radius:10px;padding:12px 16px;margin:14px 0;font-size:13px;color:#60778d}
+html[data-paper-unified] body[data-paper-view=questions]:not(.t350Simple)>#quickShell{max-width:1380px;width:100%;padding:22px 28px 50px!important;margin:0 auto!important}
+#quickShell .quickIntro{position:relative;background:transparent;border:0;border-bottom:1px solid #dce5ef;border-radius:0;padding:0 0 20px;margin-bottom:20px;display:block;color:#173552;box-shadow:none}
+#quickShell .quickIntro h1{font-size:28px;color:#173552;margin:6px 0}
+#quickShell .quickIntro p{font-size:13px;color:#728399}
+#quickShell .quickIntro .quickBadge{position:absolute;right:0;top:12px;background:#e6f4ee;color:#267664;border:1px solid #cce5d9;font-size:11px}
+#quickShell .qPanel{border:1px solid #dce5ef;border-radius:14px;padding:22px;box-shadow:0 3px 10px #193b5405;background:white}
+#quickShell .quickMeta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+#quickShell .quickMeta input,#quickShell .quickMeta select{background:#f8fafc;border-color:#d9e3ed;min-height:43px;font-size:14px;border-radius:8px}
+#quickShell .quickMeta label{font-size:12px;color:#687b90}
+#quickShell .quickMeta .span2{grid-column:span 2}
+#quickShell #modelPaperPanel{border:1px solid #d7e4ec;background:white;border-radius:15px;padding:22px;margin:20px 0}
+#quickShell .modelTop h2{font-size:21px;margin:0 0 6px;color:#173952}
+#quickShell .modelTop p{font-size:12px;color:#7a8a99;max-width:700px}
+#quickShell .modelActions{padding:13px;background:#f4f8fc;border:1px solid #dfe8ef;border-radius:10px;gap:8px}
+#quickShell .modelActions button{min-height:40px;font-size:13px;border-radius:8px}
+#quickShell #modelProgress{background:#e9f5f0;color:#27715e;font-size:13px;padding:11px 14px;border-radius:9px}
+#quickShell .modelSection h3{background:#e7f0f6;color:#234b68;border:1px solid #cfdfeb;border-radius:10px;padding:13px 16px;font-size:15px;margin:23px 0 13px}
+#quickShell .modelSection h3 span{color:#69869a;font-size:12px}
+#quickShell .modelQuestion{border:1px solid #dbe5ed;border-radius:12px;background:white;padding:19px;margin:13px 0}
+#quickShell .modelQuestion>label{font-size:13px;color:#2b5c78}
+#quickShell .modelQuestion textarea,#quickShell #qText,#quickShell #qRight{background:#fbfcfe;border:1px solid #d6e2eb;border-radius:9px;min-height:100px;font-size:19px;line-height:1.8;padding:14px}
+#quickShell .modelQuestion input{background:#fbfcfe;border-color:#dce5ee;border-radius:8px;font-size:16px;min-height:43px}
+#quickShell .modelQuestion details{font-size:12px;color:#7a8a99}
+#quickShell .modelOptions{gap:10px;margin-top:10px}
+#quickShell .modelQuestion textarea:focus,#quickShell textarea:focus{outline:2px solid #1498a2;outline-offset:1px}
+#quickShell #modelToggle{font-size:12px;border:1px solid #d3e0e9;border-radius:8px;padding:8px 12px;color:#617c90}
+#quickShell .quickQuestionList>li{box-shadow:none;border:1px solid #dce5ef;border-radius:10px}
+html[data-paper-unified] body[data-paper-view=setup]>#paperSetup371{max-width:1240px;padding:15px 28px 50px}
+}
+@media(max-width:900px){
+.p381Grid{display:block}.p381Aside{padding:0;margin-bottom:14px}.p381Aside>h2,.p381Quiet{display:none}
+#t350Editor .p381Aside .t350Meta{grid-template-columns:1fr 1fr;gap:10px}
+.p381Eyebrow{font-size:9px;letter-spacing:1.5px;margin-bottom:5px}
+#p381Typing .p381TypeLabel{display:none}
+#p381TypingStatus{font-size:11px!important}
+#p381Typing select,#p381Typing button{min-height:38px;font-size:12px;padding:7px 8px}
+#p381Options .p381Tools{position:fixed;left:12px;right:12px;top:auto;bottom:16px;max-width:none;width:auto;max-height:65vh;overflow:auto}
+}
+@media(prefers-reduced-motion:reduce){#p381Typing *,#t350Editor *,#quickShell *{scroll-behavior:auto!important;transition:none!important}}
+}
+@media print{#p381Typing{display:none!important}}
+
+@media screen and (max-width:600px){
+#p381Typing .p381TypeRow{gap:5px}
+#p381Typing .p381TypeRow>label{font-size:0;gap:0}
+#p381Typing #p381Language{width:72px}
+#p381Typing #p381Mode{width:135px}
+#p381Typing #p381Voice,#p381Typing #p381Undo{font-size:0;min-width:31px;padding:6px}
+#p381Typing #p381Voice::before{content:'🎙';font-size:16px}
+#p381Typing #p381Voice[aria-pressed=true]::before{content:'■'}
+#p381Typing #p381Undo::before{content:'↶';font-size:18px}
+#p381Typing #p381Options>summary{font-size:0;min-width:31px;padding:6px;text-align:center}
+#p381Typing #p381Options>summary::before{content:'⚙';font-size:17px}
+}

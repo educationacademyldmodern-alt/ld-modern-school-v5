@@ -7,3 +7,32 @@
 
 /* One central Save/Send row; editor owns Preview and Print. */
 .pc343DialogHeader #pc343Preview,.pc343DialogHeader #pc343Print{display:none!important}
+/* V381 premium desktop Paper Centre, scoped to the existing module. */
+@media screen and (min-width:901px){
+#pc343Center{max-width:1540px;margin:auto;padding:12px 18px 35px;color:#203c58}
+#pc343Center .pc343Hero{background:linear-gradient(115deg,#143452,#20516e 70%,#087f87);border:1px solid #284d68;border-radius:17px;padding:27px 29px;box-shadow:0 5px 16px #163c5510;margin-bottom:24px}
+#pc343Center .pc343Hero h2{font-size:27px;letter-spacing:-.4px;margin-bottom:9px}
+#pc343Center .pc343Hero p{font-size:13px;color:#c7d9e5;margin:8px 0 19px}
+#pc343Center .pc343Hero button{background:#ffffff10;color:#e6f3fa;border-color:#ffffff30;border-radius:9px;box-shadow:none;font-size:13px;min-height:42px}
+#pc343Center .pc343Hero .pcPrimary{background:#fff;color:#17465e;border-color:#fff;font-weight:800}
+#pc343Center .pc343Filters{background:#fff;border:1px solid #dce5ed;border-radius:13px;padding:20px;grid-template-columns:repeat(3,minmax(0,1fr));margin:20px 0}
+#pc343Center .pc343Filters label{font-size:12px;color:#6d8091}
+#pc343Center .pc343Filters input,#pc343Center .pc343Filters select{background:#f8fafc;border:1px solid #dce6ed;border-radius:8px;min-height:43px;font-size:14px}
+#pc343Center .pc343Group{border:1px solid #dce6ee;padding:21px;border-radius:15px;box-shadow:0 3px 12px #15395404}
+#pc343Center .pc343Group>h3{font-size:19px;color:#21465e;border:0;padding:0 0 7px;margin:0 0 12px}
+#pc343Center .pc343Paper{background:#fbfdff;border:1px solid #d8e5ed;border-top:3px solid #2c8a9b;border-radius:11px;box-shadow:0 3px 10px #15395406;padding:18px}
+#pc343Center .pc343Paper h4{font-size:18px;margin:13px 0 8px}
+#pc343Center .pc343Badge{border-radius:20px;font-size:10px;letter-spacing:.15px;padding:5px 9px}
+#pc343Center .pc343Paper button{font-size:12px;border-radius:7px;min-height:35px;box-shadow:none;padding:7px 10px}
+#pc343Center .pc343Status{font-size:13px;border:1px solid #d5e9ec;background:#edf7f8;color:#397080}
+#pc343Center #pc343Count{margin-left:auto;font-size:13px;color:#70869a;font-weight:700}
+.pc343Dialog{inset:14px;width:calc(100% - 28px);height:calc(100% - 28px);border-radius:16px;border-color:#afc5d6;box-shadow:0 24px 80px #092d4d55}
+.pc343DialogHeader{padding:12px 24px;background:#173b59;color:#e8f3fa;box-shadow:none}
+.pc343DialogHeader h3{font-size:15px;margin-bottom:8px;color:#e6f0f8}
+.pc343DialogHeader .pc343Tools{gap:8px}
+.pc343DialogHeader button{min-height:36px;padding:7px 13px;font-size:12px;background:#ffffff0d;color:#dcebf6;border:1px solid #ffffff30;box-shadow:none;border-radius:7px}
+.pc343DialogHeader .pcPrimary{background:#edf9fa;color:#136575;border:1px solid #edf9fa;box-shadow:none}
+.pc343DialogHeader #pc343Send{background:#0795a0;color:#fff;border-color:#0795a0}
+.pc343DialogHeader p{display:none}
+.pc343DialogHeader .pc343Status{display:inline-block;background:transparent;color:#b6d4e2;border:0;padding:0;margin-top:7px;font-size:11px;min-height:15px}
+}

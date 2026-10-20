@@ -1,0 +1,381 @@
+{
+  "build": "V381",
+  "engine": "Headless Chromium 153 via Playwright",
+  "round1": [
+    {
+      "name": "teacher dashboard: typing script stays unloaded",
+      "status": "passed"
+    },
+    {
+      "name": "teacher premium toolbar and editor load",
+      "status": "passed"
+    },
+    {
+      "name": "teacher Roman Hindi + payload",
+      "status": "passed"
+    },
+    {
+      "name": "teacher undo conversion",
+      "status": "passed"
+    },
+    {
+      "name": "teacher suggestions max five / keyboard selection",
+      "status": "passed"
+    },
+    {
+      "name": "teacher option field supports Hindi",
+      "status": "passed"
+    },
+    {
+      "name": "teacher direct mixed text unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "teacher autocorrect off by default",
+      "status": "passed"
+    },
+    {
+      "name": "teacher opt-in English autocorrect",
+      "status": "passed"
+    },
+    {
+      "name": "teacher correction Undo",
+      "status": "passed"
+    },
+    {
+      "name": "teacher English prefix suggestion",
+      "status": "passed"
+    },
+    {
+      "name": "teacher touch keyboard delimiter",
+      "status": "passed"
+    },
+    {
+      "name": "teacher native Hindi composition + model",
+      "status": "passed"
+    },
+    {
+      "name": "teacher symbol insertion in last active field",
+      "status": "passed"
+    },
+    {
+      "name": "teacher Hindi instruction snippet",
+      "status": "passed"
+    },
+    {
+      "name": "teacher actual parent Save invokes RPC with Hindi payload",
+      "status": "passed"
+    },
+    {
+      "name": "teacher desktop no page overflow",
+      "status": "passed"
+    },
+    {
+      "name": "teacher 300 input events: no preview pagination/no requests",
+      "status": "passed"
+    },
+    {
+      "name": "teacher 300-event performance",
+      "status": "measured",
+      "milliseconds": 7
+    },
+    {
+      "name": "teacher preview works on demand",
+      "status": "passed"
+    },
+    {
+      "name": "teacher typing toolbar absent from print",
+      "status": "passed"
+    },
+    {
+      "name": "teacher mobile layout stays inside screen",
+      "status": "passed"
+    },
+    {
+      "name": "teacher saved paper reopens with edited Hindi",
+      "status": "passed"
+    },
+    {
+      "name": "teacher no browser script exceptions",
+      "status": "passed"
+    },
+    {
+      "name": "admin dashboard: typing script stays unloaded",
+      "status": "passed"
+    },
+    {
+      "name": "admin premium toolbar and editor load",
+      "status": "passed"
+    },
+    {
+      "name": "admin Roman Hindi + payload",
+      "status": "passed"
+    },
+    {
+      "name": "admin undo conversion",
+      "status": "passed"
+    },
+    {
+      "name": "admin suggestions max five / keyboard selection",
+      "status": "passed"
+    },
+    {
+      "name": "admin option field supports Hindi",
+      "status": "passed"
+    },
+    {
+      "name": "admin direct mixed text unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "admin autocorrect off by default",
+      "status": "passed"
+    },
+    {
+      "name": "admin opt-in English autocorrect",
+      "status": "passed"
+    },
+    {
+      "name": "admin correction Undo",
+      "status": "passed"
+    },
+    {
+      "name": "admin English prefix suggestion",
+      "status": "passed"
+    },
+    {
+      "name": "admin touch keyboard delimiter",
+      "status": "passed"
+    },
+    {
+      "name": "admin native Hindi composition + model",
+      "status": "passed"
+    },
+    {
+      "name": "admin symbol insertion in last active field",
+      "status": "passed"
+    },
+    {
+      "name": "admin Hindi instruction snippet",
+      "status": "passed"
+    },
+    {
+      "name": "admin actual parent Save invokes RPC with Hindi payload",
+      "status": "passed"
+    },
+    {
+      "name": "admin desktop no page overflow",
+      "status": "passed"
+    },
+    {
+      "name": "admin 300 input events: no preview pagination/no requests",
+      "status": "passed"
+    },
+    {
+      "name": "admin 300-event performance",
+      "status": "measured",
+      "milliseconds": 21
+    },
+    {
+      "name": "admin preview works on demand",
+      "status": "passed"
+    },
+    {
+      "name": "admin typing toolbar absent from print",
+      "status": "passed"
+    },
+    {
+      "name": "admin mobile layout stays inside screen",
+      "status": "passed"
+    },
+    {
+      "name": "admin saved paper reopens with edited Hindi",
+      "status": "passed"
+    },
+    {
+      "name": "admin no browser script exceptions",
+      "status": "passed"
+    }
+  ],
+  "round2": [
+    {
+      "name": "teacher stale suggestions cannot replace new text",
+      "status": "passed"
+    },
+    {
+      "name": "teacher symbol replaces selected text only",
+      "status": "passed"
+    },
+    {
+      "name": "teacher HTML-like typing stays text",
+      "status": "passed"
+    },
+    {
+      "name": "teacher saving lock disables typing tools",
+      "status": "passed"
+    },
+    {
+      "name": "teacher saving unlock restores fields",
+      "status": "passed"
+    },
+    {
+      "name": "teacher voice chooses Hindi recognition",
+      "status": "passed"
+    },
+    {
+      "name": "teacher voice inserts into active field",
+      "status": "passed"
+    },
+    {
+      "name": "teacher delayed voice cannot overwrite newer typing",
+      "status": "passed"
+    },
+    {
+      "name": "teacher suggestions switch stops work",
+      "status": "passed"
+    },
+    {
+      "name": "teacher twelve reopen cycles keep one toolbar",
+      "status": "passed"
+    },
+    {
+      "name": "teacher duplicate script load is idempotent",
+      "status": "passed"
+    },
+    {
+      "name": "teacher payload preserved through preview / back",
+      "status": "passed"
+    },
+    {
+      "name": "teacher Ctrl Enter adds question and preserves old rows",
+      "status": "passed"
+    },
+    {
+      "name": "teacher question delete / restore remains working",
+      "status": "passed"
+    },
+    {
+      "name": "teacher responsive width 360",
+      "status": "passed"
+    },
+    {
+      "name": "teacher responsive width 768",
+      "status": "passed"
+    },
+    {
+      "name": "teacher responsive width 1024",
+      "status": "passed"
+    },
+    {
+      "name": "teacher responsive width 1920",
+      "status": "passed"
+    },
+    {
+      "name": "teacher no script errors in edge round",
+      "status": "passed"
+    },
+    {
+      "name": "admin stale suggestions cannot replace new text",
+      "status": "passed"
+    },
+    {
+      "name": "admin symbol replaces selected text only",
+      "status": "passed"
+    },
+    {
+      "name": "admin HTML-like typing stays text",
+      "status": "passed"
+    },
+    {
+      "name": "admin saving lock disables typing tools",
+      "status": "passed"
+    },
+    {
+      "name": "admin saving unlock restores fields",
+      "status": "passed"
+    },
+    {
+      "name": "admin voice chooses Hindi recognition",
+      "status": "passed"
+    },
+    {
+      "name": "admin voice inserts into active field",
+      "status": "passed"
+    },
+    {
+      "name": "admin delayed voice cannot overwrite newer typing",
+      "status": "passed"
+    },
+    {
+      "name": "admin suggestions switch stops work",
+      "status": "passed"
+    },
+    {
+      "name": "admin twelve reopen cycles keep one toolbar",
+      "status": "passed"
+    },
+    {
+      "name": "admin duplicate script load is idempotent",
+      "status": "passed"
+    },
+    {
+      "name": "admin payload preserved through preview / back",
+      "status": "passed"
+    },
+    {
+      "name": "admin responsive width 360",
+      "status": "passed"
+    },
+    {
+      "name": "admin responsive width 768",
+      "status": "passed"
+    },
+    {
+      "name": "admin responsive width 1024",
+      "status": "passed"
+    },
+    {
+      "name": "admin responsive width 1920",
+      "status": "passed"
+    },
+    {
+      "name": "admin no script errors in edge round",
+      "status": "passed"
+    }
+  ],
+  "static_review": {
+    "passed": [
+      "inline script 1",
+      "inline script 2",
+      "inline script 3",
+      "inline script 4",
+      "inline script 5",
+      "inline script 6",
+      "inline script 7",
+      "inline script 8",
+      "inline script 9",
+      "inline script 10",
+      "inline script 11",
+      "inline script 12",
+      "paper-premium-v381.js",
+      "paper-center-v343.js"
+    ],
+    "review": [
+      "HTML differs only by the appended scoped CSS/script include.",
+      "Central module JavaScript differs only by the editor cache version URL.",
+      "Existing index, login, role permissions and database workflow are unchanged.",
+      "No polling, subtree observers, fetch requests or remote typing dependencies in the new script.",
+      "At most five suggestions, 90ms debounce, bounded dictionaries and maximum 48-character conversion token.",
+      "Screen-only premium CSS, with typing controls explicitly hidden in print.",
+      "Text insertion uses textContent/setRangeText; suggestion source validated before replacement.",
+      "IME, saving locks, stale voice results, hidden-page and disposal cleanup reviewed."
+    ]
+  },
+  "limitations": [
+    "Mock RPC responses; no production database or live login was accessed.",
+    "Optional pre-existing fflate and paper-typography assets were not available in the retrieved patches. Import/typography features were not changed or fully tested.",
+    "Voice used mocked speech events. No physical microphone test.",
+    "Print CSS and preview consistency tested. No physical printer test.",
+    "Short synthetic performance test, not an all-day soak test."
+  ]
+}
