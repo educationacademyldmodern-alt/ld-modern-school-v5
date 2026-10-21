@@ -1079,7 +1079,7 @@ function ldmRoleHeroV377(kind,displayName,details=''){
  const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const teacher=kind==='teacher',label=teacher?'Teacher':'Admin';
  let date='',hour=0;try{date=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'2-digit',month:'short',year:'numeric'}).format(new Date());hour=Number(new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',hour12:false}).format(new Date()))}catch(_e){date=new Date().toLocaleDateString('en-IN');hour=new Date().getHours()}
- const greeting=hour<12?'Good Morning':hour<17?'Good Afternoon':'Good Evening';
+ const greeting=matchMedia('(min-width:901px)').matches?((hour%24)<5||(hour%24)>=21?'Good Night':(hour%24)<12?'Good Morning':(hour%24)<17?'Good Afternoon':'Good Evening'):(hour<12?'Good Morning':hour<17?'Good Afternoon':'Good Evening');
  let image='';try{const value=typeof v97AvatarUrl==='function'?String(v97AvatarUrl()||''):'';if(/^(https?:\/\/|\/|\.\/|data:image\/(png|jpeg|webp);base64,)/i.test(value))image=value}catch(_e){}
  const badge=image?'<img src="'+safe(image)+'" alt="Profile">':safe(String(displayName||label).trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase());
  return '<div class="v114PortalHeroText"><small>'+safe(date)+'</small><h2>'+safe(greeting+', '+label)+'</h2><p>'+safe(teacher?'Your students’ progress is our priority.':'Your school’s progress is our priority.')+'</p><em>Support • Guide • Encourage • Excel</em></div><div class="v114PortalHeroStudent"><div class="v114StudentBadge">'+badge+'</div><div><b>'+safe(displayName||label)+'</b><span>'+safe(details||label)+'</span></div><button type="button" onclick="render(\''+(teacher?'teacher_profile':'v97_profile')+'\')">Profile</button></div>';
@@ -10302,7 +10302,7 @@ function v97Safe(v){return typeof esc==='function'?esc(v):String(v??'')}
 function v97RoleKey(){return String(profile?.role||'').toLowerCase()}
 function v97RoleLabel(){let r=v97RoleKey();if(['admin','super_admin','principal'].includes(r))return 'Admin';if(r==='teacher')return 'Teacher';if(r==='parent')return 'Parent';if(r==='student')return 'Student';return 'User'}
 function v97Initials(name){return String(name||v97RoleLabel()).trim().split(/\s+/).slice(0,2).map(x=>(x[0]||'').toUpperCase()).join('')||'U'}
-function v97Greeting(){let h=new Date().getHours();return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
+function v97Greeting(){if(matchMedia('(min-width:901px)').matches&&window.LDM_DESKTOP_SHELL_V390)return window.LDM_DESKTOP_SHELL_V390.greeting();let h=new Date().getHours();return matchMedia('(min-width:901px)').matches&&(h%24<5||h%24>=21)?'Good Night':h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
 function v97NowText(){try{return new Date().toLocaleString('en-IN',{weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}catch(_e){return ''}}
 function v97AvatarUrl(){return String(profile?.avatar_url||window.__v97LegacyAvatar||localStorage.getItem('ld_v97_avatar_'+(user?.id||''))||'').trim()}
 function v97AvatarHtml(cls='v97WelcomeAvatar'){let u=v97AvatarUrl(),n=profile?.full_name||v97RoleLabel();return u?`<img class="${cls}" src="${v97Safe(u)}?v=${encodeURIComponent(String(profile?.updated_at||''))}" alt="Profile">`:`<div class="${cls==='v97WelcomeAvatar'?'v97WelcomeFallback':'v97ParentFallback'}">${v97Safe(v97Initials(n))}</div>`}
@@ -12523,7 +12523,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
      if(!window.profile)throw new Error('Admin profile नहीं मिला.');
      if(!admin())throw new Error('यह Admin / Principal account नहीं है.');
      surface('erp');
-     if(typeof window.openERP==='function')window.openERP();
+     if(typeof window.openERP==='function')await window.openERP();
    }catch(e){
      try{await window.sb?.auth?.signOut?.()}catch(_e){}
      window.user=null;window.profile=null;surface('login');status('Login failed: '+(e?.message||String(e)));
@@ -16156,7 +16156,7 @@ if(typeof statsBase==='function'){
  const admin=()=>['admin','super_admin','principal'].includes(role());
  const q=id=>document.getElementById(id);
  const routeNow=()=>String(window.__v90Route||sessionStorage.getItem('ldm_current_route')||'dashboard');
- function greetingText(){let h=new Date().getHours();try{let p=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',hour12:false}).formatToParts(new Date()).find(x=>x.type==='hour');h=Number(p?.value??h)}catch(_e){}return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
+ function greetingText(){let h=new Date().getHours();try{let p=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',hour12:false}).formatToParts(new Date()).find(x=>x.type==='hour');h=Number(p?.value??h)}catch(_e){}return matchMedia('(min-width:901px)').matches&&(h%24<5||h%24>=21)?'Good Night':h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
  function cleanLegacyGreetings(){
    if(!admin())return;let root=q('erpContent');if(!root)return;const re=/Good Morning|Good Afternoon|Good Evening/i;
    const known='.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting,.v6418GreetingSingleton,[data-v97-clock],#ldmAdminGreeting';
@@ -18417,7 +18417,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v332.js?v=347"></script>
+<script src="dashboard-v332.js?v=390"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=336"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18426,7 +18426,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="absence-followup-v307.css?v=307">
 <script src="absence-followup-v307.js?v=320"></script>
 <link rel="stylesheet" href="corrections-v308.css?v=309">
-<script src="corrections-v308.js?v=335"></script>
+<script src="corrections-v308.js?v=390"></script>
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=349"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
@@ -18476,15 +18476,15 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="marksheet-core.css?v=389">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
-<script src="documents-v345.js?v=389"></script>
+<script src="documents-v345.js?v=390"></script>
 <script src="teacher-save-v345.js?v=346"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=388"></script>
 <link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=388"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
-<link rel="stylesheet" href="desktop-premium-v378.css?v=388">
-<script src="desktop-premium-v378.js?v=388"></script>
-<script src="admin-documents-v389.js?v=389"></script>
+<link rel="stylesheet" href="desktop-premium-v378.css?v=390">
+<script src="desktop-premium-v378.js?v=390"></script>
+<script src="admin-documents-v389.js?v=390"></script>
 </body>
 </html>

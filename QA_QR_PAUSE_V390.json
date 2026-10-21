@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "readyWhenPaused": 35,
+  "checks": [
+    "Stop remains available while QR workers run",
+    "in-flight issue calls settle then pause, no later background issuance",
+    "ready registry cards retained",
+    "manual Retry resumes remaining work"
+  ],
+  "scope": "Full ERP browser fixture, mock database only"
+}

@@ -1,0 +1,302 @@
+{
+  "test": "Original V378 HTML + actual bundled legacy JS assets + patched files, mocked Supabase account/records; actual login/open/back/home/menu code executed",
+  "cases": [
+    {
+      "width": 390,
+      "geometry": {
+        "x": 0,
+        "w": 390,
+        "inner": 390,
+        "headerHeight": 315.421875,
+        "domOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "r320DailyReminderCard",
+          "v156DailyControl",
+          "v90Stats",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114ManagementPanel",
+          "v114AdminFeedGrid",
+          "v307Dash",
+          "v90Panel",
+          "v90Panel",
+          "r323ControlActions"
+        ],
+        "visualOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "v90Panel",
+          "v90Stats",
+          "v307Dash",
+          "v90Panel",
+          "r323ControlActions",
+          "r320DailyReminderCard",
+          "v114ManagementPanel",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114AdminFeedGrid",
+          "v156DailyControl"
+        ]
+      },
+      "counts": {
+        "settings": 2,
+        "exam": 1,
+        "dashboard": 1
+      },
+      "guarded": {
+        "same": true,
+        "writes": 1
+      },
+      "errors": [],
+      "missing": []
+    },
+    {
+      "width": 900,
+      "geometry": {
+        "x": 0,
+        "w": 900,
+        "inner": 900,
+        "headerHeight": 264.546875,
+        "domOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "r320DailyReminderCard",
+          "v156DailyControl",
+          "v90Stats",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114ManagementPanel",
+          "v114AdminFeedGrid",
+          "v307Dash",
+          "v90Panel",
+          "v90Panel",
+          "r323ControlActions"
+        ],
+        "visualOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "v90Panel",
+          "v90Stats",
+          "v307Dash",
+          "v90Panel",
+          "r323ControlActions",
+          "r320DailyReminderCard",
+          "v114ManagementPanel",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114AdminFeedGrid",
+          "v156DailyControl"
+        ]
+      },
+      "counts": {
+        "settings": 2,
+        "exam": 1,
+        "dashboard": 1
+      },
+      "guarded": {
+        "same": true,
+        "writes": 1
+      },
+      "errors": [],
+      "missing": []
+    },
+    {
+      "width": 901,
+      "geometry": {
+        "x": 0,
+        "w": 901,
+        "inner": 901,
+        "headerHeight": 97,
+        "domOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "r320DailyReminderCard",
+          "v156DailyControl",
+          "v90Stats",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114ManagementPanel",
+          "v114AdminFeedGrid",
+          "v307Dash",
+          "v90Panel",
+          "v90Panel",
+          "r323ControlActions"
+        ],
+        "visualOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "v90Panel",
+          "v90Stats",
+          "v307Dash",
+          "v90Panel",
+          "r323ControlActions",
+          "r320DailyReminderCard",
+          "v114ManagementPanel",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114AdminFeedGrid",
+          "v156DailyControl"
+        ]
+      },
+      "counts": {
+        "settings": 2,
+        "exam": 1,
+        "dashboard": 1
+      },
+      "guarded": {
+        "same": true,
+        "writes": 1
+      },
+      "errors": [],
+      "missing": []
+    },
+    {
+      "width": 1024,
+      "geometry": {
+        "x": 0,
+        "w": 1024,
+        "inner": 1024,
+        "headerHeight": 97,
+        "domOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "r320DailyReminderCard",
+          "v156DailyControl",
+          "v90Stats",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114ManagementPanel",
+          "v114AdminFeedGrid",
+          "v307Dash",
+          "v90Panel",
+          "v90Panel",
+          "r323ControlActions"
+        ],
+        "visualOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "v90Panel",
+          "v90Stats",
+          "v307Dash",
+          "v90Panel",
+          "r323ControlActions",
+          "r320DailyReminderCard",
+          "v114ManagementPanel",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114AdminFeedGrid",
+          "v156DailyControl"
+        ]
+      },
+      "counts": {
+        "settings": 2,
+        "exam": 1,
+        "dashboard": 1
+      },
+      "guarded": {
+        "same": true,
+        "writes": 1
+      },
+      "errors": [],
+      "missing": []
+    },
+    {
+      "width": 1366,
+      "geometry": {
+        "x": 0,
+        "w": 1366,
+        "inner": 1366,
+        "headerHeight": 60,
+        "domOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "r320DailyReminderCard",
+          "v156DailyControl",
+          "v90Stats",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114ManagementPanel",
+          "v114AdminFeedGrid",
+          "v307Dash",
+          "v90Panel",
+          "v90Panel",
+          "r323ControlActions"
+        ],
+        "visualOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "v90Panel",
+          "v90Stats",
+          "v307Dash",
+          "v90Panel",
+          "r323ControlActions",
+          "r320DailyReminderCard",
+          "v114ManagementPanel",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114AdminFeedGrid",
+          "v156DailyControl"
+        ]
+      },
+      "counts": {},
+      "guarded": {
+        "same": true,
+        "writes": 1
+      },
+      "errors": [],
+      "missing": []
+    },
+    {
+      "width": 1920,
+      "geometry": {
+        "x": 0,
+        "w": 1920,
+        "inner": 1920,
+        "headerHeight": 60,
+        "domOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "r320DailyReminderCard",
+          "v156DailyControl",
+          "v90Stats",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114ManagementPanel",
+          "v114AdminFeedGrid",
+          "v307Dash",
+          "v90Panel",
+          "v90Panel",
+          "r323ControlActions"
+        ],
+        "visualOrder": [
+          "r323AdminControl",
+          "v185FrontDesk",
+          "v90Panel",
+          "v90Stats",
+          "v307Dash",
+          "v90Panel",
+          "r323ControlActions",
+          "r320DailyReminderCard",
+          "v114ManagementPanel",
+          "ldmMasterControl",
+          "v149AdminQuickSlot",
+          "v114AdminFeedGrid",
+          "v156DailyControl"
+        ]
+      },
+      "counts": {
+        "settings": 2,
+        "exam": 1,
+        "dashboard": 1
+      },
+      "guarded": {
+        "same": true,
+        "writes": 1
+      },
+      "errors": [],
+      "missing": []
+    }
+  ],
+  "limits": "No real school credentials or live database were used. This does not verify every ERP module."
+}

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "complete due Marksheets automatically get registered QR on Preview",
+    "incomplete student is reported, not issued",
+    "Print-ready subset includes 2 QR Marksheets",
+    "Auto QR off explicitly permits 3 draft/provisional previews without extra writes",
+    "Parent cannot invoke Admin issue"
+  ],
+  "limits": "Original application with synthetic records/mocked RPC; no real school data modified."
+}

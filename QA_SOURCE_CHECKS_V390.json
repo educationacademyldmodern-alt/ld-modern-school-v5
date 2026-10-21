@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "scriptBlocks": 153,
+  "scope": "JavaScript parse checks of all replacement JS and inline HTML scripts; browser runtime reports supplied separately"
+}

@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "selected": 130,
+  "actualMasterMissingFather": [
+    "A95"
+  ],
+  "staleCandidateFatherRecovered": [
+    "A81"
+  ],
+  "concurrency": 4,
+  "localMockElapsedMs": 40965,
+  "checks": [
+    "fresh master read for every selected admission",
+    "row 81 missing candidate father recovered from populated master",
+    "truly empty row 95 reported by name/class/admission, no fabricated father",
+    "invalid row does not block 129 valid Print/PDF cards",
+    "automatic Preview QR generation with four workers",
+    "no per-student Document issued toast",
+    "response lost after commit retries identical request ID",
+    "130 selected -> 129 valid QR images initially; corrected master then 130/130 automatically ready without duplicating prior document numbers",
+    "native Print button invokes window.print",
+    "fees unchanged"
+  ],
+  "limits": "Actual ERP scripts and browser with mock school data; elapsed time is not a production performance measurement.",
+  "initialReady": 129,
+  "finalReadyAfterMasterCorrection": 130
+}

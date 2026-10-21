@@ -1,0 +1,1568 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "role": "admin",
+      "width": 390,
+      "mobileUnchanged": true,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": -1192,
+          "width": 390,
+          "height": 315,
+          "display": "grid",
+          "position": "relative",
+          "columns": "119.328px 119.328px 119.344px",
+          "padding": "58px 8px 8px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "host": {
+          "x": 0,
+          "y": -771,
+          "width": 390,
+          "height": 8163,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "11px 10px 24px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 9,
+          "y": -1133,
+          "width": 372,
+          "height": 59,
+          "display": "grid",
+          "position": "static",
+          "columns": "360px",
+          "padding": "2px 6px 5px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 950,
+          "display": "block",
+          "position": "absolute",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "hero": {
+          "x": 23,
+          "y": -464,
+          "width": 344,
+          "height": 153,
+          "display": "flex",
+          "position": "static",
+          "columns": "auto 1fr",
+          "padding": "18px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 25,
+          "y": 6552,
+          "width": 340,
+          "height": 285,
+          "display": "grid",
+          "position": "static",
+          "columns": "165px 165px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "teacher",
+      "width": 390,
+      "mobileUnchanged": true,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 271,
+          "display": "grid",
+          "position": "sticky",
+          "columns": "119.328px 119.328px 119.344px",
+          "padding": "7px 8px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "host": {
+          "x": 0,
+          "y": 329,
+          "width": 390,
+          "height": 2612,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "9px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 8,
+          "y": 7,
+          "width": 374,
+          "height": 64,
+          "display": "grid",
+          "position": "static",
+          "columns": "366px",
+          "padding": "3px 4px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "hero": {
+          "x": 9,
+          "y": 913,
+          "width": 372,
+          "height": 149,
+          "display": "flex",
+          "position": "static",
+          "columns": "none",
+          "padding": "18px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 9,
+          "y": 1178,
+          "width": 372,
+          "height": 1464,
+          "display": "grid",
+          "position": "static",
+          "columns": "181px 181px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "parent",
+      "width": 390,
+      "mobileUnchanged": true,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "10px 12px",
+          "background": "rgb(255, 255, 255)"
+        },
+        "host": {
+          "x": 8,
+          "y": 18,
+          "width": 374,
+          "height": 2919,
+          "display": "block",
+          "position": "static",
+          "columns": "none",
+          "padding": "9px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "brand": null,
+        "main": null,
+        "hero": {
+          "x": 17,
+          "y": 27,
+          "width": 356,
+          "height": 155,
+          "display": "flex",
+          "position": "static",
+          "columns": "minmax(0px, 1fr)",
+          "padding": "16px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 17,
+          "y": 388,
+          "width": 356,
+          "height": 1340,
+          "display": "grid",
+          "position": "static",
+          "columns": "173px 173px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": "auto",
+        "innerOverflow": "visible",
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "admin",
+      "width": 900,
+      "mobileUnchanged": true,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": -565,
+          "width": 900,
+          "height": 265,
+          "display": "grid",
+          "position": "relative",
+          "columns": "214.25px 214.25px 214.25px 214.25px",
+          "padding": "58px 10px 10px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "host": {
+          "x": 0,
+          "y": -238,
+          "width": 900,
+          "height": 4751,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "11px 10px 24px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 11,
+          "y": -506,
+          "width": 878,
+          "height": 54,
+          "display": "grid",
+          "position": "static",
+          "columns": "866px",
+          "padding": "2px 6px 5px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 900,
+          "height": 950,
+          "display": "block",
+          "position": "absolute",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "hero": {
+          "x": 518,
+          "y": -157,
+          "width": 359,
+          "height": 165,
+          "display": "flex",
+          "position": "static",
+          "columns": "auto minmax(0px, 1fr) auto",
+          "padding": "24px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 25,
+          "y": 4141,
+          "width": 850,
+          "height": 123,
+          "display": "grid",
+          "position": "static",
+          "columns": "203.5px 203.5px 203.5px 203.5px 0px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "teacher",
+      "width": 900,
+      "mobileUnchanged": true,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 900,
+          "height": 311,
+          "display": "grid",
+          "position": "sticky",
+          "columns": "91.1094px 91.1094px 91.1094px 91.1094px 91.1094px 91.1094px 91.1094px 91.1094px 91.125px",
+          "padding": "7px 8px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "host": {
+          "x": 0,
+          "y": 373,
+          "width": 900,
+          "height": 1604,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "9px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 206,
+          "y": 7,
+          "width": 91,
+          "height": 245,
+          "display": "grid",
+          "position": "static",
+          "columns": "81.1094px",
+          "padding": "3px 5px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 900,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "hero": {
+          "x": 9,
+          "y": 919,
+          "width": 882,
+          "height": 161,
+          "display": "flex",
+          "position": "static",
+          "columns": "none",
+          "padding": "24px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 9,
+          "y": 1157,
+          "width": 882,
+          "height": 604,
+          "display": "grid",
+          "position": "static",
+          "columns": "166.797px 166.797px 166.797px 166.797px 166.812px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "parent",
+      "width": 900,
+      "mobileUnchanged": true,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "10px 12px",
+          "background": "rgb(255, 255, 255)"
+        },
+        "host": {
+          "x": 14,
+          "y": 24,
+          "width": 872,
+          "height": 2019,
+          "display": "block",
+          "position": "static",
+          "columns": "none",
+          "padding": "9px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "brand": null,
+        "main": null,
+        "hero": {
+          "x": 23,
+          "y": 33,
+          "width": 854,
+          "height": 155,
+          "display": "flex",
+          "position": "static",
+          "columns": "none",
+          "padding": "16px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 23,
+          "y": 394,
+          "width": 854,
+          "height": 440,
+          "display": "grid",
+          "position": "static",
+          "columns": "134px 134px 134px 134px 134px 134px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": "auto",
+        "innerOverflow": "visible",
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "admin",
+      "width": 901,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 901,
+          "height": 97,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "8px 14px",
+          "background": "rgb(248, 251, 255)"
+        },
+        "host": {
+          "x": 0,
+          "y": 159,
+          "width": 901,
+          "height": 4830,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "18px 20px 30px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 14,
+          "y": 9,
+          "width": 300,
+          "height": 33,
+          "display": "grid",
+          "position": "static",
+          "columns": "292px",
+          "padding": "0px 8px 0px 0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 901,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(237, 243, 250)"
+        },
+        "hero": {
+          "x": 20,
+          "y": 177,
+          "width": 861,
+          "height": 190,
+          "display": "flex",
+          "position": "static",
+          "columns": "auto minmax(0px, 1fr) auto",
+          "padding": "22px 25px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 54,
+          "y": 4410,
+          "width": 793,
+          "height": 154,
+          "display": "grid",
+          "position": "static",
+          "columns": "189.25px 189.25px 189.25px 189.25px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "teacher",
+      "width": 901,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 901,
+          "height": 118,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "auto auto minmax(260px, 1fr) minmax(260px, 0.9fr) auto auto",
+          "padding": "9px 18px",
+          "background": "rgba(255, 255, 255, 0.93)"
+        },
+        "host": {
+          "x": 0,
+          "y": 180,
+          "width": 901,
+          "height": 1658,
+          "display": "flex",
+          "position": "relative",
+          "columns": "none",
+          "padding": "18px 20px 30px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 321,
+          "y": 9,
+          "width": 232,
+          "height": 99,
+          "display": "grid",
+          "position": "static",
+          "columns": "221.516px",
+          "padding": "3px 5px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 901,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(237, 243, 250)"
+        },
+        "hero": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "static",
+          "columns": "none",
+          "padding": "22px 25px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 20,
+          "y": 836,
+          "width": 861,
+          "height": 449,
+          "display": "grid",
+          "position": "static",
+          "columns": "163.391px 163.406px 163.391px 163.406px 163.391px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 901,
+          "height": 64,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "8px 14px",
+          "background": "rgb(248, 251, 255)"
+        },
+        "host": {
+          "x": 0,
+          "y": 126,
+          "width": 901,
+          "height": 754,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "12px 16px 26px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 254,
+          "y": 8,
+          "width": 300,
+          "height": 47,
+          "display": "grid",
+          "position": "static",
+          "columns": "292px",
+          "padding": "0px 8px 0px 0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 901,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "hero": null,
+        "modules": null,
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "errors": []
+    },
+    {
+      "role": "parent",
+      "width": 901,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "24px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "host": {
+          "x": 20,
+          "y": 28,
+          "width": 861,
+          "height": 2379,
+          "display": "block",
+          "position": "static",
+          "columns": "none",
+          "padding": "12px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "brand": null,
+        "main": null,
+        "hero": {
+          "x": 32,
+          "y": 40,
+          "width": 837,
+          "height": 190,
+          "display": "flex",
+          "position": "static",
+          "columns": "none",
+          "padding": "23px 27px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 32,
+          "y": 370,
+          "width": 837,
+          "height": 811,
+          "display": "grid",
+          "position": "static",
+          "columns": "158.594px 158.594px 158.609px 158.594px 158.609px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": "hidden auto",
+        "innerOverflow": "visible",
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "admin",
+      "width": 1024,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 97,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "8px 14px",
+          "background": "rgb(248, 251, 255)"
+        },
+        "host": {
+          "x": 0,
+          "y": 159,
+          "width": 1024,
+          "height": 4676,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "18px 20px 30px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 14,
+          "y": 9,
+          "width": 300,
+          "height": 33,
+          "display": "grid",
+          "position": "static",
+          "columns": "292px",
+          "padding": "0px 8px 0px 0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(237, 243, 250)"
+        },
+        "hero": {
+          "x": 20,
+          "y": 177,
+          "width": 984,
+          "height": 190,
+          "display": "flex",
+          "position": "static",
+          "columns": "auto minmax(0px, 1fr) auto",
+          "padding": "22px 25px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 54,
+          "y": 4278,
+          "width": 916,
+          "height": 131,
+          "display": "grid",
+          "position": "static",
+          "columns": "220px 220px 220px 220px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "teacher",
+      "width": 1024,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 84,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "auto auto minmax(260px, 1fr) minmax(260px, 0.9fr) auto auto",
+          "padding": "9px 18px",
+          "background": "rgba(255, 255, 255, 0.93)"
+        },
+        "host": {
+          "x": 0,
+          "y": 146,
+          "width": 1024,
+          "height": 1667,
+          "display": "flex",
+          "position": "relative",
+          "columns": "none",
+          "padding": "18px 20px 30px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 321,
+          "y": 9,
+          "width": 355,
+          "height": 65,
+          "display": "grid",
+          "position": "static",
+          "columns": "344.516px",
+          "padding": "3px 5px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(237, 243, 250)"
+        },
+        "hero": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "static",
+          "columns": "none",
+          "padding": "22px 25px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 20,
+          "y": 802,
+          "width": 984,
+          "height": 449,
+          "display": "grid",
+          "position": "static",
+          "columns": "154.828px 154.828px 154.828px 154.844px 154.828px 154.828px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 64,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "8px 14px",
+          "background": "rgb(248, 251, 255)"
+        },
+        "host": {
+          "x": 0,
+          "y": 126,
+          "width": 1024,
+          "height": 763,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "12px 16px 26px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 254,
+          "y": 8,
+          "width": 300,
+          "height": 47,
+          "display": "grid",
+          "position": "static",
+          "columns": "292px",
+          "padding": "0px 8px 0px 0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "hero": null,
+        "modules": null,
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "errors": []
+    },
+    {
+      "role": "parent",
+      "width": 1024,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "24px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "host": {
+          "x": 20,
+          "y": 28,
+          "width": 984,
+          "height": 2247,
+          "display": "block",
+          "position": "static",
+          "columns": "none",
+          "padding": "12px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "brand": null,
+        "main": null,
+        "hero": {
+          "x": 32,
+          "y": 40,
+          "width": 960,
+          "height": 190,
+          "display": "flex",
+          "position": "static",
+          "columns": "none",
+          "padding": "23px 27px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 32,
+          "y": 370,
+          "width": 960,
+          "height": 679,
+          "display": "grid",
+          "position": "static",
+          "columns": "183.188px 183.203px 183.203px 183.203px 183.188px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": "hidden auto",
+        "innerOverflow": "visible",
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "admin",
+      "width": 1366,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 60,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "8px 14px",
+          "background": "rgb(248, 251, 255)"
+        },
+        "host": {
+          "x": 0,
+          "y": 122,
+          "width": 1366,
+          "height": 4439,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "18px 20px 30px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 14,
+          "y": 13,
+          "width": 300,
+          "height": 33,
+          "display": "grid",
+          "position": "static",
+          "columns": "292px",
+          "padding": "0px 8px 0px 0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(237, 243, 250)"
+        },
+        "hero": {
+          "x": 20,
+          "y": 140,
+          "width": 1326,
+          "height": 190,
+          "display": "flex",
+          "position": "static",
+          "columns": "auto minmax(0px, 1fr) auto",
+          "padding": "22px 25px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 54,
+          "y": 4021,
+          "width": 1258,
+          "height": 115,
+          "display": "grid",
+          "position": "static",
+          "columns": "305.5px 305.5px 305.5px 305.5px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "teacher",
+      "width": 1366,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 70,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "auto auto minmax(260px, 1fr) minmax(260px, 0.9fr) auto auto",
+          "padding": "9px 18px",
+          "background": "rgba(255, 255, 255, 0.93)"
+        },
+        "host": {
+          "x": 0,
+          "y": 132,
+          "width": 1366,
+          "height": 1565,
+          "display": "flex",
+          "position": "relative",
+          "columns": "none",
+          "padding": "18px 20px 30px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 321,
+          "y": 9,
+          "width": 697,
+          "height": 51,
+          "display": "grid",
+          "position": "static",
+          "columns": "686.516px",
+          "padding": "3px 5px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(237, 243, 250)"
+        },
+        "hero": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "static",
+          "columns": "none",
+          "padding": "22px 25px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 20,
+          "y": 794,
+          "width": 1326,
+          "height": 334,
+          "display": "grid",
+          "position": "static",
+          "columns": "156.125px 156.125px 156.125px 156.125px 156.125px 156.125px 156.125px 156.125px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 64,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "8px 14px",
+          "background": "rgb(248, 251, 255)"
+        },
+        "host": {
+          "x": 0,
+          "y": 126,
+          "width": 1366,
+          "height": 767,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "12px 16px 26px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 254,
+          "y": 8,
+          "width": 300,
+          "height": 47,
+          "display": "grid",
+          "position": "static",
+          "columns": "292px",
+          "padding": "0px 8px 0px 0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "hero": null,
+        "modules": null,
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "errors": []
+    },
+    {
+      "role": "parent",
+      "width": 1366,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "24px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "host": {
+          "x": 20,
+          "y": 28,
+          "width": 1326,
+          "height": 2247,
+          "display": "block",
+          "position": "static",
+          "columns": "none",
+          "padding": "12px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "brand": null,
+        "main": null,
+        "hero": {
+          "x": 32,
+          "y": 40,
+          "width": 1302,
+          "height": 190,
+          "display": "flex",
+          "position": "static",
+          "columns": "none",
+          "padding": "23px 27px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 32,
+          "y": 370,
+          "width": 1302,
+          "height": 679,
+          "display": "grid",
+          "position": "static",
+          "columns": "251.594px 251.594px 251.609px 251.594px 251.609px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": "hidden auto",
+        "innerOverflow": "visible",
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "admin",
+      "width": 1920,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 60,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "8px 14px",
+          "background": "rgb(248, 251, 255)"
+        },
+        "host": {
+          "x": 0,
+          "y": 122,
+          "width": 1920,
+          "height": 4239,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "18px 20px 30px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 14,
+          "y": 13,
+          "width": 300,
+          "height": 33,
+          "display": "grid",
+          "position": "static",
+          "columns": "292px",
+          "padding": "0px 8px 0px 0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(237, 243, 250)"
+        },
+        "hero": {
+          "x": 20,
+          "y": 140,
+          "width": 1880,
+          "height": 190,
+          "display": "flex",
+          "position": "static",
+          "columns": "auto minmax(0px, 1fr) auto",
+          "padding": "22px 25px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 54,
+          "y": 3821,
+          "width": 1812,
+          "height": 115,
+          "display": "grid",
+          "position": "static",
+          "columns": "444px 444px 444px 444px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    },
+    {
+      "role": "teacher",
+      "width": 1920,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 70,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "auto auto minmax(260px, 1fr) minmax(260px, 0.9fr) auto auto",
+          "padding": "9px 18px",
+          "background": "rgba(255, 255, 255, 0.93)"
+        },
+        "host": {
+          "x": 235,
+          "y": 132,
+          "width": 1450,
+          "height": 1566,
+          "display": "flex",
+          "position": "relative",
+          "columns": "none",
+          "padding": "18px 20px 30px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 321,
+          "y": 9,
+          "width": 1251,
+          "height": 51,
+          "display": "grid",
+          "position": "static",
+          "columns": "1240.52px",
+          "padding": "3px 5px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(237, 243, 250)"
+        },
+        "hero": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "static",
+          "columns": "none",
+          "padding": "22px 25px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 255,
+          "y": 795,
+          "width": 1410,
+          "height": 334,
+          "display": "grid",
+          "position": "static",
+          "columns": "166.625px 166.625px 166.625px 166.625px 166.625px 166.625px 166.625px 166.625px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "functionPage": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 64,
+          "display": "flex",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "8px 14px",
+          "background": "rgb(248, 251, 255)"
+        },
+        "host": {
+          "x": 0,
+          "y": 126,
+          "width": 1920,
+          "height": 767,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "12px 16px 26px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "brand": {
+          "x": 254,
+          "y": 8,
+          "width": 300,
+          "height": 47,
+          "display": "grid",
+          "position": "static",
+          "columns": "292px",
+          "padding": "0px 8px 0px 0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "main": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 950,
+          "display": "block",
+          "position": "relative",
+          "columns": "none",
+          "padding": "0px",
+          "background": "rgb(238, 245, 252)"
+        },
+        "hero": null,
+        "modules": null,
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": null,
+        "innerOverflow": null,
+        "overflow": 0
+      },
+      "errors": []
+    },
+    {
+      "role": "parent",
+      "width": 1920,
+      "mobileUnchanged": false,
+      "dashboard": {
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "display": "none",
+          "position": "sticky",
+          "columns": "none",
+          "padding": "24px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "host": {
+          "x": 20,
+          "y": 28,
+          "width": 1880,
+          "height": 2247,
+          "display": "block",
+          "position": "static",
+          "columns": "none",
+          "padding": "12px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "brand": null,
+        "main": null,
+        "hero": {
+          "x": 32,
+          "y": 40,
+          "width": 1856,
+          "height": 190,
+          "display": "flex",
+          "position": "static",
+          "columns": "none",
+          "padding": "23px 27px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "modules": {
+          "x": 32,
+          "y": 370,
+          "width": 1856,
+          "height": 679,
+          "display": "grid",
+          "position": "static",
+          "columns": "362.391px 362.406px 362.391px 362.406px 362.391px",
+          "padding": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "bodyScroll": 950,
+        "bodyHeight": 950,
+        "portalOverflow": "hidden auto",
+        "innerOverflow": "visible",
+        "overflow": 0
+      },
+      "functionPage": null,
+      "errors": []
+    }
+  ],
+  "IndiaClockBoundaries": [
+    [
+      "2026-10-20T18:29:00Z",
+      "Good Night"
+    ],
+    [
+      "2026-10-20T18:30:00Z",
+      "Good Night"
+    ],
+    [
+      "2026-10-20T23:29:00Z",
+      "Good Night"
+    ],
+    [
+      "2026-10-20T23:30:00Z",
+      "Good Morning"
+    ],
+    [
+      "2026-10-21T06:29:00Z",
+      "Good Morning"
+    ],
+    [
+      "2026-10-21T06:30:00Z",
+      "Good Afternoon"
+    ],
+    [
+      "2026-10-21T11:30:00Z",
+      "Good Evening"
+    ],
+    [
+      "2026-10-21T15:30:00Z",
+      "Good Night"
+    ]
+  ],
+  "scope": "Actual supplied ERP markup/scripts and mock Admin/Teacher login; representative Parent portal body. No real school database."
+}
