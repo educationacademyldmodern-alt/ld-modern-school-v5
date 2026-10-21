@@ -1,7 +1,7 @@
 /* Scoped to the Paper Centre iframe. Local, bounded typing helpers; no polling or requests. */
 (()=>{'use strict';
 const W=window,D=document,api=W.LDM_PAPER_FORM_V343;if(!api||W.LDM_PAPER_PREMIUM_V381)return;
-const $=id=>D.getElementById(id),F='#t350Questions textarea[data-field="q"],#t350Questions input[data-option],#t350Questions input[data-field="right"],#t350Questions input[data-field="answer"],#t350Compose,#t350ComposeOptions input,#qText,#qRight,#qAnswer,#composerFields input,textarea[data-prop="questions"],textarea[data-prop="answers"],#modelRows [data-model-field]';
+const $=id=>D.getElementById(id),F='textarea[data-field="text"],textarea[data-field="extra"],textarea[data-meta="instructions"],#t350Questions textarea[data-field="q"],#t350Questions input[data-option],#t350Questions input[data-field="right"],#t350Questions input[data-field="answer"],#t350Compose,#t350ComposeOptions input,#qText,#qRight,#qAnswer,#composerFields input,textarea[data-prop="questions"],textarea[data-prop="answers"],#modelRows [data-model-field]';
 let context={},active=null,lastEdit=null,composing=new WeakSet(),timer=null,items=[],selected=-1,suggestedFor=null,voice=null,ignoreInput=false,frozen=false;
 let mode='direct',correct=false,suggestions=false;
 try{const p=JSON.parse(localStorage.getItem('ldm381_typing_preferences')||'{}');if(p.nativeKeyboardVersion===382){mode=p.mode==='roman'?'roman':'direct';correct=p.correct===true;suggestions=p.suggestions===true}}catch(_){}
@@ -15,7 +15,7 @@ const corrections={teh:'the',adn:'and',answr:'answer',qustion:'question',queston
 const keys=[...new Set([...Object.keys(vowels),...Object.keys(cons)])].sort((a,b)=>b.length-a.length);
 function transliterate(word){if(!/^[A-Za-z]+$/.test(word)||word.length>48)return word;const hit=common[word.toLowerCase()];if(hit)return hit;let out='',pending=false;for(let i=0;i<word.length;){const key=keys.find(k=>word.startsWith(k,i));if(!key){out+=word[i++];pending=false;continue}i+=key.length;if(vowels[key]){out+=vowels[key][pending?1:0];pending=false}else{if(pending)out+='्';out+=cons[key];pending=true}}return out}
 function hi(){return state.lang==='hi'}
-function field(el){return !frozen&&!!el?.matches?.(F)&&!el.disabled&&!el.readOnly&&el.isConnected}
+function field(el){const doc=el?.ownerDocument;if(doc&&doc!==D&&(!doc.defaultView?.frameElement?.isConnected||D.body.dataset.paperFormat401!=='typing'))return false;return !frozen&&!!el?.matches?.(F)&&!el.disabled&&!el.readOnly&&el.isConnected}
 function prefs(){try{localStorage.setItem('ldm381_typing_preferences',JSON.stringify({mode,correct,suggestions,nativeKeyboardVersion:382}))}catch(_){}}
 function textStatus(s){const n=$('p381TypingStatus');if(n&&n.textContent!==s)n.textContent=s}
 function wordAt(el){if(!field(el)||composing.has(el)||el.selectionStart!==el.selectionEnd)return null;const end=el.selectionStart,m=el.value.slice(0,end).match(/[A-Za-z\u0900-\u097f]+$/u);if(!m||m[0].length>48)return null;const start=end-m[0].length;if(start&&/[\u0900-\u097fA-Za-z0-9_@/]/.test(el.value[start-1]))return null;return{word:m[0],start,end}}
@@ -32,8 +32,8 @@ function insert(value){if(!field(active)){textStatus('पहले प्रश�
 function flush(){hide();if(field(active)&&!composing.has(active))commit(active);W.LDM_PAPER_PERFORMANCE_V373?.flush()}
 function voiceStop(){if(voice){voice.onresult=voice.onerror=voice.onend=null;try{voice.abort()}catch(_){}voice=null}const b=$('p381Voice');if(b){b.textContent='🎙 बोलकर लिखें';b.setAttribute('aria-pressed','false')}}
 function speak(){if(voice){voiceStop();textStatus('Voice बंद है।');return}if(!field(active)){textStatus('पहले लिखने वाला field चुनें।');return}const Speech=W.SpeechRecognition||W.webkitSpeechRecognition;if(!Speech){textStatus('इस browser में voice typing उपलब्ध नहीं है। Keyboard से लिखें।');return}const target=active,initial=active.value;const start=target.selectionStart,end=target.selectionEnd;const speech=new Speech();voice=speech;speech.lang=hi()?'hi-IN':'en-IN';speech.interimResults=false;speech.onresult=e=>{if(field(target)&&target.value===initial){replace(target,start,end,e.results[0][0].transcript);target.focus()}else textStatus('लिखे हुए बदलाव सुरक्षित हैं। दोबारा Voice शुरू करें।')};speech.onerror=()=>{textStatus('Microphone की अनुमति और browser support जाँचें।');voiceStop()};speech.onend=()=>{voiceStop()};try{speech.start();$('p381Voice').textContent='■ बोलना बंद करें';$('p381Voice').setAttribute('aria-pressed','true');textStatus('बोलिए…')}catch(_){voiceStop();textStatus('Voice शुरू नहीं हुई। Keyboard से लिखें।')}}
-function language(next){if(!['hi','en'].includes(next)||next===state.lang)return;flush();const control=$(D.body.classList.contains('t350Simple')?'t350Lang':'lang');if(control){control.value=next;control.dispatchEvent(new Event('change',{bubbles:true}))}else{state.lang=next;refresh()}mount();save()}
-function addQuestion(){if(!field(active))return;flush();if(active.id==='t350Compose'||active.closest('#t350ComposeOptions'))$('t350Add')?.click();else if(active.closest('#t350Questions'))active.closest('[data-section][data-question]')?.closest('section')?.querySelector('[data-section-add]')?.click();else if(active.closest('#composerFields'))$('qAdd')?.click();else textStatus('मॉडल में अगला प्रश्न लिखने के लिए Tab दबाएँ।')}
+function language(next){if(!['hi','en'].includes(next))return;flush();if(W.LDM_TYPING_BRIDGE396?.setLanguage?.(next)){mount();return}if(next===state.lang)return;const control=$(D.body.classList.contains('t350Simple')?'t350Lang':'lang');if(control){control.value=next;control.dispatchEvent(new Event('change',{bubbles:true}))}else{state.lang=next;refresh()}mount();save()}
+function addQuestion(){if(!field(active))return;flush();if(active.ownerDocument!==D&&active.ownerDocument.getElementById('add')){active.ownerDocument.getElementById('add').click();return}if(active.id==='t350Compose'||active.closest('#t350ComposeOptions'))$('t350Add')?.click();else if(active.closest('#t350Questions'))active.closest('[data-section][data-question]')?.closest('section')?.querySelector('[data-section-add]')?.click();else if(active.closest('#composerFields'))$('qAdd')?.click();else textStatus('मॉडल में अगला प्रश्न लिखने के लिए Tab दबाएँ।')}
 function shape(){const teacher=D.body.classList.contains('t350Simple'),root=$(teacher?'t350Editor':'quickShell');if(!root)return;root.classList.add('p381Editor');
 if(teacher&&!root.querySelector('.p381Grid')){const layout=D.createElement('div');layout.className='p381Grid';const aside=D.createElement('aside');aside.className='p381Aside';aside.setAttribute('aria-label','परीक्षा विवरण');const title=D.createElement('h2');title.textContent='परीक्षा विवरण';aside.append(title);const writing=D.createElement('div');writing.className='p381Writing';const nodes=[...root.children];for(const n of nodes){if(n.matches('.t350Heading,#t350Recovery'))continue;if(n.matches('.t350Meta,.t366Auto,#t366Hint'))aside.append(n);else writing.append(n)}layout.append(aside,writing);root.append(layout);const help=D.createElement('p');help.className='p381Quiet';help.textContent='डिवाइस draft अपने-आप सुरक्षित होता है। केंद्रीय सेव के लिए ऊपर Save draft दबाएँ।';aside.append(help);}
 if(teacher){const composer=root.querySelector('.p381Writing>.t350Composer:has(#t350Compose)');if(composer){const fold=D.createElement('details');fold.className='p381ComposerFold';fold.open=root.querySelector('#t350AddMode')?.getAttribute('aria-pressed')==='true';const summary=D.createElement('summary');summary.textContent='＋ नया प्रश्न जल्दी जोड़ें';composer.before(fold);fold.append(summary,composer)}}
@@ -50,10 +50,11 @@ const inPreview=D.body.dataset.paperView==='preview';panel.hidden=inPreview||!!s
 textStatus(mode==='direct'?'मोबाइल keyboard की भाषा में सीधे लिखें — हिन्दी / English / दोनों।':'Roman शब्द के बाद Space दबाएँ।');
 }
 // Delegated handlers never rebuild a question or the preview as the user types.
-D.addEventListener('focusin',e=>{if(field(e.target)){active=e.target;active.spellcheck=true;active.setAttribute('autocorrect','on');active.setAttribute('data-ldm-no-transliterate','true');hide()}});
-D.addEventListener('compositionstart',e=>{if(field(e.target)){composing.add(e.target);hide()}},true);
-D.addEventListener('compositionend',e=>{composing.delete(e.target);if(field(e.target)){notify(e.target);active=e.target;queue()}},true);
-D.addEventListener('keydown',e=>{if(e.defaultPrevented||e.isComposing||composing.has(e.target)||e.keyCode===229||!field(e.target))return;active=e.target;
+const attached401=new WeakSet();function attachDocument(doc){if(!doc||attached401.has(doc))return;attached401.add(doc);active=null;lastEdit=null;hide();
+doc.addEventListener('focusin',e=>{if(field(e.target)){active=e.target;active.spellcheck=true;active.setAttribute('autocorrect','on');active.setAttribute('data-ldm-no-transliterate','true');hide()}});
+doc.addEventListener('compositionstart',e=>{if(field(e.target)){composing.add(e.target);hide()}},true);
+doc.addEventListener('compositionend',e=>{composing.delete(e.target);if(field(e.target)){notify(e.target);active=e.target;queue()}},true);
+doc.addEventListener('keydown',e=>{if(e.defaultPrevented||e.isComposing||composing.has(e.target)||e.keyCode===229||!field(e.target))return;active=e.target;
 if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='z'){if(lastEdit){e.preventDefault();undo()}return}
 if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();addQuestion();return}
 if(e.altKey&&/^[1-5]$/.test(e.key)&&items[Number(e.key)-1]){e.preventDefault();choose(Number(e.key)-1);return}if(e.ctrlKey||e.altKey||e.metaKey)return;
@@ -61,13 +62,15 @@ if(e.key==='Escape'){hide();return}if(items.length&&['ArrowDown','ArrowUp'].incl
 if(e.key==='Tab'&&selected>=0&&items.length){e.preventDefault();choose(selected);return}
 if([' ','Enter','Tab',',','.','?','!',';',':','।'].includes(e.key)){commit(e.target);hide()}
 },true);
-D.addEventListener('input',e=>{if(ignoreInput||!field(e.target)||e.isComposing||composing.has(e.target))return;active=e.target;
+doc.addEventListener('input',e=>{if(ignoreInput||!field(e.target)||e.isComposing||composing.has(e.target))return;active=e.target;
 // Touch keyboards often insert a delimiter without a keydown event.
 if((mode==='roman'||correct)&&e.inputType==='insertText'&&e.data&&/^[\s,.?!;:।]$/.test(e.data)&&active.selectionStart===active.selectionEnd){const end=active.selectionStart;if(end){active.setSelectionRange(end-1,end-1);commit(active);const cursor=active.selectionStart+1;active.setSelectionRange(cursor,cursor)}}
 queue();},true);
-D.addEventListener('focusout',e=>{if(field(e.target)&&!composing.has(e.target))commit(e.target)},true);
-D.addEventListener('pointerdown',e=>{if(!e.target.closest('#p381Typing')&&!field(e.target))hide()},true);
-D.addEventListener('change',e=>{if(['lang','t350Lang'].includes(e.target.id))mount()});
+doc.addEventListener('focusout',e=>{if(field(e.target)&&!composing.has(e.target))commit(e.target)},true);
+doc.addEventListener('pointerdown',e=>{if(!e.target.closest('#p381Typing')&&!field(e.target))hide()},true);
+doc.addEventListener('change',e=>{if(doc!==D&&e.target.dataset?.meta==='language'){state.lang=e.target.value;mount()}else if(['lang','t350Lang'].includes(e.target.id))mount()});
+}
+attachDocument(D);
 D.addEventListener('ldm-paper-editor-mounted',mount);D.addEventListener('ldm-paper-settings-mounted',mount);
 D.addEventListener('click',e=>{if(e.target.closest('#paperWorkspace371 [data-view]'))mount()});
 for(const name of ['load','importContent','prefill']){const base=api[name];if(typeof base!=='function')continue;api[name]=function(...args){voiceStop();hide();active=null;lastEdit=null;if(name==='load'){context=args[1]||{};frozen=false}const out=base.apply(this,args);mount();return out}}
@@ -77,5 +80,5 @@ const dispose=api.dispose;api.dispose=function(...args){flush();voiceStop();acti
 const oldQuick=quickUI;quickUI=function(...args){const out=oldQuick.apply(this,args);mount();return out};
 const oldModel=modelMount;modelMount=function(...args){const out=oldModel.apply(this,args);mount();return out};
 W.addEventListener('pagehide',()=>{hide();voiceStop()});D.addEventListener('visibilitychange',()=>{if(D.hidden){hide();voiceStop()}});
-W.LDM_PAPER_PREMIUM_V381={transliterate,candidates,stats:()=>({...stats}),mount,flush};mount();
+W.LDM_PAPER_PREMIUM_V381={transliterate,candidates,stats:()=>({...stats}),mount,flush,attachDocument};mount();
 })();

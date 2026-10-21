@@ -36,3 +36,6 @@
 .pc343DialogHeader p{display:none}
 .pc343DialogHeader .pc343Status{display:inline-block;background:transparent;color:#b6d4e2;border:0;padding:0;margin-top:7px;font-size:11px;min-height:15px}
 }
+
+/* V401: one central action bar; the embedded editor hides its duplicate actions. */
+.pc343Dialog.pc401Unified .pc343DialogHeader #pc343Preview,.pc343Dialog.pc401Unified .pc343DialogHeader #pc343Print{display:inline-flex!important;align-items:center;justify-content:center}

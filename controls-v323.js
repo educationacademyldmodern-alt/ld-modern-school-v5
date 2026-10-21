@@ -13,6 +13,6 @@ function mount(){if(!admin())return;const dash=document.querySelector('#erpConte
 function schedule(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;mount()})}
 const prior=window.render;window.render=async function(...args){const out=await prior.apply(this,args);if(args[0]==='dashboard'){mount();schedule()}return out};try{render=window.render}catch(_){}
 const baseDash=window.v90AdminDashboard;if(typeof baseDash==='function'){window.v90AdminDashboard=async function(...args){const out=await baseDash.apply(this,args);mount();return out};try{v90AdminDashboard=window.v90AdminDashboard}catch(_){}}
-function ready(){const host=$('erpContent');if(host)new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.ldmRootAdminDash,.ldmNewTeacher,.v90Dash,#v233Greeting,#r323PaperCard,#s336DashboardCard,[data-v264-dash],[data-v267-admin-academic]')||n.querySelector?.('.ldmRootAdminDash,.ldmNewTeacher,.v90Dash,#v233Greeting,#r323PaperCard,#s336DashboardCard,[data-v264-dash],[data-v267-admin-academic]')))))schedule()}).observe(host,{childList:true,subtree:true});mount()}
+function ready(){const host=$('erpContent');if(host)new MutationObserver(schedule).observe(host,{childList:true,subtree:true});mount()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();window.LDM_V323_CONTROLS={mount};
 })();
