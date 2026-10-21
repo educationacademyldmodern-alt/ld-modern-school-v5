@@ -17128,10 +17128,9 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     return true;
   }
   function ensureToggle(){
-    if(document.getElementById('ldmV249LangToggle')||!document.body)return;
-    const b=document.createElement('button');b.id='ldmV249LangToggle';b.type='button';b.setAttribute('aria-label','Hindi English typing mode');
-    b.addEventListener('click',()=>setMode(currentMode()==='hi'?'en':'hi'));
-    document.body.appendChild(b);setMode(currentMode(),true);
+    // V391: remove the floating footer shortcut; retain typing initialization.
+    document.getElementById('ldmV249LangToggle')?.remove();
+    setMode(currentMode(),true);
   }
   document.addEventListener('keydown',function(e){
     if(currentMode()!=='hi'||e.defaultPrevented||e.ctrlKey||e.metaKey||e.altKey)return;
