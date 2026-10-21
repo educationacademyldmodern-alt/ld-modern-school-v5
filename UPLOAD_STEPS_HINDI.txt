@@ -1,0 +1,45 @@
+LDM V399 — एक साथ सभी हाल के ERP updates (V390–V398)
+
+आपने paper वाली file के बाद updates upload नहीं किए हैं। इसलिए यह combined ZIP दी गई है। अब अलग V395 / V396 / V397 / V398 ZIP upload करने की जरूरत नहीं।
+
+इसमें 35 नवीनतम code files और 4 छोटी नई SQL parts हैं। यह आपके मौजूदा ERP के ऊपर update है; पूरा नया ERP installation नहीं। पुराने students, payments और बाकी files रहने दें।
+
+UPLOAD का क्रम:
+1. मौजूदा ERP files की backup copy रखें।
+2. इस ZIP को Extract करें।
+3. SQL_RUN_FIRST folder की 4 files Supabase SQL Editor में क्रम से चलाएँ:
+   01_ADMIN_PAPER_STATUS_SAFE.sql
+   02_WORK_ACCESS_GRANTS_SAFE.sql
+   03_WORK_RECORDS_SAFE.sql
+   04_WORK_SERVICES_SAFE.sql
+   हर part 25 KB से छोटी है। कोई part error दे तो अगली part चलाने से पहले error ठीक कराएँ।
+   ये नई report/grants/audit functions/tables जोड़ती हैं। पुराने records, policies या मूल functions नहीं हटातीं।
+4. ZIP के मुख्य स्तर की सभी 35 .html / .js / .css files ERP root में Upload / Replace करें।
+   इनके नाम नहीं बदलें। एक ही नवीनतम index.html है।
+   पुराने ERP की दूसरी files/folders Delete नहीं करें।
+   SQL_RUN_FIRST और VERIFICATION को वेबसाइट पर upload करना जरूरी नहीं।
+5. Laptop पर Ctrl+Shift+R करें। Mobile पर page reload करें; पुरानी cached screen हो तो site को बन्द करके फिर खोलें।
+
+इस combined update में:
+- Desktop header/layout, IST greeting, QR/Admit print fixes और footer Keyboard button हटाना।
+- Attendance scrolling / तेज local marking और graph सुधार।
+- Exam entry, Teacher data save, fees/search/numeric update सुधार; fee basket में class।
+- आपका नया Paper Typing Format: अपना प्रश्न प्रकार, Add/Delete/order, अंक बाँटना, केंद्रीय Save/Send, Preview/Print।
+- Admin Teacher Paper Status: कौन पढ़ाता है, किसका paper बना/भेजा/बाकी; रिपोर्ट Preview/PDF/Print।
+- समय सीमा वाला Work Access: व्यक्ति, module, एक महीना/अपनी तारीख, अधिकार वापस लेना और वास्तविक operator audit।
+
+कहाँ खोलें:
+नया Paper Format: Question Paper Setup → नया पेपर → पेपर सेटअप / Import → यह Typing Format खोलें।
+Admin paper report: Question Paper Setup → शिक्षक पेपर स्थिति · Preview / PDF / Print।
+कार्य अधिकार: Work Assign / Admin Assistant → कार्य अधिकार / मेरा कार्य खोलें। फिर व्यक्ति, काम और अवधि चुनें।
+जिसे काम मिला है: अपने login से Assigned Work → कार्य अधिकार / मेरा कार्य खोलें → मेरे कार्य।
+
+भाई को Fee Management देना:
+उनका अपना active ERP login चुनें; नया login मौजूदा Teacher / User Access से पहले बनाएँ। Fee Management और एक महीने की अवधि चुनें। Admin का password साझा नहीं करना है। अवधि समाप्त या अधिकार वापस होने पर नया काम सर्वर रोकता है।
+
+सावधानी / जाँच की सीमा:
+- मौजूदा ERP की पहले से स्थापित central fee, paper और exam services आवश्यक हैं; यह combined update उनका नया मूल installation नहीं करती।
+- जिन मूल services का setup आपके ERP में नहीं है, वे साफ error देंगी; मनगढ़ंत सफलता या balance नहीं आएगा।
+- नया Work Access चुने business module तक सीमित है; login/permissions/database administration अपने-आप नहीं मिलता। पुराने Work Assign task/status/shortcuts सुरक्षित हैं; वास्तविक control के लिए नया कार्य अधिकार वाला विकल्प इस्तेमाल करें।
+- प्रत्येक delivered code file पहले से जाँचे गए वर्तमान ERP assembly से byte-identical है। इस बार केवल packaging merge किया गया है। Browser और local PostgreSQL QA evidence VERIFICATION में है।
+- Live school database, पूरे दिन का run और physical printer का परीक्षण नहीं हुआ है।

@@ -98,8 +98,7 @@ function mount(){W.LDM_MASTER_PLAN_INSTALL?.();const host=$('erpContent');if(!ho
  if(!midnightTimer){const next=Date.parse(today()+'T00:00:00+05:30')+86400000-Date.now()+1000;midnightTimer=setTimeout(()=>{midnightTimer=null;const c=$('s336TeacherCard');if(c)c.remove();mount();if(current==='teacher'&&$('s336Daily')&&readDate<today()){readDate=today();open('teacher')}},Math.max(1000,next))}
 }
 function install(){const h=$('erpContent');if(h&&!rootObserver){rootObserver=new MutationObserver(()=>queueMicrotask(mount));rootObserver.observe(h,{childList:true})}mount()}
-// Individual classroom attendance now saves immediately; bulk changes still have explicit Save.
-const oneAttendance=W.setOneAttendance;if(typeof oneAttendance==='function'){W.setOneAttendance=async function(...args){const r=await oneAttendance.apply(this,args);await W.LDM_ROOT?.saveAttendance?.();return r};try{setOneAttendance=W.setOneAttendance}catch(_){}}
+// V392: individual and bulk edits use the attendance engine; Save Marked Attendance commits the batch once.
 const priorRender=W.render;W.render=async function(route,...args){syncPending();if(!canLeave()){if(pending&&!busy&&!$('s336Root'))return openPending();return status('पहले नए कार्यक्षेत्र का pending Save / Retry पूरा करें।',true)}if(String(route).startsWith('s336_'))return open(String(route).slice(5));epoch++;current='home';const r=await priorRender.call(this,route,...args);install();return r};try{render=W.render}catch(_){}
 function openPending(){current=pending?.route||'home';shell('पिछले सेव की पुष्टि','वही request दोबारा भेजें; नया रिकॉर्ड नहीं बनेगा');pendingButton()}
 for(const name of ['v53CompleteHub','teacherHomeDashboard']){const base=W[name];if(typeof base==='function'){W[name]=async function(...args){if(!canLeave())return openPending();const r=await base.apply(this,args);install();return r};try{globalThis[name]=W[name]}catch(_){}}}

@@ -1,0 +1,15 @@
+/* V392: scoped attendance view; the page owns vertical scrolling. */
+#erpContent #attendanceSheet .r392AttendanceScroll{height:auto!important;max-height:none!important;overflow-x:auto!important;overflow-y:visible!important;contain:none!important}
+#attendanceSheet .r392AttendanceScroll tbody tr{content-visibility:auto;contain-intrinsic-size:auto 72px}
+#attendanceSheet .r392AttendanceScroll input[type=checkbox]{cursor:pointer;touch-action:manipulation}
+#attendanceSheet .r392AttCount{font-size:13px;color:#435e72;margin:12px 0}
+/* One flat ring: all segments and the centre use total students as denominator. */
+#erpContent #v114AttDonut.r392AttendanceDonut{width:168px!important;height:168px!important;aspect-ratio:1!important;border-radius:50%!important;position:relative!important;display:grid!important;place-items:center!important;margin:8px auto!important;padding:0!important;transform:none!important;box-shadow:none!important;border:0!important;overflow:hidden!important;flex:none!important;isolation:isolate}
+#erpContent #v114AttDonut.r392AttendanceDonut::before{display:none!important;content:none!important}
+#erpContent #v114AttDonut.r392AttendanceDonut::after{content:''!important;position:absolute!important;inset:22px!important;width:auto!important;height:auto!important;aspect-ratio:auto!important;border:0!important;border-radius:50%!important;background:#fff!important;box-shadow:none!important;transform:none!important}
+#erpContent #v114AttDonut.r392AttendanceDonut>div{position:relative!important;z-index:1!important;display:block!important;inset:auto!important;width:auto!important;height:auto!important;min-height:0!important;min-width:0!important;padding:0!important;margin:0!important;background:transparent!important;box-shadow:none!important;transform:none!important;text-align:center!important;border:0!important}
+#erpContent #v114AttDonut.r392AttendanceDonut b{display:block!important;font-size:30px!important;line-height:1.2!important;margin:0 0 5px!important;color:#153b59!important}
+#erpContent #v114AttDonut.r392AttendanceDonut small{display:block!important;max-width:112px!important;white-space:normal!important;font-size:12px!important;line-height:1.4!important;color:#536b7b!important}
+#erpContent .v114AttendanceVisual:has(.r392AttendanceDonut){grid-template-columns:190px minmax(0,1fr)!important;align-items:center!important;gap:14px!important}
+#erpContent .r392AttCoverage{grid-column:1/-1!important;margin:0!important;padding:10px 12px!important;border-radius:9px!important;background:#edf5fa!important;color:#294d64!important;font-size:13px!important;line-height:1.6!important;white-space:normal!important;text-align:center!important}
+@media(max-width:680px){#erpContent .v114AttendanceVisual:has(.r392AttendanceDonut){grid-template-columns:minmax(0,1fr)!important}}

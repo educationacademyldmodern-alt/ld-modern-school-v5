@@ -11,7 +11,8 @@ const active=s=>String(s?.status??'').trim().toLowerCase()==='active';
 const cash=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))?'₹'+Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}):'उपलब्ध नहीं';
 function status(text,kind=''){if(typeof W.v98InlineStatus==='function')W.v98InlineStatus(text,kind);else W.toast?.(text)}
 function capture(id,row){const k=key(id);if(!pending.has(k))edits.set(k,Object.fromEntries(fields.map(f=>[f,row[f]??null])))}
-function controls(on,keepInputs=false){const root=document.querySelector('.v14ModalCard,.v64ModalCard,.modalCard');if(!root)return;
+function studentForm(source){const input=$(source==='attendance'?'v64TeName':'tesName');return input?.closest('.v14ModalCard,.v64ModalCard,.modalCard,dialog,[role=dialog]')||input?.closest('form')||null}
+function controls(root,on,keepInputs=false){if(!root)return;
  root.querySelectorAll('input,textarea,button,select').forEach(el=>{const retry=/teacherSaveStudent|v64SaveTeacherStudent/.test(el.getAttribute('onclick')||'');
   if(on||keepInputs&&!retry){if(!('ldmeaDisabled'in el.dataset))el.dataset.ldmeaDisabled=el.disabled?'1':'0';el.disabled=true}
   else if('ldmeaDisabled'in el.dataset){el.disabled=el.dataset.ldmeaDisabled==='1';delete el.dataset.ldmeaDisabled}})}
@@ -25,7 +26,7 @@ async function saveStudent(id,source='class'){
   if(changes.phone&&(!/^[+0-9() -]+$/.test(changes.phone)||!/^\d{10,15}$/.test(changes.phone.replace(/\D/g,''))))return status('सही mobile number भरें (10–15 digits)।','bad');
   job={p_student_id:id,p_changes:changes,p_expected:expected,p_session:sess,p_request:crypto.randomUUID()};pending.set(k,job);
  }
- busy.add(k);controls(true);status('Student Master में सेव की पुष्टि हो रही है…','');let timer;
+ const form=studentForm(source);busy.add(k);controls(form,true);status('Student Master में सेव की पुष्टि हो रही है…','');let timer;
  try{
   const r=await Promise.race([db().rpc('ldmea_teacher_save_v2',job),new Promise((_,reject)=>timer=setTimeout(()=>reject(Error('सर्वर की पुष्टि नहीं मिली। Save फिर दबाएँ; वही request दोबारा भेजी जाएगी।')),20000))]);
   if(r.error)throw r.error;const data=r.data;
@@ -40,7 +41,7 @@ async function saveStudent(id,source='class'){
   if(definitive)pending.delete(k);if(actor()===who&&session()===sess){let m=e.message||String(e);
    if(['PGRST202','42883'].includes(e.code))m='Teacher Save RPC उपलब्ध नहीं है। reviewed migration और schema cache जाँचें। पुरानी असुरक्षित save विधि नहीं चलाई गई।';
    status(m+(pending.has(k)?' • Save फिर दबाने पर वही request Retry होगी।':' • आपके typed values form में सुरक्षित हैं।'),'bad')}
- }finally{clearTimeout(timer);busy.delete(k);if(actor()===who&&session()===sess)controls(false,pending.has(k))}
+ }finally{clearTimeout(timer);busy.delete(k);if(actor()===who&&session()===sess)controls(form,false,pending.has(k))}
 }
 W.LDMEA_ROOT={capture,saveStudent,canNavigate:()=>![...pending.keys()].some(k=>k.startsWith(actor()+'|'+session()+'|'))};
 const oldRender=W.render;if(typeof oldRender==='function'){W.render=function(...args){if(!W.LDMEA_ROOT.canNavigate())return status('पहले Student Save की पुष्टि / Retry पूरा करें।','bad');return oldRender.apply(this,args)};try{render=W.render}catch(_){}}

@@ -1,0 +1,5 @@
+#x320Center .x393ExamScroll{max-height:none!important;height:auto!important;overflow-x:auto!important}
+#x320Center .x393ExamScroll tbody tr{content-visibility:auto;contain-intrinsic-size:auto 66px}
+#x320Center #x320AutoMarks{width:20px!important;height:20px!important;min-width:20px!important;margin-right:7px}
+#x320Center #x320SaveMarks{background:#0d6b91;color:white}
+#x320Center label:has(>#x320AutoMarks){display:flex!important;align-items:center!important;gap:7px!important;line-height:1.4!important}#x320Center #x320AutoMarks{flex:0 0 20px!important;margin:0!important}
