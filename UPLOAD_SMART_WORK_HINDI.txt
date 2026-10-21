@@ -1,0 +1,83 @@
+L D MODERN EDUCATION ACADEMY — V403 Flexible Smart Work Assignment — Rechecked 1
+
+यह मौजूदा V401 code पर नया Duty/Task सुधार है। V393–V400 के सुरक्षित runtime/dependencies शामिल हैं।
+यह पहले बताये अधूरे native delegated-module integration या live ERP verification को पूर्ण होने की घोषणा नहीं है।
+
+दोबारा जाँच में सुधार
+• Shared task में Teacher की Completed/Pending स्थिति उसके अपने assignment से आएगी।
+  Admin को पूरे task की स्थिति दिखेगी।
+• Archived काम Completed counter में दोबारा नहीं गिने जाते; history Archived में सुरक्षित रहती है।
+• निष्क्रिय/unapproved Teacher profile progress submit नहीं कर सकता।
+• Login बदलने पर पिछले user के filters और selection reset होते हैं।
+• बदली JS का cache version 403r1 है।
+• प्रारंभिक V403 पहले लगा चुके हों: index.html और smart-work-v403.js replace करें;
+  SQL_SMART_WORK के 02 और 03 फिर चलाएँ। 01 दोबारा जरूरी नहीं।
+
+क्या जोड़ा गया
+• एक काम कई teachers को और एक teacher को कई काम। कुल tasks या categories की fixed संख्या नहीं।
+• Add / Edit / Duplicate / Reassign / Pause / Resume / Complete / Remove-Archive / Restore।
+• कई tasks select करके Pause, Resume, Reassign, Complete, Archive और Restore। एक batch 500 तक;
+  कुल task संख्या पर सीमा नहीं। बड़ी सूची pagination से खुलेगी।
+• 11 शुरुआती categories केवल उदाहरण; नई category, rename, archive और restore।
+• Permanent, Temporary, Daily, Weekly, Monthly, Exam Special और Custom नाम वाली Duty।
+• Teaching मिनट + अनुमानित Duty मिनट × कठिनाई × बार/सप्ताह से workload।
+  Light/Average/Heavy की सीमा और शिक्षक की क्षमता Admin बदल सकता है।
+• Teaching के class/subject records का count संदर्भ के लिए है; सही Teaching मिनट Admin भरें।
+  समय न भरा हो तो स्क्रीन उसे अधूरा अनुमान कहती है। साझा Duty का पूरा समय हर teacher पर गिना जाता है।
+• Duty Type चुनने से अगली तारीख का task अपने-आप नहीं बनता। अलग occurrence चाहिए तो Duplicate करें।
+• पुरानी completed assignment, notes, dates और events सुरक्षित। Remove से Archive होता है, hard delete नहीं।
+• Completed teacher को वही task reassign करने से completion reset नहीं होता। नया काम हो तो Duplicate करें।
+• Search, category/status/teacher filters और पूरी filtered report का Preview / PDF / Print।
+• Teachers/Workload report का भी Preview / PDF / Print। Teacher को केवल अपने tasks और workload।
+• Save fail पर fields सुरक्षित; lost response पर उसी request की Retry; double task नहीं।
+• Task/team बदल चुका हो तो stale Save/Bulk रोकता है। Bulk एक transaction में है।
+• Work Assign में पहले Duties खुलती हैं; उसी workspace का दूसरा tab Module Access है।
+  पुराना task form और नया form एक साथ नहीं चलते। Dashboard layout/order को नहीं बदला।
+
+UPLOAD
+1. ZIP extract करें। वही branch चुनें जिससे आपका चालू ERP deployment जुड़ा है।
+2. यदि V401 के सभी runtime files पहले upload हैं, केवल ये 3 files replace/add करें:
+   index.html
+   work-access-v398.js
+   smart-work-v403.js
+   udise-v306-devanagari.woff2 पहले से उसी root में होना चाहिए; ZIP में दिया है।
+3. यदि V401 files अभी नहीं लगायीं, ZIP के root की सभी runtime files उसी directory structure में
+   upload/replace करें। index.html को नये wrapper folder के अंदर न रखें। दूसरे पुराने ERP files न हटाएँ।
+4. SQL_SMART_WORK में 01, फिर 02, फिर 03 Supabase SQL Editor में चलाएँ। हर भाग 25 KB से छोटा है।
+   मौजूदा ERP में V278 Task/Teacher setup और Academics tables/functions पहले से होना जरूरी है।
+   01 prerequisites न मिलने पर रुकता है; वह कोई पुराना record नहीं हटाता।
+5. SQL_RUN_FIRST के पुराने 01–04 V399/V400/V401 के Module Access/Paper status SQL हैं।
+   पहले सफल चल चुके हों तो दोबारा चलाने की जरूरत नहीं। इस update के लिये नया SQL केवल SQL_SMART_WORK का है।
+6. Fonts, HTML और JS GitHub/ERP root में जाते हैं; SQL Editor में केवल .sql चलाएँ।
+7. UPLOAD निर्देश, SHA256SUMS और VERIFICATION वेबसाइट पर डालना जरूरी नहीं।
+8. Deployment Ready होने पर उसी commit का URL खोलें और refresh करें। केवल GitHub upload commit
+   live deployment का proof नहीं। Admin → Work Assign में Duties / Teachers-Workload / Categories दिखेंगे।
+   Teacher → Assigned Work में अपना काम दिखेगा।
+
+DATA / AUTHORIZATION
+• नया task database अलग नहीं बनाया गया। वही ldm_work_tasks / assignees / events इस्तेमाल होते हैं।
+• नया metadata/category/workload और retry/audit tables जुड़ते हैं। Install पुरानी tasks बदलता नहीं।
+• पहली install पर उदाहरण categories बनती हैं; दुबारा SQL चलाने पर archived category वापस नहीं आती।
+• नये SQL में records delete करने का command नहीं है। User के Remove action से केवल Archive flag और
+  is_active बदलते हैं। Teacher हटाने पर incomplete assignment Removed/inactive होता है;
+  completed assignment का status, note और time सुरक्षित रहता है।
+• पुराने ERP में अन्य destructive capabilities हो सकती हैं; यह statement पूरे पुराने ERP में Delete न होने का दावा नहीं।
+• Duty assignment से Fees/Users जैसे unrestricted Admin अधिकार अपने-आप नहीं मिलते। Module Access के
+  अलग scoped grants/expiry/revoke लागू रहते हैं। पुराना account role नहीं बदलता।
+• Task में ERP function केवल पुराने server-validated delegation-ready routes से खुलता है।
+
+जाँच / सीमाएँ
+• नया SQL local PostgreSQL-compatible PGlite में original V278 task SQL के साथ चला।
+• Admin/Teacher scope, inactive login, archive/restore, completed history, idempotent retry,
+  stale revision और atomic bulk, workload और 107-task pagination जाँची गयी।
+• Browser में 390 और 1366 width: वास्तविक नया UI + local database; create/edit/team/pause/resume,
+  lost reply + same Retry, Duplicate, archive/restore, workload और category, teacher completion।
+• पूरे bundled ERP login/navigation के mock-backend checks में Admin/Teacher दोनों पर एक workspace,
+  repeated click पर duplicate load नहीं, unsaved navigation guard और mobile/desktop geometry।
+• 125-task पूरी report, font-loaded native Print, Workload report और वास्तविक A4 PDF जाँची गयी।
+  PDF का पहला पन्ना render करके Hindi और table layout देखा गया।
+• Report/PDF के अलग browser tests का परिणाम VERIFICATION में है। V401 के reports HISTORY_V401 में
+  पुराने प्रमाण हैं; उन्हें नया live verification न समझें।
+• Live school database, branch/commit, actual hosted login, production schema और physical printer
+  यहाँ से जाँचे या बदले नहीं गये। Deployment के बाद इन्हें जाँचना बाकी है।
+• नैनोसेकंड/0-second latency या कभी hang न होने की guarantee नहीं।
