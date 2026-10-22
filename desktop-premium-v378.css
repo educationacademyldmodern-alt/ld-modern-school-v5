@@ -222,3 +222,13 @@ body.d390Parent #parentDashboard#parentDashboard#parentDashboard#parentDashboard
 @media screen and (min-width:901px){body:is(.d390Admin,.d390Teacher:not(.d378Desktop)) #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp .erpTop :is(.erpHomeBtn,button[hidden]){display:none!important}}
 
 @media screen and (min-width:901px){body:is(.d390Admin,.d390Teacher:not(.d378Desktop)) #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp .erpTop>button:not(.hamb):not(.v63TopLogout):not(.websiteBtn):not(#v90BackBtn):not(#v90HomeBtn):not(#ldmDeviceLockBtn):not(#v62Bell):not(#ldmV281Refresh):not(#d378Menu){display:none!important}body:is(.d390Admin,.d390Teacher:not(.d378Desktop)) #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp .erpTop :is(#v75TopSearch,#v764MasterSearch,.v764MasterSearch){min-width:180px!important;max-width:360px!important;flex-basis:210px!important}}
+/* V410: compact desktop chrome; all mobile rules remain untouched. */
+@media screen and (min-width:901px){
+body:has(#erpContent :is(.ldmRootAdminDash,.ldmNewTeacher)) #erp#erp#erp#erp#erp#erp#erp#erp#erp .erpTop{position:relative!important;top:auto!important;display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important;height:auto!important;min-height:54px!important;padding:8px 14px!important;color:#17374b!important;background:#fff!important;box-sizing:border-box!important}
+body:has(#erpContent :is(.ldmRootAdminDash,.ldmNewTeacher)) #erp#erp#erp#erp#erp#erp#erp#erp#erp .erpTop :is(input,button,select){font-size:14px!important;line-height:1.4!important;min-height:38px!important;max-width:100%!important;position:static!important;transform:none!important}
+body:has(#erpContent :is(.ldmRootAdminDash,.ldmNewTeacher)) #erp#erp#erp#erp#erp#erp#erp#erp#erp .erpTop :is(#v764MasterSearch,.v764MasterSearch){flex:1 1 240px!important;min-width:180px!important;max-width:420px!important;margin:0!important}
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent>#d378Brand{min-height:88px!important;padding:14px 20px!important;gap:14px!important;border-radius:16px!important}
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #d378Brand h1{font-size:clamp(20px,2vw,28px)!important;line-height:1.3!important;margin:4px 0!important;color:white!important}
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #d378Brand p{margin:4px 0!important;font-size:13px!important;color:#e4f1ff!important}
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent{gap:12px!important;padding-top:12px!important}
+}

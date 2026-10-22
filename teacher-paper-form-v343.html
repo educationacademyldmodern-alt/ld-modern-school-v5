@@ -74,7 +74,7 @@ for(let i=0;i<list.length;i++){
  if(first.dataset.kind==='section'){matchHead=null;if(list[i+1]?.dataset.kind==='matchhead'){matchHead=list[++i];group.push(matchHead)}if(list[i+1]?.dataset.kind==='question')group.push(list[++i])}
  else if(first.dataset.kind==='matchhead'){matchHead=first;if(list[i+1]?.dataset.kind==='question')group.push(list[++i])}
  if(list[i+1]?.dataset.kind==='end'&&group.at(-1).dataset.kind==='question')group.push(list[++i]);
- const before=current.children.length;group.forEach(n=>current.append(n));
+ if(group.some(n=>n.dataset.pageBreak410)&&current.children.length)newPage();const before=current.children.length;group.forEach(n=>current.append(n));
  if(current.scrollHeight>current.clientHeight+1){group.forEach(n=>n.remove());if(before){newPage();if(first.dataset.kind==='question'&&matchHead){const h=matchHead.cloneNode(true);h.dataset.repeatedColumns='true';current.append(h)}}group.forEach(n=>current.append(n));if(current.scrollHeight>current.clientHeight+1)hasOverflow=true}
 }
 }
@@ -92,7 +92,7 @@ function measured(){
  const headHeights=new Map();for(const u of units)if(u.head&&!headHeights.has(u.head))headHeights.set(u.head,u.head.getBoundingClientRect().height);
  units.forEach((u,i)=>u.height=Math.max(bounds[i].bottom-bounds[i].top,(bounds[i+1]?.top??bounds[i].bottom)-bounds[i].top));
  current.replaceChildren();let used=0;
- for(const unit of units){if(used&&used+unit.height>capacity){newPage();used=0;if(unit.first.dataset.kind==='question'&&unit.head){const clone=unit.head.cloneNode(true);clone.dataset.repeatedColumns='true';current.append(clone);used+=headHeights.get(unit.head)||0}}unit.nodes.forEach(n=>current.append(n));used+=unit.height}
+ for(const unit of units){if(used&&(unit.nodes.some(n=>n.dataset.pageBreak410)||used+unit.height>capacity)){newPage();used=0;if(unit.first.dataset.kind==='question'&&unit.head){const clone=unit.head.cloneNode(true);clone.dataset.repeatedColumns='true';current.append(clone);used+=headHeights.get(unit.head)||0}}unit.nodes.forEach(n=>current.append(n));used+=unit.height}
  // Never trade print correctness for speed: verify every completed page, then use
  // the original exact layout if unusual imported content changes the geometry.
  return pages.every(p=>{const c=p.querySelector('.leafContent');return c.scrollHeight<=c.clientHeight+1});
@@ -322,4 +322,4 @@ html.t350Simple body{margin:0!important;background:#f4f8fc!important}html.t350Si
 @media print{body.t350Simple>#t350Editor{display:none!important}body.t350Simple>main{display:block!important}}
 
 #t357Actions{position:sticky;bottom:0;display:flex;gap:8px;flex-wrap:wrap;padding:12px;background:#edf7ff;border:1px solid #b7d3e7;border-radius:12px;margin-top:16px;z-index:3;box-shadow:0 -3px 15px #17374b12}#t357Actions button{flex:1 1 160px}#t357Send{background:#087f64!important;color:white!important}#t357ActionStatus{width:100%;margin:0;color:#17435b;white-space:pre-wrap}body.t350Simple.t350Preview #t357Actions{display:flex!important}@media print{body.t350Simple>#t350Editor{display:none!important}body.t350Simple>main{display:block!important}}
-</style><script src="teacher-editor-v350.js?v=401"></script><script src="fflate-v323.min.js"></script><script src="paper-import-v369.js?v=409"></script><script src="paper-typography-v370.js?v=370"></script><script src="paper-workspace-v371.js?v=373"></script><script src="paper-performance-v373.js?v=373"></script><link rel="stylesheet" href="paper-premium-v381.css?v=381"><script src="paper-premium-v381.js?v=401"></script><script src="paper-typing-bridge-v396.js?v=404"></script></body></html>
+</style><script src="teacher-editor-v350.js?v=410"></script><script src="fflate-v323.min.js"></script><script src="paper-import-v369.js?v=410"></script><script src="paper-typography-v370.js?v=370"></script><script src="paper-workspace-v371.js?v=373"></script><script src="paper-performance-v373.js?v=373"></script><link rel="stylesheet" href="paper-premium-v381.css?v=381"><script src="paper-premium-v381.js?v=401"></script><script src="paper-typing-bridge-v396.js?v=410"></script><script src="paper-easy-v410.js?v=410"></script></body></html>

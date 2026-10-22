@@ -1,0 +1,62 @@
+L D MODERN EDUCATION ACADEMY — V411 COMBINED PAPER + DESK SLIP UPDATE
+
+यह V409 के ऊपर लगाने वाला update है। पहले ERP files का backup रखें।
+ZIP निकालें और उसके root की files/folders को ERP के उसी root पर upload/replace करें।
+VERIFY_V410 और यह निर्देश upload करना जरूरी नहीं। कोई नया SQL चलाना नहीं है।
+Upload के बाद Chrome में Ctrl+Shift+R / मोबाइल में site cache refresh करें।
+
+बदलाव:
+1. नया पेपर पुराने पूरे format में खुलेगा। पूरा Master और एक-एक प्रश्न जोड़ने के विकल्प बने हैं।
+2. Word DOCX, text PDF, HTML import उसी format में खुलेंगे। Import preview जाँचकर लागू करें।
+3. सीधे Import, Save Draft, Preview, Print/Save PDF, Admin को भेजें विकल्प।
+4. कुल अंक 50/70/100 या अपनी संख्या: Auto tick पर प्रश्न प्रकार के अनुसार अंक।
+   सामान्य/MCQ/रिक्त/सही-गलत = स्तर 1; लघु/मिलान = 2; दीर्घ = 4।
+   कुल जोड़ बिल्कुल पूर्णांक होगा। Manual अंक रखने के लिए Auto बंद करें।
+5. प्रश्न/खंड जोड़ें, हटाएँ, क्रम बदलें और Undo पुराने editor में उपलब्ध हैं।
+6. Portrait, Landscape, Booklet/मोड़ने वाला, दो समान कटिंग पेपर विकल्प।
+7. 1/2/3/4 पेज लक्ष्य या Auto। अधिक सामग्री होने पर अगला पेज बनेगा; प्रश्न कटेंगे नहीं।
+   Booklet में चार के गुणज तक blank पेज जुड़ते हैं। A4 landscape, duplex,
+   flip on short edge, actual size, 1 page per sheet चुनें; printer का booklet बंद रखें।
+8. पुराने प्रश्नवार format का विकल्प और उसका सुरक्षित draft बने हैं।
+9. Laptop/Desktop header और teacher banner को compact किया है। नए CSS नियम केवल 901px+ पर हैं।
+10. Work Access Fee Status: नाम/रोल/बकाया/कक्षा, Ascending/Descending;
+    उसी sorted list से Preview/PDF/Print और विद्यार्थी भुगतान बटन।
+    सामान्य records में पूरी filtered सूची पहले sort होगी, फिर पृष्ठ दिखेंगे। पूरी रिपोर्ट में भी वही क्रम।
+
+काम कैसे करें:
+Paper Centre → New/Edit → कुल अंक, कक्षा, विषय, परीक्षा भरें → पूरा format या प्रश्न जोड़ें।
+या Word/PDF/HTML Import → प्रश्न जाँचें → लागू करें → सुधारें → Preview → Save PDF/Print।
+तैयार होने पर Admin को भेजें; ऊपर केंद्रीय भेजने की सफलता का संदेश देखें।
+लिखे/स्कैन किए पेपर में text नहीं हो तो पहले OCR करके text PDF/DOCX लें।
+पुराने .doc को Word से .docx में save करें। यह update नया OCR नहीं जोड़ता।
+
+जाँच और सीमा:
+दो code-review passes: syntax, import parsing, old-format restoration, backup,
+MCQ options, numeric sorting, booklet pairs; अंक बँटवारे के 400 मामले पास।
+इस वातावरण में browser binary उपलब्ध नहीं था; download अपूर्ण रहा।
+इसलिए actual desktop/mobile rendering, physical print और live Supabase
+Save/Send/permissions को tested नहीं बताया जा रहा है। Live data पर इस्तेमाल से पहले
+एक test draft खोलें, import करें, Preview/PDF देखें, Admin को भेजकर inbox में मिलाएँ।
+यह code update है; इसे पूर्ण production/browser certification न समझें।
+
+V411 — आसान Desk Slip:
+Exam चुनें → Classes/Students Load → शुरू का Room चुनें।
+प्रति Room विद्यार्थी 40 और प्रति Desk 4 पहले से भरे हैं।
+“इसी Setup से Desk Slips बनाएँ” दबाएँ। 40 के लिए 10 desks बनेंगे।
+Rows/benches की comma वाली line भरने की जरूरत नहीं।
+सभी classes पहले से चुनी हैं; “Classes चुनें/बदलें” खोलकर बदल सकते हैं।
+ज्यादा विद्यार्थियों के लिए Auto Rooms पहले से चालू है।
+85 विद्यार्थी = Room 1:40, Room 2:40, Room 3:5।
+अपना room name भी दे सकते हैं; अगले rooms को उसी नाम से नंबर मिलेगा।
+Auto बंद करके capacity कम रखेंगे तो चेतावनी आएगी; कोई विद्यार्थी चुपचाप छूटेगा नहीं।
+HOLD विद्यार्थी शुरुआत में बाहर हैं; पुराने Include HOLD विकल्प से ही शामिल करें।
+Desk Slips और Room Plan के अलग Preview/PDF/Print बटन हैं।
+PDF बटन से browser print dialog में Save as PDF चुनें।
+यह room नाम/क्रम की स्थानीय setup है; भवन/वास्तविक room master अपने-आप नहीं पढ़ता।
+इस ZIP में V410 के paper, import, marks, desktop header और Work Fee sort सुधार भी हैं।
+V410 अलग upload करने की जरूरत नहीं। कोई नया SQL नहीं।
+
+अतिरिक्त जाँच: 18 seating/allocation मामले (2000 विद्यार्थी सहित),
+40/4 = 10 desks, 41 जैसी capacity पर भी room सीमा सही,
+पूरी 1201-record सूची sort करके दूसरे पृष्ठ पर 51–100 मिलने की जाँच पास।
+Live database और वास्तविक browser/print की पुष्टि अभी बाकी है।
