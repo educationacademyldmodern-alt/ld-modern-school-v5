@@ -90,5 +90,5 @@ const priorRender=window.render;window.render=async function(route,...args){sync
 window.ldmV277OpenLinks=()=>manager('general');window.LDM_RESOURCES={manager,openResource,openBuiltin,canNavigate:canLeave,inspectFile,unzip,buildHTML,install,resourceURL,refreshCards:()=>installCards(true),dispose:closeViewer};
 document.addEventListener('click',e=>{if(!admin())return;const button=e.target.closest('#v277LinkManagerCard');if(button){e.preventDefault();e.stopImmediatePropagation();manager('general')}},true);
 for(const name of ['v90Back','v90GoHome','erpGoHome','backWebsite']){const prior=window[name];if(typeof prior==='function')window[name]=function(...args){if(!canLeave())return status('पहले सेव / Retry पूरा करें');closeViewer();return prior.apply(this,args)}}try{v90GoHome=window.v90GoHome;erpGoHome=window.erpGoHome;backWebsite=window.backWebsite}catch(_){}
-window.addEventListener('pagehide',closeViewer);document.addEventListener('DOMContentLoaded',install,{once:true});
+window.addEventListener('pagehide',e=>{if(!e.persisted)closeViewer()});document.addEventListener('DOMContentLoaded',install,{once:true});
 })();

@@ -1,0 +1,18 @@
+V415 + V416 संयुक्त अपडेट — केवल इन दोनों के बदलाव
+
+मौजूदा ERP में पहले के updates लगे होने चाहिए। यह पूरा ERP नहीं है।
+इस ZIP की 10 website files उसी ERP root में upload/replace करें।
+V415 और V416 के ZIP अलग-अलग लगाने की जरूरत नहीं। नया SQL नहीं है।
+VERIFY folders upload करना जरूरी नहीं।
+Upload के बाद laptop पर Ctrl+Shift+R; mobile पर reload करें।
+
+V415: Teacher compact header, Parent refresh सही जगह, Admin compact attendance graph,
+room attendance print fitting और Admin/Teacher paper PDF/DOCX/HTML import + जरूरत पर OCR।
+V416: Minimize/tab-switch से warm page पर लौटने पर page/filter/scroll/cursor बनाए रखना,
+अनावश्यक focus reload रोकना, BFCache और existing local drafts के lifecycle सुधार।
+साझा index.html और paper-center-v343.js में V416 के latest बदलाव रखे हैं; V415 के बदलाव शामिल हैं।
+इस ZIP में V411–V414 की अलग update files या SQL शामिल नहीं हैं।
+
+Browser/OS tab पूरी तरह kill करे तो सभी unsaved fields/files वापस मिलने की guarantee नहीं।
+Login expiry और Device Lock लागू रहेंगे। PDF/OCR के questions preview से जाँचें।
+14 code/model/mock checks पहले पास हैं; actual device, print और live database test नहीं हुए।

@@ -17000,7 +17000,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 <script id="v245-performance-root-status">
 (function(){'use strict';
  if(window.__LDM_V245_STATUS__)return;window.__LDM_V245_STATUS__=true;
- window.addEventListener('pagehide',()=>{try{window.ldmDeactivateActiveModule?.('pagehide')}catch(_e){}},{passive:true});
+ window.addEventListener('pagehide',e=>{if(e.persisted)return;try{window.ldmDeactivateActiveModule?.('pagehide')}catch(_e){}},{passive:true});
  window.ldmV245RuntimeStatus=function(){let channels=0;try{channels=window.sb?.getChannels?.().length||0}catch(_e){};return {build:'V245-PERFORMANCE-ROOT-FIX-2026-10-04',route:String(window.__v90Route||window.page||''),route_epoch:Number(window.__ldmRouteEpoch||0),realtime_channels:channels,background_polling:false,permanent_dom_observer:false,canonical_navigation:'V237/V239',canonical_lifecycle:'V185'} };
  window.LDM_FINAL_BUILD='V245-PERFORMANCE-ROOT-FIX-2026-10-04';
 })();
@@ -18451,7 +18451,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="smart-work-v333.js?v=389"></script>
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
-<script src="resources-v334.js?v=371"></script>
+<script src="resources-v334.js?v=416"></script>
 <script src="controls-v323.js?v=356"></script>
 <style id="v325BannerFit">
 /* Match the whole banner to its natural ratio on phones; fill the desktop hero. */
@@ -18465,7 +18465,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="central-exam-fees-v333.js?v=335"></script>
 <script src="central-fee-class-v335.js?v=344"></script>
 <link rel="stylesheet" href="school-workspace-v336.css?v=336">
-<script src="school-workspace-v336.js?v=405"></script>
+<script src="school-workspace-v336.js?v=416"></script>
 
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=373"></script>
@@ -18483,7 +18483,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="paper-center-v343.css?v=404">
 <script src="marksheet-core.js?v=389"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=410"></script>
+<script src="paper-center-v343.js?v=416"></script>
 <link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=404"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=389">
 <link rel="stylesheet" href="documents-v345.css?v=345">
@@ -18500,5 +18500,5 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=403r1"></script>
-<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=413"></script><script src="desk-slip-v406.js?v=412"></script><script src="attendance-scan-v412.js?v=412"></script></body>
+<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=415"></script><script src="desk-slip-v406.js?v=415"></script><script src="attendance-scan-v412.js?v=412"></script><script src="interface-fixes-v415.js?v=415"></script><script src="resume-place-v416.js?v=416"></script></body>
 </html>
