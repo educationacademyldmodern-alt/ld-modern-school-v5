@@ -1,0 +1,33 @@
+{
+  "package": "V404 + V405 combined update only",
+  "prerequisite": "V403 Rechecked already installed with existing dependencies/font",
+  "overlap_rule": "V405 tested file replaces shared V404 file; V404-only dependencies retained",
+  "origins": {
+    "index.html": "V405",
+    "paper-center-v343.css": "V404",
+    "paper-center-v343.js": "V404",
+    "paper-smart-v358.js": "V404",
+    "paper-typing-bridge-v396.js": "V404",
+    "school-workspace-v336.js": "V405",
+    "teacher-paper-form-v343.html": "V404",
+    "work-access-v398.html": "V405",
+    "work-access-v398.js": "V405",
+    "teacher-development-v336.json": "V404",
+    "SQL_V404/01_STAFF_RECIPIENTS_SAFE.sql": "V404",
+    "school-control-model-v405.js": "V405",
+    "school-control-v405.js": "V405",
+    "SQL_V405/01_ACCESS_AND_HISTORY.sql": "V405",
+    "SQL_V405/02_READ_SOURCES.sql": "V405",
+    "SQL_V405/03_ACTIONS.sql": "V405",
+    "SQL_V405/04_REPORT_DETAILS.sql": "V405",
+    "FORMAT_V405_HINDI.txt": "V405",
+    "VERIFY_V405/SQL_MODEL_CHECK.json": "V405",
+    "VERIFY_V405/UI_CHECK.json": "V405",
+    "VERIFY_V405/SCALE_CHECK.json": "V405",
+    "VERIFY_V405/SYNTAX_CHECK.json": "V405",
+    "VERIFY_V405/READER_CHECK.json": "V405",
+    "VERIFY_V405/FINAL_CHECK.json": "V405",
+    "VERIFY_V405/PACKAGE.json": "V405"
+  },
+  "live_verified": false
+}

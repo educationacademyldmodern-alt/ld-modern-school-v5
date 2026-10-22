@@ -1,0 +1,17 @@
+दैनिक स्कूल नियंत्रण — कार्य प्रारूप
+
+1. रोज 25 विद्यार्थी: central fee balance से stable daily queue; पहले कभी न चुने / कम हाल में चुने विद्यार्थी, फिर अधिक due। Paid record Refresh पर छिपता है; खाली जगह अगला विद्यार्थी आता है। एक ही दिन बार-बार खोलने से नई random list नहीं बनती।
+2. चार दिन Absent: प्रत्येक class के हाल के चार attendance-दर्ज दिन, 60-day lookback के भीतर। Missing / duplicate attendance को Absent नहीं मानें। सत्र बदलने पर सही session चुनें।
+3. Worksheet: सभी सक्रिय Approved Teacher profiles; Teaching Diary के actual worksheet/homework remarks। हर Teacher को रोज worksheet देनी ही है, इसका अनुमान नहीं।
+4. Attendance: सभी सक्रिय classes, Nursery / LKG / UKG समेत; Present / Absent / Leave / Not Marked / Duplicate स्पष्ट।
+5. Papers: session और exam चुनें। केवल वास्तविक class-subject assignments; Draft / Admin को भेजे / बाकी। Exact assignment न मिलने पर Unknown। Question content नहीं मँगाया जाता। Paper Note चुनी exam के साथ अलग रखा जाता है।
+6. Leaves: छात्र, Teacher Leave requests और Staff Leave register। कारण सहित Approve / Reject। एक ही Retry से दोहरा approval नहीं। केंद्रीय approval सेवा उपलब्ध न होने पर त्रुटि दिखेगी, झूठी सफलता नहीं।
+7. Reports: source inventory अलग, वास्तविक report खोलना अलग। विद्यार्थी, attendance, fee payments, marks, teaching diary, student leave, paper metadata, duties, staff, transport, library, income और expenses का allowlisted डेटा। Date वाले daily sources में चुना दिन लागू होगा; अन्य sources में session / पूरा source बताया जाएगा। Missing schema को zero / complete नहीं कहा जाता।
+
+सभी जाँचों में: नाम / status खोज, class filter, Note, अगली तारीख, सुरक्षित History, filtered Preview / browser Save PDF / Print। Call / WhatsApp / SMS links में संदेश स्वयं भेजना होगा। Link खोलने पर 'sent' नहीं लगाया जाता। खुद पुष्टि करके Contacted दर्ज करें। पुराने completed logs overwrite / delete नहीं होते। आज देय Follow-ups उसी board में दिखते हैं।
+
+Admin: सभी नए checks का अधिकार। शिक्षक / कर्मचारी: केवल explicit assigned checks; server पर हर request में active login, grantor, अवधि और revoke जाँचे जाते हैं। Duties की संख्या / categories / workload में पुराने flexible controls बने रहते हैं। नए custom duty के लिए जिम्मेदारियाँ → Add Duty इस्तेमाल करें।
+
+कार्य करने का तरीका: Board चुनें → Session / Date / Exam → जाँच / Refresh → Contact / Review / Decision → Note और अगली तारीख → Save। Fail होने पर fields सुरक्षित; lost response पर वही Retry। Pending confirmation पर Back / Home guard। बाकी cards का पूरा DOM Note save पर नहीं बनाया जाता। कोई background polling नहीं।
+
+भविष्य की हर नई business service को केवल generic button से authorized नहीं मानना चाहिए। नई authority जोड़ते समय server allowlist / business rules / audit और उसी function की tests भी जोड़नी होंगी।
