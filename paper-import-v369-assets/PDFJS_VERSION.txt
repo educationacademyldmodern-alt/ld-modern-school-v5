@@ -1,0 +1,1 @@
+Mozilla PDF.js / pdfjs-dist 4.10.38 legacy build; local text extraction; matching API and worker.
