@@ -1,22 +1,44 @@
-V420 + V421 संयुक्त अपडेट — Font size और Admin attendance graph
+LDM V422 — Landscape Duplex / Auto Booklet
 
-सभी 5 website files उसी ERP root में upload/replace करें:
-index.html
-paper-center-v343.js
-teacher-paper-form-v343.html
-paper-easy-v410.js
-interface-fixes-v421.js (नई file)
+पहले मौजूदा ERP की इन नाम वाली फाइलों का बैकअप रखें।
+ZIP की 6 HTML/JS फाइलें उसी ERP root folder में upload/replace करें जहाँ index.html है।
+नई paper-print-v422.js भी जरूर upload करें। VERIFY folder upload करना जरूरी नहीं है।
+SQL चलाने की जरूरत नहीं है। यह database migration नहीं है।
+यह V420 + V421 combined package पर आधारित update है; V421 graph fix साथ रखा गया है।
+पुरानी बाकी ERP files वहीं रहने दें। मोबाइल पर ZIP extract करके files upload करें।
+Upload के बाद ERP reload करें और पुराना खुला paper editor बंद करके दोबारा खोलें।
 
-V420 और V421 अलग-अलग लगाने की जरूरत नहीं। कोई नया SQL नहीं।
-यह मौजूदा V415/V416 वाले ERP पर दोनों सुधार लगाने का संयुक्त update है।
-पुराने सभी ERP updates या पूरा ERP इसमें शामिल नहीं है।
-Upload के बाद ERP reload करें और खुले पेपर को बंद करके दोबारा खोलें।
+पेपर व्यवस्था: Auto · 2 पेज तक काटें / आगे मोड़ें
+पेज लक्ष्य: Auto (जब तक जानबूझकर अधिक पेज नहीं चाहिए)
 
-Font: पेज लक्ष्य के पास A− / अक्षर आकार / A+ मिलेगा; 8–24 pt।
-Preview और Print/PDF उसी आकार का उपयोग करेंगे। बड़े अक्षरों से पेज बढ़ सकते हैं।
-केंद्रीय database में रखने के लिए Save Draft / Send का पहले जैसा उपयोग करें।
-Graph: ring और legend की sizing सुधारी; नई filename से पुरानी cached file हटेगी।
-Teacher/Parent layout corrections नई interface script में रखे हैं।
+1 पेज: एक landscape side पर 1 | 1, बीच से काटें।
+2 पेज: आगे 1 | 1, पीछे 2 | 2, बीच से काटें — दो पूरे पेपर।
+3 पेज: आगे खाली | 1, पीछे 2 | 3, बीच से मोड़ें।
+4 पेज: आगे 4 | 1, पीछे 2 | 3, बीच से मोड़ें।
+8 पेज: शीट 1 आगे 8 | 1, पीछे 2 | 7; शीट 2 आगे 6 | 3, पीछे 4 | 5।
+Booklet के लिए जरूरत अनुसार 4 के गुणक तक अंत में खाली पेज जुड़ेंगे।
+Preview अब वही क्रम दिखाता है जो PDF/Print में जाता है।
 
-Checks: syntax, font controls/state/save/render/readonly, latest cache-reference chain
-और latest files का byte comparison पास। वास्तविक mobile/browser/print जाँच बाकी है।
+प्रिंटर / Chrome में:
+A4 • Landscape • दोनों तरफ • Flip on short edge
+Scale 100% / Actual size • Pages per sheet = 1 • Headers and footers बंद
+Printer का अलग Booklet / 2-up विकल्प बंद रखें, क्योंकि व्यवस्था पहले से बनी है।
+PDF से प्रिंट करते समय भी यही विकल्प रखें।
+प्रिंटर में दोनों तरफ की सुविधा नहीं होने पर पहले एक शीट पर आगे/पीछे की दिशा जाँचें;
+कागज दोबारा रखने का तरीका आपके प्रिंटर पर निर्भर करता है।
+
+जाँच:
+1/2/3/4/5/8/12 logical pages का Chromium preview order पास।
+1–100 pages का booklet formula / blank padding check पास।
+2 और 4 logical page PDF दोनों 2 landscape print sides में बने; PDF footer order जाँचा।
+Hindi text और 8/12/24 pt font पर tested question blocks में overflow नहीं मिला।
+390px mobile पर sheet fit; idle में layouts नहीं बढ़े; unchanged preview cached।
+Hidden editor में layout work skip; duplicate पुराने beforeprint layout listener हटाया।
+इस patch में polling, interval, network call या console logging नहीं जोड़ी गई।
+
+सीमा:
+स्थानीय browser परीक्षण में V373 editor/workspace/performance, V381 premium,
+V409 import और current V420/V421 files इस्तेमाल हुए। दो पुराने optional modules
+(paper-typography-v370.js और paper-typing-bridge-v396.js) उपलब्ध नहीं थे;
+वे आपके मौजूदा ERP में रहें। Live central Save/Send, पूरा dashboard, OCR और
+वास्तविक printer hardware का end-to-end परीक्षण यहाँ नहीं हुआ।
