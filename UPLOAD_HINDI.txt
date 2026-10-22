@@ -1,32 +1,14 @@
-V414 — जारी Admit Card + Desk Slip QR Attendance
-पिछले संयुक्त V412+V413 update के ऊपर लगाएँ।
+V419 — पेपर अक्षर छोटे/बड़े करने का सीधा विकल्प
 
-सिर्फ एक website file बदलनी है:
-attendance-scan-v412.js
+केवल paper-easy-v410.js उसी ERP root में replace करें। नया index या SQL नहीं।
+V415+V416 / V417 वाली मौजूदा paper setup पर लगाएँ। V418 graph fix बना रहेगा।
+Upload के बाद ERP को laptop पर Ctrl+Shift+R / mobile browser reload से खोलें।
+पेपर editor बंद कर दोबारा खोलें।
 
-पहले 01_ADMIT_QR_ATTENDANCE_SAFE.sql को Supabase SQL Editor में एक बार Run करें।
-यह नया authenticated resolve function जोड़ता है; पुराने विद्यार्थी/attendance/marks नहीं मिटाता।
-इसके बाद ऊपर की JS file को ERP root में upload/replace करें।
-index, Admit Card design, document-verify page, Room Sheet या बाकी files बदलनी नहीं हैं।
-Upload के बाद Chrome में page दोबारा reload करें; laptop पर Ctrl+Shift+R करें।
-
-काम कैसे करेगा:
-Teacher/Admin login → “Desk / Admit QR • Daily / Exam Attendance” →
-Daily या Exam mode चुनें → जरूरत पर आज का subject/paper चुनें → Camera शुरू करें।
-अब जारी Admit Card का document-verify.html?token=... वाला QR भी पहचाना जाएगा।
-पुराना जारी कार्ड active है तो उसे दोबारा print करने की जरूरत नहीं।
-Desk Slip QR भी उसी scanner में चलता रहेगा।
-उसी विद्यार्थी का Desk और Admit दोनों scan होने पर भी एक दिन/पेपर में duplicate नहीं बनेगा।
-Revoked, superseded, unissued या गलत document QR से attendance नहीं बनेगी।
-सामान्य phone camera से public verification page खोलने पर attendance नहीं लगेगी;
-Teacher/Admin को logged-in ERP attendance scanner इस्तेमाल करना है।
-पुराना Student ID QR scanner पहले जैसा रहेगा।
-
-सही session, active परीक्षा, आज का paper और Teacher के मौजूदा class/paper अधिकार जरूरी हैं।
-Exam Maximum Marks/Start की पहले वाली जरूरत बनी है।
-PDF/marksheet QR को Admit Card नहीं माना जाएगा।
-छपे Admit Card में verification QR ही न हो तो पहले उसे जारी करें।
-
-जाँच: QR पहचान, malformed link, revoked response, Desk+Admit पर एक ही write,
-पुराने daily/exam retry के 11 regression checks पास।
-Live SQL/Supabase, camera और वास्तविक browser की पुष्टि अभी बाकी है।
+ऊपर पेज व्यवस्था के पास A− / आकार / A+ मिलेगा। 8 से 24 pt चुनें।
+Preview और Print/PDF उसी state.font का उपयोग करते हैं; यह browser zoom नहीं है।
+आकार बदलकर Preview जाँचें; बड़े अक्षरों से पेज बढ़ सकते हैं।
+Server पर बदलाव रखने के लिए पहले की तरह Save Draft / Admin को भेजें दबाएँ।
+Imported editable questions पर लागू; PDF की मूल scan image के अंदर के अक्षर अलग से editable नहीं होते।
+Readonly/locked paper में control निष्क्रिय रहेगा।
+Code/mock checks पास; वास्तविक device/PDF print जाँच नहीं हुई।
