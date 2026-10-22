@@ -9578,9 +9578,11 @@ window.erpGoHome=v90GoHome;
 
 function v90Card(icon,title,sub,route,cls='') {return `<button class="v90Monitor ${cls}" onclick="render('${route}')"><span class="v90MonitorIcon">${icon}</span><span><b>${v90Safe(title)}</b><small>${v90Safe(sub)}</small></span><em>›</em></button>`}
 async function v90AdminDashboard(){
- const __v179Now=Date.now();
- if(window.__v179AdminDashAt&&(__v179Now-window.__v179AdminDashAt)<700&&document.querySelector('#erpContent .v90Dash'))return;
- window.__v179AdminDashAt=__v179Now;
+ // V408: keep the mounted dashboard and its fee form on repeated Home clicks.
+ const __v408Identity=JSON.stringify([profile?.id,profile?.role,school?.academic_session,
+  new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())]);
+ const __v408Dash=document.querySelector('#erpContent .ldmRootAdminDash');
+ if(__v408Dash?.dataset.v408Owner===__v408Identity){window.__v90Route='dashboard';return;}
  window.__v90Route='dashboard';v90Head('Admin Dashboard','Premium School Command Center • On-Demand Data');v90InstallShell('dashboard');
  if(!window.__ldmAdminStatsHTML){try{window.__ldmAdminStatsHTML=sessionStorage.getItem('ldm_admin_stats_html')||''}catch(_e){}}
  let actCache='',noticeCache='',eventCache='';try{actCache=sessionStorage.getItem('ldm_admin_activities_html')||'';noticeCache=sessionStorage.getItem('ldm_admin_notices_html')||'';eventCache=sessionStorage.getItem('ldm_admin_events_html')||''}catch(_e){}
@@ -9598,6 +9600,7 @@ async function v90AdminDashboard(){
  <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">ON DEMAND</span></div><div class="v90MonitorGrid">${v90Card('📅','Attendance Status','Class-wise done / not marked','v90_attendance_monitor')}${v90Card('⚠️','Attendance Conflicts','Duplicate • Resolve • History','attendance_conflict_center')}${v90Card('📝','Exam Participation','Selected • Admit • Appeared','v90_exam_monitor')}${v90Card('📊','Marks Entry Progress','Teacher • Subject • Pending','v90_marks_monitor')}${v90Card('🚌','Transport Trip','Pickup / Drop attendance','v90_transport_monitor')}${v90Card('👥','Presence & Leave','Students + Teachers today','v90_presence_monitor')}${v90Card('🎓','Student Requests','Leave • Correction • Add/Remove','v90_student_requests')}${v90Card('👨‍🏫','Teacher Requests','Personal + class related','v90_teacher_requests')}${v90Card('🗓','Timetable Master','Fast bell + whole week','timetable_master','strong')}${v90Card('📚','Daily Teaching','Timetable → lesson update','v90_teaching_monitor')}${v90Card('📊','Academic Monitoring','Teaching • Copy Check • Bell Tests','academic_monitor','strong')}<button class="v90Monitor strong v102DashGate" data-v102-gate-card="1" onclick="render('master_gate_pass')"><span class="v90MonitorIcon">🚪</span><span><b>Master Gate Pass</b><small>Early Leave • Group • Approval</small></span><em data-v102-gate-badge class="v102DashBadge">Today</em></button><button class="v90Monitor" data-v91-parent-update="1" onclick="render('v91_parent_updates')"><span class="v90MonitorIcon">✏</span><span><b>Parent Data Updates</b><small>Approve once → sync everywhere</small></span><em>›</em></button><button class="v90Monitor" data-v92-admit-pub="1" onclick="render('v92_admit_publish')"><span class="v90MonitorIcon">🎫</span><span><b>Admit Publish</b><small>Fee clear • Select • Parent show</small></span><em>›</em></button>${v90Card('🔐','Student / Parent Login','One Password • Live Status','parent_access','strong')}</div></section>
  <section class="v114AdminFeedGrid"><article class="v90Panel"><div class="v114PanelHead"><h3>Recent Activities</h3><button onclick="render('v185_admin_activities')">View All →</button></div><div id="v39Activities">${actCache||'<div class="v39Empty">नई जानकारी लोड हो रही है…</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Important Notices</h3><button onclick="render('notices')">View All →</button></div><div id="v39Notices">${noticeCache||'<div class="v39Empty">नई जानकारी लोड हो रही है…</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Calendar & Events</h3><button onclick="render('events')">View Calendar →</button></div><div id="v39Events">${eventCache||'<div class="v39Empty">नई जानकारी लोड हो रही है…</div>'}</div></article></section>
  </div>`);
+ document.querySelector('#erpContent .ldmRootAdminDash').dataset.v408Owner=__v408Identity;
  try{window.v154OneGreeting?.()}catch(_e){}
  try{window.restoreDash?.('back')}catch(_e){}
  /* V186: Back restores last-good dashboard silently. Fetch only on first load or after a local data change. */
@@ -15090,7 +15093,7 @@ if(typeof statsBase==='function'){
     if(!id){id=document.createElement('div');id.className='ldmAdminSchoolIdentity';top.insertBefore(id,top.firstChild)}
     const n=window.school?.school_name||'L D MODERN EDUCATION ACADEMY';
     const a=window.school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar';
-    id.innerHTML='<b>'+E(n)+'</b><small>'+E(a)+'</small>';
+    const identityHTML='<b>'+E(n)+'</b><small>'+E(a)+'</small>';if(id.innerHTML!==identityHTML)id.innerHTML=identityHTML;
     try{window.v62EnsureBell?.()}catch(_e){}
     try{window.v764InstallMasterSearch?.()}catch(_e){}
     let back=document.getElementById('v90BackBtn');
@@ -16171,7 +16174,7 @@ if(typeof statsBase==='function'){
    if(!admin()||routeNow()!=='dashboard')return;let root=q('erpContent'),dash=root?.querySelector('.ldmRootAdminDash,.v114AdminDash,.v90Dash');if(!dash)return;
    cleanLegacyGreetings();let g=q('v233Greeting');if(!g){g=document.createElement('section');g.id='v233Greeting';let front=q('v185FrontDesk');if(front)front.insertAdjacentElement('beforebegin',g);else dash.prepend(g)}
    let date='';try{date=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(new Date())}catch(_e){date=new Date().toLocaleDateString('en-IN')}
-   g.classList.add('v114PortalHero','v377RoleHero');g.innerHTML=ldmRoleHeroV377('admin',profile?.full_name||'Admin','School Administration');
+   g.classList.add('v114PortalHero','v377RoleHero');const heroHTML=ldmRoleHeroV377('admin',profile?.full_name||'Admin','School Administration');if(g.innerHTML!==heroHTML)g.innerHTML=heroHTML;
  }
  function installAssemblyCard(){
    if(!admin()||routeNow()!=='dashboard')return;let grid=document.querySelector('.ldmMasterGrid');if(!grid||q('v232AssemblyCard'))return;let b=document.createElement('button');b.id='v232AssemblyCard';b.type='button';b.innerHTML='<i>🌞</i><b>Morning Assembly</b><small>आज का 5 मिनट का Principal Assembly Pack</small><em>OPEN TODAY →</em>';b.onclick=()=>window.render?.('principal_assembly');grid.appendChild(b)
@@ -18428,7 +18431,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
 <script src="dashboard-v332.js?v=395"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
-<script src="exam-automation-v305.js?v=336"></script>
+<script src="exam-automation-v305.js?v=406"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
 <script src="udise-core-v306.js?v=320"></script>
 <script src="udise-app-v306.js?v=320"></script>
@@ -18439,7 +18442,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=349"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v332.js?v=392"></script>
+<script src="root-corrections-v332.js?v=408"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
 <script src="exam-central-v320.js?v=393"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
@@ -18480,7 +18483,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="paper-center-v343.css?v=404">
 <script src="marksheet-core.js?v=389"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=404"></script>
+<script src="paper-center-v343.js?v=409"></script>
 <link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=404"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=389">
 <link rel="stylesheet" href="documents-v345.css?v=345">
@@ -18497,5 +18500,5 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=403r1"></script>
-<script src="work-access-v398.js?v=405"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script></body>
+<script src="work-access-v398.js?v=408"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=408"></script><script src="desk-slip-v406.js?v=408"></script></body>
 </html>

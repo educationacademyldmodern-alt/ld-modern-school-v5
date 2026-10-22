@@ -1,0 +1,40 @@
+L D MODERN EDUCATION ACADEMY — V409 COMBINED UPDATE
+V408 के Admin stability / Work Assign / Desk Slip / Fee fix के साथ Paper Import सुधार।
+आधार: पहले से स्थापित V404+V405 ERP। यह पूरा ERP replacement नहीं, केवल जरूरी update है।
+
+UPLOAD
+1. ZIP निकालें। Root में मौजूद सभी 13 HTML/JS/font files उसी ERP/GitHub root में upload/replace करें।
+2. paper-import-v369-assets folder को उसी नाम/path सहित upload करें। इसके अंदर पाँच files हैं: pdf.mjs, pdf.worker.mjs, support-data.zip, PDFJS_LICENSE.txt, PDFJS_VERSION.txt.
+   support-data.zip को निकालना नहीं है; ERP इसे खुद पढ़ता है। Folder के अंदर के नाम/path न बदलें।
+3. V406 SQL पहले सफल नहीं चला हो तो SQL_V406/01_FEE_STATUS_AND_DESK.sql चलाएँ। V407 fee fix पहले सफल न हो तो SQL_V407/01_V407_FEE_RECONCILIATION_FIX.sql चलाएँ। V409 Paper Import के लिए कोई नया SQL नहीं है। पुराने सफल 404/405 SQL फिर न चलाएँ। V407 का rerun guarded/idempotent है।
+4. बाकी मौजूदा ERP files/folders न हटाएँ। सही Git branch वाले commit का deployment Ready होने पर नया tab/refresh करें। Upload commit दिखना अकेला live success नहीं है। बदले paper/editor/import URLs V409 हैं।
+5. यदि V408 पहले upload है तब भी इस ZIP की root files और PDF dependency folder साथ replace करें। पुराने V406/V407/V408 ZIP अलग से लगाने की जरूरत नहीं। SQL/VERIFY folders GitHub में डालना जरूरी नहीं।
+
+PAPER IMPORT का रास्ता
+Admin/Teacher → Question Paper Setup → नया या अपना saved paper खोलें → “पेपर सेटअप / Import” → “पेपर Import • Word / PDF / HTML” → file चुनें।
+पढ़ने योग्य file से numbered questions अपने-आप review में तैयार होंगे। प्रश्न/विकल्प/अंक मिलाएँ → reviewed tick → “जाँचे प्रश्न इस पेपर में रखें” → ऊपर Save draft / Send। फिर उसी central Preview / Print-Save PDF का उपयोग करें।
+Source में नंबर न हों तो “हर लाइन एक प्रश्न” चुनकर फिर प्रश्न तैयार करें। Unknown per-question marks को 1 माना जाता है और warning आती है। Source total marks अलग हों तो Submit/Preview से पहले अंक ठीक करें। Class/Subject/Session मूल teacher-selected setup से रहते हैं; source से assignment guessing नहीं की गई है।
+
+SUPPORTED / LIMITS
+• Word .docx: text, paragraphs, explicit breaks/tabs, ordinary automatic lists और options पढ़े जाते हैं। Header/footer images, styles-based lists, equations और complex tables का exact reconstruction नहीं है।
+• PDF: readable text PDF, 10 MB तक / अधिकतम 50 pages / 200000 text characters। सही Unicode वाले हिन्दी PDF की जाँच की है। Scan/photo, broken font encoding, password-protected/unreadable PDFs editable paper में बिना OCR नहीं बदलते। Encoding खराब हो तो auto-apply blocked और OCR/DOCX लेने का संदेश है। OCR engine इस update में नहीं जोड़ा गया है।
+• HTML/HTM: text/ordered lists/table text लिया जाता है; scripts/resources execute या upload नहीं होते। Original page का design/images/complex maths auto-convert नहीं होते।
+• .doc: Word द्वारा HTML के रूप में saved .doc पढ़ता है। पुराने binary .doc को Word में Save As → .docx करें। सभी .doc formats का समर्थन होने का दावा नहीं है।
+• TXT / ERP JSON / savedState वाले ERP HTML backups भी लिए जाते हैं।
+कोई arbitrary paper 100% बिना review तैयार होने का दावा नहीं है। मूल file अपने पास रखें; options/marks/layout जाँचना जरूरी है।
+
+क्या ठीक हुआ
+Missing PDF API/worker/fonts/maps dependencies अब local folder में हैं; काम केवल file चुनने पर होता है। PDF support maps एक local support-data.zip में हैं जिससे अनावश्यक अलग files upload न करनी पड़ें।
+Import बाद पुराना typingFormat396 नया text छिपा नहीं सकता। नए प्रश्न, options और multiline text active typing editor तथा सुरक्षित legacy-format copy में जाते हैं। Original paper बदलने से पहले JSON backup download होता है; Undo उपलब्ध है। Import अपने-आप central Save/Send नहीं करता।
+Malformed file आने पर पुराने questions नहीं बदलते। पुराना delayed response नई file को replace नहीं करता। Close/new file/dispose पर active PDF task बंद होता है। दूसरे paper पर पुराना Undo लागू नहीं होगा।
+
+PREVIOUS V408 FEATURES PRESERVED
+Admin repeated Home पर mounted dashboard/fee search फिर नहीं बनता; same stats/feed data पर nodes सुरक्षित। Work Assign default Access tab, एक workspace, old duties tab; existing fees authority से all-class Fee Status + collection। Desk Slips classwise/mixed, A4 10/15/20, Preview, अलग Save PDF/Print; browser dialog में Save as PDF चुनें। Fee cutoff allocation fix और reconciliation guard बने हैं। Mobile dashboard CSS/layout/order नहीं बदला।
+
+DATA / SQL
+Import नया schema नहीं बनाता और पुराने records नहीं मिटाता। Existing Save/Send पर पुराना central paper RPC चुना draft update/submit करता है। V406 read endpoints install करता है; V407 एक matching existing fee function सुधारता है। Install पुराने payments/students/history बदलता नहीं। बाद के fee save/reversal actions पुराने business rules के अनुसार financial INSERT/UPDATE करते हैं।
+
+जाँच
+दो दौर: source और final ZIP निकालकर installed overlay। Admin/Teacher 390px/1366px, DOCX/HTML/English PDF/readable Hindi PDF/TXT/Word-HTML import; 3 questions/marks/options/multiline; actual nested editor, central mock Save/get/reopen, Preview/Print dispatch; scan PDF, broken encoding, binary DOC और malformed PDF पर old data सुरक्षित। Numbered Hindi parsing, blank subquestions, manual line mode, no background PDF dependency request और HTML remote-resource/script non-execution।
+Imported preview का standalone A4 PDF बनाया; हिन्दी/questions/options देखकर तथा text extraction से जाँचा। Previous dashboard/work regression भी final installed overlay पर जाँची। Local fixture/mock verification है, live ERP login/database/physical printer verification नहीं। 0-second या कभी hang न होने की guarantee नहीं।
+PDF.js license/version folder में है। यह Mozilla PDF.js API/worker matching pair और bundled local support data उपयोग करता है; remote PDF upload/OCR/API नहीं है।
