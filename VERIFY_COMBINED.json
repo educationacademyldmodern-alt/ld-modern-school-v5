@@ -1,33 +1,21 @@
 {
-  "package": "V404 + V405 combined update only",
-  "prerequisite": "V403 Rechecked already installed with existing dependencies/font",
-  "overlap_rule": "V405 tested file replaces shared V404 file; V404-only dependencies retained",
-  "origins": {
-    "index.html": "V405",
-    "paper-center-v343.css": "V404",
-    "paper-center-v343.js": "V404",
-    "paper-smart-v358.js": "V404",
-    "paper-typing-bridge-v396.js": "V404",
-    "school-workspace-v336.js": "V405",
-    "teacher-paper-form-v343.html": "V404",
-    "work-access-v398.html": "V405",
-    "work-access-v398.js": "V405",
-    "teacher-development-v336.json": "V404",
-    "SQL_V404/01_STAFF_RECIPIENTS_SAFE.sql": "V404",
-    "school-control-model-v405.js": "V405",
-    "school-control-v405.js": "V405",
-    "SQL_V405/01_ACCESS_AND_HISTORY.sql": "V405",
-    "SQL_V405/02_READ_SOURCES.sql": "V405",
-    "SQL_V405/03_ACTIONS.sql": "V405",
-    "SQL_V405/04_REPORT_DETAILS.sql": "V405",
-    "FORMAT_V405_HINDI.txt": "V405",
-    "VERIFY_V405/SQL_MODEL_CHECK.json": "V405",
-    "VERIFY_V405/UI_CHECK.json": "V405",
-    "VERIFY_V405/SCALE_CHECK.json": "V405",
-    "VERIFY_V405/SYNTAX_CHECK.json": "V405",
-    "VERIFY_V405/READER_CHECK.json": "V405",
-    "VERIFY_V405/FINAL_CHECK.json": "V405",
-    "VERIFY_V405/PACKAGE.json": "V405"
+  "combined": [
+    "V412",
+    "V413"
+  ],
+  "baseRequired": "V411",
+  "checks": [
+    "V413 model and cache version present",
+    "V412 scanner and SQL retained",
+    "Archive CRC and SHA256 verified"
+  ],
+  "sha256": {
+    "index.html": "4c2b1b9cd054f1853f09d213f2f1ac64b32ea3a990e5f9eeb34e99d1017a0d67",
+    "desk-slip-v406.js": "425e3a13cd6d6f62639f10de0791169bff80059ddc58d28840aa237fc9970551",
+    "attendance-model-v412.js": "c78a43b5f30358fe9515ac894aaa796934bcf8bd718f133637aa59fe3fb45f63",
+    "attendance-scan-v412.js": "e4acf34bdc62e20ff895892de7573a9e09f8e3557a8ce249d8acd48c2ad480bd",
+    "SQL/01_QR_REGISTRY_SAFE.sql": "474d51666d5d421dcacc4112ee6f22cf03f28c396b635f436513505c718a2e3b",
+    "UPLOAD_COMBINED_HINDI.txt": "70aad34d2d24851f53ea8bc8a91445dcc0c17b3b60d0be95feba0db4a5655244"
   },
-  "live_verified": false
+  "limits": "Live database, browser camera and physical print not tested"
 }

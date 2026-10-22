@@ -1,35 +1,28 @@
-V404 + V405 — एक संयुक्त UPDATE ZIP
+V412 + V413 संयुक्त अपडेट — V411 के ऊपर लगाएँ
 
-आपने V404 / V405 अभी upload नहीं किए हैं तो दोनों की जगह केवल यही ZIP इस्तेमाल करें। यह V403 Rechecked installed ERP के ऊपर लगाने के लिए है; fresh installation नहीं।
+अलग V412 या V413 लगाने की जरूरत नहीं।
+1. SQL/01_QR_REGISTRY_SAFE.sql Run करें। यदि V412 वाला यही SQL सफलतापूर्वक चला चुके हैं तो दोबारा जरूरी नहीं।
+2. ERP root में इन चार files को upload/replace करें:
+   index.html
+   desk-slip-v406.js
+   attendance-model-v412.js
+   attendance-scan-v412.js
+3. Chrome में refresh करें।
 
-1. ZIP extract करें। Root की सभी 12 HTML / JS / CSS / JSON files को ERP / GitHub के उसी root पर upload / replace करें। एक ही नाम की file की एक final copy दी गई है। V404 के सुधार और V405 की नई दैनिक जाँचें दोनों शामिल हैं।
-2. ERP की बाकी files / folders न हटाएँ। मौजूदा V403 dependencies और udise-v306-devanagari.woff2 font रहने दें। पुराने दोनों ZIP अलग से upload न करें।
-3. Supabase SQL Editor में इस क्रम से नए पाँच SQL चलाएँ:
-   पहला: SQL_V404/01_STAFF_RECIPIENTS_SAFE.sql
-   दूसरा: SQL_V405/01_ACCESS_AND_HISTORY.sql
-   तीसरा: SQL_V405/02_READ_SOURCES.sql
-   चौथा: SQL_V405/03_ACTIONS.sql
-   पाँचवाँ: SQL_V405/04_REPORT_DETAILS.sql
-   हर SQL part 25 KB से छोटा है। पुराने सफल V398 / V403 migrations दोबारा न चलाएँ। यदि ऊपर के किसी SQL को पहले सफलतापूर्वक चला चुके हैं तो उसे अनावश्यक दोहराने की जरूरत नहीं।
-4. HTML / JS / JSON / font files SQL Editor में नहीं डालें। VERIFY_V405, निर्देश और checksums GitHub पर upload करना जरूरी नहीं है।
-5. सही branch के deployment Ready होने के बाद refresh करें। GitHub upload commit को live ERP verification न मानें।
+शामिल सुविधाएँ:
+Desk QR से Daily/Fast और सही timetable paper की Exam Attendance।
+हर room की पूरे exam वाली A4 Landscape attendance sheet: अधिकतम 40 विद्यार्थी, 12 dates।
+नीचे दिनवार उपस्थित/अनुपस्थित, absent roll/क्रमांक, teacher हस्ताक्षर।
+ऊपर उसी room की class-wise संख्या: Class 1:12 | Class 2:15 | Class 3:13 | कुल40/40।
+Preview, PDF और Print में वही data।
 
-कहाँ से खोलें
-Dashboard → मौजूदा स्कूल कार्य सहायक / Teacher की तैयारी card → दैनिक नियंत्रण / मिले कार्य।
-काम / अधिकार दें → सक्रिय Teacher / Staff → काम चुनें → तारीखें → अधिकार दें।
-Staff dropdown से Student / Parent हटाने का V404 server सुधार भी शामिल है।
-पुराने Duties / Tasks और Completed History जिम्मेदारियाँ tab में सुरक्षित हैं। ऊपर का Daily Reader बना रहता है; नीचे का duplicate card हटाने का V404 सुधार शामिल है।
+पुराने V411 के desk setup, paper format, sorting और desktop सुधार पहले लगे रहने चाहिए।
+यह संयुक्त V412+V413 अपडेट है; V411 की सारी files का पूर्ण package नहीं है।
+QR के लिए update के बाद उसी plan का Preview खोलकर registration होने दें।
+पुराने printed QR का original plan register न हो तो नई slips बनाएँ।
+Exam scanner में आज का सही paper और उसके पहले से सेट Maximum Marks/Start जरूरी हैं।
+Teacher के मौजूदा class/paper अधिकार लागू हैं।
+हाथ से tick की गई sheet ERP में अपने आप entry नहीं करती।
 
-Authority
-School Management: सभी नई दैनिक जाँचें / Reminders / Reports / Leave निर्णय। वास्तविक Fee transaction और Exam Attendance / Marks के लिए Fee Authority / Exam Authority भी अलग select करें। Login का मूल role Admin नहीं बनता। Expiry / Revoke server पर जाँचे जाते हैं।
-
-SQL और data व्यवहार
-स्थापना नई queue / history tables, indexes और functions बनाती है, module catalog में विकल्प जोड़ती है। पुराने ERP records delete नहीं किए जाते और login roles / मूल RLS policies नहीं बदलते। Installation से reminders नहीं भेजे जाते या fee / attendance / leave अपने-आप नहीं बदलते।
-इस्तेमाल पर reminder queue और review history सेव होते हैं। Leave निर्णय मूल central service चला सकता है; उसके business rules से leave / attendance बदल सकती है। मूल सेवाओं के अंदर उपलब्ध update / delete व्यवहार को इस update से हटाया नहीं गया है। Staff Leave register decision status बदलता है; attendance sync का दावा नहीं। Fee reversal / payment जैसे actions मूल वित्तीय records बदल सकते हैं और केवल user action पर चलते हैं।
-
-जाँच
-यह दोनों पहले जाँचे packages की files का संयुक्त package है। साझा files की V405 copy रखी गई है; V404 की बाकी आवश्यक files / reader dependency छोड़ी नहीं गई है। ZIP CRC, unique paths, original tested bytes और checksum जाँचे गए हैं।
-स्थानीय SQL / browser जाँच Admin और Teacher के 390px / 1366px sizes पर हुई थी; 2000 विद्यार्थियों / 120000 attendance records का स्थानीय test भी पास था। VERIFY_V405 में मूल evidence है; उसकी V404 prerequisite इस संयुक्त ZIP में शामिल है।
-Live ERP / production SQL / physical printer / final PDF pagination / actual message delivery अभी सत्यापित नहीं हैं। 0-second / कभी hang न होने या हर पुराने विशेष Admin tool का पूर्ण delegation होने का दावा नहीं है। Source report export की सीमा 5000 rows है; बड़ी report के लिए मूल module filter का संदेश आएगा, अधूरा export नहीं।
-
-विस्तृत कार्य प्रारूप: FORMAT_V405_HINDI.txt
+गिनती, sheet data और QR save/retry logic की जाँच पास है।
+Live Supabase SQL, camera और वास्तविक A4 rendering/print की पुष्टि बाकी है।
