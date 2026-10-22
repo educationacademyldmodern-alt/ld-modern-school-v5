@@ -1,14 +1,22 @@
-V419 — पेपर अक्षर छोटे/बड़े करने का सीधा विकल्प
+V420 + V421 संयुक्त अपडेट — Font size और Admin attendance graph
 
-केवल paper-easy-v410.js उसी ERP root में replace करें। नया index या SQL नहीं।
-V415+V416 / V417 वाली मौजूदा paper setup पर लगाएँ। V418 graph fix बना रहेगा।
-Upload के बाद ERP को laptop पर Ctrl+Shift+R / mobile browser reload से खोलें।
-पेपर editor बंद कर दोबारा खोलें।
+सभी 5 website files उसी ERP root में upload/replace करें:
+index.html
+paper-center-v343.js
+teacher-paper-form-v343.html
+paper-easy-v410.js
+interface-fixes-v421.js (नई file)
 
-ऊपर पेज व्यवस्था के पास A− / आकार / A+ मिलेगा। 8 से 24 pt चुनें।
-Preview और Print/PDF उसी state.font का उपयोग करते हैं; यह browser zoom नहीं है।
-आकार बदलकर Preview जाँचें; बड़े अक्षरों से पेज बढ़ सकते हैं।
-Server पर बदलाव रखने के लिए पहले की तरह Save Draft / Admin को भेजें दबाएँ।
-Imported editable questions पर लागू; PDF की मूल scan image के अंदर के अक्षर अलग से editable नहीं होते।
-Readonly/locked paper में control निष्क्रिय रहेगा।
-Code/mock checks पास; वास्तविक device/PDF print जाँच नहीं हुई।
+V420 और V421 अलग-अलग लगाने की जरूरत नहीं। कोई नया SQL नहीं।
+यह मौजूदा V415/V416 वाले ERP पर दोनों सुधार लगाने का संयुक्त update है।
+पुराने सभी ERP updates या पूरा ERP इसमें शामिल नहीं है।
+Upload के बाद ERP reload करें और खुले पेपर को बंद करके दोबारा खोलें।
+
+Font: पेज लक्ष्य के पास A− / अक्षर आकार / A+ मिलेगा; 8–24 pt।
+Preview और Print/PDF उसी आकार का उपयोग करेंगे। बड़े अक्षरों से पेज बढ़ सकते हैं।
+केंद्रीय database में रखने के लिए Save Draft / Send का पहले जैसा उपयोग करें।
+Graph: ring और legend की sizing सुधारी; नई filename से पुरानी cached file हटेगी।
+Teacher/Parent layout corrections नई interface script में रखे हैं।
+
+Checks: syntax, font controls/state/save/render/readonly, latest cache-reference chain
+और latest files का byte comparison पास। वास्तविक mobile/browser/print जाँच बाकी है।
