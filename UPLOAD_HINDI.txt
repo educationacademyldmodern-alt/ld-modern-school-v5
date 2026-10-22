@@ -1,32 +1,32 @@
-V366 — Teacher पूर्णांक, प्रश्न संख्या और अंक अपने आप
+V414 — जारी Admit Card + Desk Slip QR Attendance
+पिछले संयुक्त V412+V413 update के ऊपर लगाएँ।
 
-अपलोड: ये 4 files अपनी चालू GitHub ERP branch के root में replace करें:
-index.html
-paper-center-v343.js
-teacher-paper-form-v343.html
-teacher-editor-v350.js
-सभी एक commit में डालें। नए Vercel deployment पर hard refresh करें। नई SQL नहीं है। पिछला V364 audit fix लगा रहने दें। V365 frame/Refresh सुरक्षा भी इन files में शामिल है।
+सिर्फ एक website file बदलनी है:
+attendance-scan-v412.js
 
-काम करने का तरीका
-1. Teacher पेपर खोलें। “पूर्णांक के अनुसार अंक अपने आप बाँटें” default ON है।
-2. खाली Master में 50,70,100 या अन्य पूर्णांक लिखें और अगले field पर जाएँ। उस पूर्णांक अनुसार खाली प्रश्न बनेंगे (100 तक एक-अंक वाले प्रश्न; बड़े पूर्णांक में अधिक अंक बाँटे जाएँगे)।
-3. यदि पहले से प्रश्न लिखे हैं, प्रश्नों की संख्या/लिखावट/क्रम हटाए बिना अंक उसी पूर्णांक से मिलेंगे। प्रश्नों का पाठ खुद नहीं लिखा जाता; Teacher अपने प्रश्न लिखेगा।
-4. उदाहरण: 32 लिखे प्रश्न + पूर्णांक70 = 26 प्रश्न ×2 +6 प्रश्न ×3। पूर्णांक70 बना रहेगा।
-5. प्रश्न Add/Delete पर क्रमांक लगातार और अंक का कुल अपने आप अपडेट होगा।
-6. Preview/Save/Send में वही संरचित अंक जाएँगे। सभी प्रश्न और जरूरी MCQ विकल्प पूरे करें; अधूरे प्रश्न Send नहीं होते।
-7. अपने मन से हर खंड के अंक रखने हों तो Auto checkbox OFF करें। Manual में कुल और पूर्णांक अलग होने पर Send रोका जाएगा।
-8. “अंक अपने आप मिलाएँ” से Auto फिर चालू होगा; यह Teacher का पूर्णांक बदलता नहीं है।
+पहले 01_ADMIT_QR_ATTENDANCE_SAFE.sql को Supabase SQL Editor में एक बार Run करें।
+यह नया authenticated resolve function जोड़ता है; पुराने विद्यार्थी/attendance/marks नहीं मिटाता।
+इसके बाद ऊपर की JS file को ERP root में upload/replace करें।
+index, Admit Card design, document-verify page, Room Sheet या बाकी files बदलनी नहीं हैं।
+Upload के बाद Chrome में page दोबारा reload करें; laptop पर Ctrl+Shift+R करें।
 
-सीमाएँ
-एक प्रश्न का अधिकतम100 अंक है। भरे हुए प्रश्न बहुत कम हों और पूर्णांक उससे ज्यादा हो तो आवश्यक प्रश्न जोड़ें।
-समान अंक वाले प्रश्न अलग खंड में स्वतः बँट सकते हैं। बहुत ज्यादा खंड या पूर्णांक से अधिक प्रश्न होने पर दशमलव अंक भी बन सकते हैं; Preview देखकर जरूरत हो तो Manual अंक चुनें।
-अंक-बँटवारा प्रश्नों की कठिनाई का शैक्षिक मूल्यांकन नहीं करता; Teacher अंतिम paper जाँचकर भेजें।
+काम कैसे करेगा:
+Teacher/Admin login → “Desk / Admit QR • Daily / Exam Attendance” →
+Daily या Exam mode चुनें → जरूरत पर आज का subject/paper चुनें → Camera शुरू करें।
+अब जारी Admit Card का document-verify.html?token=... वाला QR भी पहचाना जाएगा।
+पुराना जारी कार्ड active है तो उसे दोबारा print करने की जरूरत नहीं।
+Desk Slip QR भी उसी scanner में चलता रहेगा।
+उसी विद्यार्थी का Desk और Admit दोनों scan होने पर भी एक दिन/पेपर में duplicate नहीं बनेगा।
+Revoked, superseded, unissued या गलत document QR से attendance नहीं बनेगी।
+सामान्य phone camera से public verification page खोलने पर attendance नहीं लगेगी;
+Teacher/Admin को logged-in ERP attendance scanner इस्तेमाल करना है।
+पुराना Student ID QR scanner पहले जैसा रहेगा।
 
-Recheck
-- खाली Master50/70/100: सही संख्या और अंक।
-- पहले से लिखे32 प्रश्न: 50/70/100 कुल, पाठ/क्रम सुरक्षित।
-- Add/Delete: लगातार numbering और कुल सही। Manual switch और mismatch protection।
-- वास्तविक PostgreSQL-backed browser में100अंक का paper Send और Admin inbox पुष्टि।
--104 अतिरिक्त गणितीय cases: प्रश्न/उत्तर सुरक्षित, section/count limits और server total tolerance जाँचे।
--Refresh frame सुरक्षा, login/restore और idle जाँच पास।
-जाँच स्थानीय synthetic users से हुई है; आपके production login पर सीधे नहीं हुई।
+सही session, active परीक्षा, आज का paper और Teacher के मौजूदा class/paper अधिकार जरूरी हैं।
+Exam Maximum Marks/Start की पहले वाली जरूरत बनी है।
+PDF/marksheet QR को Admit Card नहीं माना जाएगा।
+छपे Admit Card में verification QR ही न हो तो पहले उसे जारी करें।
+
+जाँच: QR पहचान, malformed link, revoked response, Desk+Admit पर एक ही write,
+पुराने daily/exam retry के 11 regression checks पास।
+Live SQL/Supabase, camera और वास्तविक browser की पुष्टि अभी बाकी है।

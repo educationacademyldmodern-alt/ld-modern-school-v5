@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "JS syntax",
+    "Desk QR retained",
+    "Issued Admit URL and raw token recognized",
+    "Malformed/foreign page/duplicate token query rejected",
+    "Desk scan + Admit scan = one attendance write",
+    "Revoked resolver response causes zero writes",
+    "SQL role, kind, status, unique student/exam checks present",
+    "SQL has no drop/delete/truncate"
+  ],
+  "databaseExecuted": false,
+  "cameraAndBrowserTested": false
+}
