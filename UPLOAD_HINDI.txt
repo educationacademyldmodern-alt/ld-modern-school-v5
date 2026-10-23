@@ -1,82 +1,16 @@
-LDM V424 — S02 / S03 / अनुशासनात्मक पत्र — Root Integration
+V426 — Paper layout + function search + auto forms combined update
 
-यह V423 के ऊपर का update है। V423 के paper font/spacing और पुराने graph fixes सुरक्षित हैं।
-मौजूदा ERP की समान नाम वाली files का backup रखें।
-ZIP की 7 HTML / JS / CSS / WOFF2 files को उसी root folder में upload/replace करें जहाँ index.html है।
-school-forms-v424.js और school-forms-v424.css नई files हैं।
-बाकी files local font और PDF helpers हैं; वे भी साथ upload करें।
-VERIFY / LICENSES folders को प्रोग्राम चलाने के लिए upload करना आवश्यक नहीं है।
-SQL नहीं चलाना है। मूल student records या database schema में कोई बदलाव नहीं है।
-Upload के बाद ERP reload करें।
+ZIP खोलकर सभी HTML / JS / CSS / WOFF2 फाइलें अपने ERP की उसी root directory में upload/replace करें जहाँ index.html है। LICENSES folder भी साथ रखें। पहले वाली दूसरी जरूरी ERP फाइलें न हटाएँ। यह existing ERP का patch है, पूरा नया ERP नहीं।
 
-कहाँ मिलेगा:
-Admin / Principal की navigation में “📄 S02 / S03 / अनुशासन पत्र”।
-Dashboard में पुराने UDISE entry के पास / School Forms card में भी उपलब्ध।
-एक ही सेक्शन में तीनों document options हैं।
+इस ZIP में V423 के font / spacing, V424 के S02/S03/restriction और V425 का छोटा function search भी शामिल है। इन्हें अलग से दोबारा upload करने की जरूरत नहीं। SQL या database बदलाव नहीं है। Upload के बाद browser cache refresh करें।
 
-S02:
-1. दस्तावेज़ S02 चुनें। आपके दिए प्रारूप के अनुसार कक्षा 2–12 उपलब्ध हैं।
-2. कक्षा चुनें; एक checkbox, कई checkbox या “इस कक्षा / खोज के सभी चुनें” दबाएँ।
-3. विद्यार्थी, पिता, माता, DOB, प्रवेश तिथि, आधार और school details ERP से आएँगे।
-4. पिछली UDISE सूची में न जुड़ने का वास्तविक कारण लिखें। समान कारण कई विद्यार्थियों
-   पर एक साथ लगा सकते हैं; अलग कारण “विवरण / सुधार” से भरें।
-5. Preview तैयार करें → PDF डाउनलोड / Print। सामान्य विवरण पर एक पेज में 9 विद्यार्थी।
-   लंबा विवरण हो तो बिना काटे कम rows के साथ अगले पेज बनेंगे।
-6. दिया हुआ source 2024–25 का है; वही title और columns रखे गए हैं।
+पेपर सुधार:
+- स्कूल नाम, metadata, section headings, matching rows और footer की सजावटी lines हटाईं।
+- हिंदी / अंग्रेज़ी में section A, B, C…। हर section में प्रश्न 1 से शुरू।
+- Matching: बाएँ 1, 2, 3…; दाएँ A, B, C…; headings Column A/B या स्तंभ A/B।
+- नीचे content की जगह में footer के लिए अतिरिक्त 2mm gap। प्रश्न / matching row एक साथ अगले page पर जाते हैं।
+- Cut/fold mark बरकरार। 2 pages तक दो copies; booklet 4 pages: 4–1 / 2–3।
+- Font और line spacing options बरकरार। कोई नया background polling नहीं।
 
-S03:
-1. S03 → कक्षा → एक/कई/सभी विद्यार्थी चुनें।
-2. पुराने UDISE details उसी browser/user/school/session के आयातित snapshot से लिए जाते हैं।
-   Unique identity या पहले पुष्टि किए गए link से ही auto baseline लिया जाता है।
-3. यदि पुराना snapshot नहीं है तो “विवरण / सुधार” में पुरानी जानकारी और National ID भरें।
-4. बदलने वाले checkbox चुनें। NEW particulars ERP से आएँगे; आवश्यकता पर बदल सकते हैं।
-5. एक विद्यार्थी का एक S03; कई विद्यार्थी चुनने पर एक संयुक्त multipage preview/PDF।
-6. पुराने और नए विवरण आपस में overwrite नहीं होते। मूल ERP record नहीं बदलता।
-
-अनुशासन / Restriction पत्र:
-1. विकल्प चुनें → कक्षा → विद्यार्थी चुनें। Nursery/LKG/UKG सहित वर्तमान रिकॉर्ड उपलब्ध हैं।
-2. “क्या घटना हुई?” वाली जगह घटना लिखें। नाम, पिता/अभिभावक, कक्षा, प्रवेश संख्या और
-   school details अपने-आप आएँगे।
-3. सामान्य चेतावनी के लिए और कुछ भरना जरूरी नहीं। डिफ़ॉल्ट पत्र चेतावनी है।
-4. अभिभावक मुलाकात चुनने पर तारीख दें। अस्थायी रोक चुनने पर शुरू/समाप्त और वापसी की
-   तारीख दें। कोई सप्ताहभर की रोक अपने-आप नहीं गढ़ी जाती।
-5. Hindi / English, Preview, PDF और Print उपलब्ध हैं। एक ही घटना कई चुने विद्यार्थियों पर
-   लगेगी; अलग घटना के लिए अलग चयन करें। लंबा पत्र अगले पेज पर जाएगा।
-
-बड़े चयन:
-“सभी चुनें” सिर्फ स्क्रीन की 100 rows नहीं, पूरे filtered result को चुनता है।
-अलग कक्षाओं में checkbox चुनकर चयन जोड़ा जा सकता है; चुने कुल की संख्या देखें।
-डिफ़ॉल्ट PDF/Print भाग 100 विद्यार्थियों का है। “भाग” बदलकर आगे के विद्यार्थी लें।
-50, 100, 250 या “सभी एक साथ” विकल्प हैं। कोई विद्यार्थी चुपचाप छोड़ा नहीं जाता।
-निष्क्रिय / TC records डिफ़ॉल्ट से अलग हैं; जरूरत पर checkbox से दिखाएँ।
-
-Draft / डेटा:
-अनुपलब्ध जानकारी गढ़ी नहीं जाती। “अधूरी जानकारी पर स्पष्ट DRAFT” चालू हो तो
-अधूरे forms DRAFT label के साथ बनेंगे। उसे बंद करने पर अधूरे forms रोके जाते हैं।
-स्कूल का UDISE code / block / district missing हो तो school details में भरकर सेव करें।
-फॉर्म के manual changes इसी browser में user + school + session के अनुसार local draft हैं।
-ये दूसरे device में अपने-आप sync नहीं होंगे और मूल ERP records नहीं बदलेंगे।
-UDISE portal पर कोई live submission / update API नहीं जोड़ा गया है।
-
-Print:
-S02: A4 Landscape; S03 और पत्र: A4 Portrait। एक page per sheet, Scale 100%,
-browser headers/footers बंद रखें। फॉर्म/पत्र Booklet नहीं हैं; सामान्य A4 हैं।
-प्रश्नपत्र के V423 Booklet विकल्प अपने अलग module में बने रहते हैं।
-
-जाँच:
-• 2,007 mock records का paginated central-read simulation।
-• Class selection, individual / multiple / all selection और 100-row table से आगे चयन।
-• S02 में 20 विद्यार्थी: 9+9+2 = 3 pages। PDF A4 Landscape।
-• Imported baseline से auto S03, manual old/new correction और local draft round-trip।
-• 20 विद्यार्थियों का S03: 20 pages; PDF A4 Portrait।
-• Auto student details वाला Hindi letter; लंबा English restriction letter: 3 pages।
-• Missing dates validation, long S02 reason की pagination, no cutting/overflow।
-• तीनों downloadable PDFs और Chromium native-print output जाँचे।
-• 390px mobile width, escaped HTML input, non-admin permission checks।
-• Page load पर कोई student query नहीं; idle में query count नहीं बढ़ा।
-• कोई polling / interval / MutationObserver / console logging नहीं जोड़ी गई।
-
-सीमा:
-Tests स्थानीय mock DB adapter और उपलब्ध UDISE core के साथ हुए। आपके live Supabase
-permissions / current rows पर login करके read verification तथा वास्तविक printer test
-यहाँ नहीं हुआ। Uploaded PDF formats आधार हैं; वर्तमान office acceptance का दावा नहीं।
+जाँच: local browser में Hindi/English, दो fonts, spacing 1/1.5/2, matching continuation, numbering, border removal, clipping, mobile390px और idle-layout जाँचे गए। 1/2/3/4/5/8/12 pages print order जाँचा गया। Booklet formula 1–100 pages जाँचा गया।
+सीमा: live ERP / actual printer पर test नहीं हुआ। Local fixture में optional paper-typography-v370.js और paper-typing-bridge-v396.js उपलब्ध नहीं थे। इन files को आपके existing ERP से न हटाएँ।
