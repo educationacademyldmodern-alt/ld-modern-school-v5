@@ -1,68 +1,82 @@
-LDM V423 — Premium School Paper / Font / Line Spacing
+LDM V424 — S02 / S03 / अनुशासनात्मक पत्र — Root Integration
 
-V422 के print sequence और V421 graph fix को साथ रखकर नया paper appearance update।
+यह V423 के ऊपर का update है। V423 के paper font/spacing और पुराने graph fixes सुरक्षित हैं।
+मौजूदा ERP की समान नाम वाली files का backup रखें।
+ZIP की 7 HTML / JS / CSS / WOFF2 files को उसी root folder में upload/replace करें जहाँ index.html है।
+school-forms-v424.js और school-forms-v424.css नई files हैं।
+बाकी files local font और PDF helpers हैं; वे भी साथ upload करें।
+VERIFY / LICENSES folders को प्रोग्राम चलाने के लिए upload करना आवश्यक नहीं है।
+SQL नहीं चलाना है। मूल student records या database schema में कोई बदलाव नहीं है।
+Upload के बाद ERP reload करें।
 
-Upload:
-1. मौजूदा ERP में इन्हीं नामों वाली files का backup रखें।
-2. ZIP की 7 HTML/JS/CSS files को ERP root folder में upload/replace करें।
-   index.html
-   paper-center-v343.js
-   teacher-paper-form-v343.html
-   paper-easy-v410.js
-   interface-fixes-v421.js
-   paper-print-v423.js          (नई)
-   school-paper-fonts-v423.css  (नई; जरूर upload करें)
-3. बाकी पुरानी ERP files वहीं रहें। VERIFY folder server पर upload करना जरूरी नहीं।
-4. SQL नहीं चलाना है। Database schema या student records में migration नहीं।
-5. पुराना paper editor बंद करके ERP reload करें, फिर paper दोबारा खोलें।
+कहाँ मिलेगा:
+Admin / Principal की navigation में “📄 S02 / S03 / अनुशासन पत्र”।
+Dashboard में पुराने UDISE entry के पास / School Forms card में भी उपलब्ध।
+एक ही सेक्शन में तीनों document options हैं।
 
-नया इस्तेमाल:
-पेपर फ़ॉन्ट और लाइन की दूरी में:
-• School Serif: पुस्तक जैसा साफ Roman / serif font — default।
-• School Sans: साफ sans font।
-• दोनों में हिंदी के लिए पहले से embedded Devanagari font इस्तेमाल होता है।
-• अक्षर आकार: पुराने A− / A+ / संख्या विकल्प बने हैं।
-• Line spacing: 1.0, 1.15, 1.3, 1.5, 2.0।
-• अपनी दूरी / Custom चुनकर 1.00 से 2.50 तक संख्या लिख सकते हैं।
-• पसंद paper payload में रहती है; केंद्रीय Save draft दबाकर ERP में सेव करें।
-• डिफ़ॉल्ट spacing 1.15 है; compact के लिए 1.0 चुनें।
-• Font/spacing बदलने से पेजों की संख्या बदल सकती है। पेपर का अंतिम Preview जाँचें।
+S02:
+1. दस्तावेज़ S02 चुनें। आपके दिए प्रारूप के अनुसार कक्षा 2–12 उपलब्ध हैं।
+2. कक्षा चुनें; एक checkbox, कई checkbox या “इस कक्षा / खोज के सभी चुनें” दबाएँ।
+3. विद्यार्थी, पिता, माता, DOB, प्रवेश तिथि, आधार और school details ERP से आएँगे।
+4. पिछली UDISE सूची में न जुड़ने का वास्तविक कारण लिखें। समान कारण कई विद्यार्थियों
+   पर एक साथ लगा सकते हैं; अलग कारण “विवरण / सुधार” से भरें।
+5. Preview तैयार करें → PDF डाउनलोड / Print। सामान्य विवरण पर एक पेज में 9 विद्यार्थी।
+   लंबा विवरण हो तो बिना काटे कम rows के साथ अगले पेज बनेंगे।
+6. दिया हुआ source 2024–25 का है; वही title और columns रखे गए हैं।
 
-पेपर का रूप:
-केंद्र में school name, परीक्षा/session, पतली black rules, class/subject/time/पूर्णांक,
-student details, निर्देश, व्यवस्थित section headings और दाईं ओर marks।
-प्रश्नों/sections का मूल content और marks इस appearance patch में rewrite नहीं किया गया।
-School Serif/Sans की regular और bold fonts इसी package में हैं, बाहरी font service नहीं।
-पहली बार font तैयार होने के बाद पेज मापता है; PDF print action fonts का इंतजार करता है।
+S03:
+1. S03 → कक्षा → एक/कई/सभी विद्यार्थी चुनें।
+2. पुराने UDISE details उसी browser/user/school/session के आयातित snapshot से लिए जाते हैं।
+   Unique identity या पहले पुष्टि किए गए link से ही auto baseline लिया जाता है।
+3. यदि पुराना snapshot नहीं है तो “विवरण / सुधार” में पुरानी जानकारी और National ID भरें।
+4. बदलने वाले checkbox चुनें। NEW particulars ERP से आएँगे; आवश्यकता पर बदल सकते हैं।
+5. एक विद्यार्थी का एक S03; कई विद्यार्थी चुनने पर एक संयुक्त multipage preview/PDF।
+6. पुराने और नए विवरण आपस में overwrite नहीं होते। मूल ERP record नहीं बदलता।
 
-प्रिंट:
-Auto mode • A4 Landscape • Both sides • Flip on short edge
-100% / Actual size • 1 page per sheet • browser Headers/Footers बंद।
-Printer का अतिरिक्त Booklet/2-up विकल्प बंद रखें।
-2 pages: आगे 1|1, पीछे 2|2 — बीच से काटें।
-4 pages: आगे 4|1, पीछे 2|3 — बीच से मोड़ें।
-आगे भी automatic booklet; blank padding केवल 4 के गुणक तक।
-वास्तविक printer में पहले एक sheet की आगे/पीछे की दिशा जाँचें।
+अनुशासन / Restriction पत्र:
+1. विकल्प चुनें → कक्षा → विद्यार्थी चुनें। Nursery/LKG/UKG सहित वर्तमान रिकॉर्ड उपलब्ध हैं।
+2. “क्या घटना हुई?” वाली जगह घटना लिखें। नाम, पिता/अभिभावक, कक्षा, प्रवेश संख्या और
+   school details अपने-आप आएँगे।
+3. सामान्य चेतावनी के लिए और कुछ भरना जरूरी नहीं। डिफ़ॉल्ट पत्र चेतावनी है।
+4. अभिभावक मुलाकात चुनने पर तारीख दें। अस्थायी रोक चुनने पर शुरू/समाप्त और वापसी की
+   तारीख दें। कोई सप्ताहभर की रोक अपने-आप नहीं गढ़ी जाती।
+5. Hindi / English, Preview, PDF और Print उपलब्ध हैं। एक ही घटना कई चुने विद्यार्थियों पर
+   लगेगी; अलग घटना के लिए अलग चयन करें। लंबा पत्र अगले पेज पर जाएगा।
 
-रूप का संदर्भ:
-CBSE का आधिकारिक Science sample paper (2025–26) देखा गया:
-https://cbseacademic.nic.in/web_material/SQP/ClassX_2025_26/Science-SQP.pdf
-उसके परीक्षा विवरण / instructions / numbering / marks presentation से मार्गदर्शन लिया।
-यह आपकी school design है; किसी board की prescribed typography का दावा नहीं है।
+बड़े चयन:
+“सभी चुनें” सिर्फ स्क्रीन की 100 rows नहीं, पूरे filtered result को चुनता है।
+अलग कक्षाओं में checkbox चुनकर चयन जोड़ा जा सकता है; चुने कुल की संख्या देखें।
+डिफ़ॉल्ट PDF/Print भाग 100 विद्यार्थियों का है। “भाग” बदलकर आगे के विद्यार्थी लें।
+50, 100, 250 या “सभी एक साथ” विकल्प हैं। कोई विद्यार्थी चुपचाप छोड़ा नहीं जाता।
+निष्क्रिय / TC records डिफ़ॉल्ट से अलग हैं; जरूरत पर checkbox से दिखाएँ।
 
-स्थानीय जाँच:
-• Hindi/English × Serif/Sans × spacing 1.0/1.15/1.5/2.0 — 16 cases पास।
-• Custom spacing 1.25 और font central payload capture/load में वापस मिले।
-• Font size 8/12/24, mobile width 390px, tested content overflow checks पास।
-• 1/2/3/4/5/8/12 logical pages के print pairs, 1–100 booklet formula पास।
-• Local PDF में A4 Landscape और print order जाँचा।
-• Idle में layouts नहीं बढ़े; unchanged preview cached; hidden layout skip।
-• Polling, intervals, network loops या console logging नहीं जोड़ी गई।
+Draft / डेटा:
+अनुपलब्ध जानकारी गढ़ी नहीं जाती। “अधूरी जानकारी पर स्पष्ट DRAFT” चालू हो तो
+अधूरे forms DRAFT label के साथ बनेंगे। उसे बंद करने पर अधूरे forms रोके जाते हैं।
+स्कूल का UDISE code / block / district missing हो तो school details में भरकर सेव करें।
+फॉर्म के manual changes इसी browser में user + school + session के अनुसार local draft हैं।
+ये दूसरे device में अपने-आप sync नहीं होंगे और मूल ERP records नहीं बदलेंगे।
+UDISE portal पर कोई live submission / update API नहीं जोड़ा गया है।
 
-परीक्षण की सीमा:
-स्थानीय fixture में V373 editor/workspace/performance, V381 premium, V409 import
-और current paper files थे। paper-typography-v370.js और paper-typing-bridge-v396.js
-इस fixture में उपलब्ध नहीं थे; आपके मौजूदा ERP में वे अपनी जगह रहें।
-Live central Save/Send, पूरा dashboard, original studio snapshots और वास्तविक printer
-hardware का end-to-end परीक्षण यहाँ नहीं हुआ। Original studio snapshots अपने आयातित
-रूप में रहते हैं; ये font controls structured question-paper layout पर लागू हैं।
+Print:
+S02: A4 Landscape; S03 और पत्र: A4 Portrait। एक page per sheet, Scale 100%,
+browser headers/footers बंद रखें। फॉर्म/पत्र Booklet नहीं हैं; सामान्य A4 हैं।
+प्रश्नपत्र के V423 Booklet विकल्प अपने अलग module में बने रहते हैं।
+
+जाँच:
+• 2,007 mock records का paginated central-read simulation।
+• Class selection, individual / multiple / all selection और 100-row table से आगे चयन।
+• S02 में 20 विद्यार्थी: 9+9+2 = 3 pages। PDF A4 Landscape।
+• Imported baseline से auto S03, manual old/new correction और local draft round-trip।
+• 20 विद्यार्थियों का S03: 20 pages; PDF A4 Portrait।
+• Auto student details वाला Hindi letter; लंबा English restriction letter: 3 pages।
+• Missing dates validation, long S02 reason की pagination, no cutting/overflow।
+• तीनों downloadable PDFs और Chromium native-print output जाँचे।
+• 390px mobile width, escaped HTML input, non-admin permission checks।
+• Page load पर कोई student query नहीं; idle में query count नहीं बढ़ा।
+• कोई polling / interval / MutationObserver / console logging नहीं जोड़ी गई।
+
+सीमा:
+Tests स्थानीय mock DB adapter और उपलब्ध UDISE core के साथ हुए। आपके live Supabase
+permissions / current rows पर login करके read verification तथा वास्तविक printer test
+यहाँ नहीं हुआ। Uploaded PDF formats आधार हैं; वर्तमान office acceptance का दावा नहीं।
