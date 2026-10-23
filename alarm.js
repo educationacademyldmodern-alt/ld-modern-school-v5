@@ -161,7 +161,7 @@ function scheduleForm(){
 function centerSkeleton(){
   return `<div class="v264Page">
    <section class="v264Hero"><small>SMART WORK ALARM • DAILY SCHEDULE</small><h2>🚨 आज का काम भूलिए नहीं</h2><p>Time-wise agenda • alarm • Done • Snooze • Skip • Next Task • Admin → Teacher assignment</p></section>
-   <div class="v264Notice"><strong>Reliable rule:</strong> ERP/browser खुला हो तो exact-time in-app alarm चलेगा. Browser notification permission मिले तो background tab में notification भी मिलेगा. Browser/app पूरी तरह बंद होने पर web alarm guaranteed नहीं है; उसके लिए future PWA/Web Push चाहिए.</div>
+   <div class="v264Notice"><strong>Reliable rule:</strong> Alarm इस screen के खुले और visible रहने तक चलेगा। दूसरी screen या tab पर जाने पर रुक जाएगा; फिर चालू करने के लिए यह screen खोलें या Refresh दबाएँ।</div>
    <div id="v264FormHost"></div>
    <section class="panel"><div class="panelHead"><div><h3>📅 Today Agenda</h3><p class="note">${prettyDate(today())} • time order • one-by-one work</p></div><button onclick="v264RefreshAll(true)">↻ Refresh</button></div><div id="v264Stats"></div><div id="v264NextBox"></div><div id="v264TodayAgenda" class="v264Agenda"><div class="empty">Loading today schedule…</div></div></section>
    <section class="panel"><div class="panelHead"><div><h3>🗓 Active / Upcoming</h3><p class="note">Personal + assigned recurring schedule</p></div></div><div id="v264Upcoming" class="v264Agenda"></div></section>
@@ -175,14 +175,15 @@ window.v264ScheduleCenter=async function(){
   window.__v90Route='smart_work_alarm';try{window.v90Push?.('smart_work_alarm')}catch(_e){}
   try{window.v90InstallShell?.('smart_work_alarm')}catch(_e){}
   try{window.v90Head?.('🚨 Smart Work Alarm','Daily Schedule • One-by-one Task • Teacher Assignment')}catch(_e){}
-  const host=$('erpContent');if(!host)return;
+  const host=$('erpContent');if(!host)return;const who435=uid();
   host.innerHTML=centerSkeleton();
   try{
     if(admin())await loadTeachers();
+    if(uid()!==who435||window.__v90Route!=='smart_work_alarm'||!$('v264FormHost'))return;
     $('v264FormHost').innerHTML=scheduleForm();showDays();
     await window.v264RefreshAll(true);
   }catch(e){
-    $('v264TodayAgenda').innerHTML=`<div class="dangerNote">${E(e?.message||e)}<br>V264 SAFE SQL run करें.</div>`;
+    if($('v264TodayAgenda'))$('v264TodayAgenda').innerHTML=`<div class="dangerNote">${E(e?.message||e)}<br>V264 SAFE SQL run करें.</div>`;
   }
 };
 
@@ -287,7 +288,7 @@ async function loadManage(){
   }else window.__v264AssignedByMe=[];
 }
 window.v264RefreshAll=async function(force=false){
-  try{await Promise.all([loadToday(force),loadManage()]);renderToday();renderManage();armNext();decorateDashboard()}catch(e){if($('v264TodayAgenda'))$('v264TodayAgenda').innerHTML=`<div class="dangerNote">${E(e?.message||e)}</div>`;throw e}
+  const who435=uid();try{await Promise.all([loadToday(force),loadManage()]);if(uid()!==who435||window.__v90Route!=='smart_work_alarm'||!document.querySelector('.v264Page'))return;renderToday();renderManage();armNext();decorateDashboard()}catch(e){if($('v264TodayAgenda'))$('v264TodayAgenda').innerHTML=`<div class="dangerNote">${E(e?.message||e)}</div>`;throw e}
 };
 window.v264Action=async function(id,action,snooze=0){
   const c=db();try{
@@ -310,7 +311,7 @@ function alarmHtml(x){
 }
 function closeAlarm(){$('v264AlarmOverlay')?.remove()}
 function fireAlarm(x){
-  if(!x||$('v264AlarmOverlay'))return;
+  if(document.hidden||window.__v90Route!=='smart_work_alarm'||!document.querySelector('.v264Page')||!x||$('v264AlarmOverlay'))return;
   try{localStorage.setItem(firedKey(x),'1')}catch(_e){}
   beep();document.body.insertAdjacentHTML('beforeend',alarmHtml(x));
   try{
@@ -320,6 +321,7 @@ function fireAlarm(x){
   }catch(_e){}
 }
 function armNext(){
+  if(document.hidden||window.__v90Route!=='smart_work_alarm'||!document.querySelector('.v264Page'))return stopTimers435();
   clearTimeout(window.__v264AlarmTimer);window.__v264AlarmTimer=null;
   const pending=(window.__v264TodayRows||[]).filter(x=>String(x.occurrence_state||'pending')==='pending');
   const candidates=pending.map(x=>({x,ms:effectiveMs(x)})).sort((a,b)=>a.ms-b.ms);
@@ -336,6 +338,7 @@ function armNext(){
   armMidnight();
 }
 function armMidnight(){
+  if(document.hidden||window.__v90Route!=='smart_work_alarm'||!document.querySelector('.v264Page'))return;
   clearTimeout(window.__v264MidnightTimer);
   const d=addDays(today(),1),ms=new Date(`${d}T00:00:03+05:30`).getTime()-Date.now();
   window.__v264MidnightTimer=setTimeout(async()=>{window.__v264LoadedDate='';try{await loadToday(true);renderToday();decorateDashboard();armNext()}catch(_e){}},Math.max(1000,ms));
@@ -359,6 +362,7 @@ function decorateDashboard(){
     else{box.innerHTML='<span><b>🚨 Work Alarm</b><small>Loading today schedule…</small></span><strong>OPEN →</strong>';host.insertBefore(box,host.firstChild?.nextSibling||host.firstChild)}
   }
   const rows=window.__v264TodayRows||[],pending=rows.filter(x=>String(x.occurrence_state||'pending')==='pending').sort((a,b)=>effectiveMs(a)-effectiveMs(b)),next=pending[0];
+  if(!window.__v264LoadedDate){box.innerHTML='<span><b>🚨 Work Alarm</b><small>खोलने पर आज का schedule लोड होगा</small></span><strong>OPEN →</strong>';return;}
   box.innerHTML=`<span><b>🚨 Work Alarm • ${pending.length} Pending</b><small>${next?`Next ${E(prettyTime(next.alarm_time))} — ${E(next.title)}`:'आज का pending काम पूरा ✅'}</small></span><strong>OPEN →</strong>`;
 }
 
@@ -368,12 +372,15 @@ async function bootDashboard(){
 }
 window.v264BootDashboard=bootDashboard;
 
+function stopTimers435(){for(const key of ['__v264AlarmTimer','__v264MidnightTimer','__v264ExternalTimer']){clearTimeout(window[key]);window[key]=null;}closeAlarm();}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopTimers435()});window.addEventListener('pagehide',stopTimers435);
 const previousRender=window.render;
 window.render=async function(route='dashboard'){
   const r=String(route||'dashboard');
+  stopTimers435();
   if(r==='smart_work_alarm')return window.v264ScheduleCenter();
   const out=await previousRender.apply(this,arguments);
-  if(r==='dashboard'&&(admin()||teacher()))setTimeout(bootDashboard,0);
+  if(r==='dashboard'&&(admin()||teacher()))decorateDashboard(); // V435: launcher only, schedule loads on click
   return out;
 };
 try{render=window.render}catch(_e){}
@@ -387,11 +394,12 @@ window.v264CancelExternalReminder=function(){
 };
 window.v264ArmExternalReminder=function(o){
   window.v264CancelExternalReminder();
-  if(!o||!Number.isFinite(Number(o.atMs)))return false;
+  if(document.hidden||window.__v90Route!=='academic_monitor'||!document.querySelector('.v265Page')||!o||!Number.isFinite(Number(o.atMs)))return false;
   const at=Number(o.atMs),key=String(o.key||'external'),title=String(o.title||'Reminder'),details=String(o.details||''),status=String(o.status||''),route=String(o.route||'');
   let fired=false;try{fired=localStorage.getItem('ldm_v264_external:'+key)==='1'}catch(_e){}
   if(fired)return false;
   const fire=()=>{
+    if(document.hidden||window.__v90Route!=='academic_monitor'||!document.querySelector('.v265Page'))return;
     if(document.getElementById('v264AlarmOverlay')){
       window.__v264ExternalTimer=setTimeout(fire,60000);return;
     }

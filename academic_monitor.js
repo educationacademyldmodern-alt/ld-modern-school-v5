@@ -103,11 +103,14 @@ function shell(){
  </div>`;
 }
 
+let screenRevision435=0;
 window.v265AcademicCenter=async function(){
  if(!isAdmin()&&!isTeacher())return window.toast?.('Admin / Teacher only');
+ const mine=++screenRevision435,who=uid();
  routeHead(isTeacher()?'📊 My Teaching Performance':'📊 Teacher Academic Analysis',isTeacher()?'My Bells • Teaching • Copy Checking • Class Tests':'Select one Teacher → complete syllabus, checking, tests and bell analysis');
  setMain(shell());
  await loadAll(true);
+ if(mine!==screenRevision435||uid()!==who||window.__v90Route!=='academic_monitor'||!document.querySelector('.v265Page'))return;
  setMain(shell());
  renderCurrent();
  if(isTeacher())armBellReminder();
@@ -185,7 +188,7 @@ window.v267SelectTeacher=async function(id){
  try{await loadAdminTeacherDetail(state.teacher);setMain(shell());renderCurrent()}catch(e){window.toast?.(e?.message||String(e));setMain(shell());renderCurrent()}
 };
 window.v267ClearTeacher=function(){state.teacher='';state.className='';state.subject='';state.detailLoaded=false;state.diary=[];state.copy=[];state.tests=[];state.timetable=[];state.syllabus=[];setMain(shell());renderCurrent()};
-window.v265Reload=async function(){state.loaded=false;await loadAll(true);setMain(shell());renderCurrent();if(isTeacher())armBellReminder()};
+window.v265Reload=async function(){const mine=++screenRevision435,who=uid();state.loaded=false;await loadAll(true);if(mine!==screenRevision435||uid()!==who||window.__v90Route!=='academic_monitor'||!document.querySelector('.v265Page'))return;setMain(shell());renderCurrent();if(isTeacher())armBellReminder()};
 
 window.v265Filter=function(kind=''){
  const d=n($('v265Days')?.value||30);if(d&&d!==state.days){state.days=d;return window.v265Reload()}
@@ -455,7 +458,7 @@ function nextBellPayload(){
  return null;
 }
 function armBellReminder(){
- if(!isTeacher()||typeof window.v264ArmExternalReminder!=='function')return;
+ if(!isTeacher()||document.hidden||!document.querySelector('.v265Page')||typeof window.v264ArmExternalReminder!=='function')return;
  const p=nextBellPayload();if(p)window.v264ArmExternalReminder(p);else window.v264CancelExternalReminder?.();
 }
 window.v265ArmBellReminder=armBellReminder;
@@ -482,6 +485,7 @@ async function bootTeacherDashboard(){
 }
 function decorateDashboard(){
  if(!isTeacher())return;const host=$('erpContent');if(!host||host.querySelector('[data-v265-dash]'))return;
+ if(!state.loaded){const b=document.createElement('button');b.type='button';b.dataset.v265Dash='1';b.className='v265Dash';b.onclick=()=>window.render?.('academic_monitor');b.innerHTML='<span><b>📊 Teaching Performance</b><small>Report खोलने पर आँकड़े लोड होंगे</small></span><strong>OPEN →</strong>';const target=host.querySelector('.ldmTeacherModules');if(target)target.before(b);else host.append(b);return;}
  const g=groupMetrics(),gap=g.reduce((a,x)=>a+x.gap,0),rows=todaysTimetable(),next=rows.find(r=>{let t=String(r.start_time||'').slice(0,5);return t&&new Date(`${indiaYMD()}T${t}:00+05:30`).getTime()>=Date.now()-10*60000}),perf=next?subjectMetricForBell(next):null;
  const b=document.createElement('button');b.type='button';b.dataset.v265Dash='1';b.className='v265Dash';b.onclick=()=>window.render?.('academic_monitor');b.innerHTML=`<span><b>📊 Teaching Performance • Gap ${gap}</b><small>${next?`Next Bell ${E(next.period_no)} • Class ${E(cls(next.class_name))} ${E(next.subject||'')} • ${E(perf.status)}`:'Open teaching/copy/test monitor'}</small></span><strong>OPEN →</strong>`;
  const target=host.querySelector('.ldmTeacherModules');if(target)target.parentNode.insertBefore(b,target);else host.insertBefore(b,host.firstChild?.nextSibling||host.firstChild);
@@ -505,9 +509,10 @@ function decorateAdminDashboard(){
 const prevRender=window.render;
 window.render=async function(route='dashboard'){
  const r=String(route||'dashboard');
+ screenRevision435++;
  if(r==='academic_monitor')return window.v265AcademicCenter();
  const out=await prevRender.apply(this,arguments);
- if(r==='dashboard'&&isTeacher())setTimeout(bootTeacherDashboard,0);
+ if(r==='dashboard'&&isTeacher())decorateDashboard(); // V435: launcher only, no academic queries before opening
  if(r==='dashboard'&&isAdmin())setTimeout(decorateAdminDashboard,0);
  return out;
 };

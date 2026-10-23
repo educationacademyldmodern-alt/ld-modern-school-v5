@@ -1,0 +1,142 @@
+{
+  "version": 435,
+  "status": "pass",
+  "runtimeFiles": [
+    "LICENSES/PDFJS_ACTUALTEXT_V432.txt",
+    "academic_monitor.js",
+    "alarm.js",
+    "dashboard-order-v350.js",
+    "index.html",
+    "network-economy-v433.js",
+    "paper-center-v343.js",
+    "paper-import-v369-assets/pdf.worker.mjs",
+    "paper-import-v369.js",
+    "paper-print-v432.js",
+    "paper-structure-v431.js",
+    "paper-typing-bridge-v396.js",
+    "paper-typing-format-v396.html",
+    "root-corrections-v332.js",
+    "school-workspace-v336.js",
+    "teacher-paper-form-v343.html",
+    "v57-school-operations.js"
+  ],
+  "sha256": {
+    "LICENSES/PDFJS_ACTUALTEXT_V432.txt": "c1195cb1182f3c07c382c8a72833b78dccd1d09ed4c2a07f9b56af2af0a2625e",
+    "index.html": "70a5a69953179221a4ad609d992879f2e5f33bbf8eb1825dc69bdd4cdc093d45",
+    "network-economy-v433.js": "59d5a0104dbb743d669841f293f4e667eb9d6b0a11cab3b5fbf74c748952fac9",
+    "paper-center-v343.js": "a910f685e07c6fe1c07ecabb5a17676bc1ef0022577380f64f5f9a8e691285d7",
+    "paper-import-v369-assets/pdf.worker.mjs": "bdb2d74c62fdd19c7b6d002188f721d411143af9eee9c6b74f745f68e2bc335b",
+    "paper-import-v369.js": "6980c6476a6655a419fba950215001a7792656bbeeecd78933480569ae0e2690",
+    "paper-print-v432.js": "0d8dc8a6c9e3781df07002b889773045f523b4f46e3d48d96a3b0cb5be2eb240",
+    "paper-structure-v431.js": "a24e1ed2613abaa0a5658163853b3f63cb1165d040b7415054d8f451af8ba0df",
+    "paper-typing-bridge-v396.js": "6c938535c3e17e6d9cc2ceae310af5af13ebb2c2cda3451eb0629f49165298ce",
+    "paper-typing-format-v396.html": "293496b8b8cfe25e5bab42b00b0c341735210b2b45def43ea77b7ed397bbedbc",
+    "teacher-paper-form-v343.html": "09d45e55cc5bb930afea366301eaefea4e171a10722bb394b0adca885750e8f3",
+    "root-corrections-v332.js": "eeb28f253692043d8b9ecb652b331fd9d6a23aae33dfa90b28b513d72e88d33d",
+    "dashboard-order-v350.js": "43c6ab7d8ba15320b11f1e8e3b98bcc346df7010de39eb613cc41241e976393c",
+    "v57-school-operations.js": "bb19c949e43989c2a01d5a1e7827921d14d9ea4448a5439652b0b792529ed213",
+    "school-workspace-v336.js": "635355d283118e29f040ad76112397cffb4d6280ddaf3c56b1af9abf4d39fa71",
+    "academic_monitor.js": "fcb1c487330ed561348ea5f8314561cfbbcaf197cdb58d97a84d37641048e666",
+    "alarm.js": "e7376752fa810b720f5b8222deb22e11497b587f2261117196f7618f3c67350a"
+  },
+  "verification": {
+    "qa/dashboard-results435.json": {
+      "status": "pass",
+      "checks": [
+        "Admin 5/507 present = 1%; marked 7/507 = 1% complete; same graph and card",
+        "Zero present, unmarked, full attendance, empty school and 3000-student cases correct",
+        "admin: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "admin: work alarm loads only when opened",
+        "admin: leaving screen cancels alarm and bell timers",
+        "teacher: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "Teacher academic data loads only after opening its report",
+        "Late academic reply cannot reopen a screen after leaving",
+        "teacher: work alarm loads only when opened",
+        "teacher: leaving screen cancels alarm and bell timers",
+        "parent: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "parent: leaving screen cancels alarm and bell timers"
+      ],
+      "limitations": "Actual changed modules in native Chromium with synthetic records and mocked Supabase. Not a live login, payment or production load test."
+    },
+    "qa/dashboard-desktop-results435.json": {
+      "status": "pass",
+      "checks": [
+        "Admin 5/507 present = 1%; marked 7/507 = 1% complete; same graph and card",
+        "Zero present, unmarked, full attendance, empty school and 3000-student cases correct",
+        "admin: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "admin: work alarm loads only when opened",
+        "admin: leaving screen cancels alarm and bell timers",
+        "teacher: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "Teacher academic data loads only after opening its report",
+        "Late academic reply cannot reopen a screen after leaving",
+        "teacher: work alarm loads only when opened",
+        "teacher: leaving screen cancels alarm and bell timers",
+        "parent: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "parent: leaving screen cancels alarm and bell timers"
+      ],
+      "limitations": "Actual changed modules in native Chromium with synthetic records and mocked Supabase. Not a live login, payment or production load test."
+    },
+    "qa/root-results433.json": {
+      "status": "pass",
+      "inlineScriptsCompiled": 128,
+      "checks": [
+        "Repeated init creates one Supabase client; window and core share the same user/profile/client",
+        "Profile concurrent loads join; late old-user response rejected; role normalization keeps verified Admin",
+        "20 concurrent Teacher context requests use three queries; later permission reads remain fresh",
+        "Old Teacher context cannot overwrite a new account"
+      ],
+      "limits": "Actual extracted root functions with mocked Supabase; not live login/RLS verification."
+    },
+    "qa/fee-results427.json": {
+      "status": "pass",
+      "checks": [
+        "Repeated search uses short cache without duplicate data calls",
+        "Typing aborts obsolete search; final results match newest input",
+        "50 students: Add All and amount typing add no requests; double click saves once, retaining date/mode/amount",
+        "Confirmed payment invalidates cached balances and enables next student",
+        "Late response + Retry join one transaction and complete receipt",
+        "Late success updates automatically without another click or RPC",
+        "Lost response retries identical receipt and creates no duplicate ledger payment",
+        "Balance validation failure remains editable and shows no saved receipt",
+        "Hung connection is aborted after bounded wait; Retry retains original receipt",
+        "Malformed server reply never shows success; Retry keeps original receipt",
+        "Due failure retains student results but prevents collecting unverified balances",
+        "Account change clears cached results and selection",
+        "Idle: zero background calls; mobile390px fits; zero browser errors"
+      ],
+      "errors": [],
+      "limitations": "Actual module in Chromium with synthetic student records and mocked database/RPC. No live fee payments or live SQL execution."
+    },
+    "qa/browser-results433.json": {
+      "status": "pass",
+      "checks": [
+        "Native Chromium fetch coalesces 20 requests to 1",
+        "No token mixing",
+        "Write from another tab clears cached data over local BroadcastChannel",
+        "Manual Refresh re-fetches",
+        "Thirty independent reads limited to six in flight",
+        "No idle traffic",
+        "Request-object POST body arrives unchanged once",
+        "No browser errors"
+      ],
+      "serverRequests": {
+        "reads": 33,
+        "writes": 2,
+        "peak": 6
+      },
+      "limits": "Local HTTP server; no production database, auth or monthly logs."
+    },
+    "qa/network-edge-results433.json": {
+      "status": "pass",
+      "checks": [
+        "Explicit browser no-cache bypasses completed cache",
+        "Repeated read failures pause without weakening denied status",
+        "Late response after invalidation never repopulates stale cache",
+        "Eviction keeps total cache within 2 MiB under large repeated responses",
+        "Queued cancelled search is never sent to server",
+        "Request-object POST body forwarded exactly once, without consuming it twice"
+      ]
+    }
+  },
+  "scope": "Admin attendance calculation and event-driven portal helpers. No database migration. Existing V434 paper and network fixes retained."
+}

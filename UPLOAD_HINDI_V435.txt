@@ -1,0 +1,25 @@
+LDM V435 — Admin Attendance + Quiet Portal Update
+
+V430 पहले लगा होना चाहिए। V431–V434 के जरूरी पेपर/network बदलाव भी इसी ZIP में हैं।
+ZIP खोलकर सभी folders/files उसी ERP root में upload/replace करें। पुराने records न हटाएँ।
+पहले पुराने root की copy रख लें। SQL चलाने की जरूरत नहीं है।
+Upload के बाद Ctrl+Shift+R करें; मोबाइल पर site को reload करें।
+
+नया सुधार:
+1. Admin ring और Attendance card: Present / Total Students. 5/507 = 1%.
+2. Attendance दर्ज: 7/507 = 1% complete, अलग note; 71% वाला भ्रामक note हटाया।
+3. पुरानी हर सेकंड वाली clock बंद। Focus/tab return पर teacher card rebuild बंद।
+4. Teacher academic analysis की 6 background queries बंद; report खोलने पर load.
+5. Work Alarm dashboard launcher केवल button है; schedule खोलने पर data load.
+6. Work/bell alarm दूसरी screen, hidden tab या page बंद होने पर बंद. दोबारा चलाने के लिए संबंधित screen खोलें/Refresh करें।
+7. Workspace का midnight auto-reload बंद। पुराने Save, pending Retry और unsaved guards कायम।
+8. Login/token session maintenance बंद नहीं किया; Parents login का code नहीं बदला।
+
+Dashboard खोलने का initial data load और आपके Save के बाद जरूरी affected-data update जारी रहेगा।
+अन्य functions click/typing पर चलते हैं। यह package सारे server logs या सभी third-party requests शून्य होने की गारंटी नहीं है।
+जाँच: Mobile 390px और Desktop 1440px पर वास्तविक बदले modules के साथ synthetic data/mock database: idle और focus return पर 0 नई queries और 0 DOM mutations।
+Zero/full/unmarked attendance और 3000 count गणना; देर के report जवाब; alarm cleanup; fee save/retry/search; native network body checks पास।
+यह live Supabase login/payment या 3000 concurrent users का load test नहीं है।
+Parents login पहले से ठीक है; उसे बदलने वाला अलग patch नहीं है।
+
+V430 के बाद की केवल 17 runtime/license files + यह README + जाँच का JSON शामिल है।

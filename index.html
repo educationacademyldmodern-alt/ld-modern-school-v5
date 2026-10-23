@@ -9636,7 +9636,7 @@ async function v90LoadDashboardStats(){
  try{[students,teachers]=await Promise.all([v90Count('students',q=>q.neq('status','Inactive')),v90Count('teacher_profiles',q=>q.eq('approval_status','Approved'))]);}catch(_e){}
  try{let p=await sb.from('fee_payments').select('amount').eq('payment_date',v90Today()).limit(3000);collection=(p.data||[]).reduce((a,x)=>a+Number(x.amount||0),0)}catch(_e){}
  try{let s=await sb.from('student_fee_schedules').select('amount,paid_amount,status').eq('academic_session',v90Session()).limit(6000);due=(s.data||[]).reduce((a,x)=>a+(v90Norm(x.status)==='paid'?0:Math.max(Number(x.amount||0)-Number(x.paid_amount||0),0)),0)}catch(_e){}
- try{let a=await sb.from('attendance').select('status').eq('date',v90Today()).limit(5000);let r=a.data||[];attMarked=r.length;attPresent=r.filter(x=>v90Norm(x.status)==='present').length;attAbsent=r.filter(x=>v90Norm(x.status)==='absent').length;attLeave=r.filter(x=>v90Norm(x.status)==='leave').length;attPct=attMarked?Math.round(attPresent*100/attMarked):0}catch(_e){}
+ try{let a=await sb.from('attendance').select('status').eq('date',v90Today()).limit(5000);let r=a.data||[];attMarked=r.length;attPresent=r.filter(x=>v90Norm(x.status)==='present').length;attAbsent=r.filter(x=>v90Norm(x.status)==='absent').length;attLeave=r.filter(x=>v90Norm(x.status)==='leave').length;attPct=students?Math.round(attPresent*100/students):0}catch(_e){}
  try{let [l,c,r,t]=await Promise.all([sb.from('student_leave_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('student_correction_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('student_roster_requests').select('id',{count:'exact',head:true}).eq('status','Pending'),sb.from('v90_teacher_requests').select('id',{count:'exact',head:true}).eq('status','Pending')]);pending=(l.count||0)+(c.count||0)+(r.count||0)+(t.count||0)}catch(_e){}
  const data=[['👥','Total Students',students],['👩‍🏫','Total Teachers',teachers],['₹','Fee Collection',v90Money(collection)],['💰','Total Due',v90Money(due)],['✅','Attendance',attPct?attPct+'%':'—'],['📬','Pending Requests',pending]];
  host.innerHTML=data.map(x=>`<div class="v90Stat"><span>${x[0]}</span><div><small>${x[1]}</small><b>${x[2]}</b></div></div>`).join('');window.__ldmAdminStatsHTML=host.innerHTML;try{sessionStorage.setItem('ldm_admin_stats_html',host.innerHTML)}catch(_e){}
@@ -11360,7 +11360,7 @@ try{const v113LogoutBase=logout;logout=async function(){await v113StopChannel(v1
 <script src="v53-final-polish.js?v=V53-FINAL-POLISH-1&build=V643"></script>
 <script src="v54-final-integration.js?v=V54-FINAL-1&build=V643"></script>
 <link rel="stylesheet" href="v58-complaint-discipline.css?v=V58-1&build=V643">
-<script src="v57-school-operations.js?v=356"></script>
+<script src="v57-school-operations.js?v=435"></script>
 <script src="v58-complaint-discipline.js?v=V58-1&build=V643"></script>
 <script src="v59-academic-calendar.js?v=V59-1&build=V643"></script>
 
@@ -14277,10 +14277,11 @@ async function finalHome(){
 
     if(!$('v114AttPct')&&!$('v114AttDonut'))return;
 
-    const pct=m?Math.round((p*100)/m):0;
+    const total=totalStudentsFromStats();
+    const pct=total?Math.round((p*100)/total):0;
 
     if($('v114AttPct')){
-      $('v114AttPct').textContent=m?pct+'%':'—';
+      $('v114AttPct').textContent=total?pct+'%':'—';
     }
 
     if($('v114AttDonut')){
@@ -14295,12 +14296,11 @@ async function finalHome(){
           String(c.querySelector('small')?.textContent||'').trim()
         )){
           const b=c.querySelector('b');
-          if(b)b.textContent=m?pct+'%':'—';
+          if(b)b.textContent=total?pct+'%':'—';
         }
       }
     }
 
-    const total=totalStudentsFromStats();
     const notMarked=Math.max(0,total-m);
 
     const marked=$('v114AttMarked');
@@ -17636,9 +17636,9 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
 </style>
 <script id="ldm-v263-assigned-work-marker">window.LDM_FINAL_BUILD='V276-FAST-OPEN-2026-10-09';</script>
 
-<script src="./alarm.js?v=V265"></script>
+<script src="./alarm.js?v=435"></script>
 
-<script src="./academic_monitor.js?v=V267"></script>
+<script src="./academic_monitor.js?v=435"></script>
 
 
 <style id="v271-admin-premium-style">
@@ -18461,7 +18461,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=349"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v332.js?v=408"></script>
+<script src="root-corrections-v332.js?v=435"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
 <script src="exam-central-v320.js?v=393"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
@@ -18484,7 +18484,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="central-exam-fees-v333.js?v=335"></script>
 <script src="central-fee-class-v335.js?v=344"></script>
 <link rel="stylesheet" href="school-workspace-v336.css?v=336">
-<script src="school-workspace-v336.js?v=416"></script>
+<script src="school-workspace-v336.js?v=435"></script>
 
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=373"></script>
@@ -18512,7 +18512,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=388"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=392"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=435"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=410">
 <script src="desktop-premium-v378.js?v=390"></script>
