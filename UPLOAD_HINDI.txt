@@ -1,37 +1,24 @@
-V430 — Paper section / matching lines removed in Preview, PDF and Print
+V431 — Shared exam paper structure: import, options, sections and central Preview / PDF / Print
 
-Root की सभी HTML / JS / CSS files और साथ के folders उसी existing ERP root में upload/replace करें। अन्य पुरानी ERP files न हटाएँ। Browser hard refresh करके paper दोबारा खोलें और नई PDF बनाएँ। पहले से बनी PDF अपने आप नहीं बदलेगी।
+ZIP की सभी root HTML/JS/CSS files तथा folders को उसी existing ERP root में upload/replace करें। paper-structure-v431.js, नया typing bridge और paper-print-v431.js साथ upload होना जरूरी है। बाकी पुरानी ERP files न हटाएँ। Browser hard refresh करें; paper फिर खोलकर नई PDF बनाएँ। यह existing ERP का update है, पूरा नया ERP नहीं।
 
-वजह: पुरानी paper-typography-v370.js में section / matching borders पर !important था। इसलिए V426 का सामान्य border:0 नियम उसे नहीं हटा पाया। V430 में final style अब उसी loaded legacy stylesheet पर भी जीतती है।
+पुराने V430/V429/V428/V427 सुधार साथ हैं: बिना decorative lines का paper, class selection, same-seat desk/attendance, fee fast search/save। V423 fonts/spacing files भी साथ हैं। कोई नया SQL नहीं है। साथ का SQL वही V427 का index-only SQL है; पहले चला चुके हैं तो फिर न चलाएँ।
 
-बदलाव: school top/header, metadata, sections, matching table और footer की सजावटी rules नहीं छपेंगी। बीच का physical cut/fold marker, fill-in-the-blank के underscores और गणित के fraction/root चिन्ह जरूरी content हैं और बने रहेंगे। Font / line spacing भी पुराने override के बाद सही लागू होते हैं। Print में setup controls छिपे रहते हैं।
+क्या सुधरा:
+- Letter / Hindi / Roman / numbered / pipe वाले स्पष्ट MCQ options एक संरचना में। Options a,b,c… के रूप में अलग छपेंगे।
+- MCQ, fill blanks, True/False, matching, very short / short / long तथा custom question-type sections।
+- मूल explicit sections और question order सुरक्षित; हर प्रश्न का अलग section नहीं। हर section में numbering 1 से और headings A,B,C…।
+- स्रोत में sections न हों तो पहचाने type के अनुसार contiguous sections बनते हैं। अस्पष्ट short/long या खराब OCR से सही content invent नहीं किया जाता।
+- Math के (a),(b) subparts को बिना आधार MCQ choices नहीं बनाया जाता। Matching के दोनों columns और source order सुरक्षित; अज्ञात answer key नहीं गढ़ी जाती।
+- प्रति-प्रश्न मूल marks सुरक्षित; import पर अनचाहा auto redistribution नहीं। कुल/मूल total का अंतर review में दिखता है।
+- Reviewer में प्रत्येक प्रश्न का type, section number, text, options/right match और marks बदल सकते हैं। Section number बदलने पर section क्रम में जाता है। अधूरा MCQ / खाली matching right / गलत marks लागू करने से पहले ठीक करने होंगे।
+- Question-wise typing mode भी मुख्य sectioned paper engine से Preview/Print देता है। Font, line spacing, booklet और no-lines styles वही लागू हैं। मूल दोनों editing drafts सुरक्षित रहने वाला व्यवहार बरकरार है।
 
-V429 class selection और PDF import, V428 same-seat attendance तथा V427 fee सुधार शामिल हैं। इस paper style सुधार के लिए कोई नया SQL नहीं। साथ का SQL वही पुराना optional/index-only V427 SQL है—पहले चला चुके हों तो फिर न चलाएँ।
-
-जाँच: असली V370 !important stylesheet लोड करके Hindi/English × दो fonts × spacing 1/1.5/2 में preview/print borders, computed spacing, question clipping और idle behaviour जाँचे। Generated browser PDF में horizontal decorative strokes/rules और setup controls की जाँच की। Live ERP / physical printer पर जाँच नहीं हुई।
-
-पिछले संयुक्त सुधारों का विवरण:
-
-Classes:
-- Native checkbox और label पर एक click से चयन; बड़े hit targets और बिना text drag वाला label।
-- चयन बदलते ही student/room count अपडेट; इस दौरान कोई roster/database request नहीं।
-- उसी exam/session के roster को फिर Load करने पर चुनी हुई classes बरकरार। दूसरे exam/session पर नई selection।
-- Canonical duplicate class labels हटे; All / Unselect और Nursery/LKG/UKG शामिल।
-- पुराना hidden Room layout panel सच में hidden रहेगा; quick room setup इस्तेमाल होगा।
-
-PDF / paper:
-- PDF text को coordinates के अनुसार lines और पहचाने गए दो columns में पढ़ना। Printed logical page numbers मिलने पर booklet पढ़ने का क्रम सुधारना और exact duplicate copies हटाना।
-- Import में हर प्रश्न को अलग section बनाने के बजाय मूल section/type के प्रश्न एक साथ।
-- MCQ options printable अलग options; matching columns / source order सुरक्षित। बिना answer key वाले imported matching के सही उत्तर अपने-आप नहीं गढ़े जाते।
-- मूल प्रति-प्रश्न अंक सुरक्षित; import पर smart auto-marks बंद। छपे total से अंतर हो तो review message।
-- Single / Auto print selection बना रहता है; पुराने forced page count को imported paper में नहीं ढोता।
-- Original source text और import से पहले backup / undo बने हैं।
-
-SQL:
-Seating / class / PDF सुधार के लिए कोई नया SQL नहीं। SQL/01_FEE_LOOKUP_INDEXES_SAFE.sql वही V427 का index-only SQL है। पहले चला चुके हैं तो फिर जरूरी नहीं। नहीं चलाया तो counter कम व्यस्त होने पर एक बार चलाएँ। Records और payment functions नहीं बदलता।
+कैसे उपयोग करें:
+Import → file चुनें → पहचाने प्रश्न/options/marks देखें। जिस प्रश्न में कमी हो उसका “प्रकार / सेक्शन / प्रश्न / विकल्प सुधारें” खोलें। MCQ options एक-एक line जैसे (a) पहला, (b) दूसरा भरें। Matching में right field भरें। फिर “जाँचे प्रश्न Editor में खोलें” → Preview → Print / Save PDF। केंद्रीय रिकॉर्ड के लिए ERP का Save draft / Send Admin इस्तेमाल करें।
 
 जाँच:
-Actual module + root CSS में 20 label clicks, roster refresh selection, All/None, mobile selection और exam change जाँचे। Actual PDF.js से generated portrait और 4–1/2–3 booklet PDF पढ़े: 8 questions, 4 sections, सही options और मूल marks। Hindi numerals / varying marks parser भी जाँचा। V428 का tested seating model और attendance layout तथा V427 fee code unchanged हैं।
+24 pure structure cases; actual PDF.js से portrait / 4–1,2–3 booklet और बिना section वाली PDF; numeric/Roman options; math subparts; Hindi digits/marks; incomplete-MCQ gate और repair; section reassign; typing/section round-trip और central preview; final generated PDF में दो copies के सभी 8 options और no-toolbar/no-decorative-rules। Source code और cache links भी जाँचे गए।
 
-सीमा:
-आपकी समस्या वाली मूल PDF इस संदेश में नहीं मिली है; इसलिए उसी file की पुष्टि नहीं हुई। Image-only scan/OCR, कठिन columns, चित्र और formulas को मूल से review करना होगा। OCR की internet-dependent files पहले जैसी हैं। Live ERP writes, production SQL या physical printer यहाँ नहीं चलाए गए।
+सीमाएँ:
+आपकी समस्या वाली मूल PDF उपलब्ध नहीं थी। Scanned/OCR और धुँधले/गलत encoded PDF में पहचाना text मूल से मिलाएँ; चित्र/जटिल formula स्वतः editable नहीं बनते। वास्तविक school DB save/send, production SQL और physical printer यहाँ नहीं चलाए गए।
