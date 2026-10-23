@@ -1,16 +1,37 @@
-V426 — Paper layout + function search + auto forms combined update
+V430 — Paper section / matching lines removed in Preview, PDF and Print
 
-ZIP खोलकर सभी HTML / JS / CSS / WOFF2 फाइलें अपने ERP की उसी root directory में upload/replace करें जहाँ index.html है। LICENSES folder भी साथ रखें। पहले वाली दूसरी जरूरी ERP फाइलें न हटाएँ। यह existing ERP का patch है, पूरा नया ERP नहीं।
+Root की सभी HTML / JS / CSS files और साथ के folders उसी existing ERP root में upload/replace करें। अन्य पुरानी ERP files न हटाएँ। Browser hard refresh करके paper दोबारा खोलें और नई PDF बनाएँ। पहले से बनी PDF अपने आप नहीं बदलेगी।
 
-इस ZIP में V423 के font / spacing, V424 के S02/S03/restriction और V425 का छोटा function search भी शामिल है। इन्हें अलग से दोबारा upload करने की जरूरत नहीं। SQL या database बदलाव नहीं है। Upload के बाद browser cache refresh करें।
+वजह: पुरानी paper-typography-v370.js में section / matching borders पर !important था। इसलिए V426 का सामान्य border:0 नियम उसे नहीं हटा पाया। V430 में final style अब उसी loaded legacy stylesheet पर भी जीतती है।
 
-पेपर सुधार:
-- स्कूल नाम, metadata, section headings, matching rows और footer की सजावटी lines हटाईं।
-- हिंदी / अंग्रेज़ी में section A, B, C…। हर section में प्रश्न 1 से शुरू।
-- Matching: बाएँ 1, 2, 3…; दाएँ A, B, C…; headings Column A/B या स्तंभ A/B।
-- नीचे content की जगह में footer के लिए अतिरिक्त 2mm gap। प्रश्न / matching row एक साथ अगले page पर जाते हैं।
-- Cut/fold mark बरकरार। 2 pages तक दो copies; booklet 4 pages: 4–1 / 2–3।
-- Font और line spacing options बरकरार। कोई नया background polling नहीं।
+बदलाव: school top/header, metadata, sections, matching table और footer की सजावटी rules नहीं छपेंगी। बीच का physical cut/fold marker, fill-in-the-blank के underscores और गणित के fraction/root चिन्ह जरूरी content हैं और बने रहेंगे। Font / line spacing भी पुराने override के बाद सही लागू होते हैं। Print में setup controls छिपे रहते हैं।
 
-जाँच: local browser में Hindi/English, दो fonts, spacing 1/1.5/2, matching continuation, numbering, border removal, clipping, mobile390px और idle-layout जाँचे गए। 1/2/3/4/5/8/12 pages print order जाँचा गया। Booklet formula 1–100 pages जाँचा गया।
-सीमा: live ERP / actual printer पर test नहीं हुआ। Local fixture में optional paper-typography-v370.js और paper-typing-bridge-v396.js उपलब्ध नहीं थे। इन files को आपके existing ERP से न हटाएँ।
+V429 class selection और PDF import, V428 same-seat attendance तथा V427 fee सुधार शामिल हैं। इस paper style सुधार के लिए कोई नया SQL नहीं। साथ का SQL वही पुराना optional/index-only V427 SQL है—पहले चला चुके हों तो फिर न चलाएँ।
+
+जाँच: असली V370 !important stylesheet लोड करके Hindi/English × दो fonts × spacing 1/1.5/2 में preview/print borders, computed spacing, question clipping और idle behaviour जाँचे। Generated browser PDF में horizontal decorative strokes/rules और setup controls की जाँच की। Live ERP / physical printer पर जाँच नहीं हुई।
+
+पिछले संयुक्त सुधारों का विवरण:
+
+Classes:
+- Native checkbox और label पर एक click से चयन; बड़े hit targets और बिना text drag वाला label।
+- चयन बदलते ही student/room count अपडेट; इस दौरान कोई roster/database request नहीं।
+- उसी exam/session के roster को फिर Load करने पर चुनी हुई classes बरकरार। दूसरे exam/session पर नई selection।
+- Canonical duplicate class labels हटे; All / Unselect और Nursery/LKG/UKG शामिल।
+- पुराना hidden Room layout panel सच में hidden रहेगा; quick room setup इस्तेमाल होगा।
+
+PDF / paper:
+- PDF text को coordinates के अनुसार lines और पहचाने गए दो columns में पढ़ना। Printed logical page numbers मिलने पर booklet पढ़ने का क्रम सुधारना और exact duplicate copies हटाना।
+- Import में हर प्रश्न को अलग section बनाने के बजाय मूल section/type के प्रश्न एक साथ।
+- MCQ options printable अलग options; matching columns / source order सुरक्षित। बिना answer key वाले imported matching के सही उत्तर अपने-आप नहीं गढ़े जाते।
+- मूल प्रति-प्रश्न अंक सुरक्षित; import पर smart auto-marks बंद। छपे total से अंतर हो तो review message।
+- Single / Auto print selection बना रहता है; पुराने forced page count को imported paper में नहीं ढोता।
+- Original source text और import से पहले backup / undo बने हैं।
+
+SQL:
+Seating / class / PDF सुधार के लिए कोई नया SQL नहीं। SQL/01_FEE_LOOKUP_INDEXES_SAFE.sql वही V427 का index-only SQL है। पहले चला चुके हैं तो फिर जरूरी नहीं। नहीं चलाया तो counter कम व्यस्त होने पर एक बार चलाएँ। Records और payment functions नहीं बदलता।
+
+जाँच:
+Actual module + root CSS में 20 label clicks, roster refresh selection, All/None, mobile selection और exam change जाँचे। Actual PDF.js से generated portrait और 4–1/2–3 booklet PDF पढ़े: 8 questions, 4 sections, सही options और मूल marks। Hindi numerals / varying marks parser भी जाँचा। V428 का tested seating model और attendance layout तथा V427 fee code unchanged हैं।
+
+सीमा:
+आपकी समस्या वाली मूल PDF इस संदेश में नहीं मिली है; इसलिए उसी file की पुष्टि नहीं हुई। Image-only scan/OCR, कठिन columns, चित्र और formulas को मूल से review करना होगा। OCR की internet-dependent files पहले जैसी हैं। Live ERP writes, production SQL या physical printer यहाँ नहीं चलाए गए।
