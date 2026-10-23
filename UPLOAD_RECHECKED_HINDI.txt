@@ -1,0 +1,19 @@
+V430 -> V434 RECHECKED - केवल बदली/नई जरूरी files
+
+V431/V432 paper और V433 request/client सुधार शामिल हैं। V434 recheck में Request object के रूप में भेजे गए save की body दोबारा पढ़ने की समस्या सुधारी है; network file का cache version भी बदला है।
+
+पहले V430 installed होना चाहिए। मौजूदा root का backup रखें। इस ZIP को extract करके सभी files/folders उसी ERP root में upload/replace करें जहाँ index.html है। बाहरी ZIP folder को root के अंदर न रखें।
+paper-import-v369-assets में pdf.worker.mjs replace करें; बाकी पुराने assets न हटाएँ। नए index.html और network-economy-v433.js दोनों replace करें। फिर Ctrl+Shift+R करें।
+SQL चलाने की जरूरत नहीं। इस ZIP में logging SQL या unchanged पुरानी fee/desk/attendance files नहीं हैं।
+
+पुनः जाँच:
+- V430 + इस delta से सभी वर्तमान runtime files मिलती हैं; जरूरी file नहीं छूटी।
+- सभी supplied JavaScript और 128 root inline scripts syntax pass।
+- वास्तविक दी गई Hindi PDF: import/options/sections/50 marks और 4-1 / 2-3 booklet pass।
+- Font/layout और portrait/landscape overflow checks pass।
+- Native Chromium: read coalescing, cross-tab invalidation, six-read limit और exact Request-object save body pass।
+- Synthetic 2000 student tokens और 20 teachers; account/abort/cache cases pass।
+- Fee save/search, retry, duplicate-payment protection regression pass।
+- ZIP CRC और हर बदली file का byte comparison pass।
+
+Tests local/synthetic हैं; live ERP login/payment/server logs या physical printer पर परीक्षण नहीं है। यह 1 GB monthly logs की guarantee नहीं है।

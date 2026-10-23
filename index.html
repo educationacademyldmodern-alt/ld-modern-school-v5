@@ -1,4 +1,5 @@
 <!doctype html><html lang="en"><head>
+<script src="network-economy-v433.js?v=434"></script>
 <script>document.documentElement.classList.add('ldmBootLock');</script>
 <script id="ldm-v146-boot-safety">/* V146: no global visibility boot-lock. It could remain forever and blank the whole ERP. */</script>
 <style id="ldm-v158-early-surface-owner">
@@ -1008,6 +1009,12 @@ function ldmApplyClassFilter(query,column,value){const a=ldmClassAliases(value);
 function ldmClassSame(a,b){return ldmClassCanonical(a)===ldmClassCanonical(b)}
 window.ldmClassCanonical=ldmClassCanonical;window.ldmClassAliases=ldmClassAliases;window.ldmApplyClassFilter=ldmApplyClassFilter;window.ldmClassSame=ldmClassSame;
 
+/* V433: legacy modules use window.*, core uses lexical bindings. Keep one identity/client. */
+for(const [name,get,set] of [
+ ['sb',()=>sb,v=>{sb=v}],['user',()=>user,v=>{if(user?.id!==v?.id)window.LDM_NETWORK_ECONOMY433?.invalidate();user=v}],['profile',()=>profile,v=>{if(profile?.id!==v?.id||profile?.role!==v?.role)window.LDM_NETWORK_ECONOMY433?.invalidate();profile=v}],
+ ['school',()=>school,v=>{school=v}],['cfg',()=>cfg,v=>{cfg=v}]
+]){const descriptor=Object.getOwnPropertyDescriptor(window,name);if(!descriptor||descriptor.configurable)Object.defineProperty(window,name,{configurable:true,enumerable:false,get,set});}
+let clientSignature433='';
 const roles=["super_admin","admin","principal","admission","accountant","teacher","librarian","transport","student","parent","viewer"];
 const permissions={super_admin:["*"],admin:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","exam_admit_center","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","users","excel","settings"],principal:["dashboard","admissions","students","academics","attendance","staff_attendance","fees","fee_dashboard","fee_structure","exams","exam_admit_center","staff","leave","payroll","timetable","homework","events","notices","gallery","enquiries","transport","library","income","expenses","balance","excel","settings"],admission:["dashboard","admissions","students","enquiries","excel"],accountant:["dashboard","students","fees","fee_dashboard","fee_structure","payroll","income","expenses","balance","excel"],teacher:["dashboard","students","attendance","exams","timetable","homework","events","notices"],librarian:["dashboard","students","library"],transport:["dashboard","students","transport"],student:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],parent:["dashboard","students","attendance","fees","exams","timetable","homework","events","notices"],viewer:["dashboard","notices"]};
 const write={admissions:["super_admin","admin","principal","admission"],students:["super_admin","admin","principal","admission"],academics:["super_admin","admin","principal"],attendance:["super_admin","admin","principal","teacher"],staff_attendance:["super_admin","admin","principal"],fees:["super_admin","admin","principal","accountant"],exams:["super_admin","admin","principal","teacher"],staff:["super_admin","admin","principal"],leave:["super_admin","admin","principal"],payroll:["super_admin","admin","principal","accountant"],timetable:["super_admin","admin","principal","teacher"],homework:["super_admin","admin","principal","teacher"],events:["super_admin","admin","principal","teacher"],notices:["super_admin","admin","principal","teacher"],gallery:["super_admin","admin","principal"],enquiries:["super_admin","admin","principal","admission"],transport:["super_admin","admin","principal","transport"],library:["super_admin","admin","principal","librarian"],income:["super_admin","admin","principal","accountant"],expenses:["super_admin","admin","principal","accountant"],fee_structures:["super_admin","admin","principal","accountant"],fee_installments:["super_admin","admin","principal","accountant"],fee_heads:["super_admin","admin","principal","accountant"],classes:["super_admin","admin","principal"],sections:["super_admin","admin","principal"],subjects:["super_admin","admin","principal"]};
@@ -1094,6 +1101,8 @@ function init(){
   try{const part=browserKey.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');browserRole=String(JSON.parse(atob(part)).role||'').toLowerCase()}catch(_e){}
  }
  if(browserKey.startsWith('sb_secret_')||browserRole==='service_role')throw new Error('Security block: backend secret/service_role key must not be used in a browser.');
+ if(sb&&clientSignature433===cfg.url+'|'+cfg.key)return sb;
+ clientSignature433=cfg.url+'|'+cfg.key;
  sb=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  try{
   const h=String(location.hostname||'').toLowerCase(),official=new Set(['myldm.com','www.myldm.com','ld-modern-school-v5.vercel.app','localhost','127.0.0.1']),preview=h.endsWith('.vercel.app')&&!official.has(h);
@@ -10051,18 +10060,27 @@ async function v14LoadTeacherContext(){
  return {ok:true,source:'teacher-master'};
 }
 function v14AllowedClassNames(){return [...new Set((v14TeacherClasses||[]).filter(x=>x.is_active!==false).map(x=>x.class_name).filter(Boolean))]}
+let teacherMasterFlight433=null;
 async function ldmTeacherMasterContext(){
- const uid=user?.id;if(!uid)throw new Error('Teacher login session नहीं मिला');
+ const owner=user?.id;if(!owner)throw new Error('Teacher login session नहीं मिला');
+ if(teacherMasterFlight433?.owner===owner)return teacherMasterFlight433.promise;
+ const current={owner,promise:null};teacherMasterFlight433=current;
+ current.promise=(async()=>{
+ const uid=owner;if(!uid)throw new Error('Teacher login session नहीं मिला');
  let q=await sb.from('teacher_profiles').select('*').eq('auth_user_id',uid).limit(1);if(q.error)throw q.error;let t=q.data?.[0];
  if(!t)throw new Error('Teacher Master में यह login connected नहीं है');
  if(t.is_active===false||String(t.approval_status||'Approved').toLowerCase()!=='approved')throw new Error('Teacher Master account Active/Approved नहीं है');
  let c=await sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',t.id).eq('is_active',true);if(c.error)throw c.error;
  let sub=[];try{let z=await sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',t.id).eq('is_active',true);if(!z.error)sub=z.data||[]}catch(_e){}
+ if(user?.id!==uid)throw new DOMException('Account changed','AbortError');
  window.ldmTeacherContext={teacher:t,classes:c.data||[],subjects:sub};
  /* compatibility data only: old permission loader is NOT called by NEW Teacher Access */
  window.v14TeacherProfile=t;window.v14TeacherClasses=c.data||[];window.v14TeacherSubjects=sub;
  return window.ldmTeacherContext;
+})();
+ try{return await current.promise}finally{if(teacherMasterFlight433===current)teacherMasterFlight433=null}
 }
+
 teacherLoginDialog=function(){v14Modal(`<h2>👩‍🏫 NEW Teacher Access</h2><p class="v14Muted">Teacher Master में Admin द्वारा बनाया गया Mobile + Password</p><div id="teacherAuthBox"><div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" inputmode="numeric" maxlength="10" autocomplete="username"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" autocomplete="current-password"></div><div class="full"><button class="primary" onclick="teacherPasswordLogin()">LOGIN TO TEACHER DASHBOARD</button></div></div></div>`)};
 teacherPasswordLogin=async function(){let m=ldmPhone($('tLoginId')?.value),p=String($('tLoginPassword')?.value||'');if(m.length!==10||!p)return toast('Mobile और Password डालें');let a=await sb.auth.signInWithPassword({email:`t${m}@teacher.ldmodern.local`,password:p});if(a.error)return toast('Registered Mobile या Password सही नहीं है.');try{user=a.data.user;await loadProfile();if(String(profile?.role||'').toLowerCase()!=='teacher')throw new Error('यह Teacher account नहीं है');await ldmTeacherMasterContext();$('v14Modal')?.remove();$('login')?.classList.add('hidden');$('publicSite')?.classList.add('hidden');$('erp')?.classList.remove('hidden');window.__v90History=['dashboard'];await ldmNewTeacherDashboard()}catch(e){try{await sb.auth.signOut()}catch(_e){}user=null;profile=null;toast(e.message||String(e))}};window.teacherPasswordLogin=teacherPasswordLogin;
 teacherApprovalCenter=ldmTeacherManager;
@@ -12083,13 +12101,14 @@ window.V6419_BUILD='V64.19-FINAL-STABILITY-SINGLE-PROFILE-2026-09-20';
      const uid=user?.id;if(!uid){profile=null;profileUid=null;return null}
      if(profileFlight&&profileUid===uid)return profileFlight;
      profileUid=uid;
-     profileFlight=(async()=>{
+     const current=(async()=>{
        const r=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
        if(r.error)throw new Error(friendly(r.error.message));
+       if(user?.id!==uid)throw new DOMException('Account changed','AbortError');
        if(!r.data){profile={role:'viewer',full_name:user?.email||'User',status:'missing'};return profile}
-       profile=r.data;return profile;
-     })();
-     try{return await profileFlight}finally{profileFlight=null}
+       profile={...r.data,role:String(r.data.role||'viewer').trim().toLowerCase()};return profile;
+     })();profileFlight=current;
+     try{return await current}finally{if(profileFlight===current)profileFlight=null}
    };
  }catch(_e){}
  /* Clear identity state exactly once on logout; do not retain stale profile in the UI. */
@@ -18483,7 +18502,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="paper-center-v343.css?v=404">
 <script src="marksheet-core.js?v=389"></script>
 <script src="report-core.js?v=344"></script>
-<script src="paper-center-v343.js?v=431"></script>
+<script src="paper-center-v343.js?v=432"></script>
 <link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=404"></script>
 <link rel="stylesheet" href="marksheet-core.css?v=389">
 <link rel="stylesheet" href="documents-v345.css?v=345">
