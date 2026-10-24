@@ -37,7 +37,7 @@ async function saveStudent(id,source='class'){
   // Do not rewrite historical admission/fee/result names through a broad propagation RPC.
   const route=W.__v90Route,host=$('teacherClassBody')||$('attendanceSheet');Promise.resolve().then(()=>{if(actor()!==who||session()!==sess||route!==W.__v90Route||host&&!host.isConnected)return;if(source==='attendance'&&$('attClass'))return W.loadAttendanceClass?.();if($('teacherClassSel'))return W.teacherLoadSelectedClass?.()}).catch(e=>{if(actor()===who&&session()===sess&&(!host||host.isConnected))status('✓ सेव हो गया। सूची Refresh करें: '+e.message,'ok')});
  }catch(e){
-  const definitive=['42501','22023','P0002','40001','PGRST202','42883','23514','22P02'].includes(e.code);
+  const definitive=['42501','22023','P0002','40001','PT409','PGRST202','42883','23514','22P02'].includes(e.code);
   if(definitive)pending.delete(k);if(actor()===who&&session()===sess){let m=e.message||String(e);
    if(['PGRST202','42883'].includes(e.code))m='Teacher Save RPC उपलब्ध नहीं है। reviewed migration और schema cache जाँचें। पुरानी असुरक्षित save विधि नहीं चलाई गई।';
    status(m+(pending.has(k)?' • Save फिर दबाने पर वही request Retry होगी।':' • आपके typed values form में सुरक्षित हैं।'),'bad')}

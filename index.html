@@ -9607,9 +9607,9 @@ async function v90AdminDashboard(){
  window.__v90Route='dashboard';v90Head('Admin Dashboard','Premium School Command Center • On-Demand Data');v90InstallShell('dashboard');
  if(!window.__ldmAdminStatsHTML){try{window.__ldmAdminStatsHTML=sessionStorage.getItem('ldm_admin_stats_html')||''}catch(_e){}}
  let actCache='',noticeCache='',eventCache='';try{actCache=sessionStorage.getItem('ldm_admin_activities_html')||'';noticeCache=sessionStorage.getItem('ldm_admin_notices_html')||'';eventCache=sessionStorage.getItem('ldm_admin_events_html')||''}catch(_e){}
- const hold=Array.from({length:6},()=>'<div class="v90Stat ldmStatHold"><span>•</span><div><small>डेटा देखें / Refresh दबाएँ</small><b>—</b></div></div>').join('');
+ const hold=[['👥','कुल विद्यार्थी / Total Students'],['👩‍🏫','कुल शिक्षक / Total Teachers'],['₹','आज जमा फीस / Fee Collection'],['💰','कुल बकाया / Total Due'],['✅','उपस्थिति / Attendance'],['📬','लंबित अनुरोध / Pending Requests']].map(([icon,label],i)=>`<button type="button" class="v90Stat v156SummaryCard" onclick="v156AdminSummaryDrill('${['students','teachers','collection','due','attendance','requests'][i]}')"><span>${icon}</span><div><small>${label}</small><b>—</b></div><em>विवरण ›</em></button>`).join('');
  v90Set(`<div class="v90Dash v114AdminDash ldmRootAdminDash v271AdminPremium">
- <section id="v185FrontDesk" class="v90Panel v185FrontDesk"><div class="v185FrontHead"><div><small>DAILY COUNTER</small><h2>⚡ Daily Quick Desk</h2><p>फीस, विद्यार्थी, प्रवेश और रसीद — सभी दैनिक काम एक जगह</p></div><span id="ldmV279Freshness" class="ldmV279Freshness" role="status" aria-live="polite">Dashboard डेटा देखें / Refresh दबाएँ।</span></div><div class="v185FrontActions" aria-label="दैनिक कार्यालय कार्य"><button onclick="v185FrontFee()"><span>₹</span><b>फीस पूछें / जमा करें</b><small>Fee Enquiry &amp; Collection</small></button><button onclick="openAdd('students')"><span>＋</span><b>विद्यार्थी जोड़ें</b><small>Add Student</small></button><button onclick="v185NewAdmission()"><span>🎓</span><b>नया प्रवेश</b><small>New Admission</small></button><button onclick="v185FindStudent()"><span>⌕</span><b>विद्यार्थी खोजें</b><small>Student Search &amp; Details</small></button><button onclick="render('fee_dashboard')"><span>▤</span><b>रसीद और खाता</b><small>Receipt &amp; Ledger</small></button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">Fee पूछने/जमा करने के लिए नाम लिखें और Search दबाएँ.</div></div><div id="v105FeeAccount"></div></section>
+ <section id="v185FrontDesk" class="v90Panel v185FrontDesk"><div class="v185FrontHead"><div><small>DAILY COUNTER</small><h2>⚡ Daily Quick Desk</h2><p>फीस, विद्यार्थी, प्रवेश और रसीद — सभी दैनिक काम एक जगह</p></div><span id="ldmV279Freshness" class="ldmV279Freshness" role="status" aria-live="polite">आज के आँकड़े अपडेट हो रहे हैं…</span></div><div class="v185FrontActions" aria-label="दैनिक कार्यालय कार्य"><button onclick="v185FrontFee()"><span>₹</span><b>फीस पूछें / जमा करें</b><small>Fee Enquiry &amp; Collection</small></button><button onclick="openAdd('students')"><span>＋</span><b>विद्यार्थी जोड़ें</b><small>Add Student</small></button><button onclick="v185NewAdmission()"><span>🎓</span><b>नया प्रवेश</b><small>New Admission</small></button><button onclick="v185FindStudent()"><span>⌕</span><b>विद्यार्थी खोजें</b><small>Student Search &amp; Details</small></button><button onclick="render('fee_dashboard')"><span>▤</span><b>रसीद और खाता</b><small>Receipt &amp; Ledger</small></button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">Fee पूछने/जमा करने के लिए नाम लिखें और Search दबाएँ.</div></div><div id="v105FeeAccount"></div></section>
  <section class="v156DailyControl" aria-label="Daily School Control"><div id="v114AdminClassSlot"></div>
  <section class="v114AdminMainGrid">
   <article class="v90Panel v114AttendancePanel"><div class="v114PanelHead"><h3>Student Attendance (Today)</h3><button onclick="render('attendance')">View Details →</button></div><div class="v114AttendanceVisual"><div id="v114AttDonut" class="v114Donut" style="--p:0"><div><b id="v114AttPct">—</b><small>Present</small></div></div><div class="v114Legend"><span><i class="p"></i>Present <b id="v114AttPresent">—</b></span><span><i class="a"></i>Absent <b id="v114AttAbsent">—</b></span><span><i class="l"></i>Leave <b id="v114AttLeave">—</b></span><span><i class="t"></i>Marked <b id="v114AttMarked">—</b></span><span><i class="n"></i>Not Marked <b id="v114AttNotMarked">—</b></span><span><i class="t"></i>Total Students <b id="v114AttTotal">—</b></span></div></div></article>
@@ -18460,7 +18460,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v332.js?v=427"></script>
+<script src="dashboard-v332.js?v=438"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=406"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18473,7 +18473,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=349"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v332.js?v=437"></script>
+<script src="root-corrections-v332.js?v=438"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
 <script src="exam-central-v320.js?v=393"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
@@ -18520,7 +18520,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
 <script src="documents-v345.js?v=390"></script>
-<script src="teacher-save-v345.js?v=393"></script>
+<script src="teacher-save-v345.js?v=442"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=388"></script>
@@ -18531,5 +18531,5 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=403r1"></script>
-<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=412"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script></body>
+<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=440"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script></body>
 </html>

@@ -1,0 +1,32 @@
+V442 — Root log retry fix + पहले के V438/V439/V440 बदलाव
+
+सबसे जरूरी खोज
+आपकी उपलब्ध log CSV में PostgreSQL के paper RPC ldm_v362_paper_action से 'Paper already exists' / 40001 लगातार आ रहा है। CSV (4) में postgres_logs की 359171 entries हैं, जबकि edge_logs 190 और auth_logs 19 हैं। यह चुनी हुई अवधि का sample है, पूरे महीने का माप नहीं।
+सामान्य duplicate/stale business conflict को 40001 देना सही नहीं है। Supabase के अनुसार PostgREST 14 में इससे infinite transaction retries हो सकती हैं। एक request भी अंदर ही अंदर बहुत सारे error logs बना सकती है। इसलिए केवल frontend को शांत करना पर्याप्त नहीं है।
+आधिकारिक विवरण: https://supabase.com/docs/guides/troubleshooting/high-cpu-and-infinite-transaction-retries-when-using-custom-error-codes-in-rpc-functions-77326b
+
+यह package क्या सुधारता है
+• छह पहचाने गए ERP functions में केवल सात exact business-conflict messages का custom code 40001 से PT409 करता है। वास्तविक database serialization handling को globally नहीं बदला गया है।
+• पुरानी Teacher Save UI अब PT409 को definitive conflict मानेगी: typed values सुरक्षित रहेंगे और pending retry में navigation नहीं फँसेगा।
+• Student, fee, paper, marks या attendance records को migration के दौरान नहीं बदलता। RLS, grants, security-definer और मूल business checks सुरक्षित रहते हैं।
+• पहले वाले combined V438–V440 के fee, dashboard, Recent Activities, Admit/Desk QR और mixed-class scan बदलाव शामिल हैं।
+
+लगाने का क्रम
+1. मौजूदा website की पाँच files का backup रखें: index.html, dashboard-v332.js, root-corrections-v332.js, attendance-scan-v412.js और teacher-save-v345.js।
+2. SQL/00_READ_ONLY_BACKUP_AND_AUDIT.sql चलाएँ। पहले result को CSV में export करके original function definitions सुरक्षित रखें। यह read-only है।
+3. पहले V440 QR SQL नहीं लगाई है तो SQL/01_QR_DAILY_EXAM_V440.sql चलाएँ। पहले लगा चुके हैं तो इसे छोड़ सकते हैं; rerun भी सुरक्षित है।
+4. SQL/02_STOP_BUSINESS_CONFLICT_RETRY_V442.sql चलाएँ। यह server वाला जरूरी fix है। Website files बदलने से अकेले server retry नहीं रुकेगी। पहले वाला paper-only 40001 fix लगा हो तब भी यह बाकी ज्ञात conflict paths जाँचता है।
+5. Result में ldm_v362_paper_action के लिए remaining_40001_review=false और http409_business_conflict=true अपेक्षित है। कोई remaining_40001_review=true हो तो उस function का source अलग हो सकता है; script ने उसे blindly rewrite नहीं किया।
+6. पुरानी captured requests अब भी फँसी हों तभी SQL/03_OPTIONAL_STOP_TWO_LOGGED_OLD_REQUESTS.sql देखें। इसमें केवल log में मिले दो PID + original backend start + API function + patch-installed + पुराने query timestamp के guards हैं। नया request उसी pooled backend में आया हो तो उसे नहीं रोकेगा। Zero rows का अर्थ यह नहीं कि सभी live loops बंद होने की पुष्टि हो गई; fresh log/active-query report देखें। किसी सभी-connection kill/restart को इस package में नहीं रखा गया है।
+7. पाँचों website files root में replace/upload करें और hard refresh करें। पुराने 438/439/440 files इसके ऊपर फिर replace न करें। SQL files को public website folder में upload करने की जरूरत नहीं।
+
+जाँच का दायरा
+• Root index के 129 executable inline scripts और जुड़े 74 script references के उपलब्ध reconstructed sources की समीक्षा/syntax जाँच हुई। सभी dependencies resolve हुईं।
+• बचे timer/channel candidates में print-library internal events, local UI repair/resume, greeting boundary update या click-started scanner हैं; इन्हें database polling नहीं समझा गया। Auth token renewal जैसी जरूरी session activity को disable नहीं किया गया है।
+• Admin/Teacher/Parent के प्रमुख dashboard modules की native Chromium जाँच में settled idle/focus पर कोई नई business query नहीं आई। Academic/alarm data click/open पर आया और leave पर timers रुके।
+• Fee + dashboard + QR modules का संयुक्त flow फिर पास: एक payment, automatic totals/Recent Activities, scan के बाद केवल संबंधित attendance snapshot, idle में नई queries नहीं।
+• SQL patch local PostgreSQL WASM पर execute हुई: exact-message-only change, PT409, unrelated 40001 सुरक्षित, grants/config सुरक्षित, rerun idempotent और existing rows unchanged।
+• Teacher Save का definitive conflict तथा unknown-network retry flow native Chromium में पास।
+
+सीमा और ईमानदार स्थिति
+Live Supabase पर SQL execute नहीं की गई है और deploy के बाद नया log sample नहीं देखा गया है। इसलिए अभी production logs बंद होने या पूरे ERP के महीने में 1 GB से कम रहने की गारंटी नहीं है। उपलब्ध CSV ने एक वास्तविक server retry source दिखाया है; यह package उसे सुधारने का सुरक्षित code देता है। Idle code tests वास्तविक production load/camera/auth tests का विकल्प नहीं हैं।

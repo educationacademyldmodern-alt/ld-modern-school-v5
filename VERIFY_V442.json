@@ -1,0 +1,135 @@
+{
+  "version": 442,
+  "status": "pass",
+  "base": "V437 or later, includes V438-V440 combined changes",
+  "finding": "Available log CSV shows repeated custom 40001 in ldm_v362_paper_action on PostgREST 14.5; known business conflict codes guardedly mapped to PT409",
+  "officialSource": "https://supabase.com/docs/guides/troubleshooting/high-cpu-and-infinite-transaction-retries-when-using-custom-error-codes-in-rpc-functions-77326b",
+  "checks": {
+    "root-log442-sql-results.json": {
+      "status": "pass",
+      "checks": [
+        "Two literal RAISE styles patched only for the seven exact known business messages in six allowlisted functions",
+        "Functions now raise PT409; unrelated 40001 remains unchanged",
+        "Security definer, grants and function configuration unchanged",
+        "Rerun is idempotent; existing rows untouched",
+        "Read-only audit and exact-session stop script parse/execute locally with zero matching old sessions"
+      ],
+      "limits": "Local PostgreSQL WASM with signature-compatible fixtures; production function source is guarded dynamically. No live backend terminated, migrated, or logs measured."
+    },
+    "teacher442-results.json": {
+      "status": "pass",
+      "checks": [
+        "PT409 is a definitive conflict: typed values kept, controls unlocked, no automatic retry",
+        "Unknown network result retains same request; explicit retry safely clears pending on PT409"
+      ],
+      "errors": [],
+      "limits": "Actual Teacher save module with mocked server errors in Chromium; not live Student Master updates."
+    },
+    "dashboard-results442.json": {
+      "status": "pass",
+      "checks": [
+        "Admin 5/507 present = 1%; marked 7/507 = 1% complete; same graph and card",
+        "Zero present, unmarked, full attendance, empty school and 3000-student cases correct",
+        "admin: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "admin: work alarm loads only when opened",
+        "admin: leaving screen cancels alarm and bell timers",
+        "teacher: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "Teacher academic data loads only after opening its report",
+        "Late academic reply cannot reopen a screen after leaving",
+        "teacher: work alarm loads only when opened",
+        "teacher: leaving screen cancels alarm and bell timers",
+        "parent: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "parent: leaving screen cancels alarm and bell timers"
+      ],
+      "limitations": "Actual changed modules in native Chromium with synthetic records and mocked Supabase. Not a live login, payment or production load test."
+    },
+    "combined-integration442-results.json": {
+      "status": "pass",
+      "checks": [
+        "Merged modules: initial dashboard loads once; repeated Home adds no database calls",
+        "Confirmed fee payment shows receipt once, updates collection/due/Recent Activities, and preserves card nodes",
+        "Duplicate payment notification causes zero extra queries",
+        "Actual shared QR scanner notification updates merged dashboard attendance with one daily read and no fee/feed reload",
+        "After confirmed payment and scan settle, idle adds zero database calls"
+      ],
+      "errors": [],
+      "limits": "All three merged JS modules executed together in native Chromium with synthetic backend data; no live money, camera or Supabase."
+    },
+    "root-results442.json": {
+      "status": "pass",
+      "inlineScriptsCompiled": 129,
+      "checks": [
+        "Repeated init creates one Supabase client; window and core share the same user/profile/client",
+        "Profile concurrent loads join; late old-user response rejected; role normalization keeps verified Admin",
+        "20 concurrent Teacher context requests use three queries; later permission reads remain fresh",
+        "Old Teacher context cannot overwrite a new account"
+      ],
+      "limits": "Actual extracted root functions with mocked Supabase; not live login/RLS verification."
+    }
+  },
+  "staticSourceReview": {
+    "scriptReferences": 74,
+    "missing": [],
+    "timerAndChannelCandidates": [
+      {
+        "file": "runtime_guard.js",
+        "line": 307,
+        "snippet": "window.addEventListener('focus',()=>{if(needsRepair())reconcile('focus')},{passive:true});"
+      },
+      {
+        "file": "udise-v306-jspdf.umd.min.js",
+        "line": 86,
+        "snippet": "   */var F={print:4,modify:8,copy:16,\"annot-forms\":32};function I(t,e,n,r){this.v=1,this.r=2;var i=192;t.forEach(function(t){if(void 0!==F.perm)throw new Error(\"Invalid permission: \"+t);i+=F[t]}),this.padding=\""
+      },
+      {
+        "file": "udise-v306-jspdf.umd.min.js",
+        "line": 109,
+        "snippet": "function(t){t.autoPrint=function(t){var e;return(t=t||{}).variant=t.variant||\"non-conform\",\"javascript\"===t.variant?this.addJS(\"print({});\"):(this.internal.events.subscribe(\"postPutResources\",function(){e=this."
+      },
+      {
+        "file": "udise-v306-jspdf.umd.min.js",
+        "line": 160,
+        "snippet": "function(t){t.addJS=function(t){var e,n,r=function(t){for(var e=\"\",n=0;n<t.length;n++){var r=t[n];if(\"(\"===r||\")\"===r){for(var i=0,a=n-1;a>=0&&\"\\\\\"===t[a];a--)i++;e+=i%2==0?\"\\\\\"+r:r}else e+=r}return e}(t);retur"
+      },
+      {
+        "file": "udise-v306-jspdf.umd.min.js",
+        "line": 326,
+        "snippet": "function(t){t.setLanguage=function(t){return void 0===this.internal.languageSettings&&(this.internal.languageSettings={},this.internal.languageSettings.isSubscribed=!1),void 0!=={af:\"Afrikaans\",sq:\"Albanian\",ar"
+      },
+      {
+        "file": "udise-v306-jspdf.umd.min.js",
+        "line": 358,
+        "snippet": "function(t){t.putTotalPages=function(t){var e,n=0;parseInt(this.internal.getFont().id.substr(1),10)<15?(e=new RegExp(t,\"g\"),n=this.internal.getNumberOfPages()):(e=new RegExp(this.pdfEscape16(t,this.internal.get"
+      },
+      {
+        "file": "udise-v306-html2canvas.min.js",
+        "line": 20,
+        "snippet": "    ***************************************************************************** */var r=function(A,e){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(A,e){A.__proto__=e}||function(A,e"
+      },
+      {
+        "file": "desktop-premium-v378.js",
+        "line": 92,
+        "snippet": "D.addEventListener('click',e=>{if(media.matches&&e.target.closest?.('#erpNav button,#erpNav a'))$('erp')?.querySelector(':scope>aside')?.classList.remove('open')});W.addEventListener('focus',schedule);D.addEven"
+      },
+      {
+        "file": "resume-place-v416.js",
+        "line": 14,
+        "snippet": "D.addEventListener('visibilitychange',()=>{if(D.hidden){capture();hidden=true;interacted=false}else if(hidden){hidden=false;resume()}});W.addEventListener('pagehide',()=>{capture();hidden=true;interacted=false}"
+      }
+    ]
+  },
+  "liveExecution": false,
+  "productionLogMeasurement": false,
+  "sha256": {
+    "SQL/00_READ_ONLY_BACKUP_AND_AUDIT.sql": "489ce0611a9085f0653e4513c9a5e9061812101b388da6dfb789ae05e90b9e2b",
+    "SQL/01_QR_DAILY_EXAM_V440.sql": "05f512b2d2ff265a8469b66a25eb82be60553e92482cdd8387ec30b28260da88",
+    "SQL/02_STOP_BUSINESS_CONFLICT_RETRY_V442.sql": "d0aad75ffe65ceb7153a3fe2437bbdbcecd1243ae538eb4b35709d633b768fd5",
+    "SQL/03_OPTIONAL_STOP_TWO_LOGGED_OLD_REQUESTS.sql": "7964f23868b592997070d4bb242b14441236f1270d6d27421676e9ad2b851a31",
+    "UPLOAD_HINDI_V442.txt": "cbd8ac142143c7dd4ed2578dc98b075d13dcfe5f4becc9ebe6b7e25bd76fbbc6",
+    "attendance-scan-v412.js": "8afa9e4f497f7d2ca865c24e67d3aeeb369631c0754eebf7e809f62c1b17d17c",
+    "dashboard-v332.js": "f42728825538163fb61f3e4717827ffa13dcdadf8a0b589166f4a4c0c899753e",
+    "index.html": "b8e57d71d0268ee3b8d2a65a4a94212a116df581ce8c9935f89bbf8f03508492",
+    "root-corrections-v332.js": "2af2b4e1679d2a628907ebf44313541a264df464be6f2180530366ff298c945a",
+    "teacher-save-v345.js": "dfb814a767ae74933b54098b7295b9266d698bad43a5ce887dad2b3e93d72f98"
+  }
+}
