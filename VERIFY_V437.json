@@ -1,0 +1,554 @@
+{
+  "version": 437,
+  "status": "pass",
+  "changedSince436": [
+    "index.html",
+    "root-corrections-v332.js",
+    "v57-school-operations.js",
+    "absence-followup-v307.js",
+    "resources-v334.js"
+  ],
+  "runtimeFiles": 20,
+  "localRootScriptInventory": [
+    {
+      "file": "network-economy-v433.js",
+      "bytes": 7997
+    },
+    {
+      "file": "public-final.js",
+      "bytes": 7874
+    },
+    {
+      "file": "v64-2-state-bridge.js",
+      "bytes": 592
+    },
+    {
+      "file": "final-master-upgrade.js",
+      "bytes": 6173
+    },
+    {
+      "file": "final53-complete.js",
+      "bytes": 8907
+    },
+    {
+      "file": "v53-stability-fix.js",
+      "bytes": 3874
+    },
+    {
+      "file": "v53-final-polish.js",
+      "bytes": 2271
+    },
+    {
+      "file": "v54-final-integration.js",
+      "bytes": 7447
+    },
+    {
+      "file": "v57-school-operations.js",
+      "bytes": 15824
+    },
+    {
+      "file": "v58-complaint-discipline.js",
+      "bytes": 8811
+    },
+    {
+      "file": "v59-academic-calendar.js",
+      "bytes": 5514
+    },
+    {
+      "file": "v60-session-admit-health.js",
+      "bytes": 6563
+    },
+    {
+      "file": "v62-render-safe.js",
+      "bytes": 1272
+    },
+    {
+      "file": "v63-final-repair.js",
+      "bytes": 3184
+    },
+    {
+      "file": "v64-final-layout-interaction.js",
+      "bytes": 1739
+    },
+    {
+      "file": "v64-3-parent-actions.js",
+      "bytes": 16035
+    },
+    {
+      "file": "v64-3-teacher-handover.js",
+      "bytes": 1409
+    },
+    {
+      "file": "v64-3-print.js",
+      "bytes": 3094
+    },
+    {
+      "file": "./alarm.js",
+      "bytes": 35696
+    },
+    {
+      "file": "./academic_monitor.js",
+      "bytes": 62351
+    },
+    {
+      "file": "./runtime_guard.js",
+      "bytes": 13133
+    },
+    {
+      "file": "dashboard-v332.js",
+      "bytes": 31672
+    },
+    {
+      "file": "exam-automation-v305.js",
+      "bytes": 29625
+    },
+    {
+      "file": "udise-core-v306.js",
+      "bytes": 11261
+    },
+    {
+      "file": "udise-app-v306.js",
+      "bytes": 43873
+    },
+    {
+      "file": "absence-followup-v307.js",
+      "bytes": 20977
+    },
+    {
+      "file": "corrections-v308.js",
+      "bytes": 3739
+    },
+    {
+      "file": "receipt-actions-v309.js",
+      "bytes": 18615
+    },
+    {
+      "file": "root-corrections-v332.js",
+      "bytes": 38874
+    },
+    {
+      "file": "daily-reminders-v320.js",
+      "bytes": 23819
+    },
+    {
+      "file": "exam-central-v320.js",
+      "bytes": 15522
+    },
+    {
+      "file": "udise-v306-jspdf.umd.min.js",
+      "bytes": 420165
+    },
+    {
+      "file": "udise-v306-html2canvas.min.js",
+      "bytes": 198689
+    },
+    {
+      "file": "smart-work-v333.js",
+      "bytes": 28544
+    },
+    {
+      "file": "transport-v323.js",
+      "bytes": 1709
+    },
+    {
+      "file": "resources-v334.js",
+      "bytes": 40201
+    },
+    {
+      "file": "controls-v323.js",
+      "bytes": 4782
+    },
+    {
+      "file": "central-exam-fees-v333.js",
+      "bytes": 21750
+    },
+    {
+      "file": "central-fee-class-v335.js",
+      "bytes": 12547
+    },
+    {
+      "file": "school-workspace-v336.js",
+      "bytes": 85782
+    },
+    {
+      "file": "ui-v337.js",
+      "bytes": 26134
+    },
+    {
+      "file": "student-photo-v337.js",
+      "bytes": 29944
+    },
+    {
+      "file": "a4-print-v337.js",
+      "bytes": 19661
+    },
+    {
+      "file": "print-bridge-v337.js",
+      "bytes": 4729
+    },
+    {
+      "file": "save-stay-v338.js",
+      "bytes": 4709
+    },
+    {
+      "file": "admit-layout-v339.js",
+      "bytes": 10703
+    },
+    {
+      "file": "document-layout-v341.js",
+      "bytes": 2698
+    },
+    {
+      "file": "original-dashboard-v342.js",
+      "bytes": 1197
+    },
+    {
+      "file": "marksheet-core.js",
+      "bytes": 26662
+    },
+    {
+      "file": "report-core.js",
+      "bytes": 9410
+    },
+    {
+      "file": "paper-center-v343.js",
+      "bytes": 24895
+    },
+    {
+      "file": "paper-smart-v358.js",
+      "bytes": 21233
+    },
+    {
+      "file": "document-qrcode-v345.min.js",
+      "bytes": 19927
+    },
+    {
+      "file": "documents-v345.js",
+      "bytes": 17717
+    },
+    {
+      "file": "teacher-save-v345.js",
+      "bytes": 6244
+    },
+    {
+      "file": "paper-import-v345.js",
+      "bytes": 1461
+    },
+    {
+      "file": "runtime-v347.js",
+      "bytes": 6531
+    },
+    {
+      "file": "dashboard-order-v350.js",
+      "bytes": 15325
+    },
+    {
+      "file": "desktop-premium-v378.js",
+      "bytes": 27875
+    },
+    {
+      "file": "admin-documents-v389.js",
+      "bytes": 24703
+    },
+    {
+      "file": "search-update-v394.js",
+      "bytes": 4155
+    },
+    {
+      "file": "admin-paper-status-v397.js",
+      "bytes": 4121
+    },
+    {
+      "file": "smart-work-v403.js",
+      "bytes": 32454
+    },
+    {
+      "file": "work-access-v398.js",
+      "bytes": 6601
+    },
+    {
+      "file": "school-control-model-v405.js",
+      "bytes": 9380
+    },
+    {
+      "file": "school-control-v405.js",
+      "bytes": 22022
+    },
+    {
+      "file": "desk-slip-model-v406.js",
+      "bytes": 11022
+    },
+    {
+      "file": "attendance-model-v412.js",
+      "bytes": 6292
+    },
+    {
+      "file": "desk-slip-v406.js",
+      "bytes": 24896
+    },
+    {
+      "file": "attendance-scan-v412.js",
+      "bytes": 13848
+    },
+    {
+      "file": "interface-fixes-v421.js",
+      "bytes": 8425
+    },
+    {
+      "file": "resume-place-v416.js",
+      "bytes": 5237
+    },
+    {
+      "file": "school-forms-v424.js",
+      "bytes": 43385
+    },
+    {
+      "file": "function-search-v425.js",
+      "bytes": 21857
+    }
+  ],
+  "inlineScriptsCompiled": 129,
+  "fullRootNativeBrowser": {
+    "390": [
+      {
+        "role": "admin",
+        "initialPermissionChecks": [
+          "profiles",
+          "v95_is_primary_admin",
+          "profiles"
+        ],
+        "newIdleQueries": 0,
+        "newIdleDOMMutations": 0,
+        "newIdleNetworkRequests": 0,
+        "virtualClockHours": 8,
+        "newQueriesAfterClock": 0,
+        "explicitActionQueries": [
+          "ldm_v320_daily_snapshot",
+          "admissions",
+          "fee_payments",
+          "teaching_diary",
+          "notices",
+          "events",
+          "ldm_fee_due_snapshot_v2"
+        ],
+        "browserErrors": []
+      },
+      {
+        "role": "teacher",
+        "initialPermissionChecks": [
+          "teacher_profiles",
+          "teacher_class_assignments",
+          "teacher_subject_assignments",
+          "teacher_profiles",
+          "teacher_class_assignments",
+          "teacher_subject_assignments",
+          "profiles"
+        ],
+        "newIdleQueries": 0,
+        "newIdleDOMMutations": 0,
+        "newIdleNetworkRequests": 0,
+        "virtualClockHours": 8,
+        "newQueriesAfterClock": 0,
+        "explicitActionQueries": [
+          "teacher_profiles",
+          "teacher_class_assignments",
+          "teacher_subject_assignments",
+          "teaching_diary",
+          "ldm_v265_copy_checks",
+          "ldm_v265_bell_tests",
+          "syllabus_master",
+          "timetable",
+          "attendance"
+        ],
+        "browserErrors": []
+      },
+      {
+        "role": "parent",
+        "initialPermissionChecks": [
+          "profiles"
+        ],
+        "newIdleQueries": 0,
+        "newIdleDOMMutations": 0,
+        "newIdleNetworkRequests": 0,
+        "virtualClockHours": 8,
+        "newQueriesAfterClock": 0,
+        "explicitActionQueries": [
+          "parent_portal_summary",
+          "profiles"
+        ],
+        "browserErrors": []
+      }
+    ],
+    "1440": [
+      {
+        "role": "admin",
+        "initialPermissionChecks": [
+          "profiles",
+          "v95_is_primary_admin",
+          "profiles"
+        ],
+        "newIdleQueries": 0,
+        "newIdleDOMMutations": 0,
+        "newIdleNetworkRequests": 0,
+        "virtualClockHours": 8,
+        "newQueriesAfterClock": 0,
+        "explicitActionQueries": [
+          "ldm_v320_daily_snapshot",
+          "admissions",
+          "fee_payments",
+          "teaching_diary",
+          "notices",
+          "events",
+          "ldm_fee_due_snapshot_v2"
+        ],
+        "browserErrors": []
+      },
+      {
+        "role": "teacher",
+        "initialPermissionChecks": [
+          "teacher_profiles",
+          "teacher_class_assignments",
+          "teacher_subject_assignments",
+          "teacher_profiles",
+          "teacher_class_assignments",
+          "teacher_subject_assignments",
+          "profiles"
+        ],
+        "newIdleQueries": 0,
+        "newIdleDOMMutations": 0,
+        "newIdleNetworkRequests": 0,
+        "virtualClockHours": 8,
+        "newQueriesAfterClock": 0,
+        "explicitActionQueries": [
+          "teacher_profiles",
+          "teacher_class_assignments",
+          "teacher_subject_assignments",
+          "teaching_diary",
+          "ldm_v265_copy_checks",
+          "ldm_v265_bell_tests",
+          "syllabus_master",
+          "timetable",
+          "attendance"
+        ],
+        "browserErrors": []
+      },
+      {
+        "role": "parent",
+        "initialPermissionChecks": [
+          "profiles"
+        ],
+        "newIdleQueries": 0,
+        "newIdleDOMMutations": 0,
+        "newIdleNetworkRequests": 0,
+        "virtualClockHours": 8,
+        "newQueriesAfterClock": 0,
+        "explicitActionQueries": [
+          "parent_portal_summary",
+          "profiles"
+        ],
+        "browserErrors": []
+      }
+    ]
+  },
+  "targetedChecks": {
+    "qa/dashboard-results437.json": {
+      "status": "pass",
+      "checks": [
+        "Admin 5/507 present = 1%; marked 7/507 = 1% complete; same graph and card",
+        "Zero present, unmarked, full attendance, empty school and 3000-student cases correct",
+        "admin: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "admin: work alarm loads only when opened",
+        "admin: leaving screen cancels alarm and bell timers",
+        "teacher: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "Teacher academic data loads only after opening its report",
+        "Late academic reply cannot reopen a screen after leaving",
+        "teacher: work alarm loads only when opened",
+        "teacher: leaving screen cancels alarm and bell timers",
+        "parent: no clock interval; settled idle and focus return cause zero queries and zero DOM mutations",
+        "parent: leaving screen cancels alarm and bell timers"
+      ],
+      "limitations": "V437 changed modules in native Chromium with synthetic records and mocked Supabase. Not a live login, payment or production load test."
+    },
+    "qa/root-results433.json": {
+      "status": "pass",
+      "inlineScriptsCompiled": 129,
+      "checks": [
+        "Repeated init creates one Supabase client; window and core share the same user/profile/client",
+        "Profile concurrent loads join; late old-user response rejected; role normalization keeps verified Admin",
+        "20 concurrent Teacher context requests use three queries; later permission reads remain fresh",
+        "Old Teacher context cannot overwrite a new account"
+      ],
+      "limits": "Actual extracted root functions with mocked Supabase; not live login/RLS verification."
+    },
+    "qa/fee-results427.json": {
+      "status": "pass",
+      "checks": [
+        "Repeated search uses short cache without duplicate data calls",
+        "Typing aborts obsolete search; final results match newest input",
+        "50 students: Add All and amount typing add no requests; double click saves once, retaining date/mode/amount",
+        "Confirmed payment invalidates cached balances and enables next student",
+        "Late response + Retry join one transaction and complete receipt",
+        "Late success updates automatically without another click or RPC",
+        "Lost response retries identical receipt and creates no duplicate ledger payment",
+        "Balance validation failure remains editable and shows no saved receipt",
+        "Hung connection is aborted after bounded wait; Retry retains original receipt",
+        "Malformed server reply never shows success; Retry keeps original receipt",
+        "Due failure retains student results but prevents collecting unverified balances",
+        "Account change clears cached results and selection",
+        "Idle: zero background calls; mobile390px fits; zero browser errors"
+      ],
+      "errors": [],
+      "limitations": "Actual module in Chromium with synthetic student records and mocked database/RPC. No live fee payments or live SQL execution."
+    },
+    "qa/network-edge-results433.json": {
+      "status": "pass",
+      "checks": [
+        "Explicit browser no-cache bypasses completed cache",
+        "Repeated read failures pause without weakening denied status",
+        "Late response after invalidation never repopulates stale cache",
+        "Eviction keeps total cache within 2 MiB under large repeated responses",
+        "Queued cancelled search is never sent to server",
+        "Request-object POST body forwarded exactly once, without consuming it twice"
+      ]
+    },
+    "qa/finder-results436.json": {
+      "status": "pass",
+      "checks": [
+        "admin 390px: production CSS visible; delayed header replacement and detached button repaired; search works; one button after navigation; idle zero mutations/requests",
+        "admin 1440px: production CSS visible; delayed header replacement and detached button repaired; search works; one button after navigation; idle zero mutations/requests",
+        "teacher 390px: production CSS visible; delayed header replacement and detached button repaired; search works; one button after navigation; idle zero mutations/requests",
+        "teacher 1440px: production CSS visible; delayed header replacement and detached button repaired; search works; one button after navigation; idle zero mutations/requests"
+      ],
+      "limits": "Actual finder, index CSS, desktop CSS and interface module in native Chromium with mocked navigation. No live production session."
+    }
+  },
+  "sha256": {
+    "LICENSES/PDFJS_ACTUALTEXT_V432.txt": "c1195cb1182f3c07c382c8a72833b78dccd1d09ed4c2a07f9b56af2af0a2625e",
+    "academic_monitor.js": "fcb1c487330ed561348ea5f8314561cfbbcaf197cdb58d97a84d37641048e666",
+    "alarm.js": "e7376752fa810b720f5b8222deb22e11497b587f2261117196f7618f3c67350a",
+    "dashboard-order-v350.js": "43c6ab7d8ba15320b11f1e8e3b98bcc346df7010de39eb613cc41241e976393c",
+    "function-search-v425.js": "627640c6c28b86fc16626e502b103463f49aba956540020a5783a68f76ac28c2",
+    "index.html": "f6b0eb067323ef2f12a90c9dc3a617f3b83055d1d34acc9ba9c138db314c55b8",
+    "network-economy-v433.js": "59d5a0104dbb743d669841f293f4e667eb9d6b0a11cab3b5fbf74c748952fac9",
+    "paper-center-v343.js": "a910f685e07c6fe1c07ecabb5a17676bc1ef0022577380f64f5f9a8e691285d7",
+    "paper-import-v369-assets/pdf.worker.mjs": "bdb2d74c62fdd19c7b6d002188f721d411143af9eee9c6b74f745f68e2bc335b",
+    "paper-import-v369.js": "6980c6476a6655a419fba950215001a7792656bbeeecd78933480569ae0e2690",
+    "paper-print-v432.js": "0d8dc8a6c9e3781df07002b889773045f523b4f46e3d48d96a3b0cb5be2eb240",
+    "paper-structure-v431.js": "a24e1ed2613abaa0a5658163853b3f63cb1165d040b7415054d8f451af8ba0df",
+    "paper-typing-bridge-v396.js": "6c938535c3e17e6d9cc2ceae310af5af13ebb2c2cda3451eb0629f49165298ce",
+    "paper-typing-format-v396.html": "293496b8b8cfe25e5bab42b00b0c341735210b2b45def43ea77b7ed397bbedbc",
+    "root-corrections-v332.js": "0ad94c085f3a9a8edb264b68c34948411df0bccf91be0364c3783f086f816f10",
+    "school-workspace-v336.js": "635355d283118e29f040ad76112397cffb4d6280ddaf3c56b1af9abf4d39fa71",
+    "teacher-paper-form-v343.html": "09d45e55cc5bb930afea366301eaefea4e171a10722bb394b0adca885750e8f3",
+    "v57-school-operations.js": "65fa55f398a4ad622484552df75549568318a4b6ad7fd6dbff467d987e9a9f14",
+    "absence-followup-v307.js": "d5952cf2ec2c486bbd1d2cdda5f07cf7cb2e6ebef17b48a5ba6dd8a02e9ed478",
+    "resources-v334.js": "564b5419a3030d589219ec1d0f39f670ce10f32c616362bd1c421b9dac93ce2b"
+  },
+  "limits": [
+    "Authenticated data and permission services mocked in native Chromium; not a live production login/RLS test.",
+    "Clock advanced by 8 hours; this was not an 8-hour production observation.",
+    "3000 count fixture tests formatting; not 3000 concurrent real users.",
+    "Live Supabase log ingestion volume and the earlier 8GB cause remain unverified.",
+    "Initial public school configuration, login/role/session security checks and explicitly started Save acknowledgements remain allowed."
+  ]
+}

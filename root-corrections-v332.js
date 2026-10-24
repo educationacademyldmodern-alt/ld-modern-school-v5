@@ -47,10 +47,10 @@ function paintDaily(d){if(!dailyActive()||d?.day!==todayIST()||dailyActor!==dash
  $('r320DailyRetry')?.remove();try{window.captureDash?.()}catch(_){}
 }
 function paintFeeds(){if(!dailyActive())return;for(const [id,html] of Object.entries(feedHTML)){const el=$(id);if(el&&el.innerHTML!==html)el.innerHTML=html}}
-async function refreshDue(force=false){if(!dailyActive())return false;readDashboardCache();if(dueReport&&(!force&&Date.now()-dueStamp<300000)){if(dailyReport)paintDaily(dailyReport);return true}if(dueFlight)return dueFlight;
+async function refreshDue(force=false){if(!dailyActive()||!force)return false;readDashboardCache();if(dueReport&&(!force&&Date.now()-dueStamp<300000)){if(dailyReport)paintDaily(dailyReport);return true}if(dueFlight)return dueFlight;
  const key=dashboardKey();dueFlight=(async()=>{try{const balanceRows=await rpc('ldm_fee_due_snapshot_v2',{p_session:session(),p_admission_nos:null,p_until_month:todayIST().slice(0,7)});const data={rows:(balanceRows||[]).map(x=>({amount:x.current_due}))};if(key!==dashboardKey()||dailyActor!==key)return false;if(data?.available===false||!Array.isArray(data?.rows))throw Error('बकाया स्रोत उपलब्ध नहीं');const values=data.rows.map(x=>Number(x.amount));if(values.some(x=>!Number.isFinite(x)))throw Error('बकाया राशि अमान्य');dueReport={total:values.reduce((a,b)=>a+b,0)};dueStamp=Date.now();saveDashboardCache();if(dailyReport)paintDaily(dailyReport);return true}catch(e){if(key===dashboardKey()&&dailyActive()){const card=$('v90Stats')?.querySelectorAll('button')[3];if(card&&!dueReport)card.querySelector('b').textContent='रिपोर्ट खोलें';if(card)card.title='बकाया अपडेट नहीं हुआ: '+e.message}return false}finally{if(key===dailyActor)dueFlight=null}})();return dueFlight;
 }
-async function daily(options={}){if(!dailyActive())return false;readDashboardCache();if(dailyReport?.day===todayIST())paintDaily(dailyReport);
+async function daily(options={}){if(!dailyActive())return false;if(!options.force){readDashboardCache();if(dailyReport)paintDaily(dailyReport);return true;}readDashboardCache();if(dailyReport?.day===todayIST())paintDaily(dailyReport);
  if(dailyFlight)return dailyFlight;if(!options.force&&dailyReport&&Date.now()-dailyStamp<60000)return true;
  const key=dashboardKey(),mine=++dailyRevision;dailyController=new AbortController();const control=dailyController;dailyStatus(dailyReport?'◷ पिछला डेटा दिख रहा है • अपडेट जारी…':'◷ आज के आँकड़े लोड हो रहे हैं…','busy');
  dailyFlight=(async()=>{let timer;try{let query=client().rpc('ldm_v320_daily_snapshot',{p_session:session()});if(query.abortSignal)query=query.abortSignal(control.signal);
@@ -60,7 +60,7 @@ async function daily(options={}){if(!dailyActive())return false;readDashboardCac
  }finally{clearTimeout(timer);if(mine===dailyRevision){dailyFlight=null;dailyController=null}}})();return dailyFlight;
 }
 function stopDaily(){dailyRevision++;dailyController?.abort();dailyController=null;dailyFlight=null;dueFlight=null;feedsFlight=null;if(dashboardTicker){clearInterval(dashboardTicker);dashboardTicker=null}}
-async function feeds(options={}){if(!dailyActive())return false;readDashboardCache();paintFeeds();if(!options.force&&feedsStamp&&Date.now()-feedsStamp<60000)return true;if(feedsFlight)return feedsFlight;const key=dashboardKey();
+async function feeds(options={}){if(!dailyActive())return false;if(!options.force){readDashboardCache();paintFeeds();return true;}readDashboardCache();paintFeeds();if(!options.force&&feedsStamp&&Date.now()-feedsStamp<60000)return true;if(feedsFlight)return feedsFlight;const key=dashboardKey();
  const rows=async(table,columns,order,limit)=>{let timer;try{const work=(async()=>{let q=client().from(table).select(columns).order(order,{ascending:false}).limit(limit);let r=await q;if(r.error&&table==='fee_payments'&&/created_at/i.test(r.error.message||'')){r=await client().from(table).select('student_name,amount,payment_date,receipt_no').order('payment_date',{ascending:false}).limit(limit)}if(r.error)throw Error(r.error.message);return r.data||[]})();return await Promise.race([work,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('जानकारी समय पर नहीं मिली')),12000)})])}finally{clearTimeout(timer)}};
  const empty=s=>'<p class="v39Empty">'+esc(s)+'</p>';
  feedsFlight=(async()=>{const r=await Promise.allSettled([Promise.allSettled([rows('admissions','id,student_name,class_name,admission_date,created_at','created_at',5),rows('fee_payments','student_name,amount,payment_date,receipt_no,created_at','created_at',5),rows('teaching_diary','teacher_name,class_name,subject,topic,teaching_date,created_at','created_at',5)]),rows('notices','date,title,audience,message,created_at','date',5),rows('events','event_date,title,event_type,audience,description,created_at','event_date',20)]);
@@ -75,11 +75,14 @@ async function feeds(options={}){if(!dailyActive())return false;readDashboardCac
  })().finally(()=>{if(key===dailyActor)feedsFlight=null});return feedsFlight;
 }
 function mountFeeds(){readDashboardCache();paintFeeds()}
-function startDashboard(){if(!dailyActive())return;readDashboardCache();if(dailyReport)paintDaily(dailyReport);paintFeeds();daily();feeds();refreshDue()}
+function startDashboard(){if(!dailyActive())return;readDashboardCache();if(dailyReport)paintDaily(dailyReport);paintFeeds();
+ if(!$('r437LoadDashboard')){const b=document.createElement('button');b.id='r437LoadDashboard';b.type='button';b.className='primary';b.textContent='↻ Dashboard डेटा देखें / Refresh';b.onclick=async()=>{if(b.disabled)return;b.disabled=true;try{await window.ldmRefreshDashboardOnce({force:true,reason:'manual'})}finally{b.disabled=false}};const place=$('v185FrontDesk')||document.querySelector('#erpContent .ldmRootAdminDash');place?.prepend(b)}
+ if(!dailyReport)dailyStatus('डेटा देखने के लिए Dashboard डेटा देखें / Refresh दबाएँ।','idle');
+}
 window.v90LoadDashboardStats=options=>daily(options);try{v90LoadDashboardStats=window.v90LoadDashboardStats}catch(_){}
 window.ldmRefreshDashboardOnce=async options=>{if(!dailyActive())return false;const results=await Promise.all([daily(options),feeds(options),refreshDue(!!options?.force)]);return results[0]};
 window.v39LoadAdminPanels=feeds;try{v39LoadAdminPanels=feeds}catch(_){}
-let dirtyKick=0;const dirtyBase=window.ldmMarkDataDirty;window.ldmMarkDataDirty=function(...args){dailyStamp=dueStamp=feedsStamp=0;const own=dashboardKey(),kick=++dirtyKick,inflight=[dailyFlight,dueFlight,feedsFlight].filter(Boolean);const result=dirtyBase?.apply(this,args);if(dailyActive()){startDashboard();if(inflight.length)Promise.allSettled(inflight).then(()=>{if(kick!==dirtyKick||own!==dashboardKey()||!dailyActive())return;dailyStamp=dueStamp=feedsStamp=0;startDashboard()})}return result};
+const dirtyBase=window.ldmMarkDataDirty;window.ldmMarkDataDirty=function(...args){dailyStamp=dueStamp=feedsStamp=0;const result=dirtyBase?.apply(this,args);if(dailyActive())dailyStatus('बदलाव सेव हुआ • नए dashboard आँकड़ों के लिए Refresh दबाएँ।','idle');return result};
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')stopDaily();else paintFeeds()});window.addEventListener('pagehide',stopDaily);// V341: focus never triggers a database refresh. Use the explicit refresh action.
 
 let classCache=null,classCacheKey='',classCacheAt=0,classFlight=null;

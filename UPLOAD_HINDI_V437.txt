@@ -1,0 +1,43 @@
+L D MODERN EDUCATION ACADEMY — V437 CLICK-ONLY DASHBOARDS
+
+INSTALL
+यह V430 के बाद की cumulative changed-files ZIP है। V431–V436 के जरूरी सुधार भी शामिल हैं।
+पहले पुराने root की copy रखें। ZIP के 20 runtime/license files उसी root में upload/replace करें।
+बाकी पुराने ERP files न हटाएँ। SQL नहीं चलाना है। Upload के बाद Ctrl+Shift+R / मोबाइल site reload करें।
+
+बदला व्यवहार
+Admin: Dashboard खुलने पर counters, attendance snapshot, due totals या feeds अपने आप नहीं पढ़ेंगे।
+“Dashboard डेटा देखें / Refresh” पर load होगा। पहले का सुरक्षित cached data दिख सकता है; उसे ताजा करने के लिए Refresh करें।
+Parents: login प्रक्रिया वही है। “मेरे बच्चों का डेटा देखें / Load Dashboard” पर बच्चों की fee/attendance/result summary आएगी।
+सामान्य loader दोबारा बुलने पर summary स्वतः नहीं पढ़ेगा। Global Refresh से भी स्पष्ट रूप से load कर सकते हैं।
+Teacher: Academic / काम / परीक्षा / fee / study जैसे विकल्प खोलने पर उनके reads चलेंगे।
+4+ Days Absent card केवल launcher है; Refresh/Class खोलने पर list load होगी।
+Guidance/Birthday पढ़ना भी button पर है। Login के समय marksheet preference read हटाया; preference marksheet module खोलने पर आएगी।
+Resource cards पहले से click-only थे; focus/visibility पर अनावश्यक DOM सफाई भी हटाई।
+Save के बाद dashboard stale mark होगा; सभी dashboard reports अपने आप दुबारा fetch नहीं होंगे। सक्रिय fee receipt/balance cache का जरूरी update कायम है।
+Explicit Refresh में duplicate feed fetch हटाया। QR scanner/camera hidden tab/page पर रुकेगा; दूसरा click करके फिर चालू करें।
+V435 के clock, midnight, alarm और academic background changes तथा V436 Function Search fix शामिल हैं।
+
+सुरक्षित रखा
+Authentication/session/token refresh और role/permission की जरूरी जाँच बंद नहीं की है।
+Student, fees, receipts, attendance, marks, accounts, RLS, audit records या database settings नहीं बदलीं।
+Save/Retry की server पुष्टि, unsaved guards और duplicate-payment protection कायम हैं।
+कोई blanket fetch block, global timer override या झूठा success-response नहीं लगाया।
+
+जाँच
+Root के सभी 74 local scripts उपलब्ध रखकर native Chromium में साथ चलाए; 129 inline scripts compile हुए।
+Admin/Teacher/Parent: 390px और 1440px पर initial business reads 0; initial security checks अनुमति के अनुसार हुए।
+Settled idle, focus, online, visibility return: 0 नई database queries, 0 network requests, 0 content mutations।
+8 घंटे की virtual-clock जाँच: 0 अतिरिक्त database queries / content mutations।
+Click/action पर Admin snapshot/feeds/due, Teacher academic report और Parent summary ने data माँगा।
+Fee save/search/retry, Function Search, attendance percentage, stale report responses और native request-body regression checks पास।
+
+सीमा
+यह mock accounts/data के साथ स्थानीय code/browser जाँच है; live production login/RLS या वास्तविक 3000 concurrent users का load test नहीं है।
+8 घंटे virtual-clock advance है, वास्तविक production observation नहीं।
+8GB logs का मूल server-side कारण अभी प्रमाणित नहीं है। यह browser से अनावश्यक activity रोकने वाला सुधार है।
+Supabase API/Auth/Postgres/Storage, दूसरे projects या बाहरी requests की log मात्रा इस ZIP से मापी नहीं गई।
+मासिक 1GB की सीमा की पुष्टि live usage से ही होगी; errors/security audit छिपाकर संख्या कम नहीं की गई।
+
+इस बार बदली 5 files: index.html, root-corrections-v332.js, v57-school-operations.js,
+absence-followup-v307.js, resources-v334.js. बाकी शामिल files V430 के बाद के पहले से जरूरी बदलाव हैं।
