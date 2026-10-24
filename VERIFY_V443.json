@@ -1,0 +1,97 @@
+{
+  "mode": "DOM runtime simulation + actual jsQR raster decode, mocked camera and server",
+  "checks": 18,
+  "results": [
+    [
+      1,
+      "open has no media/DB work"
+    ],
+    [
+      1,
+      "camera start/stop, autofocus, zoom, torch"
+    ],
+    [
+      1,
+      "denied permission -> help, no DB"
+    ],
+    [
+      1,
+      "real QR raster decoded with actual jsQR worker; one Admit save"
+    ],
+    [
+      1,
+      "desk route and duplicate suppression"
+    ],
+    [
+      1,
+      "teacher denial visible; pending cleared; no retry loop"
+    ],
+    [
+      1,
+      "camera request precedes decoder, close stops tracks"
+    ],
+    [
+      1,
+      "late permission canceled safely"
+    ],
+    [
+      1,
+      "settled closed scanner: no RPC/workers"
+    ],
+    [
+      2,
+      "open has no media/DB work"
+    ],
+    [
+      2,
+      "camera start/stop, autofocus, zoom, torch"
+    ],
+    [
+      2,
+      "denied permission -> help, no DB"
+    ],
+    [
+      2,
+      "real QR raster decoded with actual jsQR worker; one Admit save"
+    ],
+    [
+      2,
+      "desk route and duplicate suppression"
+    ],
+    [
+      2,
+      "teacher denial visible; pending cleared; no retry loop"
+    ],
+    [
+      2,
+      "camera request precedes decoder, close stops tracks"
+    ],
+    [
+      2,
+      "late permission canceled safely"
+    ],
+    [
+      2,
+      "settled closed scanner: no RPC/workers"
+    ]
+  ],
+  "static_checks": {
+    "index_scanner_cache_only": true,
+    "backend_V440_logic_preserved": true,
+    "javascript_syntax": true
+  },
+  "limitations": [
+    "Camera/server mocked; actual jsQR raster decode tested",
+    "Physical camera distance, live teacher account, native browser layout not verified"
+  ],
+  "sha256": {
+    "README_HINDI_V443.txt": "ca956030944bd1574e9d96576277947867de057e07bfd31abd92b6739122dbac",
+    "index.html": "e08730a7a3a374518d01d392a3d537ec3e64f9eb0fd4ed11f2aee7f691add400",
+    "qr-decode-worker-v443.js": "38df24e95d038735228a04cb333a4a0438fd99bb543ff0c5e761b972f2105c29",
+    "attendance-scan-v412.js": "4c92670d31d591f779d9c480e697cc0d0032023d3b768539a9fcad15e10e8011",
+    "SQL/01_QR_DAILY_EXAM_V443.sql": "d964304163eec7ec7c29dbbadca87bc005931a0f53ac161a9dca09c54d542f1a",
+    "SQL/02_READ_ONLY_QR_CHECK.sql": "c2a22133f7da3c70a1f0f78e4c0c4f39af15d7bc20f71e8cf3b74146afca3f3b",
+    "vendor/jsQR-1.4.0.js": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+    "vendor/jsQR-LICENSE.txt": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+  }
+}
