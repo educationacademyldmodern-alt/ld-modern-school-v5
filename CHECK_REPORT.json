@@ -1,0 +1,763 @@
+{
+  "package": "V444 through V450 combined update",
+  "runtime_version": 450,
+  "merge_versions": [
+    444,
+    445,
+    446,
+    447,
+    448,
+    449,
+    450
+  ],
+  "file_count": 28,
+  "files": [
+    {
+      "path": "LICENSES/NOTO_SANS_DEVANAGARI_OFL.txt",
+      "latest_source_version": 450,
+      "bytes": 4386,
+      "sha256": "a216f6f8d85c7228093e0ee5e258d9d377e6671f68acb4db1930b29583d0f331"
+    },
+    {
+      "path": "SQL/00_READ_ONLY_SCAN_BACKUP.sql",
+      "latest_source_version": 450,
+      "bytes": 364,
+      "sha256": "fc70e91655d2cadb17c5111b483b051c389b049af839ee8a4fb34e9b1c5ba979"
+    },
+    {
+      "path": "SQL/01_ID_CARD_SHARED_LAYOUT_V447.sql",
+      "latest_source_version": 450,
+      "bytes": 424,
+      "sha256": "2a720d5776360a669372ce82e3e538347fef86b811a95a4ee58c0db606c8526f"
+    },
+    {
+      "path": "SQL/02_FAST_MASTER_QR_V448.sql",
+      "latest_source_version": 450,
+      "bytes": 14773,
+      "sha256": "f6356421272d3cf76e10123f372a6f0db7a363c46b824bc445ea89bedde0cbe7"
+    },
+    {
+      "path": "SQL/03_SCAN_LOOKUP_INDEXES_V448.sql",
+      "latest_source_version": 450,
+      "bytes": 1854,
+      "sha256": "442cc0a0774c61cebfb8a57e08b7f317ef4f710901e429839ab8ec6402f2edaa"
+    },
+    {
+      "path": "SQL/04_READ_ONLY_SCAN_CHECK_V448.sql",
+      "latest_source_version": 450,
+      "bytes": 1020,
+      "sha256": "9577d88f4ca91f5c34810fbc1464a0a645148fcd78a40c17888c966a76836a82"
+    },
+    {
+      "path": "a4-preview-v337.html",
+      "latest_source_version": 450,
+      "bytes": 1304,
+      "sha256": "156799ed3632e5af04b8ab3476c3129ecdc0b8bff53aa844d3caf234e3ee4fbc"
+    },
+    {
+      "path": "a4-preview-v337.js",
+      "latest_source_version": 450,
+      "bytes": 7697,
+      "sha256": "39ac3c7848c999df334fa1b16b90e0d1997afb09eeb23619012c439777cb1475"
+    },
+    {
+      "path": "a4-print-v337.js",
+      "latest_source_version": 450,
+      "bytes": 20861,
+      "sha256": "be961a8f483a3339adf1d1f977040a1256854d06ab66c852edaf0abc082c47fa"
+    },
+    {
+      "path": "admin-desktop-v445.css",
+      "latest_source_version": 450,
+      "bytes": 19922,
+      "sha256": "42de3cd70d413f0c4affba290deab28b5d3723ebcf0a8f1502955b948bb87a6f"
+    },
+    {
+      "path": "attendance-scan-v412.js",
+      "latest_source_version": 450,
+      "bytes": 32716,
+      "sha256": "3d0db2a9c74412083a649d98c0a34e8e4a75fb0194922872833747056d827972"
+    },
+    {
+      "path": "central-fee-class-v335.js",
+      "latest_source_version": 450,
+      "bytes": 12871,
+      "sha256": "e9a61a910a8469002f5f7172882ca60d07bb1c7da4ac551a44c2ef1cbf9c2df8"
+    },
+    {
+      "path": "dashboard-v332.js",
+      "latest_source_version": 450,
+      "bytes": 36072,
+      "sha256": "bca792e2a4f4d96f695d85952f62168fbb86444ff8d88a91fe48e0765a94960b"
+    },
+    {
+      "path": "documents-v345.js",
+      "latest_source_version": 450,
+      "bytes": 17819,
+      "sha256": "1909ff1968af3a59ff8317283a2a8523be6d3af91f55fff2df39f86021f7815a"
+    },
+    {
+      "path": "exam-central-v320.js",
+      "latest_source_version": 450,
+      "bytes": 16515,
+      "sha256": "afdd3bb993b87a30dbb6435bfca647bba43d453a81137606a7b9de1694bf9518"
+    },
+    {
+      "path": "id-card-v447.css",
+      "latest_source_version": 450,
+      "bytes": 7677,
+      "sha256": "96ce09911ae0528a3903cf3921dec2b8b741a3fe93b8f5e5fed116eed1f0f45b"
+    },
+    {
+      "path": "id-card-v447.js",
+      "latest_source_version": 450,
+      "bytes": 18437,
+      "sha256": "e90da4e068958f26acf3d9663d2ce196ab4c4456616645380b1a0eabcfb49b51"
+    },
+    {
+      "path": "index.html",
+      "latest_source_version": 450,
+      "bytes": 2318155,
+      "sha256": "864fd90ce5051e66df9007c73bbff303e8ea683a54bf7a497e11d8414d5c5370"
+    },
+    {
+      "path": "marksheet-core.css",
+      "latest_source_version": 450,
+      "bytes": 27070,
+      "sha256": "dfe134c3cecd70cd2b47b80f096cfa22bdde3084cfd6d68566491c1aadc74c32"
+    },
+    {
+      "path": "marksheet-core.js",
+      "latest_source_version": 450,
+      "bytes": 28531,
+      "sha256": "e31e19a75a6bcb970aee1e015909029cad52ab7cf0d920bae297595bda2fa797"
+    },
+    {
+      "path": "marksheet-view-v444.js",
+      "latest_source_version": 450,
+      "bytes": 5279,
+      "sha256": "ef4ee6d9a7013c4e896fb86fbde96d1c9f564c7361d24f7c0066b8ceb0070fa1"
+    },
+    {
+      "path": "qr-decode-worker-v443.js",
+      "latest_source_version": 450,
+      "bytes": 389,
+      "sha256": "fa4ae5690787cc7bdfdd76a6e4d844168ebc9a8bd9cd6fecb1d76f5b237774ed"
+    },
+    {
+      "path": "root-corrections-v332.js",
+      "latest_source_version": 450,
+      "bytes": 44734,
+      "sha256": "de087692348faf1f33256d3e4da81263932af663ab8ea0f58db4d7a4ffb8551f"
+    },
+    {
+      "path": "school-logo.png",
+      "latest_source_version": 450,
+      "bytes": 121920,
+      "sha256": "c5fc976369ec61faeb826f7956627849cf168c7299ff756ecc66960ae02017da"
+    },
+    {
+      "path": "udise-v306-devanagari.woff2",
+      "latest_source_version": 450,
+      "bytes": 50416,
+      "sha256": "f86f14cbd1004f5795689ee9cc70d5d87d915f5135b30283525c1c7b8f0eb192"
+    },
+    {
+      "path": "udise-v306-latin.woff2",
+      "latest_source_version": 450,
+      "bytes": 10512,
+      "sha256": "1ea6a2f05ad1e2218d23fc9a788bcbce03c1a83e33eeb7078354ebe5f5e8d4e7"
+    },
+    {
+      "path": "vendor/jsQR-1.4.0.js",
+      "latest_source_version": 450,
+      "bytes": 256885,
+      "sha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859"
+    },
+    {
+      "path": "vendor/jsQR-LICENSE.txt",
+      "latest_source_version": 450,
+      "bytes": 11358,
+      "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+    }
+  ],
+  "merge_coverage": "All non-temporary deployment files from fix444 through fix450; latest version wins; old upload instructions excluded",
+  "test_results": {
+    "unique_qr_two_rounds": {
+      "count": 16,
+      "checks": [
+        [
+          1,
+          "visible V450 build; opening makes no attendance call"
+        ],
+        [
+          1,
+          "50 duplicate reads across 0s/2s/11s/1min/4h: one RPC, one student, one success beep"
+        ],
+        [
+          1,
+          "same student Admit after ID: server unchanged does not increment counter or beep"
+        ],
+        [
+          1,
+          "same student Desk after Admit: unique identity count retained"
+        ],
+        [
+          1,
+          "different newly present student increments exactly once"
+        ],
+        [
+          1,
+          "subject change permits new exam attendance without double-counting student"
+        ],
+        [
+          1,
+          "reopen: existing attendance not presented as a new student"
+        ],
+        [
+          1,
+          "explicit recheck can verify server status without increasing count"
+        ],
+        [
+          2,
+          "visible V450 build; opening makes no attendance call"
+        ],
+        [
+          2,
+          "50 duplicate reads across 0s/2s/11s/1min/4h: one RPC, one student, one success beep"
+        ],
+        [
+          2,
+          "same student Admit after ID: server unchanged does not increment counter or beep"
+        ],
+        [
+          2,
+          "same student Desk after Admit: unique identity count retained"
+        ],
+        [
+          2,
+          "different newly present student increments exactly once"
+        ],
+        [
+          2,
+          "subject change permits new exam attendance without double-counting student"
+        ],
+        [
+          2,
+          "reopen: existing attendance not presented as a new student"
+        ],
+        [
+          2,
+          "explicit recheck can verify server status without increasing count"
+        ]
+      ]
+    },
+    "qr_pipeline_two_rounds": {
+      "count": 24,
+      "checks": [
+        [
+          1,
+          "open: zero RPC / camera until click"
+        ],
+        [
+          1,
+          "invalid QR rejected locally, mobile dialog fits"
+        ],
+        [
+          1,
+          "12-scan burst capped at 8, pending+confirmed duplicate suppression, max one save in flight"
+        ],
+        [
+          1,
+          "network uncertainty: no auto retry, manual retry retains exact request UUID"
+        ],
+        [
+          1,
+          "multiple-paper choice: pause retains queue, explicit subject resumes correct request"
+        ],
+        [
+          1,
+          "close during save: no lost confirmation, queued scans persist and restore without automatic submission"
+        ],
+        [
+          1,
+          "native fake camera start/stop, real jsQR worker decodes Admit PNG"
+        ],
+        [
+          1,
+          "Desk reference uses same atomic attendance RPC"
+        ],
+        [
+          1,
+          "camera decodes next 2 QRs while prior server request waits, max one save in flight"
+        ],
+        [
+          1,
+          "hidden tab releases media and pauses remaining queue until explicit resume"
+        ],
+        [
+          1,
+          "confirmation never erases the next USB scan being typed"
+        ],
+        [
+          1,
+          "permission help, close releases camera, idle zero business RPC / ERP DOM mutation"
+        ],
+        [
+          2,
+          "open: zero RPC / camera until click"
+        ],
+        [
+          2,
+          "invalid QR rejected locally, mobile dialog fits"
+        ],
+        [
+          2,
+          "12-scan burst capped at 8, pending+confirmed duplicate suppression, max one save in flight"
+        ],
+        [
+          2,
+          "network uncertainty: no auto retry, manual retry retains exact request UUID"
+        ],
+        [
+          2,
+          "multiple-paper choice: pause retains queue, explicit subject resumes correct request"
+        ],
+        [
+          2,
+          "close during save: no lost confirmation, queued scans persist and restore without automatic submission"
+        ],
+        [
+          2,
+          "native fake camera start/stop, real jsQR worker decodes Admit PNG"
+        ],
+        [
+          2,
+          "Desk reference uses same atomic attendance RPC"
+        ],
+        [
+          2,
+          "camera decodes next 2 QRs while prior server request waits, max one save in flight"
+        ],
+        [
+          2,
+          "hidden tab releases media and pauses remaining queue until explicit resume"
+        ],
+        [
+          2,
+          "confirmation never erases the next USB scan being typed"
+        ],
+        [
+          2,
+          "permission help, close releases camera, idle zero business RPC / ERP DOM mutation"
+        ]
+      ]
+    },
+    "fee_two_rounds": {
+      "count": 30,
+      "checks": [
+        [
+          1,
+          "startup idle: no fee/auth request"
+        ],
+        [
+          1,
+          "50 mounts: Enter search works, one students request"
+        ],
+        [
+          1,
+          "superseded due query aborts through real validation+snapshot layers; latest result only"
+        ],
+        [
+          1,
+          "double Save: one flight / one confirmed receipt, fee form not rebuilt, one affected-data event"
+        ],
+        [
+          1,
+          "4h virtual session + 80 real search/save cycles: session refresh, 81 unique receipts, zero retained requests"
+        ],
+        [
+          1,
+          "85 additional searches: bounded caches, zero retained requests"
+        ],
+        [
+          1,
+          "incomplete due never treated as zero; validation wrapper executes once"
+        ],
+        [
+          1,
+          "expired session: payment not sent, draft editable; manual retry succeeds"
+        ],
+        [
+          1,
+          "wrong receipt identity blocked; same receipt key on retry"
+        ],
+        [
+          1,
+          "Master Fee search cancels old due/settings work; current fees render completely"
+        ],
+        [
+          1,
+          "mobile / tablet / desktop fee controls stay within viewport"
+        ],
+        [
+          1,
+          "settled fee view: no idle RPC / DOM rendering"
+        ],
+        [
+          1,
+          "15s UI timeout: retry joins same in-flight payment; late confirmation produces one receipt"
+        ],
+        [
+          1,
+          "late confirmed result updates receipt automatically without issuing another write"
+        ],
+        [
+          1,
+          "receipt-tool rendering failure cannot turn confirmed payment into a failed payment"
+        ],
+        [
+          2,
+          "startup idle: no fee/auth request"
+        ],
+        [
+          2,
+          "50 mounts: Enter search works, one students request"
+        ],
+        [
+          2,
+          "superseded due query aborts through real validation+snapshot layers; latest result only"
+        ],
+        [
+          2,
+          "double Save: one flight / one confirmed receipt, fee form not rebuilt, one affected-data event"
+        ],
+        [
+          2,
+          "4h virtual session + 80 real search/save cycles: session refresh, 81 unique receipts, zero retained requests"
+        ],
+        [
+          2,
+          "85 additional searches: bounded caches, zero retained requests"
+        ],
+        [
+          2,
+          "incomplete due never treated as zero; validation wrapper executes once"
+        ],
+        [
+          2,
+          "expired session: payment not sent, draft editable; manual retry succeeds"
+        ],
+        [
+          2,
+          "wrong receipt identity blocked; same receipt key on retry"
+        ],
+        [
+          2,
+          "Master Fee search cancels old due/settings work; current fees render completely"
+        ],
+        [
+          2,
+          "mobile / tablet / desktop fee controls stay within viewport"
+        ],
+        [
+          2,
+          "settled fee view: no idle RPC / DOM rendering"
+        ],
+        [
+          2,
+          "15s UI timeout: retry joins same in-flight payment; late confirmation produces one receipt"
+        ],
+        [
+          2,
+          "late confirmed result updates receipt automatically without issuing another write"
+        ],
+        [
+          2,
+          "receipt-tool rendering failure cannot turn confirmed payment into a failed payment"
+        ]
+      ]
+    },
+    "daily_exam_partial_rows_two_rounds": {
+      "count": 8,
+      "checks": [
+        [
+          1,
+          "daily QR partial row/count patch: same table/other row, zero RPC"
+        ],
+        [
+          1,
+          "daily unsaved local edit preserved"
+        ],
+        [
+          1,
+          "exam QR partial row patch: same table/other row, existing marks, zero RPC"
+        ],
+        [
+          1,
+          "exam typed unsaved marks preserved, no automatic save"
+        ],
+        [
+          2,
+          "daily QR partial row/count patch: same table/other row, zero RPC"
+        ],
+        [
+          2,
+          "daily unsaved local edit preserved"
+        ],
+        [
+          2,
+          "exam QR partial row patch: same table/other row, existing marks, zero RPC"
+        ],
+        [
+          2,
+          "exam typed unsaved marks preserved, no automatic save"
+        ]
+      ]
+    },
+    "sql_local": {
+      "count": 23,
+      "checks": [
+        "actual PL/pgSQL compiles and migration reruns",
+        "lookup indexes compile, rerun without duplicate index count",
+        [
+          1,
+          "teacher without class assignment: Admit marks daily+exam, retry same request no duplicate"
+        ],
+        [
+          1,
+          "same teacher mixed-room other class Desk -> correct daily+subject+room"
+        ],
+        [
+          1,
+          "non-exam class/day Admit -> Daily only, no invented exam"
+        ],
+        [
+          1,
+          "second active teacher rescans same student: no extra data/audit writes"
+        ],
+        [
+          1,
+          "parent and inactive teacher denied by database"
+        ],
+        [
+          1,
+          "Absent correction requires reason/current revision; existing Present marks preserved"
+        ],
+        [
+          1,
+          "old-session and revoked Admit rejected"
+        ],
+        [
+          1,
+          "multiple subjects require explicit choice, no guessed paper"
+        ],
+        [
+          1,
+          "same request UUID with different QR rejected, no new writes"
+        ],
+        [
+          1,
+          "missing exam setup: full atomic rollback, no false daily success"
+        ],
+        [
+          2,
+          "teacher without class assignment: Admit marks daily+exam, retry same request no duplicate"
+        ],
+        [
+          2,
+          "same teacher mixed-room other class Desk -> correct daily+subject+room"
+        ],
+        [
+          2,
+          "non-exam class/day Admit -> Daily only, no invented exam"
+        ],
+        [
+          2,
+          "second active teacher rescans same student: no extra data/audit writes"
+        ],
+        [
+          2,
+          "parent and inactive teacher denied by database"
+        ],
+        [
+          2,
+          "Absent correction requires reason/current revision; existing Present marks preserved"
+        ],
+        [
+          2,
+          "old-session and revoked Admit rejected"
+        ],
+        [
+          2,
+          "multiple subjects require explicit choice, no guessed paper"
+        ],
+        [
+          2,
+          "same request UUID with different QR rejected, no new writes"
+        ],
+        [
+          2,
+          "missing exam setup: full atomic rollback, no false daily success"
+        ],
+        "read-only installation check executes"
+      ],
+      "engine": "PGlite local PostgreSQL, fixture schema and real relevant V320/V412 helpers; no production access; concurrency not representative"
+    },
+    "marksheet_two_rounds": {
+      "checks": 30,
+      "checks_detail": [
+        [
+          1,
+          "classic",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          1,
+          "blue",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          1,
+          "maroon",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          1,
+          "official",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          1,
+          "termwise",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          1,
+          "detailed",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          1,
+          "30 preview replacements: no retained detached observer"
+        ],
+        [
+          1,
+          "leave marksheet: zero resize targets retained"
+        ],
+        [
+          1,
+          "settled idle/focus: zero DOM mutation and zero business RPC"
+        ],
+        [
+          1,
+          "desktop/idle zero business RPC"
+        ],
+        [
+          1,
+          "issued QR replaces draft identity with same record token"
+        ],
+        [
+          1,
+          "real issued QR decodes to the correct opaque document token"
+        ],
+        [
+          1,
+          "print copy unscaled, QR image retained"
+        ],
+        [
+          1,
+          "real A4 viewer Print/Save PDF enabled"
+        ],
+        [
+          1,
+          "print ready: zero pending timeout"
+        ],
+        [
+          2,
+          "classic",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          2,
+          "blue",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          2,
+          "maroon",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          2,
+          "official",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          2,
+          "termwise",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          2,
+          "detailed",
+          "17 subjects: one sheet; mobile full fit; logo/watermark/QR; class filtering"
+        ],
+        [
+          2,
+          "30 preview replacements: no retained detached observer"
+        ],
+        [
+          2,
+          "leave marksheet: zero resize targets retained"
+        ],
+        [
+          2,
+          "settled idle/focus: zero DOM mutation and zero business RPC"
+        ],
+        [
+          2,
+          "desktop/idle zero business RPC"
+        ],
+        [
+          2,
+          "issued QR replaces draft identity with same record token"
+        ],
+        [
+          2,
+          "real issued QR decodes to the correct opaque document token"
+        ],
+        [
+          2,
+          "print copy unscaled, QR image retained"
+        ],
+        [
+          2,
+          "real A4 viewer Print/Save PDF enabled"
+        ],
+        [
+          2,
+          "print ready: zero pending timeout"
+        ]
+      ]
+    },
+    "root_static": {
+      "external_script_references": 76,
+      "compiled_external_scripts": 76,
+      "compiled_inline_scripts": 129,
+      "missing": [],
+      "interval_channel_candidates": [
+        {
+          "ref": "udise-v306-html2canvas.min.js",
+          "type": "interval/channel review"
+        }
+      ]
+    },
+    "local_assets": {
+      "root_script_style_image_references": 121,
+      "extra_print_id_qr_dependencies": 11,
+      "missing": []
+    }
+  },
+  "production_tested": false
+}

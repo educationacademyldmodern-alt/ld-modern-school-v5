@@ -904,7 +904,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 @page{size:A4 portrait;margin:0}
 </style>
 <meta name="ldm-fix" content="V247 canonical LKG/UKG attendance root fix">
-<link rel="stylesheet" href="marksheet-core.css?v=389">
+<link rel="stylesheet" href="marksheet-core.css?v=444">
 <link rel="stylesheet" href="attendance-view-v392.css?v=392">
 <link rel="stylesheet" href="entry-view-v393.css?v=393">
 </head>
@@ -2651,7 +2651,7 @@ function idStudioRollValue(v){let m=String(v??'').match(/\d+/);return m?Number(m
 function idStudioSortRows(rows){return [...rows].sort((a,b)=>idStudioRollValue(a.roll_no)-idStudioRollValue(b.roll_no)||String(a.student_name||'').localeCompare(String(b.student_name||''))) }
 async function idLoadClassStudents(){
  const c=$('idClass')?.value||'',box=$('idStudentList'),mine=++idLoadEpoch,who=profile?.id;idReadController?.abort();idReadController=new AbortController();const signal=idReadController.signal;idStudioSelected.clear();idStudioRows=[];idStudioListPage=1;idPreviewEpoch++;$('idWork')?.replaceChildren();idStudioUpdateSelectedCount();if(!c){if(box)box.textContent='Class चुनें.';return}if(box)box.textContent='Loading students…';
- try{let data=[];for(let offset=0;offset<100000;offset+=500){let q=ldmApplyClassFilter(sb.from('students').select('id,student_id,admission_no,student_name,father_name,mother_name,guardian_name,class_name,section,roll_no,phone,dob,address,status,academic_session,photo_path,photo_url,student_photo_url'),'class_name',c).order('id').range(offset,offset+499);if(q.abortSignal)q=q.abortSignal(signal);const r=await q;if(mine!==idLoadEpoch||who!==profile?.id||!box?.isConnected||$('idClass')?.value!==c)return;if(r.error)throw r.error;if(!Array.isArray(r.data))throw Error('Student list response incomplete');data.push(...r.data);if(r.data.length<500)break;if(offset+500>=100000)throw Error('Narrow the selected class range')}
+ try{let data=[];for(let offset=0;offset<100000;offset+=500){let q=ldmApplyClassFilter(sb.from('students').select('id,student_id,admission_no,student_name,father_name,mother_name,guardian_name,class_name,section,roll_no,phone,dob,address,status,academic_session,photo_path,photo_url,student_photo_url,ldm_qr_token'),'class_name',c).order('id').range(offset,offset+499);if(q.abortSignal)q=q.abortSignal(signal);const r=await q;if(mine!==idLoadEpoch||who!==profile?.id||!box?.isConnected||$('idClass')?.value!==c)return;if(r.error)throw r.error;if(!Array.isArray(r.data))throw Error('Student list response incomplete');data.push(...r.data);if(r.data.length<500)break;if(offset+500>=100000)throw Error('Narrow the selected class range')}
  idStudioRows=idStudioSortRows(data.filter(x=>(!x.academic_session||x.academic_session===school?.academic_session)&&!['inactive','deleted','left','withdrawn','archived','trashed','recycled','transferred'].includes(String(x.status||'active').toLowerCase())));idStudioRenderStudentList();
  }catch(e){if(mine===idLoadEpoch&&box?.isConnected&&!signal.aborted)box.textContent=e.message||String(e)}
 }
@@ -15844,12 +15844,15 @@ if(typeof statsBase==='function'){
   function sessionBounds(sess){let m=String(sess||'').match(/(\d{4})/),y=m?Number(m[1]):new Date().getFullYear();return [new Date(y,3,1),new Date(y+1,2,31,23,59,59,999)]}
   async function chunks(list,size,fn){let out=[];for(let i=0;i<list.length;i+=size)out.push(...await fn(list.slice(i,i+size)));return out}
 
-  async function feeSnapshot(adms=null,sess=session(),until=monthNow()){
+  async function feeSnapshot(adms=null,sess=session(),until=monthNow(),options={}){
     const list=Array.isArray(adms)?[...new Set(adms.map(String).filter(Boolean))]:null;
     if(list&&list.length===0)return [];
     const out=[];
     for(let i=0;i<(list?list.length:1);i+=300){
-      const r=await sb.rpc('ldm_fee_due_snapshot_v2',{p_session:sess,p_admission_nos:list?list.slice(i,i+300):null,p_until_month:until});
+      if(options.signal?.aborted)throw new DOMException('Search superseded','AbortError');
+      let request=sb.rpc('ldm_fee_due_snapshot_v2',{p_session:sess,p_admission_nos:list?list.slice(i,i+300):null,p_until_month:until});
+      if(options.signal&&request.abortSignal)request=request.abortSignal(options.signal);
+      const r=await request;
       if(r.error)throw r.error;
       if(!Array.isArray(r.data))throw Error('Central fee response unavailable');
       out.push(...r.data);
@@ -18060,23 +18063,27 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
    }
    return result;
  });
+ async function masterRead(request,controller){let timer;try{return await Promise.race([request,new Promise((_,reject)=>timer=setTimeout(()=>{controller.abort();reject(Error('Fee search timed out; Search फिर करें।'))},12000))])}finally{clearTimeout(timer)}}
+ window.ldmCancelMasterFeeReads=()=>{masterSequence++;masterAbort?.abort()};
  const newMasterFeeSearch=async function(silent=false){
-   if(!admin())return;
+   if(!admin()||document.hidden)return;
    const box=byId('v75MFResults'),input=byId('v75MFQ');if(!box)return;
    const q=cleanSearch(input?.value),cls=byId('v75MFClass')?.value||'',sortDir=byId('v75MFSort')?.value==='desc'?'desc':'asc';
+   const searchOwner=String((typeof profile!=='undefined'?profile:window.profile)?.id||'');
    const token=++masterSequence;
    if(masterAbort)try{masterAbort.abort()}catch(_){}
    masterAbort=new AbortController();const signal=masterAbort.signal;
-   const fresh=()=>token===masterSequence&&box===byId('v75MFResults')&&box.isConnected;
+   const fresh=()=>admin()&&searchOwner===String((typeof profile!=='undefined'?profile:window.profile)?.id||'')&&token===masterSequence&&box===byId('v75MFResults')&&box.isConnected;
    if(!q&&!cls){window.v75MFStudents=[];window.v111FeeRows=[];box.innerHTML='<div class="empty">नाम, पिता, Admission No. लिखें या कक्षा चुनें। खोजने से पहले पूरी फीस लोड नहीं होगी।</div>';return}
    const limit=q?35:45,client=getSB();if(!client){box.textContent='Database connection not ready / डेटाबेस उपलब्ध नहीं';return}
    box.innerHTML='<div class="empty" role="status">🔎 विद्यार्थियों की खोज…</div>';
    try{
+     await window.LDM_FEE_FAST_V427?.ensureSession?.(signal);if(!fresh())return;
      let qry=client.from('students').select(feeFields).order('student_name',{ascending:sortDir==='asc'}).order('roll_no').limit(limit);
      if(cls&&typeof ldmApplyClassFilter==='function')qry=ldmApplyClassFilter(qry,'class_name',cls);else if(cls)qry=qry.eq('class_name',cls);
      if(q)qry=qry.or(searchOr(q,['student_name','admission_no','father_name','phone','student_id','roll_no']));
      if(typeof qry.abortSignal==='function')qry=qry.abortSignal(signal);
-     const {data,error}=await qry;if(!fresh())return;
+     const {data,error}=await masterRead(qry,masterAbort);if(!fresh())return;
      if(error){if(signal.aborted)return;throw error}
      const rows=typeof v111ActiveStudents==='function'?v111ActiveStudents(data||[]):data||[];
      window.v75MFStudents=rows;window.v111FeeRows=rows;
@@ -18091,10 +18098,10 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
      if(typeof window.ldmFeeDueSnapshot!=='function')throw new Error('Current Due service unavailable / केंद्रीय फीस गणना नहीं मिली');
      const session=(typeof school!=='undefined'&&school?.academic_session)||window.school?.academic_session||'2026-27';
      const month=typeof v111MonthKey==='function'?v111MonthKey(new Date()):new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'}).slice(0,7);
-     const [settings,currentDueRows]=await Promise.all([
-       client.from('student_fee_settings').select('admission_no,monthly_fee,auto_start_month,transport_fee,transport_start_month').eq('academic_session',session).in('admission_no',admissions),
-       window.ldmFeeDueSnapshot(admissions,session,month)
-     ]);
+     const [settings,currentDueRows]=await masterRead(Promise.all([
+       client.from('student_fee_settings').select('admission_no,monthly_fee,auto_start_month,transport_fee,transport_start_month').eq('academic_session',session).in('admission_no',admissions).abortSignal(signal),
+       window.ldmFeeDueSnapshot(admissions,session,month,{signal})
+     ]),masterAbort);
      if(!fresh())return;
      if(settings.error)throw settings.error;
      if(!Array.isArray(currentDueRows))throw new Error('Current Due response invalid / फीस विवरण उपलब्ध नहीं');
@@ -18460,7 +18467,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v332.js?v=438"></script>
+<script src="dashboard-v332.js?v=449"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=406"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18473,9 +18480,9 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=349"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v332.js?v=438"></script>
+<script src="root-corrections-v332.js?v=448"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
-<script src="exam-central-v320.js?v=393"></script>
+<script src="exam-central-v320.js?v=448"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18494,14 +18501,14 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 </style>
 <link rel="stylesheet" href="quickdesk-v326.css?v=326">
 <script src="central-exam-fees-v333.js?v=335"></script>
-<script src="central-fee-class-v335.js?v=344"></script>
+<script src="central-fee-class-v335.js?v=449"></script>
 <link rel="stylesheet" href="school-workspace-v336.css?v=336">
 <script src="school-workspace-v336.js?v=435"></script>
 
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=373"></script>
 <script src="student-photo-v337.js?v=356"></script>
-<script src="a4-print-v337.js?v=389"></script>
+<script src="a4-print-v337.js?v=447"></script>
 <script src="print-bridge-v337.js?v=344"></script>
 
 <script src="save-stay-v338.js?v=347"></script>
@@ -18512,14 +18519,14 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="original-dashboard-v342.css?v=344">
 <script src="original-dashboard-v342.js?v=344"></script>
 <link rel="stylesheet" href="paper-center-v343.css?v=404">
-<script src="marksheet-core.js?v=389"></script>
+<script src="marksheet-core.js?v=444"></script>
 <script src="report-core.js?v=344"></script>
 <script src="paper-center-v343.js?v=432"></script>
 <link rel="stylesheet" href="paper-smart-v358.css?v=361"><script src="paper-smart-v358.js?v=404"></script>
-<link rel="stylesheet" href="marksheet-core.css?v=389">
+<link rel="stylesheet" href="marksheet-core.css?v=444">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
-<script src="documents-v345.js?v=390"></script>
+<script src="documents-v345.js?v=444"></script>
 <script src="teacher-save-v345.js?v=442"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
@@ -18531,5 +18538,5 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=403r1"></script>
-<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=443"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script></body>
+<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=450"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=445" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=447"><script src="id-card-v447.js?v=447"></script></body>
 </html>

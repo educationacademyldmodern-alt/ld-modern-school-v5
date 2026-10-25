@@ -1,0 +1,97 @@
+V444 से V450 — सभी corrections की एक combined upload ZIP
+School: L D MODERN EDUCATION ACADEMY
+
+यह ZIP आपके लिए है क्योंकि V444 और उसके बाद का कोई update अभी upload नहीं किया है।
+V444, V445, V446, V447, V448, V449 और V450 की सभी बदलने वाली files मिलाई गई हैं।
+हर filename की केवल अंतिम सही copy है। पुराने patches अलग-अलग upload न करें।
+Runtime scanner version V450 ही है; नया version होने का दावा नहीं किया गया है।
+यह मौजूदा ERP पर update है; fresh ERP installation या पुराने database migrations का replacement नहीं।
+
+क्या शामिल है
+V444: Marksheet A4 page-fit, class/exam/session के सही subjects, logo, हल्का watermark,
+       QR, preview/PDF/print, छह formats; पुराने issued records सुरक्षित।
+V445: Admin का compact desktop layout; mobile layout सुरक्षित।
+V446: Detached preview observers और print/font timeout cleanup।
+V447: Admin/Teacher के shared official Student ID और Teacher ID, A4 pagination/print।
+V448: Approved Teacher Master से all-class / mixed seating QR attendance;
+       Admit/Desk/Student ID से Daily + सही matching Exam की atomic attendance;
+       bounded queue, local QR decoder, camera/photo/USB, marks/edit protection।
+V449: Fee search cancellation, bounded caches, long-session auth check,
+       double-click safe payment, same-receipt retry, late confirmation handling।
+V450: Same QR बार-बार दिखाने पर duplicate count/request रोक;
+       counter में केवल नए उपस्थित unique students।
+
+UPLOAD का एक ही क्रम
+1. अभी की website files और database का backup अपने पास सुरक्षित रखें।
+2. SQL folder की files Supabase SQL Editor में नीचे दिए क्रम से एक-एक करके चलाएँ।
+   SQL को website hosting पर upload नहीं करना है। कोई SQL error आए तो अगला step न चलाएँ।
+   पूरा error text देखकर missing prerequisite ठीक करें; attendance/fees reset न करें।
+3. ZIP extract करें। Root की सभी HTML, JS, CSS, PNG और WOFF2 files अपने उसी
+   website folder में upload/replace करें जहाँ मौजूदा index.html है।
+   index.html अभी अलग रखें और सबसे आखिर में upload करें।
+4. vendor और LICENSES folders को उसी नाम/path में merge करें।
+   पुराने website folders/files को delete नहीं करना है।
+5. बाकी website files upload होने के बाद इसी ZIP का index.html replace करें।
+   Site को एक नए combined444to450 नाम के subfolder में न डालें।
+6. Refresh करें; laptop पर Ctrl+Shift+R। मोबाइल पर page दोबारा खोलें।
+   Scanner header में 'Scanner V450 • Unique student count' दिखना चाहिए।
+   पुराने 'Confirmed scans' वाला screen आए तो नया scanner/index अभी load नहीं हुआ है।
+   Site data / pending payment receipts clear न करें।
+
+SQL का क्रम — V444 से कोई update नहीं लगाया है तो
+00_READ_ONLY_SCAN_BACKUP.sql — Read only: पुरानी shared QR function definition लें;
+   result को CSV/file में अपने पास सुरक्षित रखें। यह पूरे database का backup नहीं है।
+01_ID_CARD_SHARED_LAYOUT_V447.sql — shared ID layout setting जोड़ता है। Run करें।
+02_FAST_MASTER_QR_V448.sql — shared Daily + Exam scanner update। Run करें।
+03_SCAN_LOOKUP_INDEXES_V448.sql — Optional performance indexes; quiet समय में चलाएँ।
+   पहले से matching index हो तो अनावश्यक duplicate नहीं बनाता।
+04_READ_ONLY_SCAN_CHECK_V448.sql — अंतिम जाँच। पहले result की पाँच flags true चाहिए।
+   linked_active_approved_teachers असली linked/approved teachers की संख्या है;
+   0 आए तो Teacher Master approval / Active / auth_user_id link जाँचें।
+SQL rerun-safe और data-preserving है; DROP/TRUNCATE/reset शामिल नहीं है।
+V449/V450 के लिए अलग नई SQL नहीं है; उनकी frontend corrections साथ हैं।
+पुराने V442 logs/business-conflict SQL fix को यह replace नहीं करता।
+
+Exam / QR इस्तेमाल करने से पहले
+आज की तारीख, class/section/session/subject वाला timetable सही रखें।
+Admin → Exam Attendance में paper के maximum marks / Start setup पहले Save करें।
+आज उस class का exam नहीं है तो केवल Daily Present बनेगा; exam अनुमान से नहीं बनेगा।
+एक से अधिक matching subjects हों तो सही subject चुनना होगा।
+Teacher Master में Active + Approved और login account link आवश्यक है;
+अलग scanner activation नहीं। Fee/marks/manual editing की permissions नहीं बढ़ाई गई हैं।
+Desk Slip उसी registered seating-plan preview से और Admit current issued/active हो।
+Camera के लिए HTTPS और browser Camera Allow जरूरी है; denied permission code bypass नहीं कर सकता।
+
+Duplicate count का अर्थ
+एक खुले scanner में same QR को बार-बार दिखाने से नई request/count नहीं बढ़ता।
+ID/Admit/Desk से वही बच्चा आए तो server unchanged बताए तो count नहीं बढ़ता।
+Counter 'नए उपस्थित विद्यार्थी' है; पूरे school का day-total नहीं।
+Close/reopen पर नया session counter 0 से शुरू होगा। पहले से Present बच्चे नए नहीं गिने जाते।
+जानबूझकर फिर जाँचें विकल्प explicit confirmation के बाद status दोबारा पढ़ सकता है।
+Subject बदलने पर अगले exam की attendance हो सकती है, student count फिर भी unique रहेगा।
+Pending/uncertain save को उसी request से Retry करें; अपने-आप repeated retries नहीं चलतीं।
+
+Fee / daily data
+Confirmed payment के बाद receipt और प्रभावित dashboard data/recent activity update रहते हैं।
+Idle में लगातार polling नहीं जोड़ी गई है। Login/session check, search, payment और जरूरी
+confirmed-write refresh के calls आवश्यक हैं; पूरे ERP के zero logs की guarantee नहीं है।
+Server confirmation से पहले payment/attendance को Saved नहीं दिखाया जाता।
+
+Upload के बाद छोटी practical जाँच
+1. Admin और एक approved Teacher scanner में एक current QR 5 बार दिखाएँ:
+   केवल पहली नई attendance count हो; फिर Admit/Desk alias से वही बच्चा जाँचें।
+2. उसी student की Daily और matching Exam attendance list देखें; marks सुरक्षित हों।
+3. Fee search → payment → receipt → recent activity/central due देखें।
+   Network uncertainty में वही pending receipt retry करें; नया payment न बनाएँ।
+4. Marksheet और Student/Teacher ID का Preview → PDF → Print जाँचें।
+5. Mobile और laptop पर Dashboard खोलें।
+
+जाँच की सीमा
+इस package के runtime bytes V450 के tested combined code से मिलाए गए हैं।
+दो rounds में QR, fee, document और desktop browser checks पास हैं।
+76 linked + 129 inline scripts compile; checked local assets में missing file नहीं।
+SQL का actual PL/pgSQL local PostgreSQL/PGlite fixtures में जाँचा गया है।
+4-hour fee test में simulated clock और repeated operations थे; वास्तविक 4 घंटे का
+production load, physical camera और आपके live database को सीधे test नहीं किया है।
+CHECK_REPORT.json में file hashes, merge coverage और local test results हैं।
+README और CHECK_REPORT को website पर upload करना जरूरी नहीं है।
