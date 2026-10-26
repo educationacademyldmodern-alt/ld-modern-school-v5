@@ -47,7 +47,11 @@ function syncFeeForm457(){
  const emit=()=>model.dispatchEvent(new Event('input',{bubbles:true}));
  const serialize=()=>{model.value=[...host.querySelectorAll('[data-fee-row457]')].map(row=>row.querySelector('[data-date457]').value+','+row.querySelector('[data-amount457]').value).join('\n')};
  const add=(date='',amount='')=>{if(host.children.length>=24)return status('अधिकतम 24 किस्तें रखें।',true);const row=document.createElement('div');row.className='s336FeeRow457';row.setAttribute('data-fee-row457','');row.innerHTML='<label>देय तारीख / Due date<input type="date" data-date457 value="'+E(date)+'"></label><label>राशि ₹ / Amount<input type="number" min="0" step="0.01" data-amount457 value="'+E(amount)+'"></label><button type="button" aria-label="किस्त हटाएँ / Remove installment">हटाएँ</button>';row.addEventListener('input',serialize);row.querySelector('button').onclick=()=>{row.remove();serialize();emit()};host.append(row)};
- host.replaceChildren();const lines=model.value.split('\n').filter(x=>x.trim());for(const line of lines){const parts=line.split(',');add(parts[0]?.trim()||'',parts[1]?.trim()||'')}
+ host.replaceChildren();const lines=model.value.split('\n').filter(x=>x.trim());
+ const invalidLegacy=lines.length>24||lines.some(line=>{const parts=line.split(',').map(x=>x.trim());return parts.length!==2||(parts[0]&&!validDate(parts[0]))||(parts[1]&&(!Number.isFinite(+parts[1])||+parts[1]<0))});
+ if(invalidLegacy){model.hidden=false;model.setAttribute('aria-hidden','false');model.rows=6;const addButton=$('s336FeeAdd457');addButton.textContent='टेक्स्ट सुधारकर तारीख/राशि पंक्तियों में दिखाएँ';addButton.onclick=()=>{syncFeeForm457();emit()};if($('s336FeeSave'))$('s336FeeSave').disabled=true;status('पुराने draft की किस्तें नीचे पूरी रखी हैं। तारीख, राशि और अधिकतम 24 पंक्तियाँ जाँचें।',true);return}
+ model.hidden=true;model.setAttribute('aria-hidden','true');$('s336FeeAdd457').textContent='＋ किस्त जोड़ें / Add installment';
+ for(const line of lines){const parts=line.split(',');add(parts[0]?.trim()||'',parts[1]?.trim()||'')}
  if(!host.children.length&&kind.value==='installment')add($('s336FeeStart').value,'');
  $('s336FeeAdd457').onclick=()=>{add($('s336FeeStart').value,'');serialize();emit()};
  const save=$('s336FeeSave');if(save)save.disabled=true;

@@ -1,6 +1,6 @@
 L D MODERN EDUCATION ACADEMY
 V450 UPDATED — ID CARD / QR / LOGIN / LIGHT-DARK APPEARANCE
-Fee plan save + easy installment revision 457; V450 remains the source package.
+Admin all-classes fee status revision 459; V450 remains the source package.
 
 यह नया ERP install या पुरानी database पर rollback नहीं है।
 यह मौजूदा V450 update package का संशोधित संस्करण है। पुराने V450 के बाकी correction files इसी ZIP में रखे गए हैं।
@@ -52,7 +52,7 @@ FREE TIER / LOAD
 • No claim of zero Supabase usage: genuine login/save still uses the server. Production log volume must be observed after deployment.
 
 VALIDATION
-• 129 inline index scripts + changed external JS parsed successfully.
+• 128 inline index scripts + changed external JS parsed successfully.
 • Chromium: 20 normal-data Student/Teacher template cases passed.
 • Chromium: 20 long-data/optional-field template cases passed.
 • Sample 10-landscape-card and 9-portrait-card PDFs each occupy one A4 page.
@@ -129,10 +129,27 @@ ROOT VIDEO CORRECTIONS — REVISION 456
 
 LATEST FEE FIX — REVISION 457
 • school-workspace-v336.js/css updated and cache URL changed to v457. New installment editor has due-date + amount fields, Add/Remove, max 24 dates, per-student base total, Preview and confirmed Save. Monthly amount field is hidden in Installment mode. Old drafts keep their canonical text and restore into the new rows.
-• SQL/05_FEE_PLAN_START_MONTH_V457.sql is REQUIRED ONCE for the displayed NOT NULL backend error. Uploading JS alone does not repair that database function. File size under 6 KB. Do not run it as a browser query.
+• SQL/05_FEE_PLAN_START_MONTH_V457.sql is REQUIRED ONCE for the displayed NOT NULL backend error. Uploading JS alone does not repair that database function. Corrected file size under 8 KB. Do not run it as a browser query.
 • The migration checks the deployed settings table, month column type and exactly one compatible existing PL/pgSQL V336 RPC. It adds transaction-local plan-date context to the original function and a narrow missing-month guard. Existing authorization, signature, SECURITY DEFINER setting, grants, idempotency and business logic are retained. Unexpected prerequisites/body formatting cause rollback rather than an unverified rewrite.
 • New missing start month derives from chosen plan start_date; no hard-coded current/default month. Blank updates preserve the saved start month. Existing settings found on insert/upsert also preserve their month. The NOT NULL constraint remains. No DROP/TRUNCATE, historical fee/payment/receipt rewrite or audit polling added.
 • SQL test: reproduced 23502 using a representative original function in embedded PostgreSQL; verified new month, saved month, blank update, Monthly/Installment, original auth denial, grants, same-request retry, repeat migration and unchanged existing receipt. This is not a dump or execution of the production RPC; actual deployment checks run when you apply SQL/05.
 • Browser test: actual module with mocked reads/saves; Jan–Mar Monthly ₹1,200 => base total ₹3,600; one ₹1,200 installment => ₹1,200. Add/remove, draft restoration, out-of-range date rejection, preview invalidation and clear failure messages passed. Full HTML/public ERP assets with mocked server responses also passed the new fee controls and the prior login rendering checks.
 • Apply: backup current site/database; upload extracted website runtime files (including school-workspace-v336.js/css); run only new SQL/05 in Supabase SQL Editor; confirm true/true; refresh once. Old files must remain. No fee plan is applied until you Preview and Save it.
 • Pre-existing missing shared-layout prerequisites, if any, are a separate earlier installation requirement. SQL/05 does not create old V336 fee tables or RPCs when missing; it stops safely. Historical Supabase Log Ingestion has not been diagnosed against live logs.
+
+FINAL CODE RECHECK — REVISION 458
+• Latest instructions supersede earlier recheck notes: SQL/05 is required for the fee fix. If the previous SQL/05 was already run, run this corrected SQL/05 again once; old SQL/00–04 do not need rerunning. Expect true/true.
+• SQL patch now finds the real outer BEGIN while skipping line/nested block comments, quoted identifiers, escaped strings, dollar quotes and block labels. Tested a previous false marker inside a leading comment: corrected migration repairs it and remains rerun-safe. Existing settings lookup locks the row during the same transaction to preserve its saved start month during an upsert.
+• Invalid legacy installment drafts (bad date/amount/extra fields or more than 24 lines) remain fully visible as original text instead of silently losing rows. Correct the text and use the recovery button to restore date/amount rows; Preview remains mandatory.
+• Re-ran syntax (128 inline + 9 changed external scripts), full-page login/fee controls, Parent navigation/logout, Light/Dark/System, 20 Student/Teacher ID viewers, 20 dark ID layouts, scanner and navigation/cancellation checks. All passed in their documented local/mocked scope. No production account or database was modified.
+• PostgreSQL tests also verified authorization denial, original grants, idempotent retry, preserved old month/receipt, null rejection outside the fee RPC, and explicit supplied month preservation. A representative RPC was used because the production function source is not in this package.
+• Final package excludes all test fixtures. Existing unrelated ERP modules remain preserved rather than claimed fully audited. Real login latency, camera/printer hardware and historical Supabase log volume still need deployment observation.
+
+ADMIN ALL CLASSES FEE STATUS — REVISION 459
+• Admin Dashboard के नए “सभी कक्षाओं की फीस / All Classes Fee Status” card या Menu से खोलें। All Classes default है; किसी एक class का चयन, Student/Father/Mobile/Admission search और Due/Clear/Unavailable filters हैं।
+• Teacher Fee Status जैसा Current Due, due/clear student counts, selected-filter total, Call और WhatsApp reminder links। Reminder केवल link click करने पर खुलेगा; कोई संदेश अपने आप नहीं जाता।
+• हिसाब मौजूदा ldm_fee_due_snapshot_v2 central service से, उसी current month/session पर आता है। Teacher का assigned-class access और backend permissions नहीं बदले गए। यह नया view read-only है; शुल्क तय/जमा करने के पुराने पेज वैसे ही हैं।
+• केवल view खोलने या Refresh पर data पढ़ता है। Student reads 500 की pagination में, snapshot reads अधिकतम150 admissions की batches में। अधिकतम50 rows DOM में; class/search/status/page बदलने पर अतिरिक्त server request नहीं। नई polling, realtime subscription, log writer या fee-generation RPC नहीं जोड़ी गई। आवश्यक reads का existing server logging हो सकता है।
+• Missing/invalid balances को Clear/₹0 नहीं माना जाता। पुराना session और archived/inactive records बाहर रहते हैं। Account/navigation बदलने के बाद पुराना response अगला पेज नहीं बदलता।
+• New runtime file admin-fee-status-v459.js और updated index.html सहित यही combined ZIP upload करें। इस सुविधा के लिए नई SQL नहीं है। पिछले fee save fix की SQL/05 जरूरत ऊपर दिए निर्देशों के अनुसार बनी रहती है।
+• Actual full-page browser test with mocked auth/data: 3,000 active current-session students + 2 excluded rows; correct ₹7,50,000 total, local filters, 50-row pagination, reminders, widths360/390/1366, failed-read handling, teacher-route denial and stale account/navigation passed. Initial reads27 = 7 student pages + 20 snapshot batches; changing local filters added0. No production database or real student account was used.

@@ -1,7 +1,7 @@
-V450 — फीस तय करना / Save error सुधार
+V450 — फीस तय करना / Save error सुधार — अंतिम जाँच 458
 
 1. ZIP Extract करें। HTML/JS/CSS/assets को website की उसी जगह Replace करें; अन्य पुरानी files न हटाएँ। इस बार school-workspace-v336.js और school-workspace-v336.css भी हैं।
-2. Supabase → SQL Editor में केवल SQL/05_FEE_PLAN_START_MONTH_V457.sql का पूरा code एक बार चलाएँ। पुराने 00–04 फिर नहीं। Website पर SQL upload नहीं करनी है।
+2. Supabase → SQL Editor में केवल SQL/05_FEE_PLAN_START_MONTH_V457.sql का पूरा code एक बार चलाएँ। यदि पिछला SQL/05 चला चुके हैं तो इसी सुधरे हुए SQL/05 को फिर एक बार चलाएँ। पुराने 00–04 फिर नहीं। Website पर SQL upload नहीं करनी है।
 3. परिणाम में start_month_guard और fee_rpc_patched दोनों true होने चाहिए। फिर ERP Refresh करें। यदि prerequisite/body error मिले तो script rollback करता है; constraint या पुराने records को manually न हटाएँ।
 
 आसान फीस सेटअप:
@@ -13,3 +13,5 @@ Class चुनें → Monthly या Installment → शुरू/अंत 
 
 यह नया SQL पुराने function की permission/idempotency बचाकर missing start month को ठीक करता है। नया polling/API loop नहीं है। हर वास्तविक Save फिर भी आवश्यक database काम करता है।
 जाँच local PostgreSQL और browser mocks में हुई है; आपकी live database पर SQL हमने नहीं चलाई है।
+
+अंतिम जाँच: SQL में comment वाला BEGIN और पुराने गलत marker की मरम्मत शामिल है। गलत/24 से अधिक किस्तों वाले पुराने draft का मूल text पूरा रखा जाता है; सुधारकर फिर Preview करें।
