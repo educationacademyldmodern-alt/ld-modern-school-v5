@@ -1,97 +1,102 @@
-V444 से V450 — सभी corrections की एक combined upload ZIP
-School: L D MODERN EDUCATION ACADEMY
+L D MODERN EDUCATION ACADEMY
+V450 UPDATED — ID CARD / QR / LOGIN / LIGHT-DARK APPEARANCE
+Appearance revision 454 (cache version only); V450 remains the source package.
 
-यह ZIP आपके लिए है क्योंकि V444 और उसके बाद का कोई update अभी upload नहीं किया है।
-V444, V445, V446, V447, V448, V449 और V450 की सभी बदलने वाली files मिलाई गई हैं।
-हर filename की केवल अंतिम सही copy है। पुराने patches अलग-अलग upload न करें।
-Runtime scanner version V450 ही है; नया version होने का दावा नहीं किया गया है।
-यह मौजूदा ERP पर update है; fresh ERP installation या पुराने database migrations का replacement नहीं।
+यह नया ERP install या पुरानी database पर rollback नहीं है।
+यह मौजूदा V450 update package का संशोधित संस्करण है। पुराने V450 के बाकी correction files इसी ZIP में रखे गए हैं।
 
-क्या शामिल है
-V444: Marksheet A4 page-fit, class/exam/session के सही subjects, logo, हल्का watermark,
-       QR, preview/PDF/print, छह formats; पुराने issued records सुरक्षित।
-V445: Admin का compact desktop layout; mobile layout सुरक्षित।
-V446: Detached preview observers और print/font timeout cleanup।
-V447: Admin/Teacher के shared official Student ID और Teacher ID, A4 pagination/print।
-V448: Approved Teacher Master से all-class / mixed seating QR attendance;
-       Admit/Desk/Student ID से Daily + सही matching Exam की atomic attendance;
-       bounded queue, local QR decoder, camera/photo/USB, marks/edit protection।
-V449: Fee search cancellation, bounded caches, long-session auth check,
-       double-click safe payment, same-receipt retry, late confirmation handling।
-V450: Same QR बार-बार दिखाने पर duplicate count/request रोक;
-       counter में केवल नए उपस्थित unique students।
+लगाने का तरीका
+1. वर्तमान website files और database का अपना backup रखें।
+2. ZIP की root files तथा vendor/ folder को website की उन्हीं जगहों पर upload/replace करें। SQL और रिपोर्ट website runtime files नहीं हैं। दूसरे मौजूदा files delete न करें।
+3. V450 SQL पहले चला चुके हैं तो इस revision के लिए केवल SQL/02_FAST_MASTER_QR_V448.sql एक बार चलाएँ। इससे correction popup में सही student/class/roll/exam details लौटेंगी। SQL/00 से पहले मौजूदा function definition का read-only export ले सकते हैं।
+4. SQL/01 केवल तब, जब V450 का shared ID layout column अभी नहीं जोड़ा गया है। पहले चल चुका हो तो फिर जरूरी नहीं। SQL/03 को इस UI update के लिए फिर चलाने की जरूरत नहीं। SQL/04 केवल optional read-only check है।
+5. Browser में एक बार hard refresh करें। नई JS/CSS के cache versions बदले गए हैं।
 
-UPLOAD का एक ही क्रम
-1. अभी की website files और database का backup अपने पास सुरक्षित रखें।
-2. SQL folder की files Supabase SQL Editor में नीचे दिए क्रम से एक-एक करके चलाएँ।
-   SQL को website hosting पर upload नहीं करना है। कोई SQL error आए तो अगला step न चलाएँ।
-   पूरा error text देखकर missing prerequisite ठीक करें; attendance/fees reset न करें।
-3. ZIP extract करें। Root की सभी HTML, JS, CSS, PNG और WOFF2 files अपने उसी
-   website folder में upload/replace करें जहाँ मौजूदा index.html है।
-   index.html अभी अलग रखें और सबसे आखिर में upload करें।
-4. vendor और LICENSES folders को उसी नाम/path में merge करें।
-   पुराने website folders/files को delete नहीं करना है।
-5. बाकी website files upload होने के बाद इसी ZIP का index.html replace करें।
-   Site को एक नए combined444to450 नाम के subfolder में न डालें।
-6. Refresh करें; laptop पर Ctrl+Shift+R। मोबाइल पर page दोबारा खोलें।
-   Scanner header में 'Scanner V450 • Unique student count' दिखना चाहिए।
-   पुराने 'Confirmed scans' वाला screen आए तो नया scanner/index अभी load नहीं हुआ है।
-   Site data / pending payment receipts clear न करें।
+ID CARD
+• पुराने 10 formats restored: Royal Blue, Aqua Academic, Purple Curve, Executive Gold, Crimson Modern, Sky Classic, Green Academic, Purple Crown, Black Gold, Slate Minimal.
+• पुराने format names/skins and field/photo/session/footer customization controls retained. Format 1–5 landscape; 6–10 portrait.
+• Student/Teacher ID uses the same template family. Teacher ID includes teacher master data, photo and existing teacher identity QR RPC.
+• Fixed A4 grids: landscape 10 per A4; portrait 9 per A4; batches of at most 100.
+• Portrait QR has its own reserved footer area. No negative offset, no overlap with signatures.
+• Browser native A4 Preview / Print / Save as PDF uses the same rendered card.
+• Layout fits text locally, with a bounded adjustment. It never silently deletes/truncates master fields. Extremely large optional data/custom dimensions can still require a larger card or fewer optional fields; the original master record is unchanged.
 
-SQL का क्रम — V444 से कोई update नहीं लगाया है तो
-00_READ_ONLY_SCAN_BACKUP.sql — Read only: पुरानी shared QR function definition लें;
-   result को CSV/file में अपने पास सुरक्षित रखें। यह पूरे database का backup नहीं है।
-01_ID_CARD_SHARED_LAYOUT_V447.sql — shared ID layout setting जोड़ता है। Run करें।
-02_FAST_MASTER_QR_V448.sql — shared Daily + Exam scanner update। Run करें।
-03_SCAN_LOOKUP_INDEXES_V448.sql — Optional performance indexes; quiet समय में चलाएँ।
-   पहले से matching index हो तो अनावश्यक duplicate नहीं बनाता।
-04_READ_ONLY_SCAN_CHECK_V448.sql — अंतिम जाँच। पहले result की पाँच flags true चाहिए।
-   linked_active_approved_teachers असली linked/approved teachers की संख्या है;
-   0 आए तो Teacher Master approval / Active / auth_user_id link जाँचें।
-SQL rerun-safe और data-preserving है; DROP/TRUNCATE/reset शामिल नहीं है।
-V449/V450 के लिए अलग नई SQL नहीं है; उनकी frontend corrections साथ हैं।
-पुराने V442 logs/business-conflict SQL fix को यह replace नहीं करता।
+TEACHER DASHBOARD
+• Student Photos renamed Student ID Card / विद्यार्थी पहचान पत्र.
+• Assigned-class ID cards include the central student details, QR and Preview/PDF/Print action.
+• Camera, Camera App, Gallery, Update Photo, existing photo editing and removal remain.
+• At most 12 photo/ID cards rendered at a time; signed photos and QR prepared only for visible cards.
+• Bulk preview opens the 10-format ID center. Existing role/class access is retained.
 
-Exam / QR इस्तेमाल करने से पहले
-आज की तारीख, class/section/session/subject वाला timetable सही रखें।
-Admin → Exam Attendance में paper के maximum marks / Start setup पहले Save करें।
-आज उस class का exam नहीं है तो केवल Daily Present बनेगा; exam अनुमान से नहीं बनेगा।
-एक से अधिक matching subjects हों तो सही subject चुनना होगा।
-Teacher Master में Active + Approved और login account link आवश्यक है;
-अलग scanner activation नहीं। Fee/marks/manual editing की permissions नहीं बढ़ाई गई हैं।
-Desk Slip उसी registered seating-plan preview से और Admit current issued/active हो।
-Camera के लिए HTTPS और browser Camera Allow जरूरी है; denied permission code bypass नहीं कर सकता।
+ATTENDANCE / QR
+• Official Present / Absent / Not Marked labels; unscanned is not automatically absent.
+• School-branded correction dialog replaces browser prompt. Actual daily/exam status, date and correction reason shown.
+• Server confirmation required before success. Existing expected-revision and idempotency checks retained.
+• Repeated QR in the open scanner does not send another request. Existing deliberate recheck remains explicit.
+• Student ID identity token is reused; issued Admit/Desk QR resolution and existing document-specific verification remain in V450.
+• A document verification QR and a student identity QR have different purposes; issued documents keep their individual verification and revocation checks. This patch does not make an issued marksheet/TC QR automatically mark attendance.
+• Teacher QR continues to use the existing ldm_get_teacher_qr and gate permission rules. It does not grant extra teacher permissions or create a public student data endpoint.
 
-Duplicate count का अर्थ
-एक खुले scanner में same QR को बार-बार दिखाने से नई request/count नहीं बढ़ता।
-ID/Admit/Desk से वही बच्चा आए तो server unchanged बताए तो count नहीं बढ़ता।
-Counter 'नए उपस्थित विद्यार्थी' है; पूरे school का day-total नहीं।
-Close/reopen पर नया session counter 0 से शुरू होगा। पहले से Present बच्चे नए नहीं गिने जाते।
-जानबूझकर फिर जाँचें विकल्प explicit confirmation के बाद status दोबारा पढ़ सकता है।
-Subject बदलने पर अगले exam की attendance हो सकती है, student count फिर भी unique रहेगा।
-Pending/uncertain save को उसी request से Retry करें; अपने-आप repeated retries नहीं चलतीं।
+LOGIN / LOGOUT / DISPLAY
+• Event-driven school-logo transition overlay while login/dashboard/logout completes.
+• Duplicate login clicks suppressed; failure removes the overlay. Existing auth/permission checks are kept.
+• Public school logo has explicit size/alignment. Redundant secondary labels in Daily Quick Desk are hidden.
+• This addresses the exposed partial screen during transitions. A live production auth-loop diagnosis has not been performed, so it is not a guarantee against every pre-existing rendering issue.
 
-Fee / daily data
-Confirmed payment के बाद receipt और प्रभावित dashboard data/recent activity update रहते हैं।
-Idle में लगातार polling नहीं जोड़ी गई है। Login/session check, search, payment और जरूरी
-confirmed-write refresh के calls आवश्यक हैं; पूरे ERP के zero logs की guarantee नहीं है।
-Server confirmation से पहले payment/attendance को Saved नहीं दिखाया जाता।
+FREE TIER / LOAD
+• No added polling, intervals, realtime subscriptions, background API refresh or server logging.
+• QR library is a local vendor asset, loaded once on demand.
+• Loaded photo and QR values are reused for repeated preview; format changes do not reload student data.
+• Scanner stops the camera/worker/timers on close, hidden page and navigation as before.
+• Existing attendance records, correction audit, and idempotency receipts remain necessary operational data. They are not suppressed or deleted to claim zero logs.
+• No claim of zero Supabase usage: genuine login/save still uses the server. Production log volume must be observed after deployment.
 
-Upload के बाद छोटी practical जाँच
-1. Admin और एक approved Teacher scanner में एक current QR 5 बार दिखाएँ:
-   केवल पहली नई attendance count हो; फिर Admit/Desk alias से वही बच्चा जाँचें।
-2. उसी student की Daily और matching Exam attendance list देखें; marks सुरक्षित हों।
-3. Fee search → payment → receipt → recent activity/central due देखें।
-   Network uncertainty में वही pending receipt retry करें; नया payment न बनाएँ।
-4. Marksheet और Student/Teacher ID का Preview → PDF → Print जाँचें।
-5. Mobile और laptop पर Dashboard खोलें।
+VALIDATION
+• 129 inline index scripts + changed external JS parsed successfully.
+• Chromium: 20 normal-data Student/Teacher template cases passed.
+• Chromium: 20 long-data/optional-field template cases passed.
+• Sample 10-landscape-card and 9-portrait-card PDFs each occupy one A4 page.
+• QR image decoded; same cached QR reproduced with only one mocked token lookup.
+• Mocked scanner: duplicate request suppressed; correction reason/expected revision sent; cancellation sent no save; idle extra requests zero; unauthenticated scanner blocked.
+• Mocked login: duplicate click suppressed; success/error overlay cleanup passed.
+• Tests used isolated fixture data. Actual Supabase SQL execution, real account login/logout, teacher-QR permissions, camera hardware, and physical printer output were NOT tested against your school database.
+• Existing unrelated V450 modules are preserved, not represented as fully retested.
 
-जाँच की सीमा
-इस package के runtime bytes V450 के tested combined code से मिलाए गए हैं।
-दो rounds में QR, fee, document और desktop browser checks पास हैं।
-76 linked + 129 inline scripts compile; checked local assets में missing file नहीं।
-SQL का actual PL/pgSQL local PostgreSQL/PGlite fixtures में जाँचा गया है।
-4-hour fee test में simulated clock और repeated operations थे; वास्तविक 4 घंटे का
-production load, physical camera और आपके live database को सीधे test नहीं किया है।
-CHECK_REPORT.json में file hashes, merge coverage और local test results हैं।
-README और CHECK_REPORT को website पर upload करना जरूरी नहीं है।
+SQL SAFETY
+The revised SQL/02 only changes the correction response metadata compared with V450. It retains the same auth checks and daily/exam save behavior. No DROP/TRUNCATE/reset, student deletion, fee reset, or log-generation trigger has been added. Each SQL file is under 20 KB.
+
+RECHECK — REVISION 452
+• Main Teacher Dashboard card also renamed from singular Student Photo to Student ID Card.
+• Teacher dashboard Logout now uses the common login/logout transition owner.
+• Navigation cancels pending ID work; late results cannot replace the new route.
+• QR processing stops on account/session changes or detached cards; old QR work does not keep requesting new rows.
+• Printing checks preview account/session and current layout settings.
+• A template chosen while preview is preparing is queued once and applied after current work finishes; it reuses QR tokens.
+• Failed photo signing is attempted at most once per photo path in the currently loaded teacher photo list. Reopen the module for an explicit retry.
+• Partly cached teacher photos are retained when missing photos are fetched.
+• SQL is byte-for-byte unchanged from the first V450 updated package. If you already ran that updated SQL/02, no SQL rerun is needed for this recheck.
+• 40 template layout cases passed again; navigation/account-change/latest-template/outdated-print regression tests passed.
+• Live school database and account testing remains pending. This is a tested source update, not a claim that every existing V450 module has been production-tested.
+
+SECOND RECHECK — REVISION 453
+• Fixed stale cache URLs in the shared A4 print transport. ID CSS and preview HTML now request the updated versions, including when an older V450 viewer was cached.
+• A batch selected while a preview is preparing is queued as the latest request. Tested switching from first 100 cards to the final 101st card before preparation finished; correct final batch shown and existing QR lookup reused.
+• Teacher photo/ID metadata now loads assigned students in ordered 500-row pages instead of one silently capped request. Only 12 card elements and their photo/QR assets render per visible page.
+• Excludes archived/recycled/transferred records and other academic sessions. Route/account changes cancel pending teacher-list reads; no new page request after cancellation.
+• Isolated shared ID viewer test: 10 landscape cards / 9 portrait cards, correct card dimensions, QR images retained, Print button invoked successfully. Unrelated admit/marksheet layout modules were excluded from this isolated ID test.
+• PDFs from the prepared viewer document: one A4 page each; QR crops from both PDFs decoded at 300 DPI. This does not replace a physical printer/camera test.
+• 1,601-row mocked metadata read: four requests, 1,599 active current-session rows retained (two excluded intentionally). Cancelled read: zero additional requests.
+• All 40 normal/long template cases, scanner duplicate/correction/cancel cases, auth transition cases, and syntax checks passed again.
+• SQL unchanged from the preceding updated ZIP; no SQL rerun for this second recheck if its updated SQL was already applied.
+
+APPEARANCE — LIGHT / DARK / SYSTEM
+• नीचे दाईं ओर “रंग / Theme” बटन दबाएँ। Light / Dark / System चुनें। पुराने Dark Mode buttons भी इसी picker को खोलते हैं।
+• System मोबाइल/कंप्यूटर के OS colour preference का पालन करता है। Manual Light/Dark आपकी चुनी पसंद रखता है।
+• यह setting इसी browser/device में local रूप से सेव होती है और इसी browser के दूसरे tabs में sync होती है। कोई school database setting नहीं लिखी जाती।
+• एक ही theme owner: पुराने v75Dark/html.dark toggles को नई appearance settings से जोड़ा गया है। कोई duplicate theme listener loop, polling, timer या realtime subscription नहीं।
+• ERP forms, tables, common dashboard cards, dialogs and Parent/Teacher/Admin portal surfaces use dark colours. Logos/photos/QR are not inverted.
+• Official document pages retain their original design; paper editor remains white with dark text. Print/PDF stays light and hides the theme control.
+• Existing public website brand colours are retained. Appearance applies primarily to ERP/login/portal screens.
+• कोई SQL नहीं चलानी है। नई appearance-v454.js और appearance-v454.css सहित updated root files upload करें और एक बार refresh करें।
+• Tests: system-following, manual selection, preference persistence, cross-tab sync, legacy-button compatibility, white print, readable paper editor and zero database/API calls on appearance changes passed. 20 Student/Teacher ID layouts also passed under dark mode.
+• Current tests use local fixtures; live production screen coverage and real devices/printers remain to be checked after upload.

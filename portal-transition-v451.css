@@ -1,0 +1,5 @@
+#portal451Transition{position:fixed;inset:0;z-index:2147483646;display:grid;place-items:center;background:#f3f8fd;color:#173f65;padding:24px;font:16px/1.6 system-ui;text-align:center}#portal451Transition[hidden]{display:none}#portal451Transition>div{max-width:520px}#portal451Transition img{display:block;width:88px;height:88px;object-fit:contain;margin:0 auto 18px}#portal451Transition strong{display:block;font-size:20px}
+#publicSite .v26Brand{display:flex!important;align-items:center!important;gap:16px!important}#publicSite .v26Brand>img{position:static!important;width:80px!important;height:80px!important;min-width:80px;object-fit:contain!important;transform:none!important;margin:0!important}#publicSite .v26Brand>div{min-width:0;flex:1}@media(max-width:700px){#publicSite .v26Brand{gap:10px!important;padding:12px!important}#publicSite .v26Brand>img{width:64px!important;height:64px!important;min-width:64px}#publicSite .v26Brand b{font-size:clamp(18px,4.5vw,28px)!important;line-height:1.12!important}}
+
+/* The translated primary labels already carry the selected language. */
+#v185FrontDesk .v185FrontActions button>small{display:none!important}
