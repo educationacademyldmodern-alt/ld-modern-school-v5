@@ -1,0 +1,7 @@
+V450 — नोट की गई समस्याएँ और स्थिति
+1. Parent login सीधे My Children — code सुधार, local test पास।
+2. Login/Logout का अनावश्यक इंतजार — duplicate load/serial cleanup/full-screen splash सुधारे; stale startup response guarded; local tests पास। वास्तविक network/auth timing live पर नापा नहीं है।
+3. Floating Theme — हटाकर Header/Login/Menu में; Light/Dark/System और Print सुरक्षा test पास।
+4. Admin Login Back — login card में जोड़ा; mobile/desktop fixture test पास।
+5. Logs/load — दोहरा Parent load हटाया; बदले flows के idle test में अतिरिक्त requests नहीं। पुराने 15.755 GB का live स्रोत अभी अपुष्ट। पूरे ERP के zero logs की गारंटी नहीं।
+इस revision के लिए नई SQL नहीं है। पुराने data और permissions बनाए रखे हैं।

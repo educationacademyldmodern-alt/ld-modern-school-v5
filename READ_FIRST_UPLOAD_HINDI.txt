@@ -1,6 +1,6 @@
 L D MODERN EDUCATION ACADEMY
 V450 UPDATED — ID CARD / QR / LOGIN / LIGHT-DARK APPEARANCE
-Appearance revision 454 (cache version only); V450 remains the source package.
+Portal/UI revision 455; V450 remains the source package.
 
 यह नया ERP install या पुरानी database पर rollback नहीं है।
 यह मौजूदा V450 update package का संशोधित संस्करण है। पुराने V450 के बाकी correction files इसी ZIP में रखे गए हैं।
@@ -8,7 +8,7 @@ Appearance revision 454 (cache version only); V450 remains the source package.
 लगाने का तरीका
 1. वर्तमान website files और database का अपना backup रखें।
 2. ZIP की root files तथा vendor/ folder को website की उन्हीं जगहों पर upload/replace करें। SQL और रिपोर्ट website runtime files नहीं हैं। दूसरे मौजूदा files delete न करें।
-3. V450 SQL पहले चला चुके हैं तो इस revision के लिए केवल SQL/02_FAST_MASTER_QR_V448.sql एक बार चलाएँ। इससे correction popup में सही student/class/roll/exam details लौटेंगी। SQL/00 से पहले मौजूदा function definition का read-only export ले सकते हैं।
+3. इस नए Parent/Login/Theme revision 455 के लिए कोई नई SQL नहीं है। पहले दिए corrected V450 की SQL/02 पहले चला चुके हों तो दोबारा न चलाएँ। केवल मूल V450 SQL इस्तेमाल की थी और correction popup के metadata वाला संशोधन नहीं लगाया था, तभी पुराने README के उस prerequisite को अलग से लागू करें। SQL/00 read-only backup है।
 4. SQL/01 केवल तब, जब V450 का shared ID layout column अभी नहीं जोड़ा गया है। पहले चल चुका हो तो फिर जरूरी नहीं। SQL/03 को इस UI update के लिए फिर चलाने की जरूरत नहीं। SQL/04 केवल optional read-only check है।
 5. Browser में एक बार hard refresh करें। नई JS/CSS के cache versions बदले गए हैं।
 
@@ -38,7 +38,7 @@ ATTENDANCE / QR
 • Teacher QR continues to use the existing ldm_get_teacher_qr and gate permission rules. It does not grant extra teacher permissions or create a public student data endpoint.
 
 LOGIN / LOGOUT / DISPLAY
-• Event-driven school-logo transition overlay while login/dashboard/logout completes.
+• Compact, event-driven status during login/logout; the full-screen logo splash has been removed. No minimum animation delay.
 • Duplicate login clicks suppressed; failure removes the overlay. Existing auth/permission checks are kept.
 • Public school logo has explicit size/alignment. Redundant secondary labels in Daily Quick Desk are hidden.
 • This addresses the exposed partial screen during transitions. A live production auth-loop diagnosis has not been performed, so it is not a guarantee against every pre-existing rendering issue.
@@ -90,7 +90,7 @@ SECOND RECHECK — REVISION 453
 • SQL unchanged from the preceding updated ZIP; no SQL rerun for this second recheck if its updated SQL was already applied.
 
 APPEARANCE — LIGHT / DARK / SYSTEM
-• नीचे दाईं ओर “रंग / Theme” बटन दबाएँ। Light / Dark / System चुनें। पुराने Dark Mode buttons भी इसी picker को खोलते हैं।
+• ERP Header में “थीम / Theme”, Login form में “Appearance / थीम”, या Parent Menu के Appearance विकल्प से Light / Dark / System चुनें। Floating Theme button हटाया गया है।
 • System मोबाइल/कंप्यूटर के OS colour preference का पालन करता है। Manual Light/Dark आपकी चुनी पसंद रखता है।
 • यह setting इसी browser/device में local रूप से सेव होती है और इसी browser के दूसरे tabs में sync होती है। कोई school database setting नहीं लिखी जाती।
 • एक ही theme owner: पुराने v75Dark/html.dark toggles को नई appearance settings से जोड़ा गया है। कोई duplicate theme listener loop, polling, timer या realtime subscription नहीं।
@@ -100,3 +100,16 @@ APPEARANCE — LIGHT / DARK / SYSTEM
 • कोई SQL नहीं चलानी है। नई appearance-v454.js और appearance-v454.css सहित updated root files upload करें और एक बार refresh करें।
 • Tests: system-following, manual selection, preference persistence, cross-tab sync, legacy-button compatibility, white print, readable paper editor and zero database/API calls on appearance changes passed. 20 Student/Teacher ID layouts also passed under dark mode.
 • Current tests use local fixtures; live production screen coverage and real devices/printers remain to be checked after upload.
+
+LATEST NOTED CORRECTIONS — REVISION 455
+1. Parent Login: सीधे My Children सूची; पहले वाला Welcome/Profile Photo/Load Dashboard चरण नहीं। School brand + linked child cards. Child click opens its existing detail card; Back returns locally.
+2. Login/Logout: duplicate parent-loader call removed; single-flight login/parent load; startup restore rejects results from before a login/logout action. Channel cleanup starts without serially delaying auth signout. No full-screen logo splash or artificial wait. Auth completion is still required, so internet/server latency remains possible. Successful logout clears visible identity and performs one clean navigation to discard old module caches. Failed logout retains the session and removes the status.
+3. Appearance: floating bottom button removed. Header/Login/Parent Menu options; Light/Dark/System preference local; document colours preserved.
+4. Admin Login Back: always-visible button inside the login card, including mobile. Returns to the school website.
+5. Load/log prevention: deduplicated parent summary path, cached back navigation, explicit Refresh forces reload once; no new polling/retry loop or endpoint in these changes. Existing auth/RLS/necessary writes retained.
+
+IMPORTANT LIMITS
+• Historical 15.755 GB Log Ingestion has NOT been diagnosed against live Supabase logs. These source changes prevent identified duplicate work; they do not delete earlier usage or guarantee zero logs/free-plan usage.
+• Parent test uses actual base renderer and new route owner with mocked auth/summary; older enrichers are represented by a brand wrapper. Full inherited external modules, production auth latency, all live account mappings and real devices still require upload verification.
+• Existing Parent extra services are retained in the original loader chain. Their reads still occur once when that chain loads; this is not a claim that the complete Parent portal makes only one total API request.
+• No SQL changed from revision 454; no data/table/reset migration added.

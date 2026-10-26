@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head>
-<link rel="stylesheet" href="appearance-v454.css?v=454" media="screen"><script src="appearance-v454.js?v=454"></script>
+<link rel="stylesheet" href="appearance-v454.css?v=455" media="screen"><script src="appearance-v454.js?v=455"></script>
 <script src="network-economy-v433.js?v=434"></script>
 <script>document.documentElement.classList.add('ldmBootLock');</script>
 <script id="ldm-v146-boot-safety">/* V146: no global visibility boot-lock. It could remain forever and blank the whole ERP. */</script>
@@ -971,7 +971,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 <footer class="premiumFooter"><div class="footBrand"><img src="school-logo.png" alt="School Logo"><div><b id="footSchool">L D MODERN EDUCATION ACADEMY</b><span>Knowledge • Discipline • Character</span></div></div><div class="footMotto">A Better Education • A Brighter Tomorrow</div><span>Public Website + Smart Cloud ERP<br><small>© 2026 L D MODERN EDUCATION ACADEMY. All Rights Reserved.</small></span></footer>
 </div>
 
-<section id="login" class="auth hidden"><div class="loginGrid"><div class="loginHero"><img src="school-logo.png" alt="School Logo" style="width:104px;height:104px;object-fit:contain"><h1>L D MODERN EDUCATION ACADEMY</h1><p>Premium Secure School ERP</p><button class="ghost" onclick="backWebsite()">← Public Website</button></div><div class="authCard"><span class="pill">OFFICIAL SCHOOL ERP LOGIN</span><h2>Welcome Back</h2><div id="ldmSecurityOrigin" class="ldmSecurityOrigin" aria-live="polite"></div><label class="ldmLoginLabel" for="email">Email / Login ID</label><input id="email" name="username" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Email"><label class="ldmLoginLabel" for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password"><button id="ldmPrimaryLoginBtn" onclick="login()">Login</button><div class="loginLinks"><small>Accounts are created by School Admin only.</small></div><small>Admin • Principal • Admission • Accountant • Teacher • Student • Parent</small></div></div></section>
+<section id="login" class="auth hidden"><div class="loginGrid"><div class="loginHero"><img src="school-logo.png" alt="School Logo" style="width:104px;height:104px;object-fit:contain"><h1>L D MODERN EDUCATION ACADEMY</h1><p>Premium Secure School ERP</p><button class="ghost" onclick="backWebsite()">← Public Website</button></div><div class="authCard"><div class="ldmAuthActions455"><button type="button" onclick="backWebsite()">← वापस / Back</button><button type="button" data-ldm-appearance-open>◐ Appearance / थीम</button></div><span class="pill">OFFICIAL SCHOOL ERP LOGIN</span><h2>Welcome Back</h2><div id="ldmSecurityOrigin" class="ldmSecurityOrigin" aria-live="polite"></div><label class="ldmLoginLabel" for="email">Email / Login ID</label><input id="email" name="username" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Email"><label class="ldmLoginLabel" for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password"><button id="ldmPrimaryLoginBtn" onclick="login()">Login</button><div class="loginLinks"><small>Accounts are created by School Admin only.</small></div><small>Admin • Principal • Admission • Accountant • Teacher • Student • Parent</small></div></div></section>
 
 <div id="erp" class="erp hidden"><aside><div class="sideBrand"><div class="logoText small">LD</div><div><b id="sideName">L D MODERN EDUCATION ACADEMY</b><small id="roleText"></small></div></div><nav id="erpNav"></nav><button class="logout" onclick="logout()">⇥ Logout</button></aside><main><header class="erpTop"><button class="hamb" onclick="document.querySelector('#erp aside').classList.toggle('open')">☰</button><button class="erpHomeBtn" onclick="erpGoHome()" title="Home">🏠 Home</button><div><h2 id="erpTitle">Dashboard</h2><p id="erpSub"></p></div><button class="websiteBtn" onclick="backWebsite()">View Website</button></header><section id="erpContent"></section></main></div>
 <div id="modal" class="modal hidden"><div class="modalCard"><div class="modalHead"><h3 id="modalTitle"></h3><button onclick="closeModal()">✕</button></div><form id="dataForm"></form></div></div>
@@ -1143,7 +1143,7 @@ function applySchool(){
 }
 async function publicData(){let [{data:staff},{data:events},{data:notices},{data:gallery}]=await Promise.all([sb.from("staff").select("*").eq("status","Active").limit(6),sb.from("events").select("*").order("event_date",{ascending:true}).limit(6),sb.from("notices").select("*").order("date",{ascending:false}).limit(8),sb.from("gallery").select("*").order("created_at",{ascending:false}).limit(8)]);$("facultyCards").innerHTML=(staff||[]).length?staff.map(x=>`<article><h3>${esc(x.staff_name)}</h3><p>${esc(x.designation||x.staff_type||"Faculty")} ${x.subject?"• "+esc(x.subject):""}</p></article>`).join(""):'<div class="empty">Faculty will appear here.</div>';$("eventCards").innerHTML=(events||[]).length?events.map(x=>`<article><h3>${esc(x.title)}</h3><p>${esc(x.event_date)} • ${esc(x.event_type||"Event")}</p><p>${esc(x.description||"")}</p></article>`).join(""):'<div class="empty">Upcoming events will appear here.</div>';$("noticeCards").innerHTML=(notices||[]).length?notices.map(x=>`<div class="noticeItem"><b>${esc(x.title)}</b><small> ${esc(x.date||"")}</small><p>${esc(x.message||"")}</p>${x.download_url?`<a href="${esc(x.download_url)}" target="_blank">Download</a>`:""}</div>`).join(""):'<div class="empty">Notices will appear here.</div>';$("galleryGrid").innerHTML=(gallery||[]).length?gallery.map(x=>x.media_type?.toLowerCase().includes("video")?`<video controls src="${esc(x.media_url)}"></video>`:`<img src="${esc(x.media_url)}" alt="${esc(x.title)}">`).join(""):'<div class="empty">Add gallery items from ERP.</div>'}
 function openPortal(target){if(target)localStorage.setItem('ld_after_login_target',target);if(!cfg){$("publicSite").classList.add("hidden");$("setup").classList.remove("hidden");return}$("publicSite").classList.add("hidden");$("login").classList.remove("hidden")}function backWebsite(){window.__ldmPublicMode=true;try{history.pushState({ldmPublic:true},"",location.href)}catch(_e){};["login","setup","erp","parentDashboard"].forEach(x=>$(x)?.classList.add("hidden"));$("publicSite")?.classList.remove("hidden");showPublicPage("home");setTimeout(()=>{window.scrollTo(0,0)},0)}
-async function login(){let{data,error}=await sb.auth.signInWithPassword({email:$("email").value,password:$("password").value});if(error)return toast(error.message);user=data.user;await loadProfile();openERP()}async function signup(){let name=prompt("Full Name");if(!name)return;let email=prompt("Email");if(!email)return;let password=prompt("Password (minimum 6)");if(!password)return;let{error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});toast(error?error.message:"Account created. Admin will assign role.")}async function loadProfile(){let{data}=await sb.from("profiles").select("*").eq("id",user.id).single();profile=data||{role:"viewer",full_name:user.email}}async function logout(){await sb.auth.signOut();location.reload()}
+async function login(){let{data,error}=await sb.auth.signInWithPassword({email:$("email").value,password:$("password").value});if(error)return toast(error.message);user=data.user;await loadProfile();openERP()}async function signup(){let name=prompt("Full Name");if(!name)return;let email=prompt("Email");if(!email)return;let password=prompt("Password (minimum 6)");if(!password)return;let{error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});toast(error?error.message:"Account created. Admin will assign role.")}async function loadProfile(){let{data}=await sb.from("profiles").select("*").eq("id",user.id).single();profile=data||{role:"viewer",full_name:user.email}}async function logout(){const r=await sb.auth.signOut();if(r?.error)throw r.error;window.ldmFinishSignOut455?.()}
 function erpGoHome(){document.querySelector('#erp aside')?.classList.remove('open');render('dashboard');}
 function openERP(){/* V437: document preferences load when the document module is opened. */$("login").classList.add("hidden");$("publicSite").classList.add("hidden");$("erp").classList.remove("hidden");$("roleText").textContent=(profile.role||"viewer").replaceAll("_"," ");$("erpNav").innerHTML=nav.filter(x=>can(x[0])).map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join("");let t=localStorage.getItem('ld_after_login_target');localStorage.removeItem('ld_after_login_target');applyPortalWallpapers();return render(t&&can(t)?t:"dashboard")}
 
@@ -1449,7 +1449,7 @@ async function sendParentEmailLink(){
  toast(error?error.message:'Secure login link email पर भेज दिया गया');
 }
 async function restoreParentSession(){if(!cfg)return false;let{data:{session}}=await sb.auth.getSession();if(!session?.user?.email)return false;parentVerifiedEmail=String(session.user.email).toLowerCase();return true}
-async function parentSignOut(){await sb.auth.signOut();parentVerifiedEmail="";localStorage.removeItem('ld_auth_intent');location.reload()}
+async function parentSignOut(){return window.logout()}
 let parentIntent437='';
 const parentOwner437=()=>[user?.id,profile?.role,school?.academic_session].join('|');
 async function loadParentPortal(){
@@ -4121,7 +4121,7 @@ openERP=async function(){
 const v49LogoutBase=logout;
 logout=async function(){
   try{
-    if(v49RealtimeChannel){await sb.removeChannel(v49RealtimeChannel);v49RealtimeChannel=null}
+    if(v49RealtimeChannel){void sb.removeChannel(v49RealtimeChannel).catch(()=>{});v49RealtimeChannel=null}
   }catch(_e){}
   return await v49LogoutBase();
 };
@@ -5897,10 +5897,10 @@ async function v64EnhanceParentPortal(){
 }
 function v64ParentStudent(adm){return v64ParentServices.find(x=>String(x.admission_no)===String(adm))}
 function v64OpenParentLeave(adm){let s=v64ParentStudent(adm);if(!s)return;v64Modal(`<h2>🗓 Apply Student Leave</h2><p><b>${esc(s.student_name)}</b> • ${esc(s.class_name)} • ${esc(adm)}</p><div class="v64Form"><label>From Date<input id="v64LeaveFrom" type="date" value="${today()}"></label><label>To Date<input id="v64LeaveTo" type="date" value="${today()}"></label><label>Leave Type<select id="v64LeaveType"><option>Sick</option><option>Family</option><option>Emergency</option><option>Medical</option><option>Other</option></select></label><label class="full">Reason<textarea id="v64LeaveReason" placeholder="Leave reason"></textarea></label></div><button class="primary" onclick="v64SubmitParentLeave('${esc(adm)}')">Submit Leave Request</button>`)}
-async function v64SubmitParentLeave(adm){let f=$('v64LeaveFrom').value,t=$('v64LeaveTo').value,ty=$('v64LeaveType').value,r=$('v64LeaveReason').value.trim();if(!f||!t)return toast('Leave dates required');let{error}=await sb.rpc('parent_submit_student_leave',{p_admission_no:adm,p_from:f,p_to:t,p_leave_type:ty,p_reason:r});if(error)return toast(error.message);v64CloseModal();toast('Leave request sent • Pending approval');await loadParentPortal()}
+async function v64SubmitParentLeave(adm){let f=$('v64LeaveFrom').value,t=$('v64LeaveTo').value,ty=$('v64LeaveType').value,r=$('v64LeaveReason').value.trim();if(!f||!t)return toast('Leave dates required');let{error}=await sb.rpc('parent_submit_student_leave',{p_admission_no:adm,p_from:f,p_to:t,p_leave_type:ty,p_reason:r});if(error)return toast(error.message);v64CloseModal();toast('Leave request sent • Pending approval');await loadParentPortal({force:true})}
 function v64CorrectionFieldType(){let f=$('v64CorrField')?.value,el=$('v64CorrValue');if(el)el.type=f==='dob'?'date':'text'}
 function v64OpenParentCorrection(adm){let s=v64ParentStudent(adm);if(!s)return;v64Modal(`<h2>✏ Student Data Correction</h2><p><b>${esc(s.student_name)}</b> • ${esc(adm)}</p><div class="v64Form"><label>Field<select id="v64CorrField" onchange="v64CorrectionFieldType()"><option value="phone">Mobile</option><option value="address">Address</option><option value="roll_no">Roll No.</option><option value="guardian_name">Guardian Name</option><option value="emergency_phone">Emergency Phone</option><option value="student_name">Student Name (Admin approval)</option><option value="father_name">Father Name (Admin approval)</option><option value="mother_name">Mother Name (Admin approval)</option><option value="dob">DOB (Admin approval)</option></select></label><label>New Correct Value<input id="v64CorrValue"></label><label class="full">Reason<textarea id="v64CorrReason"></textarea></label></div><button class="primary" onclick="v64SubmitParentCorrection('${esc(adm)}')">Submit Correction Request</button>`)}
-async function v64SubmitParentCorrection(adm){let field=$('v64CorrField').value,val=$('v64CorrValue').value.trim(),reason=$('v64CorrReason').value.trim();if(!val)return toast('New value required');let changes={[field]:val};let{error}=await sb.rpc('parent_submit_student_correction',{p_admission_no:adm,p_changes:changes,p_reason:reason});if(error)return toast(error.message);v64CloseModal();toast('Correction request sent');await loadParentPortal()}
+async function v64SubmitParentCorrection(adm){let field=$('v64CorrField').value,val=$('v64CorrValue').value.trim(),reason=$('v64CorrReason').value.trim();if(!val)return toast('New value required');let changes={[field]:val};let{error}=await sb.rpc('parent_submit_student_correction',{p_admission_no:adm,p_changes:changes,p_reason:reason});if(error)return toast(error.message);v64CloseModal();toast('Correction request sent');await loadParentPortal({force:true})}
 async function v64ParentViewMarksheet(adm,exam){let{data,error}=await sb.rpc('parent_published_marksheet',{p_admission_no:adm,p_exam_name:exam});if(error)return toast(error.message);let s=data?.student||{},marks=data?.marks||[];let id='v64ParentMarksheetPreview';v64Modal(`<h2>📄 ${esc(exam)} Marksheet</h2><div id="${id}">${renderMarksheetHtml(s,marks,exam,getDocFormat?.('marksheet')||1)}</div><div class="v64ServiceActions"><button class="primary" onclick="v14Pdf('${id}','${esc((s.student_name||'student').replace(/[^a-z0-9]/gi,'_'))}-${esc(exam).replace(/[^a-z0-9]/gi,'_')}.pdf')">Download PDF</button><button onclick="v14Print('${id}')">Print</button></div>`)}
 async function v64OpenLearning(adm){let{data,error}=await sb.rpc('parent_class_learning',{p_admission_no:adm});if(error)return toast(error.message);let d=data?.daily_teaching||[],h=data?.homework||[];v64Modal(`<h2>📚 Daily Class / Homework</h2><div class="v64Learning"><h3>Today's / Recent Study</h3>${d.length?d.map(x=>`<div><b>${esc(x.subject||'')} • ${v64FmtDate(x.teaching_date)}</b><span>${esc(x.topic||'')} ${x.details?'• '+esc(x.details):''}</span><small>${esc(x.homework_remark||'')}</small></div>`).join(''):'<p>No daily teaching update yet.</p>'}<h3>Worksheet / Homework</h3>${h.length?h.map(x=>`<div><b>${esc(x.subject||'')} • ${esc(x.title||'')}</b><span>${esc(x.description||'')}</span><small>${v64FmtDate(x.date)} ${x.due_date?'• Due '+v64FmtDate(x.due_date):''}</small></div>`).join(''):'<p>No homework update yet.</p>'}</div>`)}
 
@@ -10398,7 +10398,7 @@ async function v97OpenSearch(){let q=String($('v97DashQ')?.value||'').trim();awa
 try{const v97TeacherDashBase=v90TeacherDashboard;v90TeacherDashboard=async function(){let r=await v97TeacherDashBase.apply(this,arguments);setTimeout(v97DecorateDashboard,0);return r}}catch(_e){}
 
 /* Parent dashboard same premium greeting; data cards stay below it. */
-function v97PolishParentPortal(){try{let pd=$('parentDashboard'),body=$('parentDashboardBody');if(!pd||pd.classList.contains('hidden')||!body)return;let old=$('v97ParentWelcome');if(old)old.remove();if(body.querySelector('.v114PortalHero')){v97StartClock();return}let name=profile?.full_name||v97RoleLabel(),hero=document.createElement('section');hero.id='v97ParentWelcome';hero.className='v97ParentWelcome';hero.innerHTML=`${v97AvatarHtml('v97ParentAvatar')}<div><small>${v97Safe(school?.dashboard_welcome_text||'Welcome to My LDM Kingdom')}</small><b>${v97Safe(v97Greeting())} ${v97Safe(v97RoleLabel())}</b><span>${v97Safe(name)} • <span data-v97-clock>${v97Safe(v97NowText())}</span></span></div><button onclick="v97ShowParentProfile()">👤 Profile Photo</button>`;body.prepend(hero);v97StartClock()}catch(_e){}}
+function v97PolishParentPortal(){if(window.LDM_PARENT455)return;try{let pd=$('parentDashboard'),body=$('parentDashboardBody');if(!pd||pd.classList.contains('hidden')||!body)return;let old=$('v97ParentWelcome');if(old)old.remove();if(body.querySelector('.v114PortalHero')){v97StartClock();return}let name=profile?.full_name||v97RoleLabel(),hero=document.createElement('section');hero.id='v97ParentWelcome';hero.className='v97ParentWelcome';hero.innerHTML=`${v97AvatarHtml('v97ParentAvatar')}<div><small>${v97Safe(school?.dashboard_welcome_text||'Welcome to My LDM Kingdom')}</small><b>${v97Safe(v97Greeting())} ${v97Safe(v97RoleLabel())}</b><span>${v97Safe(name)} • <span data-v97-clock>${v97Safe(v97NowText())}</span></span></div><button onclick="v97ShowParentProfile()">👤 Profile Photo</button>`;body.prepend(hero);v97StartClock()}catch(_e){}}
 async function v97ShowParentProfile(){if(!user?.id)return;let body=$('parentDashboardBody');if(!body)return;let photo=v97AvatarUrl(),name=profile?.full_name||v97RoleLabel();body.innerHTML=`<section class="v97ProfileCard"><div class="v97AvatarBox">${photo?`<img src="${v97Safe(photo)}?v=${Date.now()}" alt="Profile">`:`<div class="v97AvatarLargeFallback">${v97Safe(v97Initials(name))}</div>`}<div class="v97ProfileActions"><label>📷 Update Photo<input id="v97ParentAvatarFile" type="file" accept="image/jpeg,image/png,image/webp" onchange="v97UploadAvatar(this)"></label></div></div><div><h2>${v97Safe(name)}</h2><p class="note">${v97Safe(v97RoleLabel())} Profile</p><div class="v97ProfileInfo"><div><small>Role</small><b>${v97Safe(v97RoleLabel())}</b></div><div><small>Status</small><b>${v97Safe(profile?.status||'Active')}</b></div></div><div id="v97AvatarStatus" class="v97ProfileHint">Photo update यहीं रहेगा; dashboard अपने-आप Home नहीं जाएगा.</div><div class="v97ProfileActions"><button class="secondary" onclick="loadParentPortal()">← Parent Dashboard</button>${photo?'<button class="secondary" onclick="v97RemoveAvatar().then(()=>loadParentPortal())">Remove Photo</button>':''}</div></div></section>`}
 try{const v97ParentLoadBase=loadParentPortal;loadParentPortal=async function(){let r=await v97ParentLoadBase.apply(this,arguments);setTimeout(v97PolishParentPortal,30);return r}}catch(_e){}
 
@@ -11264,7 +11264,7 @@ try{
 }catch(_e){}
 try{const v113OpenERPBase=openERP;openERP=async function(){let r=await v113OpenERPBase.apply(this,arguments);setTimeout(()=>{v113StartFallback()},260);return r}}catch(_e){}
 try{const v113ParentLoadBase=loadParentPortal;loadParentPortal=async function(){let r=await v113ParentLoadBase.apply(this,arguments);setTimeout(()=>{v113StartParentRealtime();v113StartFallback()},180);return r}}catch(_e){}
-try{const v113LogoutBase=logout;logout=async function(){await v113StopChannel(v113LiveChannel);await v113StopChannel(v113ParentChannel);v113LiveChannel=null;v113LiveKey='';v113ParentChannel=null;v113ParentKey='';clearInterval(v113FallbackTimer);return await v113LogoutBase.apply(this,arguments)}}catch(_e){}
+try{const v113LogoutBase=logout;logout=async function(){void v113StopChannel(v113LiveChannel);void v113StopChannel(v113ParentChannel);v113LiveChannel=null;v113LiveKey='';v113ParentChannel=null;v113ParentKey='';clearInterval(v113FallbackTimer);return await v113LogoutBase.apply(this,arguments)}}catch(_e){}
 
 </script>
 
@@ -12023,7 +12023,7 @@ window.V6417_BUILD='V64.17-RESOURCE-CONNECTION-OPTIMIZED-2026-09-20';
     const base=window.logout;
     if(typeof base==='function')window.logout=async function(){
       clearTimeout(cleanupTimer);
-      try{await v113StopChannel(window.v113LiveChannel);await v113StopChannel(window.v113ParentChannel)}catch(_e){}
+      try{void v113StopChannel(window.v113LiveChannel);void v113StopChannel(window.v113ParentChannel)}catch(_e){}
       return await base.apply(this,arguments)
     }
   }catch(_e){}
@@ -12590,7 +12590,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
      await parentLoginCanonicalBase.apply(this,arguments);
      if(!window.user||!parent())return;
      window.parentVerifiedEmail=String(window.user?.email||'').toLowerCase();
-     surface('parent');await window.loadParentPortal?.();surface('parent');window.scrollTo(0,0);
+     surface('parent');window.scrollTo(0,0);
    }catch(e){
      try{await window.sb?.auth?.signOut?.()}catch(_e){}
      window.user=null;window.profile=null;window.showPublicPage?.('parentPortal');$('parentGate')?.classList.remove('hidden');status('Parent login failed: '+(e?.message||String(e)));
@@ -13296,6 +13296,7 @@ function capture(v){
 
 /* FINAL REFRESH RESTORE — same authenticated role + same internal module */
 async function restore(){
+  const restoreEpoch455=window.__ldmAuthEpoch455||0;
   if(window.__ldmInteractiveLogin)return;
   try{
     if(!window.sb && typeof window.init==='function'){
@@ -13304,6 +13305,7 @@ async function restore(){
 
     const ss=await window.sb?.auth?.getSession?.();
     const session=ss?.data?.session;
+    if(restoreEpoch455!==(window.__ldmAuthEpoch455||0))return;
 
     if(!session){
       surface('public');
@@ -13318,6 +13320,7 @@ async function restore(){
       await window.loadProfile();
     }
 
+    if(restoreEpoch455!==(window.__ldmAuthEpoch455||0)||window.__ldmInteractiveLogin)return;
     /* Parent keeps its own portal */
     if(parent()){
       surface('parent');
@@ -18326,7 +18329,7 @@ body:has(#erp:not(.hidden)) #ldmV281Refresh,body:has(#parentPortal:not(.hidden) 
    try{
      if(parentVisible){
        if(typeof window.loadParentPortal!=='function')throw Error('Parent Portal refresh unavailable');
-       await window.ldmOpenParentData437();
+       await window.loadParentPortal({force:true});
      }else if(current==='dashboard'||(q('erpContent')?.querySelector('.ldmRootAdminDash')&&['admin','super_admin','principal'].includes(String((window.profile||{}).role||'').toLowerCase()))){
        const role=String((window.profile||{}).role||'').toLowerCase();
        const isAdminRole=['admin','super_admin','principal'].includes(role);
@@ -18540,5 +18543,5 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=403r1"></script>
-<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=451"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=445" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=451"><script src="portal-transition-v451.js?v=451"></script></body>
+<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=451"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=445" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=455"><link rel="stylesheet" href="portal-flow-v455.css?v=455"><script src="portal-flow-v455.js?v=455"></script><script src="portal-transition-v451.js?v=455"></script></body>
 </html>

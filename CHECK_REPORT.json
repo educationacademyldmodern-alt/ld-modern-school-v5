@@ -1,6 +1,6 @@
 {
   "source_package": "LDM_V444_TO_V450_ALL_CORRECTIONS_UPLOAD.zip",
-  "revision": "V450 updated / appearance revision 454",
+  "revision": "V450 updated / portal UI revision 455",
   "validation_scope": "Local Chromium fixtures; no production DB access",
   "normal_layout": {
     "report": [
@@ -487,7 +487,7 @@
   },
   "syntax": {
     "inline_script_count": 129,
-    "changed_external_js_count": 7,
+    "changed_external_js_count": 8,
     "failures": []
   },
   "not_tested": [
@@ -1073,5 +1073,67 @@
     ]
   },
   "appearance_database_calls": 0,
-  "sql_changed_for_appearance": false
+  "sql_changed_for_appearance": false,
+  "portal455": {
+    "scope": "Actual parent base renderer and final flow with mocked summary/auth; legacy enrichers represented by brand wrapper",
+    "children": 2,
+    "summaryRequestsPerLogin": 1,
+    "selectedChildCorrect": true,
+    "profileBackCached": true,
+    "explicitRefreshOnce": true,
+    "themeFloating": false,
+    "headerTheme": true,
+    "loginBackMobileDesktop": true,
+    "logoutFailurePreservesSession": true,
+    "logoutSuccessClearsData": true,
+    "singleCacheClearingReload": true,
+    "parentSignOutAuthCalls": 1,
+    "staleRestoreBlocked": true,
+    "passiveRequests": 0,
+    "errors": []
+  },
+  "appearance455": {
+    "systemDark": {
+      "mode": "system",
+      "resolved": "dark"
+    },
+    "docInvariant": true,
+    "systemFollowsLight": true,
+    "manual": {
+      "mode": "dark",
+      "resolved": "dark"
+    },
+    "panel": {
+      "bg": "rgb(23, 36, 56)",
+      "text": "rgb(230, 237, 247)",
+      "input": "rgb(14, 26, 44)"
+    },
+    "print": {
+      "body": "rgb(255, 255, 255)",
+      "button": "none",
+      "doc": "rgb(255, 255, 255)"
+    },
+    "persisted": {
+      "mode": "dark",
+      "resolved": "dark"
+    },
+    "tabsSync": true,
+    "legacy": {
+      "open": true,
+      "oldClicks": 0
+    },
+    "editor": {
+      "background": "rgb(255, 255, 255)",
+      "text": "rgb(23, 41, 61)"
+    },
+    "serverCalls": 0,
+    "errors": []
+  },
+  "historical_logs": {
+    "diagnosed_live": false,
+    "identified_duplicate_parent_load_removed": true,
+    "new_polling": false,
+    "zero_logs_guaranteed": false
+  },
+  "sql455": "Unchanged from revision 454; no new SQL required"
 }
