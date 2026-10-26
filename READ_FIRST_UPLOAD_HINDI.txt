@@ -1,6 +1,6 @@
 L D MODERN EDUCATION ACADEMY
 V450 UPDATED — ID CARD / QR / LOGIN / LIGHT-DARK APPEARANCE
-Portal/UI revision 455; V450 remains the source package.
+Fee plan save + easy installment revision 457; V450 remains the source package.
 
 यह नया ERP install या पुरानी database पर rollback नहीं है।
 यह मौजूदा V450 update package का संशोधित संस्करण है। पुराने V450 के बाकी correction files इसी ZIP में रखे गए हैं।
@@ -8,7 +8,7 @@ Portal/UI revision 455; V450 remains the source package.
 लगाने का तरीका
 1. वर्तमान website files और database का अपना backup रखें।
 2. ZIP की root files तथा vendor/ folder को website की उन्हीं जगहों पर upload/replace करें। SQL और रिपोर्ट website runtime files नहीं हैं। दूसरे मौजूदा files delete न करें।
-3. इस नए Parent/Login/Theme revision 455 के लिए कोई नई SQL नहीं है। पहले दिए corrected V450 की SQL/02 पहले चला चुके हों तो दोबारा न चलाएँ। केवल मूल V450 SQL इस्तेमाल की थी और correction popup के metadata वाला संशोधन नहीं लगाया था, तभी पुराने README के उस prerequisite को अलग से लागू करें। SQL/00 read-only backup है।
+3. फीस save error सुधारने के लिए इस बार Supabase SQL Editor में केवल SQL/05_FEE_PLAN_START_MONTH_V457.sql एक बार चलाएँ। यह नया backend सुधार है। अपेक्षित परिणाम: start_month_guard=true और fee_rpc_patched=true। पुराने SQL/00–04 फिर न चलाएँ।
 4. SQL/01 केवल तब, जब V450 का shared ID layout column अभी नहीं जोड़ा गया है। पहले चल चुका हो तो फिर जरूरी नहीं। SQL/03 को इस UI update के लिए फिर चलाने की जरूरत नहीं। SQL/04 केवल optional read-only check है।
 5. Browser में एक बार hard refresh करें। नई JS/CSS के cache versions बदले गए हैं।
 
@@ -113,3 +113,26 @@ IMPORTANT LIMITS
 • Parent test uses actual base renderer and new route owner with mocked auth/summary; older enrichers are represented by a brand wrapper. Full inherited external modules, production auth latency, all live account mappings and real devices still require upload verification.
 • Existing Parent extra services are retained in the original loader chain. Their reads still occur once when that chain loads; this is not a claim that the complete Parent portal makes only one total API request.
 • No SQL changed from revision 454; no data/table/reset migration added.
+
+ROOT VIDEO CORRECTIONS — REVISION 456
+• Reproduced the recorded intermediate Admin/User header using the previous upload and the current full public static application assets. Auth/Supabase and external CDNs were mocked; school database was not contacted.
+• Fixed lost render promises in the original V14, V32, V38 and V40 openERP handlers. Caller awaits actual dashboard rendering instead of treating it as complete early.
+• During interactive login, keep the Admin login form visible until destination rendering finishes. Hide only the incomplete authenticated destination; no artificial timeout, added polling, or new network query. Error paths clear the staging marker.
+• Fixed the canonical Admin header allowlist, which was hiding the new Appearance button with high-specificity !important CSS. Header normalization also preserves that button.
+• Removed the five duplicate secondary translated action titles from the Daily Quick Desk source template. Informative subtitles on other controls are retained.
+• Dedicated fixed-height update status row prevents late status text from moving Quick Desk cards. Tested 360/390/720/1366 widths.
+• Removed obsolete startup boot-lock class insertion. Website/Login/Parent brand images reuse the configured school logo through applySchool; no replacement school logo was invented. Installed Android/PWA native splash icons are separate and have not been replaced or tested by this web update.
+• Full-page before/after test: old package exposed 13 incomplete dashboard frames and hid Theme; corrected package exposed 0 incomplete frames and displayed Theme. Same mocked request count: 12 before and 12 after; zero database writes; zero extra requests during the idle observation. One mock profile read belongs to the existing password-policy check and was retained.
+• Full-page test used actual HTML, CSS and public ERP assets with mocked auth/data/CDN responses: zero JavaScript errors, zero missing static files. This validates the reproduced rendering defect; actual school credentials/network performance still require post-upload verification.
+• Rechecked Parent/Logout, Light/Dark/System and all 20 Student/Teacher ID viewer cases after these changes.
+• No new SQL, reset, table change or log deletion. Historical 15.755 GB Log Ingestion remains undiagnosed without server log analysis.
+
+LATEST FEE FIX — REVISION 457
+• school-workspace-v336.js/css updated and cache URL changed to v457. New installment editor has due-date + amount fields, Add/Remove, max 24 dates, per-student base total, Preview and confirmed Save. Monthly amount field is hidden in Installment mode. Old drafts keep their canonical text and restore into the new rows.
+• SQL/05_FEE_PLAN_START_MONTH_V457.sql is REQUIRED ONCE for the displayed NOT NULL backend error. Uploading JS alone does not repair that database function. File size under 6 KB. Do not run it as a browser query.
+• The migration checks the deployed settings table, month column type and exactly one compatible existing PL/pgSQL V336 RPC. It adds transaction-local plan-date context to the original function and a narrow missing-month guard. Existing authorization, signature, SECURITY DEFINER setting, grants, idempotency and business logic are retained. Unexpected prerequisites/body formatting cause rollback rather than an unverified rewrite.
+• New missing start month derives from chosen plan start_date; no hard-coded current/default month. Blank updates preserve the saved start month. Existing settings found on insert/upsert also preserve their month. The NOT NULL constraint remains. No DROP/TRUNCATE, historical fee/payment/receipt rewrite or audit polling added.
+• SQL test: reproduced 23502 using a representative original function in embedded PostgreSQL; verified new month, saved month, blank update, Monthly/Installment, original auth denial, grants, same-request retry, repeat migration and unchanged existing receipt. This is not a dump or execution of the production RPC; actual deployment checks run when you apply SQL/05.
+• Browser test: actual module with mocked reads/saves; Jan–Mar Monthly ₹1,200 => base total ₹3,600; one ₹1,200 installment => ₹1,200. Add/remove, draft restoration, out-of-range date rejection, preview invalidation and clear failure messages passed. Full HTML/public ERP assets with mocked server responses also passed the new fee controls and the prior login rendering checks.
+• Apply: backup current site/database; upload extracted website runtime files (including school-workspace-v336.js/css); run only new SQL/05 in Supabase SQL Editor; confirm true/true; refresh once. Old files must remain. No fee plan is applied until you Preview and Save it.
+• Pre-existing missing shared-layout prerequisites, if any, are a separate earlier installation requirement. SQL/05 does not create old V336 fee tables or RPCs when missing; it stops safely. Historical Supabase Log Ingestion has not been diagnosed against live logs.

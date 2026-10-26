@@ -5,3 +5,18 @@ V450 — नोट की गई समस्याएँ और स्थित
 4. Admin Login Back — login card में जोड़ा; mobile/desktop fixture test पास।
 5. Logs/load — दोहरा Parent load हटाया; बदले flows के idle test में अतिरिक्त requests नहीं। पुराने 15.755 GB का live स्रोत अभी अपुष्ट। पूरे ERP के zero logs की गारंटी नहीं।
 इस revision के लिए नई SQL नहीं है। पुराने data और permissions बनाए रखे हैं।
+
+वीडियो के आधार पर मूल सुधार — Revision 456
+6. openERP के मूल handlers में खोया render Promise वापस लौटाया — सुधारा।
+7. Login के बीच अधूरा header/खाली dashboard — पुरानी फाइल में reproduce किया; नई फाइल के full-page mock test में नहीं दिखा।
+8. Theme को छिपाने वाला Admin header CSS selector — सुधारा।
+9. Daily Quick Desk के दोहरे titles — source template से हटाए।
+10. Update समय आने पर cards का खिसकना — status row की जगह पहले से तय; चार widths पर test पास।
+11. Web branding में configured school logo का उपयोग; obsolete web boot-lock हटाया। Android/PWA का native installed splash अलग है, उसकी पुष्टि नहीं की गई।
+पुराने server logs का वास्तविक कारण अभी अपुष्ट है। नई SQL नहीं है।
+
+फीस सुधार — Revision 457
+12. auto_start_month NOT NULL: missing महीने को plan की तारीख से लेने वाला SQL/05; पुराने valid start month को सुरक्षित रखता है। नई SQL इस बार एक बार जरूरी है।
+13. सरल किस्त editor: तारीख/राशि rows, जोड़ें/हटाएँ, कुल राशि, Preview अनिवार्य।
+14. Installment में monthly field छिपा, पुराने drafts वापस आते हैं, Save failure सफलता नहीं दिखाता।
+Local PostgreSQL और browser/full-page mock checks पास। Live SQL लागू करना बाकी है।

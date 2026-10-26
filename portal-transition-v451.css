@@ -6,3 +6,11 @@
 
 /* Compact status: no full-screen logo splash, no artificial minimum delay. */
 #portal451Transition{inset:auto 12px auto auto;top:12px;display:block;max-width:calc(100vw - 24px);padding:10px 16px;border:1px solid #c8d9e9;border-radius:12px;box-shadow:0 4px 18px #12345420;font-size:14px;pointer-events:none}#portal451Transition img,#portal451Transition strong{display:none}#portal451Transition p{margin:0}
+
+/* Keep the login form stable while its destination is being built. No timer or extra request. */
+@media screen{
+html[data-ldm-login-stage] #erp{visibility:hidden!important;pointer-events:none!important}
+html[data-ldm-login-stage] #ldmV281Refresh{visibility:hidden!important}
+html[data-ldm-login-stage="login"] body[class] #login.auth{display:grid!important;visibility:visible!important}
+html[data-ldm-login-stage="login"] body #publicSite,html[data-ldm-login-stage="login"] body #publicPageView{display:none!important}
+}

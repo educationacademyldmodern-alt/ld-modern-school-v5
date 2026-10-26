@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head>
-<link rel="stylesheet" href="appearance-v454.css?v=455" media="screen"><script src="appearance-v454.js?v=455"></script>
+<link rel="stylesheet" href="appearance-v454.css?v=456" media="screen"><script src="appearance-v454.js?v=456"></script>
 <script src="network-economy-v433.js?v=434"></script>
-<script>document.documentElement.classList.add('ldmBootLock');</script>
+<!-- No startup visibility lock: public page renders directly. -->
 <script id="ldm-v146-boot-safety">/* V146: no global visibility boot-lock. It could remain forever and blank the whole ERP. */</script>
 <style id="ldm-v158-early-surface-owner">
 
@@ -1139,6 +1139,7 @@ function applySchool(){
  let ps=$("publicSite");
  if(ps){if(school.website_wallpaper_url){ps.classList.add("websiteWallpaper");ps.style.setProperty("--site-wallpaper",`url("${school.website_wallpaper_url}")`)}else{ps.classList.remove("websiteWallpaper");ps.style.removeProperty("--site-wallpaper")}}
  if(school.logo_url&&$("pubLogo")){$("pubLogo").src=school.logo_url;$("pubLogo").classList.remove("hidden");if($("pubLD"))$("pubLD").classList.add("hidden")}
+ if(school.logo_url)document.querySelectorAll('#login .loginHero img,.v26Brand>img,.v26Footer img,.premiumFooter .footBrand img,#parentDashboard .v114PortalBrand img').forEach(img=>{if(img.getAttribute('src')!==school.logo_url)img.src=school.logo_url});
  renderRunningNotices();applyPortalWallpapers()
 }
 async function publicData(){let [{data:staff},{data:events},{data:notices},{data:gallery}]=await Promise.all([sb.from("staff").select("*").eq("status","Active").limit(6),sb.from("events").select("*").order("event_date",{ascending:true}).limit(6),sb.from("notices").select("*").order("date",{ascending:false}).limit(8),sb.from("gallery").select("*").order("created_at",{ascending:false}).limit(8)]);$("facultyCards").innerHTML=(staff||[]).length?staff.map(x=>`<article><h3>${esc(x.staff_name)}</h3><p>${esc(x.designation||x.staff_type||"Faculty")} ${x.subject?"• "+esc(x.subject):""}</p></article>`).join(""):'<div class="empty">Faculty will appear here.</div>';$("eventCards").innerHTML=(events||[]).length?events.map(x=>`<article><h3>${esc(x.title)}</h3><p>${esc(x.event_date)} • ${esc(x.event_type||"Event")}</p><p>${esc(x.description||"")}</p></article>`).join(""):'<div class="empty">Upcoming events will appear here.</div>';$("noticeCards").innerHTML=(notices||[]).length?notices.map(x=>`<div class="noticeItem"><b>${esc(x.title)}</b><small> ${esc(x.date||"")}</small><p>${esc(x.message||"")}</p>${x.download_url?`<a href="${esc(x.download_url)}" target="_blank">Download</a>`:""}</div>`).join(""):'<div class="empty">Notices will appear here.</div>';$("galleryGrid").innerHTML=(gallery||[]).length?gallery.map(x=>x.media_type?.toLowerCase().includes("video")?`<video controls src="${esc(x.media_url)}"></video>`:`<img src="${esc(x.media_url)}" alt="${esc(x.title)}">`).join(""):'<div class="empty">Add gallery items from ERP.</div>'}
@@ -2052,7 +2053,7 @@ openERP=function(){
    return render('dashboard');
  }
  $('erpNav').innerHTML=nav.filter(x=>can(x[0])).map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
- render('dashboard');
+ return render('dashboard');
 };
 
 async function render(p){document.querySelector("#erp aside")?.classList.remove("open");if(!can(p))return toast("यह विकल्प आपके वर्तमान account role के लिए उपलब्ध नहीं है। Admin से आवश्यक permission/assignment जाँचें।");if(p==="attendance")return smartAttendance();if(M[p])return list(p);if(p==="dashboard")return dashboard();if(p==="balance")return balance();if(p==="fee_dashboard")return feeDashboard();if(p==="fee_structure")return feeStructure();if(p==="users")return users();if(p==="excel")return excelCenter();if(p==="settings")return websiteSettingsCenter()}
@@ -2915,7 +2916,7 @@ render=function(p){
 
 const v32OpenERPPrev=openERP;
 openERP=function(){
-  v32OpenERPPrev();
+  const opened=v32OpenERPPrev();
   if(v14Teacher()){
     const teacherNav=[
       ['teacher_profile','👤 My Profile'],
@@ -2930,6 +2931,7 @@ openERP=function(){
     ];
     $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
   }
+  return opened;
 };
 
 // ---------- stronger email/mobile password login ----------
@@ -3405,7 +3407,7 @@ openERP=function(){
   $('roleText').textContent='teacher';
   let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile'],['teacher_class','👨‍🎓 My Students'],['attendance','✅ Attendance'],['teacher_schedule','🕐 Teaching Schedule'],['teaching_diary','📖 Daily Teaching / Syllabus'],['fees','₹ Fee Status'],['exams','📝 Exams & Marks'],['homework','✏️ Homework'],['class_opinions','💬 Class Opinion']];
   $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
-  applyPortalWallpapers();render('dashboard');
+  applyPortalWallpapers();return render('dashboard');
 };
 
 /* V39 Admin Dashboard Picture-Style Functional Upgrade */
@@ -3606,7 +3608,7 @@ openERP=async function(){
  let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile']];
  if(v40ClassTeacherNames().length)teacherNav.push(['class_teacher','⭐ Class Teacher']);
  teacherNav.push(['teacher_class','👨‍🎓 My Students'],['attendance','✅ Attendance'],['teacher_schedule','🕐 Teaching Schedule'],['teaching_diary','📖 Daily Teaching / Syllabus'],['fees','₹ Fee Status'],['exams','📝 Exams & Marks'],['homework','✏️ Homework'],['class_opinions','💬 Class Opinion']);
- $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');applyPortalWallpapers();render('dashboard');
+ $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');applyPortalWallpapers();return render('dashboard');
 }
 
 const v40RenderPrev=render;
@@ -9610,7 +9612,7 @@ async function v90AdminDashboard(){
  let actCache='',noticeCache='',eventCache='';try{actCache=sessionStorage.getItem('ldm_admin_activities_html')||'';noticeCache=sessionStorage.getItem('ldm_admin_notices_html')||'';eventCache=sessionStorage.getItem('ldm_admin_events_html')||''}catch(_e){}
  const hold=[['👥','कुल विद्यार्थी / Total Students'],['👩‍🏫','कुल शिक्षक / Total Teachers'],['₹','आज जमा फीस / Fee Collection'],['💰','कुल बकाया / Total Due'],['✅','उपस्थिति / Attendance'],['📬','लंबित अनुरोध / Pending Requests']].map(([icon,label],i)=>`<button type="button" class="v90Stat v156SummaryCard" onclick="v156AdminSummaryDrill('${['students','teachers','collection','due','attendance','requests'][i]}')"><span>${icon}</span><div><small>${label}</small><b>—</b></div><em>विवरण ›</em></button>`).join('');
  v90Set(`<div class="v90Dash v114AdminDash ldmRootAdminDash v271AdminPremium">
- <section id="v185FrontDesk" class="v90Panel v185FrontDesk"><div class="v185FrontHead"><div><small>DAILY COUNTER</small><h2>⚡ Daily Quick Desk</h2><p>फीस, विद्यार्थी, प्रवेश और रसीद — सभी दैनिक काम एक जगह</p></div><span id="ldmV279Freshness" class="ldmV279Freshness" role="status" aria-live="polite">आज के आँकड़े अपडेट हो रहे हैं…</span></div><div class="v185FrontActions" aria-label="दैनिक कार्यालय कार्य"><button onclick="v185FrontFee()"><span>₹</span><b>फीस पूछें / जमा करें</b><small>Fee Enquiry &amp; Collection</small></button><button onclick="openAdd('students')"><span>＋</span><b>विद्यार्थी जोड़ें</b><small>Add Student</small></button><button onclick="v185NewAdmission()"><span>🎓</span><b>नया प्रवेश</b><small>New Admission</small></button><button onclick="v185FindStudent()"><span>⌕</span><b>विद्यार्थी खोजें</b><small>Student Search &amp; Details</small></button><button onclick="render('fee_dashboard')"><span>▤</span><b>रसीद और खाता</b><small>Receipt &amp; Ledger</small></button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">Fee पूछने/जमा करने के लिए नाम लिखें और Search दबाएँ.</div></div><div id="v105FeeAccount"></div></section>
+ <section id="v185FrontDesk" class="v90Panel v185FrontDesk"><div class="v185FrontHead"><div><small>DAILY COUNTER</small><h2>⚡ Daily Quick Desk</h2><p>फीस, विद्यार्थी, प्रवेश और रसीद — सभी दैनिक काम एक जगह</p></div><span id="ldmV279Freshness" class="ldmV279Freshness" role="status" aria-live="polite">आज के आँकड़े अपडेट हो रहे हैं…</span></div><div class="v185FrontActions" aria-label="दैनिक कार्यालय कार्य"><button onclick="v185FrontFee()"><span>₹</span><b>फीस पूछें / जमा करें</b></button><button onclick="openAdd('students')"><span>＋</span><b>विद्यार्थी जोड़ें</b></button><button onclick="v185NewAdmission()"><span>🎓</span><b>नया प्रवेश</b></button><button onclick="v185FindStudent()"><span>⌕</span><b>विद्यार्थी खोजें</b></button><button onclick="render('fee_dashboard')"><span>▤</span><b>रसीद और खाता</b></button></div><div class="v105PaySearch"><input id="v105FeeQ" autocomplete="off" placeholder="Student Name / Father / Admission / Roll / Mobile" onkeydown="if(event.key==='Enter')v105DashboardFeeSearch()"><select id="v105FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${v90Safe(c)}</option>`).join('')}</select><button onclick="v105DashboardFeeSearch()">🔎 Search</button></div><div id="v105FeeResults" class="v105PayResults"><div class="v105SearchEmpty">Fee पूछने/जमा करने के लिए नाम लिखें और Search दबाएँ.</div></div><div id="v105FeeAccount"></div></section>
  <section class="v156DailyControl" aria-label="Daily School Control"><div id="v114AdminClassSlot"></div>
  <section class="v114AdminMainGrid">
   <article class="v90Panel v114AttendancePanel"><div class="v114PanelHead"><h3>Student Attendance (Today)</h3><button onclick="render('attendance')">View Details →</button></div><div class="v114AttendanceVisual"><div id="v114AttDonut" class="v114Donut" style="--p:0"><div><b id="v114AttPct">—</b><small>Present</small></div></div><div class="v114Legend"><span><i class="p"></i>Present <b id="v114AttPresent">—</b></span><span><i class="a"></i>Absent <b id="v114AttAbsent">—</b></span><span><i class="l"></i>Leave <b id="v114AttLeave">—</b></span><span><i class="t"></i>Marked <b id="v114AttMarked">—</b></span><span><i class="n"></i>Not Marked <b id="v114AttNotMarked">—</b></span><span><i class="t"></i>Total Students <b id="v114AttTotal">—</b></span></div></div></article>
@@ -15062,7 +15064,7 @@ if(typeof statsBase==='function'){
 #erp.ldmAdminCanonical #v75TopSearch input{width:100%!important;min-width:0!important;height:40px!important;padding:7px 10px!important;border-radius:10px!important}
 #erp.ldmAdminCanonical #v75TopSearch button{width:82px!important;min-width:82px!important;height:40px!important;padding:4px!important;border-radius:10px!important;background:#fff!important;color:#173b68!important}
 
-#erp.ldmAdminCanonical .erpTop > :not(.ldmAdminSchoolIdentity):not(#ldmDeviceLockBtn):not(.hamb):not([data-v58-order]):not(.websiteBtn):not(#v90BackBtn):not(#v90HomeBtn):not(#v62Bell):not(#v75TopSearch):not(#v62NotifPanel):not(#ldmV281Refresh):not(#ff425Entry){display:none!important}
+#erp.ldmAdminCanonical .erpTop > :not(.ldmAdminSchoolIdentity):not(#ldmDeviceLockBtn):not(.hamb):not([data-v58-order]):not(.websiteBtn):not(#v90BackBtn):not(#v90HomeBtn):not(#v62Bell):not(#v75TopSearch):not(#v62NotifPanel):not(#ldmV281Refresh):not(#ff425Entry):not(#ldmAppearanceMenu455){display:none!important}
 #erp.ldmAdminCanonical .v6412SchoolIdentity,#erp.ldmAdminCanonical .v6415School,#erp.ldmAdminCanonical .v6416School,#erp.ldmAdminCanonical .ldmV183AdminSchool,#erp.ldmAdminCanonical #v6418WebsiteBtn,#erp.ldmAdminCanonical #v58LiveDot,#erp.ldmAdminCanonical #v764LiveBadge,#erp.ldmAdminCanonical #v113EcoBadge,#erp.ldmAdminCanonical #v64HealthBadge,#erp.ldmAdminCanonical #v97TopIdentity{display:none!important}
 #erp.ldmAdminCanonical .erpTop>div:has(#erpTitle){display:none!important}
 #erp.ldmAdminCanonical .erpTop>.erpHomeBtn{display:none!important}
@@ -15123,7 +15125,7 @@ if(typeof statsBase==='function'){
     top.querySelectorAll('.v6412SchoolIdentity,.v6415School,.v6416School,.ldmV183AdminSchool,#v6418WebsiteBtn,#v58LiveDot,#v764LiveBadge,#v113EcoBadge,#v64HealthBadge,#v97TopIdentity').forEach(x=>x.remove());
     /* Keep only the canonical controls. ERP title container stays hidden because head() writes into it. */
     [...top.children].forEach(x=>{
-      if(x.matches('.ldmAdminSchoolIdentity,#ldmDeviceLockBtn,.hamb,[data-v58-order],.websiteBtn,#v90BackBtn,#v90HomeBtn,#v62Bell,#v75TopSearch,#v62NotifPanel'))return;
+      if(x.matches('.ldmAdminSchoolIdentity,#ldmDeviceLockBtn,.hamb,[data-v58-order],.websiteBtn,#v90BackBtn,#v90HomeBtn,#v62Bell,#v75TopSearch,#v62NotifPanel,#ldmAppearanceMenu455'))return;
       if(x.querySelector?.('#erpTitle,#erpSub')){x.style.display='none';x.setAttribute('aria-hidden','true');return}
       if(x.classList?.contains('erpHomeBtn')){x.style.display='none';return}
       if(x.id&&/^v(6412|6415|6416|6418|58|764|113|64|97)/.test(x.id))x.remove();
@@ -18507,8 +18509,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="quickdesk-v326.css?v=326">
 <script src="central-exam-fees-v333.js?v=335"></script>
 <script src="central-fee-class-v335.js?v=449"></script>
-<link rel="stylesheet" href="school-workspace-v336.css?v=336">
-<script src="school-workspace-v336.js?v=435"></script>
+<link rel="stylesheet" href="school-workspace-v336.css?v=457">
+<script src="school-workspace-v336.js?v=457"></script>
 
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=373"></script>
@@ -18543,5 +18545,5 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=403r1"></script>
-<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=451"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=445" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=455"><link rel="stylesheet" href="portal-flow-v455.css?v=455"><script src="portal-flow-v455.js?v=455"></script><script src="portal-transition-v451.js?v=455"></script></body>
+<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=451"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=445" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=456"></script><script src="portal-transition-v451.js?v=456"></script></body>
 </html>

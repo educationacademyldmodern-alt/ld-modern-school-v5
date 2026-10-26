@@ -1,6 +1,6 @@
 {
   "source_package": "LDM_V444_TO_V450_ALL_CORRECTIONS_UPLOAD.zip",
-  "revision": "V450 updated / portal UI revision 455",
+  "revision": "V450 updated / fee revision 457",
   "validation_scope": "Local Chromium fixtures; no production DB access",
   "normal_layout": {
     "report": [
@@ -486,8 +486,8 @@
     "logoutErrorShield": 0
   },
   "syntax": {
-    "inline_script_count": 129,
-    "changed_external_js_count": 8,
+    "inline_script_count": 128,
+    "changed_external_js_count": 9,
     "failures": []
   },
   "not_tested": [
@@ -1135,5 +1135,113 @@
     "new_polling": false,
     "zero_logs_guaranteed": false
   },
-  "sql455": "Unchanged from revision 454; no new SQL required"
+  "sql455": "Unchanged from revision 454; no new SQL required",
+  "root456": {
+    "scope": "Actual V450 inline styles, login markup, v14/v32 openERP chain, Admin login and dashboard template; auth and delayed render are mocked",
+    "baselineReproduced": true,
+    "partialRevealFixed": true,
+    "headerWhitelistFixed": true,
+    "duplicateSourceLabelsRemoved": true,
+    "statusCardPositionsStableAt": [
+      360,
+      390,
+      720,
+      1366
+    ],
+    "loginRequestCount": 1,
+    "results": [
+      {
+        "stage": "before",
+        "pending": {
+          "resolved": true,
+          "renderDone": false,
+          "erpVisible": true,
+          "loginVisible": false
+        },
+        "theme": {
+          "display": "none",
+          "visibility": "visible"
+        },
+        "errors": []
+      },
+      {
+        "stage": "after",
+        "pending": {
+          "resolved": false,
+          "renderDone": false,
+          "erpVisible": false,
+          "loginVisible": true
+        },
+        "theme": {
+          "display": "flex",
+          "visibility": "visible"
+        },
+        "errors": []
+      }
+    ]
+  },
+  "full_page456": {
+    "scope": "Full current HTML and available public ERP assets, with Supabase/auth and third-party CDNs mocked; no live database requests",
+    "baseline_partial_frames": 13,
+    "fixed_partial_frames": 0,
+    "baseline_theme_display": "none",
+    "fixed_theme_display": "flex",
+    "javascript_errors": [],
+    "missing_assets": [],
+    "mock_requests_before": 12,
+    "mock_requests_after": 12,
+    "mock_database_writes": 0,
+    "idle_extra_requests": 0,
+    "real_production_auth_tested": false,
+    "third_party_cdn_execution_mocked": true
+  },
+  "sql456": "No SQL changed from revision 455; no new SQL required.",
+  "fee_ui457": {
+    "scope": "Actual updated workspace module; mocked student/plan reads and save RPC responses",
+    "installmentEditor": true,
+    "monthlyThreeMonthsTotal": 3600,
+    "installmentOnePaymentTotal": 1200,
+    "addRemove": true,
+    "previewInvalidation": true,
+    "outOfRangeRejected": true,
+    "defaultPreservesIndividualPlans": true,
+    "failedSaveNotReportedAsSuccess": true,
+    "failedSaveUnlocksForm": true,
+    "draftRestore": true,
+    "mobileDesktopNoOverflow": true,
+    "saveRPCs": 3,
+    "idleExtraReads": 0,
+    "errors": []
+  },
+  "fee_sql457": {
+    "scope": "Embedded PostgreSQL with representative existing RPC matching the observed missing-month upsert; not a dump of the production RPC",
+    "baselineError": "23502",
+    "monthlyAndInstallment": true,
+    "newMonthDerived": true,
+    "existingMonthPreserved": true,
+    "blankUpdatePreserved": true,
+    "rpcSignatureSecurityGrantsPreserved": true,
+    "originalAuthorizationPreserved": true,
+    "retryIdempotent": true,
+    "migrationRerunSafe": true,
+    "oldReceiptUnchanged": true
+  },
+  "full_page457": {
+    "fee_controls_passed": true,
+    "errors": [],
+    "missing_assets": [],
+    "partial_login_frames": 0,
+    "idle_extra_requests": 0,
+    "server_responses": "mocked; no production database calls"
+  },
+  "sql457": {
+    "required_once": "SQL/05_FEE_PLAN_START_MONTH_V457.sql",
+    "bytes": 5986,
+    "old_sql_00_to_04": "unchanged",
+    "expected_result": {
+      "start_month_guard": true,
+      "fee_rpc_patched": true
+    },
+    "production_applied": false
+  }
 }

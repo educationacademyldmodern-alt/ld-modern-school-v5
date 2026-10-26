@@ -12,3 +12,8 @@
 html[data-ldm-theme="dark"] #ldmChildren455 h2{color:#e6edf7}html[data-ldm-theme="dark"] .ldmChildGrid455 button{background:#172438;color:#e6edf7;border-color:#35465e}html[data-ldm-theme="dark"] .ldmChildGrid455 span{color:#bdcbe0}
 
 @media print{[data-ldm-appearance-open],#ldmAppearanceMenu455{display:none!important}}
+
+/* The status slot exists before data arrives: text updates do not move action cards. */
+#erpContent #v185FrontDesk .v185FrontHead{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important;align-items:start!important}
+#erpContent #v185FrontDesk #ldmV279Freshness{display:flex!important;align-items:center!important;width:100%!important;max-width:100%!important;min-height:52px!important;height:52px!important;margin:0!important;padding:6px 10px!important;font-size:11px!important;line-height:18px!important;box-sizing:border-box!important;overflow:auto;overflow-wrap:anywhere}
+#erpContent #v185FrontDesk .v185FrontActions button>small{display:none!important}

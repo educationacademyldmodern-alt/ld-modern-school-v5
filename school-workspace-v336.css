@@ -13,3 +13,14 @@
 @media(max-width:1000px){#erpContent .v53Hub,.s336Grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:650px){#erpContent .v53Hub,.s336Grid,.s336Bank{grid-template-columns:1fr!important}.s336Stats{grid-template-columns:repeat(2,minmax(0,1fr))}.s336Hero{padding:18px}.s336Panel{padding:14px}#erpContent .v53Hub>button{min-height:130px!important}.s336Tools>label{flex-basis:100%}}
 @media print{body:has(.s336Print) *{visibility:hidden!important}body:has(.s336Print) .s336Print,body:has(.s336Print) .s336Print *{visibility:visible!important}.s336Print{position:absolute;left:0;top:0;width:100%;color:#000}.s336Print button,.s336Print input,.s336Print select{display:none!important}.s336PrintOnly{display:block}}
+
+/* V457 fee setup: explicit kind, compact rows, and truly hidden inactive fields. */
+#s336Root #s336InstallmentBox[hidden],#s336Root #s336FeeInstallments[hidden],#s336Root label[hidden]{display:none!important}
+#s336Root .s336FeeEditor457{padding:14px;border:1px solid #ccdae8;border-radius:14px;background:#f5faff;min-width:0}
+#s336Root .s336FeeEditor457 h3{margin:0 0 12px;font-size:18px}
+#s336Root .s336FeeRow457{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto;gap:10px;align-items:end;margin:10px 0}
+#s336Root .s336FeeRow457 input{width:100%;min-width:0;box-sizing:border-box}
+#s336Root .s336FeeRow457 button{min-height:42px;padding:8px 12px;color:#9b2631;background:#fff1f2;border:1px solid #edbdc3;border-radius:9px}
+#s336Root #s336FeeAdd457{min-height:42px;background:#e7f2ff;color:#124979;border:1px solid #aec8e2;border-radius:9px;padding:8px 13px}
+@media(max-width:430px){#s336Root .s336FeeRow457{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#s336Root .s336FeeRow457 button{grid-column:2;justify-self:end}}
+html[data-ldm-theme="dark"] #s336Root .s336FeeEditor457{background:#172438;color:#e6edf7;border-color:#35465e}
