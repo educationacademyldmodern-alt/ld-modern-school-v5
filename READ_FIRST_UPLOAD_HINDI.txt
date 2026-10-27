@@ -1,155 +1,86 @@
-L D MODERN EDUCATION ACADEMY
-V450 UPDATED — ID CARD / QR / LOGIN / LIGHT-DARK APPEARANCE
-Admin all-classes fee status revision 459; V450 remains the source package.
+L D MODERN EDUCATION ACADEMY — V463
+Navigation, Work Assign, Attendance load और Backup timeout update
+तारीख: 27 October 2026
 
-यह नया ERP install या पुरानी database पर rollback नहीं है।
-यह मौजूदा V450 update package का संशोधित संस्करण है। पुराने V450 के बाकी correction files इसी ZIP में रखे गए हैं।
+यह V462 के ऊपर लगाने वाला changed-files-only update है, पूरा website package नहीं।
 
-लगाने का तरीका
-1. वर्तमान website files और database का अपना backup रखें।
-2. ZIP की root files तथा vendor/ folder को website की उन्हीं जगहों पर upload/replace करें। SQL और रिपोर्ट website runtime files नहीं हैं। दूसरे मौजूदा files delete न करें।
-3. फीस save error सुधारने के लिए इस बार Supabase SQL Editor में केवल SQL/05_FEE_PLAN_START_MONTH_V457.sql एक बार चलाएँ। यह नया backend सुधार है। अपेक्षित परिणाम: start_month_guard=true और fee_rpc_patched=true। पुराने SQL/00–04 फिर न चलाएँ।
-4. SQL/01 केवल तब, जब V450 का shared ID layout column अभी नहीं जोड़ा गया है। पहले चल चुका हो तो फिर जरूरी नहीं। SQL/03 को इस UI update के लिए फिर चलाने की जरूरत नहीं। SQL/04 केवल optional read-only check है।
-5. Browser में एक बार hard refresh करें। नई JS/CSS के cache versions बदले गए हैं।
+अपलोड का क्रम
+1. Supabase SQL Editor में केवल SQL/07_BACKUP_REDACTION_SPEED_V463.sql चलाएँ।
+   अंत में redaction_fast_path = true आना चाहिए। यह पहले से मौजूद V336
+   backup redaction function को optimize करता है; पुरानी SQL दोबारा न चलाएँ।
+   Unexpected redaction body / missing function आए तो कोई बदलाव लागू नहीं होता;
+   उस स्थिति में error का पूरा text लेकर संबंधित database function जाँचें।
+2. नीचे दी गई 9 files मौजूदा website/project की उसी जगह replace करें और
+   अपनी सामान्य deployment प्रक्रिया से publish करें। SQL file website root में
+   रखने से database update नहीं होता।
+   index.html
+   root-corrections-v332.js
+   school-workspace-v336.js
+   runtime-v347.js
+   network-economy-v433.js
+   desktop-premium-v378.css
+   attendance-scan-v412.js
+   smart-work-v403.js
+   work-access-v398.js
+3. Deployment पूरा होने पर ERP फिर खोलें / एक बार refresh करें।
 
-ID CARD
-• पुराने 10 formats restored: Royal Blue, Aqua Academic, Purple Curve, Executive Gold, Crimson Modern, Sky Classic, Green Academic, Purple Crown, Black Gold, Slate Minimal.
-• पुराने format names/skins and field/photo/session/footer customization controls retained. Format 1–5 landscape; 6–10 portrait.
-• Student/Teacher ID uses the same template family. Teacher ID includes teacher master data, photo and existing teacher identity QR RPC.
-• Fixed A4 grids: landscape 10 per A4; portrait 9 per A4; batches of at most 100.
-• Portrait QR has its own reserved footer area. No negative offset, no overlap with signatures.
-• Browser native A4 Preview / Print / Save as PDF uses the same rendered card.
-• Layout fits text locally, with a bounded adjustment. It never silently deletes/truncates master fields. Extremely large optional data/custom dimensions can still require a larger card or fewer optional fields; the original master record is unchanged.
+क्या सुधरा
+• Menu की desktop/mobile state एक जगह से चलती है; हर click पर nav फिर नहीं बनता।
+  Desktop sidebar खुलने पर main content उसके बगल में आता है। पुराने shell helpers
+  sidebar बंद करें तो नई state भी उसी समय sync होती है।
+• Back/Home history बदलने से पहले pending Save/unsaved changes जाँचते हैं।
+  Cancel करने पर attendance बदलाव और वही screen सुरक्षित रहते हैं। Back पर
+  उपलब्ध पुरानी scroll position restore होती है। चालू Save की पुष्टि बाकी हो
+  तो navigation रोकना जानबूझकर रखा गया है।
+• नई route चुनने पर पुरानी route के पढ़ने वाले requests cancel होते हैं;
+  जरूरी Save requests cancel नहीं होते। समान route requests साथ जुड़ते हैं।
+• Attendance Save केवल बदली entries भेजता है। 80 में 1 बदला तो 1 entry;
+  बिना बदलाव दोबारा Save करने पर कोई नया attendance request नहीं जाता।
+  पुराने request IDs, authorization और expected-status conflict checks बने रहते हैं।
+• Attendance/exam/Work Assign के पहचाने हुए read-only RPC अब मौजूदा bounded
+  request scheduler में आते हैं। समान pending reads एक request साझा कर सकते हैं।
+  Attendance/fee/access का completed response cache नहीं किया जाता।
+• Work Assign: dropdown filters तुरंत लागू; create/edit/reassign/progress में
+  failed Save पर form सुरक्षित, uncertain reply पर उसी request की Retry;
+  account बदलने पर पुराने जवाब नए account की screen नहीं बदलते।
+• Read-only assigned-work loading Back/Home को अनावश्यक नहीं रोकती।
+• Backup का PostgreSQL 57014 statement-timeout definite failure माना जाता है;
+  UI pending Save में हमेशा बंद नहीं रहती, कोई automatic retry नहीं होती।
+  Scheduler status fail होने पर भी उपलब्ध backup list दिखाई देती है।
+• SQL07 scalar fields पर अनावश्यक recursive redaction calls घटाता है। वही
+  tables, पुराने fee records, secret-field filtering और function grants सुरक्षित हैं।
 
-TEACHER DASHBOARD
-• Student Photos renamed Student ID Card / विद्यार्थी पहचान पत्र.
-• Assigned-class ID cards include the central student details, QR and Preview/PDF/Print action.
-• Camera, Camera App, Gallery, Update Photo, existing photo editing and removal remain.
-• At most 12 photo/ID cards rendered at a time; signed photos and QR prepared only for visible cards.
-• Bulk preview opens the 10-format ID center. Existing role/class access is retained.
+जाँच
+• 7 बदली JS files और index के 128 executable inline scripts का syntax check।
+• असली ERP HTML और local copies of public assets, mocked login/database:
+  desktop menu open/close; content displacement; 360/1024/1366 px menu checks;
+  एक-click Home/Back; discard Cancel/Confirm; pending-work navigation guard;
+  100 class-selection changes में select element स्थिर; कोई browser JS error नहीं।
+• बदलाव से पहले 80-row attendance दो Save पर [80,80] भेजती थी। सुधार के बाद
+  उसी उदाहरण में [1] गया; unchanged दूसरा Save server पर नहीं गया।
+• Work Assign actual module: create/edit/reassign, teacher progress, duplicate
+  submit, rejected Save, unknown reply same-ID retry और account change cases।
+• Network mock: 10 समान pending reads से 1 network call; अगला completed read
+  fresh; reads की concurrency सीमा 6; queued reads cancel; Save cancel नहीं;
+  अंत में pending/queued/active reads 0। यह एक browser की request सीमा है,
+  सभी लोगों की server-wide global concurrency सीमा नहीं।
+• Route queue: same route joined, obsolete read aborted, अंतिम चुनी route दिखी।
+• Backup UI: 57014 unlock, network uncertainty पर pending Retry सुरक्षित,
+  scheduler error के बावजूद backup list।
+• असली पुराने V336 backup/redaction SQL को embedded PostgreSQL पर चलाकर:
+  3000 student rows; पुराने fee receipts सहित exact backup tables parity;
+  nested secret redaction parity; grants/security unchanged; SQL07 दोबारा सुरक्षित।
+  स्थानीय उदाहरण में 557ms से 365ms; यह production speed का वादा नहीं है।
+• मौजूदा V461 timetable Preview/PDF/native Print और V462 admin/teacher exam
+  attendance/scanner regression checks पास। Navigation और module checks सुधार
+  के बाद दो दौर में चले; अंतिम बदलावों के targeted checks भी पास हैं।
 
-ATTENDANCE / QR
-• Official Present / Absent / Not Marked labels; unscanned is not automatically absent.
-• School-branded correction dialog replaces browser prompt. Actual daily/exam status, date and correction reason shown.
-• Server confirmation required before success. Existing expected-revision and idempotency checks retained.
-• Repeated QR in the open scanner does not send another request. Existing deliberate recheck remains explicit.
-• Student ID identity token is reused; issued Admit/Desk QR resolution and existing document-specific verification remain in V450.
-• A document verification QR and a student identity QR have different purposes; issued documents keep their individual verification and revocation checks. This patch does not make an issued marksheet/TC QR automatically mark attendance.
-• Teacher QR continues to use the existing ldm_get_teacher_qr and gate permission rules. It does not grant extra teacher permissions or create a public student data endpoint.
+सीमा
+Live database पर कोई migration, login या deployment इस जाँच में नहीं हुआ है।
+असली camera/device तथा कई लोगों का पूरे दिन का server load यहाँ reproduce
+नहीं किया गया। बहुत बड़ा full backup अभी भी database/server क्षमता के अनुसार
+समय ले सकता है। इस update में नई polling, automatic backup loop, automatic
+write retries, log upload या audit/fee data delete नहीं जोड़ा गया है।
 
-LOGIN / LOGOUT / DISPLAY
-• Compact, event-driven status during login/logout; the full-screen logo splash has been removed. No minimum animation delay.
-• Duplicate login clicks suppressed; failure removes the overlay. Existing auth/permission checks are kept.
-• Public school logo has explicit size/alignment. Redundant secondary labels in Daily Quick Desk are hidden.
-• This addresses the exposed partial screen during transitions. A live production auth-loop diagnosis has not been performed, so it is not a guarantee against every pre-existing rendering issue.
-
-FREE TIER / LOAD
-• No added polling, intervals, realtime subscriptions, background API refresh or server logging.
-• QR library is a local vendor asset, loaded once on demand.
-• Loaded photo and QR values are reused for repeated preview; format changes do not reload student data.
-• Scanner stops the camera/worker/timers on close, hidden page and navigation as before.
-• Existing attendance records, correction audit, and idempotency receipts remain necessary operational data. They are not suppressed or deleted to claim zero logs.
-• No claim of zero Supabase usage: genuine login/save still uses the server. Production log volume must be observed after deployment.
-
-VALIDATION
-• 128 inline index scripts + changed external JS parsed successfully.
-• Chromium: 20 normal-data Student/Teacher template cases passed.
-• Chromium: 20 long-data/optional-field template cases passed.
-• Sample 10-landscape-card and 9-portrait-card PDFs each occupy one A4 page.
-• QR image decoded; same cached QR reproduced with only one mocked token lookup.
-• Mocked scanner: duplicate request suppressed; correction reason/expected revision sent; cancellation sent no save; idle extra requests zero; unauthenticated scanner blocked.
-• Mocked login: duplicate click suppressed; success/error overlay cleanup passed.
-• Tests used isolated fixture data. Actual Supabase SQL execution, real account login/logout, teacher-QR permissions, camera hardware, and physical printer output were NOT tested against your school database.
-• Existing unrelated V450 modules are preserved, not represented as fully retested.
-
-SQL SAFETY
-The revised SQL/02 only changes the correction response metadata compared with V450. It retains the same auth checks and daily/exam save behavior. No DROP/TRUNCATE/reset, student deletion, fee reset, or log-generation trigger has been added. Each SQL file is under 20 KB.
-
-RECHECK — REVISION 452
-• Main Teacher Dashboard card also renamed from singular Student Photo to Student ID Card.
-• Teacher dashboard Logout now uses the common login/logout transition owner.
-• Navigation cancels pending ID work; late results cannot replace the new route.
-• QR processing stops on account/session changes or detached cards; old QR work does not keep requesting new rows.
-• Printing checks preview account/session and current layout settings.
-• A template chosen while preview is preparing is queued once and applied after current work finishes; it reuses QR tokens.
-• Failed photo signing is attempted at most once per photo path in the currently loaded teacher photo list. Reopen the module for an explicit retry.
-• Partly cached teacher photos are retained when missing photos are fetched.
-• SQL is byte-for-byte unchanged from the first V450 updated package. If you already ran that updated SQL/02, no SQL rerun is needed for this recheck.
-• 40 template layout cases passed again; navigation/account-change/latest-template/outdated-print regression tests passed.
-• Live school database and account testing remains pending. This is a tested source update, not a claim that every existing V450 module has been production-tested.
-
-SECOND RECHECK — REVISION 453
-• Fixed stale cache URLs in the shared A4 print transport. ID CSS and preview HTML now request the updated versions, including when an older V450 viewer was cached.
-• A batch selected while a preview is preparing is queued as the latest request. Tested switching from first 100 cards to the final 101st card before preparation finished; correct final batch shown and existing QR lookup reused.
-• Teacher photo/ID metadata now loads assigned students in ordered 500-row pages instead of one silently capped request. Only 12 card elements and their photo/QR assets render per visible page.
-• Excludes archived/recycled/transferred records and other academic sessions. Route/account changes cancel pending teacher-list reads; no new page request after cancellation.
-• Isolated shared ID viewer test: 10 landscape cards / 9 portrait cards, correct card dimensions, QR images retained, Print button invoked successfully. Unrelated admit/marksheet layout modules were excluded from this isolated ID test.
-• PDFs from the prepared viewer document: one A4 page each; QR crops from both PDFs decoded at 300 DPI. This does not replace a physical printer/camera test.
-• 1,601-row mocked metadata read: four requests, 1,599 active current-session rows retained (two excluded intentionally). Cancelled read: zero additional requests.
-• All 40 normal/long template cases, scanner duplicate/correction/cancel cases, auth transition cases, and syntax checks passed again.
-• SQL unchanged from the preceding updated ZIP; no SQL rerun for this second recheck if its updated SQL was already applied.
-
-APPEARANCE — LIGHT / DARK / SYSTEM
-• ERP Header में “थीम / Theme”, Login form में “Appearance / थीम”, या Parent Menu के Appearance विकल्प से Light / Dark / System चुनें। Floating Theme button हटाया गया है।
-• System मोबाइल/कंप्यूटर के OS colour preference का पालन करता है। Manual Light/Dark आपकी चुनी पसंद रखता है।
-• यह setting इसी browser/device में local रूप से सेव होती है और इसी browser के दूसरे tabs में sync होती है। कोई school database setting नहीं लिखी जाती।
-• एक ही theme owner: पुराने v75Dark/html.dark toggles को नई appearance settings से जोड़ा गया है। कोई duplicate theme listener loop, polling, timer या realtime subscription नहीं।
-• ERP forms, tables, common dashboard cards, dialogs and Parent/Teacher/Admin portal surfaces use dark colours. Logos/photos/QR are not inverted.
-• Official document pages retain their original design; paper editor remains white with dark text. Print/PDF stays light and hides the theme control.
-• Existing public website brand colours are retained. Appearance applies primarily to ERP/login/portal screens.
-• कोई SQL नहीं चलानी है। नई appearance-v454.js और appearance-v454.css सहित updated root files upload करें और एक बार refresh करें।
-• Tests: system-following, manual selection, preference persistence, cross-tab sync, legacy-button compatibility, white print, readable paper editor and zero database/API calls on appearance changes passed. 20 Student/Teacher ID layouts also passed under dark mode.
-• Current tests use local fixtures; live production screen coverage and real devices/printers remain to be checked after upload.
-
-LATEST NOTED CORRECTIONS — REVISION 455
-1. Parent Login: सीधे My Children सूची; पहले वाला Welcome/Profile Photo/Load Dashboard चरण नहीं। School brand + linked child cards. Child click opens its existing detail card; Back returns locally.
-2. Login/Logout: duplicate parent-loader call removed; single-flight login/parent load; startup restore rejects results from before a login/logout action. Channel cleanup starts without serially delaying auth signout. No full-screen logo splash or artificial wait. Auth completion is still required, so internet/server latency remains possible. Successful logout clears visible identity and performs one clean navigation to discard old module caches. Failed logout retains the session and removes the status.
-3. Appearance: floating bottom button removed. Header/Login/Parent Menu options; Light/Dark/System preference local; document colours preserved.
-4. Admin Login Back: always-visible button inside the login card, including mobile. Returns to the school website.
-5. Load/log prevention: deduplicated parent summary path, cached back navigation, explicit Refresh forces reload once; no new polling/retry loop or endpoint in these changes. Existing auth/RLS/necessary writes retained.
-
-IMPORTANT LIMITS
-• Historical 15.755 GB Log Ingestion has NOT been diagnosed against live Supabase logs. These source changes prevent identified duplicate work; they do not delete earlier usage or guarantee zero logs/free-plan usage.
-• Parent test uses actual base renderer and new route owner with mocked auth/summary; older enrichers are represented by a brand wrapper. Full inherited external modules, production auth latency, all live account mappings and real devices still require upload verification.
-• Existing Parent extra services are retained in the original loader chain. Their reads still occur once when that chain loads; this is not a claim that the complete Parent portal makes only one total API request.
-• No SQL changed from revision 454; no data/table/reset migration added.
-
-ROOT VIDEO CORRECTIONS — REVISION 456
-• Reproduced the recorded intermediate Admin/User header using the previous upload and the current full public static application assets. Auth/Supabase and external CDNs were mocked; school database was not contacted.
-• Fixed lost render promises in the original V14, V32, V38 and V40 openERP handlers. Caller awaits actual dashboard rendering instead of treating it as complete early.
-• During interactive login, keep the Admin login form visible until destination rendering finishes. Hide only the incomplete authenticated destination; no artificial timeout, added polling, or new network query. Error paths clear the staging marker.
-• Fixed the canonical Admin header allowlist, which was hiding the new Appearance button with high-specificity !important CSS. Header normalization also preserves that button.
-• Removed the five duplicate secondary translated action titles from the Daily Quick Desk source template. Informative subtitles on other controls are retained.
-• Dedicated fixed-height update status row prevents late status text from moving Quick Desk cards. Tested 360/390/720/1366 widths.
-• Removed obsolete startup boot-lock class insertion. Website/Login/Parent brand images reuse the configured school logo through applySchool; no replacement school logo was invented. Installed Android/PWA native splash icons are separate and have not been replaced or tested by this web update.
-• Full-page before/after test: old package exposed 13 incomplete dashboard frames and hid Theme; corrected package exposed 0 incomplete frames and displayed Theme. Same mocked request count: 12 before and 12 after; zero database writes; zero extra requests during the idle observation. One mock profile read belongs to the existing password-policy check and was retained.
-• Full-page test used actual HTML, CSS and public ERP assets with mocked auth/data/CDN responses: zero JavaScript errors, zero missing static files. This validates the reproduced rendering defect; actual school credentials/network performance still require post-upload verification.
-• Rechecked Parent/Logout, Light/Dark/System and all 20 Student/Teacher ID viewer cases after these changes.
-• No new SQL, reset, table change or log deletion. Historical 15.755 GB Log Ingestion remains undiagnosed without server log analysis.
-
-LATEST FEE FIX — REVISION 457
-• school-workspace-v336.js/css updated and cache URL changed to v457. New installment editor has due-date + amount fields, Add/Remove, max 24 dates, per-student base total, Preview and confirmed Save. Monthly amount field is hidden in Installment mode. Old drafts keep their canonical text and restore into the new rows.
-• SQL/05_FEE_PLAN_START_MONTH_V457.sql is REQUIRED ONCE for the displayed NOT NULL backend error. Uploading JS alone does not repair that database function. Corrected file size under 8 KB. Do not run it as a browser query.
-• The migration checks the deployed settings table, month column type and exactly one compatible existing PL/pgSQL V336 RPC. It adds transaction-local plan-date context to the original function and a narrow missing-month guard. Existing authorization, signature, SECURITY DEFINER setting, grants, idempotency and business logic are retained. Unexpected prerequisites/body formatting cause rollback rather than an unverified rewrite.
-• New missing start month derives from chosen plan start_date; no hard-coded current/default month. Blank updates preserve the saved start month. Existing settings found on insert/upsert also preserve their month. The NOT NULL constraint remains. No DROP/TRUNCATE, historical fee/payment/receipt rewrite or audit polling added.
-• SQL test: reproduced 23502 using a representative original function in embedded PostgreSQL; verified new month, saved month, blank update, Monthly/Installment, original auth denial, grants, same-request retry, repeat migration and unchanged existing receipt. This is not a dump or execution of the production RPC; actual deployment checks run when you apply SQL/05.
-• Browser test: actual module with mocked reads/saves; Jan–Mar Monthly ₹1,200 => base total ₹3,600; one ₹1,200 installment => ₹1,200. Add/remove, draft restoration, out-of-range date rejection, preview invalidation and clear failure messages passed. Full HTML/public ERP assets with mocked server responses also passed the new fee controls and the prior login rendering checks.
-• Apply: backup current site/database; upload extracted website runtime files (including school-workspace-v336.js/css); run only new SQL/05 in Supabase SQL Editor; confirm true/true; refresh once. Old files must remain. No fee plan is applied until you Preview and Save it.
-• Pre-existing missing shared-layout prerequisites, if any, are a separate earlier installation requirement. SQL/05 does not create old V336 fee tables or RPCs when missing; it stops safely. Historical Supabase Log Ingestion has not been diagnosed against live logs.
-
-FINAL CODE RECHECK — REVISION 458
-• Latest instructions supersede earlier recheck notes: SQL/05 is required for the fee fix. If the previous SQL/05 was already run, run this corrected SQL/05 again once; old SQL/00–04 do not need rerunning. Expect true/true.
-• SQL patch now finds the real outer BEGIN while skipping line/nested block comments, quoted identifiers, escaped strings, dollar quotes and block labels. Tested a previous false marker inside a leading comment: corrected migration repairs it and remains rerun-safe. Existing settings lookup locks the row during the same transaction to preserve its saved start month during an upsert.
-• Invalid legacy installment drafts (bad date/amount/extra fields or more than 24 lines) remain fully visible as original text instead of silently losing rows. Correct the text and use the recovery button to restore date/amount rows; Preview remains mandatory.
-• Re-ran syntax (128 inline + 9 changed external scripts), full-page login/fee controls, Parent navigation/logout, Light/Dark/System, 20 Student/Teacher ID viewers, 20 dark ID layouts, scanner and navigation/cancellation checks. All passed in their documented local/mocked scope. No production account or database was modified.
-• PostgreSQL tests also verified authorization denial, original grants, idempotent retry, preserved old month/receipt, null rejection outside the fee RPC, and explicit supplied month preservation. A representative RPC was used because the production function source is not in this package.
-• Final package excludes all test fixtures. Existing unrelated ERP modules remain preserved rather than claimed fully audited. Real login latency, camera/printer hardware and historical Supabase log volume still need deployment observation.
-
-ADMIN ALL CLASSES FEE STATUS — REVISION 459
-• Admin Dashboard के नए “सभी कक्षाओं की फीस / All Classes Fee Status” card या Menu से खोलें। All Classes default है; किसी एक class का चयन, Student/Father/Mobile/Admission search और Due/Clear/Unavailable filters हैं।
-• Teacher Fee Status जैसा Current Due, due/clear student counts, selected-filter total, Call और WhatsApp reminder links। Reminder केवल link click करने पर खुलेगा; कोई संदेश अपने आप नहीं जाता।
-• हिसाब मौजूदा ldm_fee_due_snapshot_v2 central service से, उसी current month/session पर आता है। Teacher का assigned-class access और backend permissions नहीं बदले गए। यह नया view read-only है; शुल्क तय/जमा करने के पुराने पेज वैसे ही हैं।
-• केवल view खोलने या Refresh पर data पढ़ता है। Student reads 500 की pagination में, snapshot reads अधिकतम150 admissions की batches में। अधिकतम50 rows DOM में; class/search/status/page बदलने पर अतिरिक्त server request नहीं। नई polling, realtime subscription, log writer या fee-generation RPC नहीं जोड़ी गई। आवश्यक reads का existing server logging हो सकता है।
-• Missing/invalid balances को Clear/₹0 नहीं माना जाता। पुराना session और archived/inactive records बाहर रहते हैं। Account/navigation बदलने के बाद पुराना response अगला पेज नहीं बदलता।
-• New runtime file admin-fee-status-v459.js और updated index.html सहित यही combined ZIP upload करें। इस सुविधा के लिए नई SQL नहीं है। पिछले fee save fix की SQL/05 जरूरत ऊपर दिए निर्देशों के अनुसार बनी रहती है।
-• Actual full-page browser test with mocked auth/data: 3,000 active current-session students + 2 excluded rows; correct ₹7,50,000 total, local filters, 50-row pagination, reminders, widths360/390/1366, failed-read handling, teacher-route denial and stale account/navigation passed. Initial reads27 = 7 student pages + 20 snapshot batches; changing local filters added0. No production database or real student account was used.
+पुराने ID-card formats, fee records, exam scan SQL06, timetable exports और
+अन्य unchanged files इस ZIP में दोबारा नहीं हैं; मौजूदा project में रखे रहें।

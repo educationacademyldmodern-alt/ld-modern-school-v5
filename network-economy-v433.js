@@ -7,7 +7,7 @@ const MAX_ENTRIES=64,MAX_BYTES=2*1024*1024,MAX_ITEM=256*1024;
 let bytes=0,epoch=0,refreshDepth=0,activeReads=0;const readQueue=[];
 const counters={networkReads:0,writes:0,joined:0,cacheHits:0,errorPauses:0,invalidations:0};
 // Only audited read-only RPCs; unknown RPCs always pass through as possible writes.
-const READ_RPC=new Set(['ldm_teacher_context_v2','ldm_teacher_class_fee_due_v254','ldm_fee_due_snapshot_v2','ldm_v362_paper_get','ldm_v362_paper_list','ldm_v272_my_assignment_for_route','ldm_v259_gate_pass_assigned','ldm_v259_gate_students']);
+const READ_RPC=new Set(['ldm_teacher_context_v2','ldm_teacher_class_fee_due_v254','ldm_fee_due_snapshot_v2','ldm_v362_paper_get','ldm_v362_paper_list','ldm_v272_my_assignment_for_route','ldm_v259_gate_pass_assigned','ldm_v259_gate_students','ldm_v320_attendance_load','ldm_v320_exam_load','ldm_v320_exam_list','ldm_v320_daily_snapshot','ldm_v320_daily_birthdays','ldm_work403_read','ldm_work403_history','ldm_v336_database_health','ldm_v336_promotion_candidates','ldm_v462_scan_capabilities']);
 const sensitive=/profile|permission|assignment|fee|payment|receipt|attendance|mark|exam|admission|approval|gate|presence|due|balance/i;
 function erase(k){const old=cache.get(k);if(old){bytes-=old.body.byteLength;cache.delete(k)}}
 function clear(){epoch++;cache.clear();cooldowns.clear();bytes=0;counters.invalidations++}
@@ -33,7 +33,7 @@ async function remember(r,key,ttl,atEpoch){if(!ttl||!r.ok||!r.body||/no-store/i.
 function subscribe(f,signal){return new Promise((resolve,reject)=>{let done=false;f.users++;const finish=(error,value)=>{if(done)return;done=true;signal?.removeEventListener('abort',abort);f.users--;if(!f.users&&!f.done)f.controller.abort();error?reject(error):resolve(value)};const abort=()=>finish(signal?.reason||new DOMException('Aborted','AbortError'));if(signal?.aborted)return abort();signal?.addEventListener('abort',abort,{once:true});f.promise.then(r=>{try{finish(null,r.clone())}catch(e){finish(e)}},e=>finish(e))})}
 W.fetch=function(input,init){let c;try{c=classify(input,init)}catch(e){return Promise.reject(e)}if(!c)return native(input,init);
  if(!c.read){invalidate(true);counters.writes++;return native(c.req).finally(()=>invalidate(true))}
- if(c.req.signal.aborted)return Promise.reject(c.req.signal.reason||new DOMException('Aborted','AbortError'));
+ const routeSignal=W.LDM_RUNTIME_V347?.readSignal?.();if(routeSignal&&typeof AbortSignal.any==='function')c.req=new Request(c.req,{signal:AbortSignal.any([c.req.signal,routeSignal])});if(c.req.signal.aborted)return Promise.reject(c.req.signal.reason||new DOMException('Aborted','AbortError'));
  if(!c.noReuse){const hit=cache.get(c.key);if(hit){if(hit.until>Date.now()){counters.cacheHits++;return Promise.resolve(response(hit))}erase(c.key)}const bad=cooldowns.get(c.key);if(bad){if(bad.until>Date.now()){counters.errorPauses++;return bad.error?Promise.reject(bad.error):Promise.resolve(response(bad))}cooldowns.delete(c.key)}const f=flights.get(c.key);if(f&&!f.controller.signal.aborted){counters.joined++;return subscribe(f,c.req.signal)}}
  const controller=new AbortController(),f={controller,users:0,done:false,promise:null},atEpoch=epoch;
  f.promise=readNative(new Request(c.req,{signal:controller.signal})).then(async r=>{
@@ -42,7 +42,7 @@ W.fetch=function(input,init){let c;try{c=classify(input,init)}catch(e){return Pr
  }).catch(e=>{if(e?.name!=='AbortError'&&!c.noReuse&&epoch===atEpoch){while(cooldowns.size>=32)cooldowns.delete(cooldowns.keys().next().value);cooldowns.set(c.key,{error:e,until:Date.now()+3000})}throw e}).finally(()=>{f.done=true;if(flights.get(c.key)===f)flights.delete(c.key)});
  if(!c.noReuse)flights.set(c.key,f);return subscribe(f,c.req.signal);
 };
-W.LDM_NETWORK_ECONOMY433={version:433,revision:434,invalidate,async fresh(fn){invalidate();refreshDepth++;try{return await fn()}finally{refreshDepth--}},stats:()=>({...counters,cacheEntries:cache.size,cacheBytes:bytes,inFlight:flights.size,activeReads,queuedReads:readQueue.length,errorEntries:cooldowns.size})};
+W.LDM_NETWORK_ECONOMY433={version:433,revision:463,invalidate,async fresh(fn){invalidate();refreshDepth++;try{return await fn()}finally{refreshDepth--}},stats:()=>({...counters,cacheEntries:cache.size,cacheBytes:bytes,inFlight:flights.size,activeReads,queuedReads:readQueue.length,errorEntries:cooldowns.size})};
 W.document?.addEventListener('click',e=>{if(e.target?.closest?.('#ldmV281Refresh,[data-ldm-refresh]'))invalidate()},{capture:true});
 W.addEventListener('pagehide',()=>invalidate());
 })(window);

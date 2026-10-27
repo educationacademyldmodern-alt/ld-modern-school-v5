@@ -232,3 +232,6 @@ body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #d378Brand h1{font-size:cl
 body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #d378Brand p{margin:4px 0!important;font-size:13px!important;color:#e4f1ff!important}
 body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent{gap:12px!important;padding-top:12px!important}
 }
+
+/* V463: one sidebar state, desktop content stays visible. */
+@media screen and (min-width:901px){body.d390Shell[data-ldm-nav463="open"] #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp>main{margin-left:244px!important;width:calc(100% - 244px)!important}body.d390Shell[data-ldm-nav463="open"] #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp>aside{transform:translateX(0)!important}body.d390Shell[data-ldm-nav463="closed"] #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp>aside{transform:translateX(-105%)!important}}
