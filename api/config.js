@@ -10,7 +10,10 @@ export default function handler(req, res) {
 
   res.setHeader("Cache-Control", "no-store");
 
-  if (!url || !key) {
+  // This endpoint is public. Never return an accidentally configured privileged key.
+  let publicKey = String(key || '').startsWith('sb_publishable_');
+  try { publicKey ||= JSON.parse(Buffer.from(String(key).split('.')[1], 'base64url').toString()).role === 'anon'; } catch (_) {}
+  if (!url || !key || !publicKey || key === process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return res.status(503).json({
       ok: false,
       error: "Cloud configuration is missing"
