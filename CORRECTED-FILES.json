@@ -1,0 +1,152 @@
+[
+  {
+    "path": "admin-fee-status-v459.js",
+    "status": "added",
+    "bytes": 11432,
+    "sha256": "dd247cac60b2d057851d32618295dbf10f90abb4a31247e05b9a8401e92642e6"
+  },
+  {
+    "path": "admin-timetable-devanagari-v461.woff2",
+    "status": "added",
+    "bytes": 50416,
+    "sha256": "f86f14cbd1004f5795689ee9cc70d5d87d915f5135b30283525c1c7b8f0eb192"
+  },
+  {
+    "path": "admin-timetable-v460.js",
+    "status": "added",
+    "bytes": 27534,
+    "sha256": "50668ed03fe57c1005669c7d715c48c9cfbc468bb4d6391fd776d998e003239b"
+  },
+  {
+    "path": "api/admin-forgot.js",
+    "status": "changed",
+    "bytes": 3746,
+    "sha256": "ced4fb74b652d77a2e44b34c261cdd8d9456c844124d960fd31f04526e6bc896"
+  },
+  {
+    "path": "api/config.js",
+    "status": "changed",
+    "bytes": 878,
+    "sha256": "43039c15e033b46084901e931ba7085be93d3de271f721f7285d8d4c25e3ee0f"
+  },
+  {
+    "path": "api/student-access.js",
+    "status": "changed",
+    "bytes": 6949,
+    "sha256": "a5dc77089bc61d29b28d9d3ce32341d5981d092437708ec1ff6e36314ec2cc40"
+  },
+  {
+    "path": "api/student-media.js",
+    "status": "changed",
+    "bytes": 6077,
+    "sha256": "6ec51c52cd147e0a9884665bccf690f2d94adc2f7c813a85e3d49b5840b1f288"
+  },
+  {
+    "path": "attendance-scan-v412.js",
+    "status": "changed",
+    "bytes": 39796,
+    "sha256": "578ca47101658e37ae230b7b447ac539d2df308ead525a41226cec2941ec1e6a"
+  },
+  {
+    "path": "desktop-premium-v378.css",
+    "status": "changed",
+    "bytes": 55088,
+    "sha256": "4b57e1f878223e5f43ee43fe77a5da4bb9b8e8fcb5e73039e5cfb4ce90ffbb8b"
+  },
+  {
+    "path": "exam-central-v320.js",
+    "status": "changed",
+    "bytes": 30755,
+    "sha256": "2ddd0ffc2edbba1fcc69a74bd134fb1effc438bc61747b5791b70697d6b6e884"
+  },
+  {
+    "path": "final53-complete.js",
+    "status": "changed",
+    "bytes": 10228,
+    "sha256": "0f46a2080c4994c43050d7c37db7ac67b0694eeda84ca213254a0529ce16f308"
+  },
+  {
+    "path": "index.html",
+    "status": "changed",
+    "bytes": 2324832,
+    "sha256": "69e0f025894a4423e33bd73cc48218f37a6d7b4224a6fe7641d105a027b34266"
+  },
+  {
+    "path": "manifest.json",
+    "status": "changed",
+    "bytes": 182,
+    "sha256": "eeaa4edd15e0211d69ccccd130c74fbec0de48343dae66f57f4fbc8401ff1752"
+  },
+  {
+    "path": "network-economy-v433.js",
+    "status": "changed",
+    "bytes": 8516,
+    "sha256": "b895c494988f2ebc83e5d463ee82f7623bee16063b7d920ab6e5d5bf19b76e77"
+  },
+  {
+    "path": "paper-center-v343.js",
+    "status": "changed",
+    "bytes": 24954,
+    "sha256": "8bdafaa5385e34a7fb4fa7d2337b5e1eaf89835a55530422a45a54d66e492786"
+  },
+  {
+    "path": "portal-flow-v455.js",
+    "status": "changed",
+    "bytes": 10408,
+    "sha256": "2858e2c5b64fb895c4d674aa7cf0b0d7229d524b3c6c767c311f833e7bacc38f"
+  },
+  {
+    "path": "portal-transition-v451.js",
+    "status": "changed",
+    "bytes": 2786,
+    "sha256": "06983aa8793b0f8e0fdab8b092ff73252545b8955bce9b9e55ce4d9b730b6b30"
+  },
+  {
+    "path": "root-corrections-v332.js",
+    "status": "changed",
+    "bytes": 46215,
+    "sha256": "2664c5dfc0b2f4e96a0bfddfe063e5d62dc9d11a041bef15551874dc8b290437"
+  },
+  {
+    "path": "runtime-v347.js",
+    "status": "changed",
+    "bytes": 8246,
+    "sha256": "b943bd637b1abdf9cda96e1a93a70b3cbf02cdd0d769970c6b625888bfb8a268"
+  },
+  {
+    "path": "runtime_guard.js",
+    "status": "changed",
+    "bytes": 13435,
+    "sha256": "322dc75cbb8387d0f1eff7742a60b0a0772c8fcf86f3d30341d99d11b5faee4f"
+  },
+  {
+    "path": "school-workspace-v336.js",
+    "status": "changed",
+    "bytes": 90311,
+    "sha256": "d745aaf0d1c1e887443d3924b14d2fadf805d2a5680a4c20c021b91c03599bf6"
+  },
+  {
+    "path": "smart-work-v403.js",
+    "status": "changed",
+    "bytes": 33886,
+    "sha256": "93500578203694fec6224ef1b6d5d9f929070131773c3629aa27c980c91e869c"
+  },
+  {
+    "path": "v59-academic-calendar.js",
+    "status": "changed",
+    "bytes": 5728,
+    "sha256": "836a5b2f77cd8e037eba3fca13670eac34f70581bded3e8ac3a48a18eff72d97"
+  },
+  {
+    "path": "v62-render-safe.js",
+    "status": "changed",
+    "bytes": 1562,
+    "sha256": "1ddead23cdb43fde271927e25277522b37c0f12337b7dd3747dadef5cb3d17ae"
+  },
+  {
+    "path": "work-access-v398.js",
+    "status": "changed",
+    "bytes": 6589,
+    "sha256": "1dcee5a480ce3daf2912ab9790675f641c592ed7d9d272d6067ba0b85d4b8bce"
+  }
+]

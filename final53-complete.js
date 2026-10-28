@@ -27,7 +27,28 @@ $id('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div><h3>
 </div></div>`};
 
 window.v53MasterTimetable=async function(){if(!admin())return toast('Admin permission required');head('Master Timetable','One setup • whole week • bell-wise');let {data,error}=await sb.from('timetable').select('*').order('day_name').order('period_no');if(error)return toast(error.message);let rows=data||[];$id('erpContent').innerHTML=`<div class="panel"><div class="panelHead"><div><h3>🕐 Master Timetable</h3><p class="note">Existing timetable सुरक्षित है. Bulk generator केवल selected class/teacher/subject के blank periods add करता है.</p></div></div><div class="v53Tools"><input id="v53TTClass" placeholder="Class"><input id="v53TTTeacher" placeholder="Teacher"><input id="v53TTSubject" placeholder="Subject"><input id="v53TTFrom" type="number" min="1" max="12" value="1" title="First bell"><input id="v53TTTo" type="number" min="1" max="12" value="6" title="Last bell"><button class="primary" onclick="v53GenerateWeekTT()">Generate Blank Week</button></div><div class="tableWrap"><table><tr><th>Day</th><th>Bell</th><th>Class</th><th>Subject</th><th>Teacher</th></tr>${rows.map(r=>`<tr><td>${E(r.day_name)}</td><td>${E(r.period_no)}</td><td>${E(r.class_name)}</td><td>${E(r.subject)}</td><td>${E(r.teacher_name)}</td></tr>`).join('')||'<tr><td colspan="5">No timetable rows.</td></tr>'}</table></div></div>`};
-window.v53GenerateWeekTT=async function(){let c=$id('v53TTClass').value.trim(),t=$id('v53TTTeacher').value.trim(),s=$id('v53TTSubject').value.trim(),a=Number($id('v53TTFrom').value||1),b=Number($id('v53TTTo').value||6);if(!c||!t||!s)return toast('Class, Teacher, Subject required');let days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],ins=[];for(const d of days)for(let p=a;p<=b;p++){let q=await sb.from('timetable').select('id').eq('day_name',d).eq('period_no',p).eq('class_name',c).limit(1);if(!q.data?.length)ins.push({day_name:d,period_no:p,class_name:c,teacher_name:t,subject:s})}if(ins.length){let q=await sb.from('timetable').insert(ins);if(q.error)return toast(q.error.message)}toast(`${ins.length} blank timetable periods added`);v53MasterTimetable()};
+// V468: one class/week read; repeated clicks join the same pending generation.
+let timetableGeneration468=null;
+window.v53GenerateWeekTT=function(){
+ if(!admin()||String(window.profile?.status||'active').toLowerCase()!=='active')return toast('Active Admin permission required');
+ if(timetableGeneration468)return timetableGeneration468;
+ const c=$id('v53TTClass')?.value.trim()||'',t=$id('v53TTTeacher')?.value.trim()||'',s=$id('v53TTSubject')?.value.trim()||'',a=Number($id('v53TTFrom')?.value||1),b=Number($id('v53TTTo')?.value||6);
+ if(!c||!t||!s)return toast('Class, Teacher, Subject required');
+ if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b>12||a>b)return toast('Bell range 1–12 के बीच सही भरें');
+ const who=window.profile?.id,days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+ const current=()=>window.profile?.id===who&&admin()&&String(window.profile?.status||'active').toLowerCase()==='active';
+ const job=Promise.resolve().then(async()=>{
+  const q=await sb.from('timetable').select('id,day_name,period_no',{count:'exact'}).eq('class_name',c).in('day_name',days);if(q.error)throw q.error;
+  if(!current())return;
+  if(!Array.isArray(q.data)||!Number.isInteger(q.count)||q.count!==q.data.length)throw Error('Existing timetable की पूरी पुष्टि नहीं मिली; कोई bell नहीं जोड़ी गई। Class/week report जाँचें।');
+  const occupied=new Set(q.data.map(x=>String(x.day_name)+'|'+Number(x.period_no))),ins=[];
+  for(const day of days)for(let period=a;period<=b;period++)if(!occupied.has(day+'|'+period))ins.push({day_name:day,period_no:period,class_name:c,teacher_name:t,subject:s});
+  if(ins.length){const r=await sb.from('timetable').insert(ins);if(r.error)throw r.error;}
+  if(!current())return;
+  toast(`${ins.length} blank timetable periods added`);return window.v53MasterTimetable();
+ }).catch(e=>{if(current())toast(e.message||String(e))}).finally(()=>{if(timetableGeneration468===job)timetableGeneration468=null});
+ timetableGeneration468=job;return job;
+};
 
 async function dueRows(classes=[]){
  if(!classes.length)return [];

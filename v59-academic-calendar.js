@@ -13,6 +13,7 @@ const oldLoad=window.loadAttendanceClass; if(typeof oldLoad==='function')window.
 const oldSave=window.saveAttendanceSheet; if(typeof oldSave==='function')window.saveAttendanceSheet=async function(){let d=G('attDate')?.value||iso59(),s=await day59(d);if(s.holiday)return toast(s.label+' — attendance save नहीं होगी');return oldSave.apply(this,arguments)};
 try{let oldRender=window.render;window.render=async function(p){if(p==='v59_calendar')return v59HolidayCenter();return oldRender.apply(this,arguments)}}catch(_){}
 // Add Admin navigation without replacing existing navigation.
-function addNav(){if(!admin59())return;let nav=[...document.querySelectorAll('button')].find(b=>/Complaints.*Discipline/i.test(b.textContent||''));if(nav&&nav.parentElement&&!nav.parentElement.querySelector('[data-v59nav]')){let b=document.createElement('button');b.dataset.v59nav='1';b.innerHTML='📅 Academic Calendar';b.onclick=()=>v59HolidayCenter();nav.insertAdjacentElement('afterend',b)}}
-window.addEventListener('load',()=>setTimeout(addNav,700));document.addEventListener('click',()=>setTimeout(addNav,120));
+function addNav(){if(!admin59()||document.querySelector('[data-v59nav]'))return;let nav=[...document.querySelectorAll('button')].find(b=>/Complaints.*Discipline/i.test(b.textContent||''));if(nav&&nav.parentElement&&!nav.parentElement.querySelector('[data-v59nav]')){let b=document.createElement('button');b.dataset.v59nav='1';b.innerHTML='📅 Academic Calendar';b.onclick=()=>v59HolidayCenter();nav.insertAdjacentElement('afterend',b)}}
+let navTimer468=0;function queueNav468(){if(navTimer468)return;navTimer468=setTimeout(()=>{navTimer468=0;addNav()},120)}
+window.addEventListener('load',queueNav468);document.addEventListener('click',queueNav468);window.addEventListener('pagehide',()=>{clearTimeout(navTimer468);navTimer468=0});
 })();

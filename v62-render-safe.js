@@ -4,7 +4,7 @@
  function isAdmin(){return ['super_admin','admin','principal'].includes(role())}
  function mark(){
    const erp=$('erp'); if(!erp)return;
-   erp.dataset.v62Role=role()||'unknown';
+   const currentRole=role()||'unknown';if(erp.dataset.v62Role!==currentRole)erp.dataset.v62Role=currentRole;
    if(window.innerWidth<=900) erp.classList.remove('v62Collapsed');
  }
  function closeMobile(){if(window.innerWidth<=900)document.querySelector('#erp aside')?.classList.remove('open')}
@@ -18,5 +18,7 @@
  document.addEventListener('DOMContentLoaded',()=>setTimeout(install,120));
  window.addEventListener('load',()=>setTimeout(install,250));
  window.addEventListener('resize',()=>{mark();if(window.innerWidth>900)document.querySelector('#erp aside')?.classList.remove('open')},{passive:true});
- document.addEventListener('click',()=>setTimeout(install,60),true);
+ let installTimer468=0;function queueInstall468(){if(installTimer468)return;installTimer468=setTimeout(()=>{installTimer468=0;install()},60)}
+ document.addEventListener('click',queueInstall468,true);
+ window.addEventListener('pagehide',()=>{clearTimeout(installTimer468);installTimer468=0});
 })();

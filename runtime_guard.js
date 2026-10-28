@@ -15,7 +15,9 @@ const parent=()=>['parent','student'].includes(role());
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const nextFrame=()=>new Promise(r=>requestAnimationFrame(()=>r()));
 
+const cacheOwner=()=>[window.profile?.id||'',window.school?.academic_session||''].join('|');
 const S={
+  dashboardOwner:'',
   lastSurface:'',
   intent:'',
   seq:0,
@@ -164,12 +166,15 @@ function cleanupDuplicates(){
  if(h&&admin())dedupe(h,'.ldmRootAdminDash');
  if(h&&teacher())dedupe(h,'.v114TeacherDash');
 }
+function syncDashboardOwner(){const key=cacheOwner();if(S.dashboardOwner!==key){S.dashboardOwner=key;S.dashboardHTML={admin:'',teacher:''};}}
 function storeDashboard(){
+ syncDashboardOwner();
  const h=host(),k=roleKey();if(!h||!dashboardReady()||!['admin','teacher'].includes(k))return false;
  const html=h.innerHTML;if(html.length<250||/Loading\.\.\.|Loading…/i.test(html))return false;
  S.dashboardHTML[k]=html;return true;
 }
 function restoreDashboard(){
+ syncDashboardOwner();
  const h=host(),html=S.dashboardHTML[roleKey()];if(!h||!html)return false;
  h.innerHTML=html;cleanupDuplicates();reconcile('dashboard-restore');return true;
 }
