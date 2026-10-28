@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head>
 <link rel="stylesheet" href="appearance-v454.css?v=456" media="screen"><script src="appearance-v454.js?v=456"></script>
-<script src="network-economy-v433.js?v=468"></script>
+<script src="network-economy-v433.js?v=471"></script>
 <!-- No startup visibility lock: public page renders directly. -->
 <script id="ldm-v146-boot-safety">/* V146: no global visibility boot-lock. It could remain forever and blank the whole ERP. */</script>
 <style id="ldm-v158-early-surface-owner">
@@ -16454,7 +16454,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     const h=['dashboard'];saveStack(h,'dashboard');
     try{window.ldmDeactivateActiveModule?.('dashboard')}catch(_e){}
     const out=await renderNoPush('dashboard');installBrowserPair('dashboard',h,true);ensureAdminControls();
-    try{window.scrollTo(0,0)}catch(_e){}
+    try{window.scrollTo(0,0);document.querySelectorAll('#erp main,#erpContent').forEach(el=>{el.scrollTop=0;el.scrollLeft=0})}catch(_e){}
     return out;
   }
   window.v90Back=centralBack;window.v90GoHome=centralHome;window.erpGoHome=centralHome;
@@ -18476,7 +18476,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v332.js?v=449"></script>
+<script src="dashboard-v332.js?v=470"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=406"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18489,9 +18489,9 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=349"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v332.js?v=464"></script>
+<script src="root-corrections-v332.js?v=470"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
-<script src="exam-central-v320.js?v=465"></script>
+<script src="exam-central-v320.js?v=470"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18539,13 +18539,13 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="teacher-save-v345.js?v=442"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=468"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=435"></script>
+<script src="runtime-v347.js?v=470"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=470"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=463">
 <script src="desktop-premium-v378.js?v=390"></script>
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=463"></script>
-<script src="work-access-v398.js?v=463"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=463"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=445" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=466"></script><script src="portal-transition-v451.js?v=467"></script><script src="admin-fee-status-v459.js?v=459"></script><script src="admin-timetable-v460.js?v=461"></script></body>
+<script src="work-access-v398.js?v=463"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=470"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=470" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=466"></script><script src="portal-transition-v451.js?v=467"></script><script src="admin-fee-status-v459.js?v=459"></script><script src="admin-timetable-v460.js?v=461"></script><link rel="stylesheet" href="workflow-v470.css?v=470"><script src="workflow-v470.js?v=470"></script><link rel="stylesheet" href="office-v470.css?v=470"><script src="office-v470.js?v=470"></script></body>
 </html>
