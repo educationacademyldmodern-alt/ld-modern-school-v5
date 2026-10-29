@@ -1,0 +1,34 @@
+.ldmAuthActions455{display:flex!important;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 18px}.ldmAuthActions455 button{display:inline-flex!important;visibility:visible!important;position:static!important;width:auto!important;min-height:40px!important;margin:0!important;padding:8px 12px!important;border:1px solid #ccd9e7!important;border-radius:9px!important;background:#f2f6fb!important;color:#183d62!important;font:600 14px/1.4 system-ui!important;box-shadow:none!important}
+#parentDashboardBody #v97ParentWelcome{display:none!important}
+#parentDashboardBody[data-parent-view455="loading"]>:not(.v646ParentBrand){display:none!important}
+#parentDashboardBody[data-parent-view455="children"]>:not(.v646ParentBrand):not(#ldmChildren455){display:none!important}
+#parentDashboardBody[data-parent-view455="detail"] #ldmChildren455{display:none!important}
+#parentDashboardBody .parentStudentCard[hidden]{display:none!important}
+#ldmChildren455{padding:16px 12px}#ldmChildren455 h2{font-size:24px;color:#153e67;margin:12px 0 24px}.ldmChildGrid455{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.ldmChildGrid455 button{min-width:0;text-align:left;white-space:normal;padding:18px;border:1px solid #dfe8f2;border-radius:20px;background:linear-gradient(125deg,#fff,#edf6ff);color:#173e65;box-shadow:0 8px 24px #244d7310;cursor:pointer}.ldmChildGrid455 b{display:block;font-size:21px;overflow-wrap:anywhere}.ldmChildGrid455 span{display:block;margin-top:6px;font-size:14px;color:#657b8c;overflow-wrap:anywhere}
+@media(max-width:420px){.ldmChildGrid455{gap:10px}.ldmChildGrid455 button{padding:14px}.ldmChildGrid455 b{font-size:18px}.ldmChildGrid455 span{font-size:12px}}
+@media print{.ldmAuthActions455,#ldmChildren455,#ldmChildrenBack455{display:none!important}}
+
+#erp .erpTop>#ldmAppearanceMenu455{display:inline-flex!important;visibility:visible!important;position:static!important;align-items:center;justify-content:center;min-height:38px;padding:8px 11px;border:1px solid #c4d7eb;border-radius:9px;background:#fff;color:#183e66;font:600 13px/1.4 system-ui;white-space:nowrap}
+html[data-ldm-theme="dark"] #ldmChildren455 h2{color:#e6edf7}html[data-ldm-theme="dark"] .ldmChildGrid455 button{background:#172438;color:#e6edf7;border-color:#35465e}html[data-ldm-theme="dark"] .ldmChildGrid455 span{color:#bdcbe0}
+
+@media print{[data-ldm-appearance-open],#ldmAppearanceMenu455{display:none!important}}
+
+/* The status slot exists before data arrives: text updates do not move action cards. */
+#erpContent #v185FrontDesk .v185FrontHead{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important;align-items:start!important}
+#erpContent #v185FrontDesk #ldmV279Freshness{display:flex!important;align-items:center!important;width:100%!important;max-width:100%!important;min-height:52px!important;height:52px!important;margin:0!important;padding:6px 10px!important;font-size:11px!important;line-height:18px!important;box-sizing:border-box!important;overflow:auto;overflow-wrap:anywhere}
+#erpContent #v185FrontDesk .v185FrontActions button>small{display:none!important}
+
+/* V476: child names and instructions remain inside the same selectable card. */
+#ldmChildren455 .ldmChildGrid455{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));align-items:stretch}
+#ldmChildren455 .ldmChildGrid455>button{box-sizing:border-box;width:100%;min-width:0;max-width:100%;display:flex;flex-direction:column;gap:7px;height:auto;min-height:150px;overflow-wrap:anywhere}
+#ldmChildren455 .ldmChildGrid455>button :is(b,span,small){min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+#ldmChildren455 .child476Hint{display:block;font:600 13px/1.55 u337Text,system-ui,sans-serif;color:#174f74;margin-top:auto;padding-top:10px}
+@media(max-width:640px){#ldmChildren455 .ldmChildGrid455{grid-template-columns:minmax(0,1fr)}#ldmChildren455 .ldmChildGrid455>button{padding:18px}#ldmChildren455 .ldmChildGrid455 b{font-size:20px;line-height:1.4}}
+/* Keep the additional instruction out of the legacy icon's narrow grid column. */
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button{min-width:0!important;grid-template-columns:36px minmax(0,1fr)!important;grid-template-rows:auto auto auto auto!important;gap:5px 9px!important;height:auto!important;align-content:start!important;align-items:start!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>span{grid-column:1!important;grid-row:1/4!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>small:not(.child475Hint){grid-column:2!important;grid-row:1!important;font-size:12px!important;line-height:1.4!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>b{grid-column:2!important;grid-row:2!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>em{grid-column:2!important;grid-row:3!important;min-width:0!important;font-size:12px!important;line-height:1.4!important;white-space:normal!important;overflow-wrap:anywhere!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>.child475Hint{grid-column:1/-1!important;grid-row:4!important;width:100%!important;box-sizing:border-box!important;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important;font-size:12px!important;line-height:1.55!important;margin-top:8px!important}
+#ldmChildren455 .ldmChildGrid455:has(>button:only-child){grid-template-columns:minmax(0,min(100%,440px))}
