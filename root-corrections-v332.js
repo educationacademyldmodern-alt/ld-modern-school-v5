@@ -78,12 +78,13 @@ async function feeds(options={}){if(!dailyActive())return false;if(!options.forc
 function mountFeeds(){readDashboardCache();paintFeeds()}
 function startDashboard(){if(!dailyActive())return;const changedDay=dailyActor!==dashboardKey();readDashboardCache();if(dailyReport)paintDaily(dailyReport);paintFeeds();$('r437LoadDashboard')?.remove();
  const host=document.querySelector('#erpContent .ldmRootAdminDash'),key=dashboardKey();if(mounted438?.host===host&&mounted438.key===key&&!dirtyPending438)return;
- mounted438={host,key};if(dirtyPending438||writeKinds438.size){scheduleWrite438();return}
- if(changedDay||!dailyReport||Date.now()-dailyStamp>60000)window.ldmRefreshDashboardOnce?.({force:true,reason:'dashboard-open'});
+ mounted438={host,key};if(dirtyPending438||writeKinds438.size){dailyStatus('सेव हुआ • Dashboard अपडेट के लिए Refresh दबाएँ।','stale');return}
+ /* One required initial dashboard snapshot only. Never refresh for age, focus, Home or tab return. */
+ if(changedDay||!dailyReport)window.ldmRefreshDashboardOnce?.({force:true,reason:'initial-dashboard'});
 }
 
 window.v90LoadDashboardStats=options=>daily(options);try{v90LoadDashboardStats=window.v90LoadDashboardStats}catch(_){}
-window.ldmRefreshDashboardOnce=async options=>{if(!dailyActive())return false;const results=await Promise.all([daily(options),feeds(options),refreshDue(!!options?.force)]);return results[0]};
+window.ldmRefreshDashboardOnce=async options=>{if(!dailyActive())return false;const results=await Promise.all([daily(options),feeds(options),refreshDue(!!options?.force)]);const ok=results[0]===true;if(options?.force&&ok){dirtyPending438=false;writeKinds438.clear();saveDashboardCache()}return ok};
 window.v39LoadAdminPanels=feeds;try{v39LoadAdminPanels=feeds}catch(_){}
 // Confirmed local writes refresh only affected dashboard data, once; no polling.
 async function activities438(){if(!dailyActive())return false;if(activityFlight438)return activityFlight438;readDashboardCache();const key=dashboardKey(),control=new AbortController();activityController438=control;
@@ -94,7 +95,7 @@ async function activities438(){if(!dailyActive())return false;if(activityFlight4
  }catch(e){if(key===dashboardKey()&&dailyActive()){const host=$('v39Activities');if(host)host.title='नई गतिविधियाँ अपडेट नहीं हुईं: '+String(e.message||e)}return false}finally{clearTimeout(timer);if(activityController438===control)activityController438=null}})().finally(()=>{if(activityFlight438===promise)activityFlight438=null});activityFlight438=promise;return promise;
 }
 function scheduleWrite438(){if(writeTimer438||writeFlight438||!dailyActive()||$('scan412'))return;writeTimer438=setTimeout(()=>{writeTimer438=0;refreshWrite438()},80)}
-document.addEventListener('ldm-scan-closed',()=>{if(writeKinds438.size)scheduleWrite438()});
+/* Scanner close does not run a dashboard read; use the visible Refresh button when needed. */
 function refreshWrite438(){if(writeFlight438||!dailyActive()||!writeKinds438.size||$('scan412'))return;const key=dashboardKey();
  const job=(async()=>{const reads=[dailyFlight,dueFlight,feedsFlight,activityFlight438].filter(Boolean);if(reads.length)await Promise.allSettled(reads);if(key!==dashboardKey()||!dailyActive())return;
  const kinds=[...writeKinds438];writeKinds438.clear();dirtyPending438=false;const kind=kinds.join(' '),fee=/fee|payment|receipt|student|admission/i.test(kind),attendance=/attendance|presence|gate/i.test(kind),request=/request/i.test(kind),all=/notice|event|settings/i.test(kind)||!fee&&!attendance&&!request;
@@ -103,9 +104,9 @@ function refreshWrite438(){if(writeFlight438||!dailyActive()||!writeKinds438.siz
 }
 const dirtyBase=window.ldmMarkDataDirty;window.ldmMarkDataDirty=function(kind,...args){const detail=args[0];if(detail?.owner&&detail.owner!==String(actor()?.id||'')||detail?.session&&detail.session!==session())return false;
  const result=dirtyBase?.call(this,kind,...args);const key=dashboardKey();if(detail?.receipt){const id=key+'|'+detail.receipt;if(writeSeen438.has(id))return result;writeSeen438.add(id);if(writeSeen438.size>100)writeSeen438.delete(writeSeen438.values().next().value)}
- dailyStamp=dueStamp=feedsStamp=0;dirtyPending438=true;writeKinds438.add(String(kind||'data'));if(dailyActive())scheduleWrite438();return result;
+ dailyStamp=dueStamp=feedsStamp=0;dirtyPending438=true;writeKinds438.add(String(kind||'data'));if(dailyActive())dailyStatus('बदलाव सेव है • आँकड़े देखने के लिए Refresh दबाएँ।','stale');return result;
 };
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){stopDaily();clearTimeout(writeTimer438);writeTimer438=0;activityController438?.abort()}else{paintFeeds();if(dailyActive()&&(dailyActor!==dashboardKey()||dirtyPending438))startDashboard()}});window.addEventListener('pagehide',()=>{stopDaily();clearTimeout(writeTimer438);writeTimer438=0;activityController438?.abort()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){stopDaily();clearTimeout(writeTimer438);writeTimer438=0;activityController438?.abort()}else{paintFeeds()}});window.addEventListener('pagehide',()=>{stopDaily();clearTimeout(writeTimer438);writeTimer438=0;activityController438?.abort()});
 
 let classCache=null,classCacheKey='',classCacheAt=0,classFlight=null,classFlightKey='';
 async function loadClasses(force=false){const key=String(actor()?.id||'')+'|'+session();if(!force&&classCacheKey===key&&Date.now()-classCacheAt<300000)return classCache||[];if(classFlight&&classFlightKey===key)return classFlight;
