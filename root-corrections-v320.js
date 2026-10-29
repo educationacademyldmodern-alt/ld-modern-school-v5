@@ -82,7 +82,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
 let classCache=null,classCacheKey='',classCacheAt=0,classFlight=null;
 async function loadClasses(force=false){const key=String(actor()?.id||'')+'|'+session();if(!force&&classCacheKey===key&&Date.now()-classCacheAt<300000)return classCache||[];if(classFlight)return classFlight;
- classFlight=(async()=>{try{const result=await rpc('ldm_v309_absence_classes',{p_session:session()});if(!Array.isArray(result))throw Error('Class list unavailable');if(key!==String(actor()?.id||'')+'|'+session())return [];classCache=result;classCacheKey=key;classCacheAt=Date.now();return result}finally{classFlight=null}})();return classFlight;
+ classFlight=(async()=>{try{const result=await rpc('ldm_v491_absence_classes',{p_session:session()});if(!Array.isArray(result))throw Error('Class list unavailable');if(key!==String(actor()?.id||'')+'|'+session())return [];classCache=result;classCacheKey=key;classCacheAt=Date.now();return result}finally{classFlight=null}})();return classFlight;
 }
 const oldClassGetter=window.v103ClassTeacherClasses;if(typeof oldClassGetter==='function'){window.v103ClassTeacherClasses=function(){if(String(actor()?.role||'').toLowerCase()==='teacher'&&classCacheKey===String(actor()?.id||'')+'|'+session()&&classCache)return classCache.slice();return oldClassGetter.call(this)};try{v103ClassTeacherClasses=window.v103ClassTeacherClasses}catch(_){}}
 const oldTeacherClass=window.teacherClassPortal;if(typeof oldTeacherClass==='function'){window.teacherClassPortal=async function(...args){await loadClasses(true);return oldTeacherClass.apply(this,args)};try{teacherClassPortal=window.teacherClassPortal}catch(_){}}

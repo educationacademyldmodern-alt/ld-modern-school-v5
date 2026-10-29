@@ -103,3 +103,30 @@
 }
 @media screen and (min-width:1051px){#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmNewTeacher) #erpContent>.ldmNewTeacher{max-width:1320px!important;margin:0 auto!important;padding:18px!important}.ldmNewTeacher .ldmTeacherHero{border-radius:18px!important;padding:18px!important}.ldmNewTeacher .ldmTeacherModules{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}.ldmNewTeacher .ldmTeacherModules>button{min-height:112px!important;padding:15px!important;border-radius:16px!important;text-align:left!important}.ldmNewTeacher .ldmTeacherModules>button b{font-size:16px!important;line-height:1.35!important}.ldmNewTeacher .ldmTeacherModules>button small{font-size:13px!important;line-height:1.45!important}}
 @media screen and (min-width:1450px){#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmNewTeacher) .ldmTeacherModules{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+
+/* V491: laptop/desktop card grid resilient to Windows display scaling; coarse-pointer mobile rules stay untouched. */
+@media screen and (min-width:700px) and (hover:hover) and (pointer:fine){
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash){width:100%!important;min-width:0!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #erpContent{box-sizing:border-box!important;width:100%!important;max-width:1680px!important;min-width:0!important;margin-inline:auto!important;padding:20px clamp(18px,2.2vw,36px) 36px!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;width:100%!important;max-width:none!important;min-width:0!important;gap:18px!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>*{box-sizing:border-box!important;width:100%!important;max-width:none!important;min-width:0!important;grid-column:auto!important;grid-row:auto!important;margin-inline:0!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>#v90Stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:minmax(118px,auto)!important;gap:14px!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #v90Stats>button{box-sizing:border-box!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;min-width:0!important;min-height:118px!important;height:auto!important;padding:16px!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #v90Stats>button>div{min-width:0!important;flex:1 1 auto!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #v90Stats>button small{white-space:normal!important;overflow-wrap:anywhere!important;font-size:14px!important;line-height:1.4!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #v90Stats>button b{white-space:normal!important;overflow-wrap:anywhere!important;font-size:clamp(22px,2vw,30px)!important;line-height:1.2!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) :is(.v114QuickGrid,.ldmMasterGrid,.v90MonitorGrid,#r323ControlActions,.v114AdminFeedGrid,#v149AdminQuickSlot .ldmTeacherModules){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;width:100%!important;min-width:0!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) :is(.v114QuickGrid,.ldmMasterGrid,.v90MonitorGrid,#r323ControlActions,.v114AdminFeedGrid) :is(button,article,.panel){box-sizing:border-box!important;min-width:0!important;max-width:100%!important;overflow-wrap:anywhere!important}
+}
+@media screen and (min-width:1200px) and (hover:hover) and (pointer:fine){
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>#v90Stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) :is(.v114QuickGrid,.ldmMasterGrid,.v90MonitorGrid,#r323ControlActions,.v114AdminFeedGrid,#v149AdminQuickSlot .ldmTeacherModules){grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media screen and (min-width:1650px) and (hover:hover) and (pointer:fine){
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>#v90Stats{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) :is(.v114QuickGrid,.ldmMasterGrid,.v90MonitorGrid,#r323ControlActions,.v114AdminFeedGrid,#v149AdminQuickSlot .ldmTeacherModules){grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media screen and (min-width:700px) and (hover:hover) and (pointer:fine){
+  #erp:has(#erpContent .ldmNewTeacher) .ldmTeacherModules>button[data-new-teacher-route="assigned_work"]{grid-column:1/-1!important;min-height:118px!important;border:2px solid #0d806c!important;background:linear-gradient(125deg,#0b736b,#136092)!important;color:#fff!important;box-shadow:0 8px 20px #0d53602a!important}
+  #erp:has(#erpContent .ldmNewTeacher) .ldmTeacherModules>button[data-new-teacher-route="assigned_work"] small{color:#e9fffa!important}
+}
