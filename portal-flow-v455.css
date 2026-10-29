@@ -17,3 +17,18 @@ html[data-ldm-theme="dark"] #ldmChildren455 h2{color:#e6edf7}html[data-ldm-theme
 #erpContent #v185FrontDesk .v185FrontHead{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important;align-items:start!important}
 #erpContent #v185FrontDesk #ldmV279Freshness{display:flex!important;align-items:center!important;width:100%!important;max-width:100%!important;min-height:52px!important;height:52px!important;margin:0!important;padding:6px 10px!important;font-size:11px!important;line-height:18px!important;box-sizing:border-box!important;overflow:auto;overflow-wrap:anywhere}
 #erpContent #v185FrontDesk .v185FrontActions button>small{display:none!important}
+
+/* V476: child names and instructions remain inside the same selectable card. */
+#ldmChildren455 .ldmChildGrid455{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));align-items:stretch}
+#ldmChildren455 .ldmChildGrid455>button{box-sizing:border-box;width:100%;min-width:0;max-width:100%;display:flex;flex-direction:column;gap:7px;height:auto;min-height:150px;overflow-wrap:anywhere}
+#ldmChildren455 .ldmChildGrid455>button :is(b,span,small){min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+#ldmChildren455 .child476Hint{display:block;font:600 13px/1.55 u337Text,system-ui,sans-serif;color:#174f74;margin-top:auto;padding-top:10px}
+@media(max-width:640px){#ldmChildren455 .ldmChildGrid455{grid-template-columns:minmax(0,1fr)}#ldmChildren455 .ldmChildGrid455>button{padding:18px}#ldmChildren455 .ldmChildGrid455 b{font-size:20px;line-height:1.4}}
+/* Keep the additional instruction out of the legacy icon's narrow grid column. */
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button{min-width:0!important;grid-template-columns:36px minmax(0,1fr)!important;grid-template-rows:auto auto auto auto!important;gap:5px 9px!important;height:auto!important;align-content:start!important;align-items:start!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>span{grid-column:1!important;grid-row:1/4!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>small:not(.child475Hint){grid-column:2!important;grid-row:1!important;font-size:12px!important;line-height:1.4!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>b{grid-column:2!important;grid-row:2!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>em{grid-column:2!important;grid-row:3!important;min-width:0!important;font-size:12px!important;line-height:1.4!important;white-space:normal!important;overflow-wrap:anywhere!important}
+#parentDashboard#parentDashboard#parentDashboard#parentDashboard .v114PortalStats>button>.child475Hint{grid-column:1/-1!important;grid-row:4!important;width:100%!important;box-sizing:border-box!important;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important;font-size:12px!important;line-height:1.55!important;margin-top:8px!important}
+#ldmChildren455 .ldmChildGrid455:has(>button:only-child){grid-template-columns:minmax(0,min(100%,440px))}

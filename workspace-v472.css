@@ -21,3 +21,20 @@ html body #erpContent .i447Card .i447Header,html body #erpContent .i447Card .i44
 .o472 [hidden]{display:none!important}
 #erp:has(#erpNav.o472Nav)>aside .sideBrand{display:none!important}
 @media screen{#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp :is(button,input,select,textarea,label,th):not(:where(.i447Card *,.markPreview *,.m345Mark *,[contenteditable] *)){font-family:LDMOffice472,"Segoe UI",system-ui,sans-serif!important}}
+
+/* V475: same explicit menu state on desktop and phone. */
+@media screen{
+body[data-ldm-nav463="closed"] #erp#erp#erp#erp>aside{transform:translateX(-110%)!important;visibility:hidden!important;pointer-events:none!important}
+body[data-ldm-nav463="closed"] #erp#erp#erp#erp>main{margin-left:0!important;width:100%!important}
+body[data-ldm-nav463="open"] #erp#erp#erp#erp>aside{transform:none!important;visibility:visible!important;pointer-events:auto!important;z-index:10000!important;width:min(390px,92vw)!important;max-height:100dvh;overflow:auto}
+#erp#erp#erp#erp .erpTop .hamb{display:inline-flex!important}
+#erp#erp #erpNav.o472Nav .o472Group>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:10px 4px}
+#erp#erp #erpNav.o472Nav button{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-height:96px;font-size:14px!important;line-height:1.4;text-align:center;white-space:normal;border:1px solid #71a4c5!important;border-radius:14px;background:linear-gradient(145deg,#285f88,#173c61)!important;color:white!important;box-shadow:0 5px 0 #081e35,0 8px 15px #0003}
+#erp#erp #erpNav.o472Nav button:is(:hover,:focus-visible,.active){background:linear-gradient(145deg,#0c8389,#03454d)!important;border-color:#8ffff2!important;transform:translateY(-2px);outline:2px solid #8ffff2;outline-offset:1px}
+#erp#erp #erpNav.o472Nav button[hidden]{display:none!important}
+#erp#erp #erpNav.o472Nav .o472Icon{width:40px;height:40px;font-size:26px!important;border-radius:11px;background:linear-gradient(145deg,#fff5,#fff1);box-shadow:0 4px 0 #001d3580;text-shadow:0 3px 3px #0004}
+.v114PortalStats button{min-width:0;height:auto!important;overflow-wrap:anywhere;white-space:normal!important}
+.v114PortalStats button .child475Hint{display:block!important;font-size:12px!important;line-height:1.5;white-space:normal!important;margin-top:8px}
+}
+
+.child475Dialog{width:min(520px,90vw);max-height:85dvh;overflow:auto;border:1px solid #6a9bbc;border-radius:18px;padding:22px}.child475Dialog::backdrop{background:#082746aa}.child475Dialog dl{display:grid;grid-template-columns:1fr 1.5fr;gap:10px}.child475Dialog dd{margin:0;overflow-wrap:anywhere}
