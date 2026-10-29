@@ -1,4 +1,4 @@
-/* V489: tiny cross-device invalidation channel. No table payloads, polling, or idle/background channel. */
+/* V490: cross-device invalidation with targeted dashboard refresh. No table payloads, polling, or idle/background channel. */
 (()=>{'use strict';
 const W=window,D=document,TOPIC='ldm-office-sync-v489',EVENT='data_changed';
 let channel=null,subscribing=null,ready=false,origin='';const pending=new Set(),lastApplied={attendance:0,fees:0};
@@ -15,8 +15,12 @@ function hint(text){let n=q('ldmLiveSyncHint489');if(!n){n=D.createElement('div'
 async function refresh(kind){if(!visible())return false;if(!safeToRefresh(kind)){hint(kind==='attendance'?'दूसरे device पर Attendance बदली है। अपने खुले बदलाव Save/रद्द करें; फिर Refresh करें।':'दूसरे device पर Fee बदली है। अपने खुले बदलाव Save/रद्द करें; फिर Refresh करें।');return false;}const now=Date.now();if(now-(lastApplied[kind]||0)<1200)return false;lastApplied[kind]=now;
  const r=route(),admin=['admin','super_admin','principal'].includes(role());
  if(r==='dashboard'){
-  const x=D.scrollingElement,top=x?.scrollTop||0,left=x?.scrollLeft||0;
-  try{await W.render?.('dashboard',true);x&&(x.scrollTop=top,x.scrollLeft=left);return true}catch(_){return false}
+  // Keep the dashboard DOM/layout intact. Admin uses its existing targeted data refresh.
+  if(admin&&typeof W.ldmRefreshDashboardOnce==='function'){
+   try{const ok=await W.ldmRefreshDashboardOnce({force:true,reason:'cross-device-'+kind});if(ok)return true}catch(_){}
+  }
+  try{sessionStorage.setItem('ldm_dashboard_dirty',String(Date.now()));sessionStorage.setItem('ldm_dashboard_dirty_kind',kind)}catch(_){}
+  hint('दूसरे device पर '+(kind==='fees'?'Fee':'Attendance')+' अपडेट हुई। Dashboard layout सुरक्षित रखा; जरूरत पर Refresh दबाएँ।');return false;
  }
  if(kind==='attendance'){
   if(q('attendanceSheet')&&typeof W.loadAttendanceClass==='function'){
