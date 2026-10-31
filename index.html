@@ -908,6 +908,21 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 <link rel="stylesheet" href="marksheet-core.css?v=444">
 <link rel="stylesheet" href="attendance-view-v392.css?v=392">
 <link rel="stylesheet" href="entry-view-v393.css?v=393">
+<style id="ldm-teacher-marks-frozen-columns">
+.ldmTeacherMarksScroll{max-width:100%;overflow-x:auto;overflow-y:auto;max-height:72vh;position:relative;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.ldmTeacherMarksTable{border-collapse:separate;border-spacing:0;min-width:920px;width:max-content}
+.ldmTeacherMarksTable th,.ldmTeacherMarksTable td{background:var(--card,#fff);white-space:nowrap;padding:9px 12px;border-bottom:1px solid #e5e7eb}
+.ldmTeacherMarksTable th{position:sticky;top:0;z-index:6;background:#eaf1ff;color:#122b4b}
+.ldmTeacherMarksTable th:nth-child(1),.ldmTeacherMarksTable td:nth-child(1){position:sticky;left:0;min-width:165px;max-width:205px;z-index:3;box-shadow:1px 0 #dce3ec}
+.ldmTeacherMarksTable th:nth-child(2),.ldmTeacherMarksTable td:nth-child(2){position:sticky;left:165px;min-width:165px;max-width:205px;z-index:3;box-shadow:2px 0 4px #00000013}
+.ldmTeacherMarksTable th:nth-child(1),.ldmTeacherMarksTable th:nth-child(2){z-index:8;background:#eaf1ff}
+.ldmTeacherMarksTable td:nth-child(1),.ldmTeacherMarksTable td:nth-child(2){overflow:hidden;text-overflow:ellipsis}
+.ldmTeacherMarksTable input{min-width:110px;max-width:145px;width:130px;box-sizing:border-box}
+.ldmTeacherMarksTable input:focus{outline:2px solid #2563eb;outline-offset:1px}
+@media(max-width:600px){.ldmTeacherMarksTable th:nth-child(1),.ldmTeacherMarksTable td:nth-child(1){min-width:115px;max-width:115px;width:115px;white-space:normal;overflow-wrap:anywhere}
+.ldmTeacherMarksTable th:nth-child(2),.ldmTeacherMarksTable td:nth-child(2){left:115px;min-width:112px;max-width:112px;width:112px;white-space:normal;overflow-wrap:anywhere}
+.ldmTeacherMarksTable input{width:120px}}
+</style>
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -2320,11 +2335,37 @@ async function loadTeacherMarksStudents(){
  let c=$('tmClass').value,exam=$('tmExam').value.trim(),sub=$('tmSubject').value;if(!exam||!sub)return toast('Exam and Subject required');
  let {data:students}=await ldmApplyClassFilter(sb.from('students').select('admission_no,student_name,roll_no,father_name'),'class_name',c).order('student_name');
  let {data:old}=await ldmApplyClassFilter(sb.from('student_marks').select('*'),'class_name',c).eq('exam_name',exam).eq('subject_name',sub);let om={};(old||[]).forEach(x=>om[x.admission_no]=x);
- $('tmBody').innerHTML=`<div class="tableWrap"><table><tr><th>Student</th><th>Roll</th><th>Marksheet No.</th><th>Max</th><th>Obtained</th></tr>${(students||[]).map((s,i)=>{let o=om[s.admission_no]||{};return `<tr data-adm="${esc(s.admission_no)}" data-name="${esc(s.student_name)}" data-roll="${esc(s.roll_no||'')}"><td>${esc(s.student_name)}</td><td>${esc(s.roll_no||'')}</td><td><input id="tmNo${i}" value="${esc(o.marksheet_no||'')}"></td><td><input id="tmMax${i}" type="number" value="${Number(o.max_marks||100)}"></td><td><input id="tmGot${i}" type="number" value="${Number(o.obtained_marks||0)}"></td></tr>`}).join('')}</table></div><button class="v14Action primary" onclick='saveTeacherMarks(${JSON.stringify(students||[]).replace(/'/g,"&#39;")})'>Save Marks</button>`;
+ $('tmBody').innerHTML=`<div class="tableWrap ldmTeacherMarksScroll" role="region" aria-label="Teacher marks horizontal scrolling grid" tabindex="0"><table class="ldmTeacherMarksTable"><tr><th>Student Name</th><th>Father Name</th><th>Roll</th><th>Marksheet No.</th><th>Max</th><th>Obtained Marks</th></tr>${(students||[]).map((s,i)=>{let o=om[s.admission_no]||{};return `<tr data-adm="${esc(s.admission_no)}" data-name="${esc(s.student_name)}" data-roll="${esc(s.roll_no||'')}"><td>${esc(s.student_name)}</td><td>${esc(s.father_name||'—')}</td><td>${esc(s.roll_no||'')}</td><td><input id="tmNo${i}" value="${esc(o.marksheet_no||'')}"></td><td><input id="tmMax${i}" type="number" value="${Number(o.max_marks||100)}"></td><td><input id="tmGot${i}" type="number" value="${o.obtained_marks==null?'':Number(o.obtained_marks)}"></td></tr>`}).join('')}</table></div><button class="v14Action primary" onclick='saveTeacherMarks(${JSON.stringify(students||[]).replace(/'/g,"&#39;")})'>Save Marks</button>`;
 }
 async function saveTeacherMarks(students){
- let c=$('tmClass').value,exam=$('tmExam').value.trim(),sub=$('tmSubject').value,rows=students.map((s,i)=>({academic_session:'2026-27',exam_name:exam,admission_no:s.admission_no,roll_no:s.roll_no||null,student_name:s.student_name,class_name:c,subject_name:sub,max_marks:Number($('tmMax'+i).value||0),obtained_marks:Number($('tmGot'+i).value||0),marksheet_no:$('tmNo'+i).value.trim()||null,teacher_profile_id:v14TeacherProfile.id,updated_at:new Date().toISOString()}));
- let {error}=await sb.from('student_marks').upsert(rows,{onConflict:'academic_session,exam_name,admission_no,subject_name'});toast(error?error.message:'Marks saved');
+ const c=$('tmClass').value,exam=$('tmExam').value.trim(),sub=$('tmSubject').value;
+ if(!exam||!sub)return toast('Exam and Subject required');
+ const rows=[];
+ for(let i=0;i<students.length;i++){
+  const s=students[i],raw=String($('tmGot'+i)?.value??'').trim();
+  if(raw==='')continue;
+  const max=Number($('tmMax'+i)?.value),got=Number(raw);
+  if(!Number.isFinite(max)||max<=0||!Number.isFinite(got)||got<0||got>max)return toast(s.student_name+': invalid marks');
+  rows.push({academic_session:school.academic_session,exam_name:exam,admission_no:s.admission_no,roll_no:s.roll_no||null,student_name:s.student_name,class_name:c,subject_name:sub,max_marks:max,obtained_marks:got,marksheet_no:$('tmNo'+i).value.trim()||null,teacher_profile_id:v14TeacherProfile.id,updated_at:new Date().toISOString()});
+ }
+ if(!rows.length)return toast('No filled marks to save');
+ // Validate the same student-level permission used by the restrictive INSERT RLS.
+ // Do not send any marks if the current teacher/session/class/section mapping is denied.
+ const accessChecks=await Promise.all(rows.map(async r=>{
+   const res=await sb.rpc('ldm_marks_row_teacher_allowed',{
+     p_session:r.academic_session,p_class:r.class_name,
+     p_subject:r.subject_name,p_admission:r.admission_no
+   });
+   return {row:r,allowed:res.data===true,error:res.error};
+ }));
+ const denied=accessChecks.filter(x=>!x.allowed);
+ if(denied.length){
+   const first=denied[0];
+   toast('Marks सुरक्षित नहीं हुए: Teacher Bell / Section / Session अनुमति नहीं मिली ('+denied.length+' विद्यार्थी)। '+(first.error?.message||first.row.student_name)+'। भरे अंक स्क्रीन पर बने हैं।');
+   return;
+ }
+ const {error}=await sb.from('student_marks').upsert(rows,{onConflict:'academic_session,exam_name,admission_no,subject_name'});
+ toast(error?'Marks सुरक्षित नहीं हुए: '+error.message:`${rows.length} marks saved`);
 }
 
 async function teacherHomework(){
@@ -6191,9 +6232,25 @@ async function v65SmartMarksCenter(){
   let subjectBox=v65Teacher()?`<select id="v65MkSubject"><option value="">Select Assigned Subject</option>${subs.map(s=>`<option>${esc(s)}</option>`).join('')}</select>`:`<input id="v65MkSubject" placeholder="Subject">`;
   $('erpContent').innerHTML=`<div class="panel"><div class="tools"><select id="v65MkClass"><option value="">Select Class</option>${classes.map(c=>`<option>${esc(c)}</option>`).join('')}</select><input id="v65MkExam" placeholder="Exam Name">${subjectBox}<input id="v65MkMax" type="number" min="1" value="100" title="Max Marks"><button class="primary" onclick="v65LoadMarksGrid()">Load Students</button></div><div id="v65MarksBody" class="empty">Class, Exam, Subject चुनें.</div></div>`;
 }
-async function v65LoadMarksGrid(){let c=$('v65MkClass').value,exam=$('v65MkExam').value.trim(),sub=$('v65MkSubject').value.trim(),max=Number($('v65MkMax').value||100);if(!c||!exam||!sub)return toast('Class, Exam, Subject जरूरी है');let [sr,mr]=await Promise.all([ldmApplyClassFilter(sb.from('students').select('id,student_name,admission_no,roll_no,class_name,section'),'class_name',c).order('roll_no').order('student_name'),ldmApplyClassFilter(sb.from('student_marks').select('*'),'class_name',c).eq('exam_name',exam).eq('subject_name',sub)]);if(sr.error||mr.error)return toast((sr.error||mr.error).message);let mm={};(mr.data||[]).forEach(x=>mm[x.admission_no]=x);v65MarkStudents=sr.data||[];$('v65MarksBody').innerHTML=`<div class="v65MarkGrid"><table class="v65Marks"><tr><th>#</th><th>Roll</th><th>Student</th><th>Max</th><th>Obtained</th><th>Absent</th><th>Grade</th></tr>${v65MarkStudents.map((s,i)=>{let m=mm[s.admission_no]||{},ab=String(m.grade||'').toUpperCase()==='AB';return `<tr><td>${i+1}</td><td>${esc(s.roll_no||'')}</td><td><b>${esc(s.student_name)}</b><small class="cellSub">${esc(s.admission_no||'')}</small></td><td><input id="v65Max${i}" type="number" value="${Number(m.max_marks||max)}"></td><td><input class="markInput v65MarkInput" id="v65Got${i}" data-i="${i}" type="number" min="0" value="${ab?'':Number(m.obtained_marks||0)}"></td><td><label class="v65Check"><input id="v65Ab${i}" type="checkbox" ${ab?'checked':''} onchange="v65ToggleAbsent(${i})"> AB</label></td><td id="v65Grade${i}">${esc(m.grade||'')}</td></tr>`}).join('')}</table></div><div class="tools"><button class="primary" onclick="v65SaveMarksGrid()">Save / Update All</button><span class="v65Muted">Enter दबाने पर अगला student field active होगा.</span></div>`;document.querySelectorAll('.v65MarkInput').forEach(x=>x.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();let i=Number(x.dataset.i)+1;$('v65Got'+i)?.focus();$('v65Got'+i)?.select()}}))}
+async function v65LoadMarksGrid(){let c=$('v65MkClass').value,exam=$('v65MkExam').value.trim(),sub=$('v65MkSubject').value.trim(),max=Number($('v65MkMax').value||100);if(!c||!exam||!sub)return toast('Class, Exam, Subject जरूरी है');let [sr,mr]=await Promise.all([ldmApplyClassFilter(sb.from('students').select('id,student_name,admission_no,roll_no,class_name,section'),'class_name',c).order('roll_no').order('student_name'),ldmApplyClassFilter(sb.from('student_marks').select('*'),'class_name',c).eq('exam_name',exam).eq('subject_name',sub)]);if(sr.error||mr.error)return toast((sr.error||mr.error).message);let mm={};(mr.data||[]).forEach(x=>mm[x.admission_no]=x);v65MarkStudents=sr.data||[];$('v65MarksBody').innerHTML=`<div class="v65MarkGrid"><table class="v65Marks"><tr><th>#</th><th>Roll</th><th>Student</th><th>Max</th><th>Obtained</th><th>Absent</th><th>Grade</th></tr>${v65MarkStudents.map((s,i)=>{let m=mm[s.admission_no]||{},ab=String(m.grade||'').toUpperCase()==='AB';return `<tr><td>${i+1}</td><td>${esc(s.roll_no||'')}</td><td><b>${esc(s.student_name)}</b><small class="cellSub">${esc(s.admission_no||'')}</small></td><td><input id="v65Max${i}" type="number" value="${Number(m.max_marks||max)}"></td><td><input class="markInput v65MarkInput" id="v65Got${i}" data-i="${i}" type="number" min="0" value="${ab?'':(m.obtained_marks==null?'':Number(m.obtained_marks))}"></td><td><label class="v65Check"><input id="v65Ab${i}" type="checkbox" ${ab?'checked':''} onchange="v65ToggleAbsent(${i})"> AB</label></td><td id="v65Grade${i}">${esc(m.grade||'')}</td></tr>`}).join('')}</table></div><div class="tools"><button class="primary" onclick="v65SaveMarksGrid()">Save / Update All</button><span class="v65Muted">Enter दबाने पर अगला student field active होगा.</span></div>`;document.querySelectorAll('.v65MarkInput').forEach(x=>x.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();let i=Number(x.dataset.i)+1;$('v65Got'+i)?.focus();$('v65Got'+i)?.select()}}))}
 function v65ToggleAbsent(i){let a=$('v65Ab'+i),g=$('v65Got'+i);if(a.checked){g.value='';g.disabled=true;$('v65Grade'+i).textContent='AB'}else{g.disabled=false;$('v65Grade'+i).textContent=''}}
-async function v65SaveMarksGrid(){let c=$('v65MkClass').value,exam=$('v65MkExam').value.trim(),sub=$('v65MkSubject').value.trim();let rows=[];for(let i=0;i<v65MarkStudents.length;i++){let s=v65MarkStudents[i],max=Number($('v65Max'+i).value||0),ab=$('v65Ab'+i).checked,got=ab?0:Number($('v65Got'+i).value||0);if(!max||got<0||got>max)return toast(`${s.student_name}: marks 0 से Max Marks के बीच रखें`);rows.push({academic_session:v65Session(),exam_name:exam,admission_no:s.admission_no,roll_no:s.roll_no||null,student_name:s.student_name,class_name:c,section:s.section||null,subject_name:sub,max_marks:max,obtained_marks:got,grade:ab?'AB':v14Grade(v14Pct(got,max)),updated_at:new Date().toISOString()})}let{error}=await sb.from('student_marks').upsert(rows,{onConflict:'academic_session,exam_name,admission_no,subject_name'});if(error)return toast(error.message);toast(`Marks saved/updated • ${rows.length} students`);if(typeof v58BroadcastUpdate==='function')v58BroadcastUpdate('student_marks');v65LoadMarksGrid()}
+async function v65SaveMarksGrid(){
+ const c=$('v65MkClass').value,exam=$('v65MkExam').value.trim(),sub=$('v65MkSubject').value.trim(),rows=[];
+ if(!c||!exam||!sub)return toast('Class, Exam, Subject जरूरी है');
+ for(let i=0;i<v65MarkStudents.length;i++){
+  const s=v65MarkStudents[i],max=Number($('v65Max'+i).value),ab=$('v65Ab'+i).checked,raw=String($('v65Got'+i).value??'').trim();
+  if(!ab&&raw==='')continue;
+  const got=ab?0:Number(raw);
+  if(!Number.isFinite(max)||max<=0||!Number.isFinite(got)||got<0||got>max)return toast(`${s.student_name}: marks 0 से Max Marks के बीच रखें`);
+  rows.push({academic_session:v65Session(),exam_name:exam,admission_no:s.admission_no,roll_no:s.roll_no||null,student_name:s.student_name,class_name:c,section:s.section||null,subject_name:sub,max_marks:max,obtained_marks:got,grade:ab?'AB':v14Grade(v14Pct(got,max)),updated_at:new Date().toISOString()});
+ }
+ if(!rows.length)return toast('पहले कम से कम एक विद्यार्थी के अंक भरें');
+ const {error}=await sb.from('student_marks').upsert(rows,{onConflict:'academic_session,exam_name,admission_no,subject_name'});
+ if(error)return toast(error.message);
+ toast(`Marks saved/updated • ${rows.length} students`);
+ if(typeof v58BroadcastUpdate==='function')v58BroadcastUpdate('student_marks');
+ await v65LoadMarksGrid();
+}
 
 /* ---------- Future Fee Control: rolling due already from V53 + additive Fine/Waiver ---------- */
 async function v65FeeControl(){if(!v65Admin())return toast('Admin / Principal only');head('💰 Future Fee Control','Month-wise due • Current total • Fine/Waiver • Reminder');$('erpContent').innerHTML=`<div class="panel"><div class="tools"><input id="v65FeeQ" placeholder="Student / Admission No. / Father / Mobile"><select id="v65FeeClass"><option value="">All Classes</option>${cls.map(c=>`<option>${esc(c)}</option>`).join('')}</select><button class="primary" onclick="v65LoadFeeControl()">Search / Refresh</button><button class="secondary" onclick="render('due_reminders')">Open Reminder Center</button></div><div id="v65FeeBody" class="empty">Loading...</div></div>`;v65LoadFeeControl()}
