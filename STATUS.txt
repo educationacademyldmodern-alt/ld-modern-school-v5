@@ -1,0 +1,9 @@
+L D MODERN EDUCATION ACADEMY — MARKS ENTRY PATCH STATUS
+
+Verified code changes:
+1. Max Marks input now retains BOTH range validation and draft autosave. Previously oninput was overwritten.
+2. Teacher profile ID must exist; no fallback to auth profile ID when saving teacher_profile_id.
+3. Save success and server errors are shown in tmSaveStatus on the same page; no additional toast popup from this save flow.
+4. Existing class/subject validation, per-student range checks, upsert, and edit workflow retained.
+
+Tests: exact replacements verified, ZIP CRC passed. Live teacher login, Supabase RLS, real marks save and browser rendering NOT tested. SQL not applied. Not production-approved.
