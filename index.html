@@ -958,6 +958,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 </section>
 <div id="publicPageView" class="publicPageView hidden"><div class="publicPageBar"><button onclick="showPublicPage('home')">← Home</button><b id="publicPageTitle">School</b></div><div id="publicPageBody"></div></div>
 <section class="publicSection stats premiumStats"><div><b>Nursery–10</b><span>Classes</span></div><div><b>Smart ERP</b><span>School Management</span></div><div><b>Secure Portals</b><span>Teacher & Parent</span></div><div><b>Any Device</b><span>Mobile • Tablet • Laptop</span></div></section>
+<script src="management-center-shared.js?v=aw1"></script>
 <script src="public-final.js?v=344"></script>
 <section id="about" class="publicSection two"><div><span class="eyebrow">ABOUT SCHOOL</span><h2>Learning with values and modern education</h2><p id="aboutText">Quality education with discipline, values, technology and all-round student development.</p></div><div class="quote"><h3>Principal / Director Message</h3><p id="principalMsg">“Every child deserves an environment where curiosity, discipline and confidence grow together.”</p></div></section>
 <section id="faculty" class="publicSection"><span class="eyebrow">OUR TEAM</span><h2>Faculty & Staff</h2><div id="facultyCards" class="cards3"><div class="empty">Faculty will appear here.</div></div></section>
@@ -1046,7 +1047,7 @@ fee_installments:{title:"Fee Installments / Months",fields:[F("fee_structure_id"
 fee_heads:{title:"Fee Heads",fields:[F("fee_structure_id","Fee Plan","planselect",1),F("head_name","Fee Head"),F("amount","Amount","number"),F("recurring","Recurring","yesno"),F("frequency","Frequency","frequency"),F("sort_order","Order","number"),F("is_active","Active","yesno")],cols:[["head_name","Head"],["amount","Amount"],["recurring","Recurring"],["frequency","Frequency"],["is_active","Active"]]}
 };Object.keys(M).forEach(k=>M[k].table=k);
 const nav=[["dashboard","🏠 Dashboard"],["admissions","📝 Admissions"],["students","👨‍🎓 Students"],["academics","📚 Academics"],["attendance","✅ Student Attendance"],["staff_attendance","🟢 Staff Attendance"],["fees","💳 Fees & Reminders"],["fee_dashboard","📊 Smart Fee Dashboard"],["fee_structure","🧾 Fee Structure"],["exams","📘 Exams & Results"],["staff","👩‍🏫 Staff"],["leave","🗓️ Staff Leave"],["payroll","💰 Payroll"],["timetable","🕒 Timetable"],["homework","✏️ Homework"],["events","🎉 Events / PTM / Holidays"],["notices","📢 Notices"],["gallery","🖼️ Gallery"],["enquiries","☎️ Enquiries"],["transport","🚌 Transport"],["library","📖 Library"],["income","📈 Income"],["expenses","📉 Expenses"],["balance","⚖️ Balance Sheet"],["users","👥 Users & Roles"],["excel","📊 Excel Center"],["settings","🎨 Website & Settings"],["v57_guidance","📌 Global Guidance"],["v57_handover","🔁 Teacher Handover"],["v58_complaints","🛡️ Complaints & Discipline"]];
-function toast(m){$("toast").textContent=m;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),5000)}function scrollToId(x){$(x).scrollIntoView({behavior:"smooth"})}
+function toast(m){const erp=document.getElementById('erp'),parent=document.getElementById('parentDashboard');const host=erp&&!erp.classList.contains('hidden')?document.getElementById('erpContent'):parent&&!parent.classList.contains('hidden')?parent:null;if(host){let n=host.querySelector(':scope > .ldmInlineStatus');if(!n){n=document.createElement('div');n.className='ldmInlineStatus';n.setAttribute('role','status');n.setAttribute('aria-live','polite');host.prepend(n)}n.textContent=String(m??'');return}const n=document.getElementById('toast');if(n){clearTimeout(window.__ldmToastTimer);n.textContent=m;n.classList.remove('hidden');window.__ldmToastTimer=setTimeout(()=>n.classList.add('hidden'),5000)}}function scrollToId(x){$(x).scrollIntoView({behavior:"smooth"})}
 let publicMoved=null;
 function restorePublicMoved(){if(publicMoved&&publicMoved.isConnected){let footer=document.querySelector('#publicSite>footer');if(footer)footer.before(publicMoved);else $('publicSite').appendChild(publicMoved);publicMoved.style.display='none';publicMoved=null}}
 function v71ResetPublicScroll(view){
@@ -1104,7 +1105,7 @@ function init(){
  if(browserKey.startsWith('sb_secret_')||browserRole==='service_role')throw new Error('Security block: backend secret/service_role key must not be used in a browser.');
  if(sb&&clientSignature433===cfg.url+'|'+cfg.key)return sb;
  clientSignature433=cfg.url+'|'+cfg.key;
- sb=supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ sb=supabase.createClient(cfg.url,cfg.key,{global:{fetch:(...args)=>(window.LDM_ASSIGN_WORK?.fetch||window.fetch.bind(window))(...args)},auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  try{
   const h=String(location.hostname||'').toLowerCase(),official=new Set(['myldm.com','www.myldm.com','ld-modern-school-v5.vercel.app','localhost','127.0.0.1']),preview=h.endsWith('.vercel.app')&&!official.has(h);
   const local=h==='localhost'||h==='127.0.0.1';
@@ -5814,7 +5815,7 @@ let v64AttendanceSignals={leaves:[],corrections:[]};
 let v64ParentServices=[];
 let v64HealthTimer=null;
 
-function v64IsAdmin(){return typeof v14Admin==='function'&&v14Admin()}
+function v64IsAdmin(){return (typeof v14Admin==='function'&&v14Admin())||!!window.LDM_ASSIGN_WORK?.active('v90_student_requests')}
 function v64IsTeacher(){return typeof v14Teacher==='function'&&v14Teacher()}
 function v64CloseMobileSidebar(){if(window.innerWidth<=1050)document.querySelector('#erp aside')?.classList.remove('open')}
 function v64FmtDate(v){try{return v?new Date(v+'T00:00:00').toLocaleDateString('en-IN'):''}catch(_e){return v||''}}
@@ -9277,7 +9278,7 @@ setTimeout(()=>{v762RenameAdminRoute();try{if(v64IsAdmin())v58AdminSidebar?.()}c
 window.V763_BUILD='V76.3-ADMIN-MASTER-TIMETABLE-2026-09-14';
 const v763Days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 let v763Teachers=[],v763Subjects=[],v763SelectedTeacherId='',v763Teacher=null,v763WeekRows=[],v763TimeMaster=[],v763BellCount=8;
-const v763Admin=()=>['super_admin','admin','principal'].includes(String(profile?.role||''));
+const v763Admin=()=>['super_admin','admin','principal'].includes(String(profile?.role||''))||window.LDM_ASSIGN_WORK?.active('timetable_master');
 const v763Session=()=>school?.academic_session||'2026-27';
 function v763Esc(v){return typeof esc==='function'?esc(v):String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
 async function v763LoadRefs(){let[tr,ac,tm]=await Promise.all([sb.from('teacher_profiles').select('id,auth_user_id,teacher_name,approval_status').eq('approval_status','Approved').order('teacher_name'),sb.from('academics').select('subject').limit(1500),sb.from('v763_bell_time_master').select('*').eq('academic_session',v763Session()).order('bell_no')]);if(tr.error)throw tr.error;if(ac.error)throw ac.error;if(tm.error)throw new Error(tm.error.message+' • V76.3 SQL run करें');v763Teachers=tr.data||[];v763Subjects=[...new Set((ac.data||[]).map(x=>String(x.subject||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));v763TimeMaster=tm.data||[]}
@@ -9575,7 +9576,7 @@ const V90_TEACHER_NAV=[
 ];
 function v90BuildNav(active=window.__v90Route||'dashboard'){
  const host=v90Q('erpNav');if(!host||!profile)return;
- if(v90Admin()){
+ if(v90Admin()&&!window.LDM_ASSIGN_WORK?.active()){
    host.className='v90Nav';
    host.innerHTML=`<button class="v90Home ${active==='dashboard'?'active':''}" onclick="render('dashboard')">🏠 <span>Dashboard</span></button>`+V90_ADMIN_GROUPS.map((g,i)=>`<details class="v90NavGroup" ${g[2].some(x=>x[0]===active)?'open':''}><summary><span>${g[0]} ${g[1]}</span><b>⌄</b></summary><div>${g[2].map(x=>`<button class="${active===x[0]?'active':''}" onclick="render('${x[0]}')">${x[1]}</button>`).join('')}</div></details>`).join('');
  } else if(v90Teacher()){
@@ -9621,7 +9622,7 @@ async function v90AdminDashboard(){
  <section id="v90Stats" class="v90Stats v114AdminStats v156ClickableStats">${window.__ldmAdminStatsHTML||hold}</section>
  <section class="ldmMasterControl"><div class="ldmMasterTitle"><div><small>ADMIN MASTER CONTROL</small><h2>School Control Center</h2></div><span>Central • Safe • On Demand</span></div><div class="ldmMasterGrid"><button onclick="render('class_teacher_control')"><i>👨‍🏫</i><b>Class Teacher Control</b><small>Assign • Repair • Change • Handover • Open Class</small><em>OPEN →</em></button><button onclick="render('v150_student_master')"><i>🎓</i><b>Student Master Control</b><small>Full Details • Edit • Correct • Update • Delete Safety</small><em>OPEN →</em></button><button onclick="render('v6422_due_master')"><i>⚡</i><b>Quick Due Fee Update</b><small>Central Ledger • Monthly • Installment • Reminder</small><em>OPEN →</em></button><button onclick="render('idcard_center')"><i>🪪</i><b>ID Card Center</b><small>10 Formats • Preview • A4 Print</small><em>OPEN →</em></button><button onclick="render('work_delegation')"><i>🧩</i><b>Assistant / Work Delegation</b><small>Assign • Multi Teacher • Responsibility • Off</small><em>OPEN →</em></button><button onclick="render('certificate_center')"><i>🏆</i><b>Premium Certificate Center</b><small>10 A4 Formats • Photo • QR • PDF</small><em>OPEN →</em></button></div></section>
  <div id="v149AdminQuickSlot"><section id="v147AdminQuick" class="panel"><h3>⚡ QR / Storage Quick Access</h3><div class="ldmTeacherModules"><button onclick="render('v147_admin_presence')"><i>🏫</i><b>QR Gate & Presence</b><small>Entered • Inside • Exited • Not Arrived</small></button><button onclick="render('v130_qr_scanner')"><i>📷</i><b>Admin QR Scanner</b><small>Entry / Exit / Teacher Gate</small></button><button onclick="render('v147_admin_student_qr')"><i>▦</i><b>Student QR Center</b><small>View • Print • Regenerate</small></button><button onclick="render('v130_storage')"><i>🗄</i><b>Storage Center</b><small>Usage • Safe Cleanup</small></button></div></section></div>
- <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">ON DEMAND</span></div><div class="v90MonitorGrid">${v90Card('📅','Attendance Status','Class-wise done / not marked','v90_attendance_monitor')}${v90Card('⚠️','Attendance Conflicts','Duplicate • Resolve • History','attendance_conflict_center')}${v90Card('📝','Exam Participation','Selected • Admit • Appeared','v90_exam_monitor')}${v90Card('📊','Marks Entry Progress','Teacher • Subject • Pending','v90_marks_monitor')}${v90Card('🚌','Transport Trip','Pickup / Drop attendance','v90_transport_monitor')}${v90Card('👥','Presence & Leave','Students + Teachers today','v90_presence_monitor')}${v90Card('🎓','Student Requests','Leave • Correction • Add/Remove','v90_student_requests')}${v90Card('👨‍🏫','Teacher Requests','Personal + class related','v90_teacher_requests')}${v90Card('🗓','Timetable Master','Fast bell + whole week','timetable_master','strong')}${v90Card('📚','Daily Teaching','Timetable → lesson update','v90_teaching_monitor')}${v90Card('📊','Academic Monitoring','Teaching • Copy Check • Bell Tests','academic_monitor','strong')}<button class="v90Monitor strong v102DashGate" data-v102-gate-card="1" onclick="render('master_gate_pass')"><span class="v90MonitorIcon">🚪</span><span><b>Master Gate Pass</b><small>Early Leave • Group • Approval</small></span><em data-v102-gate-badge class="v102DashBadge">Today</em></button><button class="v90Monitor" data-v91-parent-update="1" onclick="render('v91_parent_updates')"><span class="v90MonitorIcon">✏</span><span><b>Parent Data Updates</b><small>Approve once → sync everywhere</small></span><em>›</em></button><button class="v90Monitor" data-v92-admit-pub="1" onclick="render('v92_admit_publish')"><span class="v90MonitorIcon">🎫</span><span><b>Admit Publish</b><small>Fee clear • Select • Parent show</small></span><em>›</em></button>${v90Card('🔐','Student / Parent Login','One Password • Live Status','parent_access','strong')}</div></section>
+ <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">ON DEMAND</span></div><div class="v90MonitorGrid" style="grid-template-columns:repeat(2,minmax(0,1fr))!important">${window.LDM_MANAGEMENT.cards()}</div></section>
  <section class="v114AdminFeedGrid"><article class="v90Panel"><div class="v114PanelHead"><h3>Recent Activities</h3><button onclick="render('v185_admin_activities')">View All →</button></div><div id="v39Activities">${actCache||'<div class="v39Empty">देखने के लिए View / Refresh दबाएँ।</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Important Notices</h3><button onclick="render('notices')">View All →</button></div><div id="v39Notices">${noticeCache||'<div class="v39Empty">देखने के लिए View / Refresh दबाएँ।</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Calendar & Events</h3><button onclick="render('events')">View Calendar →</button></div><div id="v39Events">${eventCache||'<div class="v39Empty">देखने के लिए View / Refresh दबाएँ।</div>'}</div></article></section>
  </div>`);
  document.querySelector('#erpContent .ldmRootAdminDash').dataset.v408Owner=__v408Identity;
@@ -10654,7 +10655,7 @@ function v102Safe(v){return typeof v90Safe==='function'?v90Safe(v):String(v??'')
 function v102Norm(v){return String(v??'').trim().toLowerCase()}
 function v102Today(){return typeof v90Today==='function'?v90Today():new Date().toLocaleDateString('en-CA')}
 function v102NowTime(){let d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
-function v102IsAdmin(){return typeof v90Admin==='function'&&v90Admin()}
+function v102IsAdmin(){return window.LDM_ASSIGN_WORK?.active('master_gate_pass')?window.LDM_ASSIGN_WORK.can('approve'):(typeof v90Admin==='function'&&v90Admin())}
 function v102IsTeacher(){return typeof v90Teacher==='function'&&v90Teacher()}
 function v102StatusClass(s){s=v102Norm(s);if(s==='approved')return'approved';if(s==='rejected')return'rejected';if(s==='left school')return'left';if(s==='returned')return'returned';return'pending'}
 function v102StatusPill(s){return `<span class="v102Status ${v102StatusClass(s)}">${v102Safe(s||'Pending')}</span>`}
@@ -17660,7 +17661,7 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
 
 <script src="./alarm.js?v=435"></script>
 
-<script src="./academic_monitor.js?v=435"></script>
+<script src="./academic_monitor.js?v=aw1"></script>
 
 
 <style id="v271-admin-premium-style">
@@ -17705,13 +17706,13 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
 #erpContent .v271AdminPremium .v90SectionTitle h2{margin:0!important;font-size:17px!important;color:#153f69!important}
 #erpContent .v271AdminPremium .v90SectionTitle p{margin:3px 0 0!important;color:#718295!important;font-size:10px!important}
 #erpContent .v271AdminPremium #v90LiveText{padding:5px 8px!important;border-radius:999px!important;background:#eaf6f1!important;color:#147351!important;font-size:9px!important;font-weight:900!important}
-#erpContent .v271AdminPremium .v90MonitorGrid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
-#erpContent .v271AdminPremium .v90Monitor{min-height:84px!important;padding:11px!important;border:1px solid #dfe8f1!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important;color:#183f68!important}
-#erpContent .v271AdminPremium .v90Monitor.strong{background:linear-gradient(180deg,#f7fbff,#eef6fd)!important;border-color:#bad7ee!important}
-#erpContent .v271AdminPremium .v90Monitor:hover{border-color:#8ebada!important;background:#f8fbfe!important}
-#erpContent .v271AdminPremium .v90MonitorIcon{width:38px!important;height:38px!important;border-radius:11px!important;background:#edf5fc!important;font-size:18px!important}
-#erpContent .v271AdminPremium .v90Monitor b{font-size:11px!important;color:#173f68!important}
-#erpContent .v271AdminPremium .v90Monitor small{font-size:8.5px!important;color:#718397!important;line-height:1.25!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90MonitorGrid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor{min-height:84px!important;padding:11px!important;border:1px solid #dfe8f1!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important;color:#183f68!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor.strong{background:linear-gradient(180deg,#f7fbff,#eef6fd)!important;border-color:#bad7ee!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:hover{border-color:#8ebada!important;background:#f8fbfe!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90MonitorIcon{width:38px!important;height:38px!important;border-radius:11px!important;background:#edf5fc!important;font-size:18px!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor b{font-size:11px!important;color:#173f68!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor small{font-size:8.5px!important;color:#718397!important;line-height:1.25!important}
 
 #erpContent .v271AdminPremium .v114AdminStats{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:9px!important}
 #erpContent .v271AdminPremium .v114AdminStats .v90Stat{min-height:78px!important;background:#fff!important;color:#173e67!important;border:1px solid #dfe8f1!important;border-top:3px solid #2e78b7!important;border-radius:14px!important;padding:11px!important;box-shadow:0 5px 14px rgba(20,58,94,.055)!important}
@@ -17737,9 +17738,9 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
 #erpContent .v271AdminPremium button{transition:border-color .12s ease,background-color .12s ease!important}
 #erpContent .v271AdminPremium button:focus-visible{outline:3px solid rgba(35,111,174,.25)!important;outline-offset:2px!important}
 
-@media(max-width:1100px){#erpContent .v271AdminPremium .v90MonitorGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114AdminStats{grid-template-columns:repeat(3,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#erpContent .v271AdminPremium .ldmMasterGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-@media(max-width:760px){#erpContent .v271AdminPremium{gap:10px!important}#erpContent .v271AdminPremium #v233Greeting{grid-template-columns:auto 1fr!important;padding:13px!important}.v271HeroActions{grid-column:1/-1;justify-content:stretch}.v271HeroActions button{flex:1 1 30%;min-width:0!important}#erpContent .v271AdminPremium .v114AdminMainGrid{grid-template-columns:1fr!important;grid-template-areas:"quick" "attendance" "fees"!important}#erpContent .v271AdminPremium .v90MonitorGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114AdminStats{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#erpContent .v271AdminPremium .ldmMasterGrid{grid-template-columns:1fr!important}#erpContent .v271AdminPremium .v185FrontActions{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114AdminFeedGrid{grid-template-columns:1fr!important}#erpContent .v271AdminPremium .v105PaySearch{grid-template-columns:1fr!important}#erpContent .v271AdminPremium input,#erpContent .v271AdminPremium select,#erpContent .v271AdminPremium textarea{font-size:16px!important}}
-@media(max-width:430px){#erpContent .v271AdminPremium .v90MonitorGrid{grid-template-columns:1fr!important}#erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v271HeroActions button{flex:1 1 100%}}
+@media(max-width:1100px){#erpContent :is(.v271AdminPremium,#sw403) .v90MonitorGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114AdminStats{grid-template-columns:repeat(3,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#erpContent .v271AdminPremium .ldmMasterGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:760px){#erpContent .v271AdminPremium{gap:10px!important}#erpContent .v271AdminPremium #v233Greeting{grid-template-columns:auto 1fr!important;padding:13px!important}.v271HeroActions{grid-column:1/-1;justify-content:stretch}.v271HeroActions button{flex:1 1 30%;min-width:0!important}#erpContent .v271AdminPremium .v114AdminMainGrid{grid-template-columns:1fr!important;grid-template-areas:"quick" "attendance" "fees"!important}#erpContent :is(.v271AdminPremium,#sw403) .v90MonitorGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114AdminStats{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#erpContent .v271AdminPremium .ldmMasterGrid{grid-template-columns:1fr!important}#erpContent .v271AdminPremium .v185FrontActions{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules{grid-template-columns:repeat(2,minmax(0,1fr))!important}#erpContent .v271AdminPremium .v114AdminFeedGrid{grid-template-columns:1fr!important}#erpContent .v271AdminPremium .v105PaySearch{grid-template-columns:1fr!important}#erpContent .v271AdminPremium input,#erpContent .v271AdminPremium select,#erpContent .v271AdminPremium textarea{font-size:16px!important}}
+@media(max-width:430px){#erpContent :is(.v271AdminPremium,#sw403) .v90MonitorGrid{grid-template-columns:1fr!important}#erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.v271HeroActions button{flex:1 1 100%}}
 </style>
 
 
@@ -17802,7 +17803,7 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
  box-shadow:var(--v273-shadow),var(--v273-inset)!important;min-height:92px!important
 }
 #erpContent .v271AdminPremium .v114QuickGrid button:after,
-#erpContent .v271AdminPremium .v90Monitor:after,
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:after,
 #erpContent .v271AdminPremium .ldmMasterGrid button:after,
 #erpContent .v271AdminPremium #v149AdminQuickSlot .ldmTeacherModules button:after{
  content:"";position:absolute;width:82px;height:82px;border-radius:50%;right:-22px;top:-24px;
@@ -17818,25 +17819,25 @@ window.LDM_V2621_SECURITY=Object.freeze({previewPasswordGuard:true,permanentMuta
 #erpContent .v271AdminPremium .v114QuickGrid button span{color:#fff!important;position:relative;z-index:1;text-shadow:0 1px 2px rgba(0,0,0,.15)!important}
 
 /* Management cards */
-#erpContent .v271AdminPremium .v90Monitor{
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor{
  position:relative;overflow:hidden!important;border:0!important;color:#fff!important;
  box-shadow:var(--v273-shadow),var(--v273-inset)!important;min-height:104px!important
 }
-#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+1){background:linear-gradient(145deg,#136ec4,#2098e4)!important}
-#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+2){background:linear-gradient(145deg,#087e60,#13ad7d)!important}
-#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+3){background:linear-gradient(145deg,#7044c0,#9f59d2)!important}
-#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+4){background:linear-gradient(145deg,#cc650a,#e9951c)!important}
-#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+5){background:linear-gradient(145deg,#0d839c,#18abc0)!important}
-#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+6){background:linear-gradient(145deg,#c53c69,#e65b86)!important}
-#erpContent .v271AdminPremium .v90Monitor:nth-child(8n+7){background:linear-gradient(145deg,#45647f,#647f97)!important}
-#erpContent .v271AdminPremium .v90Monitor:nth-child(8n){background:linear-gradient(145deg,#2854a8,#566fe1)!important}
-#erpContent .v271AdminPremium .v90MonitorIcon{
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:nth-child(8n+1){background:linear-gradient(145deg,#136ec4,#2098e4)!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:nth-child(8n+2){background:linear-gradient(145deg,#087e60,#13ad7d)!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:nth-child(8n+3){background:linear-gradient(145deg,#7044c0,#9f59d2)!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:nth-child(8n+4){background:linear-gradient(145deg,#cc650a,#e9951c)!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:nth-child(8n+5){background:linear-gradient(145deg,#0d839c,#18abc0)!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:nth-child(8n+6){background:linear-gradient(145deg,#c53c69,#e65b86)!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:nth-child(8n+7){background:linear-gradient(145deg,#45647f,#647f97)!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:nth-child(8n){background:linear-gradient(145deg,#2854a8,#566fe1)!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90MonitorIcon{
  background:rgba(255,255,255,.19)!important;color:#fff!important;
  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 7px 15px rgba(0,0,0,.12)!important
 }
-#erpContent .v271AdminPremium .v90Monitor b,
-#erpContent .v271AdminPremium .v90Monitor small{color:#fff!important;position:relative;z-index:1}
-#erpContent .v271AdminPremium .v90Monitor small{opacity:.92!important}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor b,
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor small{color:#fff!important;position:relative;z-index:1}
+#erpContent :is(.v271AdminPremium,#sw403) .v90Monitor small{opacity:.92!important}
 
 /* School Control Center — same visual language as Certificate cards */
 #erpContent .v271AdminPremium .ldmMasterGrid button{
@@ -17957,11 +17958,11 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
   #erpContent .v271AdminPremium .v114QuickGrid button b{font-size:25px!important;line-height:1.05!important}
   #erpContent .v271AdminPremium .v114QuickGrid button span{margin-top:8px!important;font-size:13.5px!important;line-height:1.25!important;font-weight:900!important}
 
-  #erpContent .v271AdminPremium .v90Monitor{min-height:108px!important;padding:14px!important;gap:11px!important}
-  #erpContent .v271AdminPremium .v90MonitorIcon{width:46px!important;height:46px!important;font-size:22px!important;flex:0 0 46px!important}
-  #erpContent .v271AdminPremium .v90Monitor b{font-size:15.5px!important;line-height:1.22!important;font-weight:900!important}
-  #erpContent .v271AdminPremium .v90Monitor small{margin-top:5px!important;font-size:12.5px!important;line-height:1.35!important;font-weight:650!important}
-  #erpContent .v271AdminPremium .v90Monitor em{font-size:13px!important;font-weight:900!important}
+  #erpContent :is(.v271AdminPremium,#sw403) .v90Monitor{min-height:108px!important;padding:14px!important;gap:11px!important}
+  #erpContent :is(.v271AdminPremium,#sw403) .v90MonitorIcon{width:46px!important;height:46px!important;font-size:22px!important;flex:0 0 46px!important}
+  #erpContent :is(.v271AdminPremium,#sw403) .v90Monitor b{font-size:15.5px!important;line-height:1.22!important;font-weight:900!important}
+  #erpContent :is(.v271AdminPremium,#sw403) .v90Monitor small{margin-top:5px!important;font-size:12.5px!important;line-height:1.35!important;font-weight:650!important}
+  #erpContent :is(.v271AdminPremium,#sw403) .v90Monitor em{font-size:13px!important;font-weight:900!important}
 
   #erpContent .v271AdminPremium .ldmMasterGrid button{min-height:142px!important;padding:17px!important}
   #erpContent .v271AdminPremium .ldmMasterGrid button i{width:52px!important;height:52px!important;font-size:25px!important}
@@ -17990,7 +17991,7 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
 .v187Badge{font-size:11.5px!important;line-height:1.2!important}
 
 @media (min-width:1200px){
-  #erpContent .v271AdminPremium .v90MonitorGrid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  #erpContent :is(.v271AdminPremium,#sw403) .v90MonitorGrid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   #erpContent .v271AdminPremium .v114QuickGrid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
 }
 @media (max-width:760px){
@@ -18441,14 +18442,14 @@ body:has(#erp:not(.hidden)) #ldmV281Refresh,body:has(#parentPortal:not(.hidden) 
 body:has(#erpContent .ldmRootAdminDash) #erp .erpTop{background:linear-gradient(110deg,#071b62 0%,#1250bd 55%,#086b9c 100%)!important;border:1px solid #4274e6!important;border-radius:18px!important;color:#fff!important;box-shadow:0 12px 28px #061f6638!important;padding:13px 16px!important}
 body:has(#erpContent .ldmRootAdminDash) #erp .erpTop h2,body:has(#erpContent .ldmRootAdminDash) #erp .erpTop p{color:#fff!important;text-shadow:0 2px 5px #06153e80}
 body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Panel{border-radius:20px!important;box-shadow:0 10px 25px #0a35621a!important}
-body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Monitor{transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 7px 13px #0a356226!important}
-@media(hover:hover){body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Monitor:hover{transform:translateY(-2px);box-shadow:0 11px 19px #0a35623b!important}}
+body:has(#erpContent .ldmRootAdminDash) #erpContent :is(.v271AdminPremium,#sw403) .v90Monitor{transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 7px 13px #0a356226!important}
+@media(hover:hover){body:has(#erpContent .ldmRootAdminDash) #erpContent :is(.v271AdminPremium,#sw403) .v90Monitor:hover{transform:translateY(-2px);box-shadow:0 11px 19px #0a35623b!important}}
 /* Reposition the existing one-refresh control as a normal header action, never a floating overlay. */
 body:has(#erpContent .ldmRootAdminDash) #ldmV281Refresh{position:static!important;z-index:auto!important;max-width:none!important;margin:0!important;white-space:nowrap;background:linear-gradient(120deg,#03b25a,#0b8b48)!important;color:white!important;border:1px solid #38da87!important;box-shadow:0 4px 10px #064c2e55!important;border-radius:12px!important;font-weight:750!important}
 body:has(#erpContent .ldmRootAdminDash) #erp .erpTop{display:flex!important;flex-wrap:wrap;align-items:center;gap:8px}
 body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-width:0}
 @media(max-width:680px){body:has(#erpContent .ldmRootAdminDash) #erp .erpTop{padding:10px!important;gap:7px!important}body:has(#erpContent .ldmRootAdminDash) #ldmV281Refresh{font-size:12px!important;min-height:38px!important;padding:8px 11px!important}body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium{min-width:0!important}}
-@media(prefers-reduced-motion:reduce){body:has(#erpContent .ldmRootAdminDash) #erpContent .v271AdminPremium .v90Monitor{transition:none!important}}
+@media(prefers-reduced-motion:reduce){body:has(#erpContent .ldmRootAdminDash) #erpContent :is(.v271AdminPremium,#sw403) .v90Monitor{transition:none!important}}
 /* V363: Teacher refresh participates in header flow, never overlays Home/Back. */
 #erp .erpTop.ldmTeacherRefreshHeader>#ldmV281Refresh{position:static!important;inset:auto!important;z-index:auto!important;margin:0!important;grid-column:1 / -1!important;justify-self:end!important;order:100!important;flex:0 1 auto!important;width:auto!important;max-width:100%!important;min-height:44px!important;white-space:nowrap!important;font-size:13px!important;padding:10px 14px!important;box-sizing:border-box!important}
 #erp .erpTop.ldmTeacherRefreshHeader{flex-wrap:wrap!important;gap:8px!important}
@@ -18507,7 +18508,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 }
 </style>
 <link rel="stylesheet" href="quickdesk-v326.css?v=326">
-<script src="central-exam-fees-v333.js?v=335"></script>
+<script src="central-exam-fees-v333.js?v=aw1"></script>
 <script src="central-fee-class-v335.js?v=449"></script>
 <link rel="stylesheet" href="school-workspace-v336.css?v=457">
 <script src="school-workspace-v336.js?v=458"></script>
@@ -18544,6 +18545,6 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="desktop-premium-v378.js?v=390"></script>
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
-<script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=403r1"></script>
-<script src="work-access-v398.js?v=411"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=451"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=445" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=456"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=459"></script></body>
+<script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=aw1"></script>
+<script src="work-access-v398.js?v=aw1"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=451"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=aw1" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=456"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=459"></script><script src="assign-work-native.js?v=aw2"></script><link rel="stylesheet" href="erp-premium-cards.css?v=1"><script src="erp-premium-cards.js?v=1"></script></body>
 </html>
