@@ -232,3 +232,11 @@ body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #d378Brand h1{font-size:cl
 body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #d378Brand p{margin:4px 0!important;font-size:13px!important;color:#e4f1ff!important}
 body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent{gap:12px!important;padding-top:12px!important}
 }
+
+@media screen and (min-width:901px){
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent>#d378Brand{min-height:58px!important;padding:7px 16px!important}
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent>#d378Welcome{min-height:68px!important;padding:8px 16px!important}
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent #s336DashboardCard{order:-89!important}
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent #s336DashboardCard .s336Hero{min-height:64px!important;padding:10px 16px!important}
+body.d378Desktop #erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent>#d378Welcome em{display:none!important}
+}
