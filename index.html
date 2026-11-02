@@ -918,6 +918,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
   }
 }
 </style>
+<script src="school-feedback-v464.js"></script>
 <script defer src="erp-selection-v463.js"></script>
 <style id="my-class-roster-names">@media screen{#erp #teacherClassBody .tableWrap{max-width:100%;overflow-x:auto}#erp #teacherClassBody .v103ClassTable td:nth-child(3),#erp #teacherClassBody .v103ClassTable td:nth-child(4),#erp #teacherClassBody .v103ClassTable td:nth-child(3) b{min-width:9rem;white-space:normal!important;overflow-wrap:anywhere;text-overflow:clip!important}}</style>
 </head>
@@ -1059,7 +1060,7 @@ fee_installments:{title:"Fee Installments / Months",fields:[F("fee_structure_id"
 fee_heads:{title:"Fee Heads",fields:[F("fee_structure_id","Fee Plan","planselect",1),F("head_name","Fee Head"),F("amount","Amount","number"),F("recurring","Recurring","yesno"),F("frequency","Frequency","frequency"),F("sort_order","Order","number"),F("is_active","Active","yesno")],cols:[["head_name","Head"],["amount","Amount"],["recurring","Recurring"],["frequency","Frequency"],["is_active","Active"]]}
 };Object.keys(M).forEach(k=>M[k].table=k);
 const nav=[["dashboard","🏠 Dashboard"],["admissions","📝 Admissions"],["students","👨‍🎓 Students"],["academics","📚 Academics"],["attendance","✅ Student Attendance"],["staff_attendance","🟢 Staff Attendance"],["fees","💳 Fees & Reminders"],["fee_dashboard","📊 Smart Fee Dashboard"],["fee_structure","🧾 Fee Structure"],["exams","📘 Exams & Results"],["staff","👩‍🏫 Staff"],["leave","🗓️ Staff Leave"],["payroll","💰 Payroll"],["timetable","🕒 Timetable"],["homework","✏️ Homework"],["events","🎉 Events / PTM / Holidays"],["notices","📢 Notices"],["gallery","🖼️ Gallery"],["enquiries","☎️ Enquiries"],["transport","🚌 Transport"],["library","📖 Library"],["income","📈 Income"],["expenses","📉 Expenses"],["balance","⚖️ Balance Sheet"],["users","👥 Users & Roles"],["excel","📊 Excel Center"],["settings","🎨 Website & Settings"],["v57_guidance","📌 Global Guidance"],["v57_handover","🔁 Teacher Handover"],["v58_complaints","🛡️ Complaints & Discipline"]];
-function toast(m){const erp=document.getElementById('erp'),parent=document.getElementById('parentDashboard');const host=erp&&!erp.classList.contains('hidden')?document.getElementById('erpContent'):parent&&!parent.classList.contains('hidden')?parent:null;if(host){let n=host.querySelector(':scope > .ldmInlineStatus');if(!n){n=document.createElement('div');n.className='ldmInlineStatus';n.setAttribute('role','status');n.setAttribute('aria-live','polite');host.prepend(n)}n.textContent=String(m??'');return}const n=document.getElementById('toast');if(n){clearTimeout(window.__ldmToastTimer);n.textContent=m;n.classList.remove('hidden');window.__ldmToastTimer=setTimeout(()=>n.classList.add('hidden'),5000)}}function scrollToId(x){$(x).scrollIntoView({behavior:"smooth"})}
+function toast(m){m=window.ldmExplain464?.(m)??m;const erp=document.getElementById('erp'),parent=document.getElementById('parentDashboard');const host=erp&&!erp.classList.contains('hidden')?document.getElementById('erpContent'):parent&&!parent.classList.contains('hidden')?parent:null;if(host){let n=host.querySelector(':scope > .ldmInlineStatus');if(!n){n=document.createElement('div');n.className='ldmInlineStatus';n.setAttribute('role','status');n.setAttribute('aria-live','polite');host.prepend(n)}n.textContent=String(m??'');return}const n=document.getElementById('toast');if(n){clearTimeout(window.__ldmToastTimer);n.textContent=m;n.classList.remove('hidden');window.__ldmToastTimer=setTimeout(()=>n.classList.add('hidden'),5000)}}function scrollToId(x){$(x).scrollIntoView({behavior:"smooth"})}
 let publicMoved=null;
 function restorePublicMoved(){if(publicMoved&&publicMoved.isConnected){let footer=document.querySelector('#publicSite>footer');if(footer)footer.before(publicMoved);else $('publicSite').appendChild(publicMoved);publicMoved.style.display='none';publicMoved=null}}
 function v71ResetPublicScroll(view){
@@ -9595,7 +9596,7 @@ const V90_ADMIN_GROUPS=[
  ]]
 ];
 const V90_TEACHER_NAV=[
- ['dashboard','🏠 Home'],['assigned_work','📋 Admin Assigned Work'],['smart_work_alarm','🚨 My Work Alarm'],['teacher_profile','👤 My Profile'],['v93_teacher_password','🔐 My Password'],['teacher_class','👥 My Class'],['attendance','✅ Attendance'],['master_attendance','📋 Master Attendance'],['teacher_bells','🔔 My Teaching Bell'],['v90_teacher_daily','📖 Daily Teaching'],['academic_monitor','📊 My Teaching Performance'],['homework','✏ Homework'],['v90_teacher_marks','📝 Copy Check / Marks'],['exams','📊 Marks Entry'],['v90_my_requests','📬 My Requests'],['teacher_notices','📣 Orders / Notices'],['my_notes','🗒 My Notes'],['class_opinions','💬 Class Opinion']
+ ['dashboard','🏠 Home'],['assigned_work','📋 Admin Assigned Work'],['smart_work_alarm','🚨 My Work Alarm'],['teacher_profile','👤 My Profile'],['v93_teacher_password','🔐 My Password'],['teacher_class','👥 My Class'],['attendance','✅ Attendance'],['master_attendance','📋 Master Attendance'],['teacher_bells','🔔 My Teaching Bell'],['v90_teacher_daily','📖 Daily Teaching'],['academic_monitor','📊 My Teaching Performance'],['homework','✏ Homework'],['v90_teacher_marks','📝 Copy Check / Marks'],['teacher_marks_464','📊 Marks Entry'],['v90_my_requests','📬 My Requests'],['teacher_notices','📣 Orders / Notices'],['my_notes','🗒 My Notes'],['class_opinions','💬 Class Opinion']
 ];
 function v90BuildNav(active=window.__v90Route||'dashboard'){
  const host=v90Q('erpNav');if(!host||!profile)return;
@@ -12204,7 +12205,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  const SELF=new Set(['dashboard','assigned_work','smart_work_alarm','teacher_profile','v97_profile','v93_teacher_password','teacher_notices','gallery','v90_my_requests','teacher_attendance','my_notes']);
  const CLASS=new Set(['teacher_class','attendance','master_attendance','fees','class_opinions']);
  const TEACHING=new Set(['teacher_bells','teacher_schedule','timetable','v90_teacher_daily','teaching_diary','homework','academic_monitor']);
- const MARKS=new Set(['exams','v90_teacher_marks','central_exam']);
+ const MARKS=new Set(['exams','v90_teacher_marks','central_exam','teacher_marks_464']);
  function state(){
    const ca=Array.isArray(window.v14TeacherClasses)?window.v14TeacherClasses.filter(x=>x&&x.is_active!==false):[];
    const sa=Array.isArray(window.v14TeacherSubjects)?window.v14TeacherSubjects.filter(x=>x&&x.is_active!==false):[];
@@ -12228,6 +12229,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    if(route==='class_teacher')return st.classTeacher.length?{ok:true}:{ok:false,msg:'Admin ने Class Teacher permission नहीं दी है.'};
    if(CLASS.has(route))return st.classes.length?{ok:true}:{ok:false,msg:'Admin ने इस Teacher को कोई Class permission assign नहीं की है.'};
    if(TEACHING.has(route))return (st.classes.length||st.subjects.length)?{ok:true}:{ok:false,msg:'Admin ने Class/Subject teaching permission assign नहीं की है.'};
+   if(route==='teacher_marks_464')return {ok:true}; // The authenticated paper list and save RPC enforce the teaching scope.
    if(MARKS.has(route))return (st.classes.length&&st.subjects.length)?{ok:true}:{ok:false,msg:!st.classes.length?'Marks के लिए Class permission नहीं है.':'Marks के लिए Subject permission नहीं है.'};
    return {ok:false,msg:'यह Teacher module Admin permission list में नहीं है.'};
  }
@@ -12347,7 +12349,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    if(!isTeacher())return;let ctx=window.ldmTeacherContext;try{if(!ctx)ctx=await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}
    window.__v90Route='dashboard';if(typeof v90Head==='function')v90Head('Teacher Dashboard','Teacher Access • Teacher Master controlled');if(typeof v90InstallShell==='function')v90InstallShell('dashboard');
    const t=ctx.teacher||{},allClasses=(ctx.classes||[]).map(x=>x.class_name).filter(Boolean),classes=(typeof v103ClassTeacherClasses==='function'?v103ClassTeacherClasses():[]),subjects=(ctx.subjects||[]).map(x=>x.subject_name||x.subject).filter(Boolean),host=document.getElementById('erpContent');if(!host)return;
-   host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero v114PortalHero v377RoleHero">${ldmRoleHeroV377('teacher',t.teacher_name||profile?.full_name||'Teacher','Teacher • My Class: '+(classes.join(', ')||'Not assigned'))}</section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📷','QR Attendance Scanner','Scan My Class QR → Present','v143_teacher_qr_attendance'],['📋','Master Attendance','Own class status','master_attendance'],['🪪','Student ID Card','Preview / PDF / Print • Photo update','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['📊','My Teaching Performance','Graph • Copy Check • Bell Test','academic_monitor'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','Assigned subject marks','central_exam'],['💰','Fee Status','My assigned class • Read only','fees'],['📋','Admin Assigned Work','Responsibilities / Assistant work','assigned_work'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
+   host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero v114PortalHero v377RoleHero">${ldmRoleHeroV377('teacher',t.teacher_name||profile?.full_name||'Teacher','Teacher • My Class: '+(classes.join(', ')||'Not assigned'))}</section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📷','QR Attendance Scanner','Scan My Class QR → Present','v143_teacher_qr_attendance'],['📋','Master Attendance','Own class status','master_attendance'],['🪪','Student ID Card','Preview / PDF / Print • Photo update','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['📊','My Teaching Performance','Graph • Copy Check • Bell Test','academic_monitor'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','Assigned subject marks','teacher_marks_464'],['💰','Fee Status','My assigned class • Read only','fees'],['📋','Admin Assigned Work','Responsibilities / Assistant work','assigned_work'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
    host.querySelectorAll('[data-new-teacher-route]').forEach(b=>b.onclick=async()=>{let r=b.dataset.newTeacherRoute;if(r==='__logout'){return window.logout()}try{await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}if(typeof render==='function')return render(r)});try{scrollTo(0,0)}catch(_e){}
  };
  // Canonical dispatch: NEW teacher dashboard bypasses all legacy teacher dashboard/context entry paths.
@@ -16473,6 +16475,9 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 
   async function centralHome(){
     if(!isInternalERP())return false;
+    if(routeNow()==='dashboard'&&document.querySelector('#erpContent .ldmRootAdminDash,#erpContent .ldmNewTeacher')){
+      ensureAdminControls();try{window.scrollTo(0,0)}catch(_e){}return true;
+    }
     const h=['dashboard'];saveStack(h,'dashboard');
     try{window.ldmDeactivateActiveModule?.('dashboard')}catch(_e){}
     const out=await renderNoPush('dashboard');installBrowserPair('dashboard',h,true);ensureAdminControls();
@@ -18575,7 +18580,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
 <script src="root-corrections-v332.js?v=451"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
-<script src="exam-central-v320.js?v=460"></script>
+<script src="exam-central-v320.js?v=464"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18596,8 +18601,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="central-exam-fees-v333.js?v=aw1"></script>
 <script src="central-fee-class-v335.js?v=449"></script>
 <link rel="stylesheet" href="school-workspace-v336.css?v=457">
-<script src="teaching-v460.js?v=461"></script>
-<script src="school-workspace-v336.js?v=460"></script>
+<script src="teaching-v460.js?v=465"></script>
+<script src="school-workspace-v336.js?v=465"></script>
 
 <link rel="stylesheet" href="interface-v337.css?v=344">
 <script src="ui-v337.js?v=373"></script>
@@ -18631,6 +18636,6 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="desktop-premium-v378.js?v=390"></script>
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
-<script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=461"></script>
-<script src="work-access-v398.js?v=461"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=461"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=459"></script><script src="assign-work-native.js?v=aw2"></script><link rel="stylesheet" href="erp-premium-cards.css?v=1"><script src="erp-premium-cards.js?v=1"></script></body>
+<script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=464"></script>
+<script src="work-access-v398.js?v=464"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=461"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=459"></script><script src="assign-work-native.js?v=aw2"></script><link rel="stylesheet" href="erp-premium-cards.css?v=465"><script src="erp-premium-cards.js?v=465"></script></body>
 </html>

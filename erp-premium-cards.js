@@ -22,18 +22,40 @@ function decorate(card){if(card.classList.contains('ldm3dCard'))return;
  // Existing gate badge has inline spacing; keep it below, not over the title.
  if(card.matches('.v102DashGate'))card.style.setProperty('padding-bottom','30px','important');
 }
+const candidates='[class*="Grid"],[class*="grid"],[class*="Modules"],[class*="Cards"]';
 function apply(root){const groups=new Set(root.querySelectorAll(known));
+ if(root.matches(known))groups.add(root);
  // Additional existing function registries: only homogeneous launcher grids, never data/form grids.
- root.querySelectorAll('[class*="Grid"],[class*="grid"],[class*="Modules"],[class*="Cards"]').forEach(g=>{
+ const possible=[...root.querySelectorAll(candidates)];if(root.matches(candidates))possible.push(root);possible.forEach(g=>{
  if(g.closest('table,form,dialog,[role="dialog"],.ldm3dCard')||g.querySelector('input,select,textarea,table'))return;
  const kids=[...g.children].filter(e=>e.tagName!=='STYLE');if(kids.length&&kids.every(e=>e.matches('a[href],[role="button"],[onclick],[data-route]')&&!e.querySelector('button,input,select,textarea')&&(e.querySelector('b,strong,i,svg')||/render\(/.test(e.getAttribute('onclick')||''))))groups.add(g);
  });
  for(const grid of groups){if(grid.hidden||grid.classList.contains('hidden')||grid.style.display==='none')continue;const cards=[...grid.children].filter(e=>e.matches('button,a,[role="button"],[onclick]'));if(!cards.length)continue;
- grid.classList.add('ldm3dGrid');grid.style.setProperty('grid-template-columns','repeat(2,minmax(0,1fr))','important');cards.forEach(decorate);
+ grid.classList.add('ldm3dGrid');cards.forEach(decorate);
  const panel=grid.parentElement;if(panel?.matches('.v114ManagementPanel,.ldmMasterControl,.v39QuickPanel'))panel.classList.add('ldm3dPanel');
  }
 }
-function refresh(){queued=false;for(const id of ['erpContent','parentDashboard']){const root=D.getElementById(id);if(!root)continue;if(!observers.has(root)){const observer=new MutationObserver(schedule);observer.observe(root,{childList:true,subtree:true});observers.set(root,observer)}apply(root)}for(const [root,observer]of observers)if(!root.isConnected){observer.disconnect();observers.delete(root)}}
-function schedule(){if(queued)return;queued=true;requestAnimationFrame(refresh)}
-window.LDM_PREMIUM_CARDS=Object.freeze({refresh,version:'1'});if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
+const dirty=new Set();
+function flush(){
+ queued=false;const nodes=[...dirty];dirty.clear();
+ for(const el of nodes)if(el.isConnected&&!nodes.some(parent=>parent!==el&&parent.contains(el)))apply(el);
+}
+function schedule(el){dirty.add(el);if(!queued){queued=true;requestAnimationFrame(flush)}}
+function observe(records){
+ for(const record of records){
+  const parent=record.target;
+  if(parent.nodeType!==1||parent.closest('.ldm3dCard'))continue;
+  if(parent.matches(known+','+candidates)){schedule(parent);continue}
+  for(const el of record.addedNodes)if(el.nodeType===1&&!el.matches('input,select,option,textarea,table,thead,tbody,tr,td,th'))schedule(el);
+ }
+}
+function refresh(){
+ for(const [root,observer] of observers)if(!root.isConnected){observer.disconnect();observers.delete(root)}
+ for(const id of ['erpContent','parentDashboard']){
+  const root=D.getElementById(id);if(!root)continue;
+  if(!observers.has(root)){const observer=new MutationObserver(observe);observer.observe(root,{childList:true,subtree:true});observers.set(root,observer)}
+  schedule(root);
+ }
+}
+window.LDM_PREMIUM_CARDS=Object.freeze({refresh,version:'465'});if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
 })();

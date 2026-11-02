@@ -1,0 +1,15 @@
+L D MODERN EDUCATION ACADEMY • V465 संयुक्त पैच
+यह V463 के स्रोत के ऊपर V464 Teacher Repair और V465 प्रदर्शन बदलावों का संयुक्त पैच है। इस ZIP को अकेले खाली repository में deploy न करें।
+
+यदि V464 पहले से लागू है: केवल index.html, school-workspace-v336.js, erp-premium-cards.js, erp-premium-cards.css और teaching-v460.js बदलें। V465 की नई SQL नहीं है।
+यदि V463 लगा है: V464 के READ_FIRST_HI.txt का क्रम लागू होता है। ऊपर की पाँच फ़ाइलों के साथ exam-central-v320.js, smart-work-v403.js, work-access-v398.js, school-feedback-v464.js भी समान root में रखें। RUN_ONCE_V464_REPAIR.sql पहले से सफल हो तो दोबारा न चलाएँ। PATCH460 के पुराने SQL सामूहिक रूप से न चलाएँ।
+यदि मूल स्रोत से शुरू कर रहे हैं तो उसी मूल ERP की परीक्षण कॉपी में सभी पैच फ़ाइलें उनके मूल paths पर लगाएँ। पहले से चल रहे DB functions और policies से मिलान आवश्यक है।
+
+दोबारा जाँच
+• School Work Assistant: समान खाते/सत्र में एक ही सुविधा दो बार खोलने पर एक ही लंबित अनुरोध। पुरानी अनुमति-जाँच देर से लौटने पर दूसरी सुविधा नहीं हटती।
+• Dashboard Home: पहले से Dashboard दिखने पर उसके लिए दोबारा पूरा पेज नहीं बनाया जाता।
+• कार्ड सजावट: डेटाटेबल में 3000 rows डालने के परीक्षण में कार्डों की दोबारा जाँच schedule नहीं हुई। नए launcher grid पर सजावट अब भी लागू होती है।
+• Teaching Plan: कक्षा/अवधि बदलने के बाद देर से लौटा प्रीव्यू सेव योग्य नहीं बनता। छुट्टी PDF के फ़ॉर्म में टाइप करने से अलग lesson plan का प्रीव्यू रद्द नहीं होता।
+• ≤520px स्क्रीन पर सजाए गए launcher card एक कॉलम में। अंक तालिका का horizontal scroll अपने wrapper के अंदर।
+• स्थानीय परीक्षण: 128 inline scripts parse हुए, बदले JS की syntax जाँची, शिक्षक मेनू → अधिकृत पेपर सूची mock RPC से खुली। Double-click, दूसरे page पर जाना और फिर वापस खोलना pass हुआ।
+• बाकी: वास्तविक SQL और RLS, शिक्षक द्वारा अंक सेव, शिक्षक उपस्थिति/वेतन, Parent Due, शुल्क correction, Assign Work के सभी routes, वास्तविक कैमरा/OCR, सत्र पदोन्नति और तीनों उपकरणों पर दृश्य जाँच। हर पेज के लिए live timing या overlap-free प्रमाण उपलब्ध नहीं है।

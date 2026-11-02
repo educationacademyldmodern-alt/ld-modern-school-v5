@@ -88,10 +88,10 @@
     const admin=['admin','principal','super_admin'].includes(actor.role);
     host.innerHTML='<div class="s336Panel"><p>अपना पीरियड चुनें। फोटो से पहचाने गए पाठ जाँचकर एक पाठ प्रति पंक्ति रखें।</p><div class="s336Tools"><label>समय-सारणी<select id="planBell"></select></label><label>आरंभ<input type="date" id="planFrom"></label><label>अंत<input type="date" id="planTo"></label><label>टेस्ट संख्या<input type="number" min="0" step="1" value="4" id="planTests"></label><label>पाठ की फोटो<input multiple type="file" accept="image/*" id="bookPhoto"></label><label>कैमरा<input type="file" accept="image/*" capture="environment" id="bookCamera"></label></div><label>पाठ सूची<textarea id="planLessons" rows="6"></textarea></label><label>परीक्षा या अन्य आरक्षित तारीखें (YYYY-MM-DD, एक प्रति पंक्ति)<textarea id="planReserved"></textarea></label><div class="s336Tools"><button id="planBuild">योजना का प्रीव्यू</button><button id="planSave" disabled>स्वीकृत योजना सेव करें</button><button id="planLoad">सेव योजना देखें</button></div><p role="status" id="planStatus"></p><div id="planRows"></div></div>';
     const el=id=>host.querySelector('#'+id),status=s=>{if(host.isConnected)el('planStatus').textContent=s};
-    const run=(button,act)=>{button.onclick=async()=>{button.disabled=true;try{await act()}catch(e){status(e.message)}finally{button.disabled=false}}};
-    let plan=null;
-    const invalidate=()=>{plan=null;el('planSave').disabled=true;el('planRows').replaceChildren()};
-    host.oninput=invalidate;
+    const run=(button,act)=>{button.onclick=async()=>{button.disabled=true;try{await act()}catch(e){status(e.message)}finally{button.disabled=button.id==='planSave'&&!plan}}};
+    let plan=null,revision=0;
+    const invalidate=()=>{revision++;plan=null;el('planSave').disabled=true;el('planRows').replaceChildren()};
+    host.querySelector('.s336Panel').addEventListener('input',invalidate);
     const display=items=>{const table=document.createElement('table');for(const item of items){const tr=table.insertRow();for(const value of [item.date,'घंटी '+item.period,item.topic])tr.insertCell().textContent=value}el('planRows').replaceChildren(table)};
     for(const field of ['bookPhoto','bookCamera'])el(field).onchange=async e=>{
       const input=e.target;input.disabled=true;
@@ -116,22 +116,23 @@
       const lessons=lines(el('planLessons').value),count=Number(el('planTests').value);
       const reserved=new Set(lines(el('planReserved').value));
       if([...reserved].some(d=>!/^\d{4}-\d{2}-\d{2}$/.test(d)))throw Error('आरक्षित तारीख YYYY-MM-DD में दें।');
-      const snapshot=host.querySelector('.s336Panel');
-      const slots=await availableSlots(db,bells,from,to,reserved);if(!host.isConnected||!snapshot.isConnected)return;
+      const ticket=revision;
+      const slots=await availableSlots(db,bells,from,to,reserved);if(!host.isConnected||ticket!==revision)return;
       plan=allocate(slots,lessons,count);display(plan);el('planSave').disabled=false;status(plan.length+' घंटियाँ • '+count+' टेस्ट। जाँचकर सेव करें।');
     });
     const identity=()=>({owner_id:actor.id,session_name:session,bell_key:el('planBell').value});
     run(el('planSave'),async()=>{if(!plan)throw Error('पहले प्रीव्यू बनाएं।');await read(db.rpc('ldm_save_plan460',{p_session:session,p_bell:el('planBell').value,p_plan:plan}));status('योजना सेव हुई।')});
     run(el('planLoad'),async()=>{
+      invalidate();const ticket=revision;
       const chosen=el('planBell').value,records=await read(db.from('ldm_teaching_plans460').select('plan').match(identity()));
-      if(!host.isConnected||el('planBell').value!==chosen)return;
-      invalidate();const original=records[0]?.plan||[];display(original);
+      if(!host.isConnected||ticket!==revision||el('planBell').value!==chosen)return;
+      const original=records[0]?.plan||[];display(original);
       if(!original.length)return status('इस चयन की योजना नहीं मिली।');
       const today=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Kolkata'}).format(new Date());
       const future=original.filter(x=>x.date>=today);if(!future.length)return status('सेव योजना • सभी तारीखें बीत चुकी हैं।');
       const end=el('planTo').value||future.at(-1).date;
       const slots=await availableSlots(db,groups.get(chosen),today,end,new Set(lines(el('planReserved').value)));
-      if(!host.isConnected||el('planBell').value!==chosen)return;
+      if(!host.isConnected||ticket!==revision||el('planBell').value!==chosen)return;
       let pos=0,changed=0;const next=[];
       for(const row of future){
         while(pos<slots.length&&(slots[pos].date<row.date||slots[pos].date===row.date&&Number(slots[pos].period)<Number(row.period)))pos++;
@@ -207,16 +208,16 @@
     const teachers=await read(query);
     for(const t of teachers)select.add(new Option(t.teacher_name+' · '+(t.employee_id||'ID जोड़ें'),t.id));
     async function load(setRate=null){
-      if(!select.value||!month.value)return;btn.disabled=true;select.disabled=true;month.disabled=true;
-      try{const d=await read(db.rpc('ldm_staff_preview460',{p_teacher:select.value,p_month:month.value+'-01',p_set_rate:setRate}));
+      if(!select.value||!month.value){msg.textContent=!select.value?'इस खाते से शिक्षक प्रोफ़ाइल नहीं जुड़ी है। Admin Teacher Master में Login ID जाँचें।':'हाज़िरी देखने के लिए माह चुनें।';return;}btn.disabled=true;select.disabled=true;month.disabled=true;
+      output.replaceChildren();msg.textContent='चुने हुए महीने की उपस्थिति पढ़ी जा रही है…';try{const d=await read(db.rpc('ldm_staff_preview464',{p_teacher:select.value,p_month:month.value+'-01',p_set_rate:setRate}));
         output.replaceChildren();const table=document.createElement('table'),header=table.createTHead().insertRow();
         for(const title of ['तारीख','स्कूल','हाज़िरी / छुट्टी','अनुमानित कटौती'])header.insertCell().textContent=title;
         for(const r of d.days){const row=table.insertRow();for(const field of [r.date,r.open?'खुला':'बंद · '+(r.calendar||'रविवार'),r.leave?'स्वीकृत छुट्टी':r.status||'—',r.deduction==null?'दर तय करें':'₹'+r.deduction])row.insertCell().textContent=field}
-        output.append(table);msg.textContent=d.name+' · '+d.employee+' · प्रति स्वीकृत छुट्टी कटौती '+(d.rate==null?'दर तय नहीं':'₹'+d.rate)+' · '+(d.payroll.length?'दर्ज मासिक नेट वेतन ₹'+d.payroll.map(x=>x.net).join(', ₹'):'इस माह का पेरोल दर्ज नहीं');
+        output.append(table);msg.textContent=(d.warning?d.warning+' ':'')+d.name+' · '+(d.employee||'कर्मचारी ID उपलब्ध नहीं')+' · प्रति स्वीकृत छुट्टी कटौती '+(d.rate==null?'दर तय नहीं':'₹'+d.rate)+' · '+(d.payroll.some(x=>x.net!=null)?'दर्ज मासिक नेट वेतन ₹'+d.payroll.filter(x=>x.net!=null).map(x=>x.net).join(', ₹'):'इस माह का वेतन दर्ज नहीं है; उपलब्ध हाज़िरी नीचे है।');
         if(admin){const rate=document.createElement('input'),set=document.createElement('button');rate.type='number';rate.min='0';rate.step='0.01';rate.placeholder='स्वीकृत प्रति दिन दर';rate.value=d.rate??'';set.textContent='इस माह की प्रीव्यू दर सेव करें';set.onclick=()=>{if(rate.value!==''&&rate.reportValidity()){set.disabled=true;void load(rate.valueAsNumber)}};output.prepend(rate,set)}
-      }catch(e){msg.textContent=e.message}finally{btn.disabled=false;select.disabled=false;month.disabled=false}
+      }catch(e){msg.textContent=window.ldmExplain464?.(e)||e.message}finally{btn.disabled=false;select.disabled=false;month.disabled=false}
     }
-    btn.onclick=()=>load();select.onchange=month.onchange=()=>{output.replaceChildren();msg.textContent='चयन बदल गया है। प्रीव्यू खोलें।'};await load();
+    btn.onclick=()=>load();select.onchange=month.onchange=()=>load();await load();
   }
   window.LDMTeaching={open,allocate,holiday,dayBadge,drafts,staff};
 })();
