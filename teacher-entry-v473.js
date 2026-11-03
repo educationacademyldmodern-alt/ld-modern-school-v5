@@ -9,12 +9,13 @@ window.openTeacherEntry473 = async function () {
   window.v90InstallShell?.(window.__v90Route);
   window.head?.('Exams & Marks', 'अपने विषय के अंक दर्ज करें');
   const host = document.getElementById('erpContent');
-  host.innerHTML = '<section id="entry473" class="panel"><h2>विषयवार अंक प्रविष्टि</h2><button id="newPaper474" type="button">＋ प्रश्नपत्र बनाएँ / इम्पोर्ट करें</button><label>परीक्षा और विषय<select id="paper473"><option value="">पेपर चुनें</option></select></label><div id="student473"></div><p role="status"></p></section>';
+  host.innerHTML = '<section id="entry473" class="panel"><h2>विषयवार अंक प्रविष्टि</h2><button id="newPaper474" type="button">＋ प्रश्नपत्र बनाएँ / इम्पोर्ट करें</button><label>घंटी से खोजें (वैकल्पिक)<select id="bell475"><option value="">सभी अधिकृत पेपर</option></select></label><label>परीक्षा और विषय<select id="paper473"><option value="">पेपर चुनें</option></select></label><div id="date475"></div><button id="roster475" type="button">परीक्षा उपस्थिति और अंक तालिका</button><div id="student473"></div><p role="status"></p></section>';
   const root = host.firstElementChild;
-  const paper = root.querySelector('select'), body = root.querySelector('#student473'), status = root.querySelector('[role=status]');
+  const paper = root.querySelector('#paper473'), body = root.querySelector('#student473'), status = root.querySelector('[role=status]');
   const live = () => root.isConnected && profile?.id === teacher && school?.academic_session === session;
   const prefix = JSON.stringify([teacher,session]) + ':entry473:';
   let generation = 0, data, index, busy = false, rows = [];
+  root.querySelector('#roster475').onclick=()=>{if(!busy&&live())window.LDM_EXAM.center(true)};
   const addPaper=root.querySelector('#newPaper474');
   addPaper.onclick=()=>{if(!busy && live())return window.render('teacher_paper_center');};
   const key = () => prefix + paper.value;
@@ -54,7 +55,7 @@ window.openTeacherEntry473 = async function () {
       if (!read().job && data.published_at && Number(score.value)!==Number(row.marks) && reason.value.trim().length<3){
         reason.focus();return note('प्रकाशित अंक बदलने के लिए कम से कम 3 अक्षरों में कारण लिखें।');
       }
-      busy=true;addPaper.disabled=jump.disabled=paper.disabled=next.disabled=score.disabled=reason.disabled=back.disabled=true;
+      busy=true;root.querySelector('#bell475').disabled=true;addPaper.disabled=jump.disabled=paper.disabled=next.disabled=score.disabled=reason.disabled=back.disabled=true;
       try {
         const d=read();
         if (row.marks == null || Number(score.value)!==Number(row.marks) || d.job) {
@@ -79,7 +80,7 @@ window.openTeacherEntry473 = async function () {
         // PostgreSQL errors roll back the transaction; network errors keep the exact request for retry.
         if (/^(?:22|23|40|42|P0)[A-Z0-9]{3}$/.test(e.code||'')) {const d=read();delete d.job;store(d);}
         note(e.message || 'सेव अधूरा है। फिर प्रयास करें।');
-      } finally {busy=false;if(live()){addPaper.disabled=paper.disabled=next.disabled=false;const locked=!!read().job;score.disabled=reason.disabled=locked;}}
+      } finally {busy=false;if(live()){root.querySelector('#bell475').disabled=false;addPaper.disabled=paper.disabled=next.disabled=false;const locked=!!read().job;score.disabled=reason.disabled=locked;}}
     };
     if (same && draft.job) {score.disabled=reason.disabled=true;next.textContent='सेव की पुष्टि फिर करें';}
     score.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();next.click();}};
@@ -90,13 +91,14 @@ window.openTeacherEntry473 = async function () {
   }
   paper.onchange=async()=>{
     const id=paper.value, mine=++generation;
-    body.replaceChildren();note('');
+    body.replaceChildren();root.querySelector('#date475').replaceChildren();note('');
     if(!id)return;
     try {
       localStorage.setItem(prefix+'last',id);
       const result=await rpc('ldm_teacher_load471',{p_paper:id});
       if(!live()||mine!==generation)return;
       if(String(result?.paper?.paper_id)!==id)throw Error('पेपर की पहचान जाँचें।');
+      window.examDates475(root.querySelector('#date475'),result,false,rpc,()=>paper.onchange(),note,()=>!busy&&live()&&!read().job);
       data=result;rows=result.rows.filter(r=>r.attendance==='Present');
       index=Math.max(0,rows.findIndex(r=>r.student_id===read().student));show();
     } catch(e){if(live()&&mine===generation)note(e.message);}
@@ -105,6 +107,23 @@ window.openTeacherEntry473 = async function () {
     const list=await rpc('ldm_teacher_list471',{p_session:session});
     if(!live())return;
     for(const p of list)paper.add(new Option([p.exam_name,p.class_name,p.section,p.subject_name,p.exam_date].filter(Boolean).join(' • '),p.paper_id));
+    const bell=root.querySelector('#bell475');
+    const normal=v=>String(v||'').trim().toLowerCase();
+    const classKey=v=>normal(window.ldmClassCanonical?.(v)||v);
+    rpc('ldm_teacher_bells460',{}).then(bells=>{
+      if(!live())return;
+      bells.forEach((b,i)=>bell.add(new Option(['घंटी '+b.period_no,b.class_name,b.section,b.subject].filter(Boolean).join(' • '),String(i))));
+      bell.onchange=()=>{
+        if(busy||!live())return;
+        const b=bell.value===''?null:bells[Number(bell.value)];
+        const matches=list.filter(p=>!b||(classKey(p.class_name)===classKey(b.class_name)&&normal(p.subject_name)===normal(b.subject)&&(!p.section||!b.section||normal(b.section)===normal(p.section))));
+        paper.options.length=1;
+        matches.forEach(p=>paper.add(new Option([p.exam_name,p.class_name,p.section,p.subject_name,p.exam_date].filter(Boolean).join(' • '),p.paper_id)));
+        paper.value=matches.length===1?String(matches[0].paper_id):'';
+        paper.onchange();
+        if(!matches.length)note('इस घंटी का परीक्षा पेपर उपलब्ध नहीं है।');
+      };
+    }).catch(()=>{if(live())bell.disabled=true});
     const last=localStorage.getItem(prefix+'last');if(list.some(p=>p.paper_id===last)){paper.value=last;await paper.onchange();}
     else if(!list.length)note('आपके आवंटित विषय का पेपर उपलब्ध नहीं है।');
   }catch(e){note(e.message);}

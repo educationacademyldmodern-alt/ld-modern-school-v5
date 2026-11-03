@@ -171,3 +171,28 @@ outline:3px solid #ffcc33!important;outline-offset:2px!important
 }
 
 @media screen and (min-width:901px){body #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp #erpContent{max-width:100%!important;width:100%!important;box-sizing:border-box!important}}
+@media screen {
+  #erpContent .ldmMasterGrid button > em,
+  #erpContent .v271AdminPremium .ldmMasterGrid button > em {display:none!important}
+  #work400Workspace .v90MonitorGrid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.65rem;margin-bottom:1rem}
+  #work400Workspace .v90MonitorGrid button {min-height:4rem;white-space:normal;color:white;background:linear-gradient(130deg,#08716f,#16649d);box-shadow:0 3px 0 #bbcfdb;border-radius:.8rem}
+  #v6422DueRows .tableWrap,#x320Rows .tableWrap,#a459Root .tableWrap {max-height:65vh;overflow:auto;position:relative}
+  #v6422DueRows th,#x320Rows th,#a459Root th {position:sticky;top:0;z-index:4;background:#e4f0f6;color:#123}
+  #v6422DueRows tr>:nth-child(2),#x320Rows tr>:nth-child(2),#a459Root tr>:nth-child(2),
+  #v6422DueRows tr>:nth-child(3),#x320Rows tr>:nth-child(3),#a459Root tr>:nth-child(4) {
+    --pin-width:clamp(72px,21vw,145px);position:sticky!important;left:0!important;
+    box-sizing:border-box;min-width:var(--pin-width)!important;width:var(--pin-width)!important;max-width:var(--pin-width)!important;
+    white-space:normal;overflow-wrap:anywhere;background:#f2f7fb!important;color:#142e40!important;z-index:2
+  }
+  #v6422DueRows tr>:nth-child(3),#x320Rows tr>:nth-child(3),#a459Root tr>:nth-child(4) {left:var(--pin-width)!important}
+  #v6422DueRows tr>th:nth-child(n),#x320Rows tr>th:nth-child(n),#a459Root tr>th:nth-child(n) {z-index:5}
+}
+@media screen {
+ #erp #erpContent .studentScroll475, #erp #erpContent #x320Center .x393ExamScroll{
+ --student-pin:clamp(72px,21vw,145px);--student-bg:#f2f7fb;--student-ink:#142e40;
+ max-height:65vh!important;overflow:auto!important;max-width:100%;min-width:0
+ }
+ html[data-ldm-theme=dark] #erp #erpContent .studentScroll475{--student-bg:#173348;--student-ink:white}
+ #erp #erpContent .studentScroll475 table th {position:sticky!important;top:0!important;z-index:5!important;background:var(--student-bg)!important;color:var(--student-ink)!important}
+ #erp #erpContent .studentScroll475 table{border-spacing:0}
+}

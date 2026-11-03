@@ -1,0 +1,19 @@
+L D MODERN EDUCATION ACADEMY | V475 | 3 नवंबर 2026
+
+पहला दौर — स्रोत और बदलाव
+V474 ZIP की पहचान और CRC जाँचे और उसके index की अक्षरशः तुलना की। V471 के संगत Management/Assign Work स्रोत तथा मूल central-fee-class मॉड्यूल का उपयोग हुआ।
+• काम और अधिकार दें में मौजूदा registry के 15 कामों से उनका assignment form खोलने के विकल्प जोड़े। शिक्षक को मिले अधिकारों के काम खोलने का विकल्प जोड़ा। अवधि, कक्षा और अनुमतियों के लिए मौजूदा server context और RLS उपयोग होते हैं। पुराने server contract में active approved teacher profile आवश्यक है। अलग non-teaching staff भूमिका की नई server mapping इस पैच में शामिल नहीं है।
+• शिक्षक के लिए सीधे पेपर या अपनी घंटी, कक्षा, सेक्शन और विषय से चयन। पहले से मौजूद Save & Next, स्थानीय draft तथा केंद्रीय marks sync का उपयोग। उसी स्क्रीन से उपस्थिति और अंक तालिका खुलती है। शिक्षक के तालिका विकल्पों में सर्वर पर roster सीमा और पूरे पेपर के कार्य के लिए पूरी सूची का मिलान जोड़ा।
+• Master Due Fee Update, Admin Class Fee Status, Central Due Fee Report और सामान्य Students list में स्पष्ट वर्ग चयन। फीस सूची के बड़े परिणाम 500 की खेप में। अन्य पुराने स्वतंत्र छात्र खोज पेजों के सभी मार्गों की पुष्टि बाकी है।
+• फीस व परीक्षा तालिकाओं को scroll क्षेत्र दिया। अन्य समर्थित छात्र तालिकाओं में headers से नाम और पिता के कॉलम पहचाने जाते हैं। बिना पहचाने जाने वाले column headings, custom tables एवं mobile/tablet/laptop पर समूचे ERP का दृश्य सत्यापन बाकी है।
+• Dashboard launcher से OPEN / OPEN PAPERS जैसे काले लेबल हटाने का बदलाव। मूल button और click action सुरक्षित।
+• एक विद्यार्थी की बाद की परीक्षा की तारीख, मूल पेपर पर attendance update तथा उसी ID से अंक भरना। Admin अनारम्भित और अप्रकाशित पेपर की नई तारीख रख सकता है। पहले से attendance/marks होने पर पूरे पेपर की तारीख बदलने पर रोक है। अलग audit table में पहले की तारीख व कारण दर्ज होते हैं। Date action नई exam या marks row नहीं बनाता। दूसरे modules में पुराने दिन automatic absence तथा अंतिम marksheet की लाइव पुष्टि बाकी है।
+• सीमित Safari compatibility repairs में replaceChildren, secure UUID और public login handler अनुपलब्ध होने पर पढ़ने योग्य संदेश शामिल हैं। पुराने Safari के पूरे JavaScript syntax का रूपांतरण इसमें शामिल नहीं है।
+
+दूसरा दौर — स्थानीय परीक्षण
+128 inline JavaScript blocks और सभी बदले standalone JS की syntax जाँच पास। नई JS/CSS references का V475 query version जाँचा।
+20 अलग simulated teacher sessions में प्रत्येक ने 10 अलग अंक लगातार सेव किए। 200/200 परीक्षण records सही शिक्षक और विद्यार्थी के लिए मिले। आखिरी रन में simulated paper open p95 34.30 ms और save p95 7.58 ms था। Node VM, हल्का DOM और नकली asynchronous RPC इस्तेमाल हुए।
+20 अलग फीस स्क्रीन पर चुनी कक्षा की 20 queries चलीं। हर स्क्रीन पर पिता के नाम से खोज सही रिकॉर्ड तक पहुँची। चयन से पहले पूरी फीस सूची की query नहीं चली। 40 कृत्रिम विद्यार्थियों वाली प्रत्येक स्क्रीन में चयन से खोज पूरी होने तक p95 45.69 ms था। ये स्कूल नेटवर्क, Supabase या असली मोबाइल की गति के आँकड़े नहीं हैं।
+दोनों नई परीक्षा तारीखों के UI अनुरोध, मूल पेपर ID, खाली विकल्प की रोक और सफल उत्तर पर पुनः लोड नियंत्रित परीक्षण में पास। 500 secure UUID fallback outputs का format और uniqueness परीक्षण पास।
+लाइव Chrome में दिए गए Vercel पते पर वर्तमान public landing page खुला। Go to Dashboard ने Email/Login ID और Password का फॉर्म खोला, और Teacher Access ने Registered Mobile और Password का फॉर्म खोला। तस्वीर वाला Welcome/Admission पेज V474 की मूल HTML में भी मौजूद है। लाइव V475 deployment नहीं किया गया। तस्वीर से Safari का संस्करण या JavaScript त्रुटि ज्ञात नहीं। इस जाँच में वास्तविक iPad नहीं था तथा WebKit runtime उपलब्ध नहीं हो सका।
+अभी खुले परीक्षण: staging पर SQL apply/re-run, permissions व सभी 15 कार्यों की वास्तविक write/deny जाँच, गैर-शिक्षक staff, प्रकाशित परिणाम/marksheet sync, वास्तविक 20 concurrent accounts, iPad/Safari और दोनों credentials से dashboard तक end-to-end। इन परिणामों को pass नहीं माना गया है।

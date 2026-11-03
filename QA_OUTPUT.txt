@@ -1,0 +1,8 @@
+PASS: sibling phone, stable admission, third child unchanged, stale edit rejected, selected parent link only (mock).
+Inline scripts parsed 128
+open 20 p50 / p95 ms 18.37 24.50
+local student picker lookup 200 p50 / p95 ms 0.00 0.00
+save 200 p50 / p95 ms 3.33 4.74
+20 fee screens, 20 selected-class queries, 20 parent searches passed; combined p50/p95 ms 38.32 39.60
+compatibility UUID fallback 500 passed
+2 date control paths passed using mock RPC

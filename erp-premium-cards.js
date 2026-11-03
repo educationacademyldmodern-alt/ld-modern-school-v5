@@ -24,7 +24,7 @@ function decorate(card){if(card.classList.contains('ldm3dCard'))return;
  const title=[...card.querySelectorAll('b,strong,h3,h4')].find(e=>e!==icon&&!icon.contains(e))||[...card.children].find(e=>e!==icon&&e.tagName==='SPAN'&&!e.querySelector('b,strong,small'));
  if(title)title.classList.add('ldm3dTitle');
  card.querySelectorAll('small').forEach(e=>e.classList.add('ldm3dSubtitle'));
- card.querySelectorAll('em').forEach(e=>e.classList.add('ldm3dBadge'));
+ card.querySelectorAll('em').forEach(e=>{if(/^open(?:\s+[a-z ]+)?\s*[→›»]?$/i.test(e.textContent.trim()))e.remove();else e.classList.add('ldm3dBadge')});
  card.classList.add('ldm3dCard');card.style.setProperty('background',`linear-gradient(155deg,#ffffff28,transparent 45%),linear-gradient(105deg,${palette[colour(key)]},${palette[colour(key)]})`,'important');
  // Existing gate badge has inline spacing; keep it below, not over the title.
  if(card.matches('.v102DashGate'))card.style.setProperty('padding-bottom','30px','important');
