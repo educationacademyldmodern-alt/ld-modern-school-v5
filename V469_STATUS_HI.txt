@@ -1,0 +1,1 @@
+Teacher marks client validation, academic session, duplicate save protection fixed. Database RLS still requires inspection; run 01_CHECK_MARKS_POLICY.sql and share results. No RLS policy was disabled or changed. NOT FULLY FIXED.

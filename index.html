@@ -2336,8 +2336,29 @@ async function loadTeacherMarksStudents(){
  $('tmBody').innerHTML=`<div class="tableWrap"><table><tr><th>Student</th><th>Roll</th><th>Marksheet No.</th><th>Max</th><th>Obtained</th></tr>${(students||[]).map((s,i)=>{let o=om[s.admission_no]||{};return `<tr data-adm="${esc(s.admission_no)}" data-name="${esc(s.student_name)}" data-roll="${esc(s.roll_no||'')}"><td>${esc(s.student_name)}</td><td>${esc(s.roll_no||'')}</td><td><input id="tmNo${i}" value="${esc(o.marksheet_no||'')}"></td><td><input id="tmMax${i}" type="number" value="${Number(o.max_marks||100)}"></td><td><input id="tmGot${i}" type="number" value="${Number(o.obtained_marks||0)}"></td></tr>`}).join('')}</table></div><button class="v14Action primary" onclick='saveTeacherMarks(${JSON.stringify(students||[]).replace(/'/g,"&#39;")})'>Save Marks</button>`;
 }
 async function saveTeacherMarks(students){
- let c=$('tmClass').value,exam=$('tmExam').value.trim(),sub=$('tmSubject').value,rows=students.map((s,i)=>({academic_session:'2026-27',exam_name:exam,admission_no:s.admission_no,roll_no:s.roll_no||null,student_name:s.student_name,class_name:c,subject_name:sub,max_marks:Number($('tmMax'+i).value||0),obtained_marks:Number($('tmGot'+i).value||0),marksheet_no:$('tmNo'+i).value.trim()||null,teacher_profile_id:v14TeacherProfile.id,updated_at:new Date().toISOString()}));
- let {error}=await sb.from('student_marks').upsert(rows,{onConflict:'academic_session,exam_name,admission_no,subject_name'});toast(error?error.message:'Marks saved');
+ const c=$('tmClass').value,exam=$('tmExam').value.trim(),sub=$('tmSubject').value;
+ if(!exam||!sub||!c)return toast('Class, exam and subject required');
+ await v14LoadTeacherContext();
+ if(!v14TeacherProfile?.id)return toast('Teacher profile missing. Ask admin to verify teacher mapping.');
+ const allowedClasses=v14AllowedClassNames();
+ if(!allowedClasses.includes(c))return toast('Class not assigned to this teacher');
+ if(!v14TeacherSubjects.some(x=>String(x.subject_name||'').trim().toLowerCase()===sub.trim().toLowerCase()))return toast('Subject not assigned to this teacher');
+ const session=school.academic_session;
+ if(!session)return toast('Academic session not configured');
+ const rows=[];
+ for(let i=0;i<students.length;i++){
+   const max=Number($('tmMax'+i).value),got=Number($('tmGot'+i).value);
+   if(!Number.isFinite(max)||max<=0||!Number.isFinite(got)||got<0||got>max)return toast('Invalid marks for '+students[i].student_name);
+   rows.push({academic_session:session,exam_name:exam,admission_no:students[i].admission_no,roll_no:students[i].roll_no||null,student_name:students[i].student_name,class_name:c,subject_name:sub,max_marks:max,obtained_marks:got,marksheet_no:$('tmNo'+i).value.trim()||null,teacher_profile_id:v14TeacherProfile.id,updated_at:new Date().toISOString()});
+ }
+ if(!rows.length)return toast('No students loaded');
+ const btn=document.querySelector('#tmBody button[onclick^="saveTeacherMarks"]');
+ if(btn){if(btn.disabled)return;btn.disabled=true;btn.textContent='Saving…';}
+ try{
+   const {error}=await sb.from('student_marks').upsert(rows,{onConflict:'academic_session,exam_name,admission_no,subject_name'});
+   if(error){toast(error.code==='42501'?'Marks permission denied: Admin must verify student_marks RLS policy. '+error.message:error.message);return;}
+   toast('Marks saved');
+ }finally{if(btn){btn.disabled=false;btn.textContent='Save Marks';}}
 }
 
 async function teacherHomework(){
@@ -3418,7 +3439,7 @@ openERP=function(){
   if(!v14Teacher())return v38OpenERPPrev();
   $('login').classList.add('hidden');$('publicSite').classList.add('hidden');$('erp').classList.remove('hidden');
   $('roleText').textContent='teacher';
-  let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile'],['teacher_class','👨‍🎓 My Students'],['attendance','✅ Attendance'],['teacher_schedule','🕐 Teaching Schedule'],['teaching_diary','📖 Daily Teaching / Syllabus'],['fees','₹ Fee Status'],['exams','📝 Exams & Marks'],['homework','✏️ Homework'],['class_opinions','💬 Class Opinion']];
+  let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile'],['teacher_class','👨‍🎓 My Students'],['attendance','✅ Attendance'],['teacher_schedule','🕐 Teaching Schedule'],['teaching_diary','📖 Daily Teaching / Syllabus'],['fees','₹ Fee Status'],['exam_marks_entry_470','📝 Exams & Marks'],['homework','✏️ Homework'],['class_opinions','💬 Class Opinion']];
   $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');
   applyPortalWallpapers();return render('dashboard');
 };
@@ -3620,7 +3641,7 @@ openERP=async function(){
  $('login').classList.add('hidden');$('publicSite').classList.add('hidden');$('erp').classList.remove('hidden');$('roleText').textContent='teacher';
  let teacherNav=[['dashboard','🏠 Home'],['teacher_profile','👤 My Profile']];
  if(v40ClassTeacherNames().length)teacherNav.push(['class_teacher','⭐ Class Teacher']);
- teacherNav.push(['teacher_class','👨‍🎓 My Students'],['attendance','✅ Attendance'],['teacher_schedule','🕐 Teaching Schedule'],['teaching_diary','📖 Daily Teaching / Syllabus'],['fees','₹ Fee Status'],['exams','📝 Exams & Marks'],['homework','✏️ Homework'],['class_opinions','💬 Class Opinion']);
+ teacherNav.push(['teacher_class','👨‍🎓 My Students'],['attendance','✅ Attendance'],['teacher_schedule','🕐 Teaching Schedule'],['teaching_diary','📖 Daily Teaching / Syllabus'],['fees','₹ Fee Status'],['exam_marks_entry_470','📝 Exams & Marks'],['homework','✏️ Homework'],['class_opinions','💬 Class Opinion']);
  $('erpNav').innerHTML=teacherNav.map(x=>`<button onclick="render('${x[0]}')">${x[1]}</button>`).join('');applyPortalWallpapers();return render('dashboard');
 }
 
@@ -9596,7 +9617,7 @@ const V90_ADMIN_GROUPS=[
  ]]
 ];
 const V90_TEACHER_NAV=[
- ['dashboard','🏠 Home'],['assigned_work','📋 Admin Assigned Work'],['smart_work_alarm','🚨 My Work Alarm'],['teacher_profile','👤 My Profile'],['v93_teacher_password','🔐 My Password'],['teacher_class','👥 My Class'],['attendance','✅ Attendance'],['master_attendance','📋 Master Attendance'],['teacher_bells','🔔 My Teaching Bell'],['v90_teacher_daily','📖 Daily Teaching'],['academic_monitor','📊 My Teaching Performance'],['homework','✏ Homework'],['v90_teacher_marks','📝 Copy Check / Marks'],['teacher_marks_464','📊 Marks Entry'],['v90_my_requests','📬 My Requests'],['teacher_notices','📣 Orders / Notices'],['my_notes','🗒 My Notes'],['class_opinions','💬 Class Opinion']
+ ['dashboard','🏠 Home'],['assigned_work','📋 Admin Assigned Work'],['smart_work_alarm','🚨 My Work Alarm'],['teacher_profile','👤 My Profile'],['v93_teacher_password','🔐 My Password'],['teacher_class','👥 My Class'],['attendance','✅ Attendance'],['master_attendance','📋 Master Attendance'],['teacher_bells','🔔 My Teaching Bell'],['v90_teacher_daily','📖 Daily Teaching'],['academic_monitor','📊 My Teaching Performance'],['homework','✏ Homework'],['v90_teacher_marks','📝 Copy Check / Marks'],['exam_marks_entry_470','📝 Exam Marks Entry'],['v90_my_requests','📬 My Requests'],['teacher_notices','📣 Orders / Notices'],['my_notes','🗒 My Notes'],['class_opinions','💬 Class Opinion']
 ];
 function v90BuildNav(active=window.__v90Route||'dashboard'){
  const host=v90Q('erpNav');if(!host||!profile)return;
@@ -12205,7 +12226,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
  const SELF=new Set(['dashboard','assigned_work','smart_work_alarm','teacher_profile','v97_profile','v93_teacher_password','teacher_notices','gallery','v90_my_requests','teacher_attendance','my_notes']);
  const CLASS=new Set(['teacher_class','attendance','master_attendance','fees','class_opinions']);
  const TEACHING=new Set(['teacher_bells','teacher_schedule','timetable','v90_teacher_daily','teaching_diary','homework','academic_monitor']);
- const MARKS=new Set(['exams','v90_teacher_marks','central_exam','teacher_marks_464']);
+ const MARKS=new Set(['exams','v90_teacher_marks','central_exam','teacher_marks_464','exam_marks_entry_470']);
  function state(){
    const ca=Array.isArray(window.v14TeacherClasses)?window.v14TeacherClasses.filter(x=>x&&x.is_active!==false):[];
    const sa=Array.isArray(window.v14TeacherSubjects)?window.v14TeacherSubjects.filter(x=>x&&x.is_active!==false):[];
@@ -12229,7 +12250,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    if(route==='class_teacher')return st.classTeacher.length?{ok:true}:{ok:false,msg:'Admin ने Class Teacher permission नहीं दी है.'};
    if(CLASS.has(route))return st.classes.length?{ok:true}:{ok:false,msg:'Admin ने इस Teacher को कोई Class permission assign नहीं की है.'};
    if(TEACHING.has(route))return (st.classes.length||st.subjects.length)?{ok:true}:{ok:false,msg:'Admin ने Class/Subject teaching permission assign नहीं की है.'};
-   if(route==='teacher_marks_464')return {ok:true}; // The authenticated paper list and save RPC enforce the teaching scope.
+   if(['teacher_marks_464','exam_marks_entry_470'].includes(route))return {ok:true}; // The authenticated paper list and save RPC enforce the teaching scope.
    if(MARKS.has(route))return (st.classes.length&&st.subjects.length)?{ok:true}:{ok:false,msg:!st.classes.length?'Marks के लिए Class permission नहीं है.':'Marks के लिए Subject permission नहीं है.'};
    return {ok:false,msg:'यह Teacher module Admin permission list में नहीं है.'};
  }
@@ -12349,7 +12370,7 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
    if(!isTeacher())return;let ctx=window.ldmTeacherContext;try{if(!ctx)ctx=await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}
    window.__v90Route='dashboard';if(typeof v90Head==='function')v90Head('Teacher Dashboard','Teacher Access • Teacher Master controlled');if(typeof v90InstallShell==='function')v90InstallShell('dashboard');
    const t=ctx.teacher||{},allClasses=(ctx.classes||[]).map(x=>x.class_name).filter(Boolean),classes=(typeof v103ClassTeacherClasses==='function'?v103ClassTeacherClasses():[]),subjects=(ctx.subjects||[]).map(x=>x.subject_name||x.subject).filter(Boolean),host=document.getElementById('erpContent');if(!host)return;
-   host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero v114PortalHero v377RoleHero">${ldmRoleHeroV377('teacher',t.teacher_name||profile?.full_name||'Teacher','Teacher • My Class: '+(classes.join(', ')||'Not assigned'))}</section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📷','QR Attendance Scanner','Scan My Class QR → Present','v143_teacher_qr_attendance'],['📋','Master Attendance','Own class status','master_attendance'],['🪪','Student ID Card','Preview / PDF / Print • Photo update','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['📊','My Teaching Performance','Graph • Copy Check • Bell Test','academic_monitor'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','Assigned subject marks','teacher_marks_464'],['💰','Fee Status','My assigned class • Read only','fees'],['📋','Admin Assigned Work','Responsibilities / Assistant work','assigned_work'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
+   host.innerHTML=`<div class="ldmNewTeacher"><section class="ldmTeacherHero v114PortalHero v377RoleHero">${ldmRoleHeroV377('teacher',t.teacher_name||profile?.full_name||'Teacher','Teacher • My Class: '+(classes.join(', ')||'Not assigned'))}</section><div class="ldmTeacherScope">My Class: ${classes.join(', ')||'No Class Teacher Assignment'} &nbsp; • &nbsp; Teaching Classes: ${allClasses.join(', ')||'Not assigned'} &nbsp; • &nbsp; Subjects: ${subjects.join(', ')||'As per class assignment'}</div><section class="ldmTeacherModules">${[['👤','My Profile','Teacher details','teacher_profile'],['👥','My Class / Students','Assigned class only','teacher_class'],['✅','Attendance','Assigned class attendance','attendance'],['📷','QR Attendance Scanner','Scan My Class QR → Present','v143_teacher_qr_attendance'],['📋','Master Attendance','Own class status','master_attendance'],['🪪','Student ID Card','Preview / PDF / Print • Photo update','v91_student_photos'],['🔔','Timetable / Bell','Today schedule','teacher_bells'],['📖','Daily Teaching','Bell-wise update','v90_teacher_daily'],['📊','My Teaching Performance','Graph • Copy Check • Bell Test','academic_monitor'],['✏','Homework / Worksheet','Assigned class','homework'],['📝','Copy Check / Progress','Class progress','v90_teacher_marks'],['📊','Exams & Marks','परीक्षा अंक भरें','exam_marks_entry_470'],['💰','Fee Status','My assigned class • Read only','fees'],['📋','Admin Assigned Work','Responsibilities / Assistant work','assigned_work'],['📣','Notices / Notes','Official updates','teacher_notices'],['🔐','My Password','Change password','v93_teacher_password'],['🚪','Logout','Secure sign out','__logout']].map(x=>`<button data-new-teacher-route="${x[3]}"><i>${x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></button>`).join('')}</section></div>`;
    host.querySelectorAll('[data-new-teacher-route]').forEach(b=>b.onclick=async()=>{let r=b.dataset.newTeacherRoute;if(r==='__logout'){return window.logout()}try{await ldmTeacherMasterContext()}catch(e){return toast(e.message||String(e))}if(typeof render==='function')return render(r)});try{scrollTo(0,0)}catch(_e){}
  };
  // Canonical dispatch: NEW teacher dashboard bypasses all legacy teacher dashboard/context entry paths.
@@ -18565,7 +18586,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v332.js?v=449"></script>
+<script src="dashboard-v332.js?v=471"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=406"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18580,7 +18601,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
 <script src="root-corrections-v332.js?v=451"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
-<script src="exam-central-v320.js?v=464"></script>
+<script src="exam-central-v320.js?v=471"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18630,12 +18651,12 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=388"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=435"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=471"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=460">
 <script src="desktop-premium-v378.js?v=390"></script>
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=464"></script>
-<script src="work-access-v398.js?v=464"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=461"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=459"></script><script src="assign-work-native.js?v=aw2"></script><link rel="stylesheet" href="erp-premium-cards.css?v=465"><script src="erp-premium-cards.js?v=465"></script></body>
+<script src="work-access-v398.js?v=471"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=461"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=459"></script><script src="assign-work-native.js?v=aw2"></script><link rel="stylesheet" href="erp-premium-cards.css?v=471"><script src="erp-premium-cards.js?v=470"></script></body>
 </html>

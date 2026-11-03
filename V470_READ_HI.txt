@@ -1,0 +1,1 @@
+V469 पर चार बदली फाइलें: index.html, exam-central-v320.js, erp-premium-cards.js, erp-premium-cards.css। Teacher Dashboard → Exam Marks Entry → पेपर चुनें → Load / Resume → अंक भरें → Save Changed Marks। साझा कार्ड में छह रंग हैं। नए रास्ते का mock परीक्षण सफल। वास्तविक स्कूल लॉगिन, marks save और अलग उपकरणों की स्क्रीन पर पुष्टि बाकी। V470 कार्ड और रास्ते के लिए नई SQL नहीं है।
