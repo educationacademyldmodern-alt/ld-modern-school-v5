@@ -51,7 +51,7 @@ function schedule(el){dirty.add(el);if(!queued){queued=true;requestAnimationFram
 function observe(records){
  for(const record of records){
   const parent=record.target;
-  if(parent.nodeType!==1||parent.closest('.ldm3dCard'))continue;
+  if(parent.nodeType!==1||parent.closest('.ldm3dCard,table,form,dialog,[role="dialog"]'))continue;
   if(parent.matches(known+','+candidates)){schedule(parent);continue}
   for(const el of record.addedNodes)if(el.nodeType===1&&!el.matches('input,select,option,textarea,table,thead,tbody,tr,td,th'))schedule(el);
  }

@@ -1320,7 +1320,6 @@ async function syncOneApprovedAdmission(r){
  if(!adm){adm='LD'+new Date().getFullYear()+String(Date.now()).slice(-6)+String(Math.floor(Math.random()*90+10));let{error}=await sb.from('admissions').update({admission_no:adm}).eq('id',r.id);if(error)throw error;r.admission_no=adm}
  let student=admissionToStudent(r,adm),existing=null;
  let q=await sb.from('students').select('id,admission_no,student_name,phone').eq('admission_no',adm).limit(1);if(q.error)throw q.error;existing=q.data?.[0]||null;
- if(!existing&&student.phone&&student.student_name){let m=await sb.from('students').select('id,admission_no,student_name,phone').eq('phone',student.phone).ilike('student_name',student.student_name).limit(1);if(!m.error)existing=m.data?.[0]||null}
  if(existing){let{error}=await sb.from('students').update(student).eq('id',existing.id);if(error)throw error;return 'updated'}
  let{error}=await sb.from('students').insert(student);if(error)throw error;return 'created'
 }
@@ -1391,7 +1390,7 @@ async function saveRecord(k,form,id=null){
       if(!original||String(original.id)!==String(id)||form._ldmEditKind!==k)throw Error('Original record revision unavailable; close and reopen this record before updating / रिकॉर्ड फिर खोलें');
       if(original.updated_at)o.updated_at=new Date().toISOString();q=sb.from(k).update(o).eq('id',id);let guards=0;
       if(original.updated_at){q=q.eq('updated_at',original.updated_at);guards++;}
-      for(const key of Object.keys(o)){if(key==='id'||key==='updated_at'||key.startsWith('photo')||!(key in original))continue;const value=original[key];if(value===null){q=q.is(key,null);guards++;}else if(['string','number','boolean'].includes(typeof value)&&String(value).length<500){q=q.eq(key,value);guards++;}}
+      if(k!=='students'||!original.updated_at)for(const key of Object.keys(o)){if(key==='id'||key==='updated_at'||key.startsWith('photo')||!(key in original))continue;const value=original[key];if(value===null){q=q.is(key,null);guards++;}else if(['string','number','boolean'].includes(typeof value)&&String(value).length<500){q=q.eq(key,value);guards++;}}
       if(!guards)throw Error('Cannot verify the original record; reopen it before updating');
       const result=await q.select('id').maybeSingle();if(result.error)throw result.error;if(!result.data)throw Error('Record changed on another device or update is not permitted. Your input is preserved; reopen the latest record. / दूसरे डिवाइस का बदलाव मिला');
       form._ldmEditOriginal={...original,...o};
@@ -6186,11 +6185,25 @@ async function v65HasTeacherAttendance(){if(!v65Teacher())return true;try{let{da
 async function v65TeacherAttendancePage(gate=false){
   if(!v65Teacher())return toast('Teacher login only');head('🟢 My Attendance',gate?'पहले अपनी attendance complete करें, उसके बाद class work खुलेगा.':'Daily self attendance • Admin auto update');
   let{data,error}=await sb.rpc('v65_teacher_attendance_status');if(error){$('erpContent').innerHTML=`<div class="panel v64Danger">${esc(error.message)}<br>V65 SQL one time run करें.</div>`;return}
-  $('erpContent').innerHTML=`<div class="v65TeacherGate"><span style="font-size:42px">${data?.marked?'✅':'🕘'}</span><h3>${data?.marked?'Attendance Complete':'Attendance Pending'}</h3><p>${data?.marked?`Today • ${esc(data.status||'Present')} • ${esc(String(data.check_in_at||'').replace('T',' ').slice(0,16))}`:'आज का school work शुरू करने से पहले attendance mark करें.'}</p>${data?.marked?'<div class="tools"><button class="primary" onclick="ldmTeacherPresenceEvent(\'VERIFY\')">📍 Verify Presence</button><button class="secondary" onclick="ldmTeacherPresenceEvent(\'CHECK_OUT\')">🏫 Check-Out</button><button class="secondary" onclick="render(\'dashboard\')">Teacher Home</button></div>':'<button class="primary" onclick="v65TeacherCheckIn()">📍 Check-In / Mark Attendance</button>'}</div>`;
+  $('erpContent').innerHTML=`<div class="v65TeacherGate"><span style="font-size:42px">${data?.marked?'✅':'🕘'}</span><h3>${data?.marked?'Attendance Complete':'Attendance Pending'}</h3><p>${data?.marked?`Today • ${esc(data.status||'Present')} • ${esc(String(data.check_in_at||'').replace('T',' ').slice(0,16))}`:'आज का school work शुरू करने से पहले attendance mark करें.'}</p>${data?.marked?'<div class="tools"><button class="primary" onclick="ldmTeacherPresenceEvent(\'VERIFY\')">📍 Verify Presence</button><button class="secondary" onclick="ldmTeacherPresenceEvent(\'CHECK_OUT\')">🏫 Check-Out</button><button class="secondary" onclick="render(\'dashboard\')">Teacher Home</button></div>':'<input id="teacherNote473" placeholder="नोट (वैकल्पिक)" aria-label="Attendance note"><button class="primary" onclick="v65TeacherCheckIn()">📍 Check-In / Mark Attendance</button>'}</div>`;
 }
-async function v65TeacherCheckIn(){if(!navigator.geolocation)return toast('इस device/browser में Location उपलब्ध नहीं है. Admin से संपर्क करें.');let note=prompt('Optional attendance note (blank छोड़ सकते हैं)')||'';toast('School location verify हो रही है…');navigator.geolocation.getCurrentPosition(async pos=>{try{let{latitude:p_lat,longitude:p_lng,accuracy:p_accuracy}=pos.coords;let{data,error}=await sb.rpc('ldm_teacher_geo_checkin',{p_lat,p_lng,p_accuracy,p_note:note});if(error)throw error;if(data?.ok===false)return toast(data.message||'School location verification failed');toast('✓ School location verified • Attendance marked');v65TeacherAttendancePage(false);if(typeof v58BroadcastUpdate==='function')v58BroadcastUpdate('teacher-attendance')}catch(e){toast(e.message||String(e))}},err=>toast(err.code===1?'Attendance के लिए Location permission Allow करें.':'Current location नहीं मिल सकी. Location ON करके फिर कोशिश करें.'),{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
+function teacherPosition473(done,failed){
+  const geo=navigator.geolocation;
+  let settled=false, coarse, precise;
+  function stop(){if(coarse!=null)geo.clearWatch(coarse);if(precise!=null)geo.clearWatch(precise);}
+  function finish(callback,value){if(settled)return;settled=true;stop();window.removeEventListener('pagehide',cancel);callback(value);}
+  function cancel(){finish(()=>{},null);}
+  const owner=profile?.id,gate=document.querySelector('.v65TeacherGate');
+  function accept(p){if(profile?.id!==owner || (gate&&!gate.isConnected))return cancel();finish(done,p);}
+  window.addEventListener('pagehide',cancel,{once:true});
+  // Network positioning can already be accurate on school Wi-Fi. GPS runs at the same time.
+  coarse=geo.watchPosition(p=>{if(Date.now()-p.timestamp<=5000&&p.coords.accuracy<=25)accept(p);},
+    e=>{if(e.code===1)finish(failed,e);},{enableHighAccuracy:false,timeout:4000,maximumAge:5000});
+  precise=geo.watchPosition(accept,e=>finish(failed,e),{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+}
+async function v65TeacherCheckIn(){if(!navigator.geolocation)return toast('इस device/browser में Location उपलब्ध नहीं है. Admin से संपर्क करें.');let note=document.getElementById('teacherNote473')?.value?.trim()||'';toast('School location verify हो रही है…');teacherPosition473(async pos=>{try{let{latitude:p_lat,longitude:p_lng,accuracy:p_accuracy}=pos.coords;let{data,error}=await sb.rpc('ldm_teacher_geo_checkin',{p_lat,p_lng,p_accuracy,p_note:note});if(error)throw error;if(data?.ok===false)return toast(data.message||'School location verification failed');toast('✓ School location verified • Attendance marked');v65TeacherAttendancePage(false);if(typeof v58BroadcastUpdate==='function')v58BroadcastUpdate('teacher-attendance')}catch(e){toast(e.message||String(e))}},err=>toast(err.code===1?'Attendance के लिए Location permission Allow करें.':'Current location नहीं मिल सकी. Location ON करके फिर कोशिश करें.'),{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
 
-window.ldmTeacherPresenceEvent=function(eventType){if(!navigator.geolocation)return toast('इस device/browser में Location उपलब्ध नहीं है.');toast('School location verify हो रही है…');navigator.geolocation.getCurrentPosition(async pos=>{try{let{latitude:p_lat,longitude:p_lng,accuracy:p_accuracy}=pos.coords,r=await sb.rpc('ldm_teacher_geo_event',{p_event_type:eventType,p_lat,p_lng,p_accuracy,p_note:''});if(r.error)throw r.error;if(r.data?.ok===false)return toast(r.data.message||'Location verification failed');toast(eventType==='CHECK_OUT'?'✓ Check-Out verified':'✓ Presence verified')}catch(e){toast(e.message||String(e))}},err=>toast(err.code===1?'Location permission Allow करें.':'Location ON करके फिर कोशिश करें.'),{enableHighAccuracy:true,timeout:15000,maximumAge:0})};
+window.ldmTeacherPresenceEvent=function(eventType){if(!navigator.geolocation)return toast('इस device/browser में Location उपलब्ध नहीं है.');toast('School location verify हो रही है…');teacherPosition473(async pos=>{try{let{latitude:p_lat,longitude:p_lng,accuracy:p_accuracy}=pos.coords,r=await sb.rpc('ldm_teacher_geo_event',{p_event_type:eventType,p_lat,p_lng,p_accuracy,p_note:''});if(r.error)throw r.error;if(r.data?.ok===false)return toast(r.data.message||'Location verification failed');toast(eventType==='CHECK_OUT'?'✓ Check-Out verified':'✓ Presence verified')}catch(e){toast(e.message||String(e))}},err=>toast(err.code===1?'Location permission Allow करें.':'Location ON करके फिर कोशिश करें.'),{enableHighAccuracy:true,timeout:15000,maximumAge:0})};
 /* ---------- Bell-wise Admin Teaching Control ---------- */
 async function v65TeachingControl(){
   if(!v65Admin())return toast('Admin / Principal only');head('🔔 Bell-wise Teaching Control','Teacher select • Timetable auto • Taught / Classwork / Homework • Edit / Recycle');
@@ -9623,7 +9636,12 @@ function v90BuildNav(active=window.__v90Route||'dashboard'){
  const host=v90Q('erpNav');if(!host||!profile)return;
  if(v90Admin()&&!window.LDM_ASSIGN_WORK?.active()){
    host.className='v90Nav';
-   host.innerHTML=`<button class="v90Home ${active==='dashboard'?'active':''}" onclick="render('dashboard')">🏠 <span>Dashboard</span></button>`+V90_ADMIN_GROUPS.map((g,i)=>`<details class="v90NavGroup" ${g[2].some(x=>x[0]===active)?'open':''}><summary><span>${g[0]} ${g[1]}</span><b>⌄</b></summary><div>${g[2].map(x=>`<button class="${active===x[0]?'active':''}" onclick="render('${x[0]}')">${x[1]}</button>`).join('')}</div></details>`).join('');
+   const markup=`<button class="v90Home ${active==='dashboard'?'active':''}" onclick="render('dashboard')">🏠 <span>Dashboard</span></button>`+V90_ADMIN_GROUPS.map((g,i)=>`<details class="v90NavGroup" ${g[2].some(x=>x[0]===active)?'open':''}><summary><span>${g[0]} ${g[1]}</span><b>⌄</b></summary><div>${g[2].map(x=>`<button class="${active===x[0]?'active':''}" onclick="render('${x[0]}')">${x[1]}</button>`).join('')}</div></details>`).join('');
+   const stamp=host._adminMenu473;
+   if(stamp?.actor===profile.id && stamp.markup===markup && stamp.first===host.firstElementChild && stamp.last.parentElement===host)return;
+   host.innerHTML=markup;
+   host._adminMenu473={actor:profile.id,markup,first:host.firstElementChild,last:host.lastElementChild};
+
  } else if(v90Teacher()){
    host.className='v90Nav';host.innerHTML=V90_TEACHER_NAV.map(x=>`<button class="${active===x[0]?'active':''}" onclick="render('${x[0]}')">${x[1]}</button>`).join('');
  }
@@ -18114,7 +18132,7 @@ body.ldmSurfaceParent .v114PortalQuick button:active{transform:translateY(1px)!i
 }
 </style>
 
-<script src="./runtime_guard.js?v=362"></script>
+<script src="./runtime_guard.js?v=473"></script>
 
 <style id="v277-fast-search-style">
 /* V277 scoped UI — does not style existing fee or role dashboards. */
@@ -18586,7 +18604,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 <link rel="stylesheet" href="dashboard-v304.css?v=309">
-<script src="dashboard-v332.js?v=471"></script>
+<script src="dashboard-v332.js?v=473"></script>
 <link rel="stylesheet" href="exam-automation-v305.css?v=305">
 <script src="exam-automation-v305.js?v=406"></script>
 <link rel="stylesheet" href="udise-v306.css?v=306">
@@ -18601,7 +18619,9 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
 <script src="root-corrections-v332.js?v=451"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
-<script src="exam-central-v320.js?v=471"></script>
+<script src="menu-v473.js?v=473"></script>
+<script src="teacher-entry-v473.js?v=474"></script>
+<script src="exam-central-v320.js?v=474"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18647,7 +18667,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
 <script src="documents-v345.js?v=444"></script>
-<script src="teacher-save-v345.js?v=442"></script>
+<script src="teacher-save-v345.js?v=473"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=388"></script>
@@ -18658,5 +18678,5 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=464"></script>
-<script src="work-access-v398.js?v=471"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=461"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=459"></script><script src="assign-work-native.js?v=aw2"></script><link rel="stylesheet" href="erp-premium-cards.css?v=471"><script src="erp-premium-cards.js?v=470"></script></body>
+<script src="work-access-v398.js?v=471"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=461"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=473"></script><script src="assign-work-native.js?v=aw2"></script><link rel="stylesheet" href="erp-premium-cards.css?v=473"><script src="erp-premium-cards.js?v=473"></script></body>
 </html>
