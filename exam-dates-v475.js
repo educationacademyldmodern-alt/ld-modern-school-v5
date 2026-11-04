@@ -1,5 +1,5 @@
 // Reuse the selected timetable paper and its authorized roster.
-window.examDates475 = function (host, sheet, isAdmin, save, reload, note, canStart) {
+window.examDates475 = typeof window.examDates475 === "function" ? window.examDates475 : function (host, sheet, isAdmin, save, reload, note, canStart) {
   const panel = document.createElement('details');
   panel.innerHTML = '<summary>बाद की परीक्षा / नई तारीख</summary><label>किसकी परीक्षा<select></select></label><label>परीक्षा की वास्तविक तारीख<input type="date"></label><label>कारण<input type="text"></label><button type="button">तारीख दर्ज करें</button>';
   const picker = panel.querySelector('select');
