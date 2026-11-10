@@ -2652,14 +2652,25 @@ async function generateClassMarksheets(){
 }
 
 async function v14AttachSignedPhotos(rows){
- for(let s of rows){
-   s._signed_photo='';
-   let path=s.photo_path||'';
-   if(path){
-     let {data}=await sb.storage.from('student-media').createSignedUrl(path,3600);
-     s._signed_photo=data?.signedUrl||'';
-   }else if(s.student_photo_url){s._signed_photo=s.student_photo_url}
+ const bucket=sb.storage.from('student-media');
+ const uniques=[...new Set(rows.map(s=>String(s.photo_path||'').trim()).filter(Boolean))];
+ const urls=new Map();
+ // Multiple signed URLs per request; do not persist URLs or student records.
+ for(let i=0;i<uniques.length;i+=50){
+   const batch=uniques.slice(i,i+50);
+   if(typeof bucket.createSignedUrls==='function'){
+     const {data,error}=await bucket.createSignedUrls(batch,3600);
+     if(!error&&Array.isArray(data)){
+       for(let j=0;j<batch.length;j++)urls.set(batch[j],data[j]?.error?'':data[j]?.signedUrl||'');
+       continue;
+     }
+   }
+   // Compatibility fallback: preserve old behaviour for unsupported Storage clients.
+   for(const path of batch){
+     const {data}=await bucket.createSignedUrl(path,3600);urls.set(path,data?.signedUrl||'');
+   }
  }
+ for(const s of rows){const path=String(s.photo_path||'').trim();s._signed_photo=path?(urls.get(path)||''):(s.student_photo_url||'')}
  return rows;
 }
 
@@ -9108,18 +9119,30 @@ window.ldmResolveAttendanceConflict=async function(adm,action){
     resolutionAction='keep_latest';
   }
   if(!['present','absent','leave','not_marked'].includes(chosen))return;
-  const note=prompt('Admin resolution note (optional)','')||'';
-  if(!confirm(`${adm} का final attendance “${ldmAttStatusLabel(chosen)}” रखना है?\nOriginal duplicate rows history में सुरक्षित रहेंगी.`))return;
-  const d=document.getElementById('ldmConflictDate')?.value||truth.date;
-  try{
-    const r=await sb.rpc('ldm_resolve_attendance_conflict',{
-      p_date:d,p_admission_no:String(adm),p_status:chosen,p_action:resolutionAction,p_note:note
-    });
-    if(r.error)throw r.error;
-    try{window.ldmMarkDataDirty?.('attendance')}catch(_e){}
-    window.toast?.('✓ Attendance conflict resolved • original history preserved');
-    await window.ldmLoadAttendanceConflictCenter();
-  }catch(e){window.toast?.(e?.message||String(e))}
+  // No modal/prompt: keep review and optional note inline with the selected student.
+  const focus=document.activeElement,card=focus?.closest?.('.ldmConflictCard')||document.getElementById('erpContent');
+  if(!card)return;
+  card.querySelector('.v505ConflictReview')?.remove();
+  const review=document.createElement('section');review.className='v505ConflictReview';
+  review.style.cssText='border:1px solid #b5cce1;background:#f1f7ff;padding:12px;border-radius:10px;margin:10px 0;display:grid;gap:9px';
+  const title=document.createElement('b');title.textContent=String(adm)+' • Final attendance: '+ldmAttStatusLabel(chosen)+' • Original history सुरक्षित';
+  const label=document.createElement('label');label.textContent='Optional Admin note';
+  const input=document.createElement('input');input.type='text';input.maxLength=500;input.placeholder='Note (optional)';label.append(input);
+  const actions=document.createElement('div');actions.className='tools';
+  const saveBtn=document.createElement('button');saveBtn.type='button';saveBtn.className='primary';saveBtn.textContent='✓ Save Final Attendance';
+  const cancelBtn=document.createElement('button');cancelBtn.type='button';cancelBtn.textContent='Cancel';cancelBtn.onclick=()=>review.remove();
+  const info=document.createElement('span');info.setAttribute('role','status');
+  actions.append(saveBtn,cancelBtn);review.append(title,label,actions,info);card.append(review);
+  saveBtn.onclick=async()=>{saveBtn.disabled=true;cancelBtn.disabled=true;info.textContent='Saving…';
+   const d=document.getElementById('ldmConflictDate')?.value||truth.date;
+   try{const r=await sb.rpc('ldm_resolve_attendance_conflict',{
+     p_date:d,p_admission_no:String(adm),p_status:chosen,p_action:resolutionAction,p_note:input.value.trim()});
+     if(r.error)throw r.error;
+     try{window.ldmMarkDataDirty?.('attendance')}catch(_e){}
+     info.textContent='✓ Attendance conflict resolved • original history preserved';
+     await window.ldmLoadAttendanceConflictCenter();
+   }catch(e){info.textContent=e?.message||String(e);saveBtn.disabled=false;cancelBtn.disabled=false}
+  };
 };
 
 window.ldmReopenAttendanceConflict=async function(adm){
@@ -18555,7 +18578,7 @@ body:has(#erp:not(.hidden)) #ldmV281Refresh,body:has(#parentPortal:not(.hidden) 
        restoreSearch(searches);
        if(scroll>0)window.scrollTo({top:scroll,behavior:'instant'});
      }
-     notify('✓ '+current+' • डेटा अपडेट किया गया');
+     if(current!=='marksheet_center')notify('✓ '+current+' • डेटा अपडेट किया गया');
    }catch(e){notify('Refresh failed / अपडेट नहीं हुआ: '+String(e?.message||e))}
    finally{refreshBusy=false;b.disabled=false;b.textContent='↻ Refresh / अपडेट'}
  }
@@ -18687,7 +18710,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="student-tables-v475.js?v=475"></script>
 <script src="exam-dates-v475.js?v=475"></script>
 <script src="teacher-entry-v473.js?v=475"></script>
-<script src="exam-central-v320.js?v=501"></script>
+<script src="exam-central-v320.js?v=505"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18743,7 +18766,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="desktop-premium-v378.js?v=390"></script>
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
-<script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=464"></script>
-<script src="work-access-v398.js?v=475"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=504"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=501"><script defer src="ldm-premium-v500.js?v=501"></script>
+<script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
+<script src="work-access-v398.js?v=475"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=504"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=505"><script defer src="ldm-premium-v500.js?v=505"></script><script defer src="erp-v505-stability.js?v=505"></script>
 </body>
 </html>

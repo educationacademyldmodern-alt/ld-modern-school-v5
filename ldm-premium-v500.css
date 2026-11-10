@@ -35,3 +35,25 @@
 @supports(height:100dvh){#ldm500Dialog{height:min(88dvh,950px);max-height:92dvh}}
 #ldm500Dialog:not(:modal)[open]{position:fixed;inset:3vh 0 auto;margin:auto;z-index:2147483000}
 @media print{body.ldm500-printing #ldm500Dialog{height:auto!important;max-height:none!important;position:static!important}}
+
+/* V505: stable card order; do not shuffle the dashboard on refresh. */
+#erp #erpContent .ldmRootAdminDash>#ldm500Hero{order:-30!important;grid-column:1/-1!important;width:100%!important}
+#erp #erpContent .ldmRootAdminDash>#s336DashboardCard{order:-29!important;grid-column:1/-1!important;width:100%!important}
+#erp #erpContent .ldmRootAdminDash>#v233Greeting{order:-28!important;grid-column:1/-1!important;width:100%!important;visibility:visible!important;opacity:1!important;min-height:76px!important}
+#erp #erpContent .ldmRootAdminDash #v233Greeting:not([hidden]){display:flex!important}
+/* The modal header does not cover cards: only the content area scrolls. */
+#ldm500Dialog[open]{display:flex!important;flex-direction:column!important;overflow:hidden!important;box-sizing:border-box!important}
+#ldm500Dialog .ldm500-modal-head{position:relative!important;flex:0 0 auto!important;top:auto!important}
+#ldm500Dialog .ldm500-modal-inner{min-height:0!important;flex:1 1 auto!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable}
+#ldm500Dialog .ldm500-sections{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}
+#ldm500Dialog .ldm500-sector{min-height:94px!important;padding:11px!important;border-bottom-width:2px!important;box-shadow:0 3px 9px #14295620!important}
+#ldm500Dialog .ldm500-sector b{font-size:13px!important}
+#ldm500Dialog .ldm500-sector small{font-size:11px!important}
+@media(max-width:700px){#ldm500Dialog{width:calc(100vw - 16px)!important;max-width:calc(100vw - 16px)!important;height:calc(100dvh - 24px)!important;max-height:calc(100dvh - 24px)!important;margin:12px auto!important}#ldm500Dialog .ldm500-sections{grid-template-columns:repeat(2,minmax(0,1fr))!important}#ldm500Dialog .ldm500-sector{min-height:88px!important}#ldm500Dialog .ldm500-modal-inner{padding:10px!important}}
+@media(max-width:360px){#ldm500Dialog .ldm500-sections{grid-template-columns:1fr!important}}
+@media print{body.ldm500-printing #ldm500Dialog{display:block!important;overflow:visible!important}body.ldm500-printing #ldm500Dialog .ldm500-modal-inner{overflow:visible!important;height:auto!important}}
+
+/* V505 canonical Admin containers, including nested legacy Work Assistant and greeting. */
+#erp #erpContent .ldmRootAdminDash>#r323AdminControl{order:-29!important;grid-column:1/-1!important;width:100%!important}
+#erp #erpContent .ldmRootAdminDash #r323ControlGreeting #v233Greeting{display:flex!important;visibility:visible!important;opacity:1!important}
+#erp #erpContent .ldmRootAdminDash #r323AdminControl #s336DashboardCard{position:relative!important;visibility:visible!important}
