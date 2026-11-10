@@ -5,7 +5,7 @@ let context=null,owner='',opening=false,writes=0,epoch=0,navigation=0,observer=n
 const currentProfile=()=>typeof profile!=='undefined'?profile:W.profile;
 const actor=()=>String(currentProfile()?.id||'');
 const teacher=()=>String(currentProfile()?.role||'').toLowerCase()==='teacher';
-const family=(c,r)=>!!c&&(r===c.route||(c.route==='v90_student_requests'&&r==='student_requests'));
+const family=(c,r)=>!!c&&(r===c.route||(c.route==='v90_student_requests'&&r==='student_requests')||(['v90_exam_monitor','v90_marks_monitor'].includes(c.route)&&r==='central_exam'));
 function valid(){if(context&&(!teacher()||owner!==actor()))clear();return context}
 function active(route){const c=valid();return !!c&&(route?c.route===route:family(c,String(W.__ldmDelegatedOpeningRoute||W.__v90Route||'')))}
 function can(action){return !!valid()?.permissions?.includes(action)}
@@ -56,7 +56,7 @@ async function open(id,task){if(opening||writes)return;opening=true;const starte
  if(!r.data||r.data.route!==task.module_route||!r.data.permissions?.includes('read'))throw Error('Assignment inactive, expired, completed या permission उपलब्ध नहीं।');
  clear();context=r.data;owner=actor();W.__ldmDelegatedOpeningRoute=context.route;
  if(task.assignees?.find(a=>a.id===id)?.status==='assigned'){const status=await db().rpc('ldm_work403_write',{p_request:crypto.randomUUID(),p_action:'progress',p_data:{assignment:id,status:'in_progress',note:''}});if(status.error)W.toast?.('कार्य खुल रहा है; status update नहीं हुआ: '+status.error.message)}
- if(startedAt!==navigation||startedBy!==actor()||!context)return;await W.render(context.route);if(!context||owner!==startedBy||!family(context,W.__v90Route)){clear();return;}decorate();const host=D.getElementById('erpContent');if(host){observer=new MutationObserver(()=>decorate());observer.observe(D.body,{childList:true,subtree:true})}
+ if(startedAt!==navigation||startedBy!==actor()||!context)return;await W.render(['v90_exam_monitor','v90_marks_monitor'].includes(context.route)?'central_exam':context.route);if(!context||owner!==startedBy||!family(context,W.__v90Route)){clear();return;}decorate();const host=D.getElementById('erpContent');if(host){observer=new MutationObserver(()=>decorate());observer.observe(D.body,{childList:true,subtree:true})}
  }catch(e){clear();W.toast?.(e.message||String(e));throw e}finally{W.__ldmDelegatedOpeningRoute='';opening=false}}
 const legacyActive=W.ldmDelegatedRouteActive;W.ldmDelegatedRouteActive=function(route=''){return active()&&family(context,route||W.__ldmDelegatedOpeningRoute||W.__v90Route)||(!context&&legacyActive?.(route))||false};
 const authorize=W.v1146TeacherAuthorize;if(authorize)W.v1146TeacherAuthorize=async function(route,...rest){if(valid()&&family(context,route))return {ok:true,delegated:true,assignment_id:context.assignment,delegated_route:context.route};return authorize.call(this,route,...rest)};
