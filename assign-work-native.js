@@ -12,11 +12,11 @@ function can(action){return !!valid()?.permissions?.includes(action)}
 function clear(){observer?.disconnect();observer=null;epoch++;for(const c of reads)c.abort();reads.clear();context=null;owner='';W.__ldmDelegatedContext=null;W.__ldmDelegatedOpeningRoute='';W.__v90MonitorCache={};W.LDM_NETWORK_ECONOMY433?.invalidate?.();D.getElementById('awNativeBar')?.remove();D.querySelectorAll('[data-aw-was-disabled]').forEach(b=>{b.disabled=b.dataset.awWasDisabled==='true';delete b.dataset.awWasDisabled;b.removeAttribute('title')})}
 const denied=message=>new Response(JSON.stringify({code:'42501',message,details:null,hint:null}),{status:403,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
 const rpcActions={ldm_attendance_resolution_statuses:'read',ldm_resolve_attendance_conflict:'approve',ldm_reopen_attendance_conflict:'approve',v763_save_teacher_week:'edit',v91_review_student_correction:'approve',v64_review_student_correction:'approve',v64_review_student_leave:'approve',v92_set_admit_publication:'approve',ldm_fee_due_snapshot_v2:'read',ldm_v259_gate_students:'read',ldm_v259_gate_pass_assigned:'read',v102_create_gate_pass:'write',v102_review_gate_pass:'approve',v102_mark_gate_pass_event:'edit',ldm_v265_class_roster:'read',ldm_v265_copy_check_save:'edit',ldm_v265_bell_test_save:'edit',ldm_v265_principal_audit_save:'approve',ldm_v267_teacher_academic_summary:'read',ldm_aw_refs:'read'};
-const taskRPC=new Set(['ldm_aw_context','ldm_work403_read','ldm_work403_write','ldm_work403_history']);
+const taskRPC=new Set(['ldm_exam_list476','ldm_exam_load476','ldm_exam_save476','ldm_aw_context','ldm_work403_read','ldm_work403_write','ldm_work403_history']);
 async function scopedFetch(input,init){const c=valid();if(!c)return baseFetch(input,init);const req=new Request(input,init),url=new URL(req.url);
  if(!url.pathname.startsWith('/rest/v1/'))return baseFetch(req);
  let rpc=url.pathname.includes('/rpc/'),name=decodeURIComponent(url.pathname.split('/').pop()),method=req.method.toUpperCase();
- if(rpc&&taskRPC.has(name))return baseFetch(req);
+ if(rpc&&taskRPC.has(name)){if(name.startsWith('ldm_exam_')){const h=new Headers(req.headers);h.set('x-ldm-work-assignment',c.assignment);return baseFetch(new Request(req,{headers:h}))}return baseFetch(req)}
  const ref=!rpc&&['teacher_profiles','staff'].includes(name)&&method==='GET';
  let action=rpc?rpcActions[name]:method==='GET'||method==='HEAD'?'read':method==='POST'?'write':method==='PATCH'?'edit':'delete';
  if(name==='v90_teacher_requests'&&action==='edit')action='approve';

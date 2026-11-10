@@ -2,7 +2,7 @@
 window.openTeacherEntry473 = async function () {
   const teacher = profile?.id;
   const session = school?.academic_session;
-  if (!teacher || profile.role !== 'teacher' || !session) return;
+  if (!teacher || String(profile.role||'').trim().toLowerCase() !== 'teacher' || !session) return;
   if (window.LDM_ROOT?.canNavigate() === false || window.LDM_REMINDERS?.canNavigate() === false) return;
   window.v90Push?.('exam_marks_entry_470');
   window.__v90Route = 'exam_marks_entry_470';
@@ -15,24 +15,26 @@ window.openTeacherEntry473 = async function () {
   const live = () => root.isConnected && profile?.id === teacher && school?.academic_session === session;
   const prefix = JSON.stringify([teacher,session]) + ':entry473:';
   let generation = 0, data, index, busy = false, rows = [];
-  root.querySelector('#roster475').onclick=()=>{if(!busy&&live())window.LDM_EXAM.center(true)};
+  const dirty=()=>{const d=read();return busy||!!d.job||d.value!=null};
+  window.LDM_TEACHER_ENTRY476={canNavigate:()=>!live()||!dirty()};
+  root.querySelector('#roster475').onclick=()=>{if(!dirty()&&live())window.LDM_EXAM.center(true);else note('ड्राफ्ट पहले सेव करें या नीचे दिए बटन से छोड़ें।')};
   const addPaper=root.querySelector('#newPaper474');
-  addPaper.onclick=()=>{if(!busy && live())return window.render('teacher_paper_center');};
+  addPaper.onclick=()=>{if(!dirty() && live())return window.render('teacher_paper_center');note('पहले अंक सेव करें।');};
   const key = () => prefix + paper.value;
   const note = text => { if (live()) status.textContent = text; };
   async function rpc(name,args) {
-    const result = await sb.rpc(name,args);
+    let timer;const result = await Promise.race([sb.rpc(name,args),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('सर्वर की पुष्टि नहीं मिली। उसी सेव को फिर आजमाएँ।')),15000)})]).finally(()=>clearTimeout(timer));
     if (result.error) throw result.error;
     return result.data;
   }
-  function read() { return JSON.parse(localStorage.getItem(key()) || '{}'); }
+  function read() { try{return JSON.parse(localStorage.getItem(key()) || '{}')}catch{return {}} }
   function store(draft) { localStorage.setItem(key(), JSON.stringify(draft)); }
   function show() {
     body.replaceChildren();
-    if (!rows.length) return note('इस पेपर में अंक प्रविष्टि के लिए उपस्थित विद्यार्थी उपलब्ध नहीं हैं।');
+    if (!rows.length) return note('इस पेपर में आपकी आवंटित कक्षा में विद्यार्थी उपलब्ध नहीं हैं।');
     const row = rows[index], draft = read();
     const same = draft.student === row.student_id;
-    body.innerHTML = '<label>विद्यार्थी चुनें (अंक बदलने के लिए भी)<select id="jump474"></select></label><h3></h3><small></small><label>प्राप्त अंक<input type="number" min="0" step="0.01" inputmode="decimal" enterkeyhint="next"></label><label>सुधार का कारण (यदि लागू हो)<input type="text"></label><button type="button">पिछला</button> <button type="button" class="primary">Save & Next</button>';
+    body.innerHTML = '<label>विद्यार्थी चुनें (अंक बदलने के लिए भी)<select id="jump474"></select></label><h3></h3><small></small><label>प्राप्त अंक<input type="number" min="0" step="0.01" inputmode="decimal" enterkeyhint="next"></label><input type="hidden" value=""><button type="button">पिछला</button> <button type="button" class="primary">Save & Next</button>';
     body.querySelector('h3').textContent = (index+1)+' / '+rows.length+' • '+row.student_name;
     body.querySelector('small').textContent = [row.father_name,row.admission_no,'पूर्णांक '+data.max_marks].filter(Boolean).join(' • ');
     const [score,reason] = body.querySelectorAll('input');
@@ -44,17 +46,15 @@ window.openTeacherEntry473 = async function () {
     jump.onchange=()=>{if(busy || jump.disabled)return;index=Number(jump.value);store({student:rows[index].student_id});show();note('');};
     score.max = data.max_marks;
     score.value = same ? draft.value ?? row.marks ?? '' : row.marks ?? '';
-    reason.value = same ? draft.reason || '' : '';
-    const remember = () => store({student:row.student_id,value:score.value,reason:reason.value,revision:same ? draft.revision ?? row.revision : row.revision});
+    reason.value = '';
+    if(row.attendance==='Absent'){const hint=document.createElement('p');hint.textContent='परीक्षा रिकॉर्ड में AB है। अंक सुरक्षित रहेंगे; Present/Absent बदलने के लिए उपस्थिति तालिका खोलें।';body.append(hint)}
+    const remember = () => {paper.disabled=root.querySelector('#bell475').disabled=true;store({student:row.student_id,value:score.value,reason:reason.value,revision:same ? draft.revision ?? row.revision : row.revision})};
     score.oninput = reason.oninput = () => {try {remember();note('ड्राफ्ट इस डिवाइस पर सुरक्षित है।');back.disabled=jump.disabled=true;} catch {note('ड्राफ्ट सुरक्षित नहीं हो सका। पेज खुला रखें।');}};
     back.disabled = index === 0 || (same && draft.value != null);
     back.onclick = () => { if (!busy && index>0) {index--;store({student:rows[index].student_id});show();} };
     next.onclick = async () => {
       if (busy || !live()) return;
       if (!score.value || !score.checkValidity() || !(Number(data.max_marks)>0)) return note('सही पूर्णांक और प्राप्त अंक जाँचें।');
-      if (!read().job && data.published_at && Number(score.value)!==Number(row.marks) && reason.value.trim().length<3){
-        reason.focus();return note('प्रकाशित अंक बदलने के लिए कम से कम 3 अक्षरों में कारण लिखें।');
-      }
       busy=true;root.querySelector('#bell475').disabled=true;addPaper.disabled=jump.disabled=paper.disabled=next.disabled=score.disabled=reason.disabled=back.disabled=true;
       try {
         const d=read();
@@ -62,12 +62,12 @@ window.openTeacherEntry473 = async function () {
           if (!d.job && d.student===row.student_id && d.revision!=null && d.revision!==row.revision) throw Error('दूसरे उपयोगकर्ता ने अंक बदले हैं। नया अंक जाँचें और पेपर फिर खोलें।');
           const job=d.job || {p_paper:paper.value,p_action:'marks',p_rows:[{student_id:row.student_id,marks:score.value,revision:row.revision}],p_max:data.max_marks,p_revision:data.revision,p_request:crypto.randomUUID(),p_reason:reason.value.trim()};
           store({student:row.student_id,value:score.value,reason:reason.value,revision:row.revision,job});
-          const result=await rpc('ldm_marks_sync471',job);
+          const result=await rpc('ldm_exam_save476',job);
           if (!live()) return;
           const confirmed=result?.rows?.find(r=>r.student_id===row.student_id);
           if (String(result?.paper?.paper_id)!==String(job.p_paper) || confirmed?.marks==null || Number(confirmed.marks)!==Number(job.p_rows[0].marks)) throw Error('केंद्रीय सेव की पुष्टि नहीं मिली। फिर प्रयास करें।');
           window.LDM_MARKSHEET?.clear?.();window.ldmMarkDataDirty?.('marks');
-          data=result; rows=result.rows.filter(r=>r.attendance==='Present');
+          data=result; rows=result.rows;
           index=rows.findIndex(r=>r.student_id===row.student_id);
         }
         const last=index>=rows.length-1;
@@ -80,8 +80,14 @@ window.openTeacherEntry473 = async function () {
         // PostgreSQL errors roll back the transaction; network errors keep the exact request for retry.
         if (/^(?:22|23|40|42|P0)[A-Z0-9]{3}$/.test(e.code||'')) {const d=read();delete d.job;store(d);}
         note(e.message || 'सेव अधूरा है। फिर प्रयास करें।');
-      } finally {busy=false;if(live()){root.querySelector('#bell475').disabled=false;addPaper.disabled=paper.disabled=next.disabled=false;const locked=!!read().job;score.disabled=reason.disabled=locked;}}
+      } finally {busy=false;if(live()){root.querySelector('#bell475').disabled=false;addPaper.disabled=paper.disabled=next.disabled=false;const locked=!!read().job;score.disabled=reason.disabled=locked;paper.disabled=root.querySelector('#bell475').disabled=dirty();}}
     };
+    {
+      paper.disabled=root.querySelector('#bell475').disabled=same && (draft.value!=null||!!draft.job);
+      const discard=document.createElement('button');discard.textContent='स्थानीय ड्राफ्ट छोड़ें / सर्वर अंक देखें';
+      discard.disabled=!!draft.job;
+      discard.onclick=()=>{if(busy||read().job)return;if(!confirm('केवल इस डिवाइस का अधूरा ड्राफ्ट हटाएँ? सेव किए अंक सुरक्षित रहेंगे।'))return;store({student:row.student_id});paper.disabled=root.querySelector('#bell475').disabled=false;show()};body.append(discard);
+    }
     if (same && draft.job) {score.disabled=reason.disabled=true;next.textContent='सेव की पुष्टि फिर करें';}
     score.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();next.click();}};
     if(same && draft.revision!=null && draft.revision!==row.revision && !draft.job && Number(draft.value)!==Number(row.marks)){
@@ -95,16 +101,16 @@ window.openTeacherEntry473 = async function () {
     if(!id)return;
     try {
       localStorage.setItem(prefix+'last',id);
-      const result=await rpc('ldm_teacher_load471',{p_paper:id});
+      const result=await rpc('ldm_exam_load476',{p_paper:id});
       if(!live()||mine!==generation)return;
       if(String(result?.paper?.paper_id)!==id)throw Error('पेपर की पहचान जाँचें।');
       window.examDates475(root.querySelector('#date475'),result,false,rpc,()=>paper.onchange(),note,()=>!busy&&live()&&!read().job);
-      data=result;rows=result.rows.filter(r=>r.attendance==='Present');
+      data=result;rows=result.rows;
       index=Math.max(0,rows.findIndex(r=>r.student_id===read().student));show();
     } catch(e){if(live()&&mine===generation)note(e.message);}
   };
   try {
-    const list=await rpc('ldm_teacher_list471',{p_session:session});
+    const list=await rpc('ldm_exam_list476',{p_session:session});
     if(!live())return;
     for(const p of list)paper.add(new Option([p.exam_name,p.class_name,p.section,p.subject_name,p.exam_date].filter(Boolean).join(' • '),p.paper_id));
     const bell=root.querySelector('#bell475');
