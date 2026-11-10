@@ -36,3 +36,7 @@ html body .i447Card.portrait .i447Footer{height:18mm!important;flex-basis:18mm!i
 html body .i447Card.portrait .v164MainQr{position:static!important;inset:auto!important;flex:none!important;width:16mm!important;min-height:16mm!important;max-height:none!important;overflow:visible!important}
 html body .i447Card.portrait .i447Signature{min-width:23mm!important;max-width:26mm!important}
 html body .i447Card.portrait .i447Main{gap:1mm!important}html body .i447Card.portrait .i447Info{height:auto!important}
+
+/* V508: student photo actions, primary camera/gallery and accessible retry. */
+.v508PhotoActions{align-items:center;gap:8px}.v508PhotoActions .primary,.v508PhotoActions .v508Pick{min-height:44px;display:inline-flex;align-items:center;justify-content:center;line-height:1.3}.v508PhotoActions .v508PhotoMore{width:100%;font-size:13px}.v508PhotoMore>summary{cursor:pointer;font-weight:700;padding:6px 2px}.v508PhotoMore>button{margin:3px 5px 3px 0}.v508PhotoActions button:disabled,.v508PhotoActions input:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:500px){.v508PhotoActions>.primary,.v508PhotoActions>.v508Pick{flex:1 1 45%;text-align:center}.v508PhotoActions{width:100%}}

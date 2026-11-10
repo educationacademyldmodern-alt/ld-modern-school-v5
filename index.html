@@ -2645,8 +2645,9 @@ async function generateClassMarksheets(){
  const all=async make=>{let data=[];for(let offset=0;offset<100000;offset+=500){if(job!==window.__m356Batch||who!==profile?.id||session!==school.academic_session||!host.isConnected)throw Error('Preview cancelled');const controller=new AbortController();let query=make().range(offset,offset+499);if(query.abortSignal)query=query.abortSignal(controller.signal);let timer,r;try{r=await Promise.race([query,new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Preview read timed out. Retry preview.'))},15000)})])}finally{clearTimeout(timer)}if(r.error)throw r.error;if(!Array.isArray(r.data))throw Error('Incomplete class data');data.push(...r.data);if(r.data.length<500)return data}throw Error('Narrow the selected class')};
  try{await window.LDM_DOCUMENTS_V345?.loadSettings();const termNames=format==='termwise'?[...new Set([exam,...(window.LDM_DOCUMENTS_V345?.termNames||[])])]:[exam];const batchContexts=new Map();const students=await all(()=>ldmApplyClassFilter(sb.from('students').select('*'),'class_name',c).order('id'));const active=students.filter(s=>(!s.academic_session||s.academic_session===school?.academic_session)&&!['inactive','deleted','left','withdrawn','archived','trashed','recycled'].includes(String(s.status||'active').toLowerCase()));let marks=[];for(let i=0;i<active.length;i+=100){const keys=active.slice(i,i+100).map(s=>s.admission_no);marks.push(...await all(()=>sb.from('student_marks').select('*').eq('academic_session',school.academic_session).in('exam_name',termNames).in('admission_no',keys).order('id')))}if(who!==profile?.id||view!==window.__v90Route||!host.isConnected||$('mkClass')?.value!==c||$('mkExam')?.value.trim()!==exam)return;
  for(const s of [...new Map(active.map(s=>[String(s.section||''),s])).values()]){const terms={};for(const name of termNames)terms[name]=await window.LDM_MARKSHEET.context(s,name);batchContexts.set(String(s.section||''),terms)}if(job!==window.__m356Batch||who!==profile?.id||session!==school.academic_session||!host.isConnected||$('mkClass')?.value!==c||$('mkExam')?.value.trim()!==exam)return;const by=new Map();for(const m of marks){if(!by.has(m.admission_no))by.set(m.admission_no,[]);by.get(m.admission_no).push(m)}host.replaceChildren();const controls=document.createElement('div');controls.className='v14Tabs';controls.innerHTML='<label>Students<select id="mkSelectedStudents" multiple size="6"></select></label><button id="mkUseSelected">Preview selected students</button><button id="mkUseAll">Preview full class</button><label>Print batch<select id="mkBatch"></select></label><span id="mkBatchStatus"></span><button id="mkPrintBatch">Preview / Print / PDF current batch</button>';host.append(controls);const picker=$('mkSelectedStudents');picker.innerHTML=active.map(s=>`<option value="${esc(s.id)}">${esc(s.roll_no||'')} · ${esc(s.student_name)} · ${esc(s.admission_no)}</option>`).join('');let selection=active,batchEpoch=0;const preview=document.createElement('div');preview.id='markPreviewBox';host.append(preview);
- const build=async()=>{const token=++batchEpoch;const printButton=$('mkPrintBatch');printButton.disabled=true;preview.setAttribute('aria-busy','true');try{const number=Number($('mkBatch').value)||0,subset=selection.slice(number*24,number*24+24);preview.replaceChildren();$('mkBatchStatus').textContent=`${selection.length} students · current ${selection.length?number*24+1:0}–${number*24+subset.length} · print all listed batches for complete output`;for(let i=0;i<subset.length;i+=8){if(token!==batchEpoch||job!==window.__m356Batch||who!==profile?.id||session!==school.academic_session||view!==window.__v90Route||!preview.isConnected)return;preview.insertAdjacentHTML('beforeend',subset.slice(i,i+8).map(s=>{const terms=batchContexts.get(String(s.section||''))||{};return window.LDM_MARKSHEET.render(s,by.get(s.admission_no)||[],exam,format,{...window.LDM_DOCUMENTS_V345?.previewOptions(s,exam),context:terms[exam],termContexts:terms,termMarks:by.get(s.admission_no)||[]})}).join(''));await new Promise(r=>requestAnimationFrame(r))}if(!subset.length)preview.textContent='कोई रिकॉर्ड नहीं मिला / No records found';if(token===batchEpoch)printButton.disabled=!subset.length;}catch(e){if(token===batchEpoch&&preview.isConnected)preview.textContent='Preview failed: '+(e.message||String(e));}finally{if(token===batchEpoch)preview.removeAttribute('aria-busy')}};
- const batches=()=>{$('mkBatch').innerHTML=Array.from({length:Math.max(1,Math.ceil(selection.length/24))},(_,i)=>`<option value="${i}">${i*24+1}–${Math.min((i+1)*24,selection.length)} of ${selection.length}</option>`).join('');build()};$('mkUseSelected').onclick=()=>{const ids=new Set([...picker.selectedOptions].map(o=>o.value));selection=active.filter(s=>ids.has(String(s.id)));batches()};$('mkUseAll').onclick=()=>{selection=active;batches()};$('mkBatch').onchange=build;$('mkPrintBatch').onclick=()=>{if(preview.getAttribute('aria-busy')==='true')return;return window.LDM_A4_V337.preview(preview,'Class marksheets · '+$('mkBatchStatus').textContent,{orientation:'portrait'})};batches();
+ const previewCurrent=()=>job===window.__m356Batch&&who===profile?.id&&session===school.academic_session&&view===window.__v90Route&&preview.isConnected&&$('mkClass')?.value===c&&$('mkExam')?.value.trim()===exam;
+ const build=async()=>{if(!previewCurrent())return toast('Class / Exam बदल गया है। Generate All Class Marksheets फिर दबाएँ।');const token=++batchEpoch;const renderFormat=$('mkTemplate').value;const printButton=$('mkPrintBatch');printButton.disabled=true;preview.setAttribute('aria-busy','true');try{const number=Number($('mkBatch').value)||0,subset=selection.slice(number*24,number*24+24);preview.replaceChildren();$('mkBatchStatus').textContent=`${selection.length} students · current ${selection.length?number*24+1:0}–${number*24+subset.length} · print all listed batches for complete output`;for(let i=0;i<subset.length;i+=8){if(token!==batchEpoch||!previewCurrent())return;preview.insertAdjacentHTML('beforeend',subset.slice(i,i+8).map(s=>{const terms=batchContexts.get(String(s.section||''))||{};return window.LDM_MARKSHEET.render(s,by.get(s.admission_no)||[],exam,renderFormat,{...window.LDM_DOCUMENTS_V345?.previewOptions(s,exam),context:terms[exam],termContexts:terms,termMarks:by.get(s.admission_no)||[]})}).join(''));await new Promise(r=>requestAnimationFrame(r))}if(token!==batchEpoch||!previewCurrent())return;if(!subset.length)preview.textContent='कोई रिकॉर्ड नहीं मिला / No records found';if(token===batchEpoch)printButton.disabled=!subset.length;}catch(e){if(token===batchEpoch&&preview.isConnected)preview.textContent='Preview failed: '+(e.message||String(e));}finally{if(token===batchEpoch)preview.removeAttribute('aria-busy')}};
+ const batches=()=>{$('mkBatch').innerHTML=Array.from({length:Math.max(1,Math.ceil(selection.length/24))},(_,i)=>`<option value="${i}">${i*24+1}–${Math.min((i+1)*24,selection.length)} of ${selection.length}</option>`).join('');build()};$('mkUseSelected').onclick=()=>{const ids=new Set([...picker.selectedOptions].map(o=>o.value));selection=active.filter(s=>ids.has(String(s.id)));batches()};$('mkUseAll').onclick=()=>{selection=active;batches()};$('mkBatch').onchange=build;$('mkTemplate').onchange=()=>{if(!preview.isConnected)return $('mkBatch')?generateClassMarksheets():window.previewMarksheet?.();if(!previewCurrent())return generateClassMarksheets();if($('mkTemplate').value==='termwise'&&format!=='termwise')return generateClassMarksheets();return build();};$('mkPrintBatch').onclick=()=>{if(!previewCurrent())return toast('Class / Exam बदल गया है। पहले सही preview दोबारा बनाएँ।');if(preview.getAttribute('aria-busy')==='true')return;return window.LDM_A4_V337.preview(preview,'Class marksheets · '+$('mkBatchStatus').textContent,{orientation:'portrait'})};batches();
 
  }catch(e){if(job===window.__m356Batch&&host.isConnected&&who===profile?.id&&view===window.__v90Route)host.textContent=e.message||String(e)}
 }
@@ -12804,6 +12805,8 @@ window.v103ClassTeacherClasses=function(){
 /* CANONICAL STUDENT PHOTO CENTER — assigned class only, ID view, Camera + Gallery + Preview + Update */
 let photoRows=[];
 let photoDrafts=new Map();
+let photoActionBusy=new Set(); // Only one write/remove per pupil in this screen.
+let photoCropBusy=new Set(); // Prevent competing async crop dialogs for one pupil.
 let cam=null,camId='';
 
 const v136Esc=(v)=>typeof window.esc==='function'
@@ -12835,26 +12838,51 @@ function clearPhotoDraft(id){
   photoDrafts.delete(k);
 }
 
-async function setPhotoDraft(id,file){
-  if(!file)return;
-
+async function setPhotoDraft(id,file,autoSave=false){
+  if(!file)return false;
+  const key=String(id), owner=profile?.id, session=school?.academic_session;
+  if(!teacher()||!photoRows.some(x=>String(x.id)===key)){
+    window.toast?.('Assigned class की student photo ही बदल सकते हैं');
+    return false;
+  }
+  if(photoCropBusy.has(key)||photoActionBusy.has(key)||photoDrafts.get(key)?.busy){
+    window.toast?.('इस student का photo save/remove चल रहा है');
+    return false;
+  }
   if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||'')){
-    return window.toast?.('केवल JPG, PNG या WEBP photo चुनें');
+    window.toast?.('केवल JPG, PNG या WEBP photo चुनें');
+    return false;
   }
-
   if(file.size>12*1024*1024){
-    return window.toast?.('Photo बहुत बड़ा है');
+    window.toast?.('Photo बहुत बड़ा है');
+    return false;
   }
-
-  file=await window.LDM_PHOTO_V337.cropForReview(file);if(!file)return;
-  clearPhotoDraft(id);
-
-  photoDrafts.set(String(id),{
-    file,
-    url:URL.createObjectURL(file)
-  });
-
-  renderPhotos();
+  photoCropBusy.add(key);
+  try{
+    // The existing crop review is intentionally retained: never upload a
+    // camera/gallery image without the teacher approving its actual pixels.
+    file=await window.LDM_PHOTO_V337.cropForReview(file);
+    if(!file)return false;
+    if(owner!==profile?.id||session!==school?.academic_session||
+       window.__v90Route!=='v91_student_photos'||
+       !photoRows.some(x=>String(x.id)===key))return false;
+    if(photoActionBusy.has(key)||photoDrafts.get(key)?.busy)return false;
+    clearPhotoDraft(key);
+    photoDrafts.set(key,{file,url:URL.createObjectURL(file)});
+    renderPhotos();
+    if(autoSave){
+      // Camera/gallery -> crop approval -> save. Reuses existing RPC and RLS.
+      await window.v138UploadStudentPhoto(key);
+    }
+    return true;
+  }catch(e){
+    window.toast?.(e?.message||String(e));
+    return false;
+  }finally{
+    photoCropBusy.delete(key);
+    if(owner===profile?.id && session===school?.academic_session &&
+       window.__v90Route==='v91_student_photos')renderPhotos();
+  }
 }
 
 window.v136TeacherPhotos=async function(){
@@ -13039,36 +13067,15 @@ function renderPhotos(){
               : ''
           }
 
-          <div class="v136PhotoActions"><button type="button" onclick="teacherViewIdCard('${x.id}')">ID Preview / PDF / Print</button>
-
-            <button
-              type="button"
-              onclick="v136OpenCamera('${x.id}')">
-              📷 Camera
-            </button>
-
-            <button
-              type="button"
-              onclick="v136OpenDeviceCamera('${x.id}')">
-              📱 Camera App
-            </button>
-
-            <label>
-              🖼 Gallery
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                hidden
-                onchange="v136Gallery('${x.id}',this)">
-            </label>
-
-            <button
-              type="button"
-              class="primary"
-              ${d?'':'disabled'}
-              onclick="v138UploadStudentPhoto('${x.id}')">
-              ✅ Update Photo
-            </button>
+          <div class="v136PhotoActions v508PhotoActions" data-photo-actions="${v136Esc(x.id)}">
+            <button type="button" class="primary" onclick="v136SmartCamera('${x.id}')" ${photoCropBusy.has(String(x.id))||photoActionBusy.has(String(x.id))||d?.busy?'disabled':''}>📷 Camera → Save</button>
+            <label class="v508Pick">🖼 Gallery → Save<input type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="v136Gallery('${x.id}',this)" ${photoCropBusy.has(String(x.id))||photoActionBusy.has(String(x.id))||d?.busy?'disabled':''}></label>
+            <button type="button" onclick="teacherViewIdCard('${x.id}')">🪪 Preview / PDF</button>
+            <details class="v508PhotoMore"><summary>More options</summary>
+              <button type="button" onclick="v136OpenCamera('${x.id}')">Webcam</button>
+              <button type="button" onclick="v136OpenDeviceCamera('${x.id}')">Camera App</button>
+              <button type="button" ${d?.file?'':'disabled'} onclick="v138UploadStudentPhoto('${x.id}')">Retry Save</button>
+            </details>
 
             ${
               d
@@ -13100,15 +13107,27 @@ function renderPhotos(){
 
 }
 
-window.v136Gallery=function(id,input){
+window.v136Gallery=async function(id,input){
   const f=input?.files?.[0];
-
-  if(f)setPhotoDraft(id,f);
-
   if(input)input.value='';
+  if(f)return setPhotoDraft(id,f,true);
+  return false;
+};
+
+window.v136SmartCamera=function(id){
+  if(!teacher()||!photoRows.some(x=>String(x.id)===String(id)))
+    return window.toast?.('Assigned student only');
+  if(photoCropBusy.has(String(id))||photoActionBusy.has(String(id)))return window.toast?.('Photo processing in progress');
+  // A native camera-app picker is the simplest path on phones/tablets;
+  // a browser webcam needs a separate capture tap and camera permission.
+  if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent||''))
+    return window.v136OpenDeviceCamera?.(id);
+  return window.v136OpenCamera(id);
 };
 
 window.v136CancelPhoto=function(id){
+  if(photoCropBusy.has(String(id))||photoActionBusy.has(String(id))||photoDrafts.get(String(id))?.busy)
+    return window.toast?.('Save चल रहा है; complete होने दें');
   clearPhotoDraft(id);
   renderPhotos();
 };
@@ -13132,7 +13151,11 @@ window.v138UploadStudentPhoto=async function(id){
     );
   }
 
-  if(draft.busy)return;draft.busy=true;
+  if(!teacher()||window.__v90Route!=='v91_student_photos')
+    return window.toast?.('Photo center reopen करें');
+  if(draft.busy||photoActionBusy.has(String(id)))return;
+  draft.busy=true;photoActionBusy.add(String(id));
+  const saveOwner=profile?.id,saveSession=school?.academic_session;
   let f=draft.file;
   let path=draft.uploadPath||'';
 
@@ -13163,6 +13186,10 @@ window.v138UploadStudentPhoto=async function(id){
 
     if(up.error)throw up.error;draft.uploaded=true;}
 
+    if(saveOwner!==profile?.id||saveSession!==school?.academic_session||
+       window.__v90Route!=='v91_student_photos')
+      throw Error('Account/session changed. Reopen the photo center and verify the save.');
+
     const rr=await sb.rpc(
       'ldm_teacher_set_student_photo_v190',
       {
@@ -13172,9 +13199,11 @@ window.v138UploadStudentPhoto=async function(id){
     );
 
     if(rr.error){
-      // Keep staged bytes on uncertain response; the server may have committed. Retry uses the same path.
+      // Keep staged bytes on uncertain response; retry retains the same path.
       throw rr.error;
     }
+    if(saveOwner!==profile?.id||saveSession!==school?.academic_session||
+       window.__v90Route!=='v91_student_photos')return;
 
     row.photo_path=path;
     row.photo_url='';
@@ -13199,7 +13228,11 @@ window.v138UploadStudentPhoto=async function(id){
       ? 'Storage / Permission Error: '+raw+' • V210 final safe SQL और Supabase Storage policy जाँचें.'
       : raw;
     window.toast?.(msg);
-  }finally{draft.busy=false}
+  }finally{
+    draft.busy=false;
+    photoActionBusy.delete(String(id));
+    if(saveOwner===profile?.id&&window.__v90Route==='v91_student_photos')renderPhotos();
+  }
 };
 
 window.v138RemoveStudentPhoto=async function(id){
@@ -13207,12 +13240,11 @@ window.v138RemoveStudentPhoto=async function(id){
     x=>String(x.id)===String(id)
   );
 
-  if(!row||!row.photo_path)return;
-
-  if(!confirm(
-    'इस student की current photo remove करनी है?'
-  ))return;
-
+  if(!teacher()||window.__v90Route!=='v91_student_photos'||!row||!row.photo_path)return;
+  if(photoCropBusy.has(String(id))||photoActionBusy.has(String(id))||photoDrafts.get(String(id))?.busy)return;
+  if(!confirm('इस student की current photo remove करनी है?'))return;
+  const removeOwner=profile?.id, removeSession=school?.academic_session;
+  photoActionBusy.add(String(id));
   try{
     const oldPath=row.photo_path;
 
@@ -13224,6 +13256,8 @@ window.v138RemoveStudentPhoto=async function(id){
     );
 
     if(rr.error)throw rr.error;
+    if(removeOwner!==profile?.id||removeSession!==school?.academic_session||
+       window.__v90Route!=='v91_student_photos')return;
 
     try{
       await safeStorageRemove('student-media',oldPath);
@@ -13242,9 +13276,10 @@ window.v138RemoveStudentPhoto=async function(id){
     );
 
   }catch(e){
-    window.toast?.(
-      e?.message||String(e)
-    );
+    window.toast?.(e?.message||String(e));
+  }finally{
+    photoActionBusy.delete(String(id));
+    if(removeOwner===profile?.id&&window.__v90Route==='v91_student_photos')renderPhotos();
   }
 };
 
@@ -13297,7 +13332,7 @@ window.v136OpenCamera=async function(id){
         <button
           class="primary"
           id="v136Snap">
-          📷 Capture
+          📷 Capture & Save
         </button>
 
         <button
@@ -13373,12 +13408,8 @@ function capture(v){
     );
 
     closeCam();
-
-    setPhotoDraft(id,f);
-
-    window.toast?.(
-      'Photo preview ready • Update Photo दबाएँ'
-    );
+    // Crop review then save automatically; on error keep the draft for Retry.
+    Promise.resolve(setPhotoDraft(id,f,true)).catch(e=>window.toast?.(e?.message||String(e)));
 
   },'image/jpeg',0.84);
 }
@@ -16355,8 +16386,8 @@ if(typeof statsBase==='function'){
  function cleanLegacyGreetings(){
    if(!admin())return;let root=q('erpContent');if(!root)return;const re=/Good Morning|Good Afternoon|Good Evening/i;
    const known='.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting,.v6418GreetingSingleton,[data-v97-clock],#ldmAdminGreeting';
-   [...root.querySelectorAll(known)].forEach(el=>{if(el.id!=='v233Greeting'&&re.test(String(el.textContent||'')))el.remove()});
-   const dash=root.querySelector('.ldmRootAdminDash,.v114AdminDash,.v90Dash');if(dash){[...dash.children].forEach(el=>{if(el.id==='v233Greeting')return;let t=String(el.textContent||'').trim();if(re.test(t)&&!el.querySelector('button,a,input,select,textarea,table'))el.remove()})}
+   [...root.querySelectorAll(known)].forEach(el=>{if(el.id!=='v233Greeting'&&!el.querySelector('#v233Greeting')&&re.test(String(el.textContent||'')))el.remove()});
+   const dash=root.querySelector('.ldmRootAdminDash,.v114AdminDash,.v90Dash');if(dash){[...dash.children].forEach(el=>{if(el.id==='v233Greeting'||el.querySelector('#v233Greeting'))return;let t=String(el.textContent||'').trim();if(re.test(t)&&!el.querySelector('button,a,input,select,textarea,table'))el.remove()})}
  }
  function installCanonicalGreeting(){
    if(!admin()||routeNow()!=='dashboard')return;let root=q('erpContent'),dash=root?.querySelector('.ldmRootAdminDash,.v114AdminDash,.v90Dash');if(!dash)return;
@@ -18708,9 +18739,9 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="daily-reminders-v320.js?v=322"></script>
 <script src="menu-v473.js?v=473"></script>
 <script src="student-tables-v475.js?v=475"></script>
-<script src="exam-dates-v475.js?v=475"></script>
+<script src="exam-dates-v475.js?v=507"></script>
 <script src="teacher-entry-v473.js?v=475"></script>
-<script src="exam-central-v320.js?v=505"></script>
+<script src="exam-central-v320.js?v=507"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18718,7 +18749,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
 <script src="resources-v334.js?v=437"></script>
-<script src="controls-v323.js?v=356"></script>
+<script src="controls-v323.js?v=506"></script>
 <style id="v325BannerFit">
 /* Match the whole banner to its natural ratio on phones; fill the desktop hero. */
 #publicSite #v1142RefPage .v1142Hero img{object-fit:cover!important;object-position:center!important;display:block!important;width:100%!important;max-width:100%!important;filter:none!important}
@@ -18760,13 +18791,13 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=388"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=471"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=506"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=460">
 <script src="desktop-premium-v378.js?v=390"></script>
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
-<script src="work-access-v398.js?v=475"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=451"><script src="id-card-v447.js?v=453"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=504"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=505"><script defer src="ldm-premium-v500.js?v=505"></script><script defer src="erp-v505-stability.js?v=505"></script>
+<script src="work-access-v398.js?v=475"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=508"><script src="id-card-v447.js?v=508"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=504"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=505"><script defer src="ldm-premium-v500.js?v=505"></script><script defer src="erp-v505-stability.js?v=505"></script>
 </body>
 </html>
