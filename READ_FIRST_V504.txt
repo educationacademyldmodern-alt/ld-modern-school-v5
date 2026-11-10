@@ -1,0 +1,33 @@
+LD MODERN ERP V504 — UPLOAD PACKAGE
+
+STATUS: tested source fixes; NOT a fully verified MASTER COMMAND release.
+
+The ZIP opens directly to index.html and its assets. Extract it and upload
+the contents of that folder as the website project root. Do not upload the
+ZIP itself as index.html. Prefer a staging/preview deployment first.
+
+V504 changes over V501: browser storage cleanup failure no longer stops
+logout UI reset, password clearing and return to the public page.
+portal-flow-v455.js cache version updated in index.html.
+
+Checks: 192 JS files + 128 inline scripts passed syntax; 144 local imports
+exist. Eight exam/save regression tests passed. Logout regression passed
+with both normal and blocked storage. Tests are mocks, not live logins.
+
+NOT VERIFIED / INCOMPLETE: actual iPad Safari login, browser integration,
+all dashboard routes, private backend exam save, marks clear/delete,
+full operational Admin Assistant, all-list global search, production log
+ingestion and full MASTER COMMAND acceptance. No database changes applied.
+
+NO NEW DATABASE REPAIR SQL IS INCLUDED. Existing SQL files in this source
+are historical files retained from the original project. Do not run them
+as a bundle or assume V501/V502/V503 CHECK SQL repairs the database.
+The uploaded diagnostic reports show the public save wrappers delegate to
+ldm_private476.exam_save; that implementation is not available in those
+reports. A verified database repair cannot be claimed from these exports.
+
+Before replacing production, check Admin/Teacher login, Home/Back,
+Exams and Marks P/A + Save All + reopen, and marksheet print on staging.
+For rollback, redeploy the previously working project.
+
+This README supersedes historical V500 reports retained in the project.

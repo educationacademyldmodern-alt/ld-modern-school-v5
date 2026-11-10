@@ -1,0 +1,39 @@
+{
+  "build": "V500 safe partial",
+  "date": "2026-11-10",
+  "source_zip": "ld-modern-school-v5-Mark-entery.zip",
+  "source_sha256": "2257a2408d45c8a1d3e1532d8f121eb6052077281691bbf92f82e818adabfb66",
+  "changes": [
+    "index.html",
+    "exam-central-v320.js",
+    "ldm-premium-v500.js",
+    "ldm-premium-v500.css"
+  ],
+  "summary": "Additive frontend improvements only; existing RPC and RLS retained.",
+  "tests_passed": [
+    "Node JS syntax: modified exam-central and premium scripts",
+    "128 inline index scripts passed node --check",
+    "138 local JS/CSS imports: all referenced files present",
+    "Premium universal modal at 390/834/1400 px in mocked Chromium browser: present/search/route cards",
+    "Teacher Exams mock: paper load, father name, search, mobile P/A, Save All RPC confirmation",
+    "Teacher work report mock: timetable teaching diary copy-check record aggregation and A4 preview",
+    "ZIP integrity test pending packaging"
+  ],
+  "unverified": [
+    "Live Supabase auth/RLS/save/edit/delete and actual real data",
+    "Real iPad Safari and tablet browser compatibility",
+    "Actual all modules Search/Sort (table toolbar is intentionally conditional)",
+    "Unwanted refresh popup root cause",
+    "Native browser Print / PDF on physical devices",
+    "Supabase log ingestion quantitative measurements",
+    "Full Admin Assistant operational delegation",
+    "Marksheet preview 60+ class print under production load"
+  ],
+  "security": [
+    "No service-role key added",
+    "No schema/RLS changes applied",
+    "Existing server-side authorization still determines allowed functions",
+    "No original records deleted",
+    "Original source ZIP retained"
+  ]
+}

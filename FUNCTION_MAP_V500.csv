@@ -1,0 +1,102 @@
+﻿route_key,literal_render_call_count,source_files,verification
+absence_followup,3,absence-followup-v307.js (3),Static reference only — live permissions/functionality not verified
+academic_monitor,2,v280_root.js (1); controls-v323.js (1),Static reference only — live permissions/functionality not verified
+academics,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+admin_class_fee_status,2,admin-fee-status-v459.js (1); index.html (1),Static reference only — live permissions/functionality not verified
+admissions,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+assigned_work,2,v280_root.js (1); assign-work-native.js (1),Static reference only — live permissions/functionality not verified
+attendance,30,index.html (9); index-V220-FINAL-SINGLE-ROOT.html (9); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (9); erp-canonical.js (1); final53-complete.js (1); smart-work-v403.js (1),Static reference only — live permissions/functionality not verified
+attendance_conflict_center,4,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2),Static reference only — live permissions/functionality not verified
+balance,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+books_items,2,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1),Static reference only — live permissions/functionality not verified
+certificate_center,2,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1),Static reference only — live permissions/functionality not verified
+class_teacher,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+class_teacher_control,2,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1),Static reference only — live permissions/functionality not verified
+combined_fee,3,corrections-v308.js (2); dashboard-order-v350.js (1),Static reference only — live permissions/functionality not verified
+dashboard,46,index.html (10); index-V220-FINAL-SINGLE-ROOT.html (9); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (8); paper-center-v343.js (2); function-search-v425.js (1); student-photo-v337.js (1),Static reference only — live permissions/functionality not verified
+dashboard_search,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+data_hub,5,erp-canonical.js (1); index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1); final53-complete.js (1),Static reference only — live permissions/functionality not verified
+due_reminders,7,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2); daily-reminders-v320.js (1),Static reference only — live permissions/functionality not verified
+enquiries,12,index.html (4); index-V220-FINAL-SINGLE-ROOT.html (4); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (4),Static reference only — live permissions/functionality not verified
+events,15,index.html (4); index-V220-FINAL-SINGLE-ROOT.html (4); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (4); root-corrections-v326.js (1); root-corrections-v320.js (1); root-corrections-v332.js (1),Static reference only — live permissions/functionality not verified
+exam_admit_center,7,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+exam_automation,2,exam-central-v320.js (1); exam-central-v320-RECHECKED.js (1),Static reference only — live permissions/functionality not verified
+exam_automation_center,3,exam-automation-v305.js (3),Static reference only — live permissions/functionality not verified
+exam_center,4,resources-v323.js (1); resources-v325.js (1); resources-v334.js (1); resources-v330.js (1),Static reference only — live permissions/functionality not verified
+exam_desk_slips406,1,exam-automation-v305.js (1),Static reference only — live permissions/functionality not verified
+exams,11,index.html (4); index-V220-FINAL-SINGLE-ROOT.html (4); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3),Static reference only — live permissions/functionality not verified
+excel,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); app.js (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+expenses,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+fee_dashboard,7,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2); smart-work-v333.js (1),Static reference only — live permissions/functionality not verified
+fees,1,app.js (1),Static reference only — live permissions/functionality not verified
+home_highlights,9,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3),Static reference only — live permissions/functionality not verified
+homework,4,v280_root.js (1); index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+idcard_center,6,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+marksheet_center,1,index.html (1),Static reference only — live permissions/functionality not verified
+master_attendance,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+master_fee,9,index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (5); index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2),Static reference only — live permissions/functionality not verified
+master_gate_pass,10,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3); management-center-shared.js (1),Static reference only — live permissions/functionality not verified
+master_requests,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+notice_order_center,11,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3); erp-canonical.js (1); final53-complete.js (1),Static reference only — live permissions/functionality not verified
+notices,18,index.html (5); index-V220-FINAL-SINGLE-ROOT.html (5); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (5); root-corrections-v326.js (1); root-corrections-v320.js (1); root-corrections-v332.js (1),Static reference only — live permissions/functionality not verified
+official_letter_center,1,index.html (1),Static reference only — live permissions/functionality not verified
+parent_access,9,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3),Static reference only — live permissions/functionality not verified
+promotion_center,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+question_paper_center,1,paper-center-v343.js (1),Static reference only — live permissions/functionality not verified
+reports,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+result_receipt_center,3,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (1),Static reference only — live permissions/functionality not verified
+school_documents_center,1,index.html (1),Static reference only — live permissions/functionality not verified
+school_forms,2,function-search-v425.js (2),Static reference only — live permissions/functionality not verified
+settings,15,index.html (5); index-V220-FINAL-SINGLE-ROOT.html (5); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (5),Static reference only — live permissions/functionality not verified
+smart_fee_center,28,index.html (9); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (9); index-V220-FINAL-SINGLE-ROOT.html (8); erp-canonical.js (1); final53-complete.js (1),Static reference only — live permissions/functionality not verified
+smart_work_alarm,1,controls-v323.js (1),Static reference only — live permissions/functionality not verified
+staff,17,index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (7); index.html (5); index-V220-FINAL-SINGLE-ROOT.html (5),Static reference only — live permissions/functionality not verified
+staff_attendance,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+student_photo_center,2,ui-v337.js (2),Static reference only — live permissions/functionality not verified
+student_requests,15,index.html (5); index-V220-FINAL-SINGLE-ROOT.html (5); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (5),Static reference only — live permissions/functionality not verified
+students,18,index.html (6); index-V220-FINAL-SINGLE-ROOT.html (6); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (6),Static reference only — live permissions/functionality not verified
+system_health,10,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3); v283_system_update.js (1),Static reference only — live permissions/functionality not verified
+teacher_access,2,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1),Static reference only — live permissions/functionality not verified
+teacher_approval,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+teacher_bells,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+teacher_class,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+teacher_notices,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+teacher_paper_center,2,function-search-v425.js (1); teacher-entry-v473.js (1),Static reference only — live permissions/functionality not verified
+teacher_schedule,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+teacher_students,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+teaching_diary,5,erp-canonical.js (1); index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1); final53-complete.js (1),Static reference only — live permissions/functionality not verified
+teaching_monitor,12,index.html (4); index-V220-FINAL-SINGLE-ROOT.html (4); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (4),Static reference only — live permissions/functionality not verified
+timetable,12,index.html (4); index-V220-FINAL-SINGLE-ROOT.html (4); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (4),Static reference only — live permissions/functionality not verified
+timetable_master,9,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3),Static reference only — live permissions/functionality not verified
+transport,2,erp-canonical.js (1); final53-complete.js (1),Static reference only — live permissions/functionality not verified
+udise_reconciliation,4,udise-app-v306.js (2); function-search-v425.js (1); school-forms-v424.js (1),Static reference only — live permissions/functionality not verified
+users,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+v130_qr_scanner,4,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2),Static reference only — live permissions/functionality not verified
+v130_storage,4,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2),Static reference only — live permissions/functionality not verified
+v147_admin_presence,4,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2),Static reference only — live permissions/functionality not verified
+v147_admin_student_qr,4,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2),Static reference only — live permissions/functionality not verified
+v150_student_master,4,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (1); school-workspace-v336.js (1),Static reference only — live permissions/functionality not verified
+v185_admin_activities,2,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1),Static reference only — live permissions/functionality not verified
+v200_due_fee_report,9,central-exam-fees-v333.js (2); smart-work-v333.js (2); index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); final-master-upgrade.js (1),Static reference only — live permissions/functionality not verified
+v6422_due_master,4,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2),Static reference only — live permissions/functionality not verified
+v65_achievements,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v65_control,8,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+v65_fee,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v65_recycle,11,index.html (4); index-V220-FINAL-SINGLE-ROOT.html (4); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3),Static reference only — live permissions/functionality not verified
+v65_smart_marks,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+v65_teacher_attendance,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+v65_teaching,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+v74_bell_center,9,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (3),Static reference only — live permissions/functionality not verified
+v90_attendance_monitor,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+v90_due_fee_monitor,1,index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v90_exam_monitor,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v90_student_requests,2,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1),Static reference only — live permissions/functionality not verified
+v90_teacher_daily,6,index.html (2); index-V220-FINAL-SINGLE-ROOT.html (2); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+v90_teacher_marks,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v90_teacher_requests,7,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v91_parent_updates,4,management-center-shared.js (1); index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v91_student_photos,3,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v92_admit_publish,4,management-center-shared.js (1); index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1),Static reference only — live permissions/functionality not verified
+v97_profile,8,index.html (3); index-V220-FINAL-SINGLE-ROOT.html (3); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (2),Static reference only — live permissions/functionality not verified
+van_center,4,index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1); index-V64.10-FINAL-LOGIN-BOUNDARY-FIX.html (1); transport-v323.js (1),Static reference only — live permissions/functionality not verified
+work_delegation,4,controls-v323.js (1); school-control-v405.js (1); index.html (1); index-V220-FINAL-SINGLE-ROOT.html (1),Static reference only — live permissions/functionality not verified

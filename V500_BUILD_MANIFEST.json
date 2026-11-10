@@ -1,0 +1,39 @@
+{
+  "source_sha256": "2257a2408d45c8a1d3e1532d8f121eb6052077281691bbf92f82e818adabfb66",
+  "modified_files": [
+    {
+      "path": "index.html",
+      "sha256": "b1b7b7cec581334e70fb0bd927b0299e69daab487fa5501a42e115447fb5145b"
+    },
+    {
+      "path": "exam-central-v320.js",
+      "sha256": "892b4e14678567ac160ee7d104853f391986362593c8a79e99e4bb12dfc71e18"
+    }
+  ],
+  "new_files": [
+    {
+      "path": "ldm-premium-v500.js",
+      "sha256": "3c406262dea90c7d341c2a2b9431a47bc23761f04d2015a3d3705cfec567a360"
+    },
+    {
+      "path": "ldm-premium-v500.css",
+      "sha256": "5f8d9022e9e70ce2a97c90c6723b363ff4ba83ff0aa262bffb6fdeed7ca40595"
+    },
+    {
+      "path": "FUNCTION_MAP_V500.csv",
+      "sha256": "1e06cd869415ce7b29c7618515f517012146f175d788044ce588143d7b0f8c29"
+    },
+    {
+      "path": "README_V500_HINDI.txt",
+      "sha256": "b34ee4b76c4a479aee054f53a6ad12fe0470f365f108e3aad52d459171e8967e"
+    },
+    {
+      "path": "QA_V500_REPORT.json",
+      "sha256": "3bf0854db6986f284a6c42620f238fa7d3faae58c58939ef591442d08bddb2a0"
+    },
+    {
+      "path": "SUPABASE_V500_READ_ONLY_DIAGNOSTICS.sql",
+      "sha256": "67cdeefe3e88ae82ffd9919b26907ccaa1dfb8850b5d70fab2c43dc47806f232"
+    }
+  ]
+}
