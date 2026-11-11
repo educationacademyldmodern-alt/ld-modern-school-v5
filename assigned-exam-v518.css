@@ -1,0 +1,54 @@
+/* V518: Assigned Work Exam Attendance / Marks ONLY.
+   Renders the original V517 exam module as responsive student cards.
+   All original data attributes, inputs and event handlers stay intact.
+   The dedicated file is loaded only in work-access-v398.html. */
+#x320Center, #x320Center * { box-sizing: border-box; }
+#x320Center { min-width:0; max-width:100%; width:100%; overflow:visible; color:#233d58; }
+#x320Center .x500PaperFilters { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0; }
+#x320Center .x500PaperFilters label { display:grid;gap:5px;min-width:0;font-weight:700; }
+#x320Center .x500PaperFilters select { min-width:0;width:100%;height:44px; }
+#x320Center .tools { display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:12px 0;min-width:0; }
+#x320Center .tools > * { min-width:0; }
+#x320Center .tools > button { min-height:45px;padding:9px 13px;border:1px solid #b4cbdd;border-radius:11px;white-space:normal;overflow-wrap:anywhere;color:#fff;background:#186985; }
+#x320Center .tools > label { display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:100%; }
+#x320Center input:not([type=checkbox]), #x320Center select { max-width:100%;padding:10px 12px;min-height:44px;border:1px solid #c9d4df;border-radius:10px;background:#fff;color:#233d58;font:inherit; }
+#x320Center #x320Search { flex:2 1 230px;width:auto; }
+#x320Center #x320Filter { flex:1 1 170px;width:auto; }
+#x320Center #x500SaveAll { flex:1 1 100%;background:linear-gradient(110deg,#09836b,#10a88a)!important;border-color:#07947b!important;color:#fff!important;font-weight:800; }
+#x320Center #x320AutoMarks { width:19px;height:19px;flex:none;accent-color:#0a76b7; }
+#x320Center #x320Rows { min-width:0;max-width:100%; }
+#x320Center #x320Rows .x393ExamScroll { height:auto!important;max-height:none!important;max-width:100%;overflow:visible!important; }
+/* Preserve native semantic table and the same event handlers, transform rows into cards. */
+#x320Center #x320Rows table, #x320Center #x320Rows tbody { display:block!important;width:100%!important;min-width:0!important;border:0!important;border-collapse:separate!important; }
+#x320Center #x320Rows thead { display:none!important; }
+#x320Center #x320Rows tr { display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;align-items:center;gap:10px;padding:14px;margin:10px 0;border:1px solid #c4d3ea!important;border-radius:16px!important;background:linear-gradient(135deg,#f9fcff,#edf2ff)!important;box-shadow:0 4px 13px #123c6820;min-width:0;content-visibility:auto;contain-intrinsic-size:auto 152px; }
+#x320Center #x320Rows td { display:block!important;position:static!important;left:auto!important;min-width:0!important;max-width:100%;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;white-space:normal;overflow-wrap:anywhere;vertical-align:middle; }
+#x320Center #x320Rows td:nth-child(1),#x320Center #x320Rows td:nth-child(3),#x320Center #x320Rows td:nth-child(4) { display:none!important; }
+#x320Center #x320Rows td:nth-child(2) { grid-column:1/-1!important; }
+#x320Center #x320Rows td:nth-child(2) strong { display:block;font-size:16px;font-weight:800;color:#1a3254; }
+#x320Center #x320Rows .x500NameDetails { display:block!important;font-size:12px;line-height:1.48;margin-top:4px;color:#596b82;font-weight:600; }
+#x320Center #x320Rows td:nth-child(5) { grid-column:1!important; }
+#x320Center #x320Rows td:nth-child(6) { grid-column:2!important; }
+#x320Center #x320Rows .x500Attendance { display:grid!important;grid-template-columns:1fr 1fr;gap:6px; }
+#x320Center #x320Rows .x500Attendance button { min-width:0;max-width:100%;min-height:45px;padding:7px 3px!important;border-radius:10px;border:1px solid #b9c8d9;background:#fff;color:#234468;font-family:inherit;font-size:13px;font-weight:700;line-height:1.3;cursor:pointer; }
+#x320Center #x320Rows .x500Attendance button.selected:first-child { background:#0d855f!important;border-color:#0d855f;color:white!important; }
+#x320Center #x320Rows .x500Attendance button.selected:last-child { background:#b93352!important;border-color:#b93352;color:white!important; }
+#x320Center #x320Rows select[data-att] { position:absolute!important;opacity:0!important;width:1px!important;height:1px!important;min-height:0!important;margin:0!important;padding:0!important;pointer-events:none!important; }
+#x320Center #x320Rows td:nth-child(6)::before { content:'MARKS';display:block;margin-bottom:5px;font-size:10px;color:#51637e;font-weight:800; }
+#x320Center #x320Rows input[data-mark] { width:100%!important;max-width:100%;min-height:47px!important;text-align:center;font-size:17px;font-weight:800;background:#fff; }
+#x320Center #x320Rows td:nth-child(6)>b { display:block;text-align:center;font-size:18px;padding:11px 0; }
+#x320Center #x320Rows .x500Attendance button:focus-visible,#x320Center #x320Rows input:focus-visible { outline:3px solid #297fd8;outline-offset:2px; }
+#x320Center button:disabled,#x320Center input:disabled,#x320Center select:disabled { cursor:not-allowed;opacity:.55; }
+@media(max-width:760px) {
+ #x320Center .x500PaperFilters { grid-template-columns:1fr 1fr; }
+ #x320Center .x500PaperFilters label:first-child { grid-column:1/-1; }
+ #x320Center .tools > button { flex:1 1 135px; }
+ #x320Center #x320Rows tr { padding:12px; }
+}
+@media(max-width:420px) {
+ #x320Center .x500PaperFilters {grid-template-columns:1fr;}
+ #x320Center .x500PaperFilters label:first-child {grid-column:auto;}
+ #x320Center .tools > button {flex:1 1 125px;}
+ #x320Center #x320Rows .x500Attendance button{font-size:12px;}
+}
+@media(prefers-reduced-motion:reduce){#x320Center #x320Rows tr{scroll-behavior:auto}}

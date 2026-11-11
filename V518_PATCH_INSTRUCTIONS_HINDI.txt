@@ -1,0 +1,12 @@
+LD ERP V516 -> V518 PATCH - HINDI INSTRUCTIONS
+==================================================
+Is update mein sirf 7 live ERP files hain.
+1. Yeh patch TABHI use karein jab hosting par V516 installed ho.
+2. Hosting par current website/ERP ka backup bana lein.
+3. ZIP ko usi folder mein EXTRACT/OVERWRITE karein jahan current index.html hai.
+4. Server ke kisi dusre files ko DELETE na karein.
+5. Browser cache clear/hard refresh karein.
+6. Login, Admin Exam Marks, Assigned Work and Teacher marks saving test karein.
+7. SQL audit alag hai; use installation ke liye chalana zaroori nahi hai.
+V515 ya usse purane installed version ke liye yeh patch verified nahi hai.
+Data, Supabase tables aur settings ko touch nahi karta.
