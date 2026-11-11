@@ -15371,12 +15371,13 @@ if(typeof statsBase==='function'){
     /* Keep only the canonical controls. ERP title container stays hidden because head() writes into it. */
     [...top.children].forEach(x=>{
       if(x.matches('.ldmAdminSchoolIdentity,#ldmDeviceLockBtn,.hamb,[data-v58-order],.websiteBtn,#v90BackBtn,#v90HomeBtn,#v62Bell,#v75TopSearch,#v62NotifPanel,#ldmAppearanceMenu455'))return;
-      if(x.querySelector?.('#erpTitle,#erpSub')){x.style.display='none';x.setAttribute('aria-hidden','true');return}
+      if(x.querySelector?.('#erpTitle,#erpSub')){x.style.setProperty('display','none','important');x.setAttribute('aria-hidden','true');return}
       if(x.classList?.contains('erpHomeBtn')){x.style.display='none';return}
       if(x.id&&/^v(6412|6415|6416|6418|58|764|113|64|97)/.test(x.id))x.remove();
     });
     let id=top.querySelector('.ldmAdminSchoolIdentity');
     if(!id){id=document.createElement('div');id.className='ldmAdminSchoolIdentity';top.insertBefore(id,top.firstChild)}
+    top.querySelectorAll(':scope > .ldmAdminSchoolIdentity').forEach(other=>{if(other!==id&&!other.querySelector('button,a,input,select,textarea'))other.remove()});
     const n=window.school?.school_name||'L D MODERN EDUCATION ACADEMY';
     const a=window.school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar';
     const identityHTML='<b>'+E(n)+'</b><small>'+E(a)+'</small>';if(id.innerHTML!==identityHTML)id.innerHTML=identityHTML;
@@ -18808,7 +18809,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="student-tables-v475.js?v=475"></script>
 <script src="exam-dates-v475.js?v=507"></script>
 <script src="teacher-entry-v473.js?v=511"></script>
-<script src="exam-central-v320.js?v=516"></script>
+<script src="exam-central-v320.js?v=517"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18865,6 +18866,6 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
-<script src="work-access-v398.js?v=475"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=516" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=508"><script src="id-card-v447.js?v=508"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=511"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=514"></script><script defer src="erp-v505-stability.js?v=505"></script>
+<script src="work-access-v398.js?v=517"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=508"><script src="id-card-v447.js?v=508"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=511"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=517"></script><script defer src="erp-v505-stability.js?v=505"></script>
 </body>
 </html>

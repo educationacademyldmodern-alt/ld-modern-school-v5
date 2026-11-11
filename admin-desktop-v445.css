@@ -23,7 +23,7 @@
 #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>.v114AttendancePanel{grid-column:1/9!important;grid-row:3!important;}
 #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>#v307Dash{grid-column:9/-1!important;grid-row:3!important;min-height:220px!important;}
 #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash:not(:has(>#v307Dash))>.v114AttendancePanel{grid-column:1/-1!important;}
-#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>#r323AdminControl{grid-row:2!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:16px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;}
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>#r323AdminControl{grid-row:2!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;}
 #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #s336DashboardCard .s336Hero,#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #r323ControlGreeting #v233Greeting{min-height:104px!important;height:auto!important;padding:18px!important;border-radius:14px!important;box-shadow:0 3px 10px #173e6512!important;}
 #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #s336DashboardCard .s336Hero h2,#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #r323ControlGreeting #v233Greeting h2{font-size:21px!important;line-height:1.3!important;}
 #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .ldmRootAdminDash>#v185FrontDesk{grid-row:5!important;}
@@ -81,3 +81,13 @@
 
 /* V516: match desktop specificity so asynchronous header mounts keep Theme before Fee Pay. */
 #erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .erpTop>#ldmAppearanceMenu455{order:80!important}
+
+/* V517: compact laptop composition; explicit full-width greeting, no unused left cell. */
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #r323ControlGreeting{grid-column:1/-1!important;grid-row:auto!important;width:100%!important}
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #r323ControlActions{grid-column:1/-1!important;grid-row:auto!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #r323ControlActions>button{min-height:130px!important;padding:14px!important}
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #ldm500Hero #s336DashboardCard .s336Hero{min-height:0!important;padding:10px 0 0!important}
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) #ldm500Hero #s336DashboardCard .s336Hero p{margin-bottom:10px!important}
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .erpTop{padding:10px 16px!important;gap:7px!important}
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .erpTop>.ldmAdminSchoolIdentity{flex:1 1 100%!important;padding-bottom:4px!important}
+#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp#erp:has(#erpContent .ldmRootAdminDash) .erpTop>#v75TopSearch{order:100!important;flex:1 1 100%!important}
