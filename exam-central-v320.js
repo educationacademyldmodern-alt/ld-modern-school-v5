@@ -4,6 +4,7 @@
 // Reuse the selected timetable paper and its authorized roster.
 window.examDates475 = typeof window.examDates475 === "function" ? window.examDates475 : function (host, sheet, isAdmin, save, reload, note, canStart) {
   const panel = document.createElement('details');
+  panel.id = 'x320DatePanel';
   panel.innerHTML = '<summary>बाद की परीक्षा / नई तारीख</summary><label>किसकी परीक्षा<select></select></label><label>परीक्षा की वास्तविक तारीख<input type="date"></label><label>कारण<input type="text"></label><button type="button">तारीख दर्ज करें</button>';
   const picker = panel.querySelector('select');
   picker.add(new Option('विकल्प चुनें',''));
@@ -38,18 +39,20 @@ function syncScope(){const scope=String(actor()?.id||'')+'|'+String(sess()||'');
 function blocked(){syncScope();return busy||!!pending||edits.size>0||markEdits.size>0}
 function lock(){document.querySelectorAll('#x320Center input,#x320Center select,#x320Center button').forEach(el=>{if(['x320Retry','x320Refresh','x501CancelRejected'].includes(el.id)){el.disabled=busy;return}if(el.dataset.originalDisabled===undefined)el.dataset.originalDisabled=el.disabled?'1':'0';el.disabled=busy||!!pending||el.dataset.originalDisabled==='1'})}
 async function rpc(name,args){const req=db().rpc(name,args);let timer;try{const r=await Promise.race([req,new Promise((_,reject)=>timer=setTimeout(()=>reject(Error('Server response uncertain; retry the same save request')),15000))]);if(r.error)throw r.error;return r.data}finally{clearTimeout(timer)}}
-async function save(action,rows=[]){if(busy||pending)return;if(!data)return;const args={p_paper:data.paper.paper_id,p_action:action,p_rows:rows,p_max:Number($('x320Max')?.value||data.max_marks),p_revision:data.revision,p_request:crypto.randomUUID(),p_reason:$('x320Reason')?.value.trim()||''};pending={owner:actor()?.id,session:sess(),args};try{sessionStorage.setItem(key(),JSON.stringify(pending))}catch(e){pending=null;return message('Retry storage unavailable; save not started')}return retry()}
-async function retry(){syncScope();if(!pending||busy)return;if(pending.owner!==actor()?.id||pending.session&&pending.session!==sess())return message('Retry belongs to another account/session');const job=pending,who=actor()?.id,session=sess(),requestKey=key(),host=$('x320Center'),mine=version;const current=()=>actor()?.id===who&&sess()===session&&version===mine&&host===$('x320Center')&&host?.isConnected;busy=true;job.rejected=false;lock();message('Saving…');try{let result=await rpc(job.args.p_action==='marks'?'ldm_marks_sync471':String(actor()?.role||'').toLowerCase()==='teacher'?'ldm_teacher_exam_action475':'ldm_v320_exam_save',job.args);if(!current()||pending!==job)return;if(!result?.paper||String(result.paper.paper_id)!==String(job.args.p_paper)){const loader=String(actor()?.role||'').toLowerCase()==='teacher'?'ldm_teacher_load471':'ldm_v320_exam_load';result=await rpc(loader,{p_paper:job.args.p_paper});}if(!result?.paper||String(result.paper.paper_id)!==String(job.args.p_paper))throw Error('Save confirmation unavailable; retry same request');if(job.args.p_action==='setup'&&Number(result.max_marks)!==Number(job.args.p_max))throw Error('Backend rejected Maximum Marks update. Database function needs authorization check.');if(job.args.p_action==='attendance'&&job.args.p_rows.some(x=>{const r=result.rows?.find(y=>String(y.student_id)===String(x.student_id));return !r||String(r.attendance)!==String(x.attendance)}))throw Error('Attendance not confirmed on server; retry same request');if(job.args.p_action==='marks'&&job.args.p_rows.some(x=>{const r=result.rows?.find(y=>String(y.student_id)===String(x.student_id));return !r||r.marks==null||String(r.marks).trim()===''||Number(r.marks)!==Number(x.marks)}))throw Error('Marks not confirmed on server; retry same request');data=result;pending=null;clearTimeout(autoTimer);try{sessionStorage.removeItem(requestKey)}catch(_){/* server confirmation remains authoritative */}if($('x320RetryHost'))$('x320RetryHost').replaceChildren();if(job.args.p_action==='attendance'){edits.clear();keepScores();if(autoMarks&&markEdits.size)setTimeout(scheduleAutoSave,100);}if(job.args.p_action==='marks'){markEdits.clear();keepScores()}window.LDM_MARKSHEET?.clear();window.ldmMarkDataDirty?.('marks');paint(true);message('✓ सर्वर पर सेव हुआ। बाकी विद्यार्थियों की प्रविष्टि बाद में जारी रख सकते हैं।')}catch(e){if(!current()||pending!==job)return;if(['P0001','42501','22P02','23514','23505','42703','42P01'].includes(e.code)){job.rejected=true;message(e.message+' • Save rejected. Check latest revision or cancel this rejected request.');showRecovery()}else{message(e.message);showRecovery()}}finally{if(actor()?.id===who&&sess()===session&&version===mine){busy=false;if(host===$('x320Center'))lock()}}}
+async function save(action,rows=[]){if(busy||pending)return;if(!data)return;const args={p_paper:data.paper.paper_id,p_action:action,p_rows:rows,p_max:action==='setup'?Number($('x320Max')?.value):Number(data.max_marks),p_revision:data.revision,p_request:crypto.randomUUID(),p_reason:$('x320Reason')?.value.trim()||(action==='setup'?'Maximum marks changed from '+String(data.max_marks??'unset')+' to '+String(Number($('x320Max')?.value)):'')};pending={owner:actor()?.id,session:sess(),args};try{sessionStorage.setItem(key(),JSON.stringify(pending))}catch(e){pending=null;return message('Retry storage unavailable; save not started')}return retry()}
+async function retry(){syncScope();if(!pending||busy)return;if(pending.owner!==actor()?.id||pending.session&&pending.session!==sess())return message('Retry belongs to another account/session');const job=pending,who=actor()?.id,session=sess(),requestKey=key(),host=$('x320Center'),mine=version;const current=()=>actor()?.id===who&&sess()===session&&version===mine&&host===$('x320Center')&&host?.isConnected;const place=capturePlace();let confirmed=false;job.rejected=false;try{sessionStorage.setItem(requestKey,JSON.stringify(job))}catch(_){return message('Retry status could not be stored; request not sent.')}busy=true;lock();message('Saving…');try{let result=await rpc(job.args.p_action==='marks'?'ldm_marks_sync471':String(actor()?.role||'').toLowerCase()==='teacher'?'ldm_teacher_exam_action475':'ldm_v320_exam_save',job.args);if(!current()||pending!==job)return;if(!result?.paper||String(result.paper.paper_id)!==String(job.args.p_paper)){const loader=String(actor()?.role||'').toLowerCase()==='teacher'?'ldm_teacher_load471':'ldm_v320_exam_load';result=await rpc(loader,{p_paper:job.args.p_paper});if(!current()||pending!==job)return;}if(!result?.paper||String(result.paper.paper_id)!==String(job.args.p_paper))throw Error('Save confirmation unavailable; retry same request');if(job.args.p_action==='setup'&&Number(result.max_marks)!==Number(job.args.p_max)){const err=Error('Server did not apply Maximum Marks update. Check function permissions/revision.');err.code='LDM_MAX_NOT_APPLIED';throw err;}const confirmedRows=new Map((result.rows||[]).map(r=>[String(r.student_id),r]));if(job.args.p_action==='attendance'&&job.args.p_rows.some(x=>{const r=confirmedRows.get(String(x.student_id));return !r||String(r.attendance)!==String(x.attendance)}))throw Error('Attendance not confirmed on server; retry same request');if(job.args.p_action==='marks'&&job.args.p_rows.some(x=>{const r=confirmedRows.get(String(x.student_id));return !r||r.marks==null||String(r.marks).trim()===''||Number(r.marks)!==Number(x.marks)}))throw Error('Marks not confirmed on server; retry same request');if(data&&String(data.paper.paper_id)===String(result.paper.paper_id))Object.assign(data,result);else data=result;pending=null;confirmed=true;clearTimeout(autoTimer);try{sessionStorage.removeItem(requestKey)}catch(_){/* server confirmation remains authoritative */}if($('x320RetryHost'))$('x320RetryHost').replaceChildren();if(job.args.p_action==='attendance'){edits.clear();keepScores();if(autoMarks&&markEdits.size)setTimeout(scheduleAutoSave,100);}if(job.args.p_action==='marks'){markEdits.clear();keepScores()}window.LDM_MARKSHEET?.clear();window.ldmMarkDataDirty?.('marks');if(['marks','attendance'].includes(job.args.p_action)&&$('x320Summary'))syncSavedRows(job.args.p_action);else paint(true);restorePlace(place);message('✓ सर्वर पर सेव हुआ। बाकी विद्यार्थियों की प्रविष्टि बाद में जारी रख सकते हैं।')}catch(e){if(!current())return;if(confirmed){message('✓ Server save confirmed; screen update failed. Reopen this paper after reviewing any remaining edits. '+String(e.message||e));return;}if(pending!==job)return;if(['P0001','42501','22P02','23514','23505','42703','42P01','LDM_MAX_NOT_APPLIED'].includes(e.code)){job.rejected=true;try{sessionStorage.setItem(requestKey,JSON.stringify(job))}catch(_){/* In-memory rejection is still known; a reload must treat it as uncertain. */}message(e.message+' • Save rejected. Check server state before starting a new request.');showRecovery()}else{message(e.message);showRecovery()}}finally{if(actor()?.id===who&&sess()===session&&version===mine){busy=false;if(host===$('x320Center'))lock()}}}
 
 async function refreshAfterRejectedSave(){
  if(busy||!pending)return;
- syncScope();if(!pending)return;const old=pending, paper=old.args.p_paper,who=actor()?.id,session=sess(),mine=version,host=$('x320Center');const current=()=>pending===old&&who===actor()?.id&&session===sess()&&mine===version&&host===$('x320Center');
+ syncScope();if(!pending)return;if(!pending.rejected)return message('Save outcome is uncertain. Use Retry Same Save; its request ID must not change.');const old=pending, paper=old.args.p_paper,who=actor()?.id,session=sess(),mine=version,host=$('x320Center');const current=()=>pending===old&&who===actor()?.id&&session===sess()&&mine===version&&host===$('x320Center');
  message('Checking latest server values…');busy=true;lock();
  try{
   const role=String(actor()?.role||'').toLowerCase();
   const fresh=await rpc(role==='teacher'?'ldm_teacher_load471':'ldm_v320_exam_load',{p_paper:paper});
   if(!current())return;
   if(!fresh?.paper||String(fresh.paper.paper_id)!==String(paper)||!Array.isArray(fresh.rows))throw Error('Server paper could not be verified');
+  if(!['marks','attendance'].includes(old.args.p_action))return message('Setup/publication needs review. Cancel the rejected request and reload before resubmitting.');
+  if(Number(fresh.max_marks)!==Number(old.args.p_max))return message('Maximum marks changed on server. Review the latest paper before resubmitting.');
   const conflicts=old.args.p_rows.filter(x=>{
    const row=fresh.rows.find(r=>String(r.student_id)===String(x.student_id));
    return !row||Number(row.revision)!==Number(x.revision);
@@ -60,15 +63,50 @@ async function refreshAfterRejectedSave(){
   const updated={...old,args:{...old.args,p_revision:fresh.revision,p_request:crypto.randomUUID()}};
   sessionStorage.setItem(key(),JSON.stringify(updated));
   Object.assign(old,updated);pending=old;
-  data=fresh;
+  if(data&&String(data.paper.paper_id)===String(fresh.paper.paper_id))Object.assign(data,fresh);else data=fresh;
   message('Server revision refreshed. Press Retry Same Save.');
  }catch(e){if(current())message('Refresh failed: '+e.message)}
  finally{if(current()){busy=false;lock()}}
 }
+// V509: resolve a Maximum update by reading authoritative server state; never guess if a timed-out write committed.
+async function verifyMaximum(){
+ syncScope();const job=pending;
+ if(busy||!job||job.args?.p_action!=='setup')return;
+ const who=actor()?.id,session=sess(),mine=version,host=$('x320Center');
+ const current=()=>pending===job&&actor()?.id===who&&sess()===session&&version===mine&&host===$('x320Center')&&!!host?.isConnected;
+ const requested=Number(job.args.p_max),paper=job.args.p_paper;
+ busy=true;lock();message('Checking Maximum Marks saved on server (no new write)…');
+ try{
+  const role=String(actor()?.role||'').toLowerCase();
+  const fresh=await rpc(role==='teacher'?'ldm_teacher_load471':'ldm_v320_exam_load',{p_paper:paper});
+  if(!current())return;
+  if(!fresh?.paper||String(fresh.paper.paper_id)!==String(paper)||!Array.isArray(fresh.rows)||!Number.isFinite(Number(fresh.max_marks)))throw Error('Verified paper / maximum unavailable');
+  const actual=Number(fresh.max_marks),matched=actual===requested;
+  // Only a known, explicitly rejected request may be replaced when server has a different value.
+  if(!matched&&!job.rejected){message('Server currently shows '+actual+' marks, but this write may still complete. Retry Same Save with the SAME request ID. Do not start a new Maximum save.');return;}
+  try{sessionStorage.removeItem(key())}catch(_){return message('Browser retry storage not accessible. Original request preserved; refresh only after storage is available.');}
+  pending=null;
+  if(data&&String(data.paper.paper_id)===String(fresh.paper.paper_id))Object.assign(data,fresh);else data=fresh;
+  // Refresh only the selected paper. Never invent a database write or reset other students' edits.
+  $('x320RetryHost')?.replaceChildren();paint(true);
+  if(matched){
+   window.LDM_MARKSHEET?.clear();window.ldmMarkDataDirty?.('marks');
+   message('✓ Server confirms Maximum Marks = '+actual+'. You can continue Attendance / Marks.');
+  }else{
+   const input=$('x320Max');if(input)input.value=String(requested);
+   message('Rejected request released. Server Maximum = '+actual+'; requested = '+requested+'. Review values, then press Update Maximum for a NEW save. If rejected again, backend permission/function needs repair.');
+  }
+ }catch(e){if(current())message('Maximum verification failed: '+String(e.message||e)+'. Original request kept; use Retry Same Save.');}
+ finally{if(actor()?.id===who&&sess()===session&&version===mine){busy=false;if(host===$('x320Center'))lock();}}
+}
 function showRecovery(){const h=$('x320RetryHost');if(!h)return;
  h.innerHTML='<button type="button" id="x320Retry">Retry Same Save</button> <button type="button" id="x320Refresh">Check Latest Revision</button>';
- $('x320Retry').onclick=retry;$('x320Refresh').onclick=refreshAfterRejectedSave;
- if(pending?.rejected){const b=document.createElement('button');b.id='x501CancelRejected';b.type='button';b.textContent='Cancel Rejected Request / Review Edits';b.onclick=()=>{if(busy||!pending?.rejected)return;try{sessionStorage.removeItem(key())}catch(_){return message('Retry storage unavailable; request retained')}pending=null;h.replaceChildren();lock();message('Rejected request cancelled. Unsaved edits remain for review or Discard.');};h.append(b)}
+ $('x320Retry').onclick=retry;
+ if(pending?.args?.p_action==='setup'){
+   $('x320Refresh').textContent='Check Server Maximum / Continue';
+   $('x320Refresh').onclick=verifyMaximum;
+ }else $('x320Refresh').onclick=refreshAfterRejectedSave;
+ if(pending?.rejected&&pending?.args?.p_action!=='setup'){const b=document.createElement('button');b.id='x501CancelRejected';b.type='button';b.textContent='Cancel Rejected Request / Review Edits';b.onclick=()=>{if(busy||!pending?.rejected)return;try{sessionStorage.removeItem(key())}catch(_){return message('Retry storage unavailable; request retained')}pending=null;h.replaceChildren();lock();message('Rejected request cancelled. Unsaved edits remain for review or Discard.');};h.append(b)}
 }
 function installPaperFilters(papers){
  const filters=[['x500Exam','exam_name'],['x500Class','class_name'],['x500Subject','subject_name']];
@@ -78,7 +116,7 @@ function installPaperFilters(papers){
  function applyFilter(){const selected=Object.fromEntries(filters.map(([id,field])=>[field,$(id)?.value||'']));const options=papers.filter(p=>Object.entries(selected).every(([k,v])=>!v||String(p[k]||'').trim()===v));const choose=$('x320Paper');if(!choose)return;const previous=choose.value;choose.length=1;options.forEach(p=>choose.add(new Option([p.exam_name,p.class_name,p.section,p.subject_name,p.exam_date].filter(Boolean).join(' • '),p.paper_id)));if(options.some(p=>String(p.paper_id)===previous))choose.value=previous;else {version++;data=null;clearTimeout(autoTimer);$('x320Body')?.replaceChildren();choose.value=options.length===1?String(options[0].paper_id):'';if(choose.value&&!pending){load();return;}}message(options.length+' authorized papers available');}
  applyFilter();
 }
-async function center(entry=false){const focused=entry===true;if(blocked())return window.toast?.('Save or explicitly discard current edits first');if(window.LDM_ROOT?.canNavigate()===false||window.LDM_REMINDERS?.canNavigate()===false)return;version++;data=null;page=1;window.__v90Route=focused?'exam_marks_entry_470':'central_exam';window.v90InstallShell?.(window.__v90Route);window.head?.(focused?'Exam Marks Entry / परीक्षा अंक प्रविष्टि':'Central Exam Attendance / Marks','Timetable → Paper attendance → Draft marks → Publish');$('erpContent').innerHTML=`<section class="panel" id="x320Center"><h2>${focused?'Exam Marks Entry / परीक्षा अंक प्रविष्टि':'Central Exam Attendance / Marks'}</h2><p>हर पेपर की अलग उपस्थिति। Absent = AB; खाली अंक = Pending. Saved drafts दोबारा खुलेंगे।</p><div class="x500PaperFilters"><label>Exam<select id="x500Exam"><option value="">All exams</option></select></label><label>Class<select id="x500Class"><option value="">All classes</option></select></label><label>Subject<select id="x500Subject"><option value="">All subjects</option></select></label></div><div class="tools"><select id="x320Paper"><option value="">Select timetable paper</option></select><button id="x320Load">Load / Resume</button><button id="x320Timetable">Exam timetable / Room & Seating Plan</button><button id="x320OriginalExam">पूर्व परीक्षा विकल्प</button><button id="x320LegacyExam">Existing Exam / Admit Monitor</button><button id="x320LegacyMarks">Existing Marks Progress</button></div><p id="x320Status">Loading permitted papers…</p><div id="x320RetryHost"></div><div id="x320Body"></div></section>`;
+async function center(entry=false){const focused=entry===true;if($('x320Center')&&data&&window.__v90Route===(focused?'exam_marks_entry_470':'central_exam'))return load();if(blocked())return window.toast?.('Save or explicitly discard current edits first');if(window.LDM_ROOT?.canNavigate()===false||window.LDM_REMINDERS?.canNavigate()===false)return;version++;data=null;page=1;window.__v90Route=focused?'exam_marks_entry_470':'central_exam';window.v90InstallShell?.(window.__v90Route);window.head?.(focused?'Exam Marks Entry / परीक्षा अंक प्रविष्टि':'Central Exam Attendance / Marks','Timetable → Paper attendance → Draft marks → Publish');$('erpContent').innerHTML=`<section class="panel" id="x320Center"><h2>${focused?'Exam Marks Entry / परीक्षा अंक प्रविष्टि':'Central Exam Attendance / Marks'}</h2><p>हर पेपर की अलग उपस्थिति। Absent = AB; खाली अंक = Pending. Saved drafts दोबारा खुलेंगे।</p><div class="x500PaperFilters"><label>Exam<select id="x500Exam"><option value="">All exams</option></select></label><label>Class<select id="x500Class"><option value="">All classes</option></select></label><label>Subject<select id="x500Subject"><option value="">All subjects</option></select></label></div><div class="tools"><select id="x320Paper"><option value="">Select timetable paper</option></select><button id="x320Load">Load / Resume</button><button id="x320Timetable">Exam timetable / Room & Seating Plan</button><button id="x320OriginalExam">पूर्व परीक्षा विकल्प</button><button id="x320LegacyExam">Existing Exam / Admit Monitor</button><button id="x320LegacyMarks">Existing Marks Progress</button></div><p id="x320Status" role="status" aria-live="polite">Loading permitted papers…</p><div id="x320RetryHost"></div><div id="x320Body"></div></section>`;
  if(focused){
   $('x320Center').dataset.marksEntry='true';
   $('x320Timetable').textContent='＋ समय-सारणी में परीक्षा पेपर जोड़ें';
@@ -89,12 +127,30 @@ async function center(entry=false){const focused=entry===true;if(blocked())retur
  try{pending=JSON.parse(sessionStorage.getItem(key())||'null');if(pending&&(pending.owner!==actor()?.id||pending.session&&pending.session!==sess()))pending=null}catch(_){pending=null}const mine=version,who=actor()?.id,session=sess(),host=$('x320Center');
  try{let papers=await rpc(String(actor()?.role||'').toLowerCase()==='teacher'?'ldm_teacher_list471':'ldm_v320_exam_list',{p_session:sess()});if(mine!==version||who!==actor()?.id||session!==sess()||host!==$('x320Center')||!$('x320Paper'))return;installPaperFilters(papers||[]);message(papers.length?'Paper चुनें।':'इस सत्र में अधिकृत परीक्षा पेपर नहीं मिला। Admin परीक्षा टाइमटेबल और शिक्षक की घंटी जाँचें।');if(pending){$('x320Paper').value=pending.args.p_paper;showRecovery();lock()}}catch(e){if(mine===version&&who===actor()?.id&&session===sess()&&host===$('x320Center'))message('Exam unavailable: '+e.message)}
 }
-async function load(){if(blocked())return message('Save or discard edits first');const id=$('x320Paper').value;clearTimeout(autoTimer);data=null;$('x320Body')?.replaceChildren();if(!id){version++;return message('Select timetable paper')}const mine=++version,who=actor()?.id,session=sess(),host=$('x320Center');const current=()=>mine===version&&who===actor()?.id&&session===sess()&&host===$('x320Center');message('Loading saved paper…');try{let result=await rpc(String(actor()?.role||'').toLowerCase()==='teacher'?'ldm_teacher_load471':'ldm_v320_exam_load',{p_paper:id});if(!current())return;if(String(result?.paper?.paper_id)!==String(id))throw Error('Loaded paper identity mismatch');if(!Array.isArray(result.rows)||!result.rows.length)throw Error('No students in authorized roster; check teacher bells and class/section assignment');data=result;markEdits.clear();recoverScores();page=1;paint();message(markEdits.size?'स्थानीय ड्राफ्ट मिला। जाँचकर Save करें।':'Loaded saved progress')}catch(e){if(!current())return;data=null;if($('x320Body'))$('x320Body').innerHTML='';message('Paper unavailable: '+e.message)}}
+async function load(){
+ if(blocked())return message('Save or discard edits first');
+ const id=$('x320Paper').value;clearTimeout(autoTimer);
+ if(!id){version++;data=null;$('x320Body')?.replaceChildren();return message('Select timetable paper')}
+ const previous=data,mine=++version,who=actor()?.id,session=sess(),host=$('x320Center');
+ const current=()=>mine===version&&who===actor()?.id&&session===sess()&&host===$('x320Center');
+ const place=capturePlace();busy=true;host?.setAttribute('aria-busy','true');lock();message('Loading saved paper…');
+ try{
+  const result=await rpc(String(actor()?.role||'').toLowerCase()==='teacher'?'ldm_teacher_load471':'ldm_v320_exam_load',{p_paper:id});
+  if(!current())return;
+  if(String(result?.paper?.paper_id)!==String(id))throw Error('Loaded paper identity mismatch');
+  if(!Array.isArray(result.rows)||!result.rows.length)throw Error('No students in authorized roster; check teacher bells and class/section assignment');
+  if(previous&&String(previous.paper.paper_id)===String(id)){Object.assign(previous,result);data=previous}else data=result;markEdits.clear();recoverScores();
+  if(previous&&String(previous.paper.paper_id)===String(id)&&$('x320Summary')){syncSavedRows('attendance');const max=$('x320Max');if(max)max.value=String(data.max_marks);}
+  else{page=1;paint()}
+  restorePlace(place);message(markEdits.size?'स्थानीय ड्राफ्ट मिला। जाँचकर Save करें।':'Loaded saved progress');
+ }catch(e){if(!current())return;data=previous;if(previous)$('x320Paper').value=previous.paper.paper_id;message('Paper refresh failed; previous display retained: '+e.message)}
+ finally{if(current()){busy=false;host?.removeAttribute('aria-busy');lock()}}
+}
 function paint(preservePlace=false){if(!data||!$('x320Body'))return;clearTimeout(autoTimer);
- const previous=preservePlace?{y:window.scrollY,active:document.activeElement?.matches?.('#x320Rows [data-mark]')?document.activeElement.dataset.mark:null,scroll:document.querySelector('#x320Rows .x393ExamScroll')?.scrollTop||0}:null;const oldFilter=$('x320Filter')?.value||'all',oldSearch=$('x320Search')?.value||'',oldReason=$('x320Reason')?.value||'';const rows=data.rows,ab=rows.filter(r=>r.attendance==='Absent').length,saved=rows.filter(r=>r.marks!==null).length,unknown=rows.filter(r=>r.attendance==='Not Marked').length;$('x320Body').innerHTML=`<h3>${E(data.paper.class_name)} • ${E(data.paper.subject_name)} • ${E(data.paper.exam_date)}</h3><p>Total ${rows.length} • Saved marks ${saved} • AB ${ab} • Pending ${rows.length-saved-ab} • Attendance unmarked ${unknown}</p><p>${data.published_at?'Published: '+E(data.published_at):'अंक सेव होने पर केंद्रीय परिणाम अपडेट होता है। पूरे पेपर का प्रकाशन अलग है।'}</p><div class="tools"><label>Maximum marks<input id="x320Max" type="number" min="1" max="1000" value="${data.max_marks||100}" ${['admin','super_admin','principal'].includes(String(actor()?.role||'').toLowerCase())?'':'disabled'}></label>${['admin','super_admin','principal'].includes(String(actor()?.role||'').toLowerCase())?'<button id="x320Setup" type="button">'+(data.max_marks?'Update Maximum':'Set Maximum / Start')+'</button>':''}<label>Correction / publication reason<input id="x320Reason" placeholder="Required when correcting existing records"></label></div><div class="tools"><input id="x320Search" placeholder="Name / Father / Roll / Admission"><select id="x320Filter"><option value="all">All students</option><option value="pending">Pending marks / attendance</option><option value="absent">Absent (AB)</option><option value="saved">Saved marks</option></select><button id="x500SaveAll" type="button" class="primary">✓ Save All Changes</button><button id="x320SaveAttendance">Save Attendance</button><button id="x320SaveMarks">Save Marks</button><label><input id="x320AutoMarks" type="checkbox" ${autoMarks?'checked':''}> Marks auto-save</label><button id="x320Discard">Discard Unsaved Edits / Reload</button><button id="x320Publish">Publish Completed Paper</button></div><p>Attendance और marks पहले स्क्रीन पर बदलते हैं। कई छात्रों की entry करके Save Changed Attendance / Save Changed Marks दबाएँ और server confirmation देखें। वैकल्पिक Marks auto-save चालू करने पर हर marks change सेव होगा। Select Pending से बचा हुआ काम खोलें।</p><div id="x320Rows"></div>`;
+ const previous=preservePlace?{y:window.scrollY,active:document.activeElement?.matches?.('#x320Rows [data-mark]')?document.activeElement.dataset.mark:null,scroll:document.querySelector('#x320Rows .x393ExamScroll')?.scrollTop||0}:null;const oldFilter=$('x320Filter')?.value||'all',oldSearch=$('x320Search')?.value||'',oldReason=$('x320Reason')?.value||'';const rows=data.rows,ab=rows.filter(r=>r.attendance==='Absent').length,saved=rows.filter(r=>r.marks!==null).length,unknown=rows.filter(r=>r.attendance==='Not Marked').length;$('x320Body').innerHTML=`<h3>${E(data.paper.class_name)} • ${E(data.paper.subject_name)} • ${E(data.paper.exam_date)}</h3><p id="x320Summary">Total ${rows.length} • Saved marks ${saved} • AB ${ab} • Pending ${rows.length-saved-ab} • Attendance unmarked ${unknown}</p><p id="x320Published">${data.published_at?'Published: '+E(data.published_at):'अंक सेव होने पर केंद्रीय परिणाम अपडेट होता है। पूरे पेपर का प्रकाशन अलग है।'}</p><div class="tools"><label>Maximum marks<input id="x320Max" type="number" min="1" max="1000" value="${data.max_marks||100}" ${['admin','super_admin','principal'].includes(String(actor()?.role||'').toLowerCase())?'':'disabled'}></label>${['admin','super_admin','principal'].includes(String(actor()?.role||'').toLowerCase())?'<button id="x320Setup" type="button">'+(data.max_marks?'Update Maximum':'Set Maximum / Start')+'</button>':''}<label>Correction / publication reason<input id="x320Reason" placeholder="Required when correcting existing records"></label></div><div class="tools"><input id="x320Search" placeholder="Name / Father / Roll / Admission"><select id="x320Filter"><option value="all">All students</option><option value="pending">Pending marks / attendance</option><option value="absent">Absent (AB)</option><option value="saved">Saved marks</option></select><button id="x500SaveAll" type="button" class="primary">✓ Save All Changes</button><button id="x320SaveAttendance">Save Attendance</button><button id="x320SaveMarks">Save Marks</button><label><input id="x320AutoMarks" type="checkbox" ${autoMarks?'checked':''}> Marks auto-save</label><button id="x320Discard">Discard Unsaved Edits / Reload</button><button id="x320Publish">Publish Completed Paper</button></div><p>Attendance और marks पहले स्क्रीन पर बदलते हैं। कई छात्रों की entry करके Save Changed Attendance / Save Changed Marks दबाएँ और server confirmation देखें। वैकल्पिक Marks auto-save चालू करने पर हर marks change सेव होगा। Select Pending से बचा हुआ काम खोलें।</p><div id="x320Rows"></div>`;
  $('x320Filter').value=oldFilter;$('x320Search').value=oldSearch;$('x320Reason').value=oldReason;if($('x320Setup'))$('x320Setup').onclick=()=>{
   const next=Number($('x320Max')?.value),maxSaved=Math.max(0,...data.rows.map(r=>r.marks==null?0:Number(r.marks)||0));
-  if(!Number.isFinite(next)||next<1||next>1000)return message('Maximum marks 1 से 1000 के बीच भरें।');
+  if(!Number.isInteger(next)||next<1||next>1000)return message('Maximum marks 1 से 1000 के बीच पूरा अंक भरें।');
   if(next<maxSaved)return message('Saved student marks '+maxSaved+' हैं। Maximum इससे कम नहीं कर सकते।');
   if(next===Number(data.max_marks))return message('Maximum marks में कोई बदलाव नहीं है।');
   if(edits.size||markEdits.size||pending||busy)return message('पहले बाकी Attendance/Marks Save करें, फिर Maximum बदलें।');
@@ -107,6 +163,45 @@ function paint(preservePlace=false){if(!data||!$('x320Body'))return;clearTimeout
    if(previous.active){const active=[...document.querySelectorAll('#x320Rows [data-mark]')].find(x=>x.dataset.mark===previous.active);active?.focus({preventScroll:true});}
    window.scrollTo({top:previous.y,behavior:'instant'});
  });
+}
+function capturePlace(){
+ const active=document.activeElement;
+ return {host:$('x320Center'),version,y:window.scrollY,x:window.scrollX,
+  active:active?.closest?.('#x320Center')?{id:active.id,mark:active.dataset.mark,att:active.dataset.att}:null,
+  scroll:[...document.querySelectorAll('#erpContent,#x320Body,#x320Rows .x393ExamScroll')].map(el=>({el,top:el.scrollTop,left:el.scrollLeft}))};
+}
+function restorePlace(place){requestAnimationFrame(()=>{
+ if(place.host!==$('x320Center')||place.version!==version)return;
+ const a=place.active;const target=a?.id?$(a.id):a?.mark?[...document.querySelectorAll('#x320Rows [data-mark]')].find(el=>el.dataset.mark===a.mark):a?.att?[...document.querySelectorAll('#x320Rows [data-att]')].find(el=>el.dataset.att===a.att):null;
+ target?.focus({preventScroll:true});
+ for(const s of place.scroll)if(s.el.isConnected){s.el.scrollTop=s.top;s.el.scrollLeft=s.left;}
+ window.scrollTo({left:place.x,top:place.y,behavior:'instant'});
+});}
+function syncSavedRows(action){
+ const rows=data.rows,ab=rows.filter(r=>r.attendance==='Absent').length,saved=rows.filter(r=>r.marks!=null).length;
+ $('x320Summary').textContent=`Total ${rows.length} • Saved marks ${saved} • AB ${ab} • Pending ${rows.length-saved-ab} • Attendance unmarked ${rows.filter(r=>r.attendance==='Not Marked').length}`;
+ $('x320Published').textContent=data.published_at?'Published: '+data.published_at:'अंक सेव होने पर केंद्रीय परिणाम अपडेट होता है। पूरे पेपर का प्रकाशन अलग है।';
+ const byId=new Map(rows.map(row=>[String(row.student_id),row]));
+ for(const select of document.querySelectorAll('#x320Rows [data-att]')){
+  const row=byId.get(select.dataset.att);if(!row)continue;
+  select.value=edits.get(row.student_id)||row.attendance;
+  const tr=select.closest('tr'),cell=tr.querySelector('[data-mark-cell]'),input=cell.querySelector('[data-mark]');
+  tr.querySelectorAll('[data-p],[data-a]').forEach(b=>b.classList.toggle('selected',select.value===(b.hasAttribute('data-p')?'Present':'Absent')));
+  if(input&&select.value!=='Absent'){
+   input.value=markEdits.has(row.student_id)?markEdits.get(row.student_id):row.marks==null?'':String(row.marks);
+   input.max=String(data.max_marks);input.dataset.originalDisabled=select.value==='Present'&&data.max_marks?'0':'1';
+  }else{cell.innerHTML=markCell(row);bindMark(cell.querySelector('[data-mark]'));}
+ }
+ if(action==='attendance'){
+  const picker=$('x320DatePanel')?.querySelector('select');
+  if(picker){const selected=picker.value;picker.replaceChildren(new Option('विकल्प चुनें',''));
+   if(actor()?.role!=='teacher')picker.add(new Option('पूरी कक्षा का पेपर स्थगित','paper'));
+   for(const row of rows)if(row.attendance!=='Present'&&row.marks==null)picker.add(new Option([row.student_name,row.father_name,row.admission_no].filter(Boolean).join(' • '),row.student_id));
+   picker.value=[...picker.options].some(o=>o.value===selected)?selected:'';
+  }
+ }
+ // Keep visible students in place after save, including a Pending filter.
+ // The next explicit search/filter change reevaluates membership from saved data.
 }
 function scheduleAutoSave(){clearTimeout(autoTimer);autoTimer=setTimeout(()=>{if(!busy&&!pending&&data){if(edits.size)saveAttendance();else if(markEdits.size)saveMarks()}},2600)}
  function saveAttendance(){if(busy||pending||!data||!edits.size)return;const changed=[...edits].map(([student_id,attendance])=>({student_id,attendance,revision:data.rows.find(r=>r.student_id===student_id)?.revision}));return save('attendance',changed)}

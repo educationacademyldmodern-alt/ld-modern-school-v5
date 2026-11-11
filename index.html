@@ -12838,7 +12838,7 @@ function clearPhotoDraft(id){
   photoDrafts.delete(k);
 }
 
-async function setPhotoDraft(id,file,autoSave=false){
+async function setPhotoDraft(id,file,crop=false){
   if(!file)return false;
   const key=String(id), owner=profile?.id, session=school?.academic_session;
   if(!teacher()||!photoRows.some(x=>String(x.id)===key)){
@@ -12859,21 +12859,17 @@ async function setPhotoDraft(id,file,autoSave=false){
   }
   photoCropBusy.add(key);
   try{
-    // The existing crop review is intentionally retained: never upload a
-    // camera/gallery image without the teacher approving its actual pixels.
-    file=await window.LDM_PHOTO_V337.cropForReview(file);
+    // Crop is optional. Selecting or capturing a photo never saves it.
+    const original=file;
+    file=crop?await window.LDM_PHOTO_V337.cropForReview(file):await window.LDM_PHOTO_V337.fitPhoto(file);
     if(!file)return false;
     if(owner!==profile?.id||session!==school?.academic_session||
        window.__v90Route!=='v91_student_photos'||
        !photoRows.some(x=>String(x.id)===key))return false;
     if(photoActionBusy.has(key)||photoDrafts.get(key)?.busy)return false;
     clearPhotoDraft(key);
-    photoDrafts.set(key,{file,url:URL.createObjectURL(file)});
+    photoDrafts.set(key,{file,original,url:URL.createObjectURL(file)});
     renderPhotos();
-    if(autoSave){
-      // Camera/gallery -> crop approval -> save. Reuses existing RPC and RLS.
-      await window.v138UploadStudentPhoto(key);
-    }
     return true;
   }catch(e){
     window.toast?.(e?.message||String(e));
@@ -13068,13 +13064,14 @@ function renderPhotos(){
           }
 
           <div class="v136PhotoActions v508PhotoActions" data-photo-actions="${v136Esc(x.id)}">
-            <button type="button" class="primary" onclick="v136SmartCamera('${x.id}')" ${photoCropBusy.has(String(x.id))||photoActionBusy.has(String(x.id))||d?.busy?'disabled':''}>📷 Camera → Save</button>
-            <label class="v508Pick">🖼 Gallery → Save<input type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="v136Gallery('${x.id}',this)" ${photoCropBusy.has(String(x.id))||photoActionBusy.has(String(x.id))||d?.busy?'disabled':''}></label>
+            <button type="button" class="primary" onclick="v136SmartCamera('${x.id}')" ${photoCropBusy.has(String(x.id))||photoActionBusy.has(String(x.id))||d?.busy?'disabled':''}>📷 Camera</button>
+            <label class="v508Pick">🖼 Select photo<input type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="v136Gallery('${x.id}',this)" ${photoCropBusy.has(String(x.id))||photoActionBusy.has(String(x.id))||d?.busy?'disabled':''}></label>
+            <button type="button" class="primary" ${d?.file&&!d?.busy&&!photoCropBusy.has(String(x.id))&&!photoActionBusy.has(String(x.id))?'':'disabled'} onclick="v138UploadStudentPhoto('${x.id}')">Save photo</button>
+            <button type="button" ${d?.file&&!d?.busy&&!photoCropBusy.has(String(x.id))&&!photoActionBusy.has(String(x.id))?'':'disabled'} onclick="v510CropPhoto('${x.id}')">Crop / फोटो काटें</button>
             <button type="button" onclick="teacherViewIdCard('${x.id}')">🪪 Preview / PDF</button>
             <details class="v508PhotoMore"><summary>More options</summary>
               <button type="button" onclick="v136OpenCamera('${x.id}')">Webcam</button>
               <button type="button" onclick="v136OpenDeviceCamera('${x.id}')">Camera App</button>
-              <button type="button" ${d?.file?'':'disabled'} onclick="v138UploadStudentPhoto('${x.id}')">Retry Save</button>
             </details>
 
             ${
@@ -13107,10 +13104,14 @@ function renderPhotos(){
 
 }
 
+window.v510CropPhoto=function(id){
+  const draft=photoDrafts.get(String(id));
+  if(draft?.file)return setPhotoDraft(id,draft.original||draft.file,true);
+};
 window.v136Gallery=async function(id,input){
   const f=input?.files?.[0];
   if(input)input.value='';
-  if(f)return setPhotoDraft(id,f,true);
+  if(f)return setPhotoDraft(id,f,false);
   return false;
 };
 
@@ -13153,7 +13154,7 @@ window.v138UploadStudentPhoto=async function(id){
 
   if(!teacher()||window.__v90Route!=='v91_student_photos')
     return window.toast?.('Photo center reopen करें');
-  if(draft.busy||photoActionBusy.has(String(id)))return;
+  if(draft.busy||photoActionBusy.has(String(id))||photoCropBusy.has(String(id)))return;
   draft.busy=true;photoActionBusy.add(String(id));
   const saveOwner=profile?.id,saveSession=school?.academic_session;
   let f=draft.file;
@@ -13332,7 +13333,7 @@ window.v136OpenCamera=async function(id){
         <button
           class="primary"
           id="v136Snap">
-          📷 Capture & Save
+          📷 Capture
         </button>
 
         <button
@@ -13408,8 +13409,8 @@ function capture(v){
     );
 
     closeCam();
-    // Crop review then save automatically; on error keep the draft for Retry.
-    Promise.resolve(setPhotoDraft(id,f,true)).catch(e=>window.toast?.(e?.message||String(e)));
+    // Capture prepares a preview; the teacher presses Save explicitly.
+    Promise.resolve(setPhotoDraft(id,f,false)).catch(e=>window.toast?.(e?.message||String(e)));
 
   },'image/jpeg',0.84);
 }
@@ -18740,8 +18741,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="menu-v473.js?v=473"></script>
 <script src="student-tables-v475.js?v=475"></script>
 <script src="exam-dates-v475.js?v=507"></script>
-<script src="teacher-entry-v473.js?v=475"></script>
-<script src="exam-central-v320.js?v=507"></script>
+<script src="teacher-entry-v473.js?v=511"></script>
+<script src="exam-central-v320.js?v=511"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">
@@ -18749,7 +18750,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="workspace-v323.css?v=323">
 <script src="transport-v323.js?v=323"></script>
 <script src="resources-v334.js?v=437"></script>
-<script src="controls-v323.js?v=506"></script>
+<script src="controls-v323.js?v=511"></script>
 <style id="v325BannerFit">
 /* Match the whole banner to its natural ratio on phones; fill the desktop hero. */
 #publicSite #v1142RefPage .v1142Hero img{object-fit:cover!important;object-position:center!important;display:block!important;width:100%!important;max-width:100%!important;filter:none!important}
@@ -18763,11 +18764,11 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="central-fee-class-v335.js?v=475"></script>
 <link rel="stylesheet" href="school-workspace-v336.css?v=457">
 <script src="teaching-v460.js?v=465"></script>
-<script src="school-workspace-v336.js?v=465"></script>
+<script src="school-workspace-v336.js?v=511"></script>
 
-<link rel="stylesheet" href="interface-v337.css?v=344">
+<link rel="stylesheet" href="interface-v337.css?v=510">
 <script src="ui-v337.js?v=373"></script>
-<script src="student-photo-v337.js?v=356"></script>
+<script src="student-photo-v337.js?v=510"></script>
 <script src="a4-print-v337.js?v=453"></script>
 <script src="print-bridge-v337.js?v=344"></script>
 
@@ -18791,13 +18792,13 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=388"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=506"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=511"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=460">
 <script src="desktop-premium-v378.js?v=390"></script>
 <script src="admin-documents-v389.js?v=390"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
-<script src="work-access-v398.js?v=475"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=461" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=508"><script src="id-card-v447.js?v=508"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=504"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=505"><script defer src="ldm-premium-v500.js?v=505"></script><script defer src="erp-v505-stability.js?v=505"></script>
+<script src="work-access-v398.js?v=475"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=511" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=508"><script src="id-card-v447.js?v=508"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=511"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=511"><script defer src="ldm-premium-v500.js?v=511"></script><script defer src="erp-v505-stability.js?v=505"></script>
 </body>
 </html>

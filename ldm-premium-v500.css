@@ -57,3 +57,14 @@
 #erp #erpContent .ldmRootAdminDash>#r323AdminControl{order:-29!important;grid-column:1/-1!important;width:100%!important}
 #erp #erpContent .ldmRootAdminDash #r323ControlGreeting #v233Greeting{display:flex!important;visibility:visible!important;opacity:1!important}
 #erp #erpContent .ldmRootAdminDash #r323AdminControl #s336DashboardCard{position:relative!important;visibility:visible!important}
+
+/* V511: one Universal + Work Assistant surface; stable header slots. */
+#erp#erp #erpContent #ldm500Hero{order:-30!important;grid-column:1/-1!important;grid-row:auto!important}
+#erp#erp #erpContent #ldm500Hero #s336DashboardCard{margin:12px 0 0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;max-width:100%!important}
+#erp#erp #erpContent #ldm500Hero #s336DashboardCard .s336Hero{margin:0!important;padding:12px 0 0!important;border:0!important;border-top:1px solid #ffffff55!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;min-height:0!important}
+#erp#erp #erpContent #ldm500Hero .s336Tools{display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+#erp#erp #erpContent #ldm500Hero .s336Tools button{flex:1 1 150px;min-width:0;min-height:44px;white-space:normal}
+#erp#erp.ldmAdminCanonical .erpTop>#ldmAppearanceMenu455{order:80!important}
+#erp#erp.ldmAdminCanonical .erpTop>#v350FeePay{display:inline-flex!important;order:81!important}
+#erp#erp.ldmAdminCanonical .erpTop>#v75TopSearch{order:100!important}
+#erp#erp #x320Center[aria-busy=true] #x320Rows{visibility:visible;opacity:1}
