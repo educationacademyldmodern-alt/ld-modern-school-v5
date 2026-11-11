@@ -1,0 +1,34 @@
+LD MODERN SCHOOL ERP — V516 FRONTEND CORRECTIONS
+आधार: LD_ERP_V515_DASHBOARD_ROOT_FIXED_FULL_PROJECT.zip
+तारीख: 11 November 2026
+
+यह पूरा project package है। इसे सभी पुराने मुद्दों का verified live समाधान न समझें।
+
+वास्तविक बदलाव (4 production files):
+1. marksheet-core.js — saveScores में पहले await से पहले lock लगता है। Context-load और storage failure पर भी lock खुलता है। Uncertain save के retry में वही request ID रहती है। दो concurrent calls से दो requests जाने का दोष पुनः पैदा करके ठीक किया गया।
+2. admin-desktop-v445.css — desktop high-specificity rule में Fee Pay order 81 और Theme order 80। Dashboard का V515 flex layout सुरक्षित।
+3. exam-central-v320.js — manual Correction/publication reason input और उसके references हटे। Maximum change में पुराने/नए maximum की automatic note तथा अन्य actions में स्पष्ट automatic action note भेजी जाती है। Server permissions, revision checks और validation नहीं हटाए गए। Date postponement का अलग कारण field बना रहता है। Legacy teacher fallback में पुराना reason flow सुरक्षित है; सामान्य teacher route Central Exam इस्तेमाल करता है।
+4. index.html — इन तीन assets के cache versions 516 किए गए।
+
+सत्यापित परीक्षण:
+- 193 JavaScript files: syntax PASS.
+- 128 executable index inline scripts: syntax PASS.
+- 6 नए save-lock/automatic-note/CSS source checks PASS.
+- 13 maximum-recovery VM/source checks PASS (automatic note और cache version के नए behavior के अनुसार V516 copy).
+- 8 stable-entry checks PASS; 15 photo-flow/admin-photo checks PASS.
+- ये local mock/source checks हैं। इस session में Chromium executable उपलब्ध न होने से नया browser visual test नहीं चला।
+
+अभी बाकी / सीमा:
+- Live Supabase project उपलब्ध नहीं; वास्तविक maximum update, RLS, teacher assignment permissions और correction के लिए server acceptance सत्यापित नहीं।
+- Saved marks clear/remove का backend contract अनुपलब्ध है। इसे जोड़ा नहीं गया; पुराना saved score सुरक्षित रहता है।
+- Print/PDF, bulk preview hang, iPad login और live dashboard का end-to-end परीक्षण बाकी है।
+- Zero log ingestion का दावा नहीं। Preview में reads होती हैं।
+- कोई SQL/database change नहीं किया। ZIP में पुराने SQL ऐतिहासिक files हैं; उन्हें एक साथ या बिना समीक्षा चलाना जरूरी नहीं है।
+
+INSTALL:
+पहले मौजूदा deployed files का backup रखें।
+यदि V515 installed है: ONLY_CHANGED_FROM_V515.zip की 4 production files उन्हीं paths पर replace करें।
+अन्य version हो: FULL_PROJECT.zip को अलग staging में खोलकर project के मौजूदा deployment तरीके से लगाएँ।
+Refresh के बाद test paper पर marks save/reopen, attendance correction, header क्रम और photo save जाँचें।
+Rollback: केवल इन 4 production files को V515 backup से restore करें। Database rollback आवश्यक नहीं।
+पुरानी V515 ZIP बिना बदलाव सुरक्षित है। V516_REVIEW में नए tests और file hashes हैं।
