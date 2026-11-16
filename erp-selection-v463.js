@@ -11,7 +11,7 @@
   document.addEventListener('keydown', event => {
     const el = event.target;
     if (!(el instanceof Element) || event.defaultPrevented || event.isComposing ||
-        event.key.toLowerCase() !== 'a' || !(event.ctrlKey || event.metaKey) ||
+        String(event.key || '').toLowerCase() !== 'a' || !(event.ctrlKey || event.metaKey) ||
         event.altKey || event.shiftKey || editable(el)) return;
     // Only intercept Select All when focus is on an operational control.
     // When the user selects report text, their selection and shortcuts survive.

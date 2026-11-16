@@ -106,10 +106,10 @@ function shell(){
 let screenRevision435=0;
 window.v265AcademicCenter=async function(){
  if(!isAdmin()&&!isTeacher())return window.toast?.('Admin / Teacher only');
- const mine=++screenRevision435,who=uid();
+ const mine=++screenRevision435,who=uid(),current=()=>mine===screenRevision435&&uid()===who&&window.__v90Route==='academic_monitor';
  routeHead(isTeacher()?'📊 My Teaching Performance':'📊 Teacher Academic Analysis',isTeacher()?'My Bells • Teaching • Copy Checking • Class Tests':'Select one Teacher → complete syllabus, checking, tests and bell analysis');
  setMain(shell());
- await loadAll(true);
+ try{await loadAll(true,current)}catch(e){if(current())showLoadError523(e);return}
  if(mine!==screenRevision435||uid()!==who||window.__v90Route!=='academic_monitor'||!document.querySelector('.v265Page'))return;
  setMain(shell());
  renderCurrent();
@@ -123,11 +123,11 @@ async function safe(table,cols='*',build=null){
 async function safeMaybe(table,cols='*',build=null){
  try{return await safe(table,cols,build)}catch(_e){return null}
 }
-async function loadAll(force=false){
+async function loadAll(force=false,current=()=>true){
  const end=indiaYMD(),start=rangeStart();
  try{
   if(isTeacher()){
-   await window.v14LoadTeacherContext?.();
+   await window.v14LoadTeacherContext?.();if(!current())return;
    const name=String(window.v14TeacherProfile?.teacher_name||window.profile?.full_name||'').trim();
    const [di,cp,te,sy,tt,at]=await Promise.all([
     safe('teaching_diary','*',q=>q.eq('teacher_user_id',uid()).gte('teaching_date',start).lte('teaching_date',end).order('teaching_date',{ascending:false}).limit(3000)),
@@ -137,30 +137,30 @@ async function loadAll(force=false){
     safe('timetable','*',q=>q.eq('teacher_name',name).order('day_name').order('period_no').limit(500)),
     safeMaybe('attendance','admission_no,class_name,status,date',q=>q.eq('date',end).limit(6000))
    ]);
-   state.diary=di;state.copy=cp;state.tests=te;state.syllabus=sy;state.timetable=tt;state.attendance=at;state.detailLoaded=true;
+   if(!current())return;state.diary=di;state.copy=cp;state.tests=te;state.syllabus=sy;state.timetable=tt;state.attendance=at;state.detailLoaded=true;
   }else{
    // ADMIN PERFORMANCE RULE: initial open never pulls school-wide diary/copy/test/timetable rows.
    // Only Teacher Master + one server-side aggregate RPC. Teacher detail is loaded on selection.
    const tp=await safe('teacher_profiles','id,auth_user_id,teacher_name,full_name,approval_status,is_active',q=>q.order('teacher_name').limit(3000));
-   state.teachers=tp;state.diary=[];state.copy=[];state.tests=[];state.syllabus=[];state.timetable=[];state.attendance=null;state.detailLoaded=false;
+   if(!current())return;state.teachers=tp;state.diary=[];state.copy=[];state.tests=[];state.syllabus=[];state.timetable=[];state.attendance=null;state.detailLoaded=false;
    state.adminSummary=[];state.adminSummaryError='';
    try{
     const sr=await db().rpc('ldm_v267_teacher_academic_summary',{p_days:state.days,p_session:session()});
-    if(sr.error)throw sr.error;
+    if(!current())return;if(sr.error)throw sr.error;
     state.adminSummary=sr.data||[];
    }catch(e){
-    state.adminSummaryError=String(e?.message||e);
+    if(!current())return;state.adminSummaryError=String(e?.message||e);
     // Comparison may be unavailable before V267 SQL, but teacher-specific analysis still works.
    }
-   if(state.teacher)await loadAdminTeacherDetail(state.teacher);
+   if(state.teacher)await loadAdminTeacherDetail(state.teacher,current);
   }
-  state.loaded=true;
+  if(current())state.loaded=true;
  }catch(e){
-  const b=$('v265Body');if(b)b.innerHTML=`<div class="dangerNote">${E(e?.message||e)}</div>`;
+  const b=current()&&$('v265Body');if(b)b.innerHTML=`<div class="dangerNote">${E(e?.message||e)}</div>`;
   throw e;
  }
 }
-async function loadAdminTeacherDetail(teacherId){
+async function loadAdminTeacherDetail(teacherId,current=()=>true){
  if(!isAdmin()||!teacherId)return;
  const tp=(state.teachers||[]).find(x=>String(x.auth_user_id||'')===String(teacherId));
  if(!tp)throw new Error('Teacher Master mapping नहीं मिला.');
@@ -171,7 +171,7 @@ async function loadAdminTeacherDetail(teacherId){
   safe('ldm_v265_bell_tests','*',q=>q.eq('teacher_user_id',teacherId).gte('test_date',start).lte('test_date',end).order('test_date',{ascending:false}).limit(2500)),
   safe('timetable','*',q=>q.eq('teacher_name',name).order('day_name').order('period_no').limit(700))
  ]);
- const classSet=[...new Set(tt.map(x=>cls(x.class_name)).filter(Boolean))];
+ if(!current())return;const classSet=[...new Set(tt.map(x=>cls(x.class_name)).filter(Boolean))];
  let sy=[];
  if(classSet.length){
    // Small master only; fetch the session once and normalize class aliases in JS.
@@ -179,16 +179,18 @@ async function loadAdminTeacherDetail(teacherId){
    let qr=db().from('syllabus_master').select('*').eq('academic_session',session()).limit(1500);
    let rr=await qr;if(rr.error)throw rr.error;sy=(rr.data||[]).filter(x=>classSet.includes(cls(x.class_name)));
  }
- state.diary=di;state.copy=cp;state.tests=te;state.timetable=tt;state.syllabus=sy;state.attendance=null;state.detailLoaded=true;
+ if(!current())return;state.diary=di;state.copy=cp;state.tests=te;state.timetable=tt;state.syllabus=sy;state.attendance=null;state.detailLoaded=true;
 }
+function showLoadError523(e){const b=$('v265Body');if(b)b.innerHTML='<div class="dangerNote" role="alert">'+E(e?.message||e)+'</div><button onclick="v265Reload()">Retry / फिर प्रयास करें</button>'}
 window.v267SelectTeacher=async function(id){
+ const mine=++screenRevision435,who=uid(),current=()=>mine===screenRevision435&&uid()===who&&window.__v90Route==='academic_monitor';
  state.teacher=String(id||'');state.className='';state.subject='';state.view='progress';
  if(!state.teacher){state.detailLoaded=false;state.diary=[];state.copy=[];state.tests=[];state.timetable=[];state.syllabus=[];setMain(shell());return renderCurrent()}
  const b=$('v265Body');if(b)b.innerHTML='<div class="empty">Selected Teacher का academic analysis loading…</div>';
- try{await loadAdminTeacherDetail(state.teacher);setMain(shell());renderCurrent()}catch(e){window.toast?.(e?.message||String(e));setMain(shell());renderCurrent()}
+ try{await loadAdminTeacherDetail(state.teacher,current);if(!current())return;setMain(shell());renderCurrent()}catch(e){if(current())showLoadError523(e)}
 };
-window.v267ClearTeacher=function(){state.teacher='';state.className='';state.subject='';state.detailLoaded=false;state.diary=[];state.copy=[];state.tests=[];state.timetable=[];state.syllabus=[];setMain(shell());renderCurrent()};
-window.v265Reload=async function(){const mine=++screenRevision435,who=uid();state.loaded=false;await loadAll(true);if(mine!==screenRevision435||uid()!==who||window.__v90Route!=='academic_monitor'||!document.querySelector('.v265Page'))return;setMain(shell());renderCurrent();if(isTeacher())armBellReminder()};
+window.v267ClearTeacher=function(){screenRevision435++;state.teacher='';state.className='';state.subject='';state.detailLoaded=false;state.diary=[];state.copy=[];state.tests=[];state.timetable=[];state.syllabus=[];setMain(shell());renderCurrent()};
+window.v265Reload=async function(){const mine=++screenRevision435,who=uid(),current=()=>mine===screenRevision435&&uid()===who&&window.__v90Route==='academic_monitor';state.loaded=false;try{await loadAll(true,current);if(!current()||!document.querySelector('.v265Page'))return;setMain(shell());renderCurrent();if(isTeacher())armBellReminder()}catch(e){if(current())showLoadError523(e)}};
 
 window.v265Filter=function(kind=''){
  const d=n($('v265Days')?.value||30);if(d&&d!==state.days){state.days=d;return window.v265Reload()}
