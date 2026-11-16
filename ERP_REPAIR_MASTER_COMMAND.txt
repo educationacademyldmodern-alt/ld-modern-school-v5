@@ -1,0 +1,90 @@
+# V524 VERIFIED HANDOFF — READ BEFORE THE ORIGINAL COMMAND
+
+Latest source recovered from the user's chat: ld-modern-school-v5-Mark-entery(1).zip
+SHA256: 26b461c4d62493eada8e9fb8ca971ab28e54e0166925936ce4ed767382746cbc
+Cumulative patch: ERP_FIXED_FILES_ONLY.zip; ten changed files only.
+Use ERP_PROBLEM_REGISTER_ORIGINAL.md for complete requested behavior; ERP_PROBLEM_REGISTER.md records actual partial completion. Do not treat the candidate as all 16 issues fixed.
+
+Verified root findings:
+1. Due-report shared print binding targeted obsolete v200DueReportPrint; active final report uses v261DuePrintable.
+2. Teacher count reads approved active teacher_profiles, but old drill opened staff.
+3. controls-v323.js explicitly hid Academic Monitoring's original management card.
+4. Final due save called full-list reload; changed to same-row readback.
+5. Audit keydown error came from event.key.toLowerCase without a missing-key guard.
+6. Async QR roster completion could overwrite a later route; generation/account/route checks now prevent it.
+
+Next execution requirements:
+- Begin from the exact original and inspect the cumulative manifest; do not reapply old V504 patches.
+- Preserve the existing nine file corrections and seven new account/route regression tests.
+- Complete remaining per-issue items in the status table using source evidence, without expanding beyond the original 16 requirements.
+- Staging browser is required for actual Print/PDF pagination, all save flows, dashboard layouts, notification counts and assignment parity. Current environment could not start Chromium; do not label these passed.
+- Backend audit requires a real project/schema. ERP_READ_ONLY_BACKEND_AUDIT.sql is unexecuted and read-only. Do not guess a project ID or apply speculative SQL. Inspect writer transaction boundaries, RPC authorizations, RLS and relevant indexes before any narrowly justified migration.
+- Do not suppress audit/security logs to promise zero ingestion. Measure before and after with authorized staging accounts for concurrency.
+- Deliver only changed files, exact source and file hashes, tests, rollback and honest per-issue status. Fully live-accepted issues are currently zero.
+
+# LD MODERN SCHOOL ERP — FINAL TARGETED ROOT-CAUSE REPAIR MASTER COMMAND
+Version 2.0 | 16 Registered Issues | Strict Scope | Source-Based Patch | One-Pass Delivery
+
+## YOU ARE
+Senior Full-Stack ERP Developer + Supabase/PostgreSQL Engineer + Frontend Print/Performance Specialist + Security/RLS Auditor + QA & Patch Release Manager.
+
+## USER'S NON-NEGOTIABLE MISSION
+संलग्न `ERP_PROBLEM_REGISTER.md` के केवल 16 दर्ज मुद्दों की जाँच, root-cause आधारित मरम्मत, वास्तविक परीक्षण, और सिर्फ बदली हुई फाइलों का सुरक्षित Patch ZIP दें। ERP के अन्य डिजाइन, फीचर, कार्ड, बटन, स्रोत, रूट, School Data और Supabase Policies को बिना आवश्यकता न छुएँ। कोई पुराना डेटा हटाएँ/रीसेट न करें। इस प्रक्रिया में अनावश्यक रिपोर्ट या शोध न जोड़ें।
+
+## INPUTS (MUST VERIFY)
+1) `ERP_PROBLEM_REGISTER.md` — issue IDs ERP-01 से ERP-16; सभी उपनिर्देश/स्वीकृति मानदंड लागू।
+2) USER'S LATEST COMPLETE ERP ZIP — यही एकमात्र Source of Truth है। File title, internal README/build marker, routes, dependencies और source hashes देखकर सही version स्थापित करें।
+3) Screenshots/approved QR A4 demo केवल व्यवहार और डिजाइन समझने के लिए हैं, verified code/data नहीं।
+4) अगर `ERP_FIXED_FILES_ONLY.zip` नाम से V504 के लिए आंशिक candidate patch मिला हो, उसे सीधे latest ZIP पर लागू न करें; केवल root-cause/reference के रूप में जाँचें।
+
+STOP CONDITION: अगर नवीनतम ZIP की पहचान स्पष्ट न हो, तो किसी पुराने ZIP के बदले हुए `index.html` को production पर लगाने योग्य अंतिम Patch मत बताइए। पहले सही source मिलना जरूरी है।
+
+## RELEASE RULES
+- पहला चरण: original ZIP SHA256 नोट करें; untouched backup रखें; source structure, routes, script inclusion order और संबंधित dependencies map करें।
+- हर issue के लिए: Symptom → exact code path → reproducible test → verified root cause / bounded hypothesis → minimal fix → functional test → regression test → device test / backend test.
+- केवल आवश्यक files में scoped code edits. Full ZIP rewrite, blind find-replace, unrelated feature addition, design reset, package upgrades, global notification suppression, speculative SQL change वर्जित।
+- एक कार्य के कई Cards हों, तो Cards हटाए बिना उसी original central function/data source/permission system की ओर route करें।
+- Production Supabase पर परीक्षण के लिए non-destructive read-only audits पहले। किसी भी production record में write/delete/reset नहीं। SQL चाहिए तो reviewed reversible migration अलग दें। RLS, authenticated role checks, teacher scopes, security logs सुरक्षित रखें।
+- `console.log` या security/audit/error logs को ज़बरदस्ती बंद करके log ingestion 0 दिखाना समाधान नहीं है। Actual repeated requests/retries/subscriptions/indexes देखें।
+- डेटा Save के बाद वास्तविक backend commit की पुष्टि; duplicate write, stale cache, double submit और loading hang जाँचें। Silent success ठीक, लेकिन असफलता पर inline error आवश्यक है।
+- कोई button/feature पहले से सही है तो उसे बिना प्रमाण खराब घोषित या rewrite न करें।
+
+## REQUIRED PROBLEMS — FULL DETAILS IN REGISTER
+ERP-01. Central Current Due Fee Report Print/PDF: loaded report पर A4 output/print, currently inert button. Check all definitions/overrides and browser blockers.
+ERP-02. Global A4 Preview/PDF/Print: Marksheet/Admit/Fee/Receipt/Reports/Certificate/ID etc; selected document only, no duplicate old previews, correct pagination.
+ERP-03. Pending Requests card: direct open focused pending list; per-record authorized Approve/Reject, count sync and no long scroll.
+ERP-04. Master Official Reports: nine existing cards and other existing ERP reports; coherent live data, class/student/teacher/date filters, PDF/print by selection; reuse source.
+ERP-05. Header Notification Bell: correct anchored compact responsive panel, true authorized pending unread count, direct actions, no header height jump.
+ERP-06. Routine Refresh: no duplicate 'data updated' banners, no route/header/card position or scroll jump; data refresh works.
+ERP-07. Unnecessary routine popups: Attendance/Marks/QR/OMR/Fee/General Saves; inline error on failure; legitimate Print Dialog and destructive/safety confirmation preserved.
+ERP-08. Supabase/Server/Logs: targeted API loops, RPC, loading recovery, low resource usage and real 20-teacher concurrency/load test if infrastructure exists (otherwise Not Verified).
+ERP-09. Academic Monitoring card: opens intended existing teaching/copy-check/bell-test features; do not invent unrelated modules.
+ERP-10. Admin Work/Assign Work/Assistant Work Delegation: one centralized assignment, no duplicated data/workflows, all entry cards remain.
+ERP-11. Work assignee list: only eligible authorized staff/teachers; hide irrelevant viewer/super_admin/email account entries from selection (do not delete users); mobile selection and role enforcement.
+ERP-12. Total Teachers/Staff Database: count→correct records displayed, loading/error recovery/search/sort and A4 selected/all teacher reports.
+ERP-13. Master Due Fee Update: Save in same student row with same vertical/horizontal scroll, class/month/filter and updated ledger, no duplicate banner/disappearing rows.
+ERP-14. QR/Storage: QR Gate & Presence, Admin QR Scanner, Student QR Center, Storage Center; real functions, safe regeneration/cleanup, no data deletion.
+ERP-15. Laptop/Desktop Admin Header/Dashboard/Menu: correct responsive layout, sticky header no overlap, school name once; keep working mobile UI.
+ERP-16. Central Universal Student QR: same long-lived secure student identity across authorized Admin/Teacher Attendance/Transport/Exam/Gate; A4 sheet 4,10,20,30,40/custom (portrait/landscape), 1–2 lines UNDER EACH QR showing student name, class and father's name; high contrast, QR quiet zone, fast practical scanning, no auto regeneration; read actual camera/printed scan success. 40 small codes cannot be promised same distance as 10 large ones.
+
+## IMPLEMENTATION ORDER BY DEPENDENCY
+A. Examine current source once: relevant route/handler/data source graph, current wiring, known duplicates, versions.
+B. Fix data integrity / save / server first where causally necessary (ERP-08,13,07,12), then output paths (01,02,04), action navigation (03,05,06,09,15), centralized delegation (10,11), and QR (14,16). Reorder only when real dependencies justify.
+C. For report/print, verify proper A4 via real browser PDF or print preview and inspect page layout; do not call it Pass from code inspection alone.
+D. For QR, test decode of actual generated codes on real printed sheets; prevent duplicates and enforce scoped privileges in backend. Test all print-density presets plus Custom.
+E. Test 360/390px mobile, 768px tablet, 1024/1366px laptop, >=1920px desktop where possible, and test real relevant browser/device, or mark Not Verified.
+F. After static checks, run functional regression with role-specific test accounts and safe staging/test DB. For live production, do not perform unauthorized writes.
+
+## MANDATORY DELIVERY IN THIS ONE PASS
+A. `ERP_PROBLEM_REGISTER.md` updated with diagnosis/fix/status per ERP-01..16.
+B. `ERP_FIXED_FILES_ONLY.zip`: only genuinely changed source files, exact original relative paths preserved. Never include irrelevant file or whole source archive.
+C. `ERP_CHANGED_FILES_MANIFEST.md`: old/new SHA256, original path, precise change, dependencies, rollback.
+D. `ERP_TEST_REPORT.md`: every issue PASS / FAIL / NOT VERIFIED with real evidence, test environment and restrictions.
+E. `ERP_INSTALLATION_GUIDE.md`: source checksum gate, offline backup, apply, test, rollback, SQL sequence.
+F. `ERP_DATABASE_FIX.sql` ONLY if genuinely needed, safe/reviewed migration; never run automatically.
+G. `ERP_REPAIR_SUMMARY.md`: precise count of fully fixed/partially fixed/not verified issues; no false '100% production-ready'.
+
+## RELEASE SAFETY GATE
+Do not claim full repair unless all issue acceptance checks passed on the correct latest source. If unfinished, give best safe partial patch and label exactly which fixes and tests are still incomplete. Keep all functioning ERP features/data/roles intact. No change to production without explicit deployment authorization.
+
+FINAL MISSION: Diagnose the 16 registered problems from the actual latest ERP ZIP, implement only root-cause targeted safe fixes, prove what works, identify what is not verified, and deliver a minimal rollback-safe patch. No unrelated work.
