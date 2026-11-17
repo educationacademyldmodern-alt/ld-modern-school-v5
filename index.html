@@ -2604,10 +2604,16 @@ async function marksheetCenter(){
  $('erpContent').innerHTML=`<div class="panel"><div class="v14Search"><input id="mkSearch" placeholder="Student Name / Roll Number"><input id="mkExam" placeholder="Exam Name"><select id="mkTemplate" >${Object.entries(window.LDM_MARKSHEET.formats).map(([key,label])=>`<option value="${key}" ${getDocFormat('marksheet')===key?'selected':''}>${esc(label)}</option>`).join('')}</select><button class="v14Action primary" onclick="findMarkStudent()">Search Student</button></div><div class="v14Tabs"><select id="mkClass">${v14ClassOptions()}</select><button class="v14Action" onclick="generateClassMarksheets()">Generate All Class Marksheets</button><button class="v14Action" onclick="manageExamSubjects()">Add / Edit Subjects</button><button class="v14Action" onclick="exportReportCardExcel()">Excel Export</button><button class="v14Action" onclick="excelCenter()">Excel Import</button></div><div id="mkWork"></div></div>`;
 }
 async function findMarkStudent(){
- let z=$('mkSearch').value.trim();if(!z)return toast('Name or Roll No. डालें');let {data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${z.replace(/,/g,'')}%,roll_no.ilike.%${z.replace(/,/g,'')}%`).limit(10);if(error)return toast(error.message);
- if(!(data||[]).length)return $('mkWork').innerHTML='<div class="empty">Student not found</div>';
- if(data.length>1){$('mkWork').innerHTML=`<div class="tableWrap"><table>${data.map(s=>`<tr><td>${esc(s.student_name)}</td><td>${esc(s.roll_no||'')}</td><td>${esc(s.class_name||'')}</td><td><button onclick="loadMarkStudent('${s.id}')">Select</button></td></tr>`).join('')}</table></div>`}else loadMarkStudent(data[0].id);
+ const input=$('mkSearch'),host=$('mkWork');if(!input||!host)return;const z=input.value.trim(),who=profile?.id,ticket=window.__mk525Search=(window.__mk525Search||0)+1;window.__m346StudentLoad=(window.__m346StudentLoad||0)+1;
+ let status=$('mk525SearchStatus');if(!status){status=document.createElement('p');status.id='mk525SearchStatus';status.setAttribute('role','status');host.before(status)}
+ const current=()=>ticket===window.__mk525Search&&who===profile?.id&&host.isConnected&&input.isConnected&&input.value.trim()===z;
+ if(!z){status.textContent='नाम या रोल नंबर लिखें।';input.focus();return}status.textContent='लोड हो रहा है…';
+ try{const safe=z.replace(/[%_,()]/g,' ').trim();if(!safe)throw Error('सही नाम या रोल नंबर लिखें।');const {data,error}=await sb.from('students').select('*').or(`student_name.ilike.%${safe}%,roll_no.ilike.%${safe}%`).limit(10);if(!current())return;if(error)throw error;status.textContent='';
+ if(!(data||[]).length){host.innerHTML='<div class="empty">Student not found</div>';return}
+ if(data.length>1)host.innerHTML=`<div class="tableWrap"><table>${data.map(s=>`<tr><td>${esc(s.student_name)}</td><td>${esc(s.roll_no||'')}</td><td>${esc(s.class_name||'')}</td><td><button onclick="loadMarkStudent('${esc(s.id)}')">Select</button></td></tr>`).join('')}</table></div>`;else await loadMarkStudent(data[0].id);
+ }catch(e){if(current())status.textContent=(e.message||String(e))+' • Search दबाकर फिर प्रयास करें।'}
 }
+
 async function loadMarkStudent(id){
  const request=window.__m346StudentLoad=(window.__m346StudentLoad||0)+1,who=profile?.id,sess=school.academic_session,host=$('mkWork');let {data:s,error}=await sb.from('students').select('*').eq('id',id).single();if(request!==window.__m346StudentLoad||who!==profile?.id||sess!==school.academic_session||!host?.isConnected)return;if(error)return toast(error.message);v14MarkStudent=s;let exam=$('mkExam').value.trim();if(!exam)return toast('Exam Name डालें');
  let [{data:subs,error:subjectError},{data:marks,error:marksError}]=await Promise.all([sb.from('exam_subjects').select('*').eq('academic_session',school.academic_session).eq('class_name',s.class_name).eq('exam_name',exam).eq('is_active',true).order('sort_order'),sb.from('student_marks').select('*').eq('academic_session',school.academic_session).eq('admission_no',s.admission_no).eq('exam_name',exam)]);
@@ -18919,7 +18925,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="marksheet-core.css?v=444">
 <link rel="stylesheet" href="documents-v345.css?v=345">
 <script src="document-qrcode-v345.min.js?v=345"></script>
-<script src="documents-v345.js?v=444"></script>
+<script src="documents-v345.js?v=525-444"></script>
 <script src="teacher-save-v345.js?v=473"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
@@ -18928,7 +18934,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=460">
 <script src="desktop-premium-v378.js?v=390"></script>
-<script src="admin-documents-v389.js?v=521"></script>
+<script src="admin-documents-v389.js?v=525"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
 <script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=421"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=446"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=508"><script src="id-card-v447.js?v=508"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=511"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=475"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=475"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=517"></script><script defer src="erp-v505-stability.js?v=505"></script>
@@ -18952,5 +18958,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 })();
 </script>
 
+<script src="search-scroll-v525.js?v=525"></script>
+<script src="ldm-fee-reminder-smart.js?v=2.1"></script>
 </body>
 </html>
