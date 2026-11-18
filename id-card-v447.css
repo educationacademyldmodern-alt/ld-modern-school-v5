@@ -58,3 +58,16 @@ html body .i447Card .v164Foot{height:2.5mm!important;min-height:2.5mm!important;
 html body .i447Card.landscape .i447Main{grid-template-columns:14mm minmax(0,1fr) 16mm!important}
 html body .i447Card.landscape .i447Footer{height:5mm!important;min-height:5mm!important;flex-basis:5mm!important;justify-content:flex-end!important}
 html body .i447Card.landscape .i447Header{height:12mm!important;min-height:12mm!important;flex-basis:12mm!important}
+
+/* V530: use portrait height for readable details, not an empty expanding body. */
+html body .i447Card.portrait .i447Header{height:auto!important;min-height:14mm!important;flex:0 0 auto!important;overflow:visible!important}
+html body .i447Card.portrait .i447School strong{font:700 7.2pt/1.15 id447,Arial,sans-serif!important}
+html body .i447Card.portrait .i447School small{font:400 5.3pt/1.18 id447,Arial,sans-serif!important;overflow:visible!important}
+html body .i447Card.portrait .i447School em{font:700 4.8pt/1.15 id447,Arial,sans-serif!important}
+html body .i447Card.portrait .i447Name{font-size:calc(8.4pt * var(--id-fit))!important}
+html body .i447Card.portrait .i447Line{font-size:calc(7pt * var(--id-fit))!important;line-height:1.22!important}
+html body .i447Roomy .i447Card.portrait .i447Main{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:18mm minmax(0,1fr)!important;gap:1mm!important;padding:1mm 2mm!important}
+html body .i447Roomy .i447Card.portrait .i447Photo{width:16mm!important;height:18mm!important;justify-self:center!important}
+html body .i447Roomy .i447Card.portrait .i447Info{height:auto!important;align-self:start!important}
+html body .i447Roomy .i447Card.portrait .i447Name{font-size:calc(9pt * var(--id-fit))!important;text-align:center!important}
+html body .i447Roomy .i447Card.portrait .i447Line{font-size:calc(8pt * var(--id-fit))!important;line-height:1.25!important;margin:.35mm 0!important}
