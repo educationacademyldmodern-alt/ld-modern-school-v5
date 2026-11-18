@@ -71,3 +71,11 @@ html body .i447Roomy .i447Card.portrait .i447Photo{width:16mm!important;height:1
 html body .i447Roomy .i447Card.portrait .i447Info{height:auto!important;align-self:start!important}
 html body .i447Roomy .i447Card.portrait .i447Name{font-size:calc(9pt * var(--id-fit))!important;text-align:center!important}
 html body .i447Roomy .i447Card.portrait .i447Line{font-size:calc(8pt * var(--id-fit))!important;line-height:1.25!important;margin:.35mm 0!important}
+
+/* V531: balanced details and a cutting guide around each populated cell. */
+html body .i447Card .i447Info{padding-inline:1mm!important;box-sizing:border-box!important}
+html body .i447Card.portrait .i447Info,html body .i447Roomy .i447Card.portrait .i447Info{text-align:center!important;padding-inline:1.5mm!important}
+html body .i447Card.portrait .i447Name,html body .i447Card.portrait .i447Line{text-align:center!important}
+html body .i447Sheet .i447Cell{position:relative!important;overflow:visible!important}
+html body .i447Sheet .i447Cell::after{content:"";position:absolute;inset:-.6mm;box-sizing:border-box;border:.18mm dashed #536372;border-radius:0;pointer-events:none;z-index:2}
+@media print{html body .i447Sheet .i447Cell::after{display:block!important;border-color:#222!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
