@@ -40,3 +40,21 @@ html body .i447Card.portrait .i447Main{gap:1mm!important}html body .i447Card.por
 /* V508: student photo actions, primary camera/gallery and accessible retry. */
 .v508PhotoActions{align-items:center;gap:8px}.v508PhotoActions .primary,.v508PhotoActions .v508Pick{min-height:44px;display:inline-flex;align-items:center;justify-content:center;line-height:1.3}.v508PhotoActions .v508PhotoMore{width:100%;font-size:13px}.v508PhotoMore>summary{cursor:pointer;font-weight:700;padding:6px 2px}.v508PhotoMore>button{margin:3px 5px 3px 0}.v508PhotoActions button:disabled,.v508PhotoActions input:disabled{opacity:.5;cursor:not-allowed}
 @media(max-width:500px){.v508PhotoActions>.primary,.v508PhotoActions>.v508Pick{flex:1 1 45%;text-align:center}.v508PhotoActions{width:100%}}
+
+/* V526: a single physical grid shared by screen, PDF and print. */
+html body .i447Sheet,html body .i447Sheet.i447Portrait,html body #a337Document .i447Sheet{grid-template-columns:repeat(var(--id-cols,2),minmax(0,1fr))!important;grid-template-rows:repeat(var(--id-rows,5),minmax(0,1fr))!important;gap:3mm!important}
+html body .i447Sheet .i447Card,html body .i447Sheet .i447Card.portrait{width:var(--id-cell-width)!important;min-width:0!important;max-width:100%!important;height:var(--id-cell-height)!important}
+html body .i447Card .i447Header,html body .i447Card.portrait .i447Header{height:13mm!important;min-height:13mm!important;flex:0 0 13mm!important;grid-template-columns:9mm minmax(0,1fr)!important;padding:1mm 1.5mm!important;gap:1mm!important}
+html body .i447Card .i447Logo{width:9mm!important;height:9mm!important}html body .i447Card .i447School strong{font-size:6.5pt!important}html body .i447Card .i447School small{font-size:4.5pt!important}
+html body .i447Card .i447Main,html body .i447Card.portrait .i447Main{display:grid!important;grid-template-columns:14mm minmax(0,1fr)!important;position:static!important;gap:1.5mm!important;padding:1mm 1.5mm!important;flex:1 1 auto!important;min-height:0!important;align-items:start!important}
+html body .i447Card .i447Photo,html body .i447Card.portrait .i447Photo{display:block!important;width:14mm!important;height:17mm!important;max-height:100%!important}
+html body .i447Card .i447Info,html body .i447Card.portrait .i447Info{display:block!important;width:100%!important;height:100%!important;min-height:0!important;text-align:left!important;visibility:visible!important}
+html body .i447Card .i447Name,html body .i447Card.portrait .i447Name{font-size:calc(7pt * var(--id-fit))!important;line-height:1.15!important}html body .i447Card .i447Line,html body .i447Card.portrait .i447Line{font-size:calc(6pt * var(--id-fit))!important;line-height:1.18!important;margin:.15mm 0!important}
+html body .i447Card .i447Footer,html body .i447Card.portrait .i447Footer{height:16mm!important;min-height:16mm!important;flex:0 0 16mm!important;justify-content:space-between!important;padding:0 1.5mm .5mm!important}
+html body .i447Card .v164MainQr{position:static!important;width:16mm!important;min-width:16mm!important}.i447Card .v164QrBox small{display:none!important}
+html body .i447Card .v164Foot{height:2.5mm!important;min-height:2.5mm!important;flex-basis:2.5mm!important;font-size:4pt!important}
+
+/* Landscape keeps QR beside details; portrait reserves a footer zone. */
+html body .i447Card.landscape .i447Main{grid-template-columns:14mm minmax(0,1fr) 16mm!important}
+html body .i447Card.landscape .i447Footer{height:5mm!important;min-height:5mm!important;flex-basis:5mm!important;justify-content:flex-end!important}
+html body .i447Card.landscape .i447Header{height:12mm!important;min-height:12mm!important;flex-basis:12mm!important}
