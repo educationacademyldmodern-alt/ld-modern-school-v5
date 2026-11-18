@@ -31,7 +31,54 @@ function historyHtml(kind,rows){return rowsTable(rows,kind==='leave'?[['from_dat
 async function open(key,s){if(!s?.admission_no)return window.toast?.('Student admission link उपलब्ध नहीं है। Admin से जाँच कराएँ।');const box=panel(s,key),mine=++token;const show=html=>{if(mine===token&&box.isConnected)box.innerHTML=html};
  try{
  if(['leave','correction','help'].includes(key)){paintForm(box,s,key,'Loading…');try{const d=await data(key,s);if(mine===token)box.querySelector('#v643History').innerHTML=historyHtml(key,d.rows||[])}catch(e){if(mine===token)message(box.querySelector('#v643History'),e.message,true)}return}
- if(key==='results'){const d=await rpc('v67_parent_result_list',{p_admission_no:s.admission_no});show((Array.isArray(d)?d:[]).map((r,i)=>`<article class="v643Item"><h3>${E(r.exam_name)}</h3><p>${E(r.message||'')}</p>${r.can_view?`<button data-exam-index="${i}">Preview Marksheet</button>`:'<strong>🔒 Admin / Fee clearance required</strong>'}</article>`).join('')||empty('कोई result अभी प्रकाशित नहीं है।'));box.querySelectorAll('[data-exam-index]').forEach(b=>b.onclick=async()=>{try{b.disabled=true;const r=d[Number(b.dataset.examIndex)],m=await rpc('v67_parent_published_marksheet',{p_admission_no:s.admission_no,p_exam_name:r.exam_name});if(mine!==token)return;show(`<div id="v643ResultPreview" class="v643Document">${renderMarksheetHtml(m.student||s,m.marks||[],m.exam_name||r.exam_name,typeof getDocFormat==='function'?getDocFormat('marksheet'):1)}</div><button id="v643Print">Print / Save PDF</button>`);box.querySelector('#v643Print').onclick=()=>v14Print('v643ResultPreview')}catch(e){message(box,e.message,true)}});return}
+ if(key==='results'){
+  const d=await rpc('v67_parent_result_list',{p_admission_no:s.admission_no});
+  show((Array.isArray(d)?d:[]).map((r,i)=>`<article class="v643Item"><h3>${E(r.exam_name)}</h3><p>${E(r.message||'')}</p>${r.can_view?`<button type="button" data-exam-index="${i}">Preview Marksheet</button>`:'<strong>🔒 Admin / Fee clearance required</strong>'}</article>`).join('')||empty('कोई result अभी प्रकाशित नहीं है।'));
+  box.querySelectorAll('[data-exam-index]').forEach(b=>b.onclick=async()=>{
+    const r=d[Number(b.dataset.examIndex)];if(!r?.can_view)return;
+    b.disabled=true;
+    try{
+      const m=await rpc('v67_parent_published_marksheet',{p_admission_no:s.admission_no,p_exam_name:r.exam_name});
+      if(mine!==token)return;
+      const student=m?.student||s,exam=m?.exam_name||r.exam_name;
+      if(String(student.admission_no)!==String(s.admission_no)||String(exam)!==String(r.exam_name))throw Error('Result belongs to a different student or exam. Admin must check the published record.');
+      // Only the authorized result RPC supplies marks. Never fetch another student's marks or invent values.
+      const publishedRows=Array.isArray(m?.marks)?m.marks:[];
+      const marks=publishedRows.map(row=>({
+        ...row,
+        subject_name:row.subject_name??row.subject,
+        max_marks:row.max_marks??row.maximum_marks,
+        obtained_marks:row.obtained_marks??row.marks,
+        exam_name:row.exam_name||exam,
+        admission_no:row.admission_no||s.admission_no
+      })).filter(row=>String(row.subject_name||'').trim());
+      if(!marks.length){
+        show('<p class="v643Error" role="alert">Result publish है, लेकिन Parent Result RPC से विषयवार अंक नहीं मिले। Admin को Central Exam marks और v67_parent_published_marksheet की जाँच करनी होगी। गलत/खाली मार्कशीट नहीं दिखाई गई है।</p>');
+        return;
+      }
+      if(!marks.some(row=>row.obtained_marks!==null&&row.obtained_marks!==undefined&&String(row.obtained_marks).trim()!=='')){
+        show('<p class="v643Error" role="alert">Result published है, लेकिन सर्वर ने विषयों के प्राप्त अंक नहीं लौटाए। गलत कुल/प्रतिशत नहीं बनाए गए हैं। Admin को result RPC और Central Exam Sync की जाँच करनी होगी।</p>');
+        return;
+      }
+      if(marks.some(row=>String(row.admission_no)!==String(s.admission_no)||String(row.exam_name)!==String(exam))){
+        throw Error('Published marks contain a different student or exam. Contact Admin.');
+      }
+      if(!window.LDM_MARKSHEET?.render)throw Error('Shared marksheet template missing; upload the full V533 changed files.');
+      const format=(window.LDM_MARKSHEET.formats?.[m?.format]?m.format:null)||window.LDM_MARKSHEET.getDefault?.()||(typeof getDocFormat==='function'?getDocFormat('marksheet'):1);
+      const allowedResult=['PASS','FAIL','NEEDS IMPROVEMENT','PROMOTED','NOT PROMOTED'].includes(String(m?.result||'').toUpperCase())?String(m.result).toUpperCase():null;
+      const options={...(window.LDM_DOCUMENTS_V345?.previewOptions?.(student,exam)||{}),...(m?.rules&&typeof m.rules==='object'?{rules:m.rules}:{}),parentPublished:true,parentResult:allowedResult||'PUBLISHED RESULT'};
+      show(`<div class="v534ReadTools" data-no-print role="toolbar" aria-label="Marksheet reading controls"><button type="button" data-v534-zoom="read" aria-pressed="true">🔎 साफ़ पढ़ें</button><button type="button" data-v534-zoom="fit" aria-pressed="false">पूरा पेज</button><button type="button" data-v534-zoom="out" aria-label="Zoom out">−</button><b data-m534-scale aria-live="polite">125%</b><button type="button" data-v534-zoom="in" aria-label="Zoom in">+</button></div><p class="v534ReadHint" data-no-print>मार्कशीट पढ़ने के लिए बाएँ-दाएँ खिसकाएँ। पूरा पेज देखने के लिए “पूरा पेज” दबाएँ। प्रिंट/PDF में A4 आकार ही रहेगा।</p><div id="v643ResultPreview" class="v643Document" data-m534-zoom-mode="read" data-m534-read-zoom="1.25">${window.LDM_MARKSHEET.render(student,marks,exam,format,options)}</div><button type="button" id="v643Print">Print / Save PDF</button>`);
+      window.LDM_MARKSHEET_VIEW444?.prepare?.();
+      box.querySelectorAll('[data-v534-zoom]').forEach(button=>button.onclick=()=>window.LDM_MARKSHEET_VIEW444?.setParentZoom?.(box.querySelector('#v643ResultPreview'),button.dataset.v534Zoom));
+      box.querySelector('#v643Print').onclick=()=>{
+        const root=box.querySelector('#v643ResultPreview');
+        if(window.LDM_A4_V337?.preview)return window.LDM_A4_V337.preview(root,'Published Student Marksheet',{orientation:'portrait'});
+        message(box,'A4 preview module unavailable. Upload a4-print-v337.js with the project.',true);
+      };
+    }catch(e){if(mine===token)message(box,e.message,true);}
+    finally{if(b.isConnected)b.disabled=false;}
+  });return;
+ }
  if(key==='admit'){const d=await rpc('v75_parent_admit_cards',{}),all=Array.isArray(d)?d:d?.cards||[],rows=all.filter(x=>String(x.student?.admission_no)===String(s.admission_no));show(rows.map((x,i)=>`<article class="v643Item"><h3>${E(x.exam?.exam_name||'Exam')}</h3>${x.student?.is_withheld?`<p>🔒 ${E(x.student.hold_reason||'Admin hold')}</p>`:`<button data-admit-index="${i}">Preview Admit Card</button>`}</article>`).join('')||empty('Admit Card अभी प्रकाशित नहीं है।'));box.querySelectorAll('[data-admit-index]').forEach(b=>b.onclick=()=>{const x=rows[Number(b.dataset.admitIndex)];show(`<div id="v643AdmitPreview" class="v643Document">${v75ParentAdmitHtml(x)}</div><button id="v643Print">Print / Save PDF</button>`);box.querySelector('#v643Print').onclick=()=>v14Print('v643AdmitPreview')});return}
  if(key==='idcard'){const student=await rpc('v65_parent_official_card',{p_admission_no:s.admission_no});const r=student?.student||student;if(r?.photo_path){const photo=await sb.storage.from('student-media').createSignedUrl(r.photo_path,900);if(photo.data?.signedUrl)r._signed_photo=photo.data.signedUrl}if(!r)throw Error('ID card data उपलब्ध नहीं है।');show(`<div id="v643IDPreview" class="v643Document">${renderIdCard(r,typeof getDocFormat==='function'?getDocFormat('idcard'):1)}</div><button id="v643Print">Print / Save PDF</button>`);box.querySelector('#v643Print').onclick=()=>v14Print('v643IDPreview');return}
  const d=await data(key,s);if(mine!==token)return;const rows=d.rows||[];
