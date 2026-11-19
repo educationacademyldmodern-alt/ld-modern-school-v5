@@ -17279,11 +17279,15 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     const idText=String(id),input=$id('v6422Amt_'+id),focus521=document.activeElement,tr=input?.closest('tr');
     if(!tr||dueSaves521.has(idText))return;
     let status=tr.querySelector('[data-save-status]');
-    if(!status){status=document.createElement('small');status.dataset.saveStatus='1';status.setAttribute('role','status');tr.lastElementChild.append(status)}
+    if(!status){status=document.createElement('small');status.dataset.saveStatus='1';status.setAttribute('role','status');status.style.cssText='display:block;max-width:240px;overflow-wrap:anywhere;white-space:normal';tr.lastElementChild.append(status)}
     if(feeUncertainV536.has(idText)){
       status.textContent='पिछली Save की स्थिति अनिश्चित है। Ledger जाँचकर पेज Refresh करें; बिना पुष्टि दोबारा अपडेट नहीं होगा।';return;
     }
-    const row={due_till_month:$id('v6422DueMonth')?.value||monthNow(),due_till_amount:input.value,fixed_monthly_fee:$id('v6422Fix_'+id)?.value??'',fixed_fee_start_month:$id('v6422Start_'+id)?.value||'',fee_plan:$id('v6422Mode_'+id)?.value};
+    // V548: the immediate-due checkbox controls the effective month, not the monthly fee start.
+    // Existing V547 fee RPC does the signed adjustment + canonical snapshot verification atomically.
+    const v548ApplyNow=$id('v548DueNow')?.checked!==false;
+    const v548SelectedMonth=$id('v6422DueMonth')?.value||monthNow();
+    const row={due_till_month:v548ApplyNow?monthNow():v548SelectedMonth,due_till_amount:input.value,fixed_monthly_fee:$id('v6422Fix_'+id)?.value??'',fixed_fee_start_month:$id('v6422Start_'+id)?.value||'',fee_plan:$id('v6422Mode_'+id)?.value};
     if(!has(row.due_till_amount)||!Number.isFinite(Number(row.due_till_amount))||Number(row.due_till_amount)<0){status.textContent='सही बकाया राशि डालें।';return}
     if(row.fixed_monthly_fee!==''&&(!Number.isFinite(Number(row.fixed_monthly_fee))||Number(row.fixed_monthly_fee)<0)){status.textContent='सही मासिक शुल्क डालें।';return}
     const controls=[...tr.querySelectorAll('input,select,button')].map(el=>[el,el.disabled]);
@@ -17298,7 +17302,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
       if(!current522())throw Error('Account/session changed; save cancelled.');
       const state=await feeAwaitV536(loadOneFeeState(adm),'Fee State Loading');
       if(!current522())throw Error('Account/session changed; save cancelled.');
-      await saveCentralFee(sr.data,row,state,'Master Due Update V240');committed=true;
+      await saveCentralFee(sr.data,row,state,v548ApplyNow?'Current Due Effective Now V548':'Future Due Target V548');committed=true;
       if(!current522())return;
       window.ldmMarkDataDirty?.('fees',{owner:owner522,session:session522});
       const snapshot=async month=>{
@@ -17308,15 +17312,18 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
         if(!v||!Number.isFinite(Number(v.current_due)))throw Error('Balance confirmation unavailable');return v;
       };
       const now=await snapshot(monthNow()),till=row.due_till_month===monthNow()?now:await snapshot(row.due_till_month);
+      // Verify actual CURRENT balance too; never show a false success after a different amount is persisted.
+      if(v548ApplyNow&&Math.abs(Number(now.current_due)-Number(row.due_till_amount))>0.009)
+        throw Error('Central Current Due not updated to the requested amount. Check Ledger and retry after refresh.');
       if(!tr.isConnected||!current522())return;
       const cash=v=>'₹'+Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}),amount=Number(now.current_due);
-      tr.dataset.currentDue=String(amount);input.value=String(till.current_due);input.defaultValue=input.value;
+      tr.dataset.currentDue=String(amount);input.value=String(v548ApplyNow?now.current_due:till.current_due);input.defaultValue=input.value;
       tr.cells[7].innerHTML='<b>'+cash(amount)+'</b><small class="cellSub">Till '+esc2(row.due_till_month)+': '+cash(till.current_due)+'</small>';
       tr.cells[8].innerHTML='<span class="v200Status '+(amount>0?(Number(now.unallocated_credit)>0?'partial':'due'):'clear')+'">'+(amount>0?(Number(now.unallocated_credit)>0?'PARTIAL / DUE':'DUE'):'CLEAR')+'</span>';
       const baseline=tr.querySelector('.v200DueSaved');if(baseline)baseline.textContent='Saved '+cash(row.due_till_amount)+' till '+row.due_till_month;
       const summary=$id('v6422DueRows')?.querySelectorAll('.v200DueSummary b');
       if(summary?.length===4){const rs=[...$id('v6422DueRows').querySelectorAll('tr[data-current-due]')],dues=rs.filter(r=>Number(r.dataset.currentDue)>0).length;summary[1].textContent=String(dues);summary[2].textContent=String(rs.length-dues);summary[3].textContent=cash(rs.reduce((n,r)=>n+Number(r.dataset.currentDue),0))}
-      status.textContent='✓ Save confirmed • बैलेंस अपडेट';
+      status.textContent=v548ApplyNow?'✓ Current Due '+cash(amount)+' सेव व सत्यापित • लागू '+row.due_till_month:'✓ Future Due '+cash(till.current_due)+' सेव व सत्यापित • '+row.due_till_month;
     }catch(e){
       if(e?.code==='LDM_FEE_UNCERTAIN')feeUncertainV536.add(idText);
       if(tr.isConnected&&current522()){
@@ -17333,7 +17340,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
 
   window.v75MFSaveDue=async function(){
     const s=window.v75MFStudent;if(!s?.admission_no)return window.toast?.('Student not loaded');
-    try{const state=await loadOneFeeState(s.admission_no),row={due_till_month:(window.ldmV241GetClassCutoffSync?.(s.class_name)||monthNow()),due_till_amount:$id('v75MFDue')?.value??''},changed=await saveCentralFee(s,row,state,$id('v75MFReason')?.value||'Master Fee current due V240');window.ldmMarkDataDirty?.('fees');await window.v75MFOpen?.(s.id)}catch(e){window.toast?.(e?.message||String(e))}
+    try{const state=await loadOneFeeState(s.admission_no),row={due_till_month:monthNow(),due_till_amount:$id('v75MFDue')?.value??''},changed=await saveCentralFee(s,row,state,$id('v75MFReason')?.value||'Master Fee current due V240');window.ldmMarkDataDirty?.('fees');await window.v75MFOpen?.(s.id)}catch(e){window.toast?.(e?.message||String(e))}
   };
 
   window.v76ImportClassFeeExcel=async function(e){
@@ -17497,7 +17504,16 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
         btn.onclick=async()=>{if(!cls||cls.selectedIndex<1)return window.toast?.('पहले कक्षा चुनें');try{const c=tx(cls?.value),ym=tx(inp?.value);await saveCutoff(c,ym);window.toast?.(`Class ${c} • Central Due Till ${ym} saved`);await applySavedCutoff(true);window.ldmMarkDataDirty?.('fees')}catch(e){window.toast?.(e?.message||String(e))}};
         const badge=document.createElement('span');badge.id='v241CutoffStatus';badge.className='v241CutoffBadge';
         tool.append(btn,badge);
-        const note=document.createElement('div');note.className='v241CutoffNote';note.textContent='Month बदलने के बाद Save Till Month दबाएँ. Payment होने पर central due अपने-आप घटेगा; receipt/history सुरक्षित रहेगी.';tool.append(note);
+        const note=document.createElement('div');note.className='v241CutoffNote';note.textContent='Month बदलने के बाद Save Till Month दबाएँ. Payment होने पर central due अपने-आप घटेगा; receipt/history सुरक्षित रहेगी.';        tool.append(note);
+        // V548: make immediate/current versus future-target meaning explicit.
+        const immediate=document.createElement('label');
+        immediate.id='v548DueNowLabel';
+        immediate.style.cssText='display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 12px;border:1px solid #aac7dc;border-radius:10px;background:#eff7fc;cursor:pointer;max-width:100%';
+        const check=document.createElement('input');check.type='checkbox';check.id='v548DueNow';check.checked=true;
+        const description=document.createElement('span');description.textContent='अभी देय / Central Current Due — दर्ज रकम आज से लागू करें';
+        immediate.append(check,description);
+        const help=document.createElement('div');help.style.cssText='width:100%;font-size:12px;color:#43556a';help.textContent='✓ ON: UPDATE पर दर्ज राशि अभी देय होगी। OFF: चुने गए Due Till Month का भविष्य वाला बकाया सेव होगा। भुगतान/रसीद सुरक्षित रहेंगे।';
+        immediate.append(help);tool.append(immediate);
       }
       if(cls){cls.onchange=()=>{const rows=q('v6422DueRows');if(rows){rows.dataset.load=String(Number(rows.dataset.load||0)+1);rows.textContent='लोड हो रहा है…'}return applySavedCutoff(true)}}
       if(inp){inp.onchange=()=>{const c=tx(cls?.value);paintCutoffStatus(c,inp.value,false)}}
