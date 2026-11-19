@@ -993,7 +993,7 @@ body.ldmSurfaceParent #v6422ParentBar{position:relative!important;top:auto!impor
 
 <section id="login" class="auth hidden"><div class="loginGrid"><div class="loginHero"><img src="school-logo.png" alt="School Logo" style="width:104px;height:104px;object-fit:contain"><h1>L D MODERN EDUCATION ACADEMY</h1><p>Premium Secure School ERP</p><button class="ghost" onclick="backWebsite()">← Public Website</button></div><div class="authCard"><div class="ldmAuthActions455"><button type="button" onclick="backWebsite()">← वापस / Back</button><button type="button" data-ldm-appearance-open>◐ Appearance / थीम</button></div><span class="pill">OFFICIAL SCHOOL ERP LOGIN</span><h2>Welcome Back</h2><div id="ldmSecurityOrigin" class="ldmSecurityOrigin" aria-live="polite"></div><label class="ldmLoginLabel" for="email">Email / Login ID</label><input id="email" name="username" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Email"><label class="ldmLoginLabel" for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password"><button id="ldmPrimaryLoginBtn" onclick="login()">Login</button><div class="loginLinks"><small>Accounts are created by School Admin only.</small></div><small>Admin • Principal • Admission • Accountant • Teacher • Student • Parent</small></div></div></section>
 
-<div id="erp" class="erp hidden"><aside><div class="sideBrand"><div class="logoText small">LD</div><div><b id="sideName">L D MODERN EDUCATION ACADEMY</b><small id="roleText"></small></div></div><nav id="erpNav"></nav><button class="logout" onclick="logout()">⇥ Logout</button></aside><main><header class="erpTop"><button class="hamb" onclick="document.querySelector('#erp aside').classList.toggle('open')">☰</button><button class="erpHomeBtn" onclick="erpGoHome()" title="Home">🏠 Home</button><div><h2 id="erpTitle">Dashboard</h2><p id="erpSub"></p></div><button class="websiteBtn" onclick="backWebsite()">View Website</button></header><section id="erpContent"></section></main></div>
+<div id="erp" class="erp hidden"><aside><div class="sideBrand"><div class="logoText small">LD</div><div><b id="sideName">L D MODERN EDUCATION ACADEMY</b><small id="roleText"></small></div></div><nav id="erpNav"></nav><button class="logout" onclick="logout()">⇥ Logout</button></aside><main><header class="erpTop"><button class="hamb" onclick="if(window.innerWidth<=900)document.querySelector('#erp aside')?.classList.toggle('open')">☰</button><button class="erpHomeBtn" onclick="erpGoHome()" title="Home">🏠 Home</button><div><h2 id="erpTitle">Dashboard</h2><p id="erpSub"></p></div><button class="websiteBtn" onclick="backWebsite()">View Website</button></header><section id="erpContent"></section></main></div>
 <div id="modal" class="modal hidden"><div class="modalCard"><div class="modalHead"><h3 id="modalTitle"></h3><button onclick="closeModal()">✕</button></div><form id="dataForm"></form></div></div>
 <input id="excelFile" type="file" accept=".xlsx,.xls,.csv" class="hidden"><div id="cameraModal" class="cameraModal hidden"><div class="cameraCard"><h3>Student Camera</h3><video id="cameraVideo" playsinline autoplay></video><canvas id="cameraCanvas" class="hidden"></canvas><div class="cameraActions"><button type="button" class="primary" onclick="captureCamera()">📸 Capture Photo</button><button type="button" class="secondary" onclick="closeCamera()">Cancel</button></div></div></div><div id="toast" class="toast hidden"></div><script>
 
@@ -10570,11 +10570,13 @@ function v97Initials(name){return String(name||v97RoleLabel()).trim().split(/\s+
 function v97Greeting(){if(matchMedia('(min-width:901px)').matches&&window.LDM_DESKTOP_SHELL_V390)return window.LDM_DESKTOP_SHELL_V390.greeting();let h=new Date().getHours();return matchMedia('(min-width:901px)').matches&&(h%24<5||h%24>=21)?'Good Night':h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
 function v97NowText(){try{return new Date().toLocaleString('en-IN',{weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}catch(_e){return ''}}
 function v97AvatarUrl(){return String(profile?.avatar_url||window.__v97LegacyAvatar||localStorage.getItem('ld_v97_avatar_'+(user?.id||''))||'').trim()}
-function v97AvatarHtml(cls='v97WelcomeAvatar'){let u=v97AvatarUrl(),n=profile?.full_name||v97RoleLabel();return u?`<img class="${cls}" src="${v97Safe(u)}?v=${encodeURIComponent(String(profile?.updated_at||''))}" alt="Profile">`:`<div class="${cls==='v97WelcomeAvatar'?'v97WelcomeFallback':'v97ParentFallback'}">${v97Safe(v97Initials(n))}</div>`}
+function v97AvatarHtml(cls='v97WelcomeAvatar'){let u=v97AvatarUrl(),n=profile?.full_name||v97RoleLabel();let url=u?(u+(u.includes('?')?'&':'?')+'v='+encodeURIComponent(String(profile?.updated_at||'profile'))):'';return url?`<img class="${cls}" src="${v97Safe(url)}" alt="Profile">`:`<div class="${cls==='v97WelcomeAvatar'?'v97WelcomeFallback':'v97ParentFallback'}">${v97Safe(v97Initials(n))}</div>`}
 function v97SetInline(message,type=''){let root=document.getElementById('erpContent');if(!root)return;let b=document.getElementById('v97InlineStatus');if(!b){b=document.createElement('div');b.id='v97InlineStatus';root.prepend(b)}b.className='v97InlineStatus show '+(type||'');b.textContent=String(message||'');clearTimeout(window.__v97InlineTimer);window.__v97InlineTimer=setTimeout(()=>b?.classList.remove('show'),6500)}
 
 /* Mirror normal notifications inside the current view so saves/errors do not require navigation. */
-try{const v97ToastBase=toast;toast=function(m){try{v97SetInline(m,/error|failed|not found|missing|wrong|invalid/i.test(String(m||''))?'bad':/saved|updated|success|ready|created|complete/i.test(String(m||''))?'ok':'')}catch(_e){};return v97ToastBase.apply(this,arguments)}}catch(_e){}
+/* V539: Canonical toast() already renders one inline status for ERP.
+   Do not mirror the same success/error into v97InlineStatus.
+   Explicit v97SetInline() callers remain supported. */
 
 /* Public founder + optional website person/designation card. */
 function v97ApplyPublicBranding(){
@@ -10611,7 +10613,37 @@ try{v38GetProfilePhoto=async function(){return await v97LoadLegacyAvatar()}}catc
 try{v38UploadProfilePhoto=async function(inputId){let input=typeof inputId==='string'?$(inputId):inputId;return await v97UploadAvatar(input)}}catch(_e){}
 
 /* Premium top identity + robust menu close. */
-function v97InstallTopIdentity(){try{let top=document.querySelector('#erp .erpTop');if(!top||!user)return;let rr=String(window.profile?.role||'').trim().toLowerCase();if(['admin','super_admin','principal'].includes(rr))return;let old=document.getElementById('v97TopIdentity');if(old)old.remove();let d=document.createElement('button');d.type='button';d.id='v97TopIdentity';d.className='v97TopIdentity';let u=v97AvatarUrl(),n=profile?.full_name||v97RoleLabel();d.innerHTML=`${u?`<img src="${v97Safe(u)}?v=${Date.now()}" alt="Profile">`:`<span class="v97TopFallback">${v97Safe(v97Initials(n))}</span>`}<span><b>${v97Safe(n)}</b><small>${v97Safe(v97RoleLabel())}</small></span>`;d.onclick=()=>render('v97_profile');let web=top.querySelector('.websiteBtn');top.insertBefore(d,web||null)}catch(_e){}}
+function v97InstallTopIdentity(){
+  try{
+    const top=document.querySelector('#erp .erpTop');
+    if(!top)return;
+    const existing=document.getElementById('v97TopIdentity');
+    const role=String(window.profile?.role||'').trim().toLowerCase();
+    // The Admin header has its own canonical identity: do not inject Teacher profile there.
+    if(!user||['admin','super_admin','principal'].includes(role)){
+      if(existing)existing.remove();
+      return;
+    }
+    const name=profile?.full_name||v97RoleLabel();
+    const avatar=v97AvatarUrl();
+    const revision=String(profile?.updated_at||'');
+    const fingerprint=JSON.stringify([String(user?.id||''),role,name,avatar,revision]);
+    // No reparent/repaint/image refetch on every route or Home/Back invocation.
+    if(existing&&existing.parentElement===top&&existing.dataset.v539Identity===fingerprint)return;
+    let button=existing;
+    if(!button||button.parentElement!==top){
+      button?.remove();
+      button=document.createElement('button');
+      button.type='button';button.id='v97TopIdentity';button.className='v97TopIdentity';
+      const web=top.querySelector('.websiteBtn');
+      top.insertBefore(button,web||null);
+    }
+    button.dataset.v539Identity=fingerprint;
+    const photoUrl=avatar?(avatar+(avatar.includes('?')?'&':'?')+'v='+encodeURIComponent(revision||'profile')):'';
+    button.innerHTML=`${photoUrl?`<img src="${v97Safe(photoUrl)}" alt="Profile">`:`<span class="v97TopFallback">${v97Safe(v97Initials(name))}</span>`}<span><b>${v97Safe(name)}</b><small>${v97Safe(v97RoleLabel())}</small></span>`;
+    button.onclick=()=>render('v97_profile');
+  }catch(_e){}
+}
 try{const v97ShellBase=v90InstallShell;v90InstallShell=function(active){let r=v97ShellBase.apply(this,arguments);setTimeout(()=>{v97InstallTopIdentity();try{document.querySelector('#erp aside')?.classList.remove('open')}catch(_e){}},0);return r}}catch(_e){}
 
 document.addEventListener('click',e=>{let t=e.target?.closest?.('#v90HomeBtn,#v90BackBtn,#erpNav button,.erpHomeBtn');if(!t)return;window.__v97ExplicitNavUntil=Date.now()+1800},{capture:true,passive:true});
@@ -10651,7 +10683,7 @@ window.render=async function(route='dashboard'){
  if(route==='v94_admin_password')return v97AdminSecurityPage();
  let current=String(window.__v90Route||'');
  if(route==='dashboard'&&current&&current!=='dashboard'&&Date.now()>Number(window.__v97ExplicitNavUntil||0)){
-   v97SetInline('Update/Action complete. आप इसी page पर हैं — Home या Back दबाने पर ही page बदलेगा.','ok');
+   // V539: silent auto-navigation guard; it is not a user save confirmation.
    return null;
  }
  let r=await v97RenderBase.apply(this,arguments);if(String(route)==='dashboard')v97DecorateDashboard();return r
@@ -11607,7 +11639,7 @@ try{const v113LogoutBase=logout;logout=async function(){void v113StopChannel(v11
 <link rel="stylesheet" href="v60-session-admit-health.css?v=V60-1&build=V643">
 <script src="v60-session-admit-health.js?v=V60-1&build=V643"></script>
 <link rel="stylesheet" href="v62-render-safe.css?v=V62-1&build=V643">
-<script src="v62-render-safe.js?v=V62-1&build=V643"></script>
+<script src="v62-render-safe.js?v=V540-RECHECK"></script>
 <script src="v63-final-repair.js?v=64.2&build=V643"></script>
 <link rel="stylesheet" href="v64-final-layout-interaction.css?v=V64-2-1&build=V643">
 <script src="v64-final-layout-interaction.js?v=V64-2-1&build=V643"></script>
@@ -16959,6 +16991,33 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     return {sm,am,dm};
   }
 
+  /* V536 fee write guard: bounded requests, explicit result verification, no auto retries. */
+  async function feeDbV536(build,label,limit=18000){
+    const controller=new AbortController();
+    let timer, timedOut=false;
+    const deadline=new Promise((_,reject)=>{
+      timer=setTimeout(()=>{
+        timedOut=true;
+        try{controller.abort()}catch(_e){}
+        const e=new Error(label+' का सर्वर उत्तर समय पर नहीं मिला। Save की स्थिति अनिश्चित है; Current Data दोबारा Load करके Ledger जाँचें।');
+        e.code='LDM_FEE_UNCERTAIN';reject(e);
+      },limit);
+    });
+    try{
+      const r=await Promise.race([Promise.resolve().then(()=>build(controller.signal)),deadline]);
+      return r;
+    }catch(e){
+      if(timedOut){const x=new Error(label+' का सर्वर उत्तर समय पर नहीं मिला। Save की स्थिति अनिश्चित है; Current Data दोबारा Load करके Ledger जाँचें।');x.code='LDM_FEE_UNCERTAIN';throw x}
+      throw e;
+    }finally{clearTimeout(timer)}
+  }
+  async function feeAwaitV536(promise,label,limit=18000){
+    let timer;
+    try{return await Promise.race([promise,new Promise((_,reject)=>timer=setTimeout(()=>{
+      const e=new Error(label+' का उत्तर समय पर नहीं मिला। डेटा दोबारा Load करके पुष्टि करें।');e.code='LDM_FEE_UNCERTAIN';reject(e);
+    },limit))])}finally{clearTimeout(timer)}
+  }
+
   async function saveFeeConfig(student,state,next,diff){
     if(!diff.monthly&&!diff.start&&!diff.plan)return false;
     // V341: validate before writing; never insert NULL or invent a fee start month.
@@ -16969,25 +17028,30 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     if(diff.start)row.auto_start_month=start;
     if(diff.plan)row.ldm_plan_mode=next.plan;
     const exists=!!state.cfg?.admission_no;
-    const r=exists
-      ?await sb.from('student_fee_settings').update(row).eq('admission_no',student.admission_no).eq('academic_session',sess())
-      :await sb.from('student_fee_settings').insert({...row,admission_no:student.admission_no,academic_session:sess(),auto_start_month:start,monthly_fee:next.monthly??0,ldm_plan_mode:next.plan});
+    const r=await feeDbV536(signal=>{
+      return exists
+        ?sb.from('student_fee_settings').update(row).eq('admission_no',student.admission_no).eq('academic_session',sess()).select('admission_no').abortSignal(signal)
+        :sb.from('student_fee_settings').insert({...row,admission_no:student.admission_no,academic_session:sess(),auto_start_month:start,monthly_fee:next.monthly??0,ldm_plan_mode:next.plan}).select('admission_no').abortSignal(signal);
+    },'Fee Configuration Save');
     if(r.error)throw r.error;
-    try{if(typeof window.ldmEnsureFeeMonths==='function')await window.ldmEnsureFeeMonths([student.admission_no],monthNow(),sess())}catch(e){console.warn('V240 fee ensure',e?.message||e)}
+    if(!Array.isArray(r.data)||r.data.length!==1||String(r.data[0].admission_no)!==String(student.admission_no))
+      throw Error('Fee Configuration update की पुष्टि नहीं हुई (0 / multiple rows, RLS या गलत session).');
+    if(typeof window.ldmEnsureFeeMonths==='function')try{await feeAwaitV536(window.ldmEnsureFeeMonths([student.admission_no],monthNow(),sess()),'Fee Months Sync',15000)}catch(e){if(e?.code==='LDM_FEE_UNCERTAIN')throw e;console.warn('Fee Months Sync',e?.message||e)}
     return true;
   }
 
   async function setDueTargetOnly(student,state,next,diff,reason){
     if(!diff.dueMonth&&!diff.dueAmount)return false;
     const common={p_admission_no:student.admission_no,p_session:sess(),p_till_month:next.dueMonth,p_target_due:next.dueAmount,p_monthly_fee:null,p_auto_start_month:null,p_plan_mode:null,p_reason:reason||'Central Due V240'};
-    let r=await sb.rpc('ldm_fee_set_due_target_v3',common);
+    let r=await feeDbV536(signal=>sb.rpc('ldm_fee_set_due_target_v3',common).abortSignal(signal),'Due Target RPC');
     if(r.error&&/plan_mode_check|plan mode|null value in column [\"']?plan_mode/i.test(String(r.error.message||''))){
       const safe={...common,p_plan_mode:planDB(next.plan||state.plan||'Monthly Auto')};
-      r=await sb.rpc('ldm_fee_set_due_target_v3',safe);
+      r=await feeDbV536(signal=>sb.rpc('ldm_fee_set_due_target_v3',safe).abortSignal(signal),'Due Target RPC (plan fallback)');
       if(!r.error){
         const keep=planUI(next.plan||state.plan||'Monthly Auto');
-        const u=await sb.from('student_fee_settings').update({ldm_plan_mode:keep}).eq('admission_no',student.admission_no).eq('academic_session',sess());
-        if(u.error)console.warn('V240 plan label restore',u.error.message||u.error);
+        const u=await feeDbV536(signal=>sb.from('student_fee_settings').update({ldm_plan_mode:keep}).eq('admission_no',student.admission_no).eq('academic_session',sess()).select('admission_no').abortSignal(signal),'Fee Plan Restore');
+        if(u.error)throw u.error;
+        if(!Array.isArray(u.data)||u.data.length!==1)throw Error('Fee Plan Restore की पुष्टि नहीं हुई।');
       }
     }
     if(r.error)throw r.error;
@@ -17018,8 +17082,29 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
       plan:has(row.fee_plan)&&next.plan!==old.plan
     };
     if(!Object.values(diff).some(Boolean))return false;
-    await saveFeeConfig(student,{cfg,plan:old.plan},next,diff);
-    await setDueTargetOnly(student,{cfg,plan:old.plan},next,diff,reason||'Master Excel V240');
+    // V537: One Postgres transaction for config + month sync + due target.
+    // Do not use the older two-write flow: a half-saved state is not acceptable.
+    const changes={};
+    if(diff.monthly)changes.monthly_fee=next.monthly;
+    if(diff.start)changes.auto_start_month=next.start;
+    if(diff.plan)changes.ldm_plan_mode=next.plan;
+    if(diff.dueMonth||diff.dueAmount){
+      changes.due_till_month=next.dueMonth;
+      changes.due_target=next.dueAmount;
+    }
+    const payload={
+      p_admission_no:String(student.admission_no),
+      p_session:sess(),
+      p_change:changes,
+      p_reason:reason||'Master Due Update V537'
+    };
+    const r=await feeDbV536(signal=>sb.rpc('ldm_fee_save_atomic_v537',payload).abortSignal(signal),'Atomic Fee Save V537',25000);
+    if(r.error){
+      if(missingRpc(r.error))throw new Error('पहले LD_ERP_V537_FEE_UPDATE_ATOMIC_FIX.sql Supabase में चलाएँ, फिर पेज Refresh करें।');
+      throw r.error;
+    }
+    if(!r.data||r.data.ok!==true||String(r.data.admission_no)!==String(student.admission_no)||String(r.data.session)!==sess())
+      throw Error('Fee update की सर्वर से पुष्टि नहीं हुई; Ledger जाँचें।');
     state.cfg={...cfg,monthly_fee:next.monthly,auto_start_month:next.start,ldm_plan_mode:next.plan,class_name:student.class_name||cfg.class_name||''};
     state.adj={...adj,till_month:next.dueMonth,target_due:next.dueAmount};
     state.due={...due,current_due:next.dueAmount};
@@ -17189,35 +17274,61 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   async function loadOneFeeState(adm){const x=await loadFeeState([adm]),k=admKey(adm);return {cfg:x.sm.get(k)||{},adj:x.am.get(k)||{},due:x.dm.get(k)||{}}}
 
   /* Master Due Update uses the same writer; fee plan is never pushed into schedule check unless explicitly needed. */
-  const dueSaves521=new Set();
+  const dueSaves521=new Set(),feeUncertainV536=new Set();
   window.v6422SaveDue=async function(id,adm,name){
-    const input=$id('v6422Amt_'+id),focus521=document.activeElement,tr=input?.closest('tr');if(!tr||dueSaves521.has(String(id)))return;
+    const idText=String(id),input=$id('v6422Amt_'+id),focus521=document.activeElement,tr=input?.closest('tr');
+    if(!tr||dueSaves521.has(idText))return;
+    let status=tr.querySelector('[data-save-status]');
+    if(!status){status=document.createElement('small');status.dataset.saveStatus='1';status.setAttribute('role','status');tr.lastElementChild.append(status)}
+    if(feeUncertainV536.has(idText)){
+      status.textContent='पिछली Save की स्थिति अनिश्चित है। Ledger जाँचकर पेज Refresh करें; बिना पुष्टि दोबारा अपडेट नहीं होगा।';return;
+    }
     const row={due_till_month:$id('v6422DueMonth')?.value||monthNow(),due_till_amount:input.value,fixed_monthly_fee:$id('v6422Fix_'+id)?.value??'',fixed_fee_start_month:$id('v6422Start_'+id)?.value||'',fee_plan:$id('v6422Mode_'+id)?.value};
-    let status=tr.querySelector('[data-save-status]');if(!status){status=document.createElement('small');status.dataset.saveStatus='1';status.setAttribute('role','status');tr.lastElementChild.append(status)}
     if(!has(row.due_till_amount)||!Number.isFinite(Number(row.due_till_amount))||Number(row.due_till_amount)<0){status.textContent='सही बकाया राशि डालें।';return}
     if(row.fixed_monthly_fee!==''&&(!Number.isFinite(Number(row.fixed_monthly_fee))||Number(row.fixed_monthly_fee)<0)){status.textContent='सही मासिक शुल्क डालें।';return}
-    const controls=[...tr.querySelectorAll('input,select,button')].map(el=>[el,el.disabled]);controls.forEach(([el])=>el.disabled=true);dueSaves521.add(String(id));status.textContent='सेव हो रहा है…';
+    const controls=[...tr.querySelectorAll('input,select,button')].map(el=>[el,el.disabled]);
+    controls.forEach(([el])=>el.disabled=true);dueSaves521.add(idText);status.textContent='सेव हो रहा है…';
     const owner522=String(window.user?.id||''),session522=sess(),current522=()=>String(window.user?.id||'')===owner522&&sess()===session522;
     const write522=window.LDM_RUNTIME_V347?.beginWrite?.('Master due row');
     let committed=false;
     try{
-      const sr=await sb.from('students').select('id,admission_no,class_name').eq('id',id).single();if(sr.error)throw sr.error;
-      if(String(sr.data.admission_no)!==String(adm))throw Error('Student identity changed; reload before saving.');
+      const sr=await feeDbV536(signal=>sb.from('students').select('id,admission_no,class_name').eq('id',id).single().abortSignal(signal),'Student Identity Check');
+      if(sr.error)throw sr.error;
+      if(!sr.data||String(sr.data.admission_no)!==String(adm))throw Error('Student identity changed; reload before saving.');
       if(!current522())throw Error('Account/session changed; save cancelled.');
-      const state=await loadOneFeeState(adm);if(!current522())throw Error('Account/session changed; save cancelled.');await saveCentralFee(sr.data,row,state,'Master Due Update V240');committed=true;
+      const state=await feeAwaitV536(loadOneFeeState(adm),'Fee State Loading');
+      if(!current522())throw Error('Account/session changed; save cancelled.');
+      await saveCentralFee(sr.data,row,state,'Master Due Update V240');committed=true;
       if(!current522())return;
       window.ldmMarkDataDirty?.('fees',{owner:owner522,session:session522});
-      const snapshot=async month=>{const r=await sb.rpc('ldm_fee_due_snapshot_v2',{p_session:session522,p_admission_nos:[String(adm)],p_until_month:month});if(r.error)throw r.error;const v=r.data?.find(x=>String(x.admission_no)===String(adm));if(!v||!Number.isFinite(Number(v.current_due)))throw Error('Balance confirmation unavailable');return v};
+      const snapshot=async month=>{
+        const r=await feeDbV536(signal=>sb.rpc('ldm_fee_due_snapshot_v2',{p_session:session522,p_admission_nos:[String(adm)],p_until_month:month}).abortSignal(signal),'Balance Verification');
+        if(r.error)throw r.error;
+        const v=r.data?.find(x=>String(x.admission_no)===String(adm));
+        if(!v||!Number.isFinite(Number(v.current_due)))throw Error('Balance confirmation unavailable');return v;
+      };
       const now=await snapshot(monthNow()),till=row.due_till_month===monthNow()?now:await snapshot(row.due_till_month);
       if(!tr.isConnected||!current522())return;
-      const cash=v=>'₹'+Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}),old=Number(tr.dataset.currentDue||0),amount=Number(now.current_due);
+      const cash=v=>'₹'+Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}),amount=Number(now.current_due);
       tr.dataset.currentDue=String(amount);input.value=String(till.current_due);input.defaultValue=input.value;
       tr.cells[7].innerHTML='<b>'+cash(amount)+'</b><small class="cellSub">Till '+esc2(row.due_till_month)+': '+cash(till.current_due)+'</small>';
-      tr.cells[8].innerHTML='<span class="v200Status '+(amount>0?(Number(now.unallocated_credit)>0?'partial':'due'):'clear')+'">'+(amount>0?(Number(now.unallocated_credit)>0?'PARTIAL / DUE':'DUE'):'CLEAR')+'</span>';const baseline=tr.querySelector('.v200DueSaved');if(baseline)baseline.textContent='Saved '+cash(row.due_till_amount)+' till '+row.due_till_month;
-      const summary=$id('v6422DueRows')?.querySelectorAll('.v200DueSummary b');if(summary?.length===4){const rs=[...$id('v6422DueRows').querySelectorAll('tr[data-current-due]')],dues=rs.filter(r=>Number(r.dataset.currentDue)>0).length;summary[1].textContent=String(dues);summary[2].textContent=String(rs.length-dues);summary[3].textContent=cash(rs.reduce((n,r)=>n+Number(r.dataset.currentDue),0))}
-      status.textContent='';
-    }catch(e){if(tr.isConnected&&current522())status.textContent=(committed?'सेव हुआ; बैलेंस फिर जाँचें: ':'सेव की पुष्टि नहीं हुई: ')+(e?.message||String(e));}
-    finally{if(write522!=null)window.LDM_RUNTIME_V347?.endWrite?.(write522);controls.forEach(([el,disabled])=>el.disabled=disabled);dueSaves521.delete(String(id));if(focus521?.isConnected&&tr.contains(focus521)&&document.activeElement===document.body)focus521.focus({preventScroll:true});}
+      tr.cells[8].innerHTML='<span class="v200Status '+(amount>0?(Number(now.unallocated_credit)>0?'partial':'due'):'clear')+'">'+(amount>0?(Number(now.unallocated_credit)>0?'PARTIAL / DUE':'DUE'):'CLEAR')+'</span>';
+      const baseline=tr.querySelector('.v200DueSaved');if(baseline)baseline.textContent='Saved '+cash(row.due_till_amount)+' till '+row.due_till_month;
+      const summary=$id('v6422DueRows')?.querySelectorAll('.v200DueSummary b');
+      if(summary?.length===4){const rs=[...$id('v6422DueRows').querySelectorAll('tr[data-current-due]')],dues=rs.filter(r=>Number(r.dataset.currentDue)>0).length;summary[1].textContent=String(dues);summary[2].textContent=String(rs.length-dues);summary[3].textContent=cash(rs.reduce((n,r)=>n+Number(r.dataset.currentDue),0))}
+      status.textContent='✓ Save confirmed • बैलेंस अपडेट';
+    }catch(e){
+      if(e?.code==='LDM_FEE_UNCERTAIN')feeUncertainV536.add(idText);
+      if(tr.isConnected&&current522()){
+        status.textContent=(e?.code==='LDM_FEE_UNCERTAIN'?'⚠ Save की स्थिति अनिश्चित। Ledger जाँचकर पेज Refresh करें: ':(committed?'सेव हुआ; बैलेंस फिर जाँचें: ':'सेव की पुष्टि नहीं हुई: '))+(e?.message||String(e));
+      }
+    }finally{
+      if(write522!=null)window.LDM_RUNTIME_V347?.endWrite?.(write522);
+      controls.forEach(([el,disabled])=>el.disabled=disabled);
+      if(feeUncertainV536.has(idText)){const update=tr.querySelector('button.primary');if(update)update.disabled=true;}
+      dueSaves521.delete(idText);
+      if(focus521?.isConnected&&tr.contains(focus521)&&document.activeElement===document.body)focus521.focus({preventScroll:true});
+    }
   };
 
   window.v75MFSaveDue=async function(){
@@ -18882,7 +18993,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="student-tables-v475.js?v=475"></script>
 <script src="exam-dates-v475.js?v=507"></script>
 <script src="teacher-entry-v473.js?v=511"></script>
-<script src="exam-central-v320.js?v=517"></script>
+<script src="exam-central-v320.js?v=541"></script>
 <script src="udise-v306-jspdf.umd.min.js?v=321"></script>
 <script src="udise-v306-html2canvas.min.js?v=321"></script>
 <link rel="stylesheet" href="mobile-premium-v322.css?v=322">

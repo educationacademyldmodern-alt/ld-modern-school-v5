@@ -1,22 +1,20 @@
+/* V539 - scoped header/nav events, no global per-click reinstallation, no network activity. */
 (()=>{'use strict';
- const $=id=>document.getElementById(id);
- function role(){return String(window.profile?.role||'').toLowerCase()}
- function isAdmin(){return ['super_admin','admin','principal'].includes(role())}
- function mark(){
-   const erp=$('erp'); if(!erp)return;
-   erp.dataset.v62Role=role()||'unknown';
-   if(window.innerWidth<=900) erp.classList.remove('v62Collapsed');
- }
- function closeMobile(){if(window.innerWidth<=900)document.querySelector('#erp aside')?.classList.remove('open')}
- function install(){
-   mark();
-   const nav=$('erpNav');
-   if(nav&&!nav.dataset.v62){nav.dataset.v62='1';nav.addEventListener('click',e=>{if(e.target.closest('button'))setTimeout(closeMobile,0)})}
-   const h=document.querySelector('#erp .hamb');
-   if(h&&!h.dataset.v62){h.dataset.v62='1';h.addEventListener('click',()=>{if(window.innerWidth>900&&isAdmin())$('erp')?.classList.toggle('v62Collapsed')})}
- }
- document.addEventListener('DOMContentLoaded',()=>setTimeout(install,120));
- window.addEventListener('load',()=>setTimeout(install,250));
- window.addEventListener('resize',()=>{mark();if(window.innerWidth>900)document.querySelector('#erp aside')?.classList.remove('open')},{passive:true});
- document.addEventListener('click',()=>setTimeout(install,60),true);
+ if(window.LDM_V539_HEADER_EVENTS)return;
+ window.LDM_V539_HEADER_EVENTS=true;
+ const D=document,W=window,$=id=>D.getElementById(id);
+ const role=()=>String(W.profile?.role||'').toLowerCase();
+ const isAdmin=()=>['super_admin','admin','principal'].includes(role());
+ const closeMobile=()=>{if(W.innerWidth<=900)D.querySelector('#erp aside')?.classList.remove('open')};
+ const mark=()=>{const erp=$('erp');if(!erp)return;erp.dataset.v62Role=role()||'unknown';if(W.innerWidth<=900)erp.classList.remove('v62Collapsed')};
+ // Delegated click survives header/nav DOM replacement without binding each time.
+ D.addEventListener('click',event=>{
+   const target=event.target;
+   if(!target?.closest)return;
+   if(target.closest('#erpNav button')){mark();setTimeout(closeMobile,0);return;}
+   if(target.closest('#erp .hamb')&&W.innerWidth>900&&isAdmin()){mark();$('erp')?.classList.toggle('v62Collapsed');}
+ },true);
+ W.addEventListener('resize',()=>{mark();if(W.innerWidth>900)D.querySelector('#erp aside')?.classList.remove('open')},{passive:true});
+ if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',mark,{once:true});else mark();
+ W.addEventListener('load',mark,{once:true});
 })();
