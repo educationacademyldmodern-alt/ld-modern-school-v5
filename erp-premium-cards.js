@@ -25,7 +25,7 @@ function decorate(card){if(card.classList.contains('ldm3dCard'))return;
  if(title)title.classList.add('ldm3dTitle');
  card.querySelectorAll('small').forEach(e=>e.classList.add('ldm3dSubtitle'));
  card.querySelectorAll('em').forEach(e=>{if(/^open(?:\s+[a-z ]+)?\s*[→›»]?$/i.test(e.textContent.trim()))e.remove();else e.classList.add('ldm3dBadge')});
- card.classList.add('ldm3dCard');card.style.setProperty('background',`linear-gradient(155deg,#ffffff12,transparent 45%),linear-gradient(105deg,${palette[colour(key)]},${palette[colour(key)]})`,'important');
+ card.classList.add('ldm3dCard');if(card.closest('.ldmRootAdminDash'))card.style.setProperty('--module-color',palette[colour(key)]);else card.style.setProperty('background',`linear-gradient(155deg,#ffffff12,transparent 45%),linear-gradient(105deg,${palette[colour(key)]},${palette[colour(key)]})`,'important');
  // Existing gate badge has inline spacing; keep it below, not over the title.
  if(card.matches('.v102DashGate'))card.style.setProperty('padding-bottom','30px','important');
 }
@@ -37,7 +37,8 @@ function apply(root){const groups=new Set(root.querySelectorAll(known));
  if(g.closest('table,form,dialog,[role="dialog"],.ldm3dCard')||g.querySelector('input,select,textarea,table'))return;
  const kids=[...g.children].filter(e=>e.tagName!=='STYLE');if(kids.length&&kids.every(e=>e.matches('a[href],[role="button"],[onclick],[data-route]')&&!e.querySelector('button,input,select,textarea')&&(e.querySelector('b,strong,i,svg')||/render\(/.test(e.getAttribute('onclick')||''))))groups.add(g);
  });
- for(const grid of groups){if(grid.hidden||grid.classList.contains('hidden')||grid.style.display==='none')continue;const cards=[...grid.children].filter(e=>e.matches('button,a,[role="button"],[onclick],[data-route]'));if(!cards.length)continue;
+ for(const grid of groups){if(grid.matches('.ldmRootAdminDash .v185FrontActions,.ldmRootAdminDash .ldm500-hero-pills'))continue;
+ if(grid.hidden||grid.classList.contains('hidden')||grid.style.display==='none')continue;const cards=[...grid.children].filter(e=>e.matches('button,a,[role="button"],[onclick],[data-route]'));if(!cards.length)continue;
  grid.classList.add('ldm3dGrid');cards.forEach(decorate);
  const panel=grid.parentElement;if(panel?.matches('.v114ManagementPanel,.ldmMasterControl,.v39QuickPanel'))panel.classList.add('ldm3dPanel');
  }

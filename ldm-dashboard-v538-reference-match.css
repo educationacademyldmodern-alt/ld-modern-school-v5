@@ -1,0 +1,646 @@
+/* V538 Screenshot Reference Match — applies to real ERP admin/teacher views only.
+   No opaque full-screen overlays; no hiding existing functionality. */
+@media screen {
+  #erp.ldmAdminCanonical,#erp.ldmTeacherCanonical{
+    --ldm538-ink:#07275a;--ldm538-navy:#032965;--ldm538-bright:#0076ed;
+    --ldm538-cyan:#02e7ff;--ldm538-paper:#e9f5ff;
+  }
+  #erp.ldmAdminCanonical main,#erp.ldmTeacherCanonical main{
+    min-width:0!important;background:linear-gradient(180deg,#b4d7fa 0%,#e1efff 38%,#c7e2ff 100%)!important;
+  }
+  /* Keep the original real header buttons, identical blue glossy material. */
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop,#erp#erp#erp#erp.ldmTeacherCanonical .erpTop{
+    display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important;
+    justify-content:space-between!important;gap:8px!important;align-content:center!important;
+    min-height:87px!important;height:auto!important;padding:7px 20px!important;margin:0!important;
+    position:sticky!important;top:0!important;z-index:80!important;
+    background:radial-gradient(ellipse at 55% 145%,#009cffb0,transparent 60%),linear-gradient(116deg,#041b56 0%,#0048b2 48%,#002461 100%)!important;
+    border:0!important;border-bottom:3px solid #00d5ff!important;border-radius:0!important;
+    box-shadow:inset 0 2px 1px #a9f4ff55,0 7px 16px #14346e6e!important;
+    overflow:visible!important;
+  }
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity{
+    order:-50!important;display:grid!important;grid-template-columns:80px minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;align-items:center!important;
+    flex:0 1 465px!important;width:auto!important;min-width:270px!important;max-width:465px!important;
+    padding:0!important;margin:0 auto 0 0!important;gap:1px 12px!important;text-align:left!important;
+  }
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity .ldm535BrandLogo{
+    grid-column:1!important;grid-row:1/span 2!important;width:72px!important;height:72px!important;
+    max-width:72px!important;object-fit:contain!important;border:2px solid #ffdf88!important;
+    border-radius:50%!important;background:#fff!important;padding:2px!important;
+    box-shadow:0 0 8px #70f7ff93,0 4px 11px #0614368c!important;
+  }
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity b{
+    grid-column:2!important;grid-row:1!important;color:#fff!important;text-align:left!important;
+    font:900 clamp(17px,1.54vw,25px)/1.08 system-ui,'Noto Sans Devanagari',sans-serif!important;
+    text-shadow:0 2px 3px #00113f!important;letter-spacing:0!important;
+  }
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity small{
+    grid-column:2!important;grid-row:2!important;color:#eff8ff!important;text-align:left!important;
+    font:650 clamp(10px,.76vw,12px)/1.2 system-ui,'Noto Sans Devanagari',sans-serif!important;
+  }
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop > :is(button,#v90BackBtn,#v90HomeBtn,#ldm538HeaderRefresh,#ldm538HeaderLogout),
+  #erp#erp#erp#erp.ldmTeacherCanonical .erpTop > button{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    position:static!important;inset:auto!important;order:0!important;flex:0 0 auto!important;
+    width:auto!important;max-width:none!important;min-width:59px!important;min-height:39px!important;
+    height:auto!important;margin:0!important;padding:8px 12px!important;
+    border:1px solid #e4f5ff!important;border-radius:12px!important;
+    background:linear-gradient(160deg,#fff 0%,#e1f0ff 47%,#b3d8fa 100%)!important;
+    color:#06295f!important;white-space:nowrap!important;overflow:visible!important;
+    font:850 clamp(11px,.87vw,14px)/1.13 system-ui,'Noto Sans Devanagari',sans-serif!important;
+    box-shadow:inset 0 1px 0 #fff,0 3px 0 #2475ac83,0 6px 11px #001c59a1!important;
+  }
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop >.websiteBtn{
+    color:#083979!important;
+  }
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop > :is(#v62Bell){min-width:39px!important;width:41px!important;font-size:19px!important}
+  #erp#erp#erp#erp.ldmAdminCanonical .erpTop #ldm538HeaderLogout{color:#cf2042!important}
+  /* Second toolbar = real master-search DOM node moved, so native search still works. */
+  #erp#erp#erp#erp .ldm538Toolbar{
+    display:grid!important;grid-template-columns:170px minmax(200px,1fr) auto!important;
+    align-items:center!important;gap:14px!important;width:100%!important;min-height:52px!important;
+    padding:5px clamp(12px,2.3vw,34px)!important;margin:0!important;
+    background:linear-gradient(180deg,#c3defe 0%,#d7eaff 70%,#a7ccf6 100%)!important;
+    border-bottom:1px solid #9fc6ef!important;
+  }
+  #erp#erp#erp .ldm538Toolbar .ldm538Lang{display:flex!important;gap:5px!important;white-space:nowrap!important}
+  #erp#erp#erp .ldm538Toolbar :is(button,#v75TopSearch button){
+    min-height:37px!important;padding:7px 13px!important;border-radius:11px!important;
+    border:1px solid #93baf2!important;color:#0a3266!important;
+    background:linear-gradient(160deg,#fff,#e1ecff 65%,#b7d5fa)!important;
+    box-shadow:inset 0 1px 0 white,0 3px 0 #3a7fb74c,0 6px 9px #0c3c792e!important;
+    font:800 13px/1.1 system-ui,'Noto Sans Devanagari',sans-serif!important;white-space:nowrap!important;
+  }
+  #erp#erp#erp .ldm538Toolbar .ldm538Lang button[aria-pressed="true"]{
+    color:#fff!important;background:linear-gradient(160deg,#0d74d9,#083779)!important;border-color:#68dfff!important;
+  }
+  #erp#erp#erp .ldm538Toolbar .ldm538SearchSlot{width:100%!important;min-width:0!important}
+  #erp#erp#erp .ldm538Toolbar #v75TopSearch{
+    display:flex!important;width:100%!important;max-width:585px!important;min-width:0!important;flex:1!important;
+    margin:auto!important;padding:3px!important;gap:4px!important;align-items:center!important;
+    background:linear-gradient(155deg,#fff,#c9dfff)!important;border:2px solid #a0c5fd!important;
+    border-radius:19px!important;box-shadow:inset 0 1px 4px #1a47744d,0 4px 6px #0a43815a!important;
+  }
+  #erp#erp#erp .ldm538Toolbar #v75TopSearch input{
+    width:100%!important;min-width:0!important;max-width:none!important;height:34px!important;
+    border:0!important;background:transparent!important;padding:6px 12px!important;color:#092a62!important;
+    font-size:13px!important;box-shadow:none!important;outline-offset:2px!important;
+  }
+  #erp#erp#erp .ldm538Toolbar #v75TopSearch button{min-width:52px!important;max-width:82px!important;min-height:32px!important;padding:5px 8px!important}
+  #erp#erp#erp .ldm538Toolbar .ldm538ToolActions{display:flex!important;justify-content:flex-end!important;gap:9px!important;flex-wrap:wrap!important}
+  /* Only show the new secondary toolbar on real dashboards; the inner module UI remains unchanged. */
+  #erp .ldm538Toolbar{display:none!important}
+  #erp:has(#erpContent > .ldm535PremiumDashboard) .ldm538Toolbar,
+  #erp:has(#erpContent > .v114TeacherDash) .ldm538Toolbar,
+  #erp:has(#erpContent > .ldmNewTeacher) .ldm538Toolbar{display:grid!important}
+  #erp#erp#erp #erpContent:has(>.ldm535PremiumDashboard){
+    padding:10px clamp(8px,1.2vw,20px) 24px!important;
+    background:linear-gradient(180deg,#aed5fa,#e3f0ff 50%,#bedbff)!important;
+  }
+  #erp#erp#erp #erpContent>.ldm535PremiumDashboard{
+    display:flex!important;flex-direction:column!important;gap:11px!important;
+    width:100%!important;max-width:1600px!important;margin:0 auto!important;
+  }
+  #erp#erp#erp #erpContent>.ldm535PremiumDashboard > *{
+    position:relative!important;min-width:0!important;max-width:100%!important;grid-column:1/-1!important;
+    height:auto!important;margin:0!important;transform:none!important;
+  }
+  /* Live greeting (never copied or statically faked). */
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v233Greeting{
+    order:0!important;min-height:91px!important;padding:11px 22px!important;gap:15px!important;
+    display:flex!important;align-items:center!important;flex-wrap:wrap!important;
+    border:2px solid #05d4ff!important;border-radius:19px!important;
+    background:radial-gradient(ellipse at 61% -60%,#36eaff9d,transparent 60%),linear-gradient(105deg,#0067cb,#063984 47%,#007add 100%)!important;
+    box-shadow:inset 0 1px 0 #f2ffffaa,0 4px 0 #0099dd78,0 8px 19px #0c3d8473!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting .sun{
+    display:grid!important;place-items:center!important;width:68px!important;height:68px!important;flex:0 0 68px!important;
+    background:radial-gradient(circle,#00b6ff,#0756c2)!important;border:2px solid #21edff!important;border-radius:50%!important;
+    font-size:35px!important;box-shadow:0 0 0 3px #018ada60,0 0 12px #00e5ff!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting :is(b,strong){font:900 clamp(19px,1.8vw,28px)/1.13 system-ui,sans-serif!important}
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting :is(span,small,p,b,strong){color:#fff!important;text-shadow:0 1px 2px #032b7d!important}
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting .ldm538Date{
+    margin-left:auto!important;padding:9px 13px!important;border-left:2px solid #57eafa!important;
+    display:flex!important;align-items:center!important;gap:11px!important;font-weight:850!important;
+    font-size:clamp(11px,1vw,15px)!important;color:#fff!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .ldm538CalendarIcon{font-size:30px!important;color:#f6fdff!important}
+  /* Hero: matching violet/indigo panel and five original working route buttons. */
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard>#ldm500Hero{
+    order:1!important;min-height:136px!important;max-height:none!important;
+    padding:10px 20px 13px 270px!important;border-radius:19px!important;
+    border:2px solid #8d7dff!important;overflow:hidden!important;
+    background:radial-gradient(ellipse 40% 88% at 12% 35%,#a14cfba8,transparent),radial-gradient(ellipse at 83% -90%,#b378ff99,transparent 70%),linear-gradient(115deg,#2745c1,#4f26c5 57%,#074dd5)!important;
+    box-shadow:inset 0 2px 0 #ffffff70,0 4px 0 #2345ae67,0 10px 20px #162c9278!important;
+  }
+  #erp#erp#erp #erpContent #ldm500Hero .ldm538HeroArt{
+    display:block!important;position:absolute!important;left:8px!important;top:8px!important;
+    width:242px!important;height:114px!important;z-index:0!important;pointer-events:none!important;
+    background:radial-gradient(ellipse at center bottom,#0eeeff89,transparent 64%)!important;
+  }
+  #erp#erp#erp #erpContent #ldm500Hero .ldm538HeroArt span{position:absolute!important;filter:drop-shadow(0 5px 5px #08125d)}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm538Book{font-size:45px!important;bottom:4px!important;left:5px!important;z-index:3!important}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm538Laptop{font-size:100px!important;bottom:-2px!important;left:65px!important;z-index:1!important}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm538Cap{font-size:48px!important;top:-4px!important;left:106px!important;z-index:2!important}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-top{
+    position:relative!important;z-index:2!important;margin-bottom:9px!important;display:flex!important;
+    justify-content:space-between!important;align-items:center!important;gap:10px!important;
+  }
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-title strong{
+    font:950 clamp(23px,2.36vw,37px)/1.08 system-ui,sans-serif!important;
+    color:#fff!important;text-transform:none!important;text-shadow:0 3px 4px #25126e!important;
+  }
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-title small{font:700 clamp(11px,1vw,15px)/1.3 system-ui,sans-serif!important;color:#fff!important}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-open{
+    min-height:43px!important;padding:9px 22px!important;background:linear-gradient(#ffea84,#ffd33e 63%,#f9ab11)!important;
+    border:2px solid #ffe999!important;border-radius:15px!important;color:#211e25!important;
+    font:900 clamp(12px,1.1vw,17px)/1.2 system-ui,sans-serif!important;
+    box-shadow:inset 0 2px 0 #fff8,0 4px 0 #b26b10,0 8px 15px #160d5866!important;
+  }
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills{
+    position:relative!important;z-index:2!important;display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:10px!important;margin:0!important;
+  }
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills button{
+    min-width:0!important;min-height:48px!important;border:1px solid #def8ff!important;border-radius:14px!important;
+    color:#061e52!important;font:900 clamp(11px,.97vw,15px)/1.17 system-ui,sans-serif!important;
+    box-shadow:inset 0 2px 0 #fffa,0 4px 0 #071e7a75,0 7px 12px #0b166270!important;
+  }
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills button:nth-child(1){background:linear-gradient(#ecfaff,#a6efff)!important}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills button:nth-child(2){background:linear-gradient(#ebfff5,#98f2bf)!important}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills button:nth-child(3){background:linear-gradient(#fff4d5,#ffd87a)!important}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills button:nth-child(4){background:linear-gradient(#fff1ff,#f4b7ed)!important}
+  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills button:nth-child(5){background:linear-gradient(#f0eaff,#d3c5ff)!important}
+  /* Exactly six original live KPI tiles + an independent visual label, NO guessed counts. */
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v90Stats{
+    order:2!important;display:grid!important;grid-template-columns:minmax(170px,1.35fr) repeat(6,minmax(95px,1fr))!important;
+    gap:11px!important;align-items:stretch!important;margin:0!important;
+  }
+  #erp#erp#erp #erpContent #v90Stats>.ldm538StatusTitle{
+    display:grid!important;grid-template-columns:auto 1fr!important;align-items:center!important;
+    gap:0 10px!important;min-height:61px!important;padding:8px 12px!important;color:#fff!important;
+    background:linear-gradient(145deg,#055ba9,#073376)!important;border:1px solid #93eaff!important;
+    border-radius:15px!important;box-shadow:inset 0 2px 0 #ffffff50,0 4px 0 #1459b657,0 7px 14px #10346f60!important;
+    font:850 15px/1.12 system-ui,sans-serif!important;
+  }
+  #erp#erp#erp #erpContent #v90Stats>.ldm538StatusTitle>span:first-child{grid-row:1/span 2!important;font-size:29px!important}
+  #erp#erp#erp #erpContent #v90Stats>.ldm538StatusTitle small{grid-column:2!important;color:#e8faff!important;font-size:11px!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat{
+    min-width:0!important;min-height:61px!important;height:auto!important;padding:8px 7px!important;gap:7px!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    border:1px solid #9df8ff!important;border-radius:15px!important;
+    box-shadow:inset 0 2px 0 #ffffff7a,0 4px 0 #0758a45e,0 7px 13px #1537714e!important;
+  }
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat:nth-child(2){background:linear-gradient(145deg,#039bea,#07459e)!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat:nth-child(3){background:linear-gradient(145deg,#0dae76,#075e4d)!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat:nth-child(4){background:linear-gradient(145deg,#9061f4,#5028b5)!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat:nth-child(5){background:linear-gradient(145deg,#ff9a31,#d74b13)!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat:nth-child(6){background:linear-gradient(145deg,#fa5182,#b91b53)!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat:nth-child(7){background:linear-gradient(145deg,#1194f6,#0651ab)!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat>span{font-size:23px!important;flex:0 0 auto!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat b{font:950 clamp(18px,1.58vw,24px)/1.1 system-ui,sans-serif!important;color:#fff!important}
+  #erp#erp#erp #erpContent #v90Stats>.v90Stat small{font:720 clamp(10px,.8vw,12px)/1.15 system-ui,sans-serif!important;color:#fff!important}
+  /* Compact 12 native shortcut actions in one desk row at wide sizes. */
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v185FrontDesk{
+    order:3!important;display:grid!important;grid-template-columns:minmax(155px,185px) minmax(0,1fr)!important;
+    gap:7px!important;align-items:start!important;padding:5px 10px!important;
+    border:1px solid #b9ccf7!important;border-radius:18px!important;
+    background:linear-gradient(160deg,#f7fbff,#d8e7ff)!important;
+    box-shadow:inset 0 2px 0 #fff,0 4px 0 #79a3d554,0 8px 16px #113f7a49!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontHead{
+    display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;
+    gap:3px!important;padding:8px 5px!important;margin:0!important;min-height:70px!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontHead h2{
+    font:900 clamp(14px,1.17vw,19px)/1.12 system-ui,sans-serif!important;margin:0!important;color:#062d67!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontHead p{font-size:10px!important;margin:0!important}
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions{
+    display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;
+    gap:7px!important;margin:0!important;align-items:stretch!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions>button{
+    min-height:67px!important;min-width:0!important;width:100%!important;padding:6px 3px!important;
+    flex-direction:column!important;align-items:center!important;justify-content:center!important;
+    border:1px solid #a2cbfa!important;border-radius:13px!important;
+    box-shadow:inset 0 2px 0 white,0 3px 0 #abc3e17d,0 7px 9px #0b3e7235!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions>button b{
+    font:850 clamp(10px,.76vw,12px)/1.12 system-ui,'Noto Sans Devanagari',sans-serif!important;color:#062c64!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions>button span:first-child{font-size:20px!important}
+  #erp#erp#erp #erpContent .ldm538DailyMore{grid-column:1/-1!important;margin-top:4px!important}
+  #erp#erp#erp #erpContent .ldm538DailyMore>summary{
+    font-size:12px!important;min-height:28px!important;padding:4px 9px!important;color:#0751a3!important;font-weight:750!important;cursor:pointer!important;
+  }
+  #erp#erp#erp #erpContent .ldm538MoreBody{padding:12px!important;display:grid!important;gap:9px!important}
+  /* Full access screenshot: header and two rows of eight colored category controls. */
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard>#ldm535FullAccess{
+    order:4!important;border:2px solid #60d5ff!important;border-radius:18px!important;
+    background:linear-gradient(145deg,#d9eaff,#f4fbff)!important;
+    box-shadow:inset 0 2px 0 #f5ffffc9,0 4px 0 #6da8d869,0 10px 16px #14356c6a!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess>summary{
+    display:flex!important;align-items:center!important;min-height:44px!important;padding:6px 13px!important;
+    background:radial-gradient(ellipse at 60% -90%,#21e6ff88,transparent 68%),linear-gradient(105deg,#054eab,#055bbb 52%,#063888)!important;
+    border-radius:15px 15px 0 0!important;border-bottom:2px solid #3adeff!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm535FullLabel strong{
+    font:900 clamp(16px,1.55vw,22px)/1.15 system-ui,sans-serif!important;color:#fff!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm535FullLabel small{font-size:10px!important;color:#e1faff!important}
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm535ExpandText{
+    margin-left:auto!important;padding:5px 9px!important;white-space:nowrap!important;font-size:11px!important;
+    background:linear-gradient(#fff,#e4f0ff)!important;border-radius:11px!important;color:#092e68!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm535FullBody{padding:8px 14px 10px!important}
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories{
+    display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px 12px!important;margin:0!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories>button{
+    display:flex!important;align-items:center!important;gap:9px!important;min-height:64px!important;
+    padding:7px 10px!important;text-align:left!important;border:1px solid #9ef6ff!important;border-radius:15px!important;
+    box-shadow:inset 0 2px 0 #fffa,0 3px 0 #18368654,0 7px 12px #17396952!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories .ldm537Icon{
+    flex:0 0 39px!important;width:39px!important;height:39px!important;font-size:25px!important;border-radius:11px!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories b{font:900 clamp(12px,1.05vw,16px)/1.12 system-ui,sans-serif!important}
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories small{
+    display:block!important;font:600 10px/1.14 system-ui,sans-serif!important;opacity:.98!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm538Original{margin-top:6px!important}
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm538Original>summary{
+    color:#12447e!important;font:750 12px/1.3 system-ui,sans-serif!important;padding:7px!important;cursor:pointer!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm538CategoryPanel{
+    margin-top:11px!important;padding:11px!important;border:1px solid #98c3f3!important;
+    border-radius:14px!important;background:linear-gradient(#fff,#e2efff)!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm538CategoryPanel[hidden]{display:none!important}
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm538CategoryHeading{
+    color:#092f6a!important;display:block!important;font-size:16px!important;margin-bottom:8px!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm538CategoryLinks{
+    display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm538CategoryLinks>button{
+    min-width:0!important;padding:9px!important;background:#fff!important;color:#0c457f!important;
+    border:1px solid #8ebdf1!important;border-radius:11px!important;font-weight:750!important;text-align:left!important;
+  }
+  #erp#erp#erp #erpContent #ldm535FullAccess .ldm538ShowAll{
+    margin-top:10px!important;padding:8px!important;border-radius:10px!important;border:1px solid #136fe1!important;
+    background:#075bb4!important;color:#fff!important;font-weight:850!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard>.v114AdminFeedGrid{
+    order:6!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:16px!important;margin:0!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v114AdminFeedGrid>.v90Panel{
+    padding:10px 14px!important;min-height:165px!important;border:1px solid #9ebff6!important;
+    border-radius:17px!important;background:linear-gradient(165deg,#f9fcff,#e0efff)!important;
+    box-shadow:inset 0 1px 0 #fff,0 4px 0 #6198d64d,0 9px 13px #12427a42!important;
+  }
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard>.v156DailyControl{order:7!important}
+  #erp#erp#erp #erpContent .ldm535PremiumDashboard :is(button,summary):focus-visible{
+    outline:3px solid #ffdd4c!important;outline-offset:2px!important;
+  }
+  /* Teacher keeps same blue material, but not admin-only buttons/permissions. */
+  #erp#erp#erp #erpContent>.v114TeacherDash :is(.v114TeacherHero,.v114TeacherQuick,.v114TeacherSchedule){
+    border-radius:18px!important;box-shadow:inset 0 2px 0 #ffffffad,0 6px 14px #144b7759!important;
+  }
+}
+@media screen and (max-width:1420px){
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop{padding:7px 12px!important}
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity{flex-basis:380px!important;max-width:380px!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+}
+@media screen and (max-width:1120px){
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity{flex:1 1 100%!important;max-width:none!important}
+ #erp#erp#erp .ldm538Toolbar{grid-template-columns:125px minmax(150px,1fr)!important}
+ #erp#erp#erp .ldm538Toolbar .ldm538ToolActions{grid-column:1/-1!important;justify-content:center!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v90Stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v185FrontDesk{grid-template-columns:1fr!important}
+ #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erp#erp#erp #erpContent #ldm535FullAccess .ldm538CategoryLinks{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media screen and (max-width:760px){
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop,#erp#erp#erp#erp.ldmTeacherCanonical .erpTop{gap:7px!important;padding:8px!important;min-height:0!important}
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity{grid-template-columns:58px minmax(0,1fr)!important;min-width:0!important}
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity .ldm535BrandLogo{width:50px!important;height:50px!important}
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity b{font-size:16px!important}
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop>.ldmAdminSchoolIdentity small{font-size:10px!important}
+ #erp#erp#erp#erp.ldmAdminCanonical .erpTop >button{min-width:0!important;padding:8px 10px!important;font-size:11px!important}
+ #erp#erp#erp .ldm538Toolbar{grid-template-columns:1fr!important;gap:7px!important;padding:8px!important}
+ #erp#erp#erp .ldm538Toolbar .ldm538Lang{justify-content:center!important}
+ #erp#erp#erp .ldm538Toolbar .ldm538ToolActions{grid-column:1!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v233Greeting{padding:12px!important;min-height:0!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting .ldm538Date{margin:0!important;border-left:0!important;border-top:1px solid #61d7ff!important;width:100%!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard>#ldm500Hero{padding:110px 12px 13px!important}
+ #erp#erp#erp #erpContent #ldm500Hero .ldm538HeroArt{height:95px!important;width:150px!important;left:50%!important;transform:translateX(-50%) scale(.75)!important;transform-origin:top center!important}
+ #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v90Stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erp#erp#erp #erpContent #ldm535FullAccess .ldm538CategoryLinks{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard>.v114AdminFeedGrid{grid-template-columns:1fr!important}
+}
+@media screen and (max-width:440px){
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories{grid-template-columns:1fr!important}
+ #erp#erp#erp #erpContent #ldm535FullAccess .ldm538CategoryLinks{grid-template-columns:1fr!important}
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.ldm538StatusTitle{font-size:12px!important}
+}
+@media print{#erp .ldm538Toolbar,#erp #ldm538HeaderRefresh,#erp #ldm538HeaderLogout{display:none!important}}
+@media(prefers-reduced-motion:reduce){#erp .ldm538Toolbar *,#erp #ldm535FullAccess *{animation:none!important;transition:none!important}}
+/* V538 QA pass 2: override older high-specificity dashboard rules, reduce excess height. */
+@media screen {
+ #erp#erp#erp#erp .ldm538Toolbar {box-sizing:border-box!important;max-width:100%!important;min-width:0!important;}
+ #erp#erp#erp .ldm538Toolbar .ldm538SearchSlot {min-width:0!important;max-width:100%!important;}
+ #erp#erp#erp .ldm538Toolbar .ldm538ToolActions {min-width:0!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat {
+   padding:7px 7px!important;min-height:62px!important;height:65px!important;max-height:70px!important;
+   box-sizing:border-box!important;overflow:visible!important;
+ }
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.ldm538StatusTitle {height:65px!important;max-height:70px!important;box-sizing:border-box!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat:nth-child(2){background:linear-gradient(145deg,#079dea,#0551a8)!important}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat:nth-child(3){background:linear-gradient(145deg,#16b783,#075b47)!important}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat:nth-child(4){background:linear-gradient(145deg,#9064ed,#4924ab)!important}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat:nth-child(5){background:linear-gradient(145deg,#fe9434,#d74c10)!important}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat:nth-child(6){background:linear-gradient(145deg,#ee4d86,#b61f57)!important}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat:nth-child(7){background:linear-gradient(145deg,#0799ef,#0750a8)!important}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v185FrontDesk {min-height:0!important;height:auto!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontHead {height:71px!important;min-height:71px!important;box-sizing:border-box!important;padding:4px 6px!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontHead :is(h2,p){margin:0!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontHead .ldm538DailyMore {margin:0!important;line-height:1!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontHead .ldm538DailyMore>summary {padding:1px 0!important;min-height:14px!important;font-size:9px!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions>button {height:67px!important;max-height:67px!important;box-sizing:border-box!important;}
+ #erp#erp#erp#erp #erpContent #ldm535FullAccess>summary {height:48px!important;min-height:48px!important;box-sizing:border-box!important;padding:4px 13px!important;}
+ #erp#erp#erp#erp #erpContent #ldm535FullAccess .ldm535FullIcon {width:35px!important;height:35px!important;flex-basis:35px!important;min-width:35px!important;font-size:22px!important;}
+ #erp#erp#erp#erp #erpContent #ldm535FullAccess .ldm538Original>summary {min-height:0!important;padding:3px!important;margin:0!important;font-size:10px!important;}
+ #erp#erp#erp#erp #erpContent #ldm535FullAccess .ldm538Original {margin:0!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting .ldm538GreetingText {display:flex!important;flex-direction:column!important;gap:2px!important;align-items:flex-start!important;flex:1 1 220px!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting .ldm538GreetingText b{display:block!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting .ldm538GreetingText small {display:block!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard .ldm538WorkAssistant {
+   flex:0 1 auto!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+   min-height:49px!important;padding:9px 16px!important;margin:0!important;
+   background:linear-gradient(140deg,#13c4ff,#0059bd)!important;border:2px solid #5feeff!important;
+   border-radius:16px!important;color:#fff!important;font:850 clamp(12px,1.15vw,18px)/1.1 system-ui,sans-serif!important;
+   box-shadow:inset 0 1px 0 #ffffff73,0 4px 0 #06418470,0 8px 10px #08276780!important;
+ }
+}
+@media screen and (max-width:1120px){
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat {height:auto!important;min-height:69px!important;max-height:none!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard #v90Stats>.ldm538StatusTitle {height:auto!important;min-height:69px!important;max-height:none!important;}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontHead {height:auto!important;min-height:65px!important;}
+}
+@media screen and (max-width:760px){
+ #erp#erp#erp#erp .ldm538Toolbar{grid-template-columns:minmax(0,1fr)!important;box-sizing:border-box!important;}
+ #erp#erp#erp#erp .ldm538Toolbar .ldm538SearchSlot{width:100%!important;min-width:0!important;box-sizing:border-box!important;}
+ #erp#erp#erp#erp .ldm538Toolbar #v75TopSearch{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;}
+ #erp#erp#erp#erp .ldm538Toolbar .ldm538ToolActions{grid-column:1!important;justify-content:center!important;}
+}
+@media screen {
+ #erp#erp#erp .ldm538Toolbar button:disabled{opacity:.55!important;cursor:not-allowed!important;filter:grayscale(.2)!important}
+ #erp#erp#erp #erpContent>.ldmNewTeacher{
+  max-width:1500px!important;margin:10px auto!important;display:grid!important;gap:14px!important;
+ }
+ #erp#erp#erp #erpContent .ldmNewTeacher>.ldmTeacherHero{
+  border:2px solid #37e4ff!important;border-radius:19px!important;
+  background:radial-gradient(ellipse at 67% -50%,#20e8ff78,transparent 70%),linear-gradient(120deg,#075fbc,#063783 59%,#077acf)!important;
+  box-shadow:inset 0 2px 0 #e9ffff81,0 4px 0 #1478ad63,0 11px 18px #123e7c6b!important;
+ }
+ #erp#erp#erp #erpContent .ldmNewTeacher>.ldmTeacherScope{
+  border:1px solid #7cd5ff!important;border-radius:14px!important;color:#07356e!important;
+  background:linear-gradient(#fff,#d8ebff)!important;font-weight:800!important;
+ }
+ #erp#erp#erp #erpContent .ldmNewTeacher .ldmTeacherModules{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:11px!important;
+ }
+ #erp#erp#erp #erpContent .ldmNewTeacher .ldmTeacherModules>button{
+  min-width:0!important;border:1px solid #b6eaff!important;border-radius:16px!important;
+  box-shadow:inset 0 1px 0 #ffffff7a,0 5px 0 #114c944a,0 10px 16px #163a7466!important;
+ }
+}
+@media screen and (max-width:980px){#erp#erp#erp #erpContent .ldmNewTeacher .ldmTeacherModules{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media screen and (max-width:420px){#erp#erp#erp #erpContent .ldmNewTeacher .ldmTeacherModules{grid-template-columns:1fr!important}}
+
+@media screen {
+ #erp#erp#erp #erpContent #ldm500Hero .ldm538HeroArt {
+  background:url("ldm-reference-laptop.webp") center / contain no-repeat!important;
+  mask-image:linear-gradient(to right,transparent,#000 7%,#000 91%,transparent);
+ }
+ #erp#erp#erp#erp:not(:has(#erpContent > :is(.ldm535PremiumDashboard,.v114TeacherDash,.ldmNewTeacher))) .ldm538Toolbar,
+ #erp#erp#erp#erp .ldm538Toolbar [hidden]{display:none!important}
+ #erp#erp#erp#erp .ldm538Toolbar:has(.ldm538SearchSlot[hidden]){display:flex!important;flex-wrap:wrap!important;justify-content:space-between!important}
+ #erp#erp#erp#erp:not(:has(#erpContent > :is(.ldm535PremiumDashboard,.v114TeacherDash,.ldmNewTeacher))) .ldm538Toolbar:has(.ldm538SearchSlot[hidden]){display:none!important}
+ #parentDashboard #ldmChildren455 {
+  min-width:0;box-sizing:border-box;padding:clamp(12px,2vw,26px);border:1px solid #80beee;border-radius:18px;
+  background:linear-gradient(165deg,#eaf6ff,#c7deff);color:#092e65;
+ }
+ #parentDashboard #ldmChildren455 h2 {margin:0 0 14px;color:#073475}
+ #parentDashboard #ldmChildren455 .ldmChildGrid455 {
+  display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))!important;gap:12px!important
+ }
+ #parentDashboard #ldmChildren455 button {
+  display:grid;gap:5px;min-width:0;white-space:normal;overflow-wrap:anywhere;text-align:start;padding:15px;
+  color:white;background:linear-gradient(140deg,#087cc2,#092f7f);border:1px solid #58deff;border-radius:14px;
+  box-shadow:inset 0 1px 1px #ffffff70,0 3px 6px #18356435
+ }
+ #erp#erp#erp #erpContent .ldmTeacherModules>button,#erp#erp#erp #erpContent .v114TeacherQuick .v90Quick>button {
+  min-width:0!important;white-space:normal!important;overflow-wrap:anywhere!important;height:auto!important
+ }
+}
+@media screen and (min-width:1280px) {
+ #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions {grid-template-columns:repeat(12,minmax(0,1fr))!important}
+ #erp#erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions>button {min-width:0!important;height:auto!important;min-height:67px!important;max-height:none!important;padding:4px!important;overflow-wrap:anywhere!important;}
+}
+@media screen and (max-width:1120px){
+ #erp#erp#erp#erp:is(.ldmAdminCanonical,.ldmTeacherCanonical) .erpTop{position:relative!important;top:auto!important}
+}
+
+@layer portalLayout {
+ @media screen {
+  #erp#erp .erpTop,#parentDashboard #v6422ParentBar {
+   background:radial-gradient(ellipse at 45% 130%,#038bea,transparent 64%),linear-gradient(115deg,#052053,#004cad 58%,#062961)!important;border-bottom:3px solid #28ceff!important
+  }
+  #erp#erp .erpTop>button,#parentDashboard #v6422ParentBar button {
+   background:linear-gradient(#fff,#dfedff 66%,#bedaff)!important;border-radius:11px!important;
+   color:#092859!important;box-shadow:inset 0 1px white,0 3px 5px #00275770!important
+  }
+  #erp#erp .erpTop .ldmAdminSchoolIdentity:has(.ldm535BrandLogo) {
+   grid-template-columns:auto minmax(0,1fr)!important;column-gap:12px!important
+  }
+  #erp#erp .erpTop .ldm535BrandLogo {grid-row:1 / span 2!important;grid-column:1!important}
+  #erp#erp .erpTop .ldmAdminSchoolIdentity:has(.ldm535BrandLogo)>:is(b,small){grid-column:2!important}
+  #erpContent .ldmTeacherModules>button,#parentDashboard button[data-parent-action]{
+   border:1px solid #9accef!important;border-radius:14px!important;
+   background:linear-gradient(145deg,#fff,#e0f0ff)!important;color:#082e61!important;
+   box-shadow:inset 0 1px white,0 3px 0 #80a8c85c,0 5px 10px #15385822!important
+  }
+ }
+}
+@media screen and (min-width:1121px) {
+ #erp#erp#erp#erp #erpContent #v233Greeting:has(.v114PortalHeroText){display:grid!important;grid-template-columns:auto minmax(0,1.2fr) minmax(0,.85fr) auto!important;align-items:center!important;gap:12px!important}
+ #erp#erp#erp#erp #v233Greeting .v114PortalHeroStudent{grid-column:1;grid-row:1}
+ #erp#erp#erp#erp #v233Greeting .v114PortalHeroText{grid-column:2;grid-row:1}
+ #erp#erp#erp#erp #v233Greeting .v114PortalHeroText small{display:none!important}
+ #erp#erp#erp#erp #v233Greeting .ldm538Date{grid-column:3;grid-row:1}
+ #erp#erp#erp#erp #v233Greeting .ldm538WorkAssistant{grid-column:4;grid-row:1}
+}
+
+/* Dashboard-only rules live in the portal's existing cascade layer. */
+@layer portalLayout {
+ @media screen {
+  #erpContent > .ldm535PremiumDashboard {display:flex!important;flex-direction:column!important;gap:10px!important}
+  #erpContent > .ldm535PremiumDashboard > * {order:12!important;min-inline-size:0!important;max-inline-size:100%!important}
+  #erpContent > .ldm535PremiumDashboard > #v233Greeting {order:0!important}
+  #erpContent > .ldm535PremiumDashboard > #ldm500Hero {order:1!important}
+  #erpContent > .ldm535PremiumDashboard > #v90Stats {order:2!important}
+  #erpContent > .ldm535PremiumDashboard > #v185FrontDesk {order:3!important}
+  #erpContent > .ldm535PremiumDashboard > #ldm535FullAccess {order:4!important}
+  #erpContent > .ldm535PremiumDashboard > .v114AdminFeedGrid {order:5!important}
+  #erpContent > .ldm535PremiumDashboard > #s336DashboardCard {order:6!important}
+  #erpContent > .ldm535PremiumDashboard > #r323AdminControl {order:7!important}
+  #erpContent .ldm538Original{border:1px solid #aacaf0;border-radius:16px;background:#edf6ff;padding:12px}
+  #erpContent .ldm538Original>summary{font:750 16px/1.4 system-ui;color:#073776;cursor:pointer}
+  #erpContent .ldm535FullSections{display:grid;gap:14px;margin-top:10px;min-width:0}
+  #erpContent .ldm535PremiumDashboard .ldm3dCard:not([hidden]):not(.hidden){
+   min-width:0!important;min-height:72px!important;height:auto!important;padding:10px 12px!important;
+   background:linear-gradient(158deg,#ffffff42,transparent 49%),linear-gradient(110deg,color-mix(in srgb,var(--module-color,#075dc1) 65%,#008dff),var(--module-color,#075dc1))!important;
+   color:white!important;border:1px solid #a7ddff!important;border-radius:13px!important;
+   box-shadow:inset 0 1px 1px #ffffffa8,0 3px 0 #18428340,0 5px 9px #163b6a30!important
+  }
+  #erpContent .ldm535PremiumDashboard .ldm3dCard .ldm3dTitle{font:750 clamp(14px,1.1vw,18px)/1.18 system-ui,sans-serif!important}
+  #erpContent .ldm535PremiumDashboard .ldm3dCard .ldm3dSubtitle{font:550 clamp(12px,.87vw,14px)/1.25 system-ui,sans-serif!important}
+  #erpContent .ldm535PremiumDashboard .ldm3dGrid:not([hidden]):not(.hidden){grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr))!important;gap:9px!important}
+  #erpContent .ldm535PremiumDashboard .v185FrontActions>button{order:20;min-width:0!important;color:#092c5b!important;background:linear-gradient(145deg,#fff,#e0efff)!important}
+  #erpContent .ldm535PremiumDashboard .v185FrontActions>button b{font:750 13px/1.15 system-ui,sans-serif!important;white-space:normal!important}
+  #erpContent #ldm535FullAccess .ldm537Categories .ldm537Icon{
+   background-image:url(ldm-module-icons.webp)!important;background-size:800% 100%!important;
+   color:transparent!important;font-size:0!important;border:none!important;flex:0 0 44px!important;width:44px!important;height:44px!important
+  }
+  #erpContent #ldm535FullAccess .ldm537Categories>button::after{content:'›';display:grid;place-items:center;margin-inline-start:auto;flex:0 0 23px;height:23px;background:#ffffff25;border:1px solid #ffffff80;border-radius:50%;color:#fff}
+  #erpContent .ldm535PremiumDashboard #v185FrontDesk .ldm538DailyMore{grid-column:1/-1;min-width:0;width:100%}
+  #erpContent .ldm535PremiumDashboard #v185FrontDesk .ldm538DailyMore[open]{padding:8px;background:#f5faff;border-radius:12px}
+  #erp:has(#erpContent>.ldm535PremiumDashboard):has(#ldm538Toolbar) #v337Toolbar{display:none!important}
+  #erp .ldm538SearchSlot{position:relative}
+  #erp .ldm538SearchSlot .ldmSearchHint{pointer-events:none;position:absolute;inset-inline-end:calc(max(0px,(100% - 585px)/2) + 72px);top:50%;transform:translateY(-50%);font:700 11px system-ui;color:#143d78;background:#d4e7ff;border-radius:5px;padding:2px 4px}
+  #erp .ldm538SearchSlot input{padding-inline-end:54px!important}
+  #erpContent .ldm535PremiumDashboard .v114AdminFeedGrid>article {min-width:0;border:1px solid #b1c9eb;border-radius:16px;box-shadow:0 4px 10px #164a7725}
+  #erpContent .ldm535PremiumDashboard .v114PanelHead{padding:6px 10px;border-bottom:1px solid #b5cdec;background:linear-gradient(#fff,#e1ecfa);border-radius:12px 12px 0 0}
+  #erpContent #v233Greeting em{color:#ffe58a!important}
+  #erpContent .ldm535PremiumDashboard button:focus-visible{outline:3px solid #0076c6!important;outline-offset:2px}
+ }
+ @media screen and (max-width:700px){
+  #erpContent .ldm535PremiumDashboard .ldm3dGrid:not([hidden]):not(.hidden){grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #erp .ldm538SearchSlot .ldmSearchHint{display:none}
+  #erpContent .ldm535PremiumDashboard .ldm3dCard{padding:8px!important}
+  #erpContent #ldm535FullAccess .ldm537Categories>button::after{display:none}
+ }
+ @media screen and (max-width:350px){
+  #erpContent .ldm535PremiumDashboard .ldm3dGrid:not([hidden]):not(.hidden){grid-template-columns:1fr!important}
+ }
+}
+@media screen {
+#erpContent .v185FrontActions>[data-desk-slot="0"]{order:0!important}
+#erpContent .v185FrontActions>[data-desk-slot="1"]{order:1!important}
+#erpContent .v185FrontActions>[data-desk-slot="2"]{order:2!important}
+#erpContent .v185FrontActions>[data-desk-slot="3"]{order:3!important}
+#erpContent .v185FrontActions>[data-desk-slot="4"]{order:4!important}
+#erpContent .v185FrontActions>[data-desk-slot="5"]{order:5!important}
+#erpContent .v185FrontActions>[data-desk-slot="6"]{order:6!important}
+#erpContent .v185FrontActions>[data-desk-slot="7"]{order:7!important}
+#erpContent .v185FrontActions>[data-desk-slot="8"]{order:8!important}
+#erpContent .v185FrontActions>[data-desk-slot="9"]{order:9!important}
+#erpContent .v185FrontActions>[data-desk-slot="10"]{order:10!important}
+#erpContent .v185FrontActions>[data-desk-slot="11"]{order:11!important}
+#erpContent #ldm535FullAccess [data-ldm538-category="0"] .ldm537Icon{background-position:0.0000% center!important}
+#erpContent #ldm535FullAccess [data-ldm538-category="1"] .ldm537Icon{background-position:14.2857% center!important}
+#erpContent #ldm535FullAccess [data-ldm538-category="2"] .ldm537Icon{background-position:28.5714% center!important}
+#erpContent #ldm535FullAccess [data-ldm538-category="3"] .ldm537Icon{background-position:42.8571% center!important}
+#erpContent #ldm535FullAccess [data-ldm538-category="4"] .ldm537Icon{background-position:57.1429% center!important}
+#erpContent #ldm535FullAccess [data-ldm538-category="5"] .ldm537Icon{background-position:71.4286% center!important}
+#erpContent #ldm535FullAccess [data-ldm538-category="6"] .ldm537Icon{background-position:85.7143% center!important}
+#erpContent #ldm535FullAccess [data-ldm538-category="7"] .ldm537Icon{background-position:100.0000% center!important}
+}
+
+@layer portalLayout { @media screen {
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="0"]>span:first-child{background: url(ldm-desk-icons.webp) 0.0000% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="1"]>span:first-child{background: url(ldm-desk-icons.webp) 9.0909% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="2"]>span:first-child{background: url(ldm-desk-icons.webp) 18.1818% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="3"]>span:first-child{background: url(ldm-desk-icons.webp) 27.2727% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="4"]>span:first-child{background: url(ldm-desk-icons.webp) 36.3636% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="5"]>span:first-child{background: url(ldm-desk-icons.webp) 45.4545% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="6"]>span:first-child{background: url(ldm-desk-icons.webp) 54.5455% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="7"]>span:first-child{background: url(ldm-desk-icons.webp) 63.6364% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="8"]>span:first-child{background: url(ldm-desk-icons.webp) 72.7273% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="9"]>span:first-child{background: url(ldm-desk-icons.webp) 81.8182% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="10"]>span:first-child{background: url(ldm-desk-icons.webp) 90.9091% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="11"]>span:first-child{background: url(ldm-desk-icons.webp) 100.0000% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+} }
+
+@layer portalLayout {
+ @media screen {
+  #erpContent .ldm535PremiumDashboard :is(.v185FrontActions>button,.v185FrontHead,#ldm535FullAccess>summary,#v90Stats>.v90Stat,#v90Stats>.ldm538StatusTitle){
+   box-sizing:border-box!important;height:auto!important;max-height:none!important;min-inline-size:0!important
+  }
+  #erpContent .ldm535PremiumDashboard :is(.v185FrontActions>button,#ldm535FullAccess>summary,.ldm537Categories>button,.ldm500-hero-pills>button) {
+   white-space:normal!important;overflow-wrap:anywhere!important
+  }
+  #erpContent .ldm535PremiumDashboard :is(.ldm537CatText,.ldm535FullLabel,.ldm500-hero-title,#v90Stats>.v90Stat>div) {
+   min-width:0!important;overflow-wrap:anywhere!important
+  }
+  #erpContent .ldm535PremiumDashboard .ldm537CatText :is(b,small){color:white!important;opacity:1!important;white-space:normal!important}
+  #erpContent .ldm535PremiumDashboard #ldm500Hero .ldm500-hero-top{flex-wrap:wrap!important}
+  #erpContent .ldm535PremiumDashboard #ldm500Hero .ldm500-open{max-inline-size:100%!important;white-space:normal!important}
+ }
+ @media screen and (min-width:761px) and (max-width:1120px){
+  #erpContent .ldm535PremiumDashboard #ldm500Hero{padding-inline-start:clamp(140px,19vw,210px)!important}
+  #erpContent .ldm535PremiumDashboard #ldm500Hero .ldm538HeroArt{width:clamp(115px,16vw,185px)!important}
+  #erpContent .ldm535PremiumDashboard #ldm500Hero .ldm500-hero-pills{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ }
+ @media screen and (max-width:760px){
+  #erpContent .ldm535PremiumDashboard #ldm500Hero .ldm500-hero-top{display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+  #erpContent .ldm535PremiumDashboard #ldm500Hero .ldm500-open{justify-self:start!important}
+  #erpContent .ldm535PremiumDashboard .ldm538CategoryLinks button{white-space:normal!important;overflow-wrap:anywhere!important}
+ }
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="0"]{background:linear-gradient(148deg,#00669b,#064376)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="1"]{background:linear-gradient(148deg,#7040bb,#401895)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="2"]{background:linear-gradient(148deg,#007950,#045b42)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="3"]{background:linear-gradient(148deg,#ac4808,#853608)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="4"]{background:linear-gradient(148deg,#b62269,#881650)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="5"]{background:linear-gradient(148deg,#0663bd,#063b91)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="6"]{background:linear-gradient(148deg,#6535b7,#431e90)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="7"]{background:linear-gradient(148deg,#007770,#03585b)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+}
+
+/* Bind status colours to their ERP actions across refreshes and cached data. */
+@layer portalLayout {
+ @media screen {
+  #erpContent .ldm535PremiumDashboard #v90Stats > button[onclick*="'students'"] {
+   order:1!important;background:linear-gradient(145deg,#087cc8,#05498f)!important;
+  }
+  #erpContent .ldm535PremiumDashboard #v90Stats > button[onclick*="'teachers'"] {
+   order:2!important;background:linear-gradient(145deg,#14865c,#075b42)!important;
+  }
+  #erpContent .ldm535PremiumDashboard #v90Stats > button[onclick*="'attendance'"] {
+   order:3!important;background:linear-gradient(145deg,#7742ca,#482497)!important;
+  }
+  #erpContent .ldm535PremiumDashboard #v90Stats > button[onclick*="'collection'"] {
+   order:4!important;background:linear-gradient(145deg,#cf6920,#9b3e0a)!important;
+  }
+  #erpContent .ldm535PremiumDashboard #v90Stats > button[onclick*="'due'"] {
+   order:5!important;background:linear-gradient(145deg,#b92e68,#8d164c)!important;
+  }
+  #erpContent .ldm535PremiumDashboard #v90Stats > button[onclick*="'requests'"] {
+   order:6!important;background:linear-gradient(145deg,#0a73c5,#064793)!important;
+  }
+  #erpContent .ldm535PremiumDashboard #v90Stats>.ldm538StatusTitle{order:0!important}
+ }
+}

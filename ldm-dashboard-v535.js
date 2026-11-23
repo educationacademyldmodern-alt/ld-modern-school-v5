@@ -51,7 +51,7 @@
    panel.innerHTML='<summary><span class="ldm535FullIcon" aria-hidden="true">👑</span><span class="ldm535FullLabel"><strong>Admin Full Access / सभी प्रशासनिक कार्य</strong><small>Management • School Control • QR & Storage • All Existing Modules</small></span><span class="ldm535ExpandText">सभी कार्ड खोलें <span aria-hidden="true">⌄</span></span></summary><div class="ldm535FullBody"><div class="ldm535FullIntro">सभी पुराने कार्ड मूल कार्य, अनुमति और रिकॉर्ड सहित उपलब्ध हैं। कार्ड चुनकर संबंधित पेज खोलें।</div><div class="ldm535FullSections"></div></div>';
    root.append(panel);
   }
-  const target=q('.ldm535FullSections',panel);
+  const target=q('.ldm535FullSections',root);
   for(const selector of [':scope > .v114ManagementPanel',':scope > .ldmMasterControl',':scope > #v149AdminQuickSlot']){
    const el=q(selector,root);
    if(el&&el.parentElement!==target)target.append(el);

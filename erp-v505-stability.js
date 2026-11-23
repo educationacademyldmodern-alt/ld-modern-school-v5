@@ -20,8 +20,7 @@ function stableDashboard(){
  if(!root||!admin()||String(W.__v90Route||'dashboard')!=='dashboard')return;
  // Canonical order survives legacy modules that prepend their own dashboard cards.
  const hero=root.querySelector(':scope > #ldm500Hero'),controls=root.querySelector(':scope > #r323AdminControl');
- if(hero&&root.firstElementChild!==hero)root.prepend(hero);
- if(hero&&controls&&hero.nextElementSibling!==controls)hero.after(controls);
+ // Dashboard order is owned by the V538 dashboard layout.
  if(!$('v233Greeting'))W.ldmV233InstallDashboard?.();
  // Greeting is not a disposable popup. Existing canonical renderer owns its content.
  const greeting=$('v233Greeting');if(greeting){
