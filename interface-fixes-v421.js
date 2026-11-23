@@ -29,5 +29,24 @@ body.ldm415Admin #erp #erpContent .v114AttendancePanel .v114PanelHead{margin:0!i
 body.ldm415Admin #erp #erpContent .v114AttendancePanel .v114PanelHead h3{font-size:13px!important;margin:0!important}
 @media(max-width:380px){body.ldm415Admin #erp #erpContent .v114AttendancePanel .v114AttendanceVisual{grid-template-columns:80px minmax(0,1fr)!important;gap:8px!important}body.ldm415Admin #erp #erpContent .v114AttendancePanel #v114AttDonut.v114Donut{width:76px!important;height:76px!important;min-width:76px!important;max-width:76px!important;min-height:76px!important;max-height:76px!important}body.ldm415Admin #erp #erpContent .v114AttendancePanel #v114AttDonut.v114Donut::after{inset:10px!important}body.ldm415Admin #erp #erpContent .v114AttendancePanel #v114AttDonut.v114Donut b{font-size:19px!important}body.ldm415Admin #erp #erpContent .v114AttendancePanel .v114Legend{gap:6px!important}body.ldm415Admin #erp #erpContent .v114AttendancePanel .v114Legend>span{font-size:10px!important}}
 @media print{#v415ParentRefresh{display:none!important}}`;D.head.append(css);
-function sync(){const role=String((typeof profile!=='undefined'?profile:W.profile)?.role||'').toLowerCase(),erp=$('erp'),parent=$('parentDashboard'),parentOn=!!parent&&!parent.classList.contains('hidden')&&!$('parentPortal')?.classList.contains('hidden'),teacher=role==='teacher'&&!!erp&&!erp.classList.contains('hidden');D.body.classList.toggle('ldm415Teacher',teacher);D.body.classList.toggle('ldm415Parent',parentOn);D.body.classList.toggle('ldm415Admin',['admin','principal','super_admin'].includes(role)&&!!erp&&!erp.classList.contains('hidden'));const b=$('ldmV281Refresh');if(!b)return;if(parentOn){let row=$('v415ParentRefresh');if(!row){row=D.createElement('div');row.id='v415ParentRefresh';parent.prepend(row)}if(b.parentElement!==row)row.append(b)}else if(teacher){const h=D.querySelector('#erp .erpTop');if(h&&b.parentElement!==h)h.append(b)}}
+function sync(){const role=String((typeof profile!=='undefined'?profile:W.profile)?.role||'').toLowerCase(),erp=$('erp'),parent=$('parentDashboard'),parentOn=!!parent&&!parent.classList.contains('hidden')&&!$('parentPortal')?.classList.contains('hidden'),teacher=role==='teacher'&&!!erp&&!erp.classList.contains('hidden');D.body.classList.toggle('ldm415Teacher',teacher);D.body.classList.toggle('ldm415Parent',parentOn);D.body.classList.toggle('ldm415Admin',['admin','principal','super_admin'].includes(role)&&!!erp&&!erp.classList.contains('hidden'));const b=$('ldmV281Refresh');if(!b)return;if(parentOn){
+ const bar=$('v6422ParentBar');
+ if(bar){if(b.parentElement!==bar)bar.insertBefore(b,$('v6422ParentMenuBtn'));$('v415ParentRefresh')?.remove()}
+ else {let row=$('v415ParentRefresh');if(!row){row=D.createElement('div');row.id='v415ParentRefresh';parent.prepend(row)}if(b.parentElement!==row)row.append(b)}
+ }else if(teacher){const h=D.querySelector('#erp .erpTop');if(h&&b.parentElement!==h)h.append(b)}}
 function queue(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;sync()})}D.addEventListener('click',queue);function init(){for(const id of ['erpContent','parentPortal']){const n=$(id);if(n)new MutationObserver(queue).observe(n,{childList:true,subtree:true})}sync()}const base=W.render;if(typeof base==='function'){W.render=async function(...a){try{return await base.apply(this,a)}finally{queue()}};try{render=W.render}catch(_){}}if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',init,{once:true});else init();})();
+
+/* V534 recheck: clicking the dashboard closes any open ERP sidebar without intercepting the click. */
+(()=>{'use strict';
+ document.addEventListener('click',event=>{
+  const target=event.target;
+  if(!(target instanceof Element)||!target.closest('#erpContent'))return;
+  const erp=document.getElementById('erp');
+  if(!erp||erp.classList.contains('hidden'))return;
+  erp.querySelector(':scope > aside.open')?.classList.remove('open');
+  if(document.body.classList.contains('d378MenuOpen')){
+   document.body.classList.remove('d378MenuOpen');
+   document.getElementById('d378Menu')?.setAttribute('aria-expanded','false');
+  }
+ },false);
+})();

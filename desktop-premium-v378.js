@@ -11,10 +11,16 @@ function button(text,route,primary=false){return '<button type="button" data-d37
 function safeLogo(){const value=String(schoolInfo()?.logo_url||'school-logo.png');return /^(https?:\/\/|\/|\.\/|[a-z0-9][\w./-]*\.(?:png|jpe?g|webp)(?:\?|$))/i.test(value)?value:'school-logo.png'}
 function identity(){const p=actor()||{},ctx=W.ldmTeacherContext,t=ctx?.teacher||{};let name=String(role()==='teacher'?t.teacher_name||p.full_name||'Teacher':p.full_name||'School Administrator').trim();if(name.includes('@'))name=admin()?'School Administrator':'Teacher';return {name,ctx,p}}
 function paintChrome(host){const {name,ctx,p}=identity(),s=schoolInfo()||{},classes=[...new Set((ctx?.classes||[]).filter(x=>x.is_active!==false).map(x=>String(x.class_name||'')).filter(Boolean))],subjects=[...new Set((ctx?.subjects||[]).filter(x=>x.is_active!==false).map(x=>String(x.subject_name||x.subject||'')).filter(Boolean))];
- const sig=JSON.stringify([role(),p.id,name,s.school_name,s.school_address,s.address,s.logo_url,classes,subjects,p.status,new Date().toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata'})]);if(sig===signature&&$('d378Brand')&&$('d378Welcome'))return;signature=sig;lastRole=role();
- for(const [id,tag]of [['d378Brand','section'],['d378Welcome','section'],['d378Actions','nav']])if(!$(id)){const el=D.createElement(tag);el.id=id;host.append(el)}
- $('d378Brand').innerHTML='<div class="d378SchoolIcon"><img src="'+E(safeLogo())+'" alt="School logo"><span>LD</span></div><div><small>OFFICIAL SCHOOL WORKSPACE · '+E(admin()?'ADMINISTRATION':'TEACHER PORTAL')+'</small><h1>'+E(s.school_name||'L D MODERN EDUCATION ACADEMY')+'</h1><p>'+E(s.school_address||s.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar')+'</p></div>';
- const logo=$('d378Brand').querySelector('img');logo.onerror=()=>{logo.hidden=true;logo.nextElementSibling.hidden=false};logo.nextElementSibling.hidden=true;
+ const sig=JSON.stringify([role(),p.id,name,s.school_name,s.school_address,s.address,s.logo_url,classes,subjects,p.status,new Date().toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata'})]);const schoolLabel=D.querySelector('#erp .erpTop .ldmTeacherSchoolIdentity');
+ if(sig===signature&&$('d378Welcome')&&(!schoolLabel||$('d378Brand')?.parentElement===schoolLabel))return;signature=sig;lastRole=role();
+ for(const [id,tag]of [['d378Welcome','section'],['d378Actions','nav']])if(!$(id)){const el=D.createElement(tag);el.id=id;host.append(el)}
+ if(schoolLabel){
+   let logo=$('d378Brand');
+   if(!logo){logo=D.createElement('img');logo.id='d378Brand';logo.alt='';logo.onerror=()=>logo.hidden=true}
+   const src=safeLogo();
+   if(logo.getAttribute('src')!==src){logo.hidden=false;logo.src=src}
+   if(logo.parentElement!==schoolLabel)schoolLabel.prepend(logo);
+ }
  $('d378Welcome').className='d378Welcome v114PortalHero';$('d378Welcome').innerHTML=typeof W.ldmRoleHeroV377==='function'?W.ldmRoleHeroV377(admin()?'admin':'teacher',name,admin()?'School Administration':'Teacher • '+(classes.length?classes.join(', '):'Assigned classroom')):'<h2>'+E(name)+'</h2>';
  $('d378Actions').setAttribute('aria-label','Daily dashboard actions');$('d378Actions').innerHTML=button(admin()?'📝 Teacher Paper Inbox':'📝 My Question Papers','teacher_paper_center',true)+button('✅ Attendance','attendance')+button(admin()?'₹ Fee Collection':'👥 My Class',admin()?'smart_fee_center':'teacher_class');
  if(!admin()){if(!$('d378TeacherStats')){const el=D.createElement('section');el.id='d378TeacherStats';host.append(el)}const metric=(icon,label,value,route)=>'<button type="button" data-d378-route="'+route+'"><span>'+icon+'</span><div><small>'+label+'</small><b>'+E(value)+'</b></div></button>';$('d378TeacherStats').innerHTML=metric('👥','Assigned Classes',ctx?classes.length:'—','teacher_class')+metric('📚','Assigned Subjects',ctx?subjects.length:'—','teacher_profile')+metric('👤','Account Status',String(p.status||'active'),'teacher_profile')+metric('📝','Question Papers','Open','teacher_paper_center')}else $('d378TeacherStats')?.remove();
