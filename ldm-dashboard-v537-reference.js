@@ -23,8 +23,8 @@
     const body=details?.querySelector('.ldm535FullBody');
     if(!root||!body||body.querySelector('.ldm537Categories'))return;
     const nav=D.createElement('nav');nav.className='ldm537Categories';nav.setAttribute('aria-label','Full Access Sections');
-    for(const group of groups){
-      const button=D.createElement('button');button.type='button';button.dataset.target=group.target;
+    for(const [index,group] of groups.entries()){
+      const button=D.createElement('button');button.type='button';button.dataset.target=group.target;button.dataset.ldm538Category=String(index);
       const symbol=D.createElement('span');symbol.className='ldm537Icon';symbol.setAttribute('aria-hidden','true');symbol.textContent=group.icon;
       const txt=D.createElement('span');txt.className='ldm537CatText';
       const label=D.createElement('b');label.textContent=group.name;

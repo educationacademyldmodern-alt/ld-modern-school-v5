@@ -57,7 +57,7 @@
   }
   #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherHero p {
     font:600 clamp(13px,1.08vw,16px)/1.5 system-ui,'Noto Sans Devanagari',sans-serif!important;
-    opacity:.95!important;
+    opacity:1!important;
   }
   #erp#erp#erp#erp #erpContent .v114TeacherDash .v114HeroMotto.teacher {
     min-width:185px!important;max-width:100%!important;

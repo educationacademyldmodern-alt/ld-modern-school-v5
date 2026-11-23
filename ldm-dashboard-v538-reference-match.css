@@ -271,7 +271,7 @@
   }
   #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories b{font:900 clamp(12px,1.05vw,16px)/1.12 system-ui,sans-serif!important}
   #erp#erp#erp #erpContent #ldm535FullAccess .ldm537Categories small{
-    display:block!important;font:600 10px/1.14 system-ui,sans-serif!important;opacity:.98!important;
+    display:block!important;font:600 10px/1.14 system-ui,sans-serif!important;opacity:1!important;
   }
   #erp#erp#erp #erpContent #ldm535FullAccess .ldm538Original{margin-top:6px!important}
   #erp#erp#erp #erpContent #ldm535FullAccess .ldm538Original>summary{
@@ -341,7 +341,7 @@
  #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v233Greeting{padding:12px!important;min-height:0!important}
  #erp#erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting .ldm538Date{margin:0!important;border-left:0!important;border-top:1px solid #61d7ff!important;width:100%!important}
  #erp#erp#erp #erpContent .ldm535PremiumDashboard>#ldm500Hero{padding:110px 12px 13px!important}
- #erp#erp#erp #erpContent #ldm500Hero .ldm538HeroArt{height:95px!important;width:150px!important;left:50%!important;transform:translateX(-50%) scale(.75)!important;transform-origin:top center!important}
+ #erp#erp#erp #erpContent #ldm500Hero .ldm538HeroArt{height:95px!important;width:150px!important;left:50%!important;transform:translateX(-50%)!important;transform-origin:top center!important}
  #erp#erp#erp #erpContent #ldm500Hero .ldm500-hero-pills{grid-template-columns:repeat(2,minmax(0,1fr))!important}
  #erp#erp#erp #erpContent .ldm535PremiumDashboard>#v90Stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
  #erp#erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions{grid-template-columns:repeat(3,minmax(0,1fr))!important}
@@ -406,7 +406,7 @@
  #erp#erp#erp#erp .ldm538Toolbar .ldm538ToolActions{grid-column:1!important;justify-content:center!important;}
 }
 @media screen {
- #erp#erp#erp .ldm538Toolbar button:disabled{opacity:.55!important;cursor:not-allowed!important;filter:grayscale(.2)!important}
+ #erp#erp#erp .ldm538Toolbar button:disabled{opacity:.55!important;cursor:not-allowed!important;}
  #erp#erp#erp #erpContent>.ldmNewTeacher{
   max-width:1500px!important;margin:10px auto!important;display:grid!important;gap:14px!important;
  }
@@ -432,7 +432,7 @@
 
 @media screen {
  #erp#erp#erp #erpContent #ldm500Hero .ldm538HeroArt {
-  background:url("ldm-reference-laptop.webp") center / contain no-repeat!important;
+  background:url("ldm-reference-laptop.webp?v=5") center / contain no-repeat!important;
   mask-image:linear-gradient(to right,transparent,#000 7%,#000 91%,transparent);
  }
  #erp#erp#erp#erp:not(:has(#erpContent > :is(.ldm535PremiumDashboard,.v114TeacherDash,.ldmNewTeacher))) .ldm538Toolbar,
@@ -504,7 +504,7 @@
   #erpContent > .ldm535PremiumDashboard > #v90Stats {order:2!important}
   #erpContent > .ldm535PremiumDashboard > #v185FrontDesk {order:3!important}
   #erpContent > .ldm535PremiumDashboard > #ldm535FullAccess {order:4!important}
-  #erpContent > .ldm535PremiumDashboard > .v114AdminFeedGrid {order:5!important}
+  #erpContent > .ldm535PremiumDashboard > .v114AdminFeedGrid {order:99!important}
   #erpContent > .ldm535PremiumDashboard > #s336DashboardCard {order:6!important}
   #erpContent > .ldm535PremiumDashboard > #r323AdminControl {order:7!important}
   #erpContent .ldm538Original{border:1px solid #aacaf0;border-radius:16px;background:#edf6ff;padding:12px}
@@ -520,9 +520,9 @@
   #erpContent .ldm535PremiumDashboard .ldm3dCard .ldm3dSubtitle{font:550 clamp(12px,.87vw,14px)/1.25 system-ui,sans-serif!important}
   #erpContent .ldm535PremiumDashboard .ldm3dGrid:not([hidden]):not(.hidden){grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr))!important;gap:9px!important}
   #erpContent .ldm535PremiumDashboard .v185FrontActions>button{order:20;min-width:0!important;color:#092c5b!important;background:linear-gradient(145deg,#fff,#e0efff)!important}
-  #erpContent .ldm535PremiumDashboard .v185FrontActions>button b{font:750 13px/1.15 system-ui,sans-serif!important;white-space:normal!important}
+  #erpContent .ldm535PremiumDashboard .v185FrontActions>button b{color:#092c5b!important;-webkit-text-fill-color:currentColor!important;font:750 13px/1.25 system-ui,sans-serif!important;white-space:normal!important}
   #erpContent #ldm535FullAccess .ldm537Categories .ldm537Icon{
-   background-image:url(ldm-module-icons.webp)!important;background-size:800% 100%!important;
+   background-image:url(ldm-module-icons.webp?v=5)!important;background-size:800% 100%!important;
    color:transparent!important;font-size:0!important;border:none!important;flex:0 0 44px!important;width:44px!important;height:44px!important
   }
   #erpContent #ldm535FullAccess .ldm537Categories>button::after{content:'›';display:grid;place-items:center;margin-inline-start:auto;flex:0 0 23px;height:23px;background:#ffffff25;border:1px solid #ffffff80;border-radius:50%;color:#fff}
@@ -560,6 +560,7 @@
 #erpContent .v185FrontActions>[data-desk-slot="9"]{order:9!important}
 #erpContent .v185FrontActions>[data-desk-slot="10"]{order:10!important}
 #erpContent .v185FrontActions>[data-desk-slot="11"]{order:11!important}
+@layer portalLayout {
 #erpContent #ldm535FullAccess [data-ldm538-category="0"] .ldm537Icon{background-position:0.0000% center!important}
 #erpContent #ldm535FullAccess [data-ldm538-category="1"] .ldm537Icon{background-position:14.2857% center!important}
 #erpContent #ldm535FullAccess [data-ldm538-category="2"] .ldm537Icon{background-position:28.5714% center!important}
@@ -570,19 +571,21 @@
 #erpContent #ldm535FullAccess [data-ldm538-category="7"] .ldm537Icon{background-position:100.0000% center!important}
 }
 
+}
+
 @layer portalLayout { @media screen {
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="0"]>span:first-child{background: url(ldm-desk-icons.webp) 0.0000% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="1"]>span:first-child{background: url(ldm-desk-icons.webp) 9.0909% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="2"]>span:first-child{background: url(ldm-desk-icons.webp) 18.1818% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="3"]>span:first-child{background: url(ldm-desk-icons.webp) 27.2727% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="4"]>span:first-child{background: url(ldm-desk-icons.webp) 36.3636% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="5"]>span:first-child{background: url(ldm-desk-icons.webp) 45.4545% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="6"]>span:first-child{background: url(ldm-desk-icons.webp) 54.5455% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="7"]>span:first-child{background: url(ldm-desk-icons.webp) 63.6364% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="8"]>span:first-child{background: url(ldm-desk-icons.webp) 72.7273% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="9"]>span:first-child{background: url(ldm-desk-icons.webp) 81.8182% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="10"]>span:first-child{background: url(ldm-desk-icons.webp) 90.9091% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
-#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="11"]>span:first-child{background: url(ldm-desk-icons.webp) 100.0000% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="0"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 0.0000% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="1"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 9.0909% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="2"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 18.1818% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="3"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 27.2727% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="4"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 36.3636% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="5"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 45.4545% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="6"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 54.5455% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="7"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 63.6364% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="8"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 72.7273% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="9"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 81.8182% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="10"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 90.9091% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
+#erpContent .ldm535PremiumDashboard .v185FrontActions>[data-desk-slot="11"]>span:first-child{background: url(ldm-desk-icons.webp?v=5) 100.0000% center / 1200% 100% no-repeat!important;display:block!important;color:transparent!important;width:32px!important;height:28px!important;font-size:0!important}
 } }
 
 @layer portalLayout {
@@ -610,14 +613,14 @@
   #erpContent .ldm535PremiumDashboard #ldm500Hero .ldm500-open{justify-self:start!important}
   #erpContent .ldm535PremiumDashboard .ldm538CategoryLinks button{white-space:normal!important;overflow-wrap:anywhere!important}
  }
- @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="0"]{background:linear-gradient(148deg,#00669b,#064376)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
- @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="1"]{background:linear-gradient(148deg,#7040bb,#401895)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
- @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="2"]{background:linear-gradient(148deg,#007950,#045b42)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
- @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="3"]{background:linear-gradient(148deg,#ac4808,#853608)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
- @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="4"]{background:linear-gradient(148deg,#b62269,#881650)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
- @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="5"]{background:linear-gradient(148deg,#0663bd,#063b91)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
- @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="6"]{background:linear-gradient(148deg,#6535b7,#431e90)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
- @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="7"]{background:linear-gradient(148deg,#007770,#03585b)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="0"]{background:linear-gradient(148deg,#006fb7,#0163a2)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="1"]{background:linear-gradient(148deg,#5b34f1,#4b25d2)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="2"]{background:linear-gradient(148deg,#04a766,#028657)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="3"]{background:linear-gradient(148deg,#df642b,#c84511)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="4"]{background:linear-gradient(148deg,#bb206e,#ac0f60)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="5"]{background:linear-gradient(148deg,#0565ef,#0257cc)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="6"]{background:linear-gradient(148deg,#6231ec,#4724d6)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
+ @media screen {#erpContent .ldm535PremiumDashboard #ldm535FullAccess button[data-ldm538-category="7"]{background:linear-gradient(148deg,#027981,#026771)!important;color:white!important;box-shadow:inset 0 2px 1px #ffffff70,0 3px 0 #12376e55,0 5px 9px #12376e33!important}}
 }
 
 /* Bind status colours to their ERP actions across refreshes and cached data. */
@@ -642,5 +645,32 @@
    order:6!important;background:linear-gradient(145deg,#0a73c5,#064793)!important;
   }
   #erpContent .ldm535PremiumDashboard #v90Stats>.ldm538StatusTitle{order:0!important}
+ }
+}
+
+/* Keep sortable cells in the original DOM order. Reflow only the live report. */
+@layer portalLayout {
+ @media screen and (max-width:800px) {
+  #erp #v261DuePrintable :is(.tableWrap,table,thead,tbody) {
+   display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;
+  }
+  #erp #v261DuePrintable .tableWrap {overflow:visible!important;max-height:none!important}
+  #erp #v261DuePrintable tr:not([hidden]) {
+   display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr))!important;
+   gap:.35rem .6rem;padding:.65rem;margin:.5rem 0;border:1px solid #bbd3e8;border-radius:.65rem;background:white;
+  }
+  #erp #v261DuePrintable tr[hidden] {display:none!important}
+  #erp #v261DuePrintable :is(th,td) {
+   position:static!important;min-width:0!important;width:auto!important;max-width:100%!important;box-sizing:border-box;
+   white-space:normal!important;overflow-wrap:anywhere!important;text-align:start!important;padding:.25rem!important;
+  }
+  #erp #v261DuePrintable td[data-label]::before {
+   content:attr(data-label);display:block;color:#36526c;font:600 .78rem/1.35 system-ui;
+  }
+  #erp #v261DuePrintable .v261StudentReport td[data-label="Student"] {order:-2;font-weight:800}
+  #erp #v261DuePrintable .v261StudentReport td[data-label="Current Due"] {order:-1;font-weight:800}
+  #erp #v261DuePrintable .ldm500-table-tools {display:flex!important;flex-wrap:wrap;gap:.4rem}
+  #erp #v261DuePrintable .ldm500-table-tools :is(input,select) {flex:1 1 10rem;min-width:0!important}
+  #erp .v261DueToolbar :is(label,select,input) {min-width:0!important;max-width:100%;box-sizing:border-box}
  }
 }

@@ -45,13 +45,10 @@
    const hint=create('kbd','ldmSearchHint','Ctrl + K');slot.append(hint);bar.append(langs,slot,actions);top.after(bar);
   }
   const admin=isAdmin();
-  for(const kind of ['photos','preview']){
-   const button=q('[data-ldm538="'+kind+'"]',bar);
-   if(button)button.hidden=!admin;
-  }
-  const photo=q('[data-ldm538="photos"]',bar);if(photo)photo.hidden=false;
+  const preview=q('[data-ldm538="preview"]',bar);
+  if(preview && preview.hidden===admin)preview.hidden=!admin;
   const search=q('.ldm538SearchSlot',bar);
-  if(search)search.hidden=!admin;
+  if(search && search.hidden===admin)search.hidden=!admin;
   if(!admin){q('#ldm538AdminProfile',top)?.remove();q('#ldm538HeaderRefresh',top)?.remove();}
   if(isAdmin()){
    const master=q('#v75TopSearch');if(master&&master.parentElement!==q('.ldm538SearchSlot',bar))q('.ldm538SearchSlot',bar)?.append(master);
@@ -135,11 +132,11 @@
   const body=q('.ldm535FullBody',details),sections=q('.ldm535FullSections',root);
   if(!body||!sections)return;
   const intro=q('.ldm535FullIntro',body);if(intro)intro.hidden=true;
-  let original=q(':scope > .ldm538Original',root);
-  if(!original){original=create('details','ldm538Original');original.open=true;original.append(create('summary','', 'सभी मूल ERP कार्ड / Original modules देखें'));root.append(original)}
+  let original=q(':scope > .ldm538Original',body);
+  if(!original){original=create('details','ldm538Original');original.open=false;original.append(create('summary','', 'सभी मूल ERP कार्ड / Original modules देखें'));body.append(original)}
   if(sections.parentElement!==original)original.append(sections);
   const nav=q('.ldm537Categories',body);if(nav){
-   [...nav.children].forEach((b,i)=>{if(!categories[i])return;b.dataset.ldm538Category=String(i);const small=q('small',b);if(small){const value=[
+   [...nav.children].forEach(b=>{const i=Number(b.dataset.ldm538Category);if(!categories[i])return;const small=q('small',b);if(small){const value=[
       'Attendance · Requests · Gate Pass · Monitoring','UDISE+ · Student Master · Class Teacher',
       'Exams · Question Paper · Marks Entry','Fee Collection · Due Fee · Fee Status',
       'Add Teacher · Requests · Teaching','ID Cards · Certificates · Letters',
@@ -169,14 +166,14 @@
   if(!matches.length){const no=create('span','', 'इस श्रेणी के मूल कार्ड नीचे उपलब्ध हैं।');links.append(no)}
   const all=create('button','ldm538ShowAll','सभी मूल ERP कार्ड खोलें →');all.type='button';all.addEventListener('click',()=>{const d=q('.ldm538Original',root);if(d){d.open=true;d.scrollIntoView({block:'start',behavior:'smooth'});}else W.LDM_PREMIUM_V500?.open?.();});
   panel.append(links,all);
-  q('.ldm537Categories',full)?.querySelectorAll('button').forEach((el,i)=>el.setAttribute('aria-expanded',String(i===index)));
+  q('.ldm537Categories',full)?.querySelectorAll('button').forEach(el=>el.setAttribute('aria-expanded',String(el===trigger)));
   panel.scrollIntoView({block:'nearest',behavior:'smooth'});
  }
  function refresh(){queued=false;makeToolbar();if(!isAdmin()||!isDash())return;decorateHero();statCaption();compactDesk();arrangeFull();setDate();}
  function schedule(){if(queued)return;queued=true;if(W.requestAnimationFrame)W.requestAnimationFrame(refresh);else Promise.resolve().then(refresh)}
  function initialize(){
   const host=q('#erpContent');if(host&&!observer){observer=new MutationObserver(records=>{if(records.some(r=>r.addedNodes.length||r.removedNodes.length))schedule()});observer.observe(host,{childList:true,subtree:true});}
-  D.addEventListener('click',e=>{const btn=e.target.closest?.('.ldm537Categories > button');if(!btn||!isAdmin()||!btn.closest('#ldm535FullAccess'))return;const i=Number(btn.dataset.ldm538Category||[...btn.parentElement.children].indexOf(btn));if(i<0||i>7)return;e.preventDefault();e.stopImmediatePropagation();openCategory(i,btn);},true);
+  D.addEventListener('click',e=>{const btn=e.target.closest?.('.ldm537Categories > button');if(!btn||!isAdmin()||!btn.closest('#ldm535FullAccess'))return;const i=Number(btn.dataset.ldm538Category);if(!categories[i])return;e.preventDefault();e.stopImmediatePropagation();openCategory(i,btn);},true);
   D.addEventListener('keydown',event=>{
    if(!(event.ctrlKey||event.metaKey)||event.key.toLowerCase()!=='k'||!isAdmin()||!isDash())return;
    const search=q('#v75TopQ');if(search){event.preventDefault();search.focus();}

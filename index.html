@@ -11009,7 +11009,7 @@ function v103StatsHtml(c){return `<div class="v103AttSummary"><div class="v103At
 function v103MatchStudent(s,q){q=v103Norm(q);if(!q)return true;return [s.student_name,s.father_name,s.admission_no,s.roll_no,s.phone,s.class_name].some(v=>v103Norm(v).includes(q))}
 
 /* Hide visible School Control only; underlying function remains intact. */
-function v103HideControl(){try{if(Array.isArray(window.V90_ADMIN_GROUPS||V90_ADMIN_GROUPS)){for(const g of V90_ADMIN_GROUPS){if(!Array.isArray(g?.[2]))continue;for(let i=g[2].length-1;i>=0;i--)if(g[2][i]?.[0]==='v65_control')g[2].splice(i,1)}}}catch(_e){}try{document.querySelectorAll('#erpNav button,#erpContent button,.v97DashTool').forEach(b=>{let oc=String(b.getAttribute('onclick')||''),tx=String(b.textContent||'').trim();if(oc.includes('v65_control')||/School Control|Control Panel/i.test(tx))b.remove()})}catch(_e){}}
+function v103HideControl(){try{if(Array.isArray(window.V90_ADMIN_GROUPS||V90_ADMIN_GROUPS)){for(const g of V90_ADMIN_GROUPS){if(!Array.isArray(g?.[2]))continue;for(let i=g[2].length-1;i>=0;i--)if(g[2][i]?.[0]==='v65_control')g[2].splice(i,1)}}}catch(_e){}try{document.querySelectorAll('#erpNav button,#erpContent button,.v97DashTool').forEach(b=>{let oc=String(b.getAttribute('onclick')||'');if(oc.includes('v65_control')||b.id==='v65Dock')b.remove()})}catch(_e){}}
 
 /* Student Register: always show S.No. + Roll No. without changing stored data. */
 try{if(M?.students?.cols&&!M.students.cols.some(c=>c[0]==='roll_no')){let i=M.students.cols.findIndex(c=>c[0]==='admission_no');M.students.cols.splice(i>=0?i+1:2,0,['roll_no','Roll No.'])}}catch(_e){}
@@ -18004,8 +18004,8 @@ window.v261RenderDueReport=function(){
   const host=$('v200DueReportBody');if(!host)return;
   const all=window.__v261DueRows||[],sum=window.__v261DueSummary||buildSummary(all),rows=filteredRows();
   const totalDue=all.reduce((a,x)=>a+num(x.current_due),0),dueStudents=all.filter(x=>num(x.current_due)>0).length;
-  const sumRows=sum.map(x=>`<tr><td><b>${esc(x.class_name)}</b></td><td>${x.total_students}</td><td>${x.due_students}</td><td>${x.clear_students}</td><td class="v261DueAmt">${money(x.current_due)}</td><td class="v261ClassOpen"><button onclick="v261OpenDueClass('${esc(x.class_name)}')">Open →</button></td></tr>`).join('');
-  const detailRows=rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.admission_no)}</td><td><b>${esc(r.student_name)}</b></td><td>${esc(r.father_name)}</td><td>${esc(r.class_name)}</td><td>${esc(r.roll_no||'—')}</td><td>${esc(r.phone||'—')}</td><td>${esc(r.due_till_month||'—')}</td><td>${r.fixed_monthly_fee===''?'—':money(r.fixed_monthly_fee)}</td><td class="${r.current_due>0?'v261DueAmt':'v261Clear'}">${money(r.current_due)}</td><td>${r.status}</td></tr>`).join('');
+  const sumRows=sum.map(x=>`<tr><td data-label="Class"><b>${esc(x.class_name)}</b></td><td data-label="Total Students">${x.total_students}</td><td data-label="Due Students">${x.due_students}</td><td data-label="Clear">${x.clear_students}</td><td data-label="Class Current Due" class="v261DueAmt">${money(x.current_due)}</td><td data-label="Detail" class="v261ClassOpen"><button onclick="v261OpenDueClass('${esc(x.class_name)}')">Open →</button></td></tr>`).join('');
+  const detailRows=rows.map((r,i)=>`<tr><td data-label="#">${i+1}</td><td data-label="Admission No.">${esc(r.admission_no)}</td><td data-label="Student"><b>${esc(r.student_name)}</b></td><td data-label="Father">${esc(r.father_name)}</td><td data-label="Class">${esc(r.class_name)}</td><td data-label="Roll">${esc(r.roll_no||'—')}</td><td data-label="Mobile">${esc(r.phone||'—')}</td><td data-label="Due Till">${esc(r.due_till_month||'—')}</td><td data-label="Fixed / Month">${r.fixed_monthly_fee===''?'—':money(r.fixed_monthly_fee)}</td><td data-label="Current Due" class="${r.current_due>0?'v261DueAmt':'v261Clear'}">${money(r.current_due)}</td><td data-label="Status">${r.status}</td></tr>`).join('');
   host.innerHTML=`<div id="v261DuePrintable">
     <div class="v261DueSummary"><div><small>Active Students</small><b>${all.length}</b></div><div><small>Due Students</small><b>${dueStudents}</b></div><div><small>Clear Students</small><b>${Math.max(all.length-dueStudents,0)}</b></div><div><small>Grand Central Due</small><b>${money(totalDue)}</b></div></div>
     <section class="v261ClassReport"><h3>Class-wise Current Due • As on ${esc(dateNow())}</h3><div class="tableWrap"><table><thead><tr><th>Class</th><th>Total Students</th><th>Due Students</th><th>Clear</th><th>Class Current Due</th><th>Detail</th></tr></thead><tbody>${sumRows||'<tr><td colspan="6">No class data.</td></tr>'}</tbody></table></div></section>
@@ -18975,13 +18975,13 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
 <script src="runtime-v347.js?v=388"></script>
 <link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=538-ref3"></script>
-<link rel="stylesheet" href="dashboard-parent-style-v374.css?v=377">
-<link rel="stylesheet" href="desktop-premium-v378.css?v=460">
+<link rel="stylesheet" href="dashboard-parent-style-v374.css?v=539-1">
+<link rel="stylesheet" href="desktop-premium-v378.css?v=539-1">
 <script src="desktop-premium-v378.js?v=534-layout"></script>
 <script src="admin-documents-v389.js?v=525"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
-<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=534-family-a4"><script src="id-card-v447.js?v=534-family-a4-r2"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=475"><script src="erp-premium-cards.js?v=538-ref3"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=517"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
+<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=534-family-a4"><script src="id-card-v447.js?v=534-family-a4-r2"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=538-sharp5"><script src="erp-premium-cards.js?v=538-ref3"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=517"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
 
 
 <script id="erp521-teacher-register">
@@ -19007,11 +19007,11 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="targeted-repair-v526.js?v=532"></script>
 <script src="timetable-format-v527.js?v=527"></script>
 <link rel="stylesheet" href="ldm-dashboard-v535.css?v=535-r1" media="screen">
-<link rel="stylesheet" href="ldm-dashboard-v536-unified.css?v=536-r1" media="screen">
+<link rel="stylesheet" href="ldm-dashboard-v536-unified.css?v=538-sharp5" media="screen">
 <script defer src="ldm-dashboard-v535.js?v=538-ref3"></script>
-<link rel="stylesheet" href="ldm-dashboard-v537-reference.css?v=537-r1" media="screen">
-<script defer src="ldm-dashboard-v537-reference.js?v=537-r1"></script>
-<link rel="stylesheet" href="ldm-dashboard-v538-reference-match.css?v=538-ref4-status" media="screen">
-<script defer src="ldm-dashboard-v538-reference-match.js?v=538-ref3"></script>
+<link rel="stylesheet" href="ldm-dashboard-v537-reference.css?v=538-sharp5" media="screen">
+<script defer src="ldm-dashboard-v537-reference.js?v=539-1"></script>
+<link rel="stylesheet" href="ldm-dashboard-v538-reference-match.css?v=539-1" media="screen">
+<script defer src="ldm-dashboard-v538-reference-match.js?v=539-1"></script>
 </body>
 </html>
