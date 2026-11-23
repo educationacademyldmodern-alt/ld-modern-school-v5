@@ -15,6 +15,50 @@ async function findSiblingParentByMobile(mobile){
 }
 async function authCreate(email,password,meta){const r=await fetch(SUPABASE_URL+'/auth/v1/admin/users',{method:'POST',headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password,email_confirm:true,user_metadata:meta})}),j=await asJson(r);if(!r.ok)throw Object.assign(new Error(j?.msg||j?.message||j?.error_description||'Parent auth create failed'),{status:r.status});return j?.user||j}
 async function authUpdate(id,email,password,meta){const body={email,email_confirm:true,user_metadata:meta};if(password)body.password=password;const r=await fetch(SUPABASE_URL+'/auth/v1/admin/users/'+encodeURIComponent(id),{method:'PUT',headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}),j=await asJson(r);if(!r.ok)throw Object.assign(new Error(j?.msg||j?.message||j?.error_description||'Parent auth update failed'),{status:r.status});return j?.user||j}
-async function upsertProfile(id,email,student,keepAdm){const r=await rest('profiles?on_conflict=id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({id,email,full_name:`Parent of ${student.student_name||''}`,role:'parent',status:'active',linked_admission_no:keepAdm||student.admission_no||''})}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Parent profile link failed')}
-async function updateStudent(id,mobile,email,status){const body={phone:mobile,parent_email:email,parent_login_status:status,parent_login_updated_at:new Date().toISOString()};const r=await rest(`students?id=eq.${encodeURIComponent(id)}`,{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(body)}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Student link update failed')}
-module.exports=async function handler(req,res){if(req.method!=='POST')return send(res,405,{error:'POST only'});if(!SUPABASE_URL||!SERVICE_KEY)return send(res,500,{error:'Supabase server environment is not configured'});try{await verifyPrimaryAdmin(req);const body=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{}),action=String(body.action||'');if(!['create_or_link','reset_password','create_or_set_password'].includes(action))return send(res,400,{error:'Invalid action'});if(!body.student_id)throw new Error('Student required');const student=await getStudent(body.student_id),mobile=String(body.mobile||student.phone||'').replace(/\D/g,'').slice(-10),password=String(body.password||'');if(mobile.length!==10)throw new Error('Valid 10 digit Parent Mobile required');if(password.length<8)throw new Error('Parent Password कम से कम 8 characters का रखें');const internal=`p${mobile}@parent.ldmodern.local`;let prof=await findAdmission(student.admission_no);if(!prof&&student.parent_email)prof=await findEmail(String(student.parent_email).trim().toLowerCase());if(!prof)prof=await findSiblingParentByMobile(mobile);if(!prof)prof=await findEmail(internal);const loginEmail=internal,keepAdm=prof?.linked_admission_no||student.admission_no||'',meta={full_name:`Parent of ${student.student_name||''}`,role:'parent',mobile,linked_admission_no:keepAdm};let authUser,created=false,passwordChanged=false,loginStatus='Not Generated';if(prof?.id){const mustSet=(action==='reset_password'||action==='create_or_set_password');const pw=mustSet?password:'';authUser=await authUpdate(prof.id,loginEmail,pw,meta);passwordChanged=!!pw;loginStatus=mustSet?'Regenerated':'Linked'}else{if(action==='reset_password')throw new Error('Parent login अभी बना नहीं है. पहले Create / Link करें.');authUser=await authCreate(loginEmail,password,meta);created=true;passwordChanged=true;loginStatus='Generated'}const uid=authUser?.id||prof?.id;if(!uid)throw new Error('Parent user id not returned');await upsertProfile(uid,loginEmail,student,keepAdm);await updateStudent(student.id,mobile,loginEmail,loginStatus);return send(res,200,{ok:true,created,password_changed:passwordChanged,status:loginStatus,login_email:loginEmail,mobile,linked_admission_no:keepAdm,internal_auth:loginEmail.endsWith('@parent.ldmodern.local')})}catch(e){return send(res,e.status||400,{error:e.message||String(e)})}}
+async function upsertProfile(id,email,student,keepAdm){const r=await rest('profiles?on_conflict=id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({id,email,full_name:`Parent of ${student.student_name||''}`,role:'parent',status:'active',linked_admission_no:keepAdm??student.admission_no??''})}),j=await asJson(r);if(!r.ok)throw new Error(j?.message||'Parent profile link failed')}
+async function familyRpc(name,payload){
+ const r=await rest('rpc/'+name,{method:'POST',body:JSON.stringify(payload)});
+ const data=await asJson(r);if(!r.ok)throw Object.assign(new Error(data?.message||'Family setup SQL required'),{status:409});return data;
+}
+module.exports=async function handler(req,res){
+ if(req.method!=='POST')return send(res,405,{error:'POST only'});
+ try{
+  await verifyPrimaryAdmin(req);
+  const input=typeof req.body==='string'?JSON.parse(req.body):req.body||{};
+  const action=input.action;
+  if(!['create_or_link','reset_password','create_or_set_password'].includes(action))return send(res,400,{error:'Invalid action'});
+  const student=await getStudent(input.student_id);
+  const raw=String(input.mobile||student.phone||'').trim(),digits=raw.replace(/[^0-9]/g,'');
+  if(!/^[+0-9 ()-]+$/.test(raw)||!/^(91|0)?[0-9]{10}$/.test(digits))throw Error('Valid parent mobile required');
+  const mobile=digits.slice(-10),password=String(input.password||'');
+  if(password.length<8)throw Error('Parent password must have at least 8 characters');
+  const alias=await familyRpc('ldm_family_login_lookup',{p_mobile:mobile});
+  const linked=student.parent_email?await findEmail(student.parent_email.trim().toLowerCase()):null;
+  if(student.parent_email&&!linked)throw Error('Existing parent link needs admin review before generating a login');
+  const anchor=await findAdmission(student.admission_no);
+  const sibling=await findSiblingParentByMobile(mobile);
+  const generatedEmail='family-'+require('crypto').createHash('sha256').update(String(student.id)).digest('hex').slice(0,32)+'@parent.ldmodern.local';
+  const provisioned=await findEmail(generatedEmail);
+  const candidates=new Set([alias,linked?.id,anchor?.id,sibling?.id,provisioned?.id].filter(Boolean));
+  if(candidates.size>1)throw Error('Different parent accounts are linked. Verify this family in the school records.');
+  let id=[...candidates][0],created=false,email;
+  let admission=student.admission_no;
+  if(id){
+   const found=await rows('profiles?id=eq.'+encodeURIComponent(id)+'&role=eq.parent&select=email,status,linked_admission_no');
+   if(!found[0]||!['active','approved'].includes(String(found[0].status||'active').toLowerCase()))throw Error('Parent account requires admin review');
+   email=found[0].email;admission=found[0].linked_admission_no||admission;
+  }else{
+   if(action==='reset_password')throw Error('Create or link the parent login first');
+   email=generatedEmail;
+   const u=await authCreate(email,password,{role:'parent'});
+   id=u.id;created=true;
+   try{await upsertProfile(id,email,student,'')}catch(e){
+    await fetch(SUPABASE_URL+'/auth/v1/admin/users/'+encodeURIComponent(id),{method:'DELETE',headers:{apikey:SERVICE_KEY,Authorization:'Bearer '+SERVICE_KEY}});throw e;
+   }
+  }
+  await familyRpc('ldm_family_bind',{p_parent:id,p_student:String(student.id),p_mobile:mobile});
+  const change=!created&&action!=='create_or_link';
+  if(change)await authUpdate(id,email,password,{role:'parent',mobile,linked_admission_no:admission});
+  return send(res,200,{ok:true,created,password_changed:created||change,status:created?'Generated':change?'Regenerated':'Linked',login_email:email,mobile,linked_admission_no:admission,internal_auth:true});
+ }catch(e){return send(res,e.status||400,{error:e.message||'Parent login update failed'})}
+};
