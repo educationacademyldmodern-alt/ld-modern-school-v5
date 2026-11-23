@@ -9863,7 +9863,7 @@ async function v90AdminDashboard(){
  <section id="v90Stats" class="v90Stats v114AdminStats v156ClickableStats">${window.__ldmAdminStatsHTML||hold}</section>
  <section class="ldmMasterControl"><div class="ldmMasterTitle"><div><small>ADMIN MASTER CONTROL</small><h2>School Control Center</h2></div><span>Central • Safe • On Demand</span></div><div class="ldmMasterGrid"><button onclick="render('class_teacher_control')"><i>👨‍🏫</i><b>Class Teacher Control</b><small>Assign • Repair • Change • Handover • Open Class</small><em>OPEN →</em></button><button onclick="render('v150_student_master')"><i>🎓</i><b>Student Master Control</b><small>Full Details • Edit • Correct • Update • Delete Safety</small><em>OPEN →</em></button><button onclick="render('v6422_due_master')"><i>⚡</i><b>Quick Due Fee Update</b><small>Central Ledger • Monthly • Installment • Reminder</small><em>OPEN →</em></button><button onclick="render('idcard_center')"><i>🪪</i><b>ID Card Center</b><small>10 Formats • Preview • A4 Print</small><em>OPEN →</em></button><button onclick="render('work_delegation')"><i>🧩</i><b>Assistant / Work Delegation</b><small>Assign • Multi Teacher • Responsibility • Off</small><em>OPEN →</em></button><button onclick="render('certificate_center')"><i>🏆</i><b>Premium Certificate Center</b><small>10 A4 Formats • Photo • QR • PDF</small><em>OPEN →</em></button></div></section>
  <div id="v149AdminQuickSlot"><section id="v147AdminQuick" class="panel"><h3>⚡ QR / Storage Quick Access</h3><div class="ldmTeacherModules"><button onclick="render('v147_admin_presence')"><i>🏫</i><b>QR Gate & Presence</b><small>Entered • Inside • Exited • Not Arrived</small></button><button onclick="render('v130_qr_scanner')"><i>📷</i><b>Admin QR Scanner</b><small>Entry / Exit / Teacher Gate</small></button><button onclick="render('v147_admin_student_qr')"><i>▦</i><b>Student QR Center</b><small>View • Print • Regenerate</small></button><button onclick="render('v130_storage')"><i>🗄</i><b>Storage Center</b><small>Usage • Safe Cleanup</small></button></div></section></div>
- <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">ON DEMAND</span></div><div class="v90MonitorGrid" style="grid-template-columns:repeat(2,minmax(0,1fr))!important">${window.LDM_MANAGEMENT.cards()}</div></section>
+ <section class="v114ManagementPanel"><div class="v90SectionTitle"><div><h2>Management Center</h2><p>सभी existing functions यहाँ सुरक्षित हैं</p></div><span id="v90LiveText">ON DEMAND</span></div><div class="v90MonitorGrid">${window.LDM_MANAGEMENT.cards()}</div></section>
  <section class="v114AdminFeedGrid"><article class="v90Panel"><div class="v114PanelHead"><h3>Recent Activities</h3><button onclick="render('v185_admin_activities')">View All →</button></div><div id="v39Activities">${actCache||'<div class="v39Empty">देखने के लिए View / Refresh दबाएँ।</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Important Notices</h3><button onclick="render('notices')">View All →</button></div><div id="v39Notices">${noticeCache||'<div class="v39Empty">देखने के लिए View / Refresh दबाएँ।</div>'}</div></article><article class="v90Panel"><div class="v114PanelHead"><h3>Calendar & Events</h3><button onclick="render('events')">View Calendar →</button></div><div id="v39Events">${eventCache||'<div class="v39Empty">देखने के लिए View / Refresh दबाएँ।</div>'}</div></article></section>
  </div>`);
  document.querySelector('#erpContent .ldmRootAdminDash').dataset.v408Owner=__v408Identity;
@@ -15452,7 +15452,8 @@ if(typeof statsBase==='function'){
     top.querySelectorAll(':scope > .ldmAdminSchoolIdentity').forEach(other=>{if(other!==id&&!other.querySelector('button,a,input,select,textarea'))other.remove()});
     const n=window.school?.school_name||'L D MODERN EDUCATION ACADEMY';
     const a=window.school?.address||'Gambhiriya Bujurg, Singhapatti, Padrauna, Kushinagar';
-    const identityHTML='<b>'+E(n)+'</b><small>'+E(a)+'</small>';if(id.innerHTML!==identityHTML)id.innerHTML=identityHTML;
+    const identityLogo=String(window.school?.logo_url||'school-logo.png');
+    const identityHTML='<img class="ldm535BrandLogo" alt="School logo" src="'+E(identityLogo)+'"><b>'+E(n)+'</b><small>'+E(a)+'</small>';if(id.innerHTML!==identityHTML)id.innerHTML=identityHTML;
     try{window.v62EnsureBell?.()}catch(_e){}
     try{window.v764InstallMasterSearch?.()}catch(_e){}
     let back=document.getElementById('v90BackBtn');
@@ -19005,5 +19006,10 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="ldm-fee-reminder-smart.js?v=526"></script>
 <script src="targeted-repair-v526.js?v=532"></script>
 <script src="timetable-format-v527.js?v=527"></script>
+<link rel="stylesheet" href="ldm-dashboard-v535.css?v=535-r1" media="screen">
+<link rel="stylesheet" href="ldm-dashboard-v536-unified.css?v=536-r1" media="screen">
+<script defer src="ldm-dashboard-v535.js?v=535-r1"></script>
+<link rel="stylesheet" href="ldm-dashboard-v537-reference.css?v=537-r1" media="screen">
+<script defer src="ldm-dashboard-v537-reference.js?v=537-r1"></script>
 </body>
 </html>

@@ -1,0 +1,184 @@
+/*
+ LD Modern Education Academy — V536 unified 3D dashboard refinement.
+ Visual-only, no access grant, no route overrides, no data mutations.
+ Applies to V535 Admin Dashboard and the authorized Teacher Dashboard.
+ */
+@media screen {
+  /* Deep-blue header common to both roles, with compact name/logo/search. */
+  #erp.ldmAdminCanonical .erpTop, #erp.ldmTeacherCanonical .erpTop {
+    background:
+      radial-gradient(ellipse 50% 100% at 72% -40%,rgba(51,218,255,.58),transparent 65%),
+      linear-gradient(118deg,#052962 0%,#064eab 43%,#06306d 100%) !important;
+    border-bottom:2px solid #59d9ff!important;
+    box-shadow:inset 0 1px 0 #ffffff75,0 10px 21px #09295d30!important;
+  }
+  #erp#erp .erpTop >button {white-space:normal!important;min-width:42px!important;overflow-wrap:normal!important}
+  #erp#erp .erpTop button:focus-visible {outline:3px solid #ffda5f!important;outline-offset:3px!important}
+
+  /* Admin: trim excess whitespace so the daily section stays above the fold. */
+  #erp#erp #erpContent .ldm535PremiumDashboard #v233Greeting {overflow:hidden!important}
+  #erp#erp #erpContent .ldm535PremiumDashboard .v185FrontActions >button,
+  #erp#erp #erpContent .ldm535PremiumDashboard .v114QuickGrid >button,
+  #erp#erp #erpContent .ldm535PremiumDashboard .v90Monitor,
+  #erp#erp #erpContent .ldm535PremiumDashboard .ldmMasterGrid >button {
+    border:1px solid rgba(228,251,255,.92)!important;
+    box-shadow:inset 0 1px 0 #ffffff7d,0 4px 0 #061e5a29,0 9px 16px #092a6528!important;
+    text-shadow:0 1px 2px #0c185955!important;
+  }
+  /* The old long dark rails on administration cards must not reappear. */
+  #erp#erp #erpContent .ldm535PremiumDashboard :is(.v90Monitor,.ldmMasterGrid>button) >em,
+  #erp#erp #erpContent .ldm535PremiumDashboard .ldm3dCard >.ldm3dBadge {display:none!important}
+
+  /* Teacher: same premium-blue greeting material as Admin, not a different dark theme. */
+  #erp#erp#erp#erp #erpContent >.v114TeacherDash {
+    width:100%!important;max-width:1550px!important;min-width:0!important;
+    margin:0 auto!important;display:grid!important;gap:15px!important;align-content:start!important;
+    font-family:system-ui,'Noto Sans Devanagari',sans-serif!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash > * {
+    min-width:0!important;max-width:100%!important;margin:0!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash >.v114TeacherHero {
+    min-height:128px!important;display:flex!important;align-items:center!important;
+    justify-content:space-between!important;flex-wrap:wrap!important;gap:16px!important;
+    padding:20px clamp(14px,2.2vw,28px)!important;overflow:hidden!important;
+    border:2px solid #73e5ff!important;border-radius:21px!important;
+    color:#fff!important;background:
+      radial-gradient(ellipse 45% 90% at 75% -50%,#74ffff65,transparent 90%),
+      linear-gradient(112deg,#026bbd 0%,#0848a5 57%,#029bcb 100%)!important;
+    box-shadow:inset 0 2px 0 #ffffff70,0 5px 0 #1879c444,0 13px 23px #073c8835!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherHero :is(h1,span,p,b,small) {
+    color:#fff!important;text-shadow:0 2px 5px #04275390!important;white-space:normal!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherHero h1 {
+    font:900 clamp(22px,2.4vw,36px)/1.24 system-ui,'Noto Sans Devanagari',sans-serif!important;
+    overflow-wrap:anywhere!important;margin:.25em 0!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherHero p {
+    font:600 clamp(13px,1.08vw,16px)/1.5 system-ui,'Noto Sans Devanagari',sans-serif!important;
+    opacity:.95!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114HeroMotto.teacher {
+    min-width:185px!important;max-width:100%!important;
+    padding:13px 18px!important;flex:0 1 270px!important;
+    background:linear-gradient(140deg,#46b6fa82,#0b80cc99)!important;
+    border:1px solid #9deaff!important;border-radius:18px!important;
+    box-shadow:inset 0 1px 0 #fff5,0 8px 14px #04408244!important;
+    text-align:center!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114HeroMotto.teacher b {
+    display:block!important;line-height:1.18!important;font-size:clamp(18px,1.7vw,26px)!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114HeroMotto.teacher small {
+    display:block!important;margin-top:7px!important;line-height:1.25!important;font-size:12px!important;
+  }
+
+  /* Live teacher stats: raised cards in the same palette, no fake progress lines. */
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats {
+    display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:11px!important;width:100%!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat {
+    display:flex!important;align-items:center!important;gap:10px!important;
+    min-width:0!important;min-height:87px!important;height:auto!important;
+    padding:13px!important;border:1px solid #d7f8ff!important;border-radius:17px!important;
+    background:linear-gradient(140deg,#117bce,#064795)!important;
+    box-shadow:inset 0 2px 0 #ffffff72,0 4px 0 #06477d44,0 10px 18px #102f6428!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat:nth-child(5n+2){background:linear-gradient(135deg,#0caa8c,#00666d)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat:nth-child(5n+3){background:linear-gradient(135deg,#9962df,#5631a8)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat:nth-child(5n+4){background:linear-gradient(135deg,#ed9e32,#a75a12)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat:nth-child(5n){background:linear-gradient(135deg,#ec5aa5,#9a227e)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat >span {
+    flex:0 0 40px!important;width:40px!important;height:40px!important;
+    display:grid!important;place-items:center!important;border-radius:12px!important;
+    font-size:24px!important;background:#ffffff30!important;box-shadow:inset 0 1px 0 #fff6!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat div {min-width:0!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat :is(b,small){
+    color:#fff!important;white-space:normal!important;overflow-wrap:anywhere!important;text-shadow:0 1px 3px #042e594a!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat b{font-size:clamp(17px,1.5vw,24px)!important;line-height:1.2!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat small{font-size:12px!important;line-height:1.3!important}
+
+  /* Teacher schedules and quick actions follow the same raised, colorful 3D tile design. */
+  #erp#erp#erp#erp #erpContent .v114TeacherDash :is(.v114TeacherSchedule,.v114TeacherQuick,.v114TeacherSide>.v90Panel),
+  #erp#erp#erp#erp #erpContent .v114TeacherDash #v114TeacherClassSlot >* {
+    border:1px solid #c8e6ff!important;border-radius:20px!important;
+    background:linear-gradient(160deg,#ffffff,#eef7ff)!important;
+    box-shadow:inset 0 1px 0 #fff,0 9px 22px #11498719!important;
+    min-width:0!important;max-width:100%!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash :is(.v114TeacherSchedule,.v114TeacherQuick,.v114TeacherSide>.v90Panel) h3 {
+    font:850 clamp(17px,1.5vw,23px)/1.3 system-ui,'Noto Sans Devanagari',sans-serif!important;
+    color:#0a376d!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick {
+    display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;
+    min-width:0!important;width:100%!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick > button,
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherTasks >button,
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v90Schedule >button {
+    position:relative!important;min-width:0!important;height:auto!important;min-height:84px!important;
+    padding:14px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;
+    gap:11px!important;text-align:left!important;
+    border:1px solid #b9eeff!important;border-radius:16px!important;
+    background:linear-gradient(140deg,#128bd8,#0750a8)!important;color:#fff!important;
+    box-shadow:inset 0 1px 0 #ffffff80,0 4px 0 #0c427e50,0 10px 19px #09376536!important;
+    white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;
+    transition:filter .18s ease,box-shadow .18s ease!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash :is(.v90Quick,.v114TeacherTasks,.v90Schedule)>button:nth-child(6n+2){background:linear-gradient(145deg,#12a78e,#056a6a)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash :is(.v90Quick,.v114TeacherTasks,.v90Schedule)>button:nth-child(6n+3){background:linear-gradient(145deg,#9355df,#5225a3)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash :is(.v90Quick,.v114TeacherTasks,.v90Schedule)>button:nth-child(6n+4){background:linear-gradient(145deg,#ed8b37,#b04d20)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash :is(.v90Quick,.v114TeacherTasks,.v90Schedule)>button:nth-child(6n+5){background:linear-gradient(145deg,#e95895,#a52e7b)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash :is(.v90Quick,.v114TeacherTasks,.v90Schedule)>button:nth-child(6n){background:linear-gradient(145deg,#10aed5,#075aa9)!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick >button b {
+    display:grid!important;place-items:center!important;flex:0 0 47px!important;
+    width:47px!important;height:47px!important;padding:0!important;
+    font:900 24px/1 system-ui,sans-serif!important;background:rgba(0,29,100,.24)!important;
+    border:1px solid #ffffff9c!important;border-radius:12px!important;
+    box-shadow:inset 0 1px 0 #fff5,0 3px 7px #0c26575e!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick >button span {
+    display:block!important;min-width:0!important;color:white!important;
+    font:850 clamp(13px,1.15vw,18px)/1.28 system-ui,'Noto Sans Devanagari',sans-serif!important;
+    text-shadow:0 1px 2px #062a5a7d!important;overflow-wrap:anywhere!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick >button::before,
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick >button::after {
+    display:none!important;content:none!important;
+  }
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherTasks >button {min-height:60px!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v90Schedule >button {display:grid!important;gap:4px!important;min-height:74px!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v90Schedule >button :is(b,span,strong,em){color:#fff!important;overflow-wrap:anywhere!important;text-shadow:none!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v90Schedule >button em{font-style:normal!important;font-weight:800!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick >button:focus-visible,
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherTasks >button:focus-visible,
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v90Schedule >button:focus-visible{outline:3px solid #ffd463!important;outline-offset:3px!important}
+  @media(hover:hover){
+    #erp#erp#erp#erp #erpContent .v114TeacherDash :is(.v90Quick,.v114TeacherTasks,.v90Schedule)>button:hover{filter:brightness(1.1)!important;box-shadow:inset 0 2px 0 #fff8,0 6px 0 #07345a44,0 14px 22px #09235a48!important}
+  }
+}
+@media screen and (max-width:1100px){
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats {grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick {grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media screen and (max-width:750px){
+  #erp#erp#erp#erp #erpContent .v114TeacherDash {gap:11px!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash >.v114TeacherHero {padding:14px!important;min-height:104px!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114HeroMotto.teacher {min-width:0!important;flex:1 1 100%!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherStats .v90Stat {padding:10px!important;min-height:75px!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick >button {min-height:91px!important;padding:10px!important;gap:7px!important;flex-wrap:wrap!important}
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick >button b {flex:0 0 38px!important;width:38px!important;height:38px!important;font-size:20px!important}
+}
+@media screen and (max-width:365px){
+  #erp#erp#erp#erp #erpContent .v114TeacherDash .v114TeacherQuick .v90Quick {grid-template-columns:1fr!important}
+}
+@media screen and (prefers-reduced-motion: reduce){
+  #erp#erp#erp#erp #erpContent .v114TeacherDash *,#erp .erpTop *{animation:none!important;transition:none!important}
+}
