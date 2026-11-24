@@ -3364,7 +3364,7 @@ async function v38UploadProfilePhoto(inputId){
     let up=await uploadPublicAsset(f,'profile-photos');
     localStorage.setItem('ld_profile_photo_'+user.id,up.url);
     try{await sb.from('profile_media').upsert({user_id:user.id,photo_url:up.url,updated_at:new Date().toISOString()},{onConflict:'user_id'})}catch(_e){}
-    toast('Profile photo updated');
+    if(!statusElement)toast('Profile photo updated');
     if(v14Teacher())teacherMyProfile();else dashboard();
   }catch(e){toast(e.message||String(e))}
 }
@@ -10626,7 +10626,7 @@ async function v97MyProfile(){
  if(!user?.id)return toast('आपका login session नहीं मिला या समाप्त हो गया है। कृपया दोबारा login करें।');window.__v90Route='v97_profile';try{v90Head?.('👤 My Profile','Profile Photo • Account Identity');v90InstallShell?.('v97_profile')}catch(_e){}
  let name=profile?.full_name||user?.email||v97RoleLabel(),role=v97RoleLabel(),mail=user?.email||profile?.email||'',photo=v97AvatarUrl();let html=`<div class="v90Page v97ProfilePage"><section class="v97ProfileCard"><div class="v97AvatarBox">${photo?`<img id="v97ProfileImg" src="${v97Safe(photo)}?v=${Date.now()}" alt="Profile">`:`<div class="v97AvatarLargeFallback">${v97Safe(v97Initials(name))}</div>`}<div class="v97ProfileActions"><label>📷 Update Photo<input id="v97AvatarFile" type="file" accept="image/jpeg,image/png,image/webp" onchange="v97UploadAvatar(this)"></label>${photo?'<button class="secondary" onclick="v97RemoveAvatar()">Remove</button>':''}</div></div><div><h2 style="margin:0;color:#123e73">${v97Safe(name)}</h2><p class="note">Welcome to My LDM Kingdom</p><div class="v97ProfileInfo"><div><small>Role</small><b>${v97Safe(role)}</b></div><div><small>Login</small><b>${v97Safe(mail||'Secure account')}</b></div><div><small>School</small><b>${v97Safe(school?.school_name||'L D MODERN EDUCATION ACADEMY')}</b></div><div><small>Status</small><b>${v97Safe(profile?.status||'Active')}</b></div></div><div id="v97AvatarStatus" class="v97ProfileHint">Photo एक ही storage path पर overwrite होगी ताकि storage waste न हो. Suggested size लगभग 20–60 KB.</div></div></section></div>`;v90Set?.(html)
 }
-async function v97UploadAvatar(input){let f=input?.files?.[0];if(!f)return;let st=$('v97AvatarStatus');try{if(st)st.textContent='Photo optimize/upload हो रही है...';f=await compressImageFile(f,20,60,720,'profile');let path=`${user.id}/avatar.jpg`;let r=await sb.storage.from('profile-media').upload(path,f,{upsert:true,cacheControl:'3600',contentType:'image/jpeg'});if(r.error)throw r.error;let pub=sb.storage.from('profile-media').getPublicUrl(path).data?.publicUrl||'';let u=await sb.rpc('v97_update_my_profile_photo',{p_path:path,p_url:pub});if(u.error)throw u.error;profile.avatar_path=path;profile.avatar_url=pub;profile.updated_at=new Date().toISOString();window.__v97LegacyAvatar=pub;try{localStorage.setItem('ld_v97_avatar_'+user.id,pub)}catch(_e){};if(st)st.textContent=`✓ Profile photo updated • ${Math.max(1,Math.round(f.size/1024))} KB`;toast('Profile photo updated');v97InstallTopIdentity();setTimeout(v97DecorateDashboard,0);if(v97RoleKey()==='parent'||v97RoleKey()==='student')setTimeout(v97PolishParentPortal,0)}catch(e){if(st)st.textContent='Error: '+(e.message||e);toast((e.message||String(e))+' • Profile Storage check: V109 Storage Repair SQL + Vercel Supabase env verify करें.')}finally{if(input)input.value=''}}
+async function v97UploadAvatar(input, statusElement){let f=input?.files?.[0];if(!f)return;let st=statusElement||$('v97AvatarStatus');try{if(st)st.textContent='Photo optimize/upload हो रही है...';f=await compressImageFile(f,20,60,720,'profile');let path=`${user.id}/avatar.jpg`;let r=await sb.storage.from('profile-media').upload(path,f,{upsert:true,cacheControl:'3600',contentType:'image/jpeg'});if(r.error)throw r.error;let pub=sb.storage.from('profile-media').getPublicUrl(path).data?.publicUrl||'';let u=await sb.rpc('v97_update_my_profile_photo',{p_path:path,p_url:pub});if(u.error)throw u.error;profile.avatar_path=path;profile.avatar_url=pub;profile.updated_at=new Date().toISOString();window.__v97LegacyAvatar=pub;try{localStorage.setItem('ld_v97_avatar_'+user.id,pub)}catch(_e){};if(st)st.textContent=`✓ Profile photo updated • ${Math.max(1,Math.round(f.size/1024))} KB`;if(!statusElement)toast('Profile photo updated');v97InstallTopIdentity();setTimeout(v97DecorateDashboard,0);if(v97RoleKey()==='parent'||v97RoleKey()==='student')setTimeout(v97PolishParentPortal,0)}catch(e){if(st)st.textContent='Error: '+(e.message||e);if(!statusElement)toast((e.message||String(e))+' • Profile Storage check: V109 Storage Repair SQL + Vercel Supabase env verify करें.')}finally{if(input)input.value=''}}
 async function v97RemoveAvatar(){try{let path=profile?.avatar_path||`${user.id}/avatar.jpg`;if(path)await sb.storage.from('profile-media').remove([path]);let r=await sb.rpc('v97_update_my_profile_photo',{p_path:'',p_url:''});if(r.error)throw r.error;profile.avatar_path='';profile.avatar_url='';profile.updated_at=new Date().toISOString();window.__v97LegacyAvatar='';try{localStorage.removeItem('ld_v97_avatar_'+user.id)}catch(_e){};toast('Profile photo removed');await v97MyProfile();v97InstallTopIdentity()}catch(e){toast(e.message||String(e))}}
 
 async function v97LoadLegacyAvatar(){if(!user?.id||profile?.avatar_url)return v97AvatarUrl();try{let r=await sb.from('profile_media').select('photo_url').eq('user_id',user.id).maybeSingle();let u=String(r.data?.photo_url||'').trim();if(u){window.__v97LegacyAvatar=u;try{localStorage.setItem('ld_v97_avatar_'+user.id,u)}catch(_e){};return u}}catch(_e){}return v97AvatarUrl()}
@@ -16382,7 +16382,19 @@ if(typeof statsBase==='function'){
  window.v111PreviewOneNotice=function(adm){let row=(window.v111ReminderRows||[]).find(x=>String(x.admission_no)===String(adm));return row?window.ldmV210PreviewDueNotices([row],ldmFeeNoticeOpts()):null};try{v111PreviewFeeNotices=window.v111PreviewFeeNotices;v111PreviewOneNotice=window.v111PreviewOneNotice}catch(_e){}
 
  /* Dashboard cleanup: remove only exact duplicate route buttons; preserve the first canonical entry. */
- function dedupeDashboardRoutes(){if(!isAdmin()||String(window.__v90Route||'')!=='dashboard')return;let root=$('erpContent');if(!root)return;let seen=new Set(),alias=new Map([['v90_due_fee_monitor','v6422_due_master']]);for(const b of root.querySelectorAll('button[onclick]')){let oc=String(b.getAttribute('onclick')||''),m=oc.match(/render\(['\"]([^'\"]+)['\"]\)/);if(!m)continue;let r=alias.get(m[1])||m[1];if(!r||r==='dashboard')continue;if(seen.has(r)){let sec=b.closest('.v90MonitorGrid,.v114AdminFeedGrid');if(sec)b.remove()}else seen.add(r)}}
+ function dedupeDashboardRoutes(){
+  if(!isAdmin()||String(window.__v90Route||'')!=='dashboard')return;
+  const root=$('erpContent');if(!root)return;
+  for(const grid of root.querySelectorAll('.v90MonitorGrid,.ldmMasterGrid,.ldmTeacherModules,.v185FrontActions')){
+   const seen=new Set();
+   for(const button of grid.querySelectorAll(':scope > button[onclick]')){
+    const route=/^\s*(?:window\.)?render\(\s*(['"])([\w-]+)\1\s*\)\s*;?\s*$/.exec(button.getAttribute('onclick')||'')?.[2];
+    if(!route||button.id||button.attributes.length>1)continue;
+    if(seen.has(route))button.hidden=true;
+    seen.add(route);
+   }
+  }
+ }
  function polish(){if(String(window.__v90Route||'')==='dashboard')dedupeDashboardRoutes();if(document.querySelector('.v187CertPreviewShell,.v188PreviewShell,#idA4Preview,.v111NoticePages,.ldmFeeNoticePreview'))window.ldmFitPrintPreviews?.();let cert=$('v188MasterCard');if(cert){cert.style.setProperty('background','linear-gradient(135deg,#7c3aed 0%,#2563eb 52%,#0f766e 100%)','important');cert.style.setProperty('color','#fff','important')}}
 
  /* Route-only wrapper; UI polish runs only when the relevant route/preview exists. */
@@ -16712,22 +16724,11 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   /* V244: permanent header observer retired. Header is normalized after render/head/shell/openERP only. */
   function watchHeader(){return ensureAdminControls()}
 
-  let guardBusy=false,exitPromptBusy=false;
+  let guardBusy=false;
   function rootExitPrompt(){
-    if(exitPromptBusy)return false;exitPromptBusy=true;
-    try{
-      const ok=window.confirm('ERP Dashboard से बाहर निकलना है?\n\nCancel दबाने पर ERP में ही रहेंगे।');
-      if(!ok)return false;
-      /* Never send Back to the public website. Try to close only when the browser permits it. */
-      try{window.close()}catch(_e){}
-      setTimeout(()=>{
-        if(document.visibilityState==='visible'&&erpVisible()){
-          try{window.toast?.('ERP सुरक्षित है। Browser tab बंद करें या Logout / Website button का उपयोग करें।')}catch(_e){}
-          const h=['dashboard'];saveStack(h,'dashboard');installBrowserPair('dashboard',h,true);ensureAdminControls();
-        }
-      },180);
-      return true;
-    }finally{setTimeout(()=>{exitPromptBusy=false},220)}
+    const h=['dashboard'];
+    saveStack(h,'dashboard');installBrowserPair('dashboard',h,true);ensureAdminControls();
+    return true;
   }
 
   function centralPush(route){
@@ -16762,7 +16763,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
   async function centralBack(){
     if(!isInternalERP())return false;
     let h=readStack(),here=routeNow();
-    if(here==='dashboard'||h.length<=1){
+    if(here==='dashboard'&&document.querySelector('#erpContent .ldmRootAdminDash,#erpContent .ldmNewTeacher,#erpContent .v114TeacherDash')){
       saveStack(['dashboard'],'dashboard');installBrowserPair('dashboard',['dashboard'],true);ensureAdminControls();
       try{window.scrollTo(0,0)}catch(_e){}
       return true
@@ -18918,7 +18919,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=460"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
-<script src="root-corrections-v332.js?v=451"></script>
+<script src="root-corrections-v332.js?v=544"></script>
 <script src="daily-reminders-v320.js?v=322"></script>
 <script src="menu-v473.js?v=473"></script>
 <script src="student-tables-v475.js?v=475"></script>
@@ -18973,15 +18974,15 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="teacher-save-v345.js?v=473"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=388"></script>
-<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=542-layout"></script>
+<script src="runtime-v347.js?v=544"></script>
+<link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=544"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=539-1">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=539-1">
 <script src="desktop-premium-v378.js?v=534-layout"></script>
 <script src="admin-documents-v389.js?v=525"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
-<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=534-family-a4"><script src="id-card-v447.js?v=534-family-a4-r2"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=538-sharp5"><script src="erp-premium-cards.js?v=538-ref3"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=517"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
+<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=534-family-a4"><script src="id-card-v447.js?v=534-family-a4-r2"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=538-sharp5"><script src="erp-premium-cards.js?v=538-ref3"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=544"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
 
 
 <script id="erp521-teacher-register">
@@ -19012,8 +19013,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="ldm-dashboard-v537-reference.css?v=538-sharp5" media="screen">
 <script defer src="ldm-dashboard-v537-reference.js?v=539-1"></script>
 <link rel="stylesheet" href="ldm-dashboard-v538-reference-match.css?v=539-1" media="screen">
-<script defer src="ldm-dashboard-v538-reference-match.js?v=542-layout"></script>
-<link rel="stylesheet" href="ldm-dashboard-v539-one-sector.css?v=543-navigation" media="screen">
-<script defer src="ldm-dashboard-v539-one-sector.js?v=543-navigation"></script>
+<script defer src="ldm-dashboard-v538-reference-match.js?v=544"></script>
+<link rel="stylesheet" href="ldm-dashboard-v539-one-sector.css?v=544" media="screen">
+<script defer src="ldm-dashboard-v539-one-sector.js?v=544"></script>
 </body>
 </html>

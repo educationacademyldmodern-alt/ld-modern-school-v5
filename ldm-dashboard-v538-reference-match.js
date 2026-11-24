@@ -33,17 +33,27 @@
    const langs=create('div','ldm538Lang');
    for(const [lang,label] of [['hi','हिंदी'],['en','English']]){
     const b=create('button','',label);b.type='button';b.dataset.lang=lang;b.setAttribute('aria-pressed',lang==='en'?'true':'false');
-    b.addEventListener('click',()=>{W.LDM_V337_UI?.setLanguage(lang);bar.dataset.lang=lang;langs.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.lang===lang)));bar.querySelector('[data-ldm538="photos"]').textContent=lang==='hi'?'📷 विद्यार्थी फोटो':'📷 Student Photos';const previewButton=q('[data-ldm538="preview"]');if(previewButton)previewButton.textContent=lang==='hi'?'🗎 PDF / A4 प्रीव्यू':'🗎 PDF / A4 Preview';});
+    b.addEventListener('click',()=>{W.LDM_V337_UI?.setLanguage(lang);bar.dataset.lang=lang;langs.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.lang===lang)));const photos=q('[data-ldm538="photos"]',erp);if(photos)photos.textContent=lang==='hi'?'📷 विद्यार्थी फोटो':'📷 Student Photos';const previewButton=q('[data-ldm538="preview"]');if(previewButton)previewButton.textContent=lang==='hi'?'🗎 PDF / A4 प्रीव्यू':'🗎 PDF / A4 Preview';});
     langs.append(b);
    }
    const slot=create('div','ldm538SearchSlot');
    const actions=create('div','ldm538ToolActions');
-   const add=(type,label,fn)=>{const b=create('button','',label);b.type='button';b.dataset.ldm538=type;b.addEventListener('click',fn);actions.append(b)};
+   const add=(type,label,fn)=>{const b=create('button','',label);b.type='button';b.dataset.ldm538=type;b.addEventListener('click',fn);actions.append(b);return b};
    add('photos','📷 Student Photos',()=>{if(isAdmin())safeRoute('student_photo_center');else if(isTeacher()&&typeof W.render==='function')W.render('v91_student_photos');});
 
    const hint=create('kbd','ldmSearchHint','Ctrl + K');slot.append(hint);bar.append(langs,slot,actions);top.after(bar);
   }
   const admin=isAdmin();
+  const langs=q('.ldm538Lang',bar);
+  if(langs)top.append(langs);
+  const heroTop=admin?q('#ldm500Hero .ldm500-hero-top',erp):null;
+  const photo=q('[data-ldm538="photos"]',erp);
+  if(heroTop&&photo&&photo.parentElement!==heroTop)heroTop.append(photo);
+  if(!photo){
+    const button=create('button','','📷 Student Photos');button.type='button';button.dataset.ldm538='photos';
+    button.addEventListener('click',()=>{if(isAdmin())safeRoute('student_photo_center');else if(isTeacher())W.render?.('v91_student_photos')});
+    (heroTop||q('.ldm538ToolActions',bar)).append(button);
+  }
   const heroActions=admin?q('#ldm500Hero .ldm500-hero-top',erp):null;
   if(heroActions&&!q('[data-ldm538="preview"]',heroActions)){
     const preview=create('button','','🗎 A4 दस्तावेज़ चुनें');preview.type='button';preview.dataset.ldm538='preview';
@@ -132,7 +142,7 @@
   if(!body||!sections)return;
   const intro=q('.ldm535FullIntro',body);if(intro)intro.hidden=true;
   let original=q(':scope > .ldm538Original',body);
-  if(!original){original=create('details','ldm538Original');original.open=false;original.append(create('summary','', 'सभी मूल ERP कार्ड / Original modules देखें'));body.append(original)}
+  if(!original){original=create('details','ldm538Original');original.open=true;original.append(create('summary','', 'सभी मूल ERP कार्ड / Original modules देखें'));body.append(original)}
   if(sections.parentElement!==original)original.append(sections);
   const nav=q('.ldm537Categories',body);if(nav){
    [...nav.children].forEach(b=>{const i=Number(b.dataset.ldm538Category);if(!categories[i])return;const small=q('small',b);if(small){const value=[

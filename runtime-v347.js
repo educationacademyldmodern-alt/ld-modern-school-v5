@@ -3,7 +3,14 @@
 const owner=()=>String((typeof profile!=='undefined'?profile:W.profile)?.id||''),session=()=>String((typeof school!=='undefined'?school:W.school)?.academic_session||'');
 const APIs=['LDMEA_ROOT','LDM_MARKSHEET','LDM_EXAM','LDM_RESOURCES','LDM_ROOT','LDM_V336','LDM_V304','LDM_FEE_V335','LDM_REMINDERS','LDM_V309_RECEIPT','LDM_PHOTO_V337','LDM_PAPER_V343'];
 function canNavigate(){if([...writes.values()].some(w=>w.owner===owner()))return false;for(const name of APIs){const api=W[name];if(api?.canNavigate&&api.canNavigate()===false)return false}return true}
-const blocked=()=>W.toast?.('पहले चालू Save / उसी अनुरोध का Retry पूरा करें।');
+function blocked(){
+ const top=D.querySelector('#erp .erpTop');
+ if(!top)return;
+ let status=top.querySelector('.ldmSaveStatus');
+ if(!status){status=D.createElement('span');status.className='ldmSaveStatus';status.setAttribute('role','status');top.append(status)}
+ status.textContent='सेव पूरा होने पर दोबारा प्रयास करें।';
+ clearTimeout(status.clearTimer);status.clearTimer=setTimeout(()=>status.remove(),4000);
+}
 function beginWrite(form){const id=++sequence;writes.set(id,{owner:owner(),form});return id}function endWrite(id){writes.delete(id)}
 const renderBase=W.render;let navigation=null,queuedRoute=null;
 if(typeof renderBase==='function'){W.render=function(route='dashboard',...args){if(!canNavigate())return blocked();const who=owner(),sess=session(),key=[who,sess,String(route)].join('|');if(!args.length&&flights.has(key)){metrics.sharedRoutes++;if(queuedRoute){queuedRoute.resolve();queuedRoute=null}return flights.get(key)}if(queuedRoute?.key===key&&!args.length){metrics.sharedRoutes++;return queuedRoute.promise}
@@ -13,7 +20,10 @@ if(navigation){if(queuedRoute)queuedRoute.resolve();let resolve,reject;const pro
 function once(name,kind,guard=true){const base=W[name];if(typeof base!=='function')return;W[name]=function(...args){if(guard&&!canNavigate())return blocked();const key=owner()+'|'+kind;if(actions.has(key)){metrics.sharedActions++;return actions.get(key)}let result;try{result=base.apply(this,args)}catch(e){return Promise.reject(e)}const promise=Promise.resolve(result).finally(()=>{if(actions.get(key)===promise)actions.delete(key)});actions.set(key,promise);return promise}}
 once('v90Back','back');once('v90GoHome','home');once('erpGoHome','home');once('login','login',false);once('logout','logout');try{v90GoHome=W.v90GoHome;erpGoHome=W.erpGoHome}catch(_){}
 // Resolve toolbar actions before legacy document handlers can call retained references.
-W.addEventListener('click',e=>{const menu=e.target.closest?.('#erp .erpTop .hamb');if(menu){e.preventDefault();e.stopImmediatePropagation();const side=D.querySelector('#erp>aside');if(side){ensureTeacherNav();const open=side.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))}return}const button=e.target.closest?.('#v90BackBtn,#v90HomeBtn,.erpHomeBtn');if(!button)return;e.preventDefault();e.stopImmediatePropagation();if(!canNavigate())return blocked();const fn=button.id==='v90BackBtn'?W.v90Back:W.v90GoHome;fn?.call(W)},true);
+W.addEventListener('click',e=>{const menu=e.target.closest?.('#erp .erpTop .hamb');if(menu){e.preventDefault();e.stopImmediatePropagation();const side=D.querySelector('#erp>aside');if(side){ensureTeacherNav();const open=side.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))}return}const button=e.target.closest?.('#v90BackBtn,#v90HomeBtn,.erpHomeBtn');if(!button)return;e.preventDefault();e.stopImmediatePropagation();if(!canNavigate())return blocked();const panel=D.querySelector('#erpContent #ldm500Dialog');
+if(panel){panel.querySelector('#ldm500Close')?.click();if(button.id==='v90BackBtn'){D.getElementById('ldm500Open')?.focus();return}}
+const drawer=D.querySelector('#erp>aside.open');if(drawer){drawer.classList.remove('open');D.querySelector('#erp .erpTop .hamb')?.setAttribute('aria-expanded','false')}
+const fn=button.id==='v90BackBtn'?W.v90Back:W.v90GoHome;fn?.call(W)},true);
 // Legacy sidebar handlers still check permission before their history changes.
 D.addEventListener('click',e=>{if(!e.target.closest?.('#v90BackBtn,#v90HomeBtn,#erpNav button,.erpHomeBtn'))return;if(!canNavigate()){e.preventDefault();e.stopImmediatePropagation();blocked()}},true);
 W.addEventListener('beforeunload',e=>{if([...writes.values()].some(w=>w.owner===owner())){e.preventDefault();e.returnValue=''}});

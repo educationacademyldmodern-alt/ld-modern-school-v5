@@ -17,7 +17,7 @@ function donut(){
 function mount(){if(!admin()){$('v350FeePay')?.remove();return;}const dash=D.querySelector('#erpContent .ldmRootAdminDash');if(!dash){$('v350FeePay')?.remove();return}dash.classList.add('v350Dashboard');const attendance=dash.querySelector('.v114AttendancePanel'),stats=$('v90Stats'),absent=$('v307Dash');if(!W.LDM_DESKTOP_378?.active?.()){
 // Keep the detail panels native. V535 groups the original module controls.
 for(const node of [attendance,absent,dash.querySelector('.v114QuickPanel')]){
- const target=node===attendance?(dash.querySelector('#ldmOffice')||dash):dash;
+ const target=node===attendance?(dash.querySelector('#ldmAttendanceDetails')||dash):dash;
  if(node&&node.parentElement!==target)target.append(node);
 }
 }

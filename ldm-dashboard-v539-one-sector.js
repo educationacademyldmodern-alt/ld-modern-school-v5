@@ -76,7 +76,7 @@
     const none=el('p','ldm539Empty','इस खोज से मेल खाने वाला कार्ड नहीं मिला।');none.hidden=true;
     main.append(header,controls,grid,none);
     const directory=el('details','ldm540Directory');
-    directory.append(el('summary','','सभी कार्य खोजें / Search all functions'),main);
+    directory.open=true;directory.append(el('summary','','सभी कार्य खोजें / Search all functions'),main);
     directory.addEventListener('toggle',()=>{if(directory.open)populate(r)});
     mount.append(directory);
     return main;
@@ -84,7 +84,7 @@
   function populate(r){
     const main=q('#ldm539Modules',r),grid=q('#ldm539CardGrid',main);if(!grid)return;
     const entries=liveEntries(r),hash=entries.map(e=>e.route+'|'+e.title+'|'+e.detail).join('\n');
-    if(hash===lastCatalog && grid.childElementCount===entries.length)return;
+    if(hash===lastCatalog && grid.childElementCount===entries.length){applyFilter(r);return;}
     lastCatalog=hash;const fragment=D.createDocumentFragment();
     for(const entry of entries){
       const category=classify(entry),tile=el('button','ldm539ModuleCard');tile.type='button';tile.dataset.category=category;tile.dataset.route=entry.route;
@@ -102,8 +102,14 @@
   function applyFilter(r){
     const main=q('#ldm539Modules',r);if(!main)return;let count=0;
     main.querySelectorAll('.ldm539CategoryTab').forEach(b=>setFlag(b,'aria-pressed',b.dataset.category===selection));
+    const native=new Set();
+    for(const button of r.querySelectorAll('button[onclick]')){
+      if(button.closest('#ldm539Modules,[hidden],details:not([open])'))continue;
+      const route=/^\s*(?:window\.)?render\(\s*(['"])([\w-]+)\1\s*\)\s*;?\s*$/.exec(button.getAttribute('onclick')||'')?.[2];
+      if(route)native.add(route);
+    }
     const cards=main.querySelectorAll('.ldm539ModuleCard');cards.forEach(b=>{
-      const okay=(selection==='all'||selection===b.dataset.category) && (!search||[b.textContent,b.dataset.route].join(' ').toLocaleLowerCase().includes(search));
+      const okay=(selection!=='all'||search||!native.has(b.dataset.route)) && (selection==='all'||selection===b.dataset.category) && (!search||[b.textContent,b.dataset.route].join(' ').toLocaleLowerCase().includes(search));
       if(b.hidden===okay)b.hidden=!okay;if(okay)count++;
     });
     const counter=q('.ldm539Count',main);if(counter && counter.textContent!==`${count} / ${cards.length} कार्ड`)counter.textContent=`${count} / ${cards.length} कार्ड`;
@@ -186,16 +192,25 @@
   function office(dash){
     const assistant=q('#s336DashboardCard',q('#erpContent'));
     const attendance=admin()?q('.v114AttendancePanel',dash):null;
+    const stats=q('#v90Stats',dash);
+    if(attendance&&stats){
+      let details=q('#ldmAttendanceDetails',dash);
+      if(!details){
+        details=el('details');details.id='ldmAttendanceDetails';
+        details.append(el('summary','','उपस्थिति • आज का ग्राफ़ देखें'));stats.after(details);
+      }
+      if(attendance.parentElement!==details)details.append(attendance);
+    }
     const greeting=q('#v233Greeting,.ldmTeacherHero,.v114PortalHero',dash);
-    if(!greeting||(!assistant&&!attendance))return;
+    if(!greeting||!assistant)return;
     let panel=q('#ldmOffice',dash);
     if(!panel){
       panel=el('section');panel.id='ldmOffice';panel.hidden=true;panel.setAttribute('aria-label','कार्यालय');
       const tools=el('div');tools.id='ldmOfficeTools';panel.append(tools);
       greeting.after(panel);
     }
-    const launcher=q('#ldm538Toolbar .ldm538ToolActions')||greeting;
-    let button=q('.ldm538WorkAssistant',launcher);
+    const launcher=q('#ldm500Hero .ldm500-hero-pills',dash)||greeting;
+    let button=q('.ldm538WorkAssistant',dash);if(button&&button.parentElement!==launcher)launcher.append(button);
     if(!button){
       button=el('button','ldm538WorkAssistant','🏢 कार्यालय / Office');button.type='button';button.setAttribute('aria-controls',panel.id);
       launcher.append(button);
@@ -204,12 +219,25 @@
     setFlag(button,'aria-expanded',!panel.hidden);
     const tools=q('#ldmOfficeTools',panel);
     if(assistant&&assistant.parentElement!==tools)tools.append(assistant);
-    if(attendance&&attendance.parentElement!==panel)panel.append(attendance);
+
+  }
+  function profilePhoto(dash){
+    const greeting=q('#v233Greeting',dash);
+    if(!admin()||!greeting||q('.ldmPhotoChoice',greeting))return;
+    const label=el('label','ldmPhotoChoice'),input=el('input'),img=el('img'),status=el('small');
+    status.setAttribute('role','status');input.type='file';input.accept='image/*';img.alt='';
+    const title=el('span','','📷 अपनी फ़ोटो');label.append(input,img,title,status);greeting.append(label);
+    function show(){const url=W.v97AvatarUrl?.();img.hidden=!url;if(url){img.src=url+(url.includes('?')?'&':'?')+'v='+encodeURIComponent(W.profile?.updated_at||'');title.textContent='फ़ोटो बदलें'}}
+    show();
+    input.addEventListener('change',async()=>{if(!admin()||!input.files.length)return;
+      input.disabled=true;
+      try{await W.v97UploadAvatar(input,status);show()}finally{input.disabled=false}
+    });
   }
   function render(){
     pending=false;watch();teacherSector();const r=root();
     const dash=admin()?r:(String(W.profile?.role||'').toLowerCase()==='teacher'?q('#erpContent > .ldmNewTeacher,#erpContent > .v114TeacherDash'):null);
-    setupView(dash);if(dash)office(dash);if(!r||!admin())return;
+    setupView(dash);if(dash){office(dash);profilePhoto(dash)}if(!r||!admin())return;
     ensureModules(r);
     if(q('.ldm540Directory[open]',r))populate(r);
   }
