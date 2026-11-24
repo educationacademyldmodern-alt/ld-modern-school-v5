@@ -33,20 +33,17 @@
    const langs=create('div','ldm538Lang');
    for(const [lang,label] of [['hi','हिंदी'],['en','English']]){
     const b=create('button','',label);b.type='button';b.dataset.lang=lang;b.setAttribute('aria-pressed',lang==='en'?'true':'false');
-    b.addEventListener('click',()=>{W.LDM_V337_UI?.setLanguage(lang);bar.dataset.lang=lang;langs.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.lang===lang)));bar.querySelector('[data-ldm538="photos"]').textContent=lang==='hi'?'📷 विद्यार्थी फोटो':'📷 Student Photos';bar.querySelector('[data-ldm538="preview"]').textContent=lang==='hi'?'🗎 PDF / A4 प्रीव्यू':'🗎 PDF / A4 Preview';bar.querySelector('[data-ldm538="theme"]').textContent=lang==='hi'?'🎨 थीम':'🎨 Theme';});
+    b.addEventListener('click',()=>{W.LDM_V337_UI?.setLanguage(lang);bar.dataset.lang=lang;langs.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.lang===lang)));bar.querySelector('[data-ldm538="photos"]').textContent=lang==='hi'?'📷 विद्यार्थी फोटो':'📷 Student Photos';});
     langs.append(b);
    }
    const slot=create('div','ldm538SearchSlot');
    const actions=create('div','ldm538ToolActions');
    const add=(type,label,fn)=>{const b=create('button','',label);b.type='button';b.dataset.ldm538=type;b.addEventListener('click',fn);actions.append(b)};
    add('photos','📷 Student Photos',()=>{if(isAdmin())safeRoute('student_photo_center');else if(isTeacher()&&typeof W.render==='function')W.render('v91_student_photos');});
-   add('preview','🗎 PDF / A4 Preview',()=>{if(isAdmin()&&W.LDM_A4_V337?.choose)W.LDM_A4_V337.choose();else if(isAdmin())safeRoute('marksheet_center')});
-   add('theme','🎨 Theme',()=>{if(typeof W.LDM_THEME?.open==='function')W.LDM_THEME.open();else if(typeof W.v75ToggleDark==='function')W.v75ToggleDark();else W.toast?.('Theme is not available')});
    const hint=create('kbd','ldmSearchHint','Ctrl + K');slot.append(hint);bar.append(langs,slot,actions);top.after(bar);
   }
   const admin=isAdmin();
-  const preview=q('[data-ldm538="preview"]',bar);
-  if(preview && preview.hidden===admin)preview.hidden=!admin;
+
   const search=q('.ldm538SearchSlot',bar);
   if(search && search.hidden===admin)search.hidden=!admin;
   if(!admin){q('#ldm538AdminProfile',top)?.remove();q('#ldm538HeaderRefresh',top)?.remove();}
@@ -144,26 +141,10 @@
   }
  }
  function openCategory(index,trigger){
-  const root=q('#erpContent > .ldm535PremiumDashboard'),full=q('#ldm535FullAccess',root);
-  const panel=q('.ldm538CategoryPanel',full),def=categories[index];if(!panel||!def)return;
-  if(!full.open)full.open=true;
-  if(!panel.hidden&&panel.dataset.category===String(index)){panel.hidden=true;trigger?.setAttribute('aria-expanded','false');return;}
-  panel.hidden=false;panel.dataset.category=String(index);
-  const catalog=typeof W.LDM_PREMIUM_V500?.catalog==='function'?W.LDM_PREMIUM_V500.catalog():[];
-  const matches=catalog.filter(e=>{
-   const description=[e.title,e.detail,e.route].join(' ');
-   return def.re.test(description)||(index===categories.length-1&&!categories.some(c=>c.re.test(description)));
-  });
-  panel.replaceChildren();panel.append(create('b','ldm538CategoryHeading',def.icon+' '+def.name));
-  const links=create('div','ldm538CategoryLinks');
-  for(const e of matches){
-   const btn=create('button','',String(e.icon||'📌')+' '+String(e.title||e.route));btn.type='button';btn.addEventListener('click',()=>safeRoute(e.route));links.append(btn);
-  }
-  if(!matches.length){const no=create('span','', 'इस श्रेणी के मूल कार्ड नीचे उपलब्ध हैं।');links.append(no)}
-  const all=create('button','ldm538ShowAll','सभी मूल ERP कार्ड खोलें →');all.type='button';all.addEventListener('click',()=>{const d=q('.ldm538Original',root);if(d){d.open=true;d.scrollIntoView({block:'start',behavior:'smooth'});}else W.LDM_PREMIUM_V500?.open?.();});
-  panel.append(links,all);
+  const map=['management','students','exams','finance','teachers','documents','qr','reports'];
+  W.LDM_DASHBOARD_V539?.openCategory?.(map[index]);
+  const full=q('#erpContent #ldm535FullAccess');
   q('.ldm537Categories',full)?.querySelectorAll('button').forEach(el=>el.setAttribute('aria-expanded',String(el===trigger)));
-  panel.scrollIntoView({block:'nearest',behavior:'smooth'});
  }
  function refresh(){queued=false;makeToolbar();if(!isAdmin()||!isDash())return;decorateHero();statCaption();compactDesk();arrangeFull();setDate();}
  function schedule(){if(queued)return;queued=true;if(W.requestAnimationFrame)W.requestAnimationFrame(refresh);else Promise.resolve().then(refresh)}

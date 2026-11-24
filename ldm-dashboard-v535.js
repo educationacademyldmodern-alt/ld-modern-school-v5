@@ -6,13 +6,7 @@
  const D=document,W=window;
  const adminRoles=new Set(['admin','super_admin','principal']);
  const shortcuts=[
-  ['📅','उपस्थिति / Attendance','attendance'],
-  ['📝','परीक्षा एवं अंक / Exams & Marks','central_exam'],
-  ['🧩','कार्य आवंटित करें / Assign Work','work_delegation'],
-  ['⏰','समय सारणी / Timetable','timetable_master'],
-  ['🚨','कार्य अलार्म / Work Alarm','smart_work_alarm'],
-  ['📣','सूचनाएँ / Notices','notice_order_center'],
-  ['📊','रिपोर्ट / Reports','reports']
+  ['📅','उपस्थिति / Attendance','attendance']
  ];
  let queued=false,observer=null;
  const q=(s,root=D)=>root.querySelector(s);
@@ -35,7 +29,7 @@
  function ensureShortcuts(root){
   const group=q('#v185FrontDesk .v185FrontActions',root);if(!group)return;
   for(const [icon,title,route] of shortcuts){
-   if(group.querySelector('[data-ldm535-route="'+route+'"]'))continue;
+   if([...group.querySelectorAll('button')].some(b=>b.dataset.ldm535Route===route||b.getAttribute('onclick')?.trim()==="render('attendance')"))continue;
    const button=D.createElement('button');button.type='button';button.className='ldm535DailyShortcut';button.dataset.ldm535Route=route;
    const sign=D.createElement('span');sign.textContent=icon;sign.setAttribute('aria-hidden','true');
    const label=D.createElement('b');label.textContent=title;
