@@ -139,8 +139,71 @@
     }
     t.classList.add('ldm540Teacher');
   }
+  const modes=['auto','mobile','desktop'];
+  const viewport=D.querySelector('meta[name="viewport"]');
+  const defaultViewport=viewport?.content;
+  let preferenceKey='',mode='auto';
+  function viewKey(){
+    const user=W.user?.id||W.profile?.id;
+    return user?'ldm.dashboard.view.'+user+'.'+W.profile.role:'';
+  }
+  function applyMode(value){
+    mode=modes.includes(value)?value:'auto';
+    D.documentElement.dataset.erpView=mode;
+    const content=mode==='desktop'?'width=1536':defaultViewport;
+    if(viewport&&viewport.content!==content)viewport.content=content;
+  }
+  function setupView(active){
+    const top=q('#erp .erpTop');
+    if(!active){
+      if(D.documentElement.hasAttribute('data-erp-view')){
+        applyMode('auto');delete D.documentElement.dataset.erpView;preferenceKey='';
+      }
+      q('#ldmViewSwitch',top)?.remove();return;
+    }
+    const key=viewKey();
+    if(preferenceKey!==key||!D.documentElement.hasAttribute('data-erp-view')){
+      preferenceKey=key;let saved='auto';
+      try{if(key)saved=localStorage.getItem(key)}catch{}
+      applyMode(saved);
+    }
+    if(!top)return;
+    let select=q('#ldmViewSwitch',top);
+    if(!select){
+      select=el('select');select.id='ldmViewSwitch';select.setAttribute('aria-label','डैशबोर्ड दृश्य / Dashboard view');
+      for(const [i,label] of ['🖥 दृश्य · Auto','📱 मोबाइल','🖥 डेस्कटॉप'].entries()){
+        const option=el('option','',label);option.value=modes[i];select.append(option);
+      }
+      select.addEventListener('change',()=>{applyMode(select.value);try{if(preferenceKey)localStorage.setItem(preferenceKey,mode)}catch{}});
+      const profile=q('#ldm538AdminProfile',top);if(profile)profile.before(select);else top.append(select);
+    }
+    select.value=mode;
+  }
+  function office(dash){
+    const assistant=q('#s336DashboardCard',q('#erpContent'));
+    const attendance=admin()?q('.v114AttendancePanel',dash):null;
+    const greeting=q('#v233Greeting,.ldmTeacherHero,.v114PortalHero',dash);
+    if(!greeting||(!assistant&&!attendance))return;
+    let panel=q('#ldmOffice',dash);
+    if(!panel){
+      panel=el('section');panel.id='ldmOffice';panel.hidden=true;panel.setAttribute('aria-label','कार्यालय');
+      const tools=el('div');tools.id='ldmOfficeTools';panel.append(tools);
+      greeting.after(panel);
+    }
+    let button=q('.ldm538WorkAssistant',greeting);
+    if(!button){
+      button=el('button','ldm538WorkAssistant','🏢 कार्यालय / Office');button.type='button';button.setAttribute('aria-controls',panel.id);
+      button.setAttribute('aria-expanded','false');greeting.append(button);
+      button.addEventListener('click',()=>{panel.hidden=!panel.hidden;button.setAttribute('aria-expanded',String(!panel.hidden));});
+    }
+    const tools=q('#ldmOfficeTools',panel);
+    if(assistant&&assistant.parentElement!==tools)tools.append(assistant);
+    if(attendance&&attendance.parentElement!==panel)panel.append(attendance);
+  }
   function render(){
-    pending=false;watch();teacherSector();const r=root();if(!r||!admin())return;
+    pending=false;watch();teacherSector();const r=root();
+    const dash=admin()?r:(String(W.profile?.role||'').toLowerCase()==='teacher'?q('#erpContent > .ldmNewTeacher,#erpContent > .v114TeacherDash'):null);
+    setupView(dash);if(dash)office(dash);if(!r||!admin())return;
     ensureModules(r);
     if(q('.ldm540Directory[open]',r))populate(r);
   }

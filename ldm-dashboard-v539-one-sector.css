@@ -166,7 +166,7 @@
  @media screen {
   /* Keep native sections mounted so live counters, delegation and form events retain their owners. */
   #erpContent > .ldm535PremiumDashboard:has(.ldm538Original):not(:has(#ldm535FullAccess[open] .ldm538Original[open]))
-    > :is(#s336DashboardCard,#r323AdminControl,#r323ControlActions,#r320DailyReminderCard,.v114AdminMainGrid,.v114AttendancePanel,.v114QuickPanel,#v307Dash) {
+    > :is(#r323AdminControl,#r323ControlActions,#r320DailyReminderCard,.v114AdminMainGrid,.v114QuickPanel,#v307Dash) {
     display:none!important;
   }
  }
@@ -182,5 +182,51 @@
     border:1px solid #58e5ff!important;box-shadow:inset 0 2px 2px #c8c2ff,0 3px 5px #215ea277!important;
   }
   #erp #erpContent .ldm535PremiumDashboard .v114AdminFeedGrid {gap:clamp(8px,1.1vw,18px)!important}
+ }
+}
+
+@layer portalLayout {
+ @media screen {
+  #erp #erpContent #ldmOffice {order:0!important;min-width:0;display:grid!important;gap:10px;padding:10px;border:1px solid #61cfff;border-radius:15px;background:#edf7ff}
+  #erp #erpContent #ldmOffice[hidden]{display:none!important}
+  #erp #erpContent #ldmOffice .s336Tools{display:flex!important;flex-wrap:wrap!important;gap:8px}
+  #erp #erpContent #ldmOffice .s336Tools button{flex:1 1 150px;white-space:normal!important;min-width:0!important}
+  #erp .erpTop #ldmViewSwitch{margin-inline-start:auto!important;position:static!important;grid-column:auto!important;width:auto!important;max-width:100%!important;min-height:40px;padding:5px 7px;border-radius:10px;border:1px solid #71d5ff;color:#0a295c;background:linear-gradient(#fff,#d8ebff);font:700 14px/1.2 system-ui}
+  #erp #erpContent .ldm538WorkAssistant{color:white;background:linear-gradient(#0785d6,#03479c);border:1px solid #67e5ff;border-radius:12px;min-height:42px;padding:6px 14px}
+  #erp #erpContent #v185FrontDesk .v185FrontActions>button,
+  #erp #erpContent .v114QuickGrid>button,
+  #erp #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard){
+    background:linear-gradient(168deg,#ffffff45,transparent 40%),linear-gradient(120deg,var(--tile-a,#006ebc),var(--tile-b,#073c8e))!important;
+    color:white!important;min-width:0!important;white-space:normal!important;border:1px solid #b1dcff!important;border-radius:12px!important;
+    box-shadow:inset 0 2px 1px #ffffff80,0 3px 0 #15396780,0 5px 8px #13355c38!important;
+  }
+  #erp #erpContent #v185FrontDesk .v185FrontActions>button :is(b,small,strong),
+  #erp #erpContent .v114QuickGrid>button :is(b,span,small),
+  #erp #erpContent .ldm539ModuleCard :is(small,strong){color:white!important;-webkit-text-fill-color:currentColor!important;overflow-wrap:anywhere!important}
+  #erp #erpContent .ldm539CategoryTab[aria-pressed=true]{outline:2px solid #ffce49;outline-offset:-3px}
+  #erp #erpContent .ldm539CategoryTab[aria-pressed=true]::before{content:"✓ ";font-weight:900}
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="all"],#erpContent .v185FrontActions>[data-desk-slot="0"],#erpContent .v114QuickGrid>button:nth-child(1){--tile-a:#1469b4;--tile-b:#05346d}
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="students"],#erpContent .v185FrontActions>[data-desk-slot="1"],#erpContent .v114QuickGrid>button:nth-child(2){--tile-a:#166c91;--tile-b:#074a69}
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="teachers"],#erpContent .v185FrontActions>[data-desk-slot="2"],#erpContent .v114QuickGrid>button:nth-child(3){--tile-a:#098054;--tile-b:#00573b}
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="finance"],#erpContent .v185FrontActions>[data-desk-slot="3"],#erpContent .v114QuickGrid>button:nth-child(4){--tile-a:#bf510d;--tile-b:#803500}
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="documents"],#erpContent .v185FrontActions>[data-desk-slot="4"],#erpContent .v114QuickGrid>button:nth-child(5){--tile-a:#7733b9;--tile-b:#4e1d85}
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="qr"],#erpContent .v185FrontActions>[data-desk-slot="5"],#erpContent .v114QuickGrid>button:nth-child(6){--tile-a:#086f74;--tile-b:#00484f}
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="management"],#erpContent .v185FrontActions>[data-desk-slot="6"],#erpContent .v114QuickGrid>button:nth-child(7){--tile-a:#ae226c;--tile-b:#78174a}
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="exams"],#erpContent .v185FrontActions>[data-desk-slot="7"],#erpContent .v114QuickGrid>button:nth-child(8){--tile-a:#4b52b6;--tile-b:#30358b}
+
+  #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="reports"],#erpContent .v185FrontActions>[data-desk-slot="10"]{--tile-a:#007980;--tile-b:#005258}
+  #erpContent .v185FrontActions>[data-desk-slot="8"]{--tile-a:#8641bc;--tile-b:#482395}
+  #erpContent .v185FrontActions>[data-desk-slot="9"],#erpContent .v185FrontActions>[data-desk-slot="11"]{--tile-a:#c33459;--tile-b:#85203e}
+  html[data-erp-view="desktop"] #erp main{min-width:min(1536px,100vw)!important}
+  html[data-erp-view="desktop"] #erp #erpContent #ldm535FullAccess .ldm537Categories,
+  html[data-erp-view="desktop"] #erp #erpContent .ldm540Teacher .ldmTeacherModules{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  html[data-erp-view="mobile"] #erp main{width:min(100%,520px)!important;min-width:0!important;max-width:520px!important;margin-inline:auto!important}
+  html[data-erp-view="mobile"] #erp .erpTop,html[data-erp-view="mobile"] #erp .ldm538Toolbar{display:flex!important;flex-wrap:wrap!important;gap:6px!important}
+  html[data-erp-view="mobile"] #erp .erpTop>.ldmAdminSchoolIdentity{flex:1 1 100%!important}
+  html[data-erp-view="mobile"] #erp #erpContent :is(#v185FrontDesk,#v233Greeting,.v114AdminFeedGrid,.ldm500-hero-top){display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+  html[data-erp-view="mobile"] #erp #erpContent #v233Greeting>*{grid-column:auto!important;grid-row:auto!important}
+  html[data-erp-view="mobile"] #erp #erpContent :is(#v90Stats,.v185FrontActions,.ldm500-hero-pills,.ldm537Categories,.ldm540Teacher .ldmTeacherModules,.ldm539CardGrid,.ldm539CategoryTabs){grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html[data-erp-view="mobile"] #erp #erpContent #ldm500Hero{padding:12px!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+  html[data-erp-view="mobile"] #erp #erpContent #ldm500Hero .ldm538HeroArt{position:static!important;transform:none!important;width:110px!important;height:70px!important}
  }
 }

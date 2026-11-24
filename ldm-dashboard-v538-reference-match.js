@@ -75,10 +75,6 @@
   const g=q('#v233Greeting',root);if(!g)return;
   let date=q('.ldm538Date',g);if(!date){date=create('div','ldm538Date');date.setAttribute('aria-label','Current India date');g.append(date)}
   const copy=q('.v114PortalHeroText',g)||[...g.children].find(el=>el.querySelector?.('b')&&!el.classList.contains('ldm538Date'));if(copy)copy.classList.add('ldm538GreetingText');
-  if(!q('.ldm538WorkAssistant',g)){
-    const native=q('#s336DashboardCard',root);
-    if(native){const btn=create('button','ldm538WorkAssistant','👥 School Work Assistant');btn.type='button';btn.title='Open existing School Work Assistant';btn.addEventListener('click',()=>{const card=q('#s336DashboardCard',root);if(!card)return;const originals=q('.ldm538Original',root);if(originals){originals.open=true;const full=originals.parentElement?.closest('details');if(full)full.open=true;}for(let el=card;el;el=el.parentElement){if(el.tagName==='DETAILS')el.open=true;}card.scrollIntoView({block:'start',behavior:'smooth'});});g.append(btn);}
-  }
   const now=new Date();const fmt=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'numeric',month:'short',year:'numeric'});
   const rendered=fmt.format(now);if(date.dataset.value!==rendered){date.dataset.value=rendered;date.replaceChildren(create('span','ldm538CalendarIcon','▣'),create('span','',rendered));}
  }
