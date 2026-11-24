@@ -9,7 +9,7 @@ function donut(){
  if([p,a,l,total].some(v=>v===null)||p+a+l>total){chart.style.setProperty('background','#e1e8ef','important');text(pct,'—');text(label,'आँकड़ों की पुष्टि बाकी');delete chart.dataset.attendanceSignature;text(chart.closest('.v114AttendanceVisual')?.querySelector('.r392AttCoverage'),'ताजा attendance आँकड़ों की पुष्टि बाकी है।');chart.setAttribute('aria-label','Attendance counts awaiting verification');return}
  const marked=p+a+l,notMarked=total-marked,presentPercent=total?Math.round(p*100/total):null,coverage=total?Math.round(marked*100/total):0;
  text($('v114AttMarked'),String(marked));text($('v114AttNotMarked'),String(notMarked));text(pct,presentPercent===null?'—':presentPercent+'%');text(label,'Present / Total');
- const stats=$('v90Stats');if(stats)for(const card of stats.querySelectorAll('.v90Stat')){if(/(?:^|\/)\s*Attendance\s*$/i.test(card.querySelector('small')?.textContent.trim()||''))text(card.querySelector('b'),presentPercent===null?'—':presentPercent+'%');}
+ const stats=$('v90Stats');if(stats)for(const card of stats.querySelectorAll('.v90Stat')){if((card.getAttribute('onclick')||'').includes("'attendance'")||/(?:^|\/)\s*Attendance\s*$/i.test(card.querySelector('small')?.textContent.trim()||''))text(card.querySelector('b'),presentPercent===null?'—':presentPercent+'%');}
  const signature=[p,a,l,total].join('|');if(chart.dataset.attendanceSignature!==signature){const parts=total?[p,a,l].map(v=>v*100/total):[0,0,0];chart.style.setProperty('background',`conic-gradient(#18a875 0 ${parts[0]}%,#ef6472 ${parts[0]}% ${parts[0]+parts[1]}%,#e7ad32 ${parts[0]+parts[1]}% ${parts.reduce((x,y)=>x+y,0)}%,#dfe7ef ${parts.reduce((x,y)=>x+y,0)}% 100%)`,'important');chart.dataset.attendanceSignature=signature}
  chart.setAttribute('aria-label',`Present ${p}, Absent ${a}, Leave ${l}, Not marked ${notMarked}, Total ${total}; Present ${presentPercent??0} percent of total`);
  const visual=chart.closest('.v114AttendanceVisual');let note=visual?.querySelector('.r392AttCoverage');if(visual&&!note){note=D.createElement('p');note.className='r392AttCoverage';visual.append(note)}text(note,`${marked} / ${total} की attendance दर्ज • ${coverage}% complete`);
@@ -17,7 +17,8 @@ function donut(){
 function mount(){if(!admin()){$('v350FeePay')?.remove();return;}const dash=D.querySelector('#erpContent .ldmRootAdminDash');if(!dash){$('v350FeePay')?.remove();return}dash.classList.add('v350Dashboard');const attendance=dash.querySelector('.v114AttendancePanel'),stats=$('v90Stats'),absent=$('v307Dash');if(!W.LDM_DESKTOP_378?.active?.()){
 // Keep the detail panels native. V535 groups the original module controls.
 for(const node of [attendance,absent,dash.querySelector('.v114QuickPanel')]){
- if(node&&node.parentElement!==dash&&!node.closest('#ldmOffice,#ldm542Live'))dash.append(node);
+ const target=node===attendance?(dash.querySelector('#ldmOffice')||dash):dash;
+ if(node&&node.parentElement!==target)target.append(node);
 }
 }
 
