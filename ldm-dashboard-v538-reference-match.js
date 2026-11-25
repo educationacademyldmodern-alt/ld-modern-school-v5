@@ -65,7 +65,7 @@
   if(!admin){q('#ldm538AdminProfile',top)?.remove();q('#ldm538HeaderRefresh',top)?.remove();}
   if(isAdmin()){
    const master=q('#v75TopSearch');if(master&&master.parentElement!==q('.ldm538SearchSlot',bar))q('.ldm538SearchSlot',bar)?.append(master);
-   const input=q('#v75TopQ',bar);if(input)input.placeholder='Master Search: search school records…';
+   const input=q('#v75TopQ',bar);if(input){const value=W.LDM_V337_UI?.language?.()==='hi'?'विद्यालय के रिकॉर्ड खोजें…':'Search school records…';if(input.placeholder!==value)input.placeholder=value;}
   }
   // Existing header functions remain clickable and keep their original handlers.
   if((isAdmin()||isTeacher())&&!q('#ldm538HeaderLogout',top)){

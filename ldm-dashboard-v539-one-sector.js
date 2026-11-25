@@ -10,6 +10,8 @@
   const admin=()=>roles.has(String(W.profile?.role||'').toLowerCase());
   const root=()=>D.querySelector('#erpContent > .ldm535PremiumDashboard');
   const q=(s,r=D)=>r?.querySelector(s);
+  const hi=()=>W.LDM_V337_UI?.language?.()!=='en';
+  const t=(h,e)=>hi()?h:e;
   const el=(tag,cls,txt)=>{const e=D.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=String(txt);return e;};
   const categories=[
     {id:'students',icon:'🎓',label:'Students & Admission',hindi:'विद्यार्थी एवं प्रवेश',re:/(student|admission|parent|class.teacher|udise|enquiry|transport)/i},
@@ -76,7 +78,7 @@
     const none=el('p','ldm539Empty','इस खोज से मेल खाने वाला कार्ड नहीं मिला।');none.hidden=true;
     main.append(header,controls,grid,none);
     const directory=el('details','ldm540Directory');
-    directory.open=true;directory.append(el('summary','','सभी कार्य खोजें / Search all functions'),main);
+    directory.open=true;directory.append(el('summary','',t('सभी कार्य खोजें','Search all functions')),main);
     directory.addEventListener('toggle',()=>{if(directory.open)populate(r)});
     mount.append(directory);
     return main;
@@ -91,7 +93,7 @@
       const art=el('span','ldm539ModuleIcon',entry.icon),info=el('span','ldm539ModuleCopy');
       info.append(el('strong','',entry.title),el('small','',entry.detail||'मूल ERP सुविधा खोलें'));
       tile.append(art,info,el('span','ldm539ModuleArrow','➜'));
-      tile.title=entry.title+' • '+entry.route;
+      tile.title=entry.title+' • '+entry.route;tile.dataset.searchText=[entry.title,entry.detail,W.LDM_V337_UI?.translate?.(entry.title),W.LDM_V337_UI?.translate?.(entry.detail)].join(' ');
       tile.addEventListener('click',()=>safeRoute(entry.route));fragment.append(tile);
     }
     grid.replaceChildren(fragment);applyFilter(r);
@@ -104,15 +106,15 @@
     main.querySelectorAll('.ldm539CategoryTab').forEach(b=>setFlag(b,'aria-pressed',b.dataset.category===selection));
     const native=new Set();
     for(const button of r.querySelectorAll('button[onclick]')){
-      if(button.closest('#ldm539Modules,[hidden],details:not([open])'))continue;
+      if(button.disabled||button.closest('#ldm539Modules,[hidden],.hidden,details:not([open])')||!button.getClientRects().length)continue;
       const route=/^\s*(?:window\.)?render\(\s*(['"])([\w-]+)\1\s*\)\s*;?\s*$/.exec(button.getAttribute('onclick')||'')?.[2];
       if(route)native.add(route);
     }
     const cards=main.querySelectorAll('.ldm539ModuleCard');cards.forEach(b=>{
-      const okay=(selection!=='all'||search||!native.has(b.dataset.route)) && (selection==='all'||selection===b.dataset.category) && (!search||[b.textContent,b.dataset.route].join(' ').toLocaleLowerCase().includes(search));
+      const okay=(selection!=='all'||search||!native.has(b.dataset.route)) && (selection==='all'||selection===b.dataset.category) && (!search||[b.textContent,b.dataset.route,b.title,b.dataset.searchText].join(' ').toLocaleLowerCase().includes(search));
       if(b.hidden===okay)b.hidden=!okay;if(okay)count++;
     });
-    const counter=q('.ldm539Count',main);if(counter && counter.textContent!==`${count} / ${cards.length} कार्ड`)counter.textContent=`${count} / ${cards.length} कार्ड`;
+    const counter=q('.ldm539Count',main);const label=`${count} / ${cards.length} ${hi()?'कार्ड':'cards'}`;if(counter&&counter.textContent!==label)counter.textContent=label;
     const none=q('.ldm539Empty',main);if(none&&none.hidden!==(count!==0))none.hidden=count!==0;
   }
   function teacherSector(){
@@ -160,7 +162,7 @@
   function applyMode(value){
     mode=modes.includes(value)?value:'auto';
     D.documentElement.dataset.erpView=mode;
-    const content=mode==='desktop'?'width=1536':defaultViewport;
+    const content=mode==='desktop'&&W.screen.width<901?'width=1536':defaultViewport;
     if(viewport&&viewport.content!==content)viewport.content=content;
   }
   function setupView(active){
@@ -180,8 +182,8 @@
     if(!top)return;
     let select=q('#ldmViewSwitch',top);
     if(!select){
-      select=el('select');select.id='ldmViewSwitch';select.setAttribute('aria-label','डैशबोर्ड दृश्य / Dashboard view');
-      for(const [i,label] of ['🖥 दृश्य · Auto','📱 मोबाइल','🖥 डेस्कटॉप'].entries()){
+      select=el('select');select.id='ldmViewSwitch';select.setAttribute('aria-label',t('डैशबोर्ड दृश्य','Dashboard view'));
+      for(const [i,label] of ['🖥 Auto view','📱 Mobile','🖥 Desktop'].entries()){
         const option=el('option','',label);option.value=modes[i];select.append(option);
       }
       select.addEventListener('change',()=>{applyMode(select.value);try{if(preferenceKey)localStorage.setItem(preferenceKey,mode)}catch{}});
@@ -212,9 +214,9 @@
     const launcher=q('#ldm500Hero .ldm500-hero-pills',dash)||greeting;
     let button=q('.ldm538WorkAssistant',dash);if(button&&button.parentElement!==launcher)launcher.append(button);
     if(!button){
-      button=el('button','ldm538WorkAssistant','🏢 कार्यालय / Office');button.type='button';button.setAttribute('aria-controls',panel.id);
+      button=el('button','ldm538WorkAssistant',t('🏢 कार्यालय','🏢 Office'));button.type='button';button.setAttribute('aria-controls',panel.id);
       launcher.append(button);
-      button.addEventListener('click',()=>{const current=q('#ldmOffice');if(current){current.hidden=!current.hidden;button.setAttribute('aria-expanded',String(!current.hidden));if(!current.hidden)current.scrollIntoView({block:'nearest'});}});
+      button.addEventListener('click',()=>{const current=q('#ldmOffice');if(current){current.hidden=!current.hidden;button.setAttribute('aria-expanded',String(!current.hidden));if(!current.hidden)current.scrollIntoView({block:'start',behavior:'instant'});}});
     }
     setFlag(button,'aria-expanded',!panel.hidden);
     const tools=q('#ldmOfficeTools',panel);
@@ -251,21 +253,24 @@
     });
     observer.observe(host,{childList:true,subtree:true});
   }
-  // Sidebar close is limited to the dashboard and respects dialogs and header controls.
+  // V547: close both legacy sidebar state flags, for either dashboard role.
+  const dashboardMenuActive=()=>!!D.querySelector('#erp:not(.hidden) #erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)');
+  function closeDashboardMenu(){
+    D.querySelector('#erp aside.open')?.classList.remove('open');
+    D.body.classList.remove('d378MenuOpen');
+    D.querySelectorAll('#erp .erpTop :is(.hamb,#d378Menu,#ldm538AdminProfile)').forEach(b=>b.setAttribute('aria-expanded','false'));
+  }
   D.addEventListener('click',event=>{
-    if(!root()||!admin())return;
-    const aside=D.querySelector('#erp aside.open');if(!aside)return;
+    if(!dashboardMenuActive()||!event.target.closest('#erpContent'))return;
     if(event.target.closest('#erp aside,#erp .erpTop,[role=dialog],dialog,.modal,.modalCard'))return;
-    aside.classList.remove('open');
-    D.querySelector('#erp .erpTop .hamb')?.setAttribute('aria-expanded','false');
+    if(D.querySelector('#erp aside.open')||D.body.classList.contains('d378MenuOpen'))closeDashboardMenu();
   });
   D.addEventListener('keydown',event=>{
-    if(event.key!=='Escape'||!root()||!admin())return;
+    if(event.key!=='Escape'||!dashboardMenuActive())return;
     if(D.querySelector('dialog[open],.modal:not(.hidden),[role=dialog][aria-modal=true]'))return;
-    const aside=D.querySelector('#erp aside.open');if(!aside)return;
-    aside.classList.remove('open');D.querySelector('#erp .erpTop .hamb')?.setAttribute('aria-expanded','false');
+    if(D.querySelector('#erp aside.open')||D.body.classList.contains('d378MenuOpen'))closeDashboardMenu();
   });
-  function start(){watch();schedule();}
+  function start(){watch();schedule();W.addEventListener('ldm:language-changed',()=>{const r=root();if(r){const summary=q('.ldm540Directory>summary',r);if(summary)summary.textContent=t('सभी कार्य खोजें','Search all functions');applyFilter(r)}schedule()});}
   W.LDM_DASHBOARD_V539=Object.freeze({version:'539',refresh:()=>{watch();schedule();},categories:categories.length});
   if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();

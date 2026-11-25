@@ -4,8 +4,8 @@ const known='.erpCards,.dashboard-cards,.dashboard-grid,.quick-cards,.stats-grid
 const tones=['blue','green','purple','orange','pink','royal'];
 let queued=false;const observers=new Map();
 const isEmoji=s=>/\p{Extended_Pictographic}/u.test(s)&&!/[A-Za-z\u0900-\u097f]/.test(s);
-function identity(card){const code=card.getAttribute('onclick')||'';const title=card.querySelector('b,strong,h3,h4')?.textContent?.trim();return card.dataset.newTeacherRoute||card.dataset.assignFunction||card.dataset.route||code.match(/render\(['"]([^'"]+)/)?.[1]||window.LDM_MANAGEMENT?.entries.find(e=>e.title===title)?.route||title||card.textContent.trim()}
-function colour(key){const k=key.toLowerCase();
+function identity(card){const code=card.getAttribute('onclick')||'';const title=card.querySelector('b,strong,h3,h4')?.textContent?.trim();return card.dataset.newTeacherRoute||card.dataset.assignFunction||card.dataset.route||code.match(/render\(['"]([^'"]+)/)?.[1]||window.LDM_MANAGEMENT?.entries?.find(e=>e.title===title)?.route||title||card.textContent.trim()}
+function colour(key){const k=String(key??'').toLowerCase();
  if(/due|बकाया/.test(k))return 4;
  if(/attendance|presence|उपस्थिति/.test(k))return 2;
  if(/pending|request|अनुरोध/.test(k))return 5;
@@ -14,8 +14,8 @@ function colour(key){const k=key.toLowerCase();
  if(/teacher|staff|शिक्षक/.test(k))return 1;
  if(/student|admission|विद्यार्थी/.test(k))return 0;
  let h=0;for(const c of key)h=(h*31+c.codePointAt(0))>>>0;return h%tones.length}
-function fallback(key){const k=key.toLowerCase();return /student|admission/.test(k)?'🎓':/teacher|staff/.test(k)?'👩‍🏫':/fee|financ|balance|salary/.test(k)?'💰':/exam|paper/.test(k)?'📝':/mark|result/.test(k)?'📑':/time|bell/.test(k)?'⏰':/teach|syllabus|plan/.test(k)?'📚':/id.?card/.test(k)?'🪪':/transport/.test(k)?'🚌':/seat|desk/.test(k)?'🪑':/attendance|presence/.test(k)?'📅':'🏫'}
-function decorate(card){if(card.classList.contains('ldm3dCard'))return;
+function fallback(key){const k=String(key??'').toLowerCase();return /student|admission/.test(k)?'🎓':/teacher|staff/.test(k)?'👩‍🏫':/fee|financ|balance|salary/.test(k)?'💰':/exam|paper/.test(k)?'📝':/mark|result/.test(k)?'📑':/time|bell/.test(k)?'⏰':/teach|syllabus|plan/.test(k)?'📚':/id.?card/.test(k)?'🪪':/transport/.test(k)?'🚌':/seat|desk/.test(k)?'🪑':/attendance|presence/.test(k)?'📅':'🏫'}
+function decorate(card){if(card.classList.contains('ldm3dCard')||card.closest('form,table,dialog,[role="dialog"]'))return;
  if(card.hidden||card.classList.contains('hidden')||card.style.display==='none')return;
  const key=identity(card);let icon=card.querySelector('.v90MonitorIcon,:scope>i,:scope>svg,:scope>img');
  if(!icon)icon=[...card.children].find(e=>isEmoji(e.textContent.trim()));
@@ -25,7 +25,7 @@ function decorate(card){if(card.classList.contains('ldm3dCard'))return;
  const title=[...card.querySelectorAll('b,strong,h3,h4')].find(e=>e!==icon&&!icon.contains(e))||[...card.children].find(e=>e!==icon&&e.tagName==='SPAN'&&!e.querySelector('b,strong,small'));
  if(title)title.classList.add('ldm3dTitle');
  card.querySelectorAll('small').forEach(e=>e.classList.add('ldm3dSubtitle'));
- card.querySelectorAll('em').forEach(e=>{if(/^open(?:\s+[a-z ]+)?\s*[→›»]?$/i.test(e.textContent.trim()))e.remove();else e.classList.add('ldm3dBadge')});
+ card.querySelectorAll('em').forEach(e=>e.classList.add('ldm3dBadge'));
  card.classList.add('ldm3dCard');card.dataset.erpTone=tones[colour(key)];
  // Existing gate badge has inline spacing; keep it below, not over the title.
  if(card.matches('.v102DashGate'))card.style.setProperty('padding-bottom','30px','important');
@@ -66,5 +66,5 @@ function refresh(){
   schedule(root);
  }
 }
-window.LDM_PREMIUM_CARDS=Object.freeze({refresh,version:'470'});if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
+window.LDM_PREMIUM_CARDS=Object.freeze({refresh,version:'546'});if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
 })();

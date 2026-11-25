@@ -227,3 +227,98 @@ outline:3px solid #ffcc33!important;outline-offset:2px!important
 :is(#erpContent,#teacherDashboard,#parentDashboard,#adminDashboard) :is(.ldm3dCard,.ldm539ModuleCard,.ldm537Categories>button,.ldm500-sector,.ldm538StatusTitle,.v90Stat,.ldm539CategoryTab,.ldm500-hero-pills>button,.v185FrontActions>button,#r323ControlActions>button,.ldm538CategoryLinks>button,.v114PortalQuick>button,.ldm540TeacherTabs>button)[aria-pressed="true"] {outline:2px solid #ffd669!important;outline-offset:-3px!important}
 }
 }
+
+/* V546: first important cascade layer, one dashboard layout contract. No print changes. */
+@layer ldmRoot546 {
+ @media screen {
+  #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) > main {width:100%!important;max-width:100%!important;min-width:0!important;margin-inline:0!important;box-sizing:border-box!important}
+  #erp #erpContent:has(> :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) {width:100%!important;min-width:0!important;max-width:100%!important;padding:clamp(8px,1.2vw,18px)!important;box-sizing:border-box!important}
+  #erp #erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) {width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important;margin-inline:0!important;gap:12px!important}
+  #erp #erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) > * {min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) .erpTop {display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important;position:relative!important;inset:auto!important;min-height:0!important;height:auto!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important}
+  #erp .erpTop > :is(button,select,.ldm538Lang) {flex:0 1 auto!important;position:static!important;min-width:0!important;max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important;height:auto!important}
+  #erp:has(#erpContent > .ldm535PremiumDashboard) #ldm538Toolbar {display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:10px!important;padding:8px clamp(8px,1.2vw,18px)!important;width:100%!important;box-sizing:border-box!important;min-width:0!important;height:auto!important}
+  #erp #ldm538Toolbar .ldm538SearchSlot {display:flex!important;align-items:center!important;flex:1 1 280px!important;min-width:0!important;max-width:100%!important;width:auto!important;gap:8px!important}
+  #erp #ldm538Toolbar #v75TopSearch {position:static!important;inset:auto!important;display:flex!important;align-items:center!important;flex:1 1 0!important;min-width:0!important;max-width:none!important;width:100%!important;margin:0!important;box-sizing:border-box!important}
+  #erp #ldm538Toolbar #v75TopSearch input {flex:1 1 0!important;min-width:0!important;width:100%!important;max-width:100%!important;height:40px!important;box-sizing:border-box!important}
+  #erp #ldm538Toolbar #v75TopSearch button {flex:0 0 auto!important;max-width:100%!important;white-space:normal!important}
+  #erp #ldm538Toolbar .ldm538ToolActions:empty,#erp #ldm538Toolbar .ldm538SearchSlot[hidden] {display:none!important}
+  #erp #erpContent :is(.ldm539CardGrid,.ldm3dGrid,.ldmTeacherModules,.v185FrontActions,.ldmMasterGrid,.v90MonitorGrid,.v114QuickGrid) {min-width:0!important;max-width:100%!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,218px),1fr))!important;gap:12px!important;align-items:stretch!important}
+  #erp #erpContent .ldm539CategoryTabs {grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr))!important;gap:10px!important}
+  #erp #erpContent #v90Stats {grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))!important;gap:12px!important}
+  #erp #erpContent .ldm539SearchArea {display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important;min-width:0!important}
+  #erp #erpContent .ldm539Search {flex:1 1 200px!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  #erp #erpContent #ldmOffice:not([hidden]) {position:relative!important;inset:auto!important;order:-1!important;display:block!important;width:100%!important;max-width:100%!important;max-height:none!important;overflow:visible!important;box-shadow:0 4px 12px #16478b40!important;transform:none!important;scroll-margin-top:10px}
+  :is(#erpContent,#parentDashboard,#teacherDashboard,#adminDashboard) :is(.ldm3dCard,.ldm539ModuleCard,.ldm537Categories>button,.ldm500-sector,.ldm538StatusTitle,.v90Stat,.ldm539CategoryTab,.ldm500-hero-pills>button,.v185FrontActions>button,#r323ControlActions>button,.ldm538CategoryLinks>button,.v114PortalQuick>button,.ldm540TeacherTabs>button) {
+   background:linear-gradient(180deg,#ffffff38 0%,transparent 36%),linear-gradient(145deg,var(--card-light,#087cc8),var(--card-dark,#05498f))!important;
+   color:#fff!important;border:1px solid #a4e1ff!important;border-radius:14px!important;
+   box-shadow:inset 0 2px 0 #ffffff85,0 3px 0 var(--card-dark,#05498f),0 6px 0 #92abc6,0 8px 10px #12365c38!important;
+   filter:none!important;opacity:1!important;backdrop-filter:none!important;box-sizing:border-box!important;
+   min-width:0!important;max-width:100%!important;height:auto!important;max-height:none!important;white-space:normal!important;overflow-wrap:anywhere!important;
+   font-family:Georgia,"Noto Serif Devanagari","Nirmala UI",serif!important;font-size:16px!important;font-weight:700!important;line-height:1.3!important;
+  }
+  :is(#erpContent,#parentDashboard,#teacherDashboard,#adminDashboard) :is(.ldm3dCard,.ldm539ModuleCard,.ldm537Categories>button,.ldm500-sector,.ldm538StatusTitle,.v90Stat,.ldm539CategoryTab,.ldm500-hero-pills>button,.v185FrontActions>button,#r323ControlActions>button,.ldm538CategoryLinks>button,.v114PortalQuick>button,.ldm540TeacherTabs>button) :is(b,strong,h3,h4,.ldm3dTitle,small,.ldm3dSubtitle) {font-family:inherit!important;color:#fff!important;-webkit-text-fill-color:currentColor!important;white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.3!important;opacity:1!important;filter:none!important}
+  :is(#erpContent,#parentDashboard,#teacherDashboard,#adminDashboard) :is(.ldm3dCard,.ldm539ModuleCard,.ldm539CategoryTab,.v185FrontActions>button,.v114PortalQuick>button) :is(b,strong,h3,h4,.ldm3dTitle) {font-size:16px!important;font-weight:700!important}
+  :is(#erpContent,#parentDashboard,#teacherDashboard,#adminDashboard) .ldm3dCard .ldm3dBadge {position:static!important;inset:auto!important;max-width:100%!important;min-width:0!important;white-space:normal!important;overflow-wrap:anywhere!important;align-self:start!important}
+  :is(#erpContent,#parentDashboard,#teacherDashboard,#adminDashboard) :is(.ldm3dCard,.ldm539ModuleCard,.v90Stat):disabled {opacity:.65!important;cursor:not-allowed!important}
+  :is(#erpContent,#parentDashboard,#teacherDashboard,#adminDashboard) :is(.ldm3dCard,.ldm539ModuleCard,.ldm539CategoryTab,.v90Stat,.ldm540TeacherTabs>button,#ldmOffice)[hidden],#erpContent .ldm540Filtered {display:none!important}
+  #erpContent .ldm539ModuleCopy {min-width:0!important;flex:1 1 0!important}
+  #erpContent .ldm539ModuleIcon {flex-shrink:0!important}
+  #erpContent .ldm539ModuleArrow {flex:0 0 22px!important;width:22px!important;height:22px!important}
+  #erp #ldmAttendanceDetails {scroll-margin-top:10px;min-width:0!important;max-width:100%!important}
+ }
+ @media screen and (max-width:600px) {
+  #erp #erpContent :is(.ldm539CardGrid,.ldm3dGrid,.ldmTeacherModules,.v185FrontActions,.ldmMasterGrid,.v90MonitorGrid,.v114QuickGrid) {grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))!important;gap:10px!important}
+  #erp #erpContent .ldm539CardGrid {grid-template-columns:minmax(0,1fr)!important}
+  #erp #erpContent #v90Stats {grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #erp #ldm538Toolbar .ldmSearchHint {display:none!important}
+  #erp #erpContent #ldmAttendanceDetails {order:2!important}
+ }
+ @media screen and (max-width:350px) {#erp #erpContent #v90Stats {grid-template-columns:minmax(0,1fr)!important}}
+}
+
+/* V547: screen-only shared geometry; override the actual V546 layout contract. */
+@layer ldmRoot546 {
+ @media screen {
+  #erp:not(.hidden):has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) {display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+  #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) > main {position:relative!important;inset:auto!important;width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;box-sizing:border-box!important;flex:1 1 0!important}
+  #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) > aside {position:fixed!important;inset:0 auto 0 0!important;width:min(280px,88vw)!important;max-width:88vw!important;height:100dvh!important;max-height:100dvh!important;overflow-y:auto!important;z-index:200!important;transform:translateX(-105%)!important;visibility:hidden!important;box-sizing:border-box!important}
+  #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) > aside.open,body.d378MenuOpen #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) > aside {transform:translateX(0)!important;visibility:visible!important}
+  #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) .erpTop {justify-content:flex-start!important;align-content:center!important;padding:8px clamp(8px,1.1vw,16px)!important;overflow:visible!important}
+  #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)) .erpTop > :is(.ldmAdminSchoolIdentity,.ldmTeacherSchoolIdentity) {flex:1 1 320px!important;min-width:0!important;max-width:100%!important;margin:0!important;overflow-wrap:anywhere!important}
+  #erp .erpTop > :is(.ldmAdminSchoolIdentity,.ldmTeacherSchoolIdentity) :is(b,small) {min-width:0!important;max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  #erp .erpTop .ldm538Lang {flex:0 1 auto!important;min-width:0!important;max-width:100%!important;flex-wrap:wrap!important}
+  #erp #ldm538Toolbar .ldmSearchHint {flex:0 0 auto!important}
+  #erp #ldm538Toolbar #v75TopSearch {gap:6px!important;padding:4px!important;min-width:0!important}
+  #erp #ldm538Toolbar #v75TopSearch input {width:0!important;min-width:0!important;flex:1 1 0!important}
+  #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) :is(.ldm3dGrid,.ldm539CardGrid,.ldmTeacherModules,.ldmMasterGrid,.v90MonitorGrid,.v114QuickGrid,.v185FrontActions,.ldm537Categories,#r323ControlActions) {display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))!important;grid-auto-rows:auto!important;min-width:0!important;max-width:100%!important;gap:12px!important;align-items:stretch!important}
+  #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) :is(.ldm3dGrid,.ldm539CardGrid,.ldmTeacherModules,.ldmMasterGrid,.v90MonitorGrid,.v114QuickGrid,.v185FrontActions,.ldm537Categories,#r323ControlActions)>button {min-width:0!important;max-width:100%!important;width:100%!important;height:auto!important;max-height:none!important;min-height:76px!important;padding:10px!important;white-space:normal!important;overflow-wrap:anywhere!important;box-sizing:border-box!important}
+  #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) .ldm3dGrid {padding:10px!important;margin:0!important}
+  #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) .ldm3dCard {min-height:112px!important;gap:5px!important;justify-content:center!important}
+  #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) .ldm3dCard .ldm3dIcon {height:36px!important;font-size:32px!important;margin:0!important}
+  #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) .ldm3dCard .ldm3dSubtitle {font-size:13px!important;line-height:1.3!important;margin:0!important}
+  #erp #erpContent .ldm535PremiumDashboard #v90Stats {display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;gap:12px!important}
+  #erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat {display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:7px!important;min-height:70px!important;height:auto!important;padding:9px!important;min-width:0!important;max-width:100%!important}
+  #erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat>span {flex:0 0 30px!important;width:30px!important;min-width:0!important;height:auto!important;font-size:24px!important}
+  #erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat>div {flex:1 1 0!important;min-width:0!important;width:auto!important;max-width:100%!important}
+  #erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat :is(small,b) {display:block!important;min-width:0!important;max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  #erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat small {font-size:13px!important;line-height:1.25!important}
+  #erp #erpContent .ldm535PremiumDashboard #v90Stats>.v90Stat b {font-size:clamp(18px,1.5vw,24px)!important;line-height:1.2!important}
+  #erp #erpContent .ldm535PremiumDashboard #v185FrontDesk {grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+  #erp #erpContent .ldm535PremiumDashboard #v185FrontDesk .v185FrontHead {min-height:0!important;padding:4px!important}
+  #erp #erpContent .ldm535PremiumDashboard #v185FrontDesk .v185FrontActions {grid-template-columns:repeat(auto-fit,minmax(min(100%,135px),1fr))!important}
+  #erp #erpContent .ldm535PremiumDashboard .ldm539CardGrid>button[hidden],#erp #erpContent .ldm3dGrid>button[hidden],#erp #erpContent .ldmTeacherModules>button.ldm540Filtered {display:none!important}
+  html[data-erp-view="mobile"] #erp:has(#erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash))>main {width:min(100%,520px)!important;max-width:520px!important;margin-inline:auto!important}
+  html[data-erp-view="mobile"] #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) :is(.ldm3dGrid,.ldm539CardGrid,.ldmTeacherModules,.ldmMasterGrid,.v90MonitorGrid,.v114QuickGrid,.v185FrontActions,.ldm537Categories,#r323ControlActions),html[data-erp-view="mobile"] #erp #erpContent .ldm535PremiumDashboard #v90Stats {grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html[data-erp-view="mobile"] #erp #erpContent .ldm535PremiumDashboard .ldm539CardGrid {grid-template-columns:minmax(0,1fr)!important}
+  #parentDashboard .ldm3dGrid {display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))!important;grid-auto-rows:auto!important;gap:12px!important;min-width:0!important;max-width:100%!important}
+  #parentDashboard .ldm3dGrid>.ldm3dCard {min-height:112px!important;height:auto!important;max-height:none!important;min-width:0!important;max-width:100%!important;padding:10px!important;gap:5px!important}
+ }
+ @media screen and (max-width:600px) {
+  #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) :is(.ldm3dGrid,.ldmTeacherModules,.ldmMasterGrid,.v90MonitorGrid,.v114QuickGrid,.v185FrontActions,.ldm537Categories,#r323ControlActions),#erp #erpContent .ldm535PremiumDashboard #v90Stats,#erp #erpContent .ldm535PremiumDashboard #v185FrontDesk .v185FrontActions {grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #erp #erpContent :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash) .ldm539CardGrid {grid-template-columns:minmax(0,1fr)!important}
+  #erp .erpTop > :is(.ldmAdminSchoolIdentity,.ldmTeacherSchoolIdentity) {flex-basis:100%!important}
+  #erp #ldm538Toolbar .ldm538SearchSlot {flex-basis:100%!important}
+ }
+ @media screen and (max-width:350px) {#erp #erpContent .ldm535PremiumDashboard #v90Stats {grid-template-columns:minmax(0,1fr)!important}}
+}

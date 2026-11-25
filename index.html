@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head>
-<style>@layer ldmStatusCards;</style>
+<style>@layer ldmRoot546, ldmStatusCards;</style>
 <link rel="stylesheet" href="appearance-v454.css?v=456" media="screen"><script src="portal-compat-v475.js?v=475"></script>
 <script src="appearance-v454.js?v=456"></script>
 <script src="network-economy-v433.js?v=434"></script>
@@ -1130,7 +1130,7 @@ function ldmRoleHeroV377(kind,displayName,details=''){
  const greeting=ldmIndiaGreeting();
  let image='';try{const value=typeof v97AvatarUrl==='function'?String(v97AvatarUrl()||''):'';if(/^(https?:\/\/|\/|\.\/|data:image\/(png|jpeg|webp);base64,)/i.test(value))image=value}catch(_e){}
  const badge=image?'<img src="'+safe(image)+'" alt="Profile">':safe(String(displayName||label).trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase());
- return '<div class="v114PortalHeroText"><small>'+safe(date)+'</small><h2>'+safe(greeting+', '+label)+'</h2><p>'+safe(teacher?'Your students’ progress is our priority.':'Your school’s progress is our priority.')+'</p><em>Support • Guide • Encourage • Excel</em></div><div class="v114PortalHeroStudent"><div class="v114StudentBadge">'+badge+'</div><div><b>'+safe(displayName||label)+'</b><span>'+safe(details||label)+'</span></div><button type="button" onclick="render(\''+(teacher?'teacher_profile':'v97_profile')+'\')">Profile</button></div>';
+ return '<div class="v114PortalHeroText"><small data-ldm-role-date>'+safe(date)+'</small><h2 data-ldm-role-greeting="'+label.toLowerCase()+'">'+safe(greeting+', '+label)+'</h2><p>'+safe(teacher?'Your students’ progress is our priority.':'Your school’s progress is our priority.')+'</p><em>Support • Guide • Encourage • Excel</em></div><div class="v114PortalHeroStudent"><div class="v114StudentBadge">'+badge+'</div><div><b>'+safe(displayName||label)+'</b><span>'+safe(details||label)+'</span></div><button type="button" onclick="render(\''+(teacher?'teacher_profile':'v97_profile')+'\')">Profile</button></div>';
 }
 function init(){
  // Never initialize a browser client using a privileged backend key.
@@ -11709,12 +11709,12 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
       const seen=[];
       root.querySelectorAll('[data-v97-clock],.v97ParentWelcome,.v97WelcomeCopy,.v90Welcome').forEach(el=>{
         if(!el||!el.isConnected)return; const t=(el.textContent||'').trim();
-        if(!/Good Morning|Good Afternoon|Good Evening/i.test(t))return;
+        if(!/Good Morning|Good Afternoon|Good Evening|Good Night/i.test(t))return;
         if(seen.some(x=>x!==el&&(x.contains(el)||el.contains(x))))return;
         seen.push(el);
       });
       /* Remove only duplicate standalone greeting strips; never remove the main welcome hero. */
-      const strips=[...root.children].filter(el=>/^(?:[^A-Za-z]{0,4})?(Good Morning|Good Afternoon|Good Evening)\b/i.test((el.textContent||'').trim())&&!el.classList.contains('v90Dash'));
+      const strips=[...root.children].filter(el=>/^(?:[^A-Za-z]{0,4})?(Good Morning|Good Afternoon|Good Evening|Good Night)\b/i.test((el.textContent||'').trim())&&!el.classList.contains('v90Dash'));
       strips.slice(1).forEach(el=>el.remove());
     });
    }catch(_e){}
@@ -12296,7 +12296,7 @@ window.V6418_BUILD='V64.18-CLEAN-RUNTIME-COLLISION-FIX-2026-09-20';
 (function(){'use strict';
  const q=id=>document.getElementById(id), idle=window.requestIdleCallback||function(fn){return setTimeout(fn,0)};
  let scheduled=false;
- function greetingText(el){return /Good Morning|Good Afternoon|Good Evening/i.test((el?.textContent||'').trim())}
+ function greetingText(el){return /Good Morning|Good Afternoon|Good Evening|Good Night/i.test((el?.textContent||'').trim())}
  function cleanGreetings(){
   const root=q('erpContent');if(!root)return;
   const bars=[...root.querySelectorAll('.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting')]
@@ -12386,7 +12386,7 @@ window.V6419_BUILD='V64.19-FINAL-STABILITY-SINGLE-PROFILE-2026-09-20';
    };
  }catch(_e){}
  /* Keep only one simple greeting block after module renders, without a permanent MutationObserver. */
- function dedupeGreeting(){const root=q('erpContent');if(!root)return;let a=[...root.querySelectorAll('.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting')].filter(x=>/Good Morning|Good Afternoon|Good Evening/i.test(x.textContent||''));a.slice(1).forEach(x=>x.remove())}
+ function dedupeGreeting(){const root=q('erpContent');if(!root)return;let a=[...root.querySelectorAll('.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting')].filter(x=>/Good Morning|Good Afternoon|Good Evening|Good Night/i.test(x.textContent||''));a.slice(1).forEach(x=>x.remove())}
  /* V244: greeting dedupe runs only on startup; V233 canonical dashboard greeting owns route renders. */
  window.addEventListener('load',()=>setTimeout(dedupeGreeting,300),{once:true,passive:true});
  /* Resource hygiene: stop known obsolete realtime channels; V113 remains authoritative. */
@@ -13878,8 +13878,8 @@ try{document.documentElement.classList.remove('ldmV128Booting');document.body?.c
  function greetingCandidates(root){
    if(!root)return[];
    const sel='.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting,.v6418GreetingSingleton,[data-v97-clock],.v90Welcome';
-   let a=[...root.querySelectorAll(sel)].filter(el=>/Good Morning|Good Afternoon|Good Evening/i.test(el.textContent||'')&&!el.querySelector('button,a,input,table,.erpCards,.stat'));
-   const direct=[...root.children].filter(el=>/^\s*[^A-Za-z]{0,5}(Good Morning|Good Afternoon|Good Evening)\b/i.test((el.textContent||'').trim())&&!el.querySelector('button,a,input,table,.erpCards,.stat'));
+   let a=[...root.querySelectorAll(sel)].filter(el=>/Good Morning|Good Afternoon|Good Evening|Good Night/i.test(el.textContent||'')&&!el.querySelector('button,a,input,table,.erpCards,.stat'));
+   const direct=[...root.children].filter(el=>/^\s*[^A-Za-z]{0,5}(Good Morning|Good Afternoon|Good Evening|Good Night)\b/i.test((el.textContent||'').trim())&&!el.querySelector('button,a,input,table,.erpCards,.stat'));
    return [...new Set([...direct,...a])].filter(el=>!a.some(other=>other!==el&&el.contains(other)));
  }
  function oneGreeting(){let root=$('erpContent');let a=greetingCandidates(root);a.slice(1).forEach(el=>el.remove())}
@@ -16258,7 +16258,7 @@ if(typeof statsBase==='function'){
  function currentClassTeacherClasses(){try{if(typeof window.v103ClassTeacherClasses==='function')return [...new Set(window.v103ClassTeacherClasses().map(String).filter(Boolean))]}catch(_e){};try{return [...new Set((window.v14TeacherClasses||[]).filter(x=>x?.is_active!==false&&x?.is_class_teacher===true).map(x=>String(x.class_name||'')).filter(Boolean))]}catch(_e){return[]}}
 
  /* 14: Admin wishing/time is fully retired, not hidden after creation. */
- function retireAdminWishing(){if(!admin())return;clearInterval(window.__ldmAdminGreetingTimer);window.__ldmAdminGreetingTimer=null;clearInterval(window.__v97ClockTimer);window.__v97ClockTimer=null;let root=q('erpContent');if(!root)return;const re=/Good Morning|Good Afternoon|Good Evening/i;document.getElementById('ldmAdminGreeting')?.remove();[...root.querySelectorAll('.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting,.v6418GreetingSingleton,[data-v97-clock],.v90Welcome')].forEach(el=>{if(re.test(String(el.textContent||''))&&!el.querySelector('button,a,input,table,.erpCards,.stat'))el.remove()})}
+ function retireAdminWishing(){if(!admin())return;clearInterval(window.__ldmAdminGreetingTimer);window.__ldmAdminGreetingTimer=null;clearInterval(window.__v97ClockTimer);window.__v97ClockTimer=null;let root=q('erpContent');if(!root)return;const re=/Good Morning|Good Afternoon|Good Evening|Good Night/i;document.getElementById('ldmAdminGreeting')?.remove();[...root.querySelectorAll('.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting,.v6418GreetingSingleton,[data-v97-clock],.v90Welcome')].forEach(el=>{if(re.test(String(el.textContent||''))&&!el.querySelector('button,a,input,table,.erpCards,.stat'))el.remove()})}
  window.ldmRetireAdminWishing=retireAdminWishing;window.ldmCanonicalGreeting=retireAdminWishing;window.v154OneGreeting=retireAdminWishing;
 
  /* Preserve useful Admin top tools while never creating a wishing hero/clock. */
@@ -16549,9 +16549,9 @@ if(typeof statsBase==='function'){
  const admin=()=>['admin','super_admin','principal'].includes(role());
  const q=id=>document.getElementById(id);
  const routeNow=()=>String(window.__v90Route||sessionStorage.getItem('ldm_current_route')||'dashboard');
- function greetingText(){let h=new Date().getHours();try{let p=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',hour12:false}).formatToParts(new Date()).find(x=>x.type==='hour');h=Number(p?.value??h)}catch(_e){}return matchMedia('(min-width:901px)').matches&&(h%24<5||h%24>=21)?'Good Night':h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
+ function greetingText(){return ldmIndiaGreeting()}
  function cleanLegacyGreetings(){
-   if(!admin())return;let root=q('erpContent');if(!root)return;const re=/Good Morning|Good Afternoon|Good Evening/i;
+   if(!admin())return;let root=q('erpContent');if(!root)return;const re=/Good Morning|Good Afternoon|Good Evening|Good Night/i;
    const known='.v90Greeting,.v92Greeting,.v97Greeting,.greeting,.dashGreeting,.v6418GreetingSingleton,[data-v97-clock],#ldmAdminGreeting';
    [...root.querySelectorAll(known)].forEach(el=>{if(el.id!=='v233Greeting'&&!el.querySelector('#v233Greeting')&&re.test(String(el.textContent||'')))el.remove()});
    const dash=root.querySelector('.ldmRootAdminDash,.v114AdminDash,.v90Dash');if(dash){[...dash.children].forEach(el=>{if(el.id==='v233Greeting'||el.querySelector('#v233Greeting'))return;let t=String(el.textContent||'').trim();if(re.test(t)&&!el.querySelector('button,a,input,select,textarea,table'))el.remove()})}
@@ -16560,7 +16560,7 @@ if(typeof statsBase==='function'){
    if(!admin()||routeNow()!=='dashboard')return;let root=q('erpContent'),dash=root?.querySelector('.ldmRootAdminDash,.v114AdminDash,.v90Dash');if(!dash)return;
    cleanLegacyGreetings();let g=q('v233Greeting');if(!g){g=document.createElement('section');g.id='v233Greeting';let front=q('v185FrontDesk');if(front)front.insertAdjacentElement('beforebegin',g);else dash.prepend(g)}
    let date='';try{date=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(new Date())}catch(_e){date=new Date().toLocaleDateString('en-IN')}
-   g.classList.add('v114PortalHero','v377RoleHero');const heroHTML=ldmRoleHeroV377('admin',profile?.full_name||'Admin','School Administration');if(g.dataset.heroSource!==heroHTML||!g.querySelector('.v114PortalHeroText')){g.innerHTML=heroHTML;g.dataset.heroSource=heroHTML;}
+   g.classList.add('v114PortalHero','v377RoleHero');const heroHTML=ldmRoleHeroV377('admin',profile?.full_name||'Admin','School Administration');const stable=heroHTML.replace(/(<small data-ldm-role-date>)[^<]*/,'$1').replace(/(<h2 data-ldm-role-greeting="admin">)[^<]*/,'$1');if(g.dataset.heroSource!==stable||!g.querySelector('.v114PortalHeroText')){g.innerHTML=heroHTML;g.dataset.heroSource=stable;}window.LDM_V337_UI?.refreshGreeting?.();
  }
  function installAssemblyCard(){
    if(!admin()||routeNow()!=='dashboard')return;let grid=document.querySelector('.ldmMasterGrid');if(!grid||q('v232AssemblyCard'))return;let b=document.createElement('button');b.id='v232AssemblyCard';b.type='button';b.innerHTML='<i>🌞</i><b>Morning Assembly</b><small>आज का 5 मिनट का Principal Assembly Pack</small><em>OPEN TODAY →</em>';b.onclick=()=>window.render?.('principal_assembly');grid.appendChild(b)
@@ -18955,7 +18955,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="school-workspace-v336.js?v=538-ref3"></script>
 
 <link rel="stylesheet" href="interface-v337.css?v=510">
-<script src="ui-v337.js?v=545"></script>
+<script src="ui-v337.js?v=546"></script>
 <script src="student-photo-v337.js?v=512"></script>
 <script src="a4-print-v337.js?v=534-family-a4"></script>
 <script src="print-bridge-v337.js?v=344"></script>
@@ -18987,7 +18987,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=525"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
-<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=534-family-a4"><script src="id-card-v447.js?v=534-family-a4-r2"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=545"><script src="erp-premium-cards.js?v=545"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=544"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
+<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=534-family-a4"><script src="id-card-v447.js?v=534-family-a4-r2"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=547"><script src="erp-premium-cards.js?v=546"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=544"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
 
 
 <script id="erp521-teacher-register">
@@ -19018,8 +19018,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="ldm-dashboard-v537-reference.css?v=538-sharp5" media="screen">
 <script defer src="ldm-dashboard-v537-reference.js?v=539-1"></script>
 <link rel="stylesheet" href="ldm-dashboard-v538-reference-match.css?v=539-1" media="screen">
-<script defer src="ldm-dashboard-v538-reference-match.js?v=544"></script>
-<link rel="stylesheet" href="ldm-dashboard-v539-one-sector.css?v=544" media="screen">
-<script defer src="ldm-dashboard-v539-one-sector.js?v=544"></script>
+<script defer src="ldm-dashboard-v538-reference-match.js?v=546"></script>
+<link rel="stylesheet" href="ldm-dashboard-v539-one-sector.css?v=547" media="screen">
+<script defer src="ldm-dashboard-v539-one-sector.js?v=547"></script>
 </body>
 </html>

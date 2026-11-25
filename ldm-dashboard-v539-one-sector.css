@@ -209,7 +209,7 @@
   #erpContent :is(.ldm539CategoryTab,.ldm539ModuleCard)[data-category="reports"],#erpContent .v185FrontActions>[data-desk-slot="10"]{--tile-a:#007980;--tile-b:#005258}
   #erpContent .v185FrontActions>[data-desk-slot="8"]{--tile-a:#8641bc;--tile-b:#482395}
   #erpContent .v185FrontActions>[data-desk-slot="9"],#erpContent .v185FrontActions>[data-desk-slot="11"]{--tile-a:#c33459;--tile-b:#85203e}
-  html[data-erp-view="desktop"] #erp main{min-width:min(1536px,100vw)!important}
+  html[data-erp-view="desktop"] #erp main{min-width:0!important}
   html[data-erp-view="desktop"] #erp #erpContent #ldm535FullAccess .ldm537Categories,
   html[data-erp-view="desktop"] #erp #erpContent .ldm540Teacher .ldmTeacherModules{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   html[data-erp-view="mobile"] #erp main{width:min(100%,520px)!important;min-width:0!important;max-width:520px!important;margin-inline:auto!important}
