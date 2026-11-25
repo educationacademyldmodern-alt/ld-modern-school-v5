@@ -82,3 +82,66 @@ html body .i447Sheet .i447Cell::after{content:"";position:absolute;inset:-.6mm;b
 
 html body .i447Sheet .i447Cell {width:var(--id-cell-width)!important;height:var(--id-cell-height)!important;justify-self:center;align-self:center;}
 html body .i447Sheet .i447Cell > .i447Card {flex:none!important;width:var(--id-width)!important;max-width:none!important;height:var(--id-height)!important;transform:scale(var(--id-scale,1))!important;transform-origin:center!important;}
+
+/* V566: compact selection and four independent premium card layouts. */
+#i447Center .i566Selector{display:block!important;margin:10px 0!important;padding:0!important;max-width:100%!important;background:none!important;box-shadow:none!important;border:0!important}
+#i447Center .i566DesignLabel,#i447Center .i566Shared label{display:grid;gap:5px;min-width:0;font-weight:700}
+#i447Center .i566DesignLabel select{width:100%;max-width:100%;min-height:44px;padding:7px 12px;border:1px solid #91afce;border-radius:9px;color:#143d64;background:#f4f9ff;font-weight:700}
+#i447Center .i566Shared{margin:10px 0;padding:10px;border:1px solid #c1d5e6;border-radius:10px;background:#f4f9ff;color:#173047;box-sizing:border-box}
+#i447Center .i566Shared label{margin:6px 0;flex:1 1 150px}
+#i447Center .i566Shared input,#i447Center .i566Shared select{box-sizing:border-box;max-width:100%;width:100%;min-height:40px}
+#i447Center .i566SignSample{width:120px;max-height:50px;object-fit:contain;display:block;margin:8px 0}
+#i566SettingsStatus{font-size:13px;overflow-wrap:anywhere;color:#173047}
+html body .i447Sheet.i566Sheet,html body #a337Document .i447Sheet.i566Sheet{width:var(--i566-page-width,190mm)!important;height:var(--i566-page-height,277mm)!important;min-height:var(--i566-page-height,277mm)!important;max-height:var(--i566-page-height,277mm)!important;grid-template-columns:repeat(var(--id-cols),var(--id-cell-width))!important;grid-template-rows:repeat(var(--id-rows),var(--id-cell-height))!important;gap:var(--i566-gap,3mm)!important;justify-content:center!important;align-content:center!important}
+html body .i447Card.i566Card{container-type:size!important;display:grid!important;grid-template-rows:22% 8% minmax(0,1fr) 24% 7%!important;background:linear-gradient(150deg,#fff 25%,#eef5ff 75%,#dfeafb)!important;color:#102b53!important;border:0.4mm solid #0a3674!important;border-radius:var(--id-radius,3.2mm)!important;overflow:hidden!important;font-family:Arial,'Noto Sans Devanagari',sans-serif!important;line-height:1.12!important;text-align:left!important}
+.i566Card *{box-sizing:border-box;min-width:0;overflow-wrap:anywhere;line-height:1.12;}
+.i566Card .i566Head{display:grid;grid-template-columns:19% minmax(0,1fr);align-items:center;gap:3%;padding:2.5% 4%;color:white;background:linear-gradient(130deg,#1269bf,#092c67 45%,#051c4b);border-bottom:1mm solid #e5b336;overflow:hidden}
+.i566Card .i566Head img{width:100%;height:100%;max-height:16cqh;object-fit:contain}
+.i566Card .i566Head strong{display:block;font-size:4.1cqw;line-height:1.04;font-weight:800;color:#fff;}
+.i566Card .i566Head small{display:block;font-size:2.3cqw;margin-top:1%;color:white;line-height:1.13}
+.i566Card .i566Title{align-self:center;justify-self:center;background:linear-gradient(#2575cf,#063e8a);border-radius:1.2mm;padding:.65mm 3mm;color:#fff;font-size:3.25cqw;font-weight:800;max-width:94%;text-align:center}
+.i566Card .i566Main{display:grid;grid-template-columns:30% minmax(0,1fr);gap:3%;min-height:0;padding:1% 4%;overflow:hidden;align-items:start;}
+.i566Card .i566Photo{width:100%;height:100%;max-height:100%;object-fit:contain;object-position:center;background:linear-gradient(135deg,#1596e6,#084480);border:.45mm solid #0c478c;border-radius:1.6mm;color:white;text-align:center;font-size:3cqw;}
+.i566Card .i566Info{align-self:start;display:grid;gap:.2mm;max-height:100%;overflow:hidden;}
+.i566Card .i566Name{font-size:4.6cqw;line-height:1.08;color:#082b5b;display:block;margin-bottom:.35mm;font-weight:800}
+.i566Card .i566Line{display:grid;grid-template-columns:44% minmax(0,1fr);gap:2%;font-size:2.7cqw;align-items:start;color:#101b2f;}
+.i566Card .i566Line b{color:#103d78;}
+.i566Card .i566Bottom{display:grid;grid-template-columns:26% minmax(0,1fr) 30%;align-items:center;gap:3%;padding:0 4%;overflow:hidden;}
+html body .i566Card .i447QR{width:100%!important;height:100%!important;max-width:100%!important;min-width:0!important;min-height:0!important;max-height:22cqh!important;aspect-ratio:1;justify-self:start;background:#fff!important;border:0!important;padding:1.3mm!important;box-sizing:border-box!important;overflow:hidden!important}
+html body .i566Card .i447QR img{width:100%!important;height:100%!important;object-fit:contain!important;display:block!important;image-rendering:pixelated}
+.i566Card .i566Dates{font-size:2.5cqw;color:#102b53;font-weight:700;text-align:center}
+.i566Card .i566Sign{height:100%;max-height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;align-items:end;text-align:center;font-size:2.7cqw;font-weight:700;}
+.i566Card .i566Sign img{width:100%;height:100%;object-fit:contain;min-height:0;align-self:end;}
+.i566Card .i566Sign span{grid-row:2;border-top:.2mm solid #133968;padding:.35mm 0;}
+.i566Card .i566Foot{background:linear-gradient(110deg,#104b94,#061d4a);border-top:.6mm solid #efc544;color:#fff;text-align:center;font-size:2.45cqw;font-weight:700;padding:.3mm 2%;overflow:hidden;}
+html body .i447Card.i566Portrait{grid-template-rows:19% 7% minmax(0,1fr) 22% 6%!important}
+.i566Portrait .i566Head strong{font-size:5cqw}.i566Portrait .i566Head small{font-size:2.8cqw}
+.i566Portrait .i566Title{font-size:4.4cqw;padding:.65mm 2mm}
+.i566Portrait .i566Main{grid-template-columns:minmax(0,1fr);grid-template-rows:43% minmax(0,1fr);gap:2%;padding:0 5%;}
+.i566Portrait .i566Photo{width:46%;height:100%;justify-self:center;border-color:#dcae2d;}
+.i566Portrait .i566Info{width:100%;align-self:start;gap:.35mm;}
+.i566Portrait .i566Name{text-align:center;font-size:5.5cqw;}
+.i566Portrait .i566Line{font-size:3.4cqw;grid-template-columns:44% minmax(0,1fr);padding:.15mm .45mm;background:#e4effd;border-radius:.5mm}
+.i566Portrait .i566Dates,.i566Portrait .i566Sign{font-size:3.3cqw}.i566Portrait .i566Foot{font-size:3cqw}
+.i566T12 .i566Line b{background:#0b356d;color:white;padding:.15mm .5mm;border-radius:.5mm}
+.i566T13 .i566Head strong{color:#ffd645}.i566T13 .i566Title,.i566T13 .i566Name,.i566T14 .i566Name{background:linear-gradient(#e51e24,#990000);color:#fff;border-radius:1.2mm;padding:.45mm .7mm;text-align:center;}
+.i566T14 .i566Head{background:linear-gradient(135deg,#0084df,#08285f 52%,#051b49);border-bottom:1.4mm solid #ffd246;}
+.i566T14 .i566Photo{border:.6mm solid #fff;box-shadow:0 .7mm 1.1mm #174370;}
+@media print{html body .i447Sheet.i566Sheet{margin:0!important;zoom:1!important}.i566Card,.i566Card *{print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}}
+.i566Card .i566Head{padding:1cqh 4%;grid-template-rows:minmax(0,1fr);min-height:0;gap:2%;}
+.i566Card .i566Head>div{min-height:0;align-self:center;}
+.i566Card .i566Head>div:only-child{grid-column:1/-1;}
+.i566Card .i566Head strong{font-size:3.65cqw;}
+.i566Card .i566Head small{font-size:2.05cqw;}
+.i566Portrait .i566Head strong{font-size:4.65cqw}.i566Portrait .i566Head small{font-size:2.55cqw}
+html body .i566Card .i447QR img{max-width:100%!important;max-height:100%!important}
+
+/* Optional barcode strip; all legacy formats retain original geometry. */
+html body .i447Card.i566Card.i568HasBarcode{grid-template-rows:22% 8% minmax(0,1fr) 20% 8% 7%!important}
+html body .i447Card.i566Portrait.i568HasBarcode{grid-template-rows:19% 7% minmax(0,1fr) 22% 7% 6%!important}
+.i568Barcode{margin:0 5%;min-width:0;min-height:0;background:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.i568Barcode img{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;object-fit:fill!important;image-rendering:pixelated}
+.i568BarcodeControl{display:flex!important;align-items:center!important;gap:.5rem!important;flex-wrap:wrap!important}
+.i566Landscape.i568HasBarcode .i566Info{gap:.1mm}
+.i566Landscape.i568HasBarcode .i566Name{font-size:4.15cqw;margin-bottom:.2mm}
+.i566Landscape.i568HasBarcode .i566Line{font-size:2.45cqw}
