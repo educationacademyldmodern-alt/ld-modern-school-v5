@@ -324,3 +324,124 @@
   #erpContent .ldmTableWrap,#erpContent .tableWrap {max-width:100%;min-width:0;overflow-x:auto}
  }
 }
+/* V548 canonical admin dashboard; one directory and a non-overlapping welcome row.
+   First important layer, screen only; page-specific reports/print untouched. */
+@layer ldmRoot548 {
+ @media screen {
+  #erp #erpContent .ldm535PremiumDashboard #v233Greeting {display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-rows:auto!important;gap:12px!important;padding:12px 16px!important;min-height:0!important;height:auto!important;align-items:center!important;overflow:visible!important}
+  #erp #erpContent #v233Greeting>.v114PortalHeroText {grid-area:1/1!important;position:static!important;min-width:0!important;max-width:100%!important;text-align:left!important;margin:0!important;transform:none!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:3px!important}
+  #erp #erpContent #v233Greeting>.v114PortalHeroText>* {position:static!important;transform:none!important;margin:0!important;max-width:100%!important;overflow-wrap:anywhere!important}
+  #erp #erpContent #v233Greeting [data-ldm-role-date] {display:block!important;font-size:12px!important;color:white!important}
+  #erp #erpContent #v233Greeting h2 {font:800 clamp(18px,2vw,28px)/1.15 system-ui,sans-serif!important;color:white!important}
+  #erp #erpContent #v233Greeting :is(p,em) {font-size:12px!important;line-height:1.3!important}
+  #erp #erpContent #v233Greeting>.v114PortalHeroStudent {grid-area:1/2!important;position:static!important;inset:auto!important;transform:none!important;display:grid!important;grid-template-columns:44px minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;align-items:center!important;gap:5px 8px!important;min-width:0!important;max-width:100%!important;width:auto!important;height:auto!important;margin:0!important;padding:8px!important}
+  #erp #erpContent #v233Greeting .v114StudentBadge {grid-area:1/1/3/2!important;width:44px!important;height:44px!important;position:static!important;transform:none!important;margin:0!important}
+  #erp #erpContent #v233Greeting .v114StudentBadge img {width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important}
+  #erp #erpContent #v233Greeting .v114PortalHeroStudent>div:nth-child(2) {grid-area:1/2/3/3!important;min-width:0!important;overflow-wrap:anywhere!important}
+  #erp #erpContent #v233Greeting .v114PortalHeroStudent>div:nth-child(2) :is(b,span) {font-size:13px!important;line-height:1.25!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  #erp #erpContent #v233Greeting .v114PortalHeroStudent>button {grid-area:1/3!important;position:static!important;min-height:32px!important;height:auto!important;margin:0!important}
+  #erp #erpContent #v233Greeting .ldmPhotoChoice {grid-area:2/3!important;position:relative!important;max-width:100%!important;font-size:12px!important;color:white!important;white-space:normal!important;text-align:center!important;cursor:pointer!important}
+  #erp #erpContent #v233Greeting .ldmPhotoChoice input {position:absolute!important;inset:0!important;width:100%!important;height:100%!important;opacity:0!important;clip-path:none!important;cursor:pointer!important}
+  #erp #erpContent #v233Greeting .ldmPhotoChoice small:empty {display:none!important}
+  #erp #erpContent #ldm500Hero {padding:10px 12px!important;min-height:0!important;height:auto!important;display:grid!important;grid-template-columns:clamp(68px,10vw,132px) minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-items:center!important;gap:8px!important;overflow:visible!important}
+  #erp #erpContent #ldm500Hero .ldm538HeroArt {position:static!important;inset:auto!important;transform:none!important;grid-area:1/1/3/2!important;width:100%!important;height:85px!important;max-width:100%!important;margin:0!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-top {grid-area:1/2!important;display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:space-between!important;gap:6px!important;min-width:0!important;margin:0!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-title {flex:1 1 280px!important;min-width:0!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-title strong {font-size:clamp(18px,2vw,28px)!important;line-height:1.2!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-title small {font-size:12px!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-pills {grid-area:2/2!important;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important;margin:0!important;min-width:0!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-pills>button {min-height:46px!important;height:auto!important;width:100%!important;min-width:0!important;max-width:100%!important;padding:7px!important;font:750 13px/1.25 system-ui,sans-serif!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-top>button {min-height:36px!important;height:auto!important;padding:6px 10px!important;font-size:13px!important;white-space:normal!important}
+  #erp #erpContent #ldm535FullAccess .ldm535FullBody {display:block!important;padding:8px!important;min-width:0!important}
+  #erp #erpContent #ldm539Modules {display:grid!important;gap:10px!important;padding:0!important;min-width:0!important;max-width:100%!important;box-shadow:none!important;border:0!important;background:transparent!important}
+  #erp #erpContent #ldm539CardGrid {display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))!important;gap:12px!important;align-items:stretch!important;min-width:0!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm535FullSections,.v114ManagementPanel,.ldmMasterControl,#v149AdminQuickSlot,#v147AdminQuick,.v90MonitorGrid,.ldmMasterGrid,.ldmTeacherModules,.ldm548Extras) {display:contents!important}
+  #erp #erpContent #ldm539CardGrid :is(.v90SectionTitle,.ldmMasterTitle,#v147AdminQuick>h3) {display:none!important}
+  #erp #erpContent #ldm539Modules :is(.ldm548Filtered,[hidden],.hidden) {display:none!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard):not([hidden]):not(.ldm548Filtered):not(.hidden) {
+    display:grid!important;grid-template-columns:36px minmax(0,1fr)!important;grid-auto-rows:auto!important;align-content:center!important;align-items:center!important;gap:4px 8px!important;position:relative!important;inset:auto!important;transform:none!important;min-width:0!important;max-width:100%!important;width:100%!important;height:auto!important;min-height:90px!important;padding:9px!important;margin:0!important;box-sizing:border-box!important;
+    color:white!important;background:linear-gradient(180deg,#ffffff38,transparent 40%),linear-gradient(145deg,var(--548a,#087ac3),var(--548b,#06498b))!important;border:1px solid #a7d6ff!important;border-radius:13px!important;box-shadow:inset 0 2px 1px #ffffff77,0 3px 0 var(--548b,#06498b),0 5px 0 #a9b9d0,0 8px 12px #12365c38!important;filter:none!important;opacity:1!important;text-align:left!important;white-space:normal!important;overflow-wrap:anywhere!important;
+  }
+  #erp #erpContent #ldm539CardGrid [data-category=students]{--548a:#087ac3;--548b:#06498b}
+  #erp #erpContent #ldm539CardGrid [data-category=teachers]{--548a:#a83a8b;--548b:#7b1656}
+  #erp #erpContent #ldm539CardGrid [data-category=exams]{--548a:#7851c8;--548b:#452193}
+  #erp #erpContent #ldm539CardGrid [data-category=finance]{--548a:#c96c17;--548b:#8c3906}
+  #erp #erpContent #ldm539CardGrid [data-category=documents]{--548a:#146fbe;--548b:#064a91}
+  #erp #erpContent #ldm539CardGrid [data-category=qr]{--548a:#128269;--548b:#045b46}
+  #erp #erpContent #ldm539CardGrid [data-category=management]{--548a:#6751bd;--548b:#40318e}
+  #erp #erpContent #ldm539CardGrid [data-category=reports]{--548a:#13849b;--548b:#08576b}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard)>:is(i,.v90MonitorIcon,.ldm539ModuleIcon) {grid-column:1!important;grid-row:1/4!important;position:static!important;inset:auto!important;transform:none!important;width:34px!important;height:auto!important;min-height:0!important;font-size:25px!important;display:grid!important;place-items:center!important;margin:0!important;padding:0!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard)>:is(b,strong,small,span:not(.v90MonitorIcon):not(.ldm539ModuleIcon),em) {grid-column:2!important;grid-row:auto!important;position:static!important;inset:auto!important;transform:none!important;margin:0!important;min-width:0!important;max-width:100%!important;overflow-wrap:anywhere!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard) :is(b,strong){display:block!important;color:white!important;font:750 15px/1.25 system-ui,'Nirmala UI',sans-serif!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard) small{display:block!important;color:white!important;font:600 12px/1.3 system-ui,'Nirmala UI',sans-serif!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  #erp #erpContent #ldm539CardGrid .ldm539ModuleArrow {display:none!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard)>em {font-size:10px!important;line-height:1.2!important}
+  #erp #erpContent #ldm539CardGrid button:disabled {opacity:.65!important;cursor:not-allowed!important}
+ }
+ @media screen and (max-width:1000px){#erp #erpContent #ldm500Hero .ldm500-hero-pills{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+ @media screen and (max-width:650px){
+  #erp #erpContent .ldm535PremiumDashboard #v233Greeting {grid-template-columns:minmax(0,1fr)!important;padding:9px!important;gap:8px!important}
+  #erp #erpContent #v233Greeting>.v114PortalHeroStudent {grid-area:2/1!important}
+  #erp #erpContent #ldm500Hero {grid-template-columns:minmax(0,1fr)!important;padding:10px!important}
+  #erp #erpContent #ldm500Hero .ldm538HeroArt {display:none!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-top {grid-area:1/1!important}
+  #erp #erpContent #ldm500Hero .ldm500-hero-pills {grid-area:2/1!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #erp #erpContent #ldm539CardGrid {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard):not([hidden]):not(.ldm548Filtered):not(.hidden){grid-template-columns:26px minmax(0,1fr)!important;gap:4px 5px!important;min-height:94px!important;padding:7px!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard)>:is(i,.v90MonitorIcon,.ldm539ModuleIcon){width:25px!important;font-size:20px!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard) :is(b,strong){font-size:13px!important}
+  #erp #erpContent #ldm539CardGrid :is(.ldm548Native,.ldm539ModuleCard) small{font-size:11px!important}
+ }
+ @media screen and (max-width:340px){#erp #erpContent #ldm539CardGrid{grid-template-columns:minmax(0,1fr)!important}}
+ @media screen {
+ html[data-erp-view=mobile] #erp #erpContent .ldm535PremiumDashboard #v233Greeting {grid-template-columns:minmax(0,1fr)!important}
+ html[data-erp-view=mobile] #erp #erpContent #v233Greeting>.v114PortalHeroStudent {grid-area:2/1!important}
+ html[data-erp-view=mobile] #erp #erpContent #ldm500Hero {grid-template-columns:minmax(0,1fr)!important}
+ html[data-erp-view=mobile] #erp #erpContent #ldm500Hero .ldm538HeroArt{display:none!important}
+ html[data-erp-view=mobile] #erp #erpContent #ldm500Hero .ldm500-hero-top{grid-area:1/1!important}
+ html[data-erp-view=mobile] #erp #erpContent #ldm500Hero .ldm500-hero-pills{grid-area:2/1!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ html[data-erp-view=mobile] #erp #erpContent #ldm539CardGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ }
+}
+
+/* V549: canonical top-of-dashboard attendance layout; no sticky overlay. */
+@layer ldmRoot548 {
+ @media screen {
+  #erp #erpContent > .ldm535PremiumDashboard {display:flex!important;flex-direction:column!important;gap:8px!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > #v233Greeting {order:0!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > #v90Stats {order:1!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > .ldm549AttendanceTop {order:2!important;display:block!important;position:static!important;inset:auto!important;transform:none!important;width:100%!important;max-width:100%!important;min-width:0!important;height:auto!important;min-height:0!important;max-height:none!important;padding:9px 12px!important;margin:0!important;box-sizing:border-box!important;border:1px solid #b4d5ed!important;border-radius:13px!important;background:#fff!important;color:#173958!important;overflow:visible!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > #ldm500Hero {order:3!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > #v185FrontDesk {order:4!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > .v156DailyControl {order:5!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > .v114QuickPanel {order:6!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > #r323AdminControl {order:7!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > #ldm535FullAccess {order:8!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > #v307Dash {order:9!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > .v114AdminFeedGrid {order:10!important;}
+  #erp #erpContent > .ldm535PremiumDashboard > #ldmOffice:not([hidden]) {order:-1!important;}
+  #erp #erpContent .ldm549AttendanceTop > .v114PanelHead {display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:wrap!important;gap:6px!important;margin:0 0 7px!important;padding:0!important;min-height:0!important;height:auto!important;}
+  #erp #erpContent .ldm549AttendanceTop .v114PanelHead h3 {font:800 16px/1.3 system-ui,'Nirmala UI',sans-serif!important;color:#14395d!important;margin:0!important;}
+  #erp #erpContent .ldm549AttendanceTop .v114PanelHead button {display:inline-flex!important;min-height:32px!important;height:auto!important;padding:5px 10px!important;white-space:normal!important;}
+  #erp #erpContent .ldm549AttendanceTop .v114AttendanceVisual {display:grid!important;grid-template-columns:88px minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-items:center!important;justify-items:stretch!important;gap:5px 12px!important;min-height:0!important;height:auto!important;margin:0!important;padding:0!important;}
+  #erp #erpContent .ldm549AttendanceTop #v114AttDonut {grid-area:1/1/3/2!important;width:82px!important;height:82px!important;min-width:82px!important;max-width:82px!important;min-height:82px!important;max-height:82px!important;margin:0 auto!important;}
+  #erp #erpContent .ldm549AttendanceTop #v114AttDonut::after {inset:11px!important;}
+  #erp #erpContent .ldm549AttendanceTop #v114AttDonut b {font:800 20px/1.15 system-ui!important;margin:0!important;}
+  #erp #erpContent .ldm549AttendanceTop #v114AttDonut small {font:600 9px/1.15 system-ui!important;max-width:56px!important;}
+  #erp #erpContent .ldm549AttendanceTop .v114Legend {grid-area:1/2!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px 8px!important;width:100%!important;min-width:0!important;margin:0!important;padding:0!important;}
+  #erp #erpContent .ldm549AttendanceTop .v114Legend>span {display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:4px!important;min-width:0!important;width:auto!important;max-width:100%!important;font:650 13px/1.3 system-ui,'Nirmala UI',sans-serif!important;white-space:normal!important;color:#173958!important;}
+  #erp #erpContent .ldm549AttendanceTop .v114Legend>span>b {font:800 15px/1.2 system-ui!important;color:#173958!important;float:none!important;margin:0!important;}
+  #erp #erpContent .ldm549AttendanceTop .r392AttCoverage {grid-area:2/2!important;margin:0!important;padding:4px 8px!important;font:600 11px/1.3 system-ui,'Nirmala UI',sans-serif!important;overflow-wrap:anywhere!important;}
+ }
+ @media screen and (max-width:700px) {
+  #erp #erpContent .ldm549AttendanceTop .v114Legend {grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  #erp #erpContent .ldm549AttendanceTop .v114AttendanceVisual {grid-template-columns:82px minmax(0,1fr)!important;}
+  #erp #erpContent .ldm549AttendanceTop .r392AttCoverage {grid-area:2/1/3/3!important;}
+  #erp #erpContent .ldm549AttendanceTop #v114AttDonut {grid-area:1/1!important;}
+ }
+ @media screen {
+  html[data-erp-view=mobile] #erp #erpContent .ldm549AttendanceTop .v114Legend {grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  html[data-erp-view=mobile] #erp #erpContent .ldm549AttendanceTop .r392AttCoverage {grid-area:2/1/3/3!important;}
+  html[data-erp-view=mobile] #erp #erpContent .ldm549AttendanceTop #v114AttDonut {grid-area:1/1!important;}
+ }
+}

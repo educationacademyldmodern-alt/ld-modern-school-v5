@@ -60,7 +60,8 @@
   const root=q('#erpContent > .ldmRootAdminDash');
   if(!admin()||!root)return;
   root.classList.add('ldm535PremiumDashboard');
-  ensureUniversal(root);
+  // V553: V539 owns dashboard ordering; retain V535 as a fallback only.
+  if(!W.LDM_DASHBOARD_V539)ensureUniversal(root);
   ensureShortcuts(root);
   ensureFullAccess(root);
  }

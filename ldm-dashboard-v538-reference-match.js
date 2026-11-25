@@ -22,7 +22,7 @@
  const isDash=()=>!!q('#erpContent > .ldm535PremiumDashboard, #erpContent > .v114TeacherDash, #erpContent > .ldmNewTeacher');
  const create=(tag,cls,text)=>{const e=D.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
  const safeRoute=(route)=>{if(!isAdmin()||!route||typeof W.render!=='function')return;try{const result=W.render(route);if(result?.catch)result.catch(e=>W.toast?.(String(e?.message||e)));}catch(e){W.toast?.(String(e?.message||e));}};
- const setText=(node,value)=>{if(node && node.textContent!==value)node.textContent=value};
+ const setText=(node,value)=>{const v=W.LDM_V337_UI?.translate?.(value)||value;if(node && node.textContent!==v)node.textContent=v};
  let queued=false,observer=null;
  function makeToolbar(){
   const erp=q('#erp');if(!erp||erp.classList.contains('hidden')||!(isAdmin()||isTeacher()))return;
@@ -44,25 +44,31 @@
    const hint=create('kbd','ldmSearchHint','Ctrl + K');slot.append(hint);bar.append(langs,slot,actions);top.after(bar);
   }
   const admin=isAdmin();
-  const langs=q('.ldm538Lang',bar);
-  if(langs)top.append(langs);
+  const langs=q('.ldm538Lang',top)||q('.ldm538Lang',bar);
+  if(langs&&langs.parentElement!==top)top.append(langs);
+  if(langs){const lang=W.LDM_V337_UI?.language?.()||'en';for(const b of langs.querySelectorAll('button[data-lang]')){const v=String(b.dataset.lang===lang);if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v);}}
   const heroTop=admin?q('#ldm500Hero .ldm500-hero-top',erp):null;
   const photo=q('[data-ldm538="photos"]',erp);
   if(heroTop&&photo&&photo.parentElement!==heroTop)heroTop.append(photo);
+  if(!heroTop&&photo&&photo.parentElement!==q('.ldm538ToolActions',bar))q('.ldm538ToolActions',bar)?.append(photo);
   if(!photo){
     const button=create('button','','📷 Student Photos');button.type='button';button.dataset.ldm538='photos';
     button.addEventListener('click',()=>{if(isAdmin())safeRoute('student_photo_center');else if(isTeacher())W.render?.('v91_student_photos')});
     (heroTop||q('.ldm538ToolActions',bar)).append(button);
   }
-  const heroActions=admin?q('#ldm500Hero .ldm500-hero-top',erp):null;
-  if(heroActions&&!q('[data-ldm538="preview"]',heroActions)){
-    const preview=create('button','','🗎 A4 दस्तावेज़ चुनें');preview.type='button';preview.dataset.ldm538='preview';
+  const heroActions=admin?q('#ldm500Hero .ldm500-hero-pills',erp):null;
+  // Use one chooser inside the hero; retain page-specific print controls.
+  const priorPreview=q('[data-ldm538="preview"]',erp);
+  if(heroActions&&priorPreview&&priorPreview.parentElement!==heroActions){const old=q('[data-ldm500-route="marksheet_center"]',heroActions);if(old)old.replaceWith(priorPreview);else heroActions.append(priorPreview);}
+  if(heroActions&&!q('[data-ldm538="preview"]',erp)){
+    const preview=create('button','','🗎 PDF / A4 Preview');preview.type='button';preview.dataset.ldm538='preview';
     preview.addEventListener('click',()=>{if(!isAdmin())return;if(W.LDM_A4_V337?.choose)W.LDM_A4_V337.choose();else safeRoute('marksheet_center')});
-    heroActions.append(preview);
+    const old=q('[data-ldm500-route="marksheet_center"]',heroActions);if(old)old.replaceWith(preview);else heroActions.append(preview);
   }
   const search=q('.ldm538SearchSlot',bar);
   if(search && search.hidden===admin)search.hidden=!admin;
   if(!admin){q('#ldm538AdminProfile',top)?.remove();q('#ldm538HeaderRefresh',top)?.remove();}
+  const nativeRefresh=q('#ldmV281Refresh',top);if(nativeRefresh)q('#ldm538HeaderRefresh',top)?.remove();
   if(isAdmin()){
    const master=q('#v75TopSearch');if(master&&master.parentElement!==q('.ldm538SearchSlot',bar))q('.ldm538SearchSlot',bar)?.append(master);
    const input=q('#v75TopQ',bar);if(input){const value=W.LDM_V337_UI?.language?.()==='hi'?'विद्यालय के रिकॉर्ड खोजें…':'Search school records…';if(input.placeholder!==value)input.placeholder=value;}
@@ -77,19 +83,18 @@
    btn.addEventListener('click',()=>{const aside=q('aside',erp);if(aside){aside.classList.toggle('open');q('.hamb',top)?.setAttribute('aria-expanded',String(aside.classList.contains('open')))}});
    top.append(btn);
   }
-  if(isAdmin()&&!q('#ldm538HeaderRefresh',top)){
+  if(isAdmin()&&!q('#ldmV281Refresh',top)&&!q('#ldm538HeaderRefresh',top)){
    const btn=create('button','ldm538Refresh','⟳ Refresh');btn.id='ldm538HeaderRefresh';btn.type='button';
-   btn.addEventListener('click',()=>{const b=q('#ldmV281Refresh');if(b&&b!==btn&&!b.disabled)b.click();else if(typeof W.ldmRefreshCurrentRoute==='function')W.ldmRefreshCurrentRoute();else if(typeof W.render==='function')W.render('dashboard');});
+   btn.addEventListener('click',()=>{const b=q('#ldmV281Refresh');if(b&&b!==btn&&!b.disabled)b.click();else if(typeof W.ldmRefreshCurrentRoute==='function')W.ldmRefreshCurrentRoute();else if(typeof W.render==='function')W.render(W.__v90Route||'dashboard');});
    const bell=q('#v62Bell',top);if(bell)bell.before(btn);else top.append(btn);
   }
  }
  function setDate(){
   const root=q('#erpContent > .ldm535PremiumDashboard');if(!root||!isAdmin())return;
   const g=q('#v233Greeting',root);if(!g)return;
-  let date=q('.ldm538Date',g);if(!date){date=create('div','ldm538Date');date.setAttribute('aria-label','Current India date');g.append(date)}
-  const copy=q('.v114PortalHeroText',g)||[...g.children].find(el=>el.querySelector?.('b')&&!el.classList.contains('ldm538Date'));if(copy)copy.classList.add('ldm538GreetingText');
-  const now=new Date();const fmt=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'numeric',month:'short',year:'numeric'});
-  const rendered=fmt.format(now);if(date.dataset.value!==rendered){date.dataset.value=rendered;date.replaceChildren(create('span','ldm538CalendarIcon','▣'),create('span','',rendered));}
+  q('.ldm538Date',g)?.remove();
+  const copy=q('.v114PortalHeroText',g);if(copy)copy.classList.add('ldm538GreetingText');
+
  }
  function decorateHero(){
   const hero=q('#erpContent > .ldm535PremiumDashboard > #ldm500Hero');if(!hero)return;
@@ -97,7 +102,7 @@
    const art=create('span','ldm538HeroArt');art.setAttribute('aria-hidden','true');
    hero.prepend(art);
   }
-  const title=q('.ldm500-hero-title strong',hero);if(title&&title.textContent!=='Universal ERP Control Center')title.textContent='Universal ERP Control Center';
+  const title=q('.ldm500-hero-title strong',hero);setText(title,'Universal ERP Control Center');
  }
  function statCaption(){
   const grid=q('#erpContent > .ldm535PremiumDashboard > #v90Stats');if(!grid)return;
@@ -110,7 +115,7 @@
   const root=q('#erpContent > .ldm535PremiumDashboard'),desk=q('#v185FrontDesk',root);if(!desk)return;
   const head=q('.v185FrontHead',desk),actions=q('.v185FrontActions',desk);if(!head||!actions)return;
   desk.classList.add('ldm538Desk');
-  const h=q('h2',head);if(h&&h.textContent!=='⚡ Daily Quick Desk')h.textContent='⚡ Daily Quick Desk';
+  const h=q('h2',head);setText(h,'⚡ Daily Quick Desk');
   const targets=["v185FindStudent()", "openAdd('students')", "v185NewAdmission()", "v185FrontFee()", "render('fee_dashboard')",
    'attendance','work_delegation','timetable_master','central_exam','smart_work_alarm','reports','notice_order_center'];
   for(const btn of actions.children){
@@ -141,20 +146,10 @@
   const body=q('.ldm535FullBody',details),sections=q('.ldm535FullSections',root);
   if(!body||!sections)return;
   const intro=q('.ldm535FullIntro',body);if(intro)intro.hidden=true;
-  let original=q(':scope > .ldm538Original',body);
-  if(!original){original=create('details','ldm538Original');original.open=true;original.append(create('summary','', 'सभी मूल ERP कार्ड / Original modules देखें'));body.append(original)}
-  if(sections.parentElement!==original)original.append(sections);
-  const nav=q('.ldm537Categories',body);if(nav){
-   [...nav.children].forEach(b=>{const i=Number(b.dataset.ldm538Category);if(!categories[i])return;const small=q('small',b);if(small){const value=[
-      'Attendance · Requests · Gate Pass · Monitoring','UDISE+ · Student Master · Class Teacher',
-      'Exams · Question Paper · Marks Entry','Fee Collection · Due Fee · Fee Status',
-      'Add Teacher · Requests · Teaching','ID Cards · Certificates · Letters',
-      'QR Gate · Student QR · Storage','All Reports · Activities · Notices'][i];if(small.textContent!==value)small.textContent=value;}
-   });
-   if(!q('.ldm538CategoryPanel',body)){
-    const panel=create('section','ldm538CategoryPanel');panel.hidden=true;panel.setAttribute('aria-live','polite');nav.after(panel);
-   }
-  }
+  // V548: the V539 directory owns the single native grid. Never wrap it in a second accordion.
+  q('.ldm537Categories',body)?.remove();
+  q('.ldm538CategoryPanel',body)?.remove();
+
  }
  function openCategory(index,trigger){
   const root=q('#erpContent > .ldm535PremiumDashboard'),full=q('#ldm535FullAccess',root);
@@ -189,6 +184,6 @@
   });
   D.addEventListener('visibilitychange',()=>{if(!D.hidden)schedule()});schedule();
  }
- W.LDM_DASHBOARD_V538=Object.freeze({version:'538',refresh:schedule});
+ W.LDM_DASHBOARD_V538=Object.freeze({version:'553',refresh:schedule});
  if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();
 })();
