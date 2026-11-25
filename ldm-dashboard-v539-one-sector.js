@@ -109,39 +109,62 @@
     const counter=q('.ldm539Count',main);const label=`${count} / ${cards.length} ${hi()?'कार्ड':'cards'}`;if(counter&&counter.textContent!==label)counter.textContent=label;
     const none=q('.ldm539Empty',main);if(none&&none.hidden!==(count!==0))none.hidden=count!==0;
   }
+  // V560: Teacher filters operate only on existing, visible native teacher controls.
+  const teacherGroups=[
+    {id:'all',label:'All functions',hindi:'सभी कार्य',icon:'▦'},
+    {id:'students',label:'My Class & Attendance',hindi:'मेरी कक्षा एवं उपस्थिति',icon:'✓'},
+    {id:'exams',label:'Teaching & Exams',hindi:'शिक्षण एवं परीक्षा',icon:'📚'},
+    {id:'teachers',label:'Profile & Assigned Work',hindi:'प्रोफ़ाइल एवं आवंटित कार्य',icon:'👤'},
+    {id:'finance',label:'Fee Status',hindi:'शुल्क स्थिति',icon:'₹'},
+    {id:'documents',label:'ID & Documents',hindi:'पहचान एवं दस्तावेज',icon:'📄'},
+    {id:'qr',label:'QR & Presence',hindi:'क्यूआर एवं प्रवेश-निकास',icon:'▦'},
+    {id:'reports',label:'Notices & Reports',hindi:'सूचना एवं रिपोर्ट',icon:'📋'},
+    {id:'management',label:'Other Functions',hindi:'अन्य कार्य',icon:'⚙'}
+  ];
+  const teacherRoutes={teacher_profile:'teachers',teacher_class:'students',attendance:'students',master_attendance:'students',v143_teacher_qr_attendance:'qr',v91_student_photos:'documents',teacher_bells:'exams',v90_teacher_daily:'exams',academic_monitor:'exams',homework:'exams',v90_teacher_marks:'exams',v65_smart_marks:'exams',fees:'finance',assigned_work:'teachers',teacher_notices:'reports',v93_teacher_password:'teachers',__logout:'teachers',v147_teacher_presence:'qr',v147_student_qr:'qr'};
   function teacherSector(){
     if(String(W.profile?.role||'').toLowerCase()!=='teacher')return;
-    const t=q('#erpContent > .ldmNewTeacher, #erpContent > .v114TeacherDash');
-    const grid=q('.ldmTeacherModules',t);
-    if(!grid||!t)return;
-    let nav=q('.ldm540TeacherNav',t);
+    const dash=q('#erpContent > .ldmNewTeacher, #erpContent > .v114TeacherDash');
+    const grid=q('.ldmTeacherModules',dash);
+    if(!grid||!dash)return;
+    let nav=q('.ldm540TeacherNav',dash);
     if(!nav){
       nav=el('section','ldm540TeacherNav');
       nav.append(el('h2','','Teacher Work Center'));
       const tabs=el('div','ldm540TeacherTabs');nav.append(tabs);
-      grid.before(nav);nav.dataset.selected='all';
-      for(const group of [{id:'all',label:'All functions',icon:'▦'},...categories]){
-        const button=el('button','',group.icon+' '+group.label);
-        button.type='button';button.dataset.key=group.id;tabs.append(button);
+      tabs.setAttribute('role','group');
+      nav.dataset.selected='all';
+      for(const group of teacherGroups){
+        const button=el('button','');button.type='button';button.dataset.key=group.id;tabs.append(button);
         button.addEventListener('click',()=>{nav.dataset.selected=group.id;teacherSector()});
       }
     }
-    const present=new Set();
-    for(const card of grid.children){
-      if(!card.matches('button,a,[role="button"]'))continue;
-      const category=classify({title:q('b,strong',card)?.textContent||'',detail:'',
-        route:card.dataset.newTeacherRoute||card.dataset.route||card.getAttribute('onclick')||''});
-      present.add(category);
+    if(nav.nextElementSibling!==grid)grid.before(nav);
+    grid.classList.add('ldm560TeacherGrid');
+    dash.classList.add('ldm540Teacher');
+    const cards=[...grid.children].filter(card=>card.matches('button,a,[role="button"]'));
+    const present=new Set();const eligible=[];
+    for(const card of cards){
+      // Preserve native hidden/permission state; our filter uses a separate class.
+      card.classList.toggle('ldm560NativeHidden',card.style.display==='none');
+      if(card.hidden||card.classList.contains('hidden')||card.style.display==='none'||card.closest('[hidden],.hidden')){card.classList.remove('ldm540Filtered');continue;}
+      const route=card.dataset.newTeacherRoute||card.dataset.route||routeOf(card);
+      const category=Object.prototype.hasOwnProperty.call(teacherRoutes,route)?teacherRoutes[route]:classify({title:q('b,strong',card)?.textContent||card.textContent,detail:'',route});
+      present.add(category);eligible.push(card);
       if(card.dataset.teacherSector!==category)card.dataset.teacherSector=category;
-      card.classList.toggle('ldm540Filtered',nav.dataset.selected!=='all'&&nav.dataset.selected!==category);
     }
-    if(nav.dataset.selected!=='all'&&!present.has(nav.dataset.selected)){nav.dataset.selected='all';teacherSector();return}
+    if(nav.dataset.selected!=='all'&&!present.has(nav.dataset.selected))nav.dataset.selected='all';
+    for(const card of eligible)card.classList.toggle('ldm540Filtered',nav.dataset.selected!=='all'&&nav.dataset.selected!==card.dataset.teacherSector);
+    const title=q('h2',nav),titleText=localized('Teacher Work Center','शिक्षक कार्य केंद्र');
+    if(title.textContent!==titleText)title.textContent=titleText;
+    setFlag(q('.ldm540TeacherTabs',nav),'aria-label',localized('Filter teacher functions','शिक्षक कार्य छाँटें'));
     for(const tab of nav.querySelectorAll('button')){
-      const unavailable=tab.dataset.key!=='all'&&!present.has(tab.dataset.key);
+      const group=teacherGroups.find(g=>g.id===tab.dataset.key);if(!group)continue;
+      const unavailable=group.id!=='all'&&!present.has(group.id);
       if(tab.hidden!==unavailable)tab.hidden=unavailable;
-      setFlag(tab,'aria-pressed',tab.dataset.key===nav.dataset.selected);
+      const label=group.icon+' '+localized(group.label,group.hindi);if(tab.textContent!==label)tab.textContent=label;
+      setFlag(tab,'aria-pressed',group.id===nav.dataset.selected);
     }
-    t.classList.add('ldm540Teacher');
   }
   const modes=['auto','mobile','desktop'];
   const viewport=D.querySelector('meta[name="viewport"]');
@@ -232,10 +255,21 @@
     });
   }
 
+  // V561: use existing nodes; keep dashboard first when legacy widgets prepend.
+  function teacherTop(dash){
+    const teacher=String(W.profile?.role||'').toLowerCase()==='teacher';
+    const top=q('#erp .erpTop'),print=q('#v337PrintEntry'),tools=q('#ldm538Toolbar .ldm538ToolActions'),original=q('#v337Toolbar .v337Tools');
+    if(teacher){
+      const identity=top?.querySelector('.ldmTeacherSchoolIdentity');
+      if(identity&&!identity.querySelector('img')){const logo=el('img');logo.src='school-logo.png';logo.alt='School logo';identity.prepend(logo);}
+      if(print&&tools&&print.parentElement!==tools)tools.append(print);
+      if(dash?.matches('.ldmNewTeacher')&&dash.parentElement?.id==='erpContent'&&dash.parentElement.firstElementChild!==dash)dash.parentElement.prepend(dash);
+    }else if(print&&original&&print.parentElement!==original)original.append(print);
+  }
   function render(){
     pending=false;watch();teacherSector();const r=root();
     const dash=admin()?r:(String(W.profile?.role||'').toLowerCase()==='teacher'?q('#erpContent > .ldmNewTeacher,#erpContent > .v114TeacherDash'):null);
-    setupView(dash);if(dash){office(dash);profilePhoto(dash)}if(!r||!admin())return;
+    setupView(dash);teacherTop(dash);if(dash){office(dash);profilePhoto(dash)}if(!r||!admin())return;
     ensureModules(r);
     updateLanguage(r);populate(r);
   }
@@ -244,10 +278,12 @@
     const host=D.getElementById('erpContent');if(!host)return;
     if(observer)return;
     observer=new MutationObserver(records=>{
-      if(records.some(m=>!m.target.closest?.('.ldm548Extras,.ldm540TeacherNav') &&
+      if(records.some(m=>!m.target.closest?.('.ldm548Extras,.ldm540TeacherNav,table,form,[role=dialog],.ldmInlineStatus') &&
         [...m.addedNodes,...m.removedNodes].some(n=>n.nodeType===1)))schedule();
     });
     observer.observe(host,{childList:true,subtree:true});
+    const main=host.parentElement,top=q('#erp .erpTop');if(main)observer.observe(main,{childList:true});if(top)observer.observe(top,{childList:true,subtree:true});
+    for(const bar of D.querySelectorAll('#erp #v337Toolbar,#erp #ldm538Toolbar'))observer.observe(bar,{childList:true,subtree:true});
   }
   // V547: close both legacy sidebar state flags, for either dashboard role.
   const dashboardMenuActive=()=>!!D.querySelector('#erp:not(.hidden) #erpContent > :is(.ldm535PremiumDashboard,.ldmRootAdminDash,.ldmNewTeacher,.v114TeacherDash)');
@@ -281,6 +317,6 @@
   }
   function start(){watch();schedule();W.addEventListener('resize',schedule,{passive:true});W.addEventListener('ldm:language-changed',()=>{const r=root();if(r){updateLanguage(r);populate(r)}schedule()});}
 
-  W.LDM_DASHBOARD_V539=Object.freeze({version:'553',refresh:()=>{watch();schedule();},categories:categories.length});
+  W.LDM_DASHBOARD_V539=Object.freeze({version:'561',refresh:()=>{watch();schedule();},categories:categories.length});
   if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();

@@ -70,7 +70,7 @@
  function init(){
   if(!observer){
    const host=D.getElementById('erpContent');
-   if(host){observer=new MutationObserver(records=>{if(records.some(r=>r.addedNodes.length||r.removedNodes.length))schedule();});observer.observe(host,{childList:true,subtree:true});}
+   if(host){observer=new MutationObserver(records=>{if(records.some(r=>!r.target.closest?.("table,form,[role=dialog],.ldmInlineStatus")&&[...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1)))schedule();});observer.observe(host,{childList:true,subtree:true});}
   }
   schedule();
  }

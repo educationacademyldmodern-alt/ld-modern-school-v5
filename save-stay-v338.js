@@ -7,9 +7,9 @@ function remember(form){if(!form)return;formOrigins.set(form,{...snapshot(),edit
 function capture(kind,form,id){const original=formOrigins.get(form);if(original){const submission=nextStamp();formOrigins.set(form,{...original,latestSave:submission});return {...original,kind,id,submission}}const context={...snapshot(),editor:nextStamp(),kind,id};context.submission=nextStamp();if(form)formOrigins.set(form,{...context,latestSave:context.submission});return context}
 function matches(context){return context.owner===owner()&&context.route===route()&&context.serial===serial&&(!context.view||context.view.isConnected&&$('erpContent')?.contains(context.view))}
 function sameEditor(form,context){return formOrigins.get(form)?.editor===context.editor&&formOrigins.get(form)?.latestSave===context.submission}
-function restore(context){for(const saved of context.controls){const el=$(saved.id);if(!el)continue;if(el.tagName==='SELECT'&&![...el.options].some(o=>o.value===saved.value))continue;el.value=saved.value;if(saved.type==='checkbox'||saved.type==='radio')el.checked=saved.checked}
+function restore(context,scrollOnly=false){if(!scrollOnly){for(const saved of context.controls){const el=$(saved.id);if(!el)continue;if(el.tagName==='SELECT'&&![...el.options].some(o=>o.value===saved.value))continue;el.value=saved.value;if(saved.type==='checkbox'||saved.type==='radio')el.checked=saved.checked}
  // Refilter from fresh server rows after putting the original class/query back.
- if(route()==='v150_student_master')W.v150RenderStudents?.();else if($('nameSearch')||$('search')){for(const id of ['nameSearch','search'])$(id)?.dispatchEvent(new Event('input',{bubbles:true}))}
+ if(route()==='v150_student_master')W.v150RenderStudents?.();else if($('nameSearch')||$('search')){for(const id of ['nameSearch','search'])$(id)?.dispatchEvent(new Event('input',{bubbles:true}))}}
  const h=$('erpContent');for(const s of context.scrolls){const el=s.id?$(s.id):h?.querySelectorAll('.tableWrap')[s.index];if(el){el.scrollLeft=s.x;el.scrollTop=s.y}}W.scrollTo(context.x,context.y)}
 async function finish(kind,form,id,context){
  // A later editor or an explicitly chosen page always wins over the old delayed Save callback.
@@ -22,7 +22,7 @@ async function finish(kind,form,id,context){
  // Dashboard/collection pages can contain another unfinished payment. Marking dirty is sufficient there.
  if(['dashboard','smart_fee_center','master_fee','fee_dashboard'].includes(context.route)){W.ldmMarkDataDirty?.(kind);return true}
  refreshing=true;
- try{const result=W.render(context.route);const refreshSerial=serial;await result;if(owner()!==context.owner||route()!==context.route||serial!==refreshSerial)return false;restore(liveContext);requestAnimationFrame(()=>{if(owner()===context.owner&&route()===context.route&&serial===refreshSerial)restore(liveContext)});return true}
+ try{const result=W.render(context.route);const refreshSerial=serial;await result;if(owner()!==context.owner||route()!==context.route||serial!==refreshSerial)return false;restore(liveContext);requestAnimationFrame(()=>{if(owner()===context.owner&&route()===context.route&&serial===refreshSerial)restore(liveContext,true)});return true}
  catch(e){W.toast?.((W.LDM_V337_UI?.language()==='en'?'Saved; list refresh failed: ':'डेटा सेव है; सूची अपडेट नहीं हुई: ')+(e.message||e));return false}
  finally{refreshing=false}
 }
