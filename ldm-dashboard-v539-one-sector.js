@@ -63,7 +63,7 @@
     groups.forEach(group=>{
       const b=el('button','ldm539CategoryTab',group.icon+'  '+localized(group.label,group.hindi));
       b.type='button';b.dataset.category=group.id;b.title=group.hindi;
-      b.setAttribute('aria-pressed',String(group.id===selection));b.addEventListener('click',()=>{selection=group.id;applyFilter(r);});filters.append(b);
+      b.setAttribute('aria-pressed',String(group.id===selection));b.addEventListener('click',()=>{selection=group.id;if(selection==='all'){search='';const input=q('.ldm539Search',r);if(input)input.value='';}applyFilter(r);});filters.append(b);
     });
     const searchArea=el('div','ldm539SearchArea');const searchInput=el('input','ldm539Search');searchInput.type='search';searchInput.placeholder='कार्ड / विषय / काम खोजें…';
     searchInput.setAttribute('aria-label','Search loaded ERP cards');searchInput.autocomplete='off';searchInput.value=search;

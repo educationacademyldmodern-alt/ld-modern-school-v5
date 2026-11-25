@@ -35,7 +35,7 @@ let dueReport=null,dueStamp=0,dueFlight=null,feedsStamp=0,feedsFlight=null,feedH
 let activityFlight438=null,activityController438=null,writeTimer438=0,writeFlight438=null,mounted438=null,dirtyPending438=false;const writeKinds438=new Set(),writeSeen438=new Set();
 function dailyStatus(text,kind){const e=$('ldmV279Freshness');if(e){e.textContent=text;e.dataset.status=kind}}
 function readDashboardCache(){const key=dashboardKey();if(dailyActor===key)return;stopDaily();dailyActor=key;mounted438=null;writeKinds438.clear();writeSeen438.clear();dirtyPending438=false;dailyReport=null;dueReport=null;dailyStamp=dueStamp=feedsStamp=0;feedHTML={};window.__ldmAdminStatsHTML='';try{for(const k of ['ldm_admin_stats_html','ldm_v182_dash_state','ldm_admin_activities_html','ldm_admin_notices_html','ldm_admin_events_html'])sessionStorage.removeItem(k)}catch(_){}
- try{const d=JSON.parse(sessionStorage.getItem('ldm_v322_dashboard_'+key)||'null');if(d?.key===key){dailyReport=d.daily;dailyStamp=d.dailyStamp||0;dueReport=d.due;dueStamp=d.dueStamp||0;feedHTML=d.feeds||{};feedsStamp=d.feedsStamp||0}}catch(_){}
+ try{const d=JSON.parse(sessionStorage.getItem('ldm_v322_dashboard_'+key)||'null');if(d?.key===key){dailyReport=d.daily;dailyStamp=d.dailyStamp||0;dueReport=d.due;dueStamp=d.dueStamp||0;feedHTML=d.feeds||{};if(feedHTML.v39Activities&&!feedHTML.v39Activities.includes("ldm558Work"))delete feedHTML.v39Activities;feedsStamp=d.feedsStamp||0}}catch(_){}
 }
 function saveDashboardCache(){if(dailyActor!==dashboardKey())return;try{sessionStorage.setItem('ldm_v322_dashboard_'+dailyActor,JSON.stringify({key:dailyActor,daily:dailyReport,dailyStamp,due:dueReport,dueStamp,feeds:feedHTML,feedsStamp}))}catch(_){} }
 function paintDaily(d){if(!dailyActive()||d?.day!==todayIST()||dailyActor!==dashboardKey())return;
@@ -47,7 +47,7 @@ function paintDaily(d){if(!dailyActive()||d?.day!==todayIST()||dailyActor!==dash
  const stamp=new Date(d.verified_at).toLocaleTimeString('hi-IN',{timeZone:'Asia/Kolkata'});dailyStatus('● '+d.day+' • '+stamp+' पर अपडेट'+(d.conflicts?' • विरोधी उपस्थिति: '+d.conflicts:''),'ok');
  $('r320DailyRetry')?.remove();try{window.captureDash?.()}catch(_){}
 }
-function paintFeeds(){if(!dailyActive())return;for(const [id,html] of Object.entries(feedHTML)){const el=$(id);if(el&&el.innerHTML!==html)el.innerHTML=html}}
+const feedPaint558=new WeakMap();function paintFeeds(){if(!dailyActive())return;for(const [id,html] of Object.entries(feedHTML)){const el=$(id);if(el&&feedPaint558.get(el)!==html){el.innerHTML=html;feedPaint558.set(el,html)}}}
 async function refreshDue(force=false){if(!dailyActive()||!force)return false;readDashboardCache();if(dueReport&&(!force&&Date.now()-dueStamp<300000)){if(dailyReport)paintDaily(dailyReport);return true}if(dueFlight)return dueFlight;
  const key=dashboardKey();dueFlight=(async()=>{try{const balanceRows=await rpc('ldm_fee_due_snapshot_v2',{p_session:session(),p_admission_nos:null,p_until_month:todayIST().slice(0,7)});const data={rows:(balanceRows||[]).map(x=>({amount:x.current_due}))};if(key!==dashboardKey()||dailyActor!==key)return false;if(data?.available===false||!Array.isArray(data?.rows))throw Error('बकाया स्रोत उपलब्ध नहीं');const values=data.rows.map(x=>Number(x.amount));if(values.some(x=>!Number.isFinite(x)))throw Error('बकाया राशि अमान्य');dueReport={total:values.reduce((a,b)=>a+b,0)};dueStamp=Date.now();saveDashboardCache();if(dailyReport)paintDaily(dailyReport);return true}catch(e){if(key===dashboardKey()&&dailyActive()){const card=$('v90Stats')?.querySelectorAll('button')[3];if(card&&!dueReport)card.querySelector('b').textContent='रिपोर्ट खोलें';if(card)card.title='बकाया अपडेट नहीं हुआ: '+e.message}return false}finally{if(key===dailyActor)dueFlight=null}})();return dueFlight;
 }
@@ -61,17 +61,253 @@ async function daily(options={}){if(!dailyActive())return false;if(!options.forc
  }finally{clearTimeout(timer);if(mine===dailyRevision){dailyFlight=null;dailyController=null}}})();return dailyFlight;
 }
 function stopDaily(){dailyRevision++;dailyController?.abort();dailyController=null;dailyFlight=null;dueFlight=null;feedsFlight=null;if(dashboardTicker){clearInterval(dashboardTicker);dashboardTicker=null}}
-async function recentAuditRows(){
- const control=new AbortController(),timer=setTimeout(()=>control.abort(),6000);
+// V556: human-readable audit entries, shared by initial and confirmed-write feeds.
+const activityLanguage=()=>window.LDM_V337_UI?.language?.()==='en'?'en':'hi';
+const activityWords=(hi,en)=>activityLanguage()==='en'?en:hi;
+const activityTables={
+ ldm_v321_due_snapshots:['बकाया शुल्क की गणना','Due fee calculation','₹'],ldm_v304_receipts:['शुल्क रसीद','Fee receipt','🧾'],fees:['शुल्क रिकॉर्ड','Fee record','₹'],fee_payments:['शुल्क भुगतान','Fee payment','₹'],student_fee_settings:['विद्यार्थी की शुल्क सेटिंग','Student fee settings','⚙'],fee_plans:['शुल्क योजना','Fee plan','₹'],students:['विद्यार्थी रिकॉर्ड','Student record','🎓'],admissions:['प्रवेश रिकॉर्ड','Admission record','🎓'],attendance:['विद्यार्थी उपस्थिति','Student attendance','✓'],staff_attendance:['कर्मचारी उपस्थिति','Staff attendance','✓'],student_marks:['परीक्षा अंक','Exam marks','📝'],staff:['कर्मचारी रिकॉर्ड','Staff record','👥'],profiles:['उपयोगकर्ता प्रोफाइल','User profile','👤'],teacher_profiles:['शिक्षक प्रोफाइल','Teacher profile','👤'],teaching_diary:['दैनिक शिक्षण','Daily teaching','📚'],notices:['विद्यालय सूचना','School notice','📢'],events:['विद्यालय कार्यक्रम','School event','📅'],homework:['गृहकार्य','Homework','📚'],timetable:['समय सारणी','Timetable','📅'],student_roster_requests:['विद्यार्थी अनुरोध','Student request','📋'],v90_teacher_requests:['शिक्षक अनुरोध','Teacher request','📋'],expenses:['व्यय रिकॉर्ड','Expense record','₹'],income:['आय रिकॉर्ड','Income record','₹'],leave:['अवकाश रिकॉर्ड','Leave record','📋']
+};
+const activityUUID=/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+// V557: business-work descriptions, not technical table/action labels.
+const activityWork557={
+ "ldm_v321_due_snapshots": [
+  "बकाया शुल्क की गणना सहेजी गई",
+  "Due fee calculation saved",
+  "बकाया शुल्क की गणना दोबारा अपडेट हुई",
+  "Due fee calculation updated",
+  "बकाया शुल्क की गणना हटाई गई",
+  "Due fee calculation removed"
+ ],
+ "ldm_v304_receipts": [
+  "शुल्क भुगतान की रसीद जारी हुई",
+  "Fee payment receipt issued",
+  "शुल्क रसीद में संशोधन हुआ",
+  "Fee receipt corrected",
+  "शुल्क रसीद हटाई गई",
+  "Fee receipt removed"
+ ],
+ "fees": [
+  "विद्यार्थी के शुल्क की नई प्रविष्टि दर्ज हुई",
+  "Student fee entry recorded",
+  "विद्यार्थी के शुल्क की प्रविष्टि बदली गई",
+  "Student fee entry updated",
+  "शुल्क प्रविष्टि हटाई गई",
+  "Fee entry removed"
+ ],
+ "fee_payments": [
+  "विद्यार्थी का शुल्क भुगतान दर्ज हुआ",
+  "Student fee payment recorded",
+  "शुल्क भुगतान में संशोधन हुआ",
+  "Fee payment corrected",
+  "शुल्क भुगतान की प्रविष्टि हटाई गई",
+  "Fee payment entry removed"
+ ],
+ "student_fee_settings": [
+  "विद्यार्थी की शुल्क व्यवस्था निर्धारित हुई",
+  "Student fee settings created",
+  "विद्यार्थी की शुल्क व्यवस्था बदली गई",
+  "Student fee settings changed",
+  "विद्यार्थी की शुल्क व्यवस्था हटाई गई",
+  "Student fee settings removed"
+ ],
+ "fee_plans": [
+  "नई शुल्क योजना बनाई गई",
+  "Fee plan created",
+  "शुल्क योजना बदली गई",
+  "Fee plan updated",
+  "शुल्क योजना हटाई गई",
+  "Fee plan removed"
+ ],
+ "students": [
+  "नया विद्यार्थी जोड़ा गया",
+  "Student added",
+  "विद्यार्थी का विवरण सुधारा गया",
+  "Student details updated",
+  "विद्यार्थी का रिकॉर्ड हटाया गया",
+  "Student record removed"
+ ],
+ "admissions": [
+  "नया प्रवेश दर्ज हुआ",
+  "Admission recorded",
+  "प्रवेश का विवरण बदला गया",
+  "Admission details updated",
+  "प्रवेश रिकॉर्ड हटाया गया",
+  "Admission record removed"
+ ],
+ "attendance": [
+  "विद्यार्थी की उपस्थिति दर्ज हुई",
+  "Student attendance recorded",
+  "विद्यार्थी की उपस्थिति में सुधार हुआ",
+  "Student attendance corrected",
+  "उपस्थिति की प्रविष्टि हटाई गई",
+  "Attendance entry removed"
+ ],
+ "staff_attendance": [
+  "कर्मचारी की उपस्थिति दर्ज हुई",
+  "Staff attendance recorded",
+  "कर्मचारी की उपस्थिति बदली गई",
+  "Staff attendance corrected",
+  "कर्मचारी की उपस्थिति हटाई गई",
+  "Staff attendance entry removed"
+ ],
+ "student_marks": [
+  "परीक्षा के अंक दर्ज हुए",
+  "Exam marks recorded",
+  "परीक्षा के अंक संशोधित हुए",
+  "Exam marks corrected",
+  "परीक्षा की अंक प्रविष्टि हटाई गई",
+  "Exam marks entry removed"
+ ],
+ "staff": [
+  "नया कर्मचारी जोड़ा गया",
+  "Staff member added",
+  "कर्मचारी का विवरण बदला गया",
+  "Staff details updated",
+  "कर्मचारी का रिकॉर्ड हटाया गया",
+  "Staff record removed"
+ ],
+ "profiles": [
+  "नई उपयोगकर्ता प्रोफाइल बनाई गई",
+  "User profile created",
+  "उपयोगकर्ता प्रोफाइल बदली गई",
+  "User profile updated",
+  "उपयोगकर्ता प्रोफाइल हटाई गई",
+  "User profile removed"
+ ],
+ "teacher_profiles": [
+  "शिक्षक की प्रोफाइल बनाई गई",
+  "Teacher profile created",
+  "शिक्षक का विवरण बदला गया",
+  "Teacher details updated",
+  "शिक्षक की प्रोफाइल हटाई गई",
+  "Teacher profile removed"
+ ],
+ "teaching_diary": [
+  "आज के शिक्षण का विवरण दर्ज हुआ",
+  "Teaching diary entry recorded",
+  "शिक्षण का विवरण अपडेट हुआ",
+  "Teaching diary entry updated",
+  "शिक्षण की प्रविष्टि हटाई गई",
+  "Teaching diary entry removed"
+ ],
+ "notices": [
+  "नई विद्यालय सूचना दर्ज हुई",
+  "School notice created",
+  "विद्यालय सूचना में बदलाव हुआ",
+  "School notice updated",
+  "विद्यालय सूचना हटाई गई",
+  "School notice removed"
+ ],
+ "events": [
+  "विद्यालय का नया कार्यक्रम दर्ज हुआ",
+  "School event created",
+  "विद्यालय कार्यक्रम का विवरण बदला गया",
+  "School event updated",
+  "विद्यालय कार्यक्रम हटाया गया",
+  "School event removed"
+ ],
+ "homework": [
+  "नया गृहकार्य दर्ज हुआ",
+  "Homework recorded",
+  "गृहकार्य बदला गया",
+  "Homework updated",
+  "गृहकार्य हटाया गया",
+  "Homework removed"
+ ],
+ "timetable": [
+  "समय सारणी की नई प्रविष्टि बनी",
+  "Timetable entry created",
+  "समय सारणी बदली गई",
+  "Timetable updated",
+  "समय सारणी की प्रविष्टि हटाई गई",
+  "Timetable entry removed"
+ ],
+ "student_roster_requests": [
+  "विद्यार्थी संबंधी अनुरोध दर्ज हुआ",
+  "Student request recorded",
+  "विद्यार्थी संबंधी अनुरोध अपडेट हुआ",
+  "Student request updated",
+  "विद्यार्थी संबंधी अनुरोध हटाया गया",
+  "Student request removed"
+ ],
+ "v90_teacher_requests": [
+  "शिक्षक का अनुरोध दर्ज हुआ",
+  "Teacher request recorded",
+  "शिक्षक के अनुरोध में बदलाव हुआ",
+  "Teacher request updated",
+  "शिक्षक का अनुरोध हटाया गया",
+  "Teacher request removed"
+ ],
+ "expenses": [
+  "विद्यालय का व्यय दर्ज हुआ",
+  "School expense recorded",
+  "व्यय की प्रविष्टि बदली गई",
+  "Expense entry updated",
+  "व्यय की प्रविष्टि हटाई गई",
+  "Expense entry removed"
+ ],
+ "income": [
+  "विद्यालय की आय दर्ज हुई",
+  "School income recorded",
+  "आय की प्रविष्टि बदली गई",
+  "Income entry updated",
+  "आय की प्रविष्टि हटाई गई",
+  "Income entry removed"
+ ],
+ "leave": [
+  "अवकाश की प्रविष्टि दर्ज हुई",
+  "Leave entry recorded",
+  "अवकाश की प्रविष्टि बदली गई",
+  "Leave entry updated",
+  "अवकाश की प्रविष्टि हटाई गई",
+  "Leave entry removed"
+ ]
+};
+// V558: event-time snapshots, never infer old values from the current record.
+const activityObj=v=>{if(v&&typeof v==='object'&&!Array.isArray(v))return v;try{const o=JSON.parse(v);return o&&typeof o==='object'&&!Array.isArray(o)?o:{}}catch{return {}}};
+const activityVal=(...vs)=>vs.find(v=>typeof v==='number'&&Number.isFinite(v)||typeof v==='string'&&v.trim())??'';
+const activityMoney=v=>v!==''&&v!=null&&Number.isFinite(Number(v))?'₹'+Number(v).toLocaleString('en-IN'):'';
+const activityClean=v=>{const t=String(v??'').trim();return activityUUID.test(t)?'':t.slice(0,250)};
+function describeAudit(row,names,students=new Map()){
+ const table=String(row.table_name||'').toLowerCase(),action=String(row.action||'').toUpperCase();
+ const before=activityObj(row.before_row),after=activityObj(row.after_row),snap=action==='DELETE'?before:after;
+ const def=Object.hasOwn(activityTables,table)?activityTables[table]:['विद्यालय रिकॉर्ड','School record','📋'];
+ const pos=({INSERT:0,UPDATE:2,DELETE:4})[action],work=Object.hasOwn(activityWork557,table)?activityWork557[table]:null;
+ const verb=({INSERT:['नई प्रविष्टि दर्ज हुई','entry created'],UPDATE:['में बदलाव हुआ','updated'],DELETE:['की प्रविष्टि हटाई गई','entry removed']})[action]||['संबंधी गतिविधि दर्ज हुई','activity recorded'];
+ let title=work&&Number.isInteger(pos)?activityWords(work[pos],work[pos+1]):activityWords(def[0]+' '+verb[0],def[1]+' '+verb[1]);
+ const linked=students.get(String(snap.student_id||''))||students.get('adm:'+String(snap.admission_no||''))||{};
+ const student=activityClean(activityVal(snap.student_name,table==='students'?snap.name:'',linked.student_name));
+ const person=activityClean(activityVal(student,snap.teacher_name,snap.staff_name,snap.full_name,snap.requested_by_name));
+ const cls=activityClean(activityVal(snap.class_name,linked.class_name)),who=activityClean(names.get(row.actor)||row.actor||'');
+ const details=[];if(cls)details.push(activityWords('कक्षा ','Class ')+cls);if(person)title=person+' • '+title;
+ if(['fees','fee_payments'].includes(table)){
+  const amount=activityMoney(table==='fees'?snap.paid_amount:snap.amount);if(amount){if(action==='INSERT'&&table==='fee_payments')title=[person,amount,activityWords('फीस जमा','fee paid')].filter(Boolean).join(' • ');else if(action==='INSERT'&&table==='fees'&&Number(snap.paid_amount)>0)title=[person,amount,activityWords('शुल्क भुगतान दर्ज','fee payment recorded')].filter(Boolean).join(' • ');else details.push(activityWords('दर्ज भुगतान: ','Recorded payment: ')+amount)}
+  const mode=activityClean(activityVal(snap.payment_mode,snap.mode));if(mode)details.push(mode);
+ }
+ if(table==='ldm_v304_receipts'){
+  const result=activityObj(snap.result),rows=Array.isArray(result.rows)?result.rows:[];if(rows.length){const items=rows.map(r=>[activityClean(r.student_name),activityMoney(r.amount)].filter(Boolean).join(' • ')).filter(Boolean);if(items.length){title=items[0]+' • '+title+(items.length>1?' +'+(items.length-1):'');details.push(...items.slice(1,50));}if(result.mode)details.push(activityClean(result.mode));}
+ }
+ const fields={fees:[['paid_amount','जमा राशि','Paid amount',true],['due_amount','बकाया','Due',true],['discount','छूट','Discount',true]],fee_payments:[['amount','राशि','Amount',true]],student_fee_settings:[['monthly_fee','मासिक शुल्क','Monthly fee',true]],student_marks:[['marks','अंक','Marks'],['marks_obtained','प्राप्त अंक','Marks obtained'],['obtained_marks','प्राप्त अंक','Marks obtained'],['max_marks','पूर्णांक','Max marks'],['status','स्थिति','Status']],attendance:[['status','उपस्थिति','Attendance']],staff_attendance:[['status','उपस्थिति','Attendance']],students:[['student_name','नाम','Name'],['class_name','कक्षा','Class'],['section','सेक्शन','Section'],['status','स्थिति','Status']],v90_teacher_requests:[['status','स्थिति','Status']],student_roster_requests:[['status','स्थिति','Status']]};
+ for(const [key,h,e,money] of fields[table]||[]){const a=before[key],b=snap[key];if(b==null||b==='')continue;const fmt=money?activityMoney:activityClean;const value=fmt(b);if(!value)continue;if(action==='UPDATE'&&a!=null&&String(a)!==String(b)&&fmt(a)!=='')details.push(activityWords(h,e)+': '+fmt(a)+' → '+value);else if(action!=='UPDATE')details.push(activityWords(h,e)+': '+value);}
+ for(const value of [snap.subject,snap.exam_name,snap.fee_month,snap.due_month,snap.topic,snap.title]){const v=activityClean(value);if(v)details.push(v)}
+ if(table==='student_marks'||table==='attendance'||table==='student_fee_settings'){const change=details.find(x=>x.includes(' → '));if(change)title+=' • '+change;}
+ return {time:row.created_at,title,text:[...new Set(details)].join(' • '),who,icon:def[2]};
+}
+function activityHTML(list){return list.map(x=>{let time='';if(x.time){const d=new Date(x.time);if(!Number.isNaN(d.getTime()))time=d.toLocaleString(activityLanguage()==='en'?'en-IN':'hi-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true})}const meta=[x.who,time].filter(Boolean).join(' • ');const line=[x.title,x.text].filter(Boolean).join(' • ');return `<details class="v39Feed ldm556Activity ldm558Work"><summary><span class="ldm556ActivityIcon" aria-hidden="true">${esc(x.icon||'📋')}</span><span class="ldm558ActivityCopy"><b>${esc(line)}</b><time>${esc(meta||activityWords('समय उपलब्ध नहीं','Time unavailable'))}</time></span></summary><div class="ldm558ActivityDetail"><b>${esc(x.title)}</b>${x.text?`<p>${esc(x.text)}</p>`:''}<p>${esc(meta)}</p></div></details>`}).join('')}
+async function recentAuditRows(limit=4,offset=0,date=''){
+ if(!admin())return [];const owner=dashboardKey(),control=new AbortController(),timer=setTimeout(()=>control.abort(),9000);
  try{
-  const {data,error}=await client().from('ldm_v336_audit').select('id,created_at,actor,action,table_name,record_key').order('id',{ascending:false}).limit(4).abortSignal(control.signal);
-  if(error||!data?.length)return [];
-  const ids=[...new Set(data.map(row=>row.actor).filter(Boolean))];
-  const people=ids.length?await client().from('profiles').select('id,full_name').in('id',ids).abortSignal(control.signal):{};
-  const names=new Map((people.data||[]).map(p=>[p.id,p.full_name]));
-  return data.map(row=>({time:row.created_at,title:[row.action,row.table_name].filter(Boolean).join(' · '),text:[names.get(row.actor)||row.actor||'Server',row.record_key].filter(Boolean).join(' • ')}));
+  const base='id,created_at,actor,action,table_name,record_key';const query=cols=>{let q=client().from('ldm_v336_audit').select(cols);if(date)q=q.gte('created_at',date+'T00:00:00+05:30').lt('created_at',new Date(Date.parse(date+'T00:00:00+05:30')+86400000).toISOString());return q.order('id',{ascending:false}).range(offset,offset+limit-1).abortSignal(control.signal)};
+  let {data,error}=await query(base+',before_row,after_row');if(error&&/before_row|after_row/i.test(error.message||'')){({data,error}=await query(base))}if(error||!data?.length)return [];
+  const ids=[...new Set(data.map(r=>r.actor).filter(v=>activityUUID.test(String(v))))];const studentIds=new Set(),admissions=new Set();
+  for(const row of data){const v=activityObj(row.action==='DELETE'?row.before_row:row.after_row);if(!v.student_name){if(activityUUID.test(String(v.student_id||'')))studentIds.add(v.student_id);if(v.admission_no)admissions.add(String(v.admission_no));}}
+  const lookup=async(table,cols,key,values)=>{if(!values.length)return [];try{const r=await client().from(table).select(cols).in(key,values).abortSignal(control.signal);return r.data||[]}catch{return []}};
+  const [people,byId,byAdm]=await Promise.all([lookup('profiles','id,full_name','id',ids),lookup('students','id,admission_no,student_name,class_name','id',[...studentIds]),lookup('students','id,admission_no,student_name,class_name','admission_no',[...admissions])]);
+  if(!admin()||owner!==dashboardKey())return [];const names=new Map(people.map(p=>[p.id,p.full_name])),students=new Map();for(const r of [...byId,...byAdm]){students.set(String(r.id),r);students.set('adm:'+String(r.admission_no),r)}return data.map(row=>describeAudit(row,names,students));
  }catch{return []}finally{clearTimeout(timer)}
 }
+// Read-only, paginated history. Search applies to loaded records; date applies on server.
+window.ldm556ActivityHistory=async function(host){if(!admin()||!host?.isConnected)return;const owner=dashboardKey();host.querySelector('.ldm556History')?.remove();const section=document.createElement('section');section.className='panel ldm556History';section.innerHTML=`<h3>${activityWords('दर्ज गतिविधियाँ','Logged activities')}</h3><div class="ldm558HistoryTools"><input type="search" aria-label="Search loaded activities" placeholder="${activityWords('लोड की गई गतिविधियाँ खोजें','Search loaded activities')}"><input type="date" aria-label="Activity date"><button type="button">${activityWords('अगली 50','Load next 50')}</button></div><div role="status"></div><div class="ldm558HistoryList"></div>`;host.prepend(section);const [search,date,more]=section.querySelectorAll('input,button'),status=section.querySelector('[role=status]'),list=section.querySelector('.ldm558HistoryList');let rows=[],offset=0,epoch=0;const paint=()=>{const q=search.value.trim().toLocaleLowerCase();list.innerHTML=activityHTML(rows.filter(x=>[x.title,x.text,x.who,x.time].join(' ').toLocaleLowerCase().includes(q)))||'<p>'+activityWords('कोई मिलती गतिविधि नहीं।','No matching activities.')+'</p>'};const load=async(reset)=>{const token=++epoch;if(reset){rows=[];offset=0;paint()}more.disabled=true;status.textContent=activityWords('लोड हो रहा है…','Loading…');const batch=await recentAuditRows(50,offset,date.value);if(token!==epoch||!admin()||owner!==dashboardKey()||!section.isConnected)return;rows.push(...batch);offset+=batch.length;paint();status.textContent=activityWords('लोड रिकॉर्ड: ','Loaded records: ')+rows.length+(batch.length===0?' • '+activityWords('आगे कोई रिकॉर्ड उपलब्ध नहीं या स्रोत अनुपलब्ध','No more records or source unavailable'):'');more.disabled=batch.length<50;};search.oninput=paint;date.onchange=()=>load(true);more.onclick=()=>load(false);await load(true);};
 async function feeds(options={}){if(!dailyActive())return false;if(!options.force){readDashboardCache();paintFeeds();return true;}readDashboardCache();paintFeeds();if(!options.force&&feedsStamp&&Date.now()-feedsStamp<60000)return true;if(feedsFlight)return feedsFlight;const key=dashboardKey();
  const rows=async(table,columns,order,limit)=>{let timer;try{const work=(async()=>{let q=client().from(table).select(columns).order(order,{ascending:false}).limit(limit);let r=await q;if(r.error&&table==='fee_payments'&&/created_at/i.test(r.error.message||'')){r=await client().from(table).select('student_name,amount,payment_date,receipt_no').order('payment_date',{ascending:false}).limit(limit)}if(r.error)throw Error(r.error.message);return r.data||[]})();return await Promise.race([work,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('जानकारी समय पर नहीं मिली')),12000)})])}finally{clearTimeout(timer)}};
  const empty=s=>'<p class="v39Empty">'+esc(s)+'</p>';
@@ -79,7 +315,7 @@ async function feeds(options={}){if(!dailyActive())return false;if(!options.forc
  if(key!==dashboardKey()||dailyActor!==key)return false;let complete=true;
  const set=(id,html)=>{feedHTML[id]=html};
  const failure=(id,msg)=>{complete=false;const el=$(id);if(el){el.title='अपडेट नहीं हुआ: '+msg;if(!feedHTML[id])el.innerHTML=empty('जानकारी अभी नहीं मिली; Refresh दबाकर दोबारा प्रयास करें।')}};
- if(r[0].status==='fulfilled'){const list=[],errors=[];r[0].value.forEach((x,i)=>{if(x.status==='rejected'){errors.push(x.reason.message);return}for(const row of x.value)list.push({time:row.created_at||row.payment_date||row.admission_date||row.teaching_date,title:['नया प्रवेश','फीस जमा','शिक्षण अपडेट'][i],text:i===0?row.student_name+' • कक्षा '+row.class_name:i===1?row.student_name+' • ₹'+Number(row.amount).toLocaleString('en-IN'):row.teacher_name+' • '+row.subject+' • '+row.topic})});if(r[3]?.value?.length){list.splice(0,list.length,...r[3].value);errors.length=0}list.sort((a,b)=>new Date(b.time||0)-new Date(a.time||0));const html=list.slice(0,4).map(x=>`<div class="v39Feed"><span>●</span><div><b>${esc(x.title)}</b><small>${esc(x.text)}</small></div><time>${esc(x.time?new Date(x.time).toLocaleString('hi-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'')}</time></div>`).join('');if(!errors.length)set('v39Activities',html||empty('अभी कोई नई गतिविधि नहीं।'));else {if(!feedHTML.v39Activities&&html)set('v39Activities',html);failure('v39Activities',errors.join('; '))}}
+ if(r[0].status==='fulfilled'){const list=[],errors=[];r[0].value.forEach((x,i)=>{if(x.status==='rejected'){errors.push(x.reason.message);return}for(const row of x.value)list.push({time:row.created_at||row.payment_date||row.admission_date||row.teaching_date,title:[activityWords('नया प्रवेश दर्ज हुआ','Admission recorded'),activityWords('विद्यार्थी का शुल्क भुगतान दर्ज हुआ','Student fee payment recorded'),activityWords('शिक्षण का विवरण दर्ज हुआ','Teaching diary entry recorded')][i],text:i===0?row.student_name+' • कक्षा '+row.class_name:i===1?row.student_name+' • ₹'+Number(row.amount).toLocaleString('en-IN'):row.teacher_name+' • '+row.subject+' • '+row.topic})});if(r[3]?.value?.length){list.splice(0,list.length,...r[3].value);errors.length=0}list.sort((a,b)=>new Date(b.time||0)-new Date(a.time||0));const html=activityHTML(list.slice(0,4));if(!errors.length)set('v39Activities',html||empty('अभी कोई नई गतिविधि नहीं।'));else {if(!feedHTML.v39Activities&&html)set('v39Activities',html);failure('v39Activities',errors.join('; '))}}
  else failure('v39Activities',r[0].reason.message);
  if(r[1].status==='fulfilled')set('v39Notices',r[1].value.slice(0,4).map(x=>`<button class="v39Notice" onclick="render('notices')"><span>📢</span><div><b>${esc(x.title)}</b><small>${esc(x.message)}</small><em>${esc(x.date)} • ${esc(x.audience||'')}</em></div></button>`).join('')||empty('अभी कोई सूचना नहीं।'));else failure('v39Notices',r[1].reason.message);
  if(r[2].status==='fulfilled'){const all=r[2].value.slice().sort((a,b)=>{const ad=String(a.event_date||''),bd=String(b.event_date||''),au=ad>=todayIST(),bu=bd>=todayIST();return au!==bu?(au?-1:1):au?ad.localeCompare(bd):bd.localeCompare(ad)});set('v39Events',all.slice(0,5).map(x=>`<button class="v39Event" onclick="render('events')"><span><b>${esc(x.event_date)}</b></span><div><b>${esc(x.title)}</b><small>${esc(x.event_type||x.audience||'कार्यक्रम')}</small></div></button>`).join('')||empty('अभी कोई कार्यक्रम नहीं।'))}else failure('v39Events',r[2].reason.message);
@@ -99,9 +335,9 @@ window.v39LoadAdminPanels=feeds;try{v39LoadAdminPanels=feeds}catch(_){}
 // Confirmed local writes refresh only affected dashboard data, once; no polling.
 async function activities438(){if(!dailyActive())return false;if(activityFlight438)return activityFlight438;readDashboardCache();const key=dashboardKey(),control=new AbortController();activityController438=control;
  const promise=(async()=>{let timer;try{const sources=[['admissions','id,student_name,class_name,admission_date,created_at','created_at'],['fee_payments','student_name,amount,payment_date,receipt_no,created_at','created_at'],['teaching_diary','teacher_name,class_name,subject,topic,teaching_date,created_at','created_at']];
- const job=recentAuditRows().then(audit=>audit.length?[audit]:Promise.all(sources.map(async([table,columns,order],i)=>{let q=client().from(table).select(columns).order(order,{ascending:false}).limit(5);if(q.abortSignal)q=q.abortSignal(control.signal);let r=await q;if(r.error&&table==='fee_payments'&&/created_at/i.test(r.error.message||'')){q=client().from(table).select('student_name,amount,payment_date,receipt_no').order('payment_date',{ascending:false}).limit(5);if(q.abortSignal)q=q.abortSignal(control.signal);r=await q}if(r.error)throw r.error;return (r.data||[]).map(row=>({time:row.created_at||row.payment_date||row.admission_date||row.teaching_date,title:['नया प्रवेश','फीस जमा','शिक्षण अपडेट'][i],text:i===0?row.student_name+' • कक्षा '+row.class_name:i===1?row.student_name+' • ₹'+Number(row.amount).toLocaleString('en-IN'):row.teacher_name+' • '+row.subject+' • '+row.topic}))})));
+ const job=recentAuditRows().then(audit=>audit.length?[audit]:Promise.all(sources.map(async([table,columns,order],i)=>{let q=client().from(table).select(columns).order(order,{ascending:false}).limit(5);if(q.abortSignal)q=q.abortSignal(control.signal);let r=await q;if(r.error&&table==='fee_payments'&&/created_at/i.test(r.error.message||'')){q=client().from(table).select('student_name,amount,payment_date,receipt_no').order('payment_date',{ascending:false}).limit(5);if(q.abortSignal)q=q.abortSignal(control.signal);r=await q}if(r.error)throw r.error;return (r.data||[]).map(row=>({time:row.created_at||row.payment_date||row.admission_date||row.teaching_date,title:[activityWords('नया प्रवेश दर्ज हुआ','Admission recorded'),activityWords('विद्यार्थी का शुल्क भुगतान दर्ज हुआ','Student fee payment recorded'),activityWords('शिक्षण का विवरण दर्ज हुआ','Teaching diary entry recorded')][i],text:i===0?row.student_name+' • कक्षा '+row.class_name:i===1?row.student_name+' • ₹'+Number(row.amount).toLocaleString('en-IN'):row.teacher_name+' • '+row.subject+' • '+row.topic}))})));
  const groups=await Promise.race([job,new Promise((_,reject)=>{timer=setTimeout(()=>{control.abort();reject(Error('Activities update timed out'))},12000)})]);if(key!==dashboardKey()||dailyActor!==key||!dailyActive()||control.signal.aborted)return false;
- const list=groups.flat().sort((a,b)=>new Date(b.time||0)-new Date(a.time||0)).slice(0,4);feedHTML.v39Activities=list.map(x=>`<div class="v39Feed"><span>●</span><div><b>${esc(x.title)}</b><small>${esc(x.text)}</small></div><time>${esc(x.time?new Date(x.time).toLocaleString('hi-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'')}</time></div>`).join('')||'<p class="v39Empty">अभी कोई नई गतिविधि नहीं।</p>';saveDashboardCache();paintFeeds();return true;
+ const list=groups.flat().sort((a,b)=>new Date(b.time||0)-new Date(a.time||0)).slice(0,4);feedHTML.v39Activities=activityHTML(list)||'<p class="v39Empty">अभी कोई नई गतिविधि नहीं।</p>';saveDashboardCache();paintFeeds();return true;
  }catch(e){if(key===dashboardKey()&&dailyActive()){const host=$('v39Activities');if(host)host.title='नई गतिविधियाँ अपडेट नहीं हुईं: '+String(e.message||e)}return false}finally{clearTimeout(timer);if(activityController438===control)activityController438=null}})().finally(()=>{if(activityFlight438===promise)activityFlight438=null});activityFlight438=promise;return promise;
 }
 function scheduleWrite438(){if(writeTimer438||writeFlight438||!dailyActive())return;writeTimer438=setTimeout(()=>{writeTimer438=0;refreshWrite438()},80)}
