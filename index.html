@@ -1,4 +1,5 @@
 <!doctype html><html lang="en"><head>
+<style>@layer ldmStatusCards;</style>
 <link rel="stylesheet" href="appearance-v454.css?v=456" media="screen"><script src="portal-compat-v475.js?v=475"></script>
 <script src="appearance-v454.js?v=456"></script>
 <script src="network-economy-v433.js?v=434"></script>
@@ -1118,11 +1119,15 @@ function publicModule(k){
   openPortal();
 }
 
+function ldmIndiaGreeting(now=new Date()){
+ const hour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',hourCycle:'h23'}).format(now));
+ return hour<5||hour>=21?'Good Night':hour<12?'Good Morning':hour<17?'Good Afternoon':'Good Evening';
+}
 function ldmRoleHeroV377(kind,displayName,details=''){
  const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const teacher=kind==='teacher',label=teacher?'Teacher':'Admin';
- let date='',hour=0;try{date=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'2-digit',month:'short',year:'numeric'}).format(new Date());hour=Number(new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',hour12:false}).format(new Date()))}catch(_e){date=new Date().toLocaleDateString('en-IN');hour=new Date().getHours()}
- const greeting=matchMedia('(min-width:901px)').matches?((hour%24)<5||(hour%24)>=21?'Good Night':(hour%24)<12?'Good Morning':(hour%24)<17?'Good Afternoon':'Good Evening'):(hour<12?'Good Morning':hour<17?'Good Afternoon':'Good Evening');
+ const date=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'2-digit',month:'short',year:'numeric'}).format(new Date());
+ const greeting=ldmIndiaGreeting();
  let image='';try{const value=typeof v97AvatarUrl==='function'?String(v97AvatarUrl()||''):'';if(/^(https?:\/\/|\/|\.\/|data:image\/(png|jpeg|webp);base64,)/i.test(value))image=value}catch(_e){}
  const badge=image?'<img src="'+safe(image)+'" alt="Profile">':safe(String(displayName||label).trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase());
  return '<div class="v114PortalHeroText"><small>'+safe(date)+'</small><h2>'+safe(greeting+', '+label)+'</h2><p>'+safe(teacher?'Your students’ progress is our priority.':'Your school’s progress is our priority.')+'</p><em>Support • Guide • Encourage • Excel</em></div><div class="v114PortalHeroStudent"><div class="v114StudentBadge">'+badge+'</div><div><b>'+safe(displayName||label)+'</b><span>'+safe(details||label)+'</span></div><button type="button" onclick="render(\''+(teacher?'teacher_profile':'v97_profile')+'\')">Profile</button></div>';
@@ -10590,7 +10595,7 @@ function v97Safe(v){return typeof esc==='function'?esc(v):String(v??'')}
 function v97RoleKey(){return String(profile?.role||'').toLowerCase()}
 function v97RoleLabel(){let r=v97RoleKey();if(['admin','super_admin','principal'].includes(r))return 'Admin';if(r==='teacher')return 'Teacher';if(r==='parent')return 'Parent';if(r==='student')return 'Student';return 'User'}
 function v97Initials(name){return String(name||v97RoleLabel()).trim().split(/\s+/).slice(0,2).map(x=>(x[0]||'').toUpperCase()).join('')||'U'}
-function v97Greeting(){if(matchMedia('(min-width:901px)').matches&&window.LDM_DESKTOP_SHELL_V390)return window.LDM_DESKTOP_SHELL_V390.greeting();let h=new Date().getHours();return matchMedia('(min-width:901px)').matches&&(h%24<5||h%24>=21)?'Good Night':h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
+function v97Greeting(){return ldmIndiaGreeting()}
 function v97NowText(){try{return new Date().toLocaleString('en-IN',{weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}catch(_e){return ''}}
 function v97AvatarUrl(){return String(profile?.avatar_url||window.__v97LegacyAvatar||localStorage.getItem('ld_v97_avatar_'+(user?.id||''))||'').trim()}
 function v97AvatarHtml(cls='v97WelcomeAvatar'){let u=v97AvatarUrl(),n=profile?.full_name||v97RoleLabel();return u?`<img class="${cls}" src="${v97Safe(u)}?v=${encodeURIComponent(String(profile?.updated_at||''))}" alt="Profile">`:`<div class="${cls==='v97WelcomeAvatar'?'v97WelcomeFallback':'v97ParentFallback'}">${v97Safe(v97Initials(n))}</div>`}
@@ -18950,7 +18955,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="school-workspace-v336.js?v=538-ref3"></script>
 
 <link rel="stylesheet" href="interface-v337.css?v=510">
-<script src="ui-v337.js?v=373"></script>
+<script src="ui-v337.js?v=545"></script>
 <script src="student-photo-v337.js?v=512"></script>
 <script src="a4-print-v337.js?v=534-family-a4"></script>
 <script src="print-bridge-v337.js?v=344"></script>
@@ -18982,7 +18987,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=525"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
-<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=534-family-a4"><script src="id-card-v447.js?v=534-family-a4-r2"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=538-sharp5"><script src="erp-premium-cards.js?v=538-ref3"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=544"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
+<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=534-family-a4"><script src="id-card-v447.js?v=534-family-a4-r2"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=545"><script src="erp-premium-cards.js?v=545"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=544"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
 
 
 <script id="erp521-teacher-register">

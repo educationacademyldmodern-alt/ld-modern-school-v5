@@ -1,18 +1,19 @@
 /* Presentation only: decorate existing launcher nodes, preserving actions and permission state. */
 (()=>{'use strict';if(window.LDM_PREMIUM_CARDS)return;const D=document;
 const known='.erpCards,.dashboard-cards,.dashboard-grid,.quick-cards,.stats-grid,.v90MonitorGrid,.ldmMasterGrid,.ldmTeacherModules,.v114QuickGrid,.v39QuickGrid,.v48ReportGrid,.futureGrid,.ldmCTModules,.v114PortalQuick,.v90Quick,.v185FrontActions,.ldmChildGrid455,#r323ControlActions';
-const palette=['#19578b','#12624f','#653889','#84460a','#125f69','#8b2e51'];
+const tones=['blue','green','purple','orange','pink','royal'];
 let queued=false;const observers=new Map();
 const isEmoji=s=>/\p{Extended_Pictographic}/u.test(s)&&!/[A-Za-z\u0900-\u097f]/.test(s);
 function identity(card){const code=card.getAttribute('onclick')||'';const title=card.querySelector('b,strong,h3,h4')?.textContent?.trim();return card.dataset.newTeacherRoute||card.dataset.assignFunction||card.dataset.route||code.match(/render\(['"]([^'"]+)/)?.[1]||window.LDM_MANAGEMENT?.entries.find(e=>e.title===title)?.route||title||card.textContent.trim()}
 function colour(key){const k=key.toLowerCase();
- if(/due|बकाया/.test(k))return 3;
- if(/attendance|presence|उपस्थिति/.test(k))return 4;
+ if(/due|बकाया/.test(k))return 4;
+ if(/attendance|presence|उपस्थिति/.test(k))return 2;
  if(/pending|request|अनुरोध/.test(k))return 5;
- if(/fee|collection|फीस|marks|exam/.test(k))return 2;
+ if(/fee|collection|फीस/.test(k))return 3;
+ if(/marks|exam/.test(k))return 2;
  if(/teacher|staff|शिक्षक/.test(k))return 1;
  if(/student|admission|विद्यार्थी/.test(k))return 0;
- let h=0;for(const c of key)h=(h*31+c.codePointAt(0))>>>0;return h%palette.length}
+ let h=0;for(const c of key)h=(h*31+c.codePointAt(0))>>>0;return h%tones.length}
 function fallback(key){const k=key.toLowerCase();return /student|admission/.test(k)?'🎓':/teacher|staff/.test(k)?'👩‍🏫':/fee|financ|balance|salary/.test(k)?'💰':/exam|paper/.test(k)?'📝':/mark|result/.test(k)?'📑':/time|bell/.test(k)?'⏰':/teach|syllabus|plan/.test(k)?'📚':/id.?card/.test(k)?'🪪':/transport/.test(k)?'🚌':/seat|desk/.test(k)?'🪑':/attendance|presence/.test(k)?'📅':'🏫'}
 function decorate(card){if(card.classList.contains('ldm3dCard'))return;
  if(card.hidden||card.classList.contains('hidden')||card.style.display==='none')return;
@@ -25,7 +26,7 @@ function decorate(card){if(card.classList.contains('ldm3dCard'))return;
  if(title)title.classList.add('ldm3dTitle');
  card.querySelectorAll('small').forEach(e=>e.classList.add('ldm3dSubtitle'));
  card.querySelectorAll('em').forEach(e=>{if(/^open(?:\s+[a-z ]+)?\s*[→›»]?$/i.test(e.textContent.trim()))e.remove();else e.classList.add('ldm3dBadge')});
- card.classList.add('ldm3dCard');if(card.closest('.ldmRootAdminDash'))card.style.setProperty('--module-color',palette[colour(key)]);else card.style.setProperty('background',`linear-gradient(155deg,#ffffff12,transparent 45%),linear-gradient(105deg,${palette[colour(key)]},${palette[colour(key)]})`,'important');
+ card.classList.add('ldm3dCard');card.dataset.erpTone=tones[colour(key)];
  // Existing gate badge has inline spacing; keep it below, not over the title.
  if(card.matches('.v102DashGate'))card.style.setProperty('padding-bottom','30px','important');
 }
