@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head>
-<style>@layer ldmRoot565, ldmRoot564, ldmRoot562, ldmRoot561, ldmRoot560, ldmRoot559, ldmRoot558, ldmRoot554, ldmRoot553, ldmRoot552, ldmRoot551, ldmRoot548, ldmRoot546, ldmStatusCards;</style>
+<style>@layer ldmRoot569, ldmRoot565, ldmRoot564, ldmRoot562, ldmRoot561, ldmRoot560, ldmRoot559, ldmRoot558, ldmRoot554, ldmRoot553, ldmRoot552, ldmRoot551, ldmRoot548, ldmRoot546, ldmStatusCards;</style>
 <link rel="stylesheet" href="appearance-v454.css?v=456" media="screen"><script src="portal-compat-v475.js?v=475"></script>
 <script src="appearance-v454.js?v=456"></script>
 <script src="network-economy-v433.js?v=434"></script>
@@ -1311,6 +1311,9 @@ html[data-erp-view="mobile"] #erp #erpContent .ldm540Teacher .ldm560TeacherGrid,
 #erp #erpNav#erpNav[data-ldm565-owner] :is(button,summary):focus-visible{outline:2px solid #b5dfff!important;outline-offset:-2px!important}
 }
 </style>
+<style id="ldm-v569-remark-layout">
+@layer ldmRoot569 { .v569RemarkAction,.v569ReminderActions button{display:inline-flex!important;align-items:center!important;white-space:normal!important;overflow-wrap:anywhere!important;min-height:36px!important;margin:4px 2px!important;padding:6px 8px!important;max-width:100%!important;font-size:12px!important;line-height:1.25!important;} .v569ReminderActions{display:flex!important;flex-wrap:wrap!important;gap:4px!important;} #v307Detail,#r320ReminderJob,#frsEditBox{scroll-margin-top:180px;min-width:0;max-width:100%;} :is(.v307Remark,.r320ReminderPreview,#frsEditBox) :is(input,textarea,select){width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;} :is(.v307,.r320ReminderPage,#frsPanel) .tableWrap{max-width:100%;overflow-x:auto;} :is(.v307Remark,.r320ReminderPreview) label{display:block!important;white-space:normal!important;} }
+</style>
 </head>
 <body>
 <script>window.V107_BUILD="V107-CLEAN-PREMIUM-DOCS-2026-09-15";window.V108_BUILD="V108-SMART-STUDENT-PARENT-LOGIN-2026-09-15";</script>
@@ -1514,6 +1517,17 @@ function ldmRoleHeroV377(kind,displayName,details=''){
  const badge=image?'<img src="'+safe(image)+'" alt="Profile">':safe(String(displayName||label).trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase());
  return '<div class="v114PortalHeroText"><small data-ldm-role-date>'+safe(date)+'</small><h2 data-ldm-role-greeting="'+label.toLowerCase()+'">'+safe(greeting+', '+label)+'</h2><p>'+safe(teacher?'Your students’ progress is our priority.':'Your school’s progress is our priority.')+'</p><em>Support • Guide • Encourage • Excel</em></div><div class="v114PortalHeroStudent"><div class="v114StudentBadge">'+badge+'</div><div><b>'+safe(displayName||label)+'</b><span>'+safe(details||label)+'</span></div><button type="button" onclick="render(\''+(teacher?'teacher_profile':'v97_profile')+'\')">Profile</button></div>';
 }
+async function ldmBoundAuthFetch569(input,options){
+ const run=window.LDM_ASSIGN_WORK?.fetch||window.fetch.bind(window),opts=options||{};let url;try{url=new URL(typeof input==='string'?input:input.url||String(input),location.href)}catch(_){return run(input,options)}
+ const method=String(opts.method||input?.method||'GET').toUpperCase(),path=url.pathname;
+ const isLogin=path.endsWith('/auth/v1/token')&&url.searchParams.get('grant_type')==='password';
+ const permissionRead=method==='GET'&&/\/rest\/v1\/(profiles|teacher_profiles|teacher_class_assignments|teacher_subject_assignments|school_settings|staff)$/.test(path);
+ const portalRead=method==='POST'&&/\/rest\/v1\/rpc\/(ldm_get_portal_controls|ldm_v309_absence_classes|ldm_v309_absence_list|ldm_v307_followup_history|ldm_v312_history|ldm_v312_list|ldm_v312_service_status|ldm_v312_plans)$/.test(path);
+ const isLogout=path.endsWith('/auth/v1/logout')&&method==='POST';
+ if(!isLogin&&!permissionRead&&!portalRead&&!isLogout)return run(input,options);
+ const ctl=new AbortController(),prior=opts.signal||input?.signal,abort=()=>ctl.abort();if(prior?.aborted)abort();else prior?.addEventListener('abort',abort,{once:true});
+ const timer=setTimeout(abort,15000);try{return await run(input,{...opts,signal:ctl.signal})}finally{clearTimeout(timer);prior?.removeEventListener('abort',abort)}
+}
 function init(){
  // Never initialize a browser client using a privileged backend key.
  const browserKey=String(cfg?.key||'');
@@ -1524,7 +1538,7 @@ function init(){
  if(browserKey.startsWith('sb_secret_')||browserRole==='service_role')throw new Error('Security block: backend secret/service_role key must not be used in a browser.');
  if(sb&&clientSignature433===cfg.url+'|'+cfg.key)return sb;
  clientSignature433=cfg.url+'|'+cfg.key;
- sb=supabase.createClient(cfg.url,cfg.key,{global:{fetch:(...args)=>(window.LDM_ASSIGN_WORK?.fetch||window.fetch.bind(window))(...args)},auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ sb=supabase.createClient(cfg.url,cfg.key,{global:{fetch:ldmBoundAuthFetch569},auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  try{
   const h=String(location.hostname||'').toLowerCase(),official=new Set(['myldm.com','www.myldm.com','ld-modern-school-v5.vercel.app','localhost','127.0.0.1']),preview=h.endsWith('.vercel.app')&&!official.has(h);
   const local=h==='localhost'||h==='127.0.0.1';
@@ -10727,8 +10741,7 @@ async function ldmTeacherMasterContext(){
  let q=await sb.from('teacher_profiles').select('*').eq('auth_user_id',uid).limit(1);if(q.error)throw q.error;let t=q.data?.[0];
  if(!t)throw new Error('Teacher Master में यह login connected नहीं है');
  if(t.is_active===false||String(t.approval_status||'Approved').toLowerCase()!=='approved')throw new Error('Teacher Master account Active/Approved नहीं है');
- let c=await sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',t.id).eq('is_active',true);if(c.error)throw c.error;
- let sub=[];try{let z=await sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',t.id).eq('is_active',true);if(!z.error)sub=z.data||[]}catch(_e){}
+ const [c,z]=await Promise.all([sb.from('teacher_class_assignments').select('*').eq('teacher_profile_id',t.id).eq('is_active',true),sb.from('teacher_subject_assignments').select('*').eq('teacher_profile_id',t.id).eq('is_active',true)]);if(c.error)throw c.error;let sub=z.error?[]:(z.data||[]);
  if(user?.id!==uid)throw new DOMException('Account changed','AbortError');
  window.ldmTeacherContext={teacher:t,classes:c.data||[],subjects:sub};
  /* compatibility data only: old permission loader is NOT called by NEW Teacher Access */
@@ -10738,8 +10751,16 @@ async function ldmTeacherMasterContext(){
  try{return await current.promise}finally{if(teacherMasterFlight433===current)teacherMasterFlight433=null}
 }
 
-teacherLoginDialog=function(){v14Modal(`<h2>👩‍🏫 NEW Teacher Access</h2><p class="v14Muted">Teacher Master में Admin द्वारा बनाया गया Mobile + Password</p><div id="teacherAuthBox"><div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" inputmode="numeric" maxlength="10" autocomplete="username"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" autocomplete="current-password"></div><div class="full"><button class="primary" onclick="teacherPasswordLogin()">LOGIN TO TEACHER DASHBOARD</button></div></div></div>`)};
-teacherPasswordLogin=async function(){let m=ldmPhone($('tLoginId')?.value),p=String($('tLoginPassword')?.value||'');if(m.length!==10||!p)return toast('Mobile और Password डालें');let a=await sb.auth.signInWithPassword({email:`t${m}@teacher.ldmodern.local`,password:p});if(a.error)return toast('Registered Mobile या Password सही नहीं है.');try{user=a.data.user;await loadProfile();if(String(profile?.role||'').toLowerCase()!=='teacher')throw new Error('यह Teacher account नहीं है');await ldmTeacherMasterContext();$('v14Modal')?.remove();$('login')?.classList.add('hidden');$('publicSite')?.classList.add('hidden');$('erp')?.classList.remove('hidden');window.__v90History=['dashboard'];await ldmNewTeacherDashboard()}catch(e){try{await sb.auth.signOut()}catch(_e){}user=null;profile=null;toast(e.message||String(e))}};window.teacherPasswordLogin=teacherPasswordLogin;
+teacherLoginDialog=function(){v14Modal(`<h2>👩‍🏫 NEW Teacher Access</h2><p class="v14Muted">Teacher Master में Admin द्वारा बनाया गया Mobile + Password</p><div id="teacherAuthBox"><div class="v14Form"><div class="full"><label>Registered Mobile</label><input id="tLoginId" type="text" inputmode="text" autocapitalize="none" autocomplete="username" placeholder="Mobile / Email"></div><div class="full"><label>Password</label><input id="tLoginPassword" type="password" autocomplete="current-password"></div><div class="full"><button class="primary" onclick="teacherPasswordLogin()">LOGIN TO TEACHER DASHBOARD</button></div></div></div>`)};
+teacherPasswordLogin=async function(){
+ const host=$('teacherAuthBox'),button=host?.querySelector('button[onclick*="teacherPasswordLogin"]'),raw=String($('tLoginId')?.value||'').trim(),p=String($('tLoginPassword')?.value||''),m=ldmPhone(raw);
+ const status=(message,busy=false)=>{if(host?.isConnected)v75AuthStatus(host,'v569TeacherLoginStatus',message,busy)};
+ if(!p||(!raw.includes('@')&&m.length!==10))return status('Registered mobile / email और password डालें।');
+ if(button)button.disabled=true;let authenticated=false;
+ try{status('Login verification…',true);if(!sb)init();const a=await sb.auth.signInWithPassword({email:raw.includes('@')?raw.toLowerCase():`t${m}@teacher.ldmodern.local`,password:p});if(a.error)throw a.error;if(!a.data?.user)throw Error('Login session unavailable');authenticated=true;user=a.data.user;window.ldmTeacherContext=null;window.v14TeacherProfile=null;window.v14TeacherClasses=[];window.v14TeacherSubjects=[];await loadProfile();if(String(profile?.role||'').toLowerCase()!=='teacher'||String(profile?.status||'active').toLowerCase()!=='active')throw Error('Active Teacher account आवश्यक है');await ldmTeacherMasterContext();window.__ldmPublicMode=false;window.ldmSetSurface?.('erp');window.__v90History=['dashboard'];window.__v90Route='dashboard';await ldmNewTeacherDashboard();if(!$('erpContent')?.querySelector('.ldmNewTeacher'))throw Error('Teacher dashboard नहीं खुला; पुनः प्रयास करें');$('v14Modal')?.remove();}
+ catch(e){if(authenticated){try{await sb.auth.signOut()}catch(_){}user=null;profile=null;window.ldmTeacherContext=null;window.v14TeacherProfile=null;window.v14TeacherClasses=[];window.v14TeacherSubjects=[];window.ldmSetSurface?.('public')};status(/invalid login credentials/i.test(e.message||'')?'Registered Mobile / Email या Password गलत है।':(e.message||'Login unavailable; retry.'));}
+ finally{if(button?.isConnected)button.disabled=false;}
+ };window.teacherPasswordLogin=teacherPasswordLogin;
 teacherApprovalCenter=ldmTeacherManager;
 try{if(Array.isArray(V90_ADMIN_GROUPS)){let g=V90_ADMIN_GROUPS.find(x=>String(x[1]).toLowerCase().includes('teacher'));if(g&&Array.isArray(g[2])){g[2]=g[2].filter(x=>!['teacher_approval','teacher_access'].includes(x[0]));g[2].splice(1,0,['teacher_access','👩‍🏫 Teacher Master'])}}}catch(_e){}
 const __ldmRender=window.render;window.render=async function(p){if(p==='teacher_access'||p==='teacher_approval')return ldmTeacherManager();return __ldmRender.apply(this,arguments)};
@@ -12989,13 +13010,13 @@ body.v1146-teacher [data-v1146-hidden="1"]{display:none!important}
 (()=>{'use strict';
  const esc127=v=>typeof v90Safe==='function'?v90Safe(v):(typeof esc==='function'?esc(v):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])));
  const admin127=()=>['admin','super_admin','principal'].includes(String(window.profile?.role||'').toLowerCase());
- async function portalState127(){try{let r=await sb.rpc('ldm_get_portal_controls');if(r.error)throw r.error;return r.data||{teacher_active:true,parent_active:true}}catch(e){console.warn('Portal control unavailable; preserving existing login behavior',e?.message||e);return {teacher_active:true,parent_active:true,_fallback:true}}}
+ async function portalState127(){try{let r=await sb.rpc('ldm_get_portal_controls');if(r.error)throw r.error;return r.data||{teacher_active:true,parent_active:true}}catch(e){console.warn('Portal control unavailable; preserving existing login behavior',e?.message||e);return {teacher_active:true,parent_active:true,_fallback:true,_networkError:/abort|network|failed to fetch|timeout|connection/i.test(String(e?.message||e))}}}
  function blocked127(kind,s){let msg=kind==='teacher'?(s.teacher_message||'Teacher Portal temporarily unavailable. Please contact school office.'):(s.parent_message||'Parent / Student Portal temporarily unavailable. Please contact school office.');toast(msg);return false}
  // Emergency master switches: ADMIN is never checked/blocked by these switches.
  window.ldmPortalEmergencyControl=async function(){if(!admin127())return toast('Admin / Principal only');v90Head?.('Portal Emergency Control','Teacher / Parent access master switch • Admin always active');v90InstallShell?.('portal_emergency_control');let h=document.getElementById('erpContent');if(!h)return;let s=await portalState127();h.innerHTML=`<div class="panel"><div class="panelHead"><div><h3>🛡 Portal Emergency Control</h3><p class="note">किसी portal में technical problem हो तो केवल उस user portal को temporary रोकें. Admin Login/Dashboard और Admin modules कभी इस switch से बंद नहीं होंगे.</p></div><button onclick="ldmPortalEmergencyControl()">↻ Refresh</button></div><div class="v127SwitchGrid"><div class="v127Switch ${s.teacher_active!==false?'on':'off'}"><h3>👩‍🏫 Teacher Portal • ${s.teacher_active!==false?'ACTIVE':'DEACTIVATED'}</h3><label>Message<textarea id="v127TeacherMsg">${esc127(s.teacher_message||'Teacher Portal temporarily unavailable. Please contact school office.')}</textarea></label><button class="${s.teacher_active!==false?'del':'primary'}" onclick="ldmSetPortalControl('teacher',${s.teacher_active===false})">${s.teacher_active!==false?'Deactivate Teacher Portal':'Activate Teacher Portal'}</button></div><div class="v127Switch ${s.parent_active!==false?'on':'off'}"><h3>👨‍👩‍👧 Parent / Student Portal • ${s.parent_active!==false?'ACTIVE':'DEACTIVATED'}</h3><label>Message<textarea id="v127ParentMsg">${esc127(s.parent_message||'Parent / Student Portal temporarily unavailable. Please contact school office.')}</textarea></label><button class="${s.parent_active!==false?'del':'primary'}" onclick="ldmSetPortalControl('parent',${s.parent_active===false})">${s.parent_active!==false?'Deactivate Parent Portal':'Activate Parent Portal'}</button></div></div><div class="note" style="margin-top:12px">Last change: ${esc127(s.updated_at||'—')} • Existing Students/Teachers/Fees/Attendance data is not changed or deleted.</div></div>`};
  window.ldmSetPortalControl=async function(kind,active){if(!admin127())return toast('Admin / Principal only');let msg=String(document.getElementById(kind==='teacher'?'v127TeacherMsg':'v127ParentMsg')?.value||'').trim();if(!active&&!confirm(`${kind==='teacher'?'Teacher':'Parent / Student'} Portal temporarily DEACTIVATE करें? Admin access चालू रहेगा.`))return;let r=await sb.rpc('ldm_set_portal_control',{p_portal:kind,p_active:!!active,p_message:msg});if(r.error)return toast(r.error.message+' • V127 SQL run/check करें');toast(`${kind==='teacher'?'Teacher':'Parent / Student'} Portal ${active?'Activated':'Deactivated'}`);ldmPortalEmergencyControl()};
  // Enforce switches BEFORE user auth; missing V127 SQL deliberately fails open so existing login is never accidentally broken.
- const teacherLoginBase=window.teacherPasswordLogin;if(typeof teacherLoginBase==='function')window.teacherPasswordLogin=async function(){let s=await portalState127();if(s.teacher_active===false)return blocked127('teacher',s);return teacherLoginBase.apply(this,arguments)};
+ const teacherLoginBase=window.teacherPasswordLogin;if(typeof teacherLoginBase==='function')window.teacherPasswordLogin=async function(){let s=await portalState127();if(s.teacher_active===false){v75AuthStatus(document.getElementById('teacherAuthBox'),'v569TeacherLoginStatus',s.teacher_message||'Teacher Portal temporarily unavailable. Contact school office.');return false}if(s._fallback&&s._networkError){v75AuthStatus(document.getElementById('teacherAuthBox'),'v569TeacherLoginStatus','Portal status unavailable; check internet and retry.');return false}return teacherLoginBase.apply(this,arguments)};
  const parentLoginBase=window.parentPasswordLogin;if(typeof parentLoginBase==='function')window.parentPasswordLogin=async function(){let s=await portalState127();if(s.parent_active===false)return blocked127('parent',s);return parentLoginBase.apply(this,arguments)};
  // Transport monitor: active central Van assignments + same-date CENTRAL school attendance + separate Pickup/Drop status.
  window.v90LoadTransportMonitor=async function(){let d=v90Q('v90TrDate')?.value||v90Today(),trip=v90Q('v90TrTrip')?.value||'Morning Pickup';try{let session=typeof v68Session==='function'?v68Session():v90Session();let [ts,sr,sa,ta]=await Promise.all([sb.from('v68_transport_settings').select('*').eq('academic_session',session).eq('is_active',true).limit(6000),sb.from('students').select('admission_no,student_name,class_name,father_name,phone,status').limit(7000),sb.from('attendance').select('admission_no,status').eq('date',d).limit(8000),sb.from('v90_transport_trip_attendance').select('*').eq('trip_date',d).eq('trip_type',trip).limit(8000)]);let er=ts.error||sr.error||sa.error||ta.error;if(er)throw er;let sm={};(sr.data||[]).forEach(x=>sm[String(x.admission_no)]=x);let school={};(sa.data||[]).forEach(x=>school[String(x.admission_no)]=x.status);let tripm={};(ta.data||[]).forEach(x=>tripm[String(x.admission_no||x.student_name)]=x);let rows=(ts.data||[]).map(t=>{let s=sm[String(t.admission_no)]||{};return {...t,student_name:s.student_name||t.student_name||'',class_name:s.class_name||t.class_name||'',_school:school[String(t.admission_no)]||'Not Submitted',_att:tripm[String(t.admission_no)]||tripm[String(s.student_name||'')]}});let groups={};rows.forEach(x=>{let key=x.vehicle_no||x.route_name||'Transport';(groups[key]??=[]).push(x)});window.__v90MonitorCache.transportGroups=groups;let all=Object.values(groups).flat(),board=all.filter(x=>['boarded','present','dropped'].includes(String(x._att?.status||'').toLowerCase())).length,abs=all.filter(x=>['absent','not boarded'].includes(String(x._att?.status||'').toLowerCase())).length,leave=all.filter(x=>String(x._att?.status||'').toLowerCase()==='leave').length,schoolPresent=all.filter(x=>['present','p'].includes(String(x._school||'').toLowerCase())).length;v90Q('v90TrStats').innerHTML=[['Vehicles / Routes',Object.keys(groups).length],['Van Students',all.length],['School Present',schoolPresent],['Trip Confirmed',board],['Not Boarded',abs],['Trip Pending',Math.max(all.length-board-abs-leave,0)]].map(x=>`<div class="v90Stat"><div><small>${x[0]}</small><b>${x[1]}</b></div></div>`).join('');v90Q('v90TrBody').innerHTML=Object.entries(groups).map(([key,rr])=>`<section class="v90RouteCard"><div class="v90PanelHead"><div><h3>🚌 ${esc127(key)}</h3><p>${esc127(rr[0]?.route_name||'')} • ${esc127(rr[0]?.driver_name||'')}</p></div><span>${rr.length} Students</span></div><div class="tableWrap"><table class="v90Table"><tr><th>Student</th><th>Class</th><th>Pickup</th><th>School Attendance</th><th>${esc127(trip)}</th><th>Action</th></tr>${rr.map(x=>{let sn=String(x._school||'Not Submitted'),sc=/^p(resent)?$/i.test(sn)?'present':/absent|^a$/i.test(sn)?'absent':/leave|^l$/i.test(sn)?'leave':'pending';return `<tr><td><b>${esc127(x.student_name||'')}</b><small class="cellSub">${esc127(x.admission_no||'')}</small></td><td>${esc127(x.class_name||'')}</td><td>${esc127(x.pickup_point||'')}</td><td><span class="v127SchoolAtt ${sc}">${esc127(sn)}</span></td><td>${x._att?v90StatusPill(x._att.status,['boarded','present','dropped'].includes(String(x._att.status||'').toLowerCase())?'ok':String(x._att.status||'').toLowerCase()==='leave'?'warn':'bad'):v90StatusPill('Pending','warn')}</td><td><button onclick="v90MarkTrip('${esc127(x.admission_no||'')}','${esc127(x.student_name||'')}','${esc127(x.class_name||'')}','${esc127(x.route_name||'')}','${esc127(x.vehicle_no||'')}','${trip==='Afternoon Drop'?'Dropped':'Boarded'}')">✓ ${trip==='Afternoon Drop'?'Dropped':'Boarded'}</button> <button onclick="v90MarkTrip('${esc127(x.admission_no||'')}','${esc127(x.student_name||'')}','${esc127(x.class_name||'')}','${esc127(x.route_name||'')}','${esc127(x.vehicle_no||'')}','Not Boarded')">✕ Not Boarded</button></td></tr>`}).join('')}</table></div></section>`).join('')||'<div class="empty">No active transport assignments found.</div>'}catch(e){v90Q('v90TrBody').innerHTML=`<div class="empty">${esc127(e.message||String(e))}</div>`}};
@@ -14015,7 +14036,7 @@ async function restore(){
       ){
         await window.ldmTeacherMasterContext();
       }
-      if(window.__ldmInteractiveLogin)return;
+      if(window.__ldmInteractiveLogin||restoreEpoch455!==(window.__ldmAuthEpoch455||0))return;
       surface('erp');
 
       let route='dashboard';
@@ -14073,11 +14094,8 @@ async function restore(){
   }catch(e){
     console.error('LDM refresh restore',e);
 
-    if(window.user){
-      surface('erp');
-    }else{
-      surface('public');
-    }
+    if(restoreEpoch455!==(window.__ldmAuthEpoch455||0)||window.__ldmInteractiveLogin)return;
+    surface('public');
   }
 }
 
@@ -14123,7 +14141,7 @@ if(typeof currentTeacherDash==='function')window.ldmNewTeacherDashboard=async fu
   const r=await currentTeacherDash.apply(this,arguments);
   try{window.teacherShell?.();const host=$147('erpContent');if(host&&!host.querySelector('[data-new-teacher-route="v147_teacher_presence"]')){
     const grid=host.querySelector('.ldmTeacherModules');if(grid)grid.insertAdjacentHTML('beforeend','<button data-new-teacher-route="v147_teacher_presence"><i>🏫</i><b>My Class QR & Presence</b><small>Entered • Inside • Exited • History</small></button><button data-new-teacher-route="v147_student_qr"><i>▦</i><b>Student QR</b><small>View • Generate • Print</small></button>');
-    grid?.querySelectorAll('[data-new-teacher-route]').forEach(b=>{if(!b.__v147)b.addEventListener('click',()=>{let x=b.dataset.newTeacherRoute;if(x&&x.startsWith('v147_'))window.render?.(x)}),b.__v147=true});
+    grid?.querySelectorAll('[data-new-teacher-route]').forEach(b=>{if(!b.__v147&&b.dataset.newTeacherRoute?.startsWith('v147_')&&!b.onclick){b.onclick=()=>window.render?.(b.dataset.newTeacherRoute);b.__v147=true}});
   }}catch(_e){}return r;
 };
 
@@ -19318,14 +19336,14 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="udise-core-v306.js?v=320"></script>
 <script src="udise-app-v306.js?v=320"></script>
 <link rel="stylesheet" href="absence-followup-v307.css?v=307">
-<script src="absence-followup-v307.js?v=437"></script>
+<script src="absence-followup-v307.js?v=569"></script>
 <link rel="stylesheet" href="corrections-v308.css?v=309">
 <script src="corrections-v308.js?v=390"></script>
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
 <script src="receipt-actions-v309.js?v=460"></script>
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
 <script src="root-corrections-v332.js?v=564"></script>
-<script src="daily-reminders-v320.js?v=322"></script>
+<script src="daily-reminders-v320.js?v=570"></script>
 <script src="menu-v473.js?v=565"></script>
 <script src="student-tables-v475.js?v=475"></script>
 <script src="exam-dates-v475.js?v=507"></script>
@@ -19379,7 +19397,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="teacher-save-v345.js?v=473"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=553"></script>
+<script src="runtime-v347.js?v=569"></script>
 <link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=553"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=539-1">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=539-1">
@@ -19387,7 +19405,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="admin-documents-v389.js?v=525"></script>
 <script src="search-update-v394.js?v=394"></script>
 <script src="admin-paper-status-v397.js?v=397"></script><script src="smart-work-v403.js?v=505"></script>
-<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=568"><script src="id-card-v447.js?v=568"></script><link rel="stylesheet" href="portal-transition-v451.css?v=456"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=456"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=553"><script src="erp-premium-cards.js?v=553"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=553"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
+<script src="work-access-v398.js?v=521"></script><script src="school-control-model-v405.js?v=405"></script><script src="school-control-v405.js?v=405"></script><script src="desk-slip-model-v406.js?v=411"></script><script src="attendance-model-v412.js?v=428"></script><script src="desk-slip-v406.js?v=429"></script><script src="attendance-scan-v412.js?v=461"></script><script src="interface-fixes-v421.js?v=534-r3"></script><script src="resume-place-v416.js?v=416"></script><script src="school-forms-v424.js?v=424"></script><script src="function-search-v425.js?v=436"></script><script src="marksheet-view-v444.js?v=534"></script><link rel="stylesheet" href="admin-desktop-v445.css?v=517" media="screen and (min-width:1051px)"><link rel="stylesheet" href="id-card-v447.css?v=568"><script src="id-card-v447.js?v=568"></script><link rel="stylesheet" href="portal-transition-v451.css?v=569"><link rel="stylesheet" href="portal-flow-v455.css?v=456"><script src="portal-flow-v455.js?v=534-r3"></script><script src="portal-transition-v451.js?v=569"></script><script src="admin-fee-status-v459.js?v=526"></script><script src="assign-work-native.js?v=475"></script><link rel="stylesheet" href="erp-premium-cards.css?v=553"><script src="erp-premium-cards.js?v=553"></script><link rel="stylesheet" href="ldm-premium-v500.css?v=514"><script defer src="ldm-premium-v500.js?v=553"></script><script defer src="erp-v505-stability.js?v=538-ref3"></script>
 
 
 <script id="erp521-teacher-register">
@@ -19409,7 +19427,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 </script>
 
 <script src="search-scroll-v525.js?v=525"></script>
-<script src="ldm-fee-reminder-smart.js?v=526"></script>
+<script src="ldm-fee-reminder-smart.js?v=570"></script>
 <script src="targeted-repair-v526.js?v=532"></script>
 <script src="timetable-format-v527.js?v=527"></script>
 <link rel="stylesheet" href="ldm-dashboard-v535.css?v=535-r1" media="screen">

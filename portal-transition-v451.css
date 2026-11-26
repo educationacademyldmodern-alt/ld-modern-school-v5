@@ -14,3 +14,5 @@ html[data-ldm-login-stage] #ldmV281Refresh{visibility:hidden!important}
 html[data-ldm-login-stage="login"] body[class] #login.auth{display:grid!important;visibility:visible!important}
 html[data-ldm-login-stage="login"] body #publicSite,html[data-ldm-login-stage="login"] body #publicPageView{display:none!important}
 }
+
+#portal451Transition{position:static!important;inset:auto!important;max-width:100%!important;box-shadow:none!important;border:0!important;background:transparent!important;padding:4px 0!important;font-size:12px!important;pointer-events:none!important;white-space:normal!important;overflow-wrap:anywhere!important}#v569LogoutError{font-size:12px;white-space:normal;overflow-wrap:anywhere;max-width:100%}

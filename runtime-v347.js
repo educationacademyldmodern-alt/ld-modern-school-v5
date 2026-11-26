@@ -1,7 +1,7 @@
 /* V387: one navigation guard owns route, Back/Home and auth coalescing. No idle polling. */
 (()=>{'use strict';const W=window,D=document;if(W.LDM_RUNTIME_V347?.version>=388)return;const writes=new Map(),flights=new Map(),actions=new Map();let sequence=0;const metrics={routeCalls:0,sharedRoutes:0,sharedActions:0,lastRouteMs:0};
 const owner=()=>String((typeof profile!=='undefined'?profile:W.profile)?.id||''),session=()=>String((typeof school!=='undefined'?school:W.school)?.academic_session||'');
-const APIs=['LDMEA_ROOT','LDM_MARKSHEET','LDM_EXAM','LDM_RESOURCES','LDM_ROOT','LDM_V336','LDM_V304','LDM_FEE_V335','LDM_REMINDERS','LDM_V309_RECEIPT','LDM_PHOTO_V337','LDM_PAPER_V343'];
+const APIs=['LDMEA_ROOT','LDM_MARKSHEET','LDM_EXAM','LDM_RESOURCES','LDM_ROOT','LDM_V336','LDM_V304','LDM_FEE_V335','LDM_REMINDERS','LDM_V307','LDM_V309_RECEIPT','LDM_PHOTO_V337','LDM_PAPER_V343'];
 function canNavigate(){if([...writes.values()].some(w=>w.owner===owner()))return false;for(const name of APIs){const api=W[name];if(api?.canNavigate&&api.canNavigate()===false)return false}return true}
 function blocked(){
  const top=D.querySelector('#erp .erpTop');
@@ -27,7 +27,7 @@ const fn=button.id==='v90BackBtn'?W.v90Back:W.v90GoHome;fn?.call(W)},true);
 // Legacy sidebar handlers still check permission before their history changes.
 D.addEventListener('click',e=>{if(!e.target.closest?.('#v90BackBtn,#v90HomeBtn,#erpNav button,.erpHomeBtn'))return;if(!canNavigate()){e.preventDefault();e.stopImmediatePropagation();blocked()}},true);
 W.addEventListener('beforeunload',e=>{if([...writes.values()].some(w=>w.owner===owner())){e.preventDefault();e.returnValue=''}});
-function ensureTeacherNav(active=W.__v90Route||'dashboard'){if(String((typeof profile!=='undefined'?profile:W.profile)?.role||'').toLowerCase()!=='teacher')return;const nav=D.getElementById('erpNav');if(!nav)return;const routes=['dashboard','attendance','teacher_profile','exams'];const missing=routes.some(route=>![...nav.querySelectorAll('button')].some(b=>(b.getAttribute('onclick')||'').includes("'"+route+"'")));if(missing&&typeof W.v90BuildNav==='function')W.v90BuildNav(active)}
+function ensureTeacherNav(active=W.__v90Route||'dashboard'){if(String((typeof profile!=='undefined'?profile:W.profile)?.role||'').toLowerCase()!=='teacher')return;const nav=D.getElementById('erpNav');if(!nav)return;const missing=![...nav.querySelectorAll('button')].some(b=>b.dataset.route==='dashboard'||/render\s*\(\s*['"]dashboard['"]/.test(b.getAttribute('onclick')||''));if(missing&&typeof W.v90BuildNav==='function')W.v90BuildNav(active)}
 D.addEventListener('click',e=>{if(e.target.closest?.('#erp .erpTop .hamb'))ensureTeacherNav()},true);
 const teacherDashboard=W.ldmNewTeacherDashboard;let teacherFlight=null,teacherOwner='';
 if(typeof teacherDashboard==='function'){W.ldmNewTeacherDashboard=function(...args){const who=owner(),host=D.getElementById('erpContent'),isTeacher=String((typeof profile!=='undefined'?profile:W.profile)?.role||'').toLowerCase()==='teacher';if(!isTeacher)return teacherDashboard.apply(this,args);ensureTeacherNav();if(teacherFlight&&teacherOwner===who)return teacherFlight;if(teacherOwner===who&&W.__v90Route==='dashboard'&&host?.querySelector('.ldmNewTeacher'))return Promise.resolve();teacherOwner=who;teacherFlight=Promise.resolve().then(()=>teacherDashboard.apply(this,args)).then(result=>{ensureTeacherNav('dashboard');return result}).finally(()=>{teacherFlight=null});return teacherFlight};try{ldmNewTeacherDashboard=W.ldmNewTeacherDashboard}catch(_){}}

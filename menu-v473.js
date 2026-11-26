@@ -32,7 +32,8 @@
   function role(){try{return String((typeof profile!=='undefined'?profile:window.profile)?.role||'').toLowerCase()}catch(_){return ''}}
   function hindi(){try{return window.LDM_V337_UI?.language?.()==='hi'}catch(_){return false}}
   function arrange(nav){
-    const r=role();if(!['teacher','admin','super_admin','principal','accountant'].includes(r))return;
+    const r=role();if(!['teacher','admin','super_admin','principal','accountant'].includes(r)){delete nav.dataset.ldm565Owner;return;}
+    nav.dataset.ldm565Owner=r==='teacher'?'teacher':'admin';
     nav.parentElement.classList.add('ldm562Sidebar');
     nav.classList.add('ldm562Nav');
     if(r==='teacher'){
@@ -49,13 +50,13 @@
       for(const b of [...nav.children].filter(x=>x.matches('button'))){
         const dest=targets[routeOf(b)];if(!dest)continue;
         // Only relocate existing authorized nodes; never manufacture a route.
-        const group=groups.find(g=>g.querySelector('summary')?.textContent.toLowerCase().includes(dest));
+        const group=groups.find(g=>g.dataset.ldm565Section===String({'students':0,'fee & accounts':2,'exam & results':3}[dest])||g.querySelector('summary')?.textContent.toLowerCase().includes(dest));
         const body=group?.querySelector(':scope > div');if(body)body.appendChild(b);
       }
     }
   }
   function start() {
-    const nav=document.getElementById('erpNav');if(!nav)return;
+    const nav=document.getElementById('erpNav');if(!nav||nav._menu565Observer)return;nav._menu565Observer=true;
     let queued=false;
     const settle=()=>{queued=false;arrange(nav);nav.querySelectorAll('button,summary').forEach(decorate);};
     const schedule=()=>{if(!queued){queued=true;queueMicrotask(settle)}};
