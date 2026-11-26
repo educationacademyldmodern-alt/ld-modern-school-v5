@@ -27,7 +27,7 @@
     ['work','📋 Assigned Work & Notices','आवंटित कार्य एवं सूचनाएँ',['assigned_work','smart_work_alarm','v90_my_requests','teacher_notices','my_notes']],
     ['fee','₹ Fee Status','शुल्क स्थिति',['fees','teacher_fee']]
   ];
-  const extraRoutes={v305ExamNav:'exam_automation_center',u306Nav:'udise_reconciliation',v307Nav:'absence_followup',v308FeeNav:'combined_fee'};
+  const extraRoutes={v305ExamNav:'exam_automation_center',u306Nav:'udise_reconciliation',v307Nav:'absence_followup',v308FeeNav:'combined_fee',r320ReminderNav:'daily_reminders',x320Nav:'central_exam',sf424Nav:'school_forms',v53CompleteNav:'v53_complete_hub',v53TeacherDueNav:'teacher_due_fee'};
   function routeOf(b){return b.dataset.route||extraRoutes[b.id]||(b.hasAttribute('data-admin-fee459')?'admin_class_fee_status':'')||(b.hasAttribute('data-v649-idcard')?'idcard_center':'')||(b.hasAttribute('data-v65-selfatt')?'v65_teacher_attendance':'')||(b.getAttribute('onclick')||'').match(/\brender\s*\(\s*['"]([^'"]+)['"]/)?.[1]||'';}
   function role(){try{return String((typeof profile!=='undefined'?profile:window.profile)?.role||'').toLowerCase()}catch(_){return ''}}
   function hindi(){try{return window.LDM_V337_UI?.language?.()==='hi'}catch(_){return false}}
@@ -55,10 +55,37 @@
       }
     }
   }
+  // V572: selection reflects the current page, not the last click. Only existing menu nodes are marked.
+  const aliases={teacher_fee:'fees',exam_marks_entry_470:'central_exam'};
+  const normalized=r=>aliases[String(r||'')]||String(r||'');
+  function actualRoute(fallback){
+    // The old Master Plan directly calls head() without setting a route.
+    if(document.querySelector('#erpContent .v53Hub') && document.getElementById('erpTitle')?.textContent.trim()==='Master Plan')return 'v53_complete_hub';
+    return fallback||window.__v90Route||'dashboard';
+  }
+  let preferred=null;
+  function sync(route){
+    const nav=document.getElementById('erpNav');if(!nav?.dataset.ldm565Owner)return;
+    const current=normalized(actualRoute(route));
+    const buttons=[...nav.querySelectorAll('button')];
+    const available=b=>!b.hidden&&!b.classList.contains('hidden')&&b.style.display!=='none'&&b.getAttribute('aria-hidden')!=='true';
+    const candidates=buttons.filter(b=>available(b)&&normalized(routeOf(b))===current&&current);
+    const selected=(preferred&&candidates.includes(preferred)?preferred:null)||candidates.find(b=>b.getAttribute('aria-current')==='page')||candidates[0]||null;
+    const group=selected?.closest('details')||null;
+    const changed=nav._menu572Route!==current||nav._menu572Selected!==selected;
+    for(const b of buttons){if(b===selected){if(b.getAttribute('aria-current')!=='page')b.setAttribute('aria-current','page')}else if(b.getAttribute('aria-current')==='page')b.removeAttribute('aria-current');}
+    for(const g of nav.querySelectorAll('details')){const active=g===group;if(active!==g.hasAttribute('data-menu572-current'))g.toggleAttribute('data-menu572-current',active);}
+    if(changed&&group&&!group.open)group.open=true;
+    nav._menu572Route=current;nav._menu572Selected=selected;
+  }
+  window.LDM_MENU_ACTIVE_V572={sync};
   function start() {
     const nav=document.getElementById('erpNav');if(!nav||nav._menu565Observer)return;nav._menu565Observer=true;
     let queued=false;
-    const settle=()=>{queued=false;arrange(nav);nav.querySelectorAll('button,summary').forEach(decorate);};
+    const settle=()=>{queued=false;arrange(nav);nav.querySelectorAll('button,summary').forEach(decorate);sync();};
+    nav.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&nav.contains(b))preferred=b;},true);
+    // Sync on opening a drawer even for legacy direct-open handlers. No route is changed.
+    window.addEventListener('click',e=>{if(e.target.closest?.('#erp .erpTop .hamb'))sync();},true);
     const schedule=()=>{if(!queued){queued=true;queueMicrotask(settle)}};
     settle();
     new MutationObserver(schedule).observe(nav,{childList:true,subtree:true});

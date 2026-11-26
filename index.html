@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head>
-<style>@layer ldmRoot569, ldmRoot565, ldmRoot564, ldmRoot562, ldmRoot561, ldmRoot560, ldmRoot559, ldmRoot558, ldmRoot554, ldmRoot553, ldmRoot552, ldmRoot551, ldmRoot548, ldmRoot546, ldmStatusCards;</style>
+<style>@layer ldmRoot573, ldmRoot572, ldmRoot571, ldmRoot569, ldmRoot565, ldmRoot564, ldmRoot562, ldmRoot561, ldmRoot560, ldmRoot559, ldmRoot558, ldmRoot554, ldmRoot553, ldmRoot552, ldmRoot551, ldmRoot548, ldmRoot546, ldmStatusCards;</style>
 <link rel="stylesheet" href="appearance-v454.css?v=456" media="screen"><script src="portal-compat-v475.js?v=475"></script>
 <script src="appearance-v454.js?v=456"></script>
 <script src="network-economy-v433.js?v=434"></script>
@@ -1313,6 +1313,55 @@ html[data-erp-view="mobile"] #erp #erpContent .ldm540Teacher .ldm560TeacherGrid,
 </style>
 <style id="ldm-v569-remark-layout">
 @layer ldmRoot569 { .v569RemarkAction,.v569ReminderActions button{display:inline-flex!important;align-items:center!important;white-space:normal!important;overflow-wrap:anywhere!important;min-height:36px!important;margin:4px 2px!important;padding:6px 8px!important;max-width:100%!important;font-size:12px!important;line-height:1.25!important;} .v569ReminderActions{display:flex!important;flex-wrap:wrap!important;gap:4px!important;} #v307Detail,#r320ReminderJob,#frsEditBox{scroll-margin-top:180px;min-width:0;max-width:100%;} :is(.v307Remark,.r320ReminderPreview,#frsEditBox) :is(input,textarea,select){width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;} :is(.v307,.r320ReminderPage,#frsPanel) .tableWrap{max-width:100%;overflow-x:auto;} :is(.v307Remark,.r320ReminderPreview) label{display:block!important;white-space:normal!important;} }
+</style>
+<style id="ldm-v572-menu-active-state">
+@layer ldmRoot572 {
+/* Separate current page, current section and open section. No individual card boxes. */
+#erp #erpNav#erpNav[data-ldm565-owner] button:not([aria-current="page"]){background:transparent!important;box-shadow:none!important;color:#fff!important}
+#erp #erpNav#erpNav[data-ldm565-owner] button:not([aria-current="page"]):hover,#erp #erpNav#erpNav[data-ldm565-owner] summary:hover{background:#ffffff12!important;box-shadow:none!important}
+#erp #erpNav#erpNav[data-ldm565-owner] button[aria-current="page"]{background:#1763a1!important;box-shadow:inset 4px 0 #ffd45b!important;color:#fff!important;font-weight:800!important}
+#erp #erpNav#erpNav[data-ldm565-owner] details[data-menu572-current]>summary{background:#174b7e!important;box-shadow:inset 3px 0 #ffd45b!important;color:#ffdf7a!important}
+#erp #erpNav#erpNav[data-ldm565-owner] details[open]>summary b{transform:rotate(180deg)!important;color:#ffdf7a!important}
+#erp #erpNav#erpNav[data-ldm565-owner] details[open]>summary{border-bottom:1px solid #ffffff28!important}
+#erp #erpNav#erpNav[data-ldm565-owner] :is(button,summary):focus-visible{outline:2px solid #b5dfff!important;outline-offset:-2px!important}
+}
+</style>
+<style id="ldm-v573-teacher-header-grid">
+/* One equal-cell layout for Teacher header, including late-inserted native controls. No JS or route changes. */
+@layer ldmRoot573 { @media screen {
+#erp.ldmTeacherCanonical .erpTop {
+ --ldm573-cols:8; --ldm573-button-height:46px;
+ display:grid!important;grid-template-columns:repeat(var(--ldm573-cols),minmax(0,1fr))!important;
+ grid-auto-rows:auto!important;grid-auto-flow:row!important;align-items:center!important;justify-items:stretch!important;
+ gap:6px!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:100%!important;
+ height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;
+}
+#erp.ldmTeacherCanonical .erpTop>.ldmTeacherSchoolIdentity {grid-column:1/-1!important;order:-100!important;width:100%!important;min-width:0!important;}
+#erp.ldmTeacherCanonical .erpTop>.ldm538Lang:not([hidden]):not(.hidden) {display:contents!important;}
+#erp.ldmTeacherCanonical .erpTop>.ldm538Lang>button {order:90!important;}
+#erp.ldmTeacherCanonical .erpTop>:is(button,select),#erp.ldmTeacherCanonical .erpTop>.ldm538Lang>button {
+ grid-column:auto!important;grid-row:auto!important;align-self:stretch!important;justify-self:stretch!important;
+ position:static!important;inset:auto!important;transform:none!important;float:none!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ height:var(--ldm573-button-height)!important;min-height:var(--ldm573-button-height)!important;max-height:var(--ldm573-button-height)!important;
+ box-sizing:border-box!important;margin:0!important;padding:4px 5px!important;
+ font:750 12px/1.2 system-ui,'Nirmala UI',sans-serif!important;text-align:center!important;
+ white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;text-overflow:clip!important;
+ align-items:center!important;justify-content:center!important;border-radius:9px!important;
+}
+#erp.ldmTeacherCanonical .erpTop>select {padding-inline:4px 18px!important;white-space:nowrap!important;overflow-wrap:normal!important;font-size:11px!important;}
+#erp.ldmTeacherCanonical .erpTop>button:focus-visible,#erp.ldmTeacherCanonical .erpTop>.ldm538Lang>button:focus-visible,#erp.ldmTeacherCanonical .erpTop>select:focus-visible {outline:2px solid #ffdc65!important;outline-offset:1px!important;}
+#erp.ldmTeacherCanonical .erpTop>[hidden],#erp.ldmTeacherCanonical .erpTop>.hidden,#erp.ldmTeacherCanonical .erpTop>.ldm538Lang>[hidden],#erp.ldmTeacherCanonical .erpTop>.ldm538Lang>.hidden {display:none!important;}
+#erp.ldmTeacherCanonical :is(#ldm538Toolbar,#v337Toolbar) :is(.ldm538ToolActions,.v337Tools) {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;max-width:460px!important;width:100%!important;}
+#erp.ldmTeacherCanonical :is(#ldm538Toolbar,#v337Toolbar) :is(.ldm538ToolActions,.v337Tools)>button {box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:100%!important;height:44px!important;min-height:44px!important;max-height:44px!important;margin:0!important;padding:4px 6px!important;font:750 12px/1.2 system-ui,'Nirmala UI',sans-serif!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;}
+@media(max-width:1250px){#erp.ldmTeacherCanonical .erpTop{--ldm573-cols:6;}}
+@media(max-width:950px){#erp.ldmTeacherCanonical .erpTop{--ldm573-cols:5;}}
+@media(max-width:700px){#erp.ldmTeacherCanonical .erpTop{--ldm573-cols:4;}}
+@media(max-width:500px){#erp.ldmTeacherCanonical .erpTop{--ldm573-cols:3;--ldm573-button-height:48px;}}
+@media(max-width:359px){#erp.ldmTeacherCanonical .erpTop{--ldm573-cols:2;}}
+html[data-erp-view=mobile] #erp.ldmTeacherCanonical .erpTop {--ldm573-cols:3;--ldm573-button-height:48px;}
+@media(max-width:359px){html[data-erp-view=mobile] #erp.ldmTeacherCanonical .erpTop {--ldm573-cols:2;}}
+} }
 </style>
 </head>
 <body>
@@ -10231,6 +10280,7 @@ function v90BuildNav(active=window.__v90Route||'dashboard'){
   }
   host._menu565.active=active;
  }
+ window.LDM_MENU_ACTIVE_V572?.sync(active);
 }
 function v90InstallShell(active=window.__v90Route||'dashboard'){
  const erp=v90Q('erp');if(!erp||erp.classList.contains('hidden'))return;
@@ -17224,7 +17274,7 @@ body.ldmSurfaceERP #erp.ldmAdminCanonical #v90HomeBtn{
     const h=readStack();
     if(h[h.length-1]!==r)centralPush(r);
     else{saveStack(h,r);installBrowserPair(r,h)}
-    ensureAdminControls();watchHeader();
+    ensureAdminControls();watchHeader();window.LDM_MENU_ACTIVE_V572?.sync();
   }
 
   const headBase=window.head;
@@ -19335,8 +19385,8 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="udise-v306.css?v=306">
 <script src="udise-core-v306.js?v=320"></script>
 <script src="udise-app-v306.js?v=320"></script>
-<link rel="stylesheet" href="absence-followup-v307.css?v=307">
-<script src="absence-followup-v307.js?v=569"></script>
+<link rel="stylesheet" href="absence-followup-v307.css?v=571">
+<script src="absence-followup-v307.js?v=571"></script>
 <link rel="stylesheet" href="corrections-v308.css?v=309">
 <script src="corrections-v308.js?v=390"></script>
 <link rel="stylesheet" href="scoped-fixes-v309.css?v=309">
@@ -19344,7 +19394,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <link rel="stylesheet" href="root-corrections-v320.css?v=320">
 <script src="root-corrections-v332.js?v=564"></script>
 <script src="daily-reminders-v320.js?v=570"></script>
-<script src="menu-v473.js?v=565"></script>
+<script src="menu-v473.js?v=572"></script>
 <script src="student-tables-v475.js?v=475"></script>
 <script src="exam-dates-v475.js?v=507"></script>
 <script src="teacher-entry-v473.js?v=511"></script>
@@ -19397,7 +19447,7 @@ body:has(#erpContent .ldmRootAdminDash) #erp .erpTop>div{flex:1 1 200px;min-widt
 <script src="teacher-save-v345.js?v=473"></script>
 <script src="paper-import-v345.js?v=345"></script>
 <link rel="stylesheet" href="premium-dashboard-v347.css?v=350">
-<script src="runtime-v347.js?v=569"></script>
+<script src="runtime-v347.js?v=572"></script>
 <link rel="stylesheet" href="dashboard-order-v350.css?v=371"><script src="dashboard-order-v350.js?v=553"></script>
 <link rel="stylesheet" href="dashboard-parent-style-v374.css?v=539-1">
 <link rel="stylesheet" href="desktop-premium-v378.css?v=539-1">
