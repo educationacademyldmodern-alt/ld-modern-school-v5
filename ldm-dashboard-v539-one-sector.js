@@ -278,7 +278,7 @@
     const host=D.getElementById('erpContent');if(!host)return;
     if(observer)return;
     observer=new MutationObserver(records=>{
-      if(records.some(m=>!m.target.closest?.('.ldm548Extras,.ldm540TeacherNav,table,form,[role=dialog],.ldmInlineStatus') &&
+      if(records.some(m=>!m.target.closest?.('.ldm548Extras,.ldm540TeacherNav,table,form,[role=dialog],.ldmInlineStatus,#work574Panel') &&
         [...m.addedNodes,...m.removedNodes].some(n=>n.nodeType===1)))schedule();
     });
     observer.observe(host,{childList:true,subtree:true});

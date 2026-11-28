@@ -114,7 +114,7 @@
  rows.forEach(r=>{r.hidden=!!q&&!r.textContent.toLocaleLowerCase().includes(q)})};bar.querySelector('input').oninput=filter;bar.querySelector('select').onchange=filter;
  });}
  let timer=0;function schedule(){if(timer)return;timer=setTimeout(()=>{timer=0;try{attachHero();dedupeIdentity();setupTableTools()}catch(e){/* must not interfere with ERP */}},180)}
- function install(){const host=D.getElementById('erpContent');if(!host)return;const observer=new MutationObserver(schedule);observer.observe(host,{childList:true,subtree:true});const header=D.querySelector('#erp .erpTop');if(header)new MutationObserver(schedule).observe(header,{childList:true,subtree:false});schedule()}
+ function install(){const host=D.getElementById('erpContent');if(!host)return;const observer=new MutationObserver(records=>{if(records.some(r=>!r.target.closest?.('#work574Panel')))schedule()});observer.observe(host,{childList:true,subtree:true});const header=D.querySelector('#erp .erpTop');if(header)new MutationObserver(schedule).observe(header,{childList:true,subtree:false});schedule()}
  if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',install,{once:true});else install();
  W.LDM_PREMIUM_V500=Object.freeze({open,catalog:()=>entries().map(e=>({icon:e[0],title:e[1],detail:e[2],route:e[3]})),version:'514.0',modes:'additive'});
 })();

@@ -176,7 +176,7 @@
  function refresh(){queued=false;makeToolbar();if(!isAdmin()||!isDash())return;decorateHero();statCaption();compactDesk();arrangeFull();setDate();}
  function schedule(){if(queued)return;queued=true;if(W.requestAnimationFrame)W.requestAnimationFrame(refresh);else Promise.resolve().then(refresh)}
  function initialize(){
-  const host=q('#erpContent');if(host&&!observer){observer=new MutationObserver(records=>{if(records.some(r=>!r.target.closest?.("table,form,[role=dialog],.ldmInlineStatus")&&[...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1)))schedule()});observer.observe(host,{childList:true,subtree:true});}
+  const host=q('#erpContent');if(host&&!observer){observer=new MutationObserver(records=>{if(records.some(r=>!r.target.closest?.("table,form,[role=dialog],.ldmInlineStatus,#work574Panel")&&[...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1)))schedule()});observer.observe(host,{childList:true,subtree:true});}
   D.addEventListener('click',e=>{const btn=e.target.closest?.('.ldm537Categories > button');if(!btn||!isAdmin()||!btn.closest('#ldm535FullAccess'))return;const i=Number(btn.dataset.ldm538Category);if(!categories[i])return;e.preventDefault();e.stopImmediatePropagation();openCategory(i,btn);},true);
   D.addEventListener('keydown',event=>{
    if(!(event.ctrlKey||event.metaKey)||event.key.toLowerCase()!=='k'||!isAdmin()||!isDash())return;

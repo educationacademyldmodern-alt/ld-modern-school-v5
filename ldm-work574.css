@@ -35,3 +35,14 @@
 /* V580: retained delivery status, no modal or automatic retry. */
 #work574Panel #work580Delivery,#work574Panel #work580Reviewed {grid-column:1/-1;overflow-wrap:anywhere;}
 #work574Panel #work580Delivery:empty {display:none;}
+
+/* V581: stable launcher outside #erpContent, no positioning loop. */
+#erp #work581Dock{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:8px;box-sizing:border-box;width:100%;min-width:0;padding:8px 10px;flex:0 0 auto;grid-column:1/-1}
+#erp #work581Dock[hidden]{display:none!important}
+#erp #work581Dock .work574Entry{margin:0;min-height:44px;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;background:linear-gradient(155deg,#247bb6,#0a427d)!important}
+#work574Panel .work574Form{align-items:start}
+#work574Panel .work574Form>p{grid-column:1/-1;margin:0;line-height:1.4}
+#work574Panel .work574Form>label{align-self:start;min-width:0;min-height:0}
+#work574Panel .work574Form>label select:not([multiple]){min-height:40px;height:auto}
+@media(max-width:600px){#work574Panel .work574Form{grid-template-columns:minmax(0,1fr)!important}#work574Panel .work574Tools{gap:4px}#work574Panel .work574Tools button{flex:1 1 95px}}
+@media print{#work581Dock{display:none!important}}

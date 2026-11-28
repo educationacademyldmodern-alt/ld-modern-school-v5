@@ -85,7 +85,7 @@
     const settle=()=>{queued=false;arrange(nav);nav.querySelectorAll('button,summary').forEach(decorate);sync();};
     nav.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!nav.contains(b)||b.disabled)return;preferred=b;
       // Preserve native click/permissions. A leaf click closes an open overlay, not a category summary.
-      queueMicrotask(()=>{const aside=nav.closest('aside');if(aside?.classList.contains('open'))aside.classList.remove('open');sync();});
+      queueMicrotask(()=>{const aside=nav.closest('aside');if(aside?.classList.contains('open'))aside.classList.remove('open');document.body.classList.remove('d378MenuOpen');document.querySelectorAll('#erp .erpTop :is(.hamb,#d378Menu,#ldm538AdminProfile)').forEach(x=>{if(x.getAttribute('aria-expanded')!=='false')x.setAttribute('aria-expanded','false')});sync();});
     },true);
     // Sync on opening a drawer even for legacy direct-open handlers. No route is changed.
     window.addEventListener('click',e=>{if(e.target.closest?.('#erp .erpTop .hamb'))sync();},true);
